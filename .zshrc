@@ -79,10 +79,10 @@ SPACESHIP_DIR_TRUNC_REPO="false"
 export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo)
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/bharat/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/bharat/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '~/google-cloud-sdk/path.zsh.inc' ]; then . '~/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/bharat/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/bharat/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '~/google-cloud-sdk/completion.zsh.inc' ]; then . '~/google-cloud-sdk/completion.zsh.inc'; fi
 
 export SPACESHIP_CHAR_SYMBOL="⌘";
 export PURE_PROMPT_SYMBOL="⌘"

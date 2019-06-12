@@ -4,6 +4,7 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 source ~/env
+export TERM=xterm-256color
 
 eval "$(fasd --init auto)"
 
@@ -13,7 +14,8 @@ eval "$(fasd --init auto)"
 alias k="/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
 alias b=bat
 alias br=brew
-alias e='emacs -nw'
+alias ed="emacs --daemon &"
+alias e="emacsclient -t -a ''"
 alias fk="fkill"
 alias g=git
 alias m=make

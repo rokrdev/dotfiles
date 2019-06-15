@@ -527,6 +527,8 @@ key_bindings:
   - { key: Back,     mods: Alt,     chars: "\x1bD"                           }
   - { key: Delete,   mods: Alt,     chars: "\x1bd"                           }
   - { key: X,        mods: Command, chars: "\x1bx"                           }
+  - { key: LBracket, mods: Command|Shift, chars: "\x1b{"                    }
+  - { key: RBracket, mods: Command|Shift, chars: "\x1b}"                    }
   - { key: Key0, mods: Command|Control, command: { program: "/usr/local/bin/tmux", args: ["switch-client", "-n"] } }
   - { key: Key1, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["select-window", "-t", "1"] } }
   - { key: Key2, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["select-window", "-t", "2"] } }

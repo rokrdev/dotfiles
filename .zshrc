@@ -3,19 +3,21 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-source ~/env
-export TERM=xterm-256color
+source ~/.zshenv
 
 eval "$(fasd --init auto)"
 
 # Customize to your needs...
-
+function startEmacs {
+   emacs "$1" &
+}
 
 alias k="/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
 alias b=bat
 alias br=brew
 alias ed="emacs --daemon &"
-alias e="emacsclient -t -a ''"
+alias e="emacs -nw"
+alias eg=startEmacs
 alias fk="fkill"
 alias g=git
 alias m=make
@@ -55,17 +57,9 @@ alias yt='yarn test'
 alias ya='yarn add'
 alias zz='fasd_cd -d -i' # cd with interactive selection
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-# export PATH="$PATH:$HOME/.rvm/bin"
-export ALTERNATE_EDITOR=v
-export VISUAL=v
-export EDITOR="$VISUAL"
-
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 eval "$(rbenv init -)"
-
-export PATH="${HOME}/.npm-packages/bin:$PATH"
 
 # source autosuggestions
 source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -78,20 +72,13 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
 SPACESHIP_DIR_TRUNC_REPO="false"
 
-export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo)
-
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '~/google-cloud-sdk/path.zsh.inc' ]; then . '~/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f '~/google-cloud-sdk/completion.zsh.inc' ]; then . '~/google-cloud-sdk/completion.zsh.inc'; fi
 
-export SPACESHIP_CHAR_SYMBOL="⌘";
-export PURE_PROMPT_SYMBOL="⌘"
-
-export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
-export JAVA_HOME="$HOME/.jenv/versions/`jenv version-name`"
 alias jenv_set_java_home='export JAVA_HOME="$HOME/.jenv/versions/`jenv version-name`"'
 
 source ~/projects/shellject/bash/shellject_wrapper.sh

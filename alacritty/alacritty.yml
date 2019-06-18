@@ -121,9 +121,14 @@ colors:
   primary:
     background: '0x2E3440'
     foreground: '0xD8DEE9'
+    dim_foreground: '0x9a9a9a'
+    bright_foreground: '0xffffff'
   cursor:
     text: '0x2E3440'
-    cursor: '0xD8DEE9'
+    cursor: '0xEFF3F9'
+  selection:
+    text: '0xEAEAEA'
+    background: '0x404040'
   normal:
     black: '0x3B4252'
     red: '0xBF616A'
@@ -148,8 +153,6 @@ colors:
     # If the bright foreground color is not set, or `draw_bold_text_with_bright_colors`
     # is `false`, the normal foreground color will be used.
     #
-    # dim_foreground: '0x9a9a9a'
-    # bright_foreground: '0xffffff'
 
 # Visual Bell
 #

@@ -413,7 +413,7 @@ key_bindings:
   - { key: K,      mods: Command, chars: "\x0c"            }
   - { key: V,      mods: Command, action: Paste            }
   - { key: C,      mods: Command, action: Copy             }
-  - { key: H,      mods: Command|Control, action: Hide             }
+  - { key: H,      mods: Command, action: Hide             }
   - { key: Q,      mods: Command, action: Quit             }
   - { key: W,      mods: Command, action: Quit             }
 

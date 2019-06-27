@@ -24,8 +24,10 @@ window:
   # Units are physical pixels; this is not DPI aware.
   # (change requires restart)
   padding:
-    x: 3
+    x: 4
     y: 2
+
+  dynamic_padding: true
 
   # Window decorations
   # Setting this to false will result in window without borders and title bar.
@@ -87,7 +89,7 @@ font:
   # as modifying the linespacing, and offset.x as modifying the letter spacing.
   offset:
     x: 0
-    y: 0
+    y: 2
 
   # Glyph offset determines the locations of the glyphs within their cells with
   # the default being at the bottom. Increase the x offset to move the glyph to

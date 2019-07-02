@@ -85,3 +85,5 @@ alias jenv_set_java_home='export JAVA_HOME="$HOME/.jenv/versions/`jenv version-n
 
 source ~/projects/shellject/bash/shellject_wrapper.sh
 source ~/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/shellject-1.0.1/bash/shellject_wrapper.sh
+
+jenv_set_java_home

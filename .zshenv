@@ -26,5 +26,18 @@ export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PR
 export SPACESHIP_CHAR_SYMBOL="⌘";
 export PURE_PROMPT_SYMBOL="⌘"
 
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/bharat/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/bharat/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/bharat/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/bharat/google-cloud-sdk/completion.zsh.inc'; fi
+
+export IMAGE_FAMILY="pytorch-latest-gpu" # or "pytorch-latest-cpu" for non-GPU instances
+export ZONE="us-west2-b" # budget: "us-west1-b"
+export INSTANCE_NAME="my-fastai-instance"
+export INSTANCE_TYPE="n1-highmem-8" # budget: "n1-highmem-4"
+
 export PATH="$HOME/.jenv/bin:$PATH"
 export JAVA_HOME="$HOME/.jenv/versions/`jenv version-name`"
+
+source ~/.env

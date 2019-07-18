@@ -15,12 +15,13 @@ function startEmacs {
 alias k="/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
 alias b=bat
 alias ed="emacs --daemon &"
-# alias e="emacs -nw"
- alias e="emacsclient -t -a ''"
+alias e="emacs -nw"
+# alias e="emacsclient -t -a ''"
 alias eg=startEmacs
 alias fk="fkill"
 alias m=make
 alias nn=nnn
+alias n=npm
 alias t=tmux
 alias v=nvim
 alias y=yarn

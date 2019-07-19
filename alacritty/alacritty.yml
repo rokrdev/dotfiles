@@ -609,6 +609,8 @@ key_bindings:
   - { key: Key6,      mods: Alt|Shift, chars: "\x1b^"                        } # Alt + ^
   - { key: Backslash, mods: Alt,       chars: "\x1b\\"                       } # Alt + \
   - { key: Backslash, mods: Alt|Shift, chars: "\x1b|"                        } # Alt + |
+  - { key: Up,        mods: Command,   chars: "\x1b[1;5A"                    } # Alt + up
+  - { key: Down,      mods: Command,   chars: "\x1b[1;5B"                    } # Alt + down
   - { key: Key1, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["select-window", "-t", "1"] } }
   - { key: Key2, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["select-window", "-t", "2"] } }
   - { key: Key3, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["select-window", "-t", "3"] } }

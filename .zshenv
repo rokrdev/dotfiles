@@ -38,6 +38,5 @@ export INSTANCE_NAME="my-fastai-instance"
 export INSTANCE_TYPE="n1-highmem-8" # budget: "n1-highmem-4"
 
 export PATH="$HOME/.jenv/bin:$PATH"
-export JAVA_HOME="$HOME/.jenv/versions/`jenv version-name`"
 
 source ~/.env

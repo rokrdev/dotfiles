@@ -534,6 +534,7 @@ key_bindings:
   - { key: X,        mods: Command, chars: "\x1bx"                           }
   - { key: LBracket, mods: Command|Shift, chars: "\x1b{"                     }
   - { key: RBracket, mods: Command|Shift, chars: "\x1b}"                     }
+  - { key: Slash,     mods: Command,       chars: "\x1b/"                     }
   - { key: A,         mods: Command,       chars: "\x1ba"                        }
   - { key: B,         mods: Command,       chars: "\x1bb"                        }
   - { key: C,         mods: Command,       chars: "\x1bc"                        }

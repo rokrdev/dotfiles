@@ -245,8 +245,8 @@ shell:
   program: /usr/local/bin/zsh
   args:
     - --login
-    # - -c
-    # - 'tmux attach || tmux new -s main'
+    - -c
+    - 'tmux attach || tmux new -s main'
 
 working_directory: None
 

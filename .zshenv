@@ -16,8 +16,8 @@ export TERM=xterm-256color
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 # export PATH="$PATH:$HOME/.rvm/bin"
-export ALTERNATE_EDITOR=v
-export VISUAL=v
+export ALTERNATE_EDITOR=e
+export VISUAL=e
 export EDITOR="$VISUAL"
 export PATH="${HOME}/.npm-packages/bin:$PATH"
 

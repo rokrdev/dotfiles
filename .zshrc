@@ -25,7 +25,7 @@ alias n=npm
 alias t=tmux
 alias v=nvim
 alias y=yarn
-alias z='fasd_cd -d'     # cd, same functionality as j in autojump
+alias zl='fasd_cd -d'     # cd, same functionality as j in autojump
 alias rg="rg --hidden -g '!.git/*'"
 alias sudo='sudo '       # to use sudo with alias
 alias brup='brew update; brew upgrade; brew cleanup; brew doctor'
@@ -74,15 +74,55 @@ source ~/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/shellject-1.0.1/bash/she
 
 jenv_set_java_home
 
-fe() {
-  local files
-  IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
-  [[ -n "$files" ]] && emacs -nw "${files[@]}"
+unalias f
+f() {
+    local files
+    local olIFS=IFS  # save old IFS to reset later
+    IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    IFS=$olIFS   # reset IFS else git info breaks in terminal prompt
+    [[ -n "$files" ]] && emacs -nw "${files[@]}"
 }
 
-fif() {
-  local files
-  if [ ! "$#" -ge 1 ]; then echo "Need a string to search for!"; return 1; fi
-  IFS=$'\n' files=($(rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}"))
-  [[ -n "$files" ]] && emacs -nw "${files[@]}"
+ffLogic() {
+    local files
+    local olIFS=IFS  # save old IFS to reset later
+    if [ ! "$#" -ge 1 ]; then echo "Need a string to search for!"; return 1; fi
+    IFS=$'\n' files=($(rg --files-with-matches --no-messages "$1" | fzf --multi --select-1 --exit-0 --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}"))
+    IFS=$olIFS   #reset IFS else git info breaks in terminal prompt
+    if [ "$2" = 'open' ]; then
+        [[ -n "$files" ]] && emacs -nw "${files[@]}"
+    else
+        [[ -n "$files" ]] && echo "${files[@]}"
+    fi
+}
+
+ffo() {
+    ffLogic "$1" "open"
+}
+
+ff() {
+    ffLogic "$1" "search"
+}
+
+function z() {
+    [ $# -gt 0 ] && fasd_cd -d "$*" && return
+    local dir
+    dir="$(fasd -Rdl "$1" | fzf -1 -0 --no-sort +m)" && cd "${dir}" || return 1
+}
+alias z=z
+
+kp() {
+    ### PROCESS
+    # mnemonic: [K]ill [P]rocess
+    # show output of "ps -ef", use [tab] to select one or multiple entries
+    # press [enter] to kill selected processes and go back to the process list.
+    # or press [escape] to go back to the process list. Press [escape] twice to exit completely.
+
+    local pid=$(ps aux | sed 1d | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[kill:process]'" | awk '{print $2}')
+
+    if [ "x$pid" != "x" ]
+    then
+        echo $pid | xargs kill -${1:-9}
+        kp
+    fi
 }

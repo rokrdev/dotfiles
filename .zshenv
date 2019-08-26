@@ -16,8 +16,8 @@ export TERM=xterm-256color
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 # export PATH="$PATH:$HOME/.rvm/bin"
-export ALTERNATE_EDITOR=e
-export VISUAL=e
+export ALTERNATE_EDITOR="emacs -nw"
+export VISUAL="emacs -nw"
 export EDITOR="$VISUAL"
 export PATH="${HOME}/.npm-packages/bin:$PATH"
 
@@ -33,10 +33,14 @@ if [ -f '/Users/bharat/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/bharat/g
 if [ -f '/Users/bharat/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/bharat/google-cloud-sdk/completion.zsh.inc'; fi
 
 export IMAGE_FAMILY="pytorch-latest-gpu" # or "pytorch-latest-cpu" for non-GPU instances
-export ZONE="us-east4-c" # budget: "us-west1-b"
+export ZONE="us-west1-b" # budget: "us-west1-b"
 export INSTANCE_NAME="my-fastai-instance"
 export INSTANCE_TYPE="n1-highmem-8" # budget: "n1-highmem-4"
 
 export PATH="$HOME/.jenv/bin:$PATH"
 
 source ~/.env
+
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_CTRL_R_OPTS='--sort --exact'
+export FZF_TMUX=1

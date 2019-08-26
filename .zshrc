@@ -77,7 +77,7 @@ jenv_set_java_home
 unalias f
 f() {
     local files
-    local olIFS=IFS  # save old IFS to reset later
+    local olIFS=$IFS  # save old IFS to reset later
     IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
     IFS=$olIFS   # reset IFS else git info breaks in terminal prompt
     [[ -n "$files" ]] && emacs -nw "${files[@]}"
@@ -85,11 +85,11 @@ f() {
 
 ffLogic() {
     local files
-    local olIFS=IFS  # save old IFS to reset later
-    if [ ! "$#" -ge 1 ]; then echo "Need a string to search for!"; return 1; fi
-    IFS=$'\n' files=($(rg --files-with-matches --no-messages "$1" | fzf --multi --select-1 --exit-0 --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}"))
+    local olIFS=$IFS  # save old IFS to reset later
+    if [ -z "$2" ]; then echo "Need a string to search for!"; return 1; fi
+    IFS=$'\n' files=($(rg --files-with-matches --no-messages "$2" | fzf --multi --select-1 --exit-0 --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$2' || rg --ignore-case --pretty --context 10 '$2' {}"))
     IFS=$olIFS   #reset IFS else git info breaks in terminal prompt
-    if [ "$2" = 'open' ]; then
+    if [ "$1" = 'open' ]; then
         [[ -n "$files" ]] && emacs -nw "${files[@]}"
     else
         [[ -n "$files" ]] && echo "${files[@]}"
@@ -97,17 +97,19 @@ ffLogic() {
 }
 
 ffo() {
-    ffLogic "$1" "open"
+    ffLogic "open" "$1"
 }
 
 ff() {
-    ffLogic "$1" "search"
+    ffLogic "search" "$1"
 }
 
 function z() {
+    local olIFS=$IFS  # save old IFS to reset later
     [ $# -gt 0 ] && fasd_cd -d "$*" && return
     local dir
-    dir="$(fasd -Rdl "$1" | fzf -1 -0 --no-sort +m)" && cd "${dir}" || return 1
+    dir="$(fasd -Rdl "$1" | fzf -1 -0 --no-sort +m)" && cd "${dir}"
+    IFS=$olIFS   #reset IFS else git info breaks in terminal prompt
 }
 alias z=z
 

@@ -44,3 +44,5 @@ source ~/.env
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_CTRL_R_OPTS='--sort --exact'
 export FZF_TMUX=1
+
+export PATH="/usr/local/anaconda3/bin:$PATH"

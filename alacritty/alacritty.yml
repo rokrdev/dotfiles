@@ -608,6 +608,7 @@ key_bindings:
   - { key: Up,        mods: Command,       chars: "\x1b[1;5A"                    } # Alt + up
   - { key: Down,      mods: Command,       chars: "\x1b[1;5B"                    } # Alt + down
   - { key: Semicolon, mods: Command|Shift, chars: "\x1b:"                        } # Cmd + colon
+  - { key: 36,        mods: Command,       chars: "\x1b\r"                       } # Alt + Enter
   - { key: Key1, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["select-window", "-t", "1"] } }
   - { key: Key2, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["select-window", "-t", "2"] } }
   - { key: Key3, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["select-window", "-t", "3"] } }

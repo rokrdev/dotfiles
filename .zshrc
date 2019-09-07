@@ -22,6 +22,7 @@ alias fk="fkill"
 alias m=make
 alias nn=nnn
 alias n=npm
+alias ssh="TERM=xterm-256color ssh"
 alias t=tmux
 alias v=nvim
 alias y=yarn

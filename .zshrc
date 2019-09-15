@@ -15,7 +15,6 @@ function startEmacs {
 function notion {
   cd $NOTION
   git pull
-  git-crypt unlock $NOTION_KEY
   emacs -nw $NOTION/clip.org
 }
 

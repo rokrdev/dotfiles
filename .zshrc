@@ -12,6 +12,13 @@ function startEmacs {
    emacs "$1" &
 }
 
+function notion {
+  cd $NOTION
+  git pull
+  git-crypt unlock $NOTION_KEY
+  emacs -nw $NOTION/clip.org
+}
+
 alias k="/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
 alias b=bat
 alias ed="emacs --daemon &"
@@ -35,6 +42,7 @@ alias gtr='git log --oneline --graph --decorate --all'
 alias mi='make install'
 alias mu='make update'
 alias ni='npm install'
+alias nq=notion
 alias nr='npm run'
 alias nt='npm test'
 alias rf=rimraf

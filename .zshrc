@@ -14,7 +14,10 @@ function startEmacs {
 
 function notion {
   cd $NOTION
-  git pull
+  ssh git@github.com
+  if [ $? -eq 0 ]; then
+    git pull
+  fi
   emacs -nw $NOTION/clip.org
 }
 

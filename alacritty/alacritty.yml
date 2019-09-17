@@ -83,7 +83,7 @@ font:
     style: Italic
 
   # Point size of the font
-  size: 12.5
+  size: 14.0
 
   # Offset is the extra space around each character. offset.y can be
   # thought of as modifying the linespacing, and offset.x as modifying
@@ -610,6 +610,7 @@ key_bindings:
   - { key: Down,      mods: Command,       chars: "\x1b[1;5B"                    } # Alt + down
   - { key: Semicolon, mods: Command|Shift, chars: "\x1b:"                        } # Cmd + colon
   - { key: 36,        mods: Command,       chars: "\x1b\r"                       } # Alt + Enter
+  - { key: Period,    mods: Command,       chars: "\x1b."                        } # Alt + .
   - { key: Key1, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["select-window", "-t", "1"] } }
   - { key: Key2, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["select-window", "-t", "2"] } }
   - { key: Key3, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["select-window", "-t", "3"] } }

@@ -22,8 +22,8 @@ export PATH="${HOME}/.npm-packages/bin:$PATH"
 
 export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo)
 
-export SPACESHIP_CHAR_SYMBOL="⌘";
-export PURE_PROMPT_SYMBOL="⌘"
+export SPACESHIP_CHAR_SYMBOL="λ";
+export PURE_PROMPT_SYMBOL="λ"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/bharat/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/bharat/google-cloud-sdk/path.zsh.inc'; fi

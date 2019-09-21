@@ -29,8 +29,9 @@ alias e="emacs -nw"
 alias eg=startEmacs
 alias fk="fkill"
 alias m=make
-alias nn=nnn
 alias n=npm
+alias nn=nnn
+alias nv="~/.npm-packages/bin/n"
 alias ssh="TERM=xterm-256color ssh"
 alias t=tmux
 alias v=nvim

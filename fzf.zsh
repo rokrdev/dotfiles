@@ -93,6 +93,14 @@ f() {
     [[ -n "$files" ]] && emacs -nw "${files[@]}"
 }
 
+fe() {
+    local files
+    local olIFS=$IFS  # save old IFS to reset later
+    IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    IFS=$olIFS   # reset IFS else git info breaks in terminal prompt
+    [[ -n "$files" ]] && emacs "${files[@]}" &
+}
+
 ffLogic() {
     local files
     local olIFS=$IFS  # save old IFS to reset later

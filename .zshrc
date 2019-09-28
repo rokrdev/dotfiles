@@ -48,6 +48,7 @@ alias ni='npm install'
 alias nq=notion
 alias nr='npm run'
 alias nt='npm test'
+alias p=python
 alias rf=rimraf
 alias ta='tmux attach || tmux new'
 alias vim=nvim
@@ -96,3 +97,6 @@ setopt HIST_SAVE_NO_DUPS
 setopt HIST_BEEP
 
 source ~/fzf.zsh
+
+typeset -U path
+export PATH

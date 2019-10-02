@@ -22,7 +22,6 @@ export PATH="${HOME}/.npm-packages/bin:$PATH"
 
 export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo)
 
-export SPACESHIP_CHAR_SYMBOL="λ";
 export PURE_PROMPT_SYMBOL="λ"
 
 # The next line updates PATH for the Google Cloud SDK.
@@ -36,6 +35,7 @@ export ZONE="us-west1-b" # budget: "us-west1-b"
 export INSTANCE_NAME="my-fastai-instance"
 export INSTANCE_TYPE="n1-highmem-8" # budget: "n1-highmem-4"
 
+export PATH="/usr/local/anaconda3/bin:$PATH"
 export PATH="$HOME/.jenv/bin:$PATH"
 
 source ~/.env
@@ -44,4 +44,10 @@ export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_CTRL_R_OPTS='--sort --exact'
 export FZF_TMUX=1
 
-export PATH="/usr/local/anaconda3/bin:$PATH"
+eval "$(fasd --init auto)"
+rbenv() {
+  eval "$(rbenv init -)"
+  rbenv "$@"
+}
+eval "$(jenv init - --no-rehash)"
+(jenv rehash &) 2> /dev/null

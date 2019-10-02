@@ -1,11 +1,10 @@
 # Source Prezto.
+# zmodload zsh/zprof
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
 source ~/.zshenv
-
-eval "$(fasd --init auto)"
 
 # Customize to your needs...
 function startEmacs {
@@ -60,8 +59,6 @@ alias zz='fasd_cd -d -i' # cd with interactive selection
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-eval "$(rbenv init -)"
-
 # source autosuggestions
 source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
@@ -71,21 +68,14 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 # defaults write NSGlobalDomain KeyRepeat -float 1.5
 # defaults write NSGlobalDomain InitialKeyRepeat -int 23
 
-SPACESHIP_DIR_TRUNC_REPO="false"
-
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '~/google-cloud-sdk/path.zsh.inc' ]; then . '~/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f '~/google-cloud-sdk/completion.zsh.inc' ]; then . '~/google-cloud-sdk/completion.zsh.inc'; fi
 
-eval "$(jenv init -)"
-alias jenv_set_java_home='export JAVA_HOME="$HOME/.jenv/versions/`jenv version-name`"'
-
 source ~/projects/shellject/bash/shellject_wrapper.sh
 source ~/.rbenv/versions/2.4.1/lib/ruby/gems/2.4.0/gems/shellject-1.0.1/bash/shellject_wrapper.sh
-
-jenv_set_java_home
 
 setopt EXTENDED_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST
@@ -100,3 +90,4 @@ source ~/fzf.zsh
 
 typeset -U path
 export PATH
+# zprof

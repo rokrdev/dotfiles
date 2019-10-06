@@ -50,5 +50,9 @@ rbenv() {
   eval "$(rbenv init -)"
   rbenv "$@"
 }
-eval "$(jenv init - --no-rehash)"
-(jenv rehash &) 2> /dev/null
+
+jenv() {
+  eval "$(jenv init - --no-rehash)"
+  (jenv rehash &) 2> /dev/null
+  jenv "$@"
+}

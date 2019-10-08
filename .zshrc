@@ -23,7 +23,7 @@ function notion {
 alias k="/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
 alias b=bat
 alias ed="emacs --daemon &"
-alias e="emacs -nw"
+alias e="emacs -nw -nl -nsl --no-site-file"
 # alias e="emacsclient -t -a ''"
 alias eg=startEmacs
 alias fk="fkill"
@@ -86,3 +86,19 @@ source ~/fzf.zsh
 typeset -U path
 export PATH
 # zprof
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/usr/local/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/usr/local/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/usr/local/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/usr/local/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+

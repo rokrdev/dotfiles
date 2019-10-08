@@ -90,7 +90,7 @@ f() {
     local olIFS=$IFS  # save old IFS to reset later
     IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
     IFS=$olIFS   # reset IFS else git info breaks in terminal prompt
-    [[ -n "$files" ]] && emacs -nw "${files[@]}"
+    [[ -n "$files" ]] && e "${files[@]}"
 }
 
 fe() {
@@ -98,7 +98,7 @@ fe() {
     local olIFS=$IFS  # save old IFS to reset later
     IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
     IFS=$olIFS   # reset IFS else git info breaks in terminal prompt
-    [[ -n "$files" ]] && emacs "${files[@]}" &
+    [[ -n "$files" ]] && e "${files[@]}" &
 }
 
 ffLogic() {
@@ -108,7 +108,7 @@ ffLogic() {
     IFS=$'\n' files=($(rg --files-with-matches --no-messages "$2" | fzf --multi --select-1 --exit-0 --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$2' || rg --ignore-case --pretty --context 10 '$2' {}"))
     IFS=$olIFS   #reset IFS else git info breaks in terminal prompt
     if [ "$1" = 'open' ]; then
-        [[ -n "$files" ]] && emacs -nw "${files[@]}"
+        [[ -n "$files" ]] && e "${files[@]}"
     else
         [[ -n "$files" ]] && echo "${files[@]}"
     fi

@@ -8,7 +8,7 @@ source ~/.zshenv
 
 # Customize to your needs...
 function startEmacs {
-   emacs "$1" &
+   emacsclient -c  "$1" &
 }
 
 function notion {
@@ -23,8 +23,8 @@ function notion {
 alias k="/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
 alias b=bat
 alias ed="emacs --daemon &"
-alias e="emacs -nw -nl -nsl --no-site-file"
-# alias e="emacsclient -t -a ''"
+# alias e="emacs -nw -nl -nsl --no-site-file"
+alias e="emacsclient -t -a ''"
 alias eg=startEmacs
 alias fk="fkill"
 alias m=make

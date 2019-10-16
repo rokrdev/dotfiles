@@ -51,8 +51,15 @@ rbenv() {
   rbenv "$@"
 }
 
-jenv() {
+jv() {
   eval "$(jenv init - --no-rehash)"
   (jenv rehash &) 2> /dev/null
-  jenv "$@"
 }
+
+typeset -U path
+export PATH
+
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+# defaults write NSGlobalDomain KeyRepeat -float 1.5
+# defaults write NSGlobalDomain InitialKeyRepeat -int 23
+defaults write NSGlobalDomain NSAppSleepDisabled -bool YES

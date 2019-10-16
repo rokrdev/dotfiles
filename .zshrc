@@ -1,5 +1,6 @@
 # Source Prezto.
 # zmodload zsh/zprof
+
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
@@ -8,7 +9,7 @@ source ~/.zshenv
 
 # Customize to your needs...
 function startEmacs {
-   emacsclient -c  "$1" &
+   emacs  "$1" &
 }
 
 function notion {
@@ -23,8 +24,8 @@ function notion {
 alias k="/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
 alias b=bat
 alias ed="emacs --daemon &"
-# alias e="emacs -nw -nl -nsl --no-site-file"
-alias e="emacsclient -t -a ''"
+alias e="emacs -nw -nl -nsl --no-site-file"
+# alias e="emacsclient -t -a ''"
 alias eg=startEmacs
 alias fk="fkill"
 alias m=make
@@ -62,10 +63,6 @@ source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 prompt pure
 
-defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
-# defaults write NSGlobalDomain KeyRepeat -float 1.5
-# defaults write NSGlobalDomain InitialKeyRepeat -int 23
-
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '~/google-cloud-sdk/path.zsh.inc' ]; then . '~/google-cloud-sdk/path.zsh.inc'; fi
 
@@ -83,10 +80,6 @@ setopt HIST_BEEP
 
 source ~/fzf.zsh
 
-typeset -U path
-export PATH
-# zprof
-
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/usr/local/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
@@ -102,3 +95,4 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+# zprof

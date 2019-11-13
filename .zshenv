@@ -1,4 +1,3 @@
-
 #
 # Defines environment variables.
 #

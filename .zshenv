@@ -37,6 +37,7 @@ export INSTANCE_TYPE="n1-highmem-8" # budget: "n1-highmem-4"
 export PATH="/usr/local/anaconda3/bin:$PATH"
 export PATH="$HOME/.jenv/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="/usr/local/bin:$PATH"
 
 source ~/.env
 

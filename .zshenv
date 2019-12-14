@@ -14,8 +14,8 @@ export TERM=xterm-24bit
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 # export PATH="$PATH:$HOME/.rvm/bin"
-export ALTERNATE_EDITOR="emacs -nw"
-export VISUAL="emacs -nw"
+export ALTERNATE_EDITOR="nvim"
+export VISUAL="nvim"
 export EDITOR="$VISUAL"
 export PATH="${HOME}/.npm-packages/bin:$PATH"
 

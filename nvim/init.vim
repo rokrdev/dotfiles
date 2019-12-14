@@ -1,4 +1,3 @@
-" Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/pluggedf
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
@@ -11,9 +10,12 @@ Plug 'junegunn/vim-easy-align'
 " Any valid git URL is allowed
 Plug 'https://github.com/junegunn/vim-github-dashboard.git'
 
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+let g:deoplete#enable_at_startup = 1
 " On-demand loading
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
+" Specify a directory for plugins
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-unimpaired'
@@ -37,7 +39,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'pangloss/vim-javascript'
 Plug 'jiangmiao/auto-pairs'
 
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+
 Plug 'cloudhead/neovim-fuzzy'
 Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
 Plug 'shougo/context_filetype.vim'
@@ -55,10 +58,16 @@ Plug 'udalov/kotlin-vim'
 Plug 'ayu-theme/ayu-vim'
 Plug 'francoiscabrol/ranger.vim'
 Plug 'rbgrouleff/bclose.vim'
+Plug 'w0rp/ale'
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+Plug 'elixir-editors/vim-elixir'
+Plug 'RRethy/vim-illuminate'
 
 call plug#end()
 
-let g:deoplete#enable_at_startup = 1
 let g:deoplete#auto_completion_start_length=2
 let g:deoplete#sources={}
 let g:deoplete#sources._    = ['buffer', 'file', 'ultisnips']
@@ -184,16 +193,28 @@ endfunc
 highlight multiple_cursors_cursor term=reverse cterm=reverse gui=reverse
 highlight link multiple_cursors_visual Visual
 
+let g:multi_cursor_use_default_mapping=0
+
+" Default mapping
+let g:multi_cursor_start_word_key      = '<C-n>'
+let g:multi_cursor_select_all_word_key = '<leader>aa'
+let g:multi_cursor_start_key           = 'g<C-n>'
+let g:multi_cursor_select_all_key      = 'g<leader>ak'
+let g:multi_cursor_next_key            = '<C-n>'
+let g:multi_cursor_prev_key            = '<C-p>'
+let g:multi_cursor_skip_key            = '<C-x>'
+let g:multi_cursor_quit_key            = '<Esc>'
+
 " Search and Replace
 nmap <Leader>S :%s!!!g<Left><Left><Left>
 nnoremap <leader>c :nohlsearch<CR>
 nnoremap Q @q
 vnoremap Q :norm @q<cr>
-nnoremap <C-p> :FuzzyOpen<CR>
 nnoremap H :bnext<CR>
 nnoremap L :bprevious<CR>
 nnoremap <leader>s :w<cr>
 let g:ranger_map_keys = 0
+nnoremap <leader>p :FuzzyOpen<CR>
 nnoremap <leader>F :Ranger<cr>
 nnoremap <leader>f :Rg<cr>
 nnoremap <leader>n :NERDTreeToggle<CR>
@@ -221,7 +242,7 @@ let g:airline#extensions#default#section_truncate_width = {
       \ 'y': 88,
       \ 'z': 45,
       \ }
-" let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
 let b:airline_whitespace_checks = [ 'indent', 'mixed-indent-file' ]
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
@@ -270,3 +291,41 @@ set guicursor=
 
 let g:prettier#autoformat = 0
 autocmd BufWritePre *.js,*.jsx,*.css,*.scss,*.less Prettier
+
+let g:ale_fixers = {
+ \ 'javascript': ['eslint'],
+ \ 'elixir': ['elixir-ls']
+ \ }
+
+let g:ale_fixers = {
+\   'elixir': ['mix_format'],
+\}
+
+let g:ale_sign_error = '❌'
+let g:ale_sign_warning = '⚠️'
+
+let g:ale_fix_on_save = 1
+let g:ale_elixir_elixir_ls_release = '~/.local/bin'
+
+nnoremap ]r :ALENextWrap<CR>     " move to the next ALE warning / error
+nnoremap [r :ALEPreviousWrap<CR> " move to the previous ALE warning / error
+
+" Required for operations modifying multiple buffers like rename.
+set hidden
+
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
+    \ 'python': ['/usr/local/bin/pyls'],
+    \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
+    \ 'elixir': ['~/.local/bin/language_server.sh']
+    \ }
+
+nnoremap <leader>l :call LanguageClient_contextMenu()<CR>
+" Or map each action separately
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <leader>r :call LanguageClient#textDocument_rename()<CR>
+
+let g:Illuminate_ftblacklist = ['nerdtree']

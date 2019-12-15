@@ -57,6 +57,7 @@ alias ys='yarn start'
 alias yt='yarn test'
 alias ya='yarn add'
 alias zz='fasd_cd -d -i' # cd with interactive selection
+alias python3=python
 
 # source autosuggestions
 source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh

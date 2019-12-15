@@ -1,6 +1,6 @@
 " - For Neovim: ~/.local/share/nvim/pluggedf
 " - Avoid using standard Vim directory names like 'plugin'
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.config/nvim/autoload')
 
 " Make sure you use single quotes
 
@@ -61,7 +61,7 @@ Plug 'rbgrouleff/bclose.vim'
 Plug 'w0rp/ale'
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
+    \ 'do': 'install.sh',
     \ }
 Plug 'elixir-editors/vim-elixir'
 Plug 'RRethy/vim-illuminate'

@@ -133,6 +133,8 @@ let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 syntax enable
 set background=dark
 let ayucolor="mirage"
+let g:nord_bold=1
+let g:nord_italic=1
 colorscheme nord
 let g:airline_theme='nord'
 
@@ -289,7 +291,7 @@ command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-h
 
 set guicursor=
 
-let g:prettier#autoformat = 0
+let g:prettier#autoformat = 1
 autocmd BufWritePre *.js,*.jsx,*.css,*.scss,*.less Prettier
 
 let g:ale_fixers = {
@@ -329,3 +331,10 @@ nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 nnoremap <leader>r :call LanguageClient#textDocument_rename()<CR>
 
 let g:Illuminate_ftblacklist = ['nerdtree']
+
+let g:better_whitespace_enabled=1
+let g:strip_whitespace_on_save=1
+
+highlight Comment cterm=italic gui=italic
+highlight Function cterm=italic gui=italic
+let g:nord_comment_brightness = 20

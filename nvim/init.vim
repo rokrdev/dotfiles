@@ -221,6 +221,8 @@ nnoremap <leader>F :Ranger<cr>
 nnoremap <leader>f :Rg<cr>
 nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>b :Buffers<CR>
+nnoremap <leader>q :bd<CR>
+nnoremap <leader>S :Scratchy<CR>
 nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
 vnoremap <C-j> :m '>+1<CR>gv=gv
@@ -346,3 +348,16 @@ set tags+=$HOME/.local/tags
 autocmd BufWritePost *.py silent! !ctags ; /dev/null &amp;
 autocmd BufWritePost *.js silent! !ctags ; /dev/null &amp;
 autocmd BufWritePost *.ex silent! !ctags ; /dev/null &amp;
+
+function! s:ScratchGenerator()
+  exe "e!" . "__Scratchy__"
+endfunction
+
+function! s:ScratchMarkBuffer()
+  setlocal buftype=nofile
+  setlocal bufhidden=hide
+  setlocal noswapfile
+endfunction
+
+autocmd BufNewFile __Scratchy__ call s:ScratchMarkBuffer()
+command! Scratchy call s:ScratchGenerator()

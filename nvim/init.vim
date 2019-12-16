@@ -37,7 +37,6 @@ Plug 'Yggdroot/indentLine'
 Plug 'mattn/emmet-vim'
 Plug 'ap/vim-css-color'
 Plug 'airblade/vim-gitgutter'
-Plug 'pangloss/vim-javascript'
 Plug 'jiangmiao/auto-pairs'
 
 Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
@@ -318,10 +317,10 @@ nnoremap [r :ALEPreviousWrap<CR> " move to the previous ALE warning / error
 set hidden
 
 let g:LanguageClient_autoStart = 1
+" \ 'javascript': ['javascript-typescript-langserver'],
+" \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-    \ 'javascript': ['javascript-typescript-langserver'],
-    \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
     \ 'python': ['/usr/local/bin/pyls'],
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ 'elixir': ['~/.local/bin/language_server.sh']
@@ -342,3 +341,8 @@ let g:strip_whitespace_on_save=1
 highlight Comment cterm=italic gui=italic
 highlight Function cterm=italic gui=italic
 let g:nord_comment_brightness = 20
+
+set tags+=$HOME/.local/tags
+autocmd BufWritePost *.py silent! !ctags ; /dev/null &amp;
+autocmd BufWritePost *.js silent! !ctags ; /dev/null &amp;
+autocmd BufWritePost *.ex silent! !ctags ; /dev/null &amp;

@@ -1,5 +1,6 @@
 " - For Neovim: ~/.local/share/nvim/pluggedf
 " - Avoid using standard Vim directory names like 'plugin'
+"
 call plug#begin('~/.config/nvim/autoload')
 
 " Make sure you use single quotes
@@ -22,7 +23,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'haishanh/night-owl.vim'
-Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -61,7 +62,7 @@ Plug 'rbgrouleff/bclose.vim'
 Plug 'w0rp/ale'
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
-    \ 'do': 'install.sh',
+    \ 'do': './install.sh',
     \ }
 Plug 'elixir-editors/vim-elixir'
 Plug 'RRethy/vim-illuminate'
@@ -80,8 +81,8 @@ let g:deoplete#sources.scss = ['buffer', 'member', 'file', 'omni', 'ultisnips']
 " Manually trigger tag autocomplete
 inoremap <silent> <expr> <C-]> utils#manualTagComplete()
 " let g:deoplete#disable_auto_complete = 1
-" autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-" inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 "
 
 " let g:sneak#label = 1
@@ -212,8 +213,8 @@ nmap <Leader>S :%s!!!g<Left><Left><Left>
 nnoremap <leader>c :nohlsearch<CR>
 nnoremap Q @q
 vnoremap Q :norm @q<cr>
-nnoremap H :bnext<CR>
-nnoremap L :bprevious<CR>
+nnoremap L :bnext<CR>
+nnoremap H :bprevious<CR>
 nnoremap <leader>s :w<cr>
 let g:ranger_map_keys = 0
 nnoremap <leader>p :FuzzyOpen<CR>
@@ -245,6 +246,7 @@ let g:airline#extensions#default#section_truncate_width = {
       \ 'z': 45,
       \ }
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
 let b:airline_whitespace_checks = [ 'indent', 'mixed-indent-file' ]
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
@@ -317,7 +319,7 @@ set hidden
 
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-    \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'javascript': ['javascript-typescript-langserver'],
     \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
     \ 'python': ['/usr/local/bin/pyls'],
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
@@ -331,6 +333,7 @@ nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 nnoremap <leader>r :call LanguageClient#textDocument_rename()<CR>
 
 let g:Illuminate_ftblacklist = ['nerdtree']
+let g:indentLine_fileTypeExclude = ["nerdtree"]
 
 let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1

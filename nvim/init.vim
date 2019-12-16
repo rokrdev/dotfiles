@@ -169,7 +169,6 @@ if !&sidescrolloff
 endif
 set nostartofline       " Do not jump to first character with page commands.
 
-set ignorecase          " Make searching case insensitive
 set smartcase           " ... unless the query has capital letters.
 set gdefault
 set mouse=a
@@ -318,6 +317,7 @@ nnoremap [r :ALEPreviousWrap<CR> " move to the previous ALE warning / error
 " Required for operations modifying multiple buffers like rename.
 set hidden
 
+let g:LanguageClient_autoStart = 1
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
     \ 'javascript': ['javascript-typescript-langserver'],

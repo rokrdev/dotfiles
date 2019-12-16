@@ -48,7 +48,7 @@ Plug 'joshdick/onedark.vim'
 Plug 'terryma/vim-expand-region'
 Plug 'andymass/vim-matchup'
 " Plug 'skwp/vim-easymotion'
-" Plug 'justinmk/vim-sneak'
+Plug 'justinmk/vim-sneak'
 Plug 'arcticicestudio/nord-vim'
 Plug 'prettier/vim-prettier'
 Plug 'dracula/vim', { 'as': 'dracula' }
@@ -84,11 +84,11 @@ autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 "
 
-" let g:sneak#label = 1
-" map f <Plug>Sneak_f
-" map F <Plug>Sneak_F
-" map t <Plug>Sneak_t
-" map T <Plug>Sneak_T
+let g:sneak#label = 1
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
 
 " tern
 if exists('g:plugs["tern_for_vim"]')
@@ -119,15 +119,17 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
+let $TERM="xterm-24bit"
+
 " If you have vim >=8.0 or Neovim >= 0.1.5
 if (has("termguicolors"))
-  " set termguicolors
+  set termguicolors
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 endif
 
-" For Neovim 0.1.3 and 0.1.4
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+" " For Neovim 0.1.3 and 0.1.4
+" let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 """"" enable the theme
 syntax enable
@@ -361,3 +363,5 @@ endfunction
 
 autocmd BufNewFile __Scratchy__ call s:ScratchMarkBuffer()
 command! Scratchy call s:ScratchGenerator()
+
+highlight Sneak cterm=NONE guifg=black guibg=#B48EAD ctermfg=black ctermbg=175

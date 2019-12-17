@@ -37,7 +37,6 @@ alias t=tmux
 alias v=nvim
 alias y=yarn
 alias zl='fasd_cd -d'     # cd, same functionality as j in autojump
-alias rg="rg --hidden -g '!.git/*'"
 alias sudo='sudo '       # to use sudo with alias
 alias brup='brew update; brew upgrade; brew cask upgrade; brew cleanup; brew doctor'
 alias dc='docker-compose'
@@ -58,6 +57,9 @@ alias yt='yarn test'
 alias ya='yarn add'
 alias zz='fasd_cd -d -i' # cd with interactive selection
 alias python3=python
+
+# exclude="priv,.config,.git,node_modules,vendor,build,package-lock.json,yarn.lock,mix.lock,dist"
+# alias rg='rg --hidden -g "!{'$exclude'}/*"'
 
 # source autosuggestions
 source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh

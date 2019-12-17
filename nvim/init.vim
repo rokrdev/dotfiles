@@ -65,6 +65,7 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ }
 Plug 'elixir-editors/vim-elixir'
 Plug 'RRethy/vim-illuminate'
+Plug 'djoshea/vim-autoread'
 
 call plug#end()
 
@@ -114,6 +115,24 @@ let g:UltiSnipsJumpBackwardTrigger="<C-z>"
 
 set clipboard=unnamed
 let NERDTreeMapOpen='<ENTER>'
+
+let $FZF_DEFAULT_COMMAND='rg --files --smart-case'
+
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+
+" [[B]Commits] Customize the options used by 'git log':
+let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+
+" [Tags] Command to generate tags file
+let g:fzf_tags_command = 'ctags &'
+
+" [Commands] --expect expression for directly executing the command
+let g:fzf_commands_expect = 'alt-enter,ctrl-x'
+
+au TermOpen * tnoremap <buffer> <Esc> <c-\><c-n>
+au FileType fzf tunmap <buffer> <Esc>
+
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-x': 'split',
@@ -209,29 +228,28 @@ let g:multi_cursor_prev_key            = '<C-p>'
 let g:multi_cursor_skip_key            = '<C-x>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
-" Search and Replace
-nmap <Leader>S :%s!!!g<Left><Left><Left>
-nnoremap <leader>c :nohlsearch<CR>
-nnoremap Q @q
-vnoremap Q :norm @q<cr>
-nnoremap L :bnext<CR>
-nnoremap H :bprevious<CR>
-nnoremap <leader>s :w<cr>
 let g:ranger_map_keys = 0
-nnoremap <leader>p :FuzzyOpen<CR>
-nnoremap <leader>F :Ranger<cr>
-nnoremap <leader>f :Rg<cr>
-nnoremap <leader>n :NERDTreeToggle<CR>
-nnoremap <leader>b :Buffers<CR>
-nnoremap <leader>q :bd<CR>
-nnoremap <leader>S :Scratchy<CR>
+nmap gs :%s!!!g<Left><Left><Left>
 nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
-vnoremap <C-j> :m '>+1<CR>gv=gv
-vnoremap <C-k> :m '<-2<CR>gv=gv
-nnoremap ]w :NextTrailingWhitespace<CR>
+nnoremap <leader>S :Scratchy<CR>
+nnoremap <leader>b :Buffers<CR>
+nnoremap gc :nohlsearch<CR>
+nnoremap <leader>ff :Rg<space>
+nnoremap <leader>fr :Ranger<cr>
+nnoremap <leader>n :NERDTreeToggle<CR>
+nnoremap <leader>p :FuzzyOpen<CR>
+nnoremap <leader>q :bd<CR>
+nnoremap <leader>s :w<cr>
+nnoremap H :bprevious<CR>
+nnoremap L :bnext<CR>
+nnoremap Q @q
 nnoremap [w :PrevTrailingWhitespace<CR>
 nnoremap \ :Find<SPACE>
+nnoremap ]w :NextTrailingWhitespace<CR>
+vnoremap <C-j> :m '>+1<CR>gv=gv
+vnoremap <C-k> :m '<-2<CR>gv=gv
+vnoremap Q :norm @q<cr>
 
 let g:indentLine_enabled = 0
 let g:indentLine_char = '│'
@@ -347,9 +365,9 @@ highlight Function cterm=italic gui=italic
 let g:nord_comment_brightness = 20
 
 set tags+=$HOME/.local/tags
-autocmd BufWritePost *.py silent! !ctags ; /dev/null &amp;
-autocmd BufWritePost *.js silent! !ctags ; /dev/null &amp;
-autocmd BufWritePost *.ex silent! !ctags ; /dev/null &amp;
+" autocmd BufWritePost *.py silent! !ctags ; /dev/null &amp;
+" autocmd BufWritePost *.js silent! !ctags ; /dev/null &amp;
+" autocmd BufWritePost *.ex silent! !ctags ; /dev/null &amp;
 
 function! s:ScratchGenerator()
   exe "e!" . "__Scratchy__"

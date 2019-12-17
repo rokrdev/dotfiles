@@ -27,7 +27,6 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'airblade/vim-gitgutter'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'sheerun/vim-polyglot'
@@ -66,6 +65,7 @@ Plug 'autozimu/LanguageClient-neovim', {
 Plug 'elixir-editors/vim-elixir'
 Plug 'RRethy/vim-illuminate'
 Plug 'djoshea/vim-autoread'
+Plug 'ludovicchabant/vim-gutentags'
 
 call plug#end()
 
@@ -115,8 +115,6 @@ let g:UltiSnipsJumpBackwardTrigger="<C-z>"
 
 set clipboard=unnamed
 let NERDTreeMapOpen='<ENTER>'
-
-let $FZF_DEFAULT_COMMAND='rg --files --smart-case'
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
@@ -234,13 +232,13 @@ nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
 nnoremap <leader>S :Scratchy<CR>
 nnoremap <leader>b :Buffers<CR>
-nnoremap gc :nohlsearch<CR>
-nnoremap <leader>ff :Rg<space>
-nnoremap <leader>fr :Ranger<cr>
-nnoremap <leader>n :NERDTreeToggle<CR>
-nnoremap <leader>p :FuzzyOpen<CR>
+nnoremap <leader>ff :Rg<CR>
+nnoremap <leader>fr :Ranger<CR>
+nnoremap <leader>mc :nohl<CR>
+nnoremap <leader>pf :FuzzyOpen<CR>
+nnoremap <leader>pn :NERDTreeToggle<CR>
 nnoremap <leader>q :bd<CR>
-nnoremap <leader>s :w<cr>
+nnoremap <leader>s :w<CR>
 nnoremap H :bprevious<CR>
 nnoremap L :bnext<CR>
 nnoremap Q @q
@@ -249,7 +247,7 @@ nnoremap \ :Find<SPACE>
 nnoremap ]w :NextTrailingWhitespace<CR>
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
-vnoremap Q :norm @q<cr>
+vnoremap Q :norm @q<CR>
 
 let g:indentLine_enabled = 0
 let g:indentLine_char = '│'
@@ -300,6 +298,7 @@ let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
 
+set statusline+=%{gutentags#statusline()}
 " --column: Show column number
 " --line-number: Show line number
 " --no-heading: Do not show file headings in results
@@ -363,11 +362,6 @@ let g:strip_whitespace_on_save=1
 highlight Comment cterm=italic gui=italic
 highlight Function cterm=italic gui=italic
 let g:nord_comment_brightness = 20
-
-set tags+=$HOME/.local/tags
-" autocmd BufWritePost *.py silent! !ctags ; /dev/null &amp;
-" autocmd BufWritePost *.js silent! !ctags ; /dev/null &amp;
-" autocmd BufWritePost *.ex silent! !ctags ; /dev/null &amp;
 
 function! s:ScratchGenerator()
   exe "e!" . "__Scratchy__"

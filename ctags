@@ -1,6 +1,7 @@
 --recurse=yes
 --exclude=.git
 --exclude=tags
+--exclude=autoload
 
 
 

@@ -316,20 +316,17 @@ set guicursor=
 let g:prettier#autoformat = 1
 autocmd BufWritePre *.js,*.jsx,*.css,*.scss,*.less Prettier
 
+ " \ 'elixir': ['elixir-ls']
+" \   'elixir': ['mix_format'],
 let g:ale_fixers = {
  \ 'javascript': ['eslint'],
- \ 'elixir': ['elixir-ls']
  \ }
-
-let g:ale_fixers = {
-\   'elixir': ['mix_format'],
-\}
 
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
 
 let g:ale_fix_on_save = 1
-let g:ale_elixir_elixir_ls_release = '~/.local/bin'
+" let g:ale_elixir_elixir_ls_release = '~/.local/bin'
 
 nnoremap ]r :ALENextWrap<CR>     " move to the next ALE warning / error
 nnoremap [r :ALEPreviousWrap<CR> " move to the previous ALE warning / error

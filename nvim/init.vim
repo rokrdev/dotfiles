@@ -78,18 +78,11 @@ let g:deoplete#sources.css  = ['buffer', 'member', 'file', 'omni', 'ultisnips']
 let g:deoplete#sources.scss = ['buffer', 'member', 'file', 'omni', 'ultisnips']
 " Insert <TAB> or select next match
 
-" Manually trigger tag autocomplete
-inoremap <silent> <expr> <C-]> utils#manualTagComplete()
 " let g:deoplete#disable_auto_complete = 1
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 "
 
 let g:sneak#label = 1
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
-map t <Plug>Sneak_t
-map T <Plug>Sneak_T
 
 " tern
 if exists('g:plugs["tern_for_vim"]')
@@ -127,9 +120,6 @@ let g:fzf_tags_command = 'ctags &'
 
 " [Commands] --expect expression for directly executing the command
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
-
-au TermOpen * tnoremap <buffer> <Esc> <c-\><c-n>
-au FileType fzf tunmap <buffer> <Esc>
 
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
@@ -211,43 +201,8 @@ func! Multiple_cursors_after()
     call deoplete#enable()
   endif
 endfunc
-highlight multiple_cursors_cursor term=reverse cterm=reverse gui=reverse
-highlight link multiple_cursors_visual Visual
 
 let g:multi_cursor_use_default_mapping=0
-
-" Default mapping
-let g:multi_cursor_start_word_key      = '<C-n>'
-let g:multi_cursor_select_all_word_key = '<leader>aa'
-let g:multi_cursor_start_key           = 'g<C-n>'
-let g:multi_cursor_select_all_key      = 'g<leader>ak'
-let g:multi_cursor_next_key            = '<C-n>'
-let g:multi_cursor_prev_key            = '<C-p>'
-let g:multi_cursor_skip_key            = '<C-x>'
-let g:multi_cursor_quit_key            = '<Esc>'
-
-let g:ranger_map_keys = 0
-nmap gs :%s!!!g<Left><Left><Left>
-nnoremap <C-j> :m .+1<CR>==
-nnoremap <C-k> :m .-2<CR>==
-nnoremap <leader>S :Scratchy<CR>
-nnoremap <leader>b :Buffers<CR>
-nnoremap <leader>ff :Rg<CR>
-nnoremap <leader>fr :Ranger<CR>
-nnoremap <leader>mc :nohl<CR>
-nnoremap <leader>pf :FuzzyOpen<CR>
-nnoremap <leader>pn :NERDTreeToggle<CR>
-nnoremap <leader>q :bd<CR>
-nnoremap <leader>s :w<CR>
-nnoremap H :bprevious<CR>
-nnoremap L :bnext<CR>
-nnoremap Q @q
-nnoremap [w :PrevTrailingWhitespace<CR>
-nnoremap \ :Find<SPACE>
-nnoremap ]w :NextTrailingWhitespace<CR>
-vnoremap <C-j> :m '>+1<CR>gv=gv
-vnoremap <C-k> :m '<-2<CR>gv=gv
-vnoremap Q :norm @q<CR>
 
 let g:indentLine_enabled = 0
 let g:indentLine_char = '│'
@@ -309,7 +264,7 @@ set statusline+=%{gutentags#statusline()}
 " --follow: Follow symlinks
 " --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
 " --color: Search color options
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!{.git,node_modules}/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow '.shellescape(<q-args>), 1, <bang>0)
 
 set guicursor=
 
@@ -328,9 +283,6 @@ let g:ale_sign_warning = '⚠️'
 let g:ale_fix_on_save = 1
 " let g:ale_elixir_elixir_ls_release = '~/.local/bin'
 
-nnoremap ]r :ALENextWrap<CR>     " move to the next ALE warning / error
-nnoremap [r :ALEPreviousWrap<CR> " move to the previous ALE warning / error
-
 " Required for operations modifying multiple buffers like rename.
 set hidden
 
@@ -344,20 +296,12 @@ let g:LanguageClient_serverCommands = {
     \ 'elixir': ['~/.local/bin/language_server.sh']
     \ }
 
-nnoremap <leader>l :call LanguageClient_contextMenu()<CR>
-" Or map each action separately
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <leader>r :call LanguageClient#textDocument_rename()<CR>
-
 let g:Illuminate_ftblacklist = ['nerdtree']
 let g:indentLine_fileTypeExclude = ["nerdtree"]
 
 let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1
 
-highlight Comment cterm=italic gui=italic
-highlight Function cterm=italic gui=italic
 let g:nord_comment_brightness = 20
 
 function! s:ScratchGenerator()
@@ -374,3 +318,60 @@ autocmd BufNewFile __Scratchy__ call s:ScratchMarkBuffer()
 command! Scratchy call s:ScratchGenerator()
 
 highlight Sneak cterm=NONE guifg=black guibg=#B48EAD ctermfg=black ctermbg=175
+highlight multiple_cursors_cursor term=reverse cterm=reverse gui=reverse
+highlight link multiple_cursors_visual Visual
+highlight Comment cterm=italic gui=italic
+highlight Function cterm=italic gui=italic
+
+" All mappings
+" Manually trigger tag autocomplete
+inoremap <silent> <expr> <C-]> utils#manualTagComplete()
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
+au TermOpen * tnoremap <buffer> <Esc> <c-\><c-n>
+au FileType fzf tunmap <buffer> <Esc>
+
+" Default mapping
+let g:multi_cursor_start_word_key      = '<C-n>'
+let g:multi_cursor_select_all_word_key = '<leader>aa'
+let g:multi_cursor_start_key           = 'g<C-n>'
+let g:multi_cursor_select_all_key      = 'g<leader>ak'
+let g:multi_cursor_next_key            = '<C-n>'
+let g:multi_cursor_prev_key            = '<C-p>'
+let g:multi_cursor_skip_key            = '<C-x>'
+let g:multi_cursor_quit_key            = '<Esc>'
+
+let g:ranger_map_keys = 0
+nmap gs :%s!!!g<Left><Left><Left>
+nnoremap <C-j> :m .+1<CR>==
+nnoremap <C-k> :m .-2<CR>==
+nnoremap <leader>S :Scratchy<CR>
+nnoremap <leader>b :Buffers<CR>
+nnoremap <leader>f :Rg<CR>
+nnoremap <leader>r :Ranger<CR>
+nnoremap <leader>mc :nohl<CR>
+nnoremap <leader>p :FuzzyOpen<CR>
+nnoremap <leader>n :NERDTreeToggle<CR>
+nnoremap <leader>q :bd<CR>
+nnoremap <leader>s :w<CR>
+nnoremap H :bprevious<CR>
+nnoremap L :bnext<CR>
+nnoremap Q @q
+nnoremap [w :PrevTrailingWhitespace<CR>
+nnoremap \ :Find<SPACE>
+nnoremap ]w :NextTrailingWhitespace<CR>
+vnoremap <C-j> :m '>+1<CR>gv=gv
+vnoremap <C-k> :m '<-2<CR>gv=gv
+vnoremap Q :norm @q<CR>
+nnoremap ]r :ALENextWrap<CR>     " move to the next ALE warning / error
+nnoremap [r :ALEPreviousWrap<CR> " move to the previous ALE warning / error
+
+nnoremap <leader>l :call LanguageClient_contextMenu()<CR>
+" Or map each action separately
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <leader>r :call LanguageClient#textDocument_rename()<CR>
+

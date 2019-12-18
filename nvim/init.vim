@@ -368,9 +368,17 @@ vnoremap Q :norm @q<CR>
 nnoremap ]r :ALENextWrap<CR>     " move to the next ALE warning / error
 nnoremap [r :ALEPreviousWrap<CR> " move to the previous ALE warning / error
 
-nnoremap <leader>l :call LanguageClient_contextMenu()<CR>
+nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
 " Or map each action separately
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <leader>r :call LanguageClient#textDocument_rename()<CR>
+nnoremap <leader>lh :call LanguageClient#textDocument_hover()<CR>
+nnoremap <leader>lj :call LanguageClient#textDocument_definition()<CR>
+nnoremap <leader>lr :call LanguageClient#textDocument_rename()<CR>
+
+nnoremap <leader>gg :Git<CR>
+nnoremap <leader>gb :Gblame<CR>
+nnoremap <leader>gd :Gdiff<CR>
+nnoremap <leader>gl :Gllog<CR>
+nnoremap <leader>gf :Gpull<CR>
+nnoremap <leader>gp :Gpush<CR>
+
 

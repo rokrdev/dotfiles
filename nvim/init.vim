@@ -40,7 +40,6 @@ Plug 'jiangmiao/auto-pairs'
 
 Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 
-Plug 'cloudhead/neovim-fuzzy'
 Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
 Plug 'shougo/context_filetype.vim'
 Plug 'joshdick/onedark.vim'
@@ -353,7 +352,7 @@ nnoremap <leader>b :Buffers<CR>
 nnoremap <leader>f :Rg<CR>
 nnoremap <leader>r :Ranger<CR>
 nnoremap <leader>mc :nohl<CR>
-nnoremap <leader>p :FuzzyOpen<CR>
+nnoremap <leader>p :Files<CR>
 nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>q :bd<CR>
 nnoremap <leader>s :w<CR>

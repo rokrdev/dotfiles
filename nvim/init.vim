@@ -354,7 +354,7 @@ nnoremap <leader>r :Ranger<CR>
 nnoremap <leader>mc :nohl<CR>
 nnoremap <leader>p :Files<CR>
 nnoremap <leader>n :NERDTreeToggle<CR>
-nnoremap <leader>q :bd<CR>
+nnoremap <leader>w :bd<CR>
 nnoremap <leader>s :w<CR>
 nnoremap H :bprevious<CR>
 nnoremap L :bnext<CR>

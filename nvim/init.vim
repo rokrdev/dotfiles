@@ -265,6 +265,18 @@ set statusline+=%{gutentags#statusline()}
 " --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
 " --color: Search color options
 command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow '.shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* RgPlus call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow '.shellescape(expand('<cword>')), 1, <bang>0)
+
+" function! init#visualSelection()
+"   try
+"     let a_save = @a
+"     normal! gv"ay
+"     return @a
+"   finally
+"     let @a = a_save
+"   endtry
+" endfunction
+" command! -bang -nargs=* RgVPlus call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow ' + init#visualSelection(), 1, <bang>0)
 
 set guicursor=
 
@@ -352,6 +364,8 @@ nnoremap <leader>S :Scratchy<CR>
 nnoremap <leader>b :Buffers<CR>
 nnoremap <leader>f :Rg<CR>
 nnoremap <leader>r :Ranger<CR>
+nnoremap <leader>* :RgPlus<CR>
+" vnoremap <leader>* :<C-U>RgVPlus<CR>
 nnoremap <leader>mc :nohl<CR>
 nnoremap <leader>p :Files<CR>
 nnoremap <leader>n :NERDTreeToggle<CR>

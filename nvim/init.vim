@@ -1,4 +1,4 @@
-" - For Neovim: ~/.local/share/nvim/pluggedf
+" - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
 "
 call plug#begin('~/.config/nvim/autoload')
@@ -37,6 +37,8 @@ Plug 'mattn/emmet-vim'
 Plug 'ap/vim-css-color'
 Plug 'airblade/vim-gitgutter'
 Plug 'jiangmiao/auto-pairs'
+Plug 'xolox/vim-session'
+Plug 'xolox/vim-misc'
 
 Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 
@@ -356,6 +358,19 @@ let g:multi_cursor_prev_key            = '<C-p>'
 let g:multi_cursor_skip_key            = '<C-x>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
+" Session config
+let g:session_directory = "~/.vim/session"
+let g:session_autoload = "no"
+let g:session_autosave = "no"
+let g:session_command_alias = 1
+
+nnoremap <leader>so :OpenSession<SPACE>
+nnoremap <leader>ss :SaveSession<SPACE>
+nnoremap <leader>sd :DeleteSession<CR>
+nnoremap <leader>sc :CloseSession<CR>
+nnoremap <leader>sc :CloseSession<CR>
+nnoremap <leader>sn :SaveSession default<CR> :OpenSession NOTES<CR>
+
 let g:ranger_map_keys = 0
 nmap gs :%s!!!g<Left><Left><Left>
 nnoremap <C-j> :m .+1<CR>==
@@ -370,7 +385,6 @@ nnoremap <leader>mc :nohl<CR>
 nnoremap <leader>p :Files<CR>
 nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>w :bd<CR>
-nnoremap <leader>s :w<CR>
 nnoremap H :bprevious<CR>
 nnoremap L :bnext<CR>
 nnoremap Q @q

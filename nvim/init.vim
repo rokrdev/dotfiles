@@ -135,7 +135,7 @@ set expandtab           " Insert spaces when TAB is pressed.
 set tabstop=2           " Render TABs using this many spaces.
 set shiftwidth=2        " Indentation amount for < and > commands.
 set softtabstop=2
-set cursorline
+set nocursorline
 set nojoinspaces        " Prevents inserting two spaces after punctuation on a join (J)
 set encoding=utf-8
 set autoread
@@ -327,26 +327,14 @@ inoremap <silent><expr> <c-space> coc#refresh()
 
 filetype plugin indent on
 
-func! Multiple_cursors_before()
-  if deoplete#is_enabled()
-    call deoplete#disable()
-    let g:deoplete_is_enable_before_multi_cursors = 1
-  else
-    let g:deoplete_is_enable_before_multi_cursors = 0
-  endif
-endfunc
-func! Multiple_cursors_after()
-  if g:deoplete_is_enable_before_multi_cursors
-    call deoplete#enable()
-  endif
-endfunc
 
 let g:multi_cursor_use_default_mapping=0
 
-let g:indentLine_enabled = 0
-let g:indentLine_char = '│'
+let g:indentLine_enabled = 1
+let g:indentLine_char = '┆'
 let g:indentLine_leadingSpaceEnabled = 1
 let g:indentLine_leadingSpaceChar = "·"
+autocmd TermOpen * IndentLinesDisable
 
 " let g:fuzzy_opencmd = 'tab drop'
 

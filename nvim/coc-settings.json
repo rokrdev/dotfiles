@@ -1,4 +1,5 @@
 {
+  "elixir.pathToElixirLS": "~/.local/bin/language_server.sh",
   "languageserver": {
     "bash": {
       "command": "bash-language-server",
@@ -12,7 +13,7 @@
       "args": ["--stdio"]
     },
     "elixirLS": {
-      "command": "language_server.sh",
+      "command": "~/.local/bin/language_server.sh",
       "filetypes": ["elixir", "eelixir"]
      }
   }

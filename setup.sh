@@ -13,6 +13,8 @@ brew cask install 1password 1password-cli adobe-acrobat-reader aerial alacritty 
 
 mkdir ~/projects
 
+zsh
+
 # install prezto modules ---------------------------------------------------------------------------------------------------------------------------------------------------------
 git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
 setopt EXTENDED_GLOB

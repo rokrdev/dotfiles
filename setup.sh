@@ -36,6 +36,7 @@ ln -s ~/projects/keyboard/karabiner/ ~/.config/karabiner
 ln ~/projects/dotfiles/tmux.conf ~/.tmux.conf
 ln ~/projects/dotfiles/zshenv ~/.zshenv
 ln ~/projects/dotfiles/zshrc ~/.zshrc
+ln ~/projects/dotfiles/fzf.zsh ~/.fzf.zsh
 
 ln ~/projects/keyboard/.skhdrc ~/.skhdrc
 ln ~/projects/keyboard/.yabairc ~/.yabairc

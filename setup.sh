@@ -1,4 +1,4 @@
-#!/bin/zsh
+!/bin/zsh
 
 # install brew packages ---------------------------------------------------------------------------------------------------------------------------------------------------------
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -96,7 +96,6 @@ brew install ispell
 brew install jansson
 brew install jasper
 brew install jemalloc
-brew install jenv
 brew install jpeg
 brew install jq
 brew install kotlin
@@ -164,7 +163,6 @@ brew install maven
 brew install mcrypt
 brew install mhash
 brew install mkvtoolnix
-brew install mongodb-community
 brew install mozjpeg
 brew install mpfr
 brew install mps-youtube
@@ -203,7 +201,6 @@ brew install pango
 brew install pcre
 brew install pcre2
 brew install perl
-brew install php@5.6
 brew install pinentry
 brew install pinentry-mac
 brew install pixman
@@ -214,7 +211,6 @@ brew install python
 brew install python3
 brew install qt
 brew install ranger
-brew install rbenv
 brew install readline
 brew install ren
 brew install rename
@@ -286,7 +282,6 @@ brew cask install folx
 brew cask install font-hasklig-nerd-font-mono
 brew cask install font-meslo-nerd-font-mono
 brew cask install font-sourcecodepro-nerd-font-mono
-brew cask install font-symbola
 brew cask install gimp
 brew cask install google-backup-and-sync
 brew cask install google-chrome

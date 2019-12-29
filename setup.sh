@@ -204,7 +204,7 @@ loadDotfiles () {
   ln ~/projects/dotfiles/fzf.zsh ~/.fzf.zsh
 
   source ~/.zshrc
-  yabai --install-sa
+  sudo yabai --install-sa
 
   brew services start yabai
   brew services start skhd

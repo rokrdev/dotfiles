@@ -33,8 +33,6 @@ preztoConfig () {
 }
 
 asdfTermConfig () {
-  echo "term config  ---------------------------------------------------------------------"
-  tic -x xterm-24bit.terminfo
   echo "asdf config ---------------------------------------------------------------------"
   asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git
   asdf plugin-add erlang https://github.com/asdf-vm/asdf-erlang.git
@@ -64,7 +62,7 @@ loadDotfiles () {
   echo "load dotfiles ---------------------------------------------------------------------"
   mkdir ~/.config
   mkdir ~/projects
-  git clone https://github.com/jbharat/dotfiles ~/projects/dotfiles
+  git clone https://github.com/jbharat/dotfiles.git ~/projects/dotfiles
 
   git clone https://github.com/jbharat/keyboard.git ~/projects/keyboard
 
@@ -79,6 +77,9 @@ loadDotfiles () {
   ln ~/projects/keyboard/.yabairc ~/.yabairc
 
   cp ~/projects/dotfiles/xterm-24bit.terminfo ~/
+
+  echo "term config  ---------------------------------------------------------------------"
+  tic -x xterm-24bit.terminfo
 
   echo "override zsh files ---------------------------------------------------------------------"
   rm ~/.zshrc
@@ -102,5 +103,5 @@ vimAndNpmConfig () {
 }
 
 
-brewConfig; preztoConfig; asdfTermConfig; pythonConfig; loadDotfiles; vimAndNpmConfig;
+brewConfig; preztoConfig; asdfTermConfig; pythonConf; loadDotfiles; vimAndNpmConfig;
 echo "-------------------------------------------Installation Complete----------------------------------------------"

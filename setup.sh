@@ -288,9 +288,7 @@ brew cask install google-chrome
 brew cask install graphiql
 brew cask install intellij-idea-ce
 brew cask install iterm2
-brew cask install java8
 brew cask install kap
-brew cask install karabiner
 brew cask install karabiner-elements
 brew cask install kindle
 brew cask install macmediakeyforwarder
@@ -330,9 +328,6 @@ ln -s ~/projects/dotfiles/nvim/ ~/.config/nvim
 ln -s ~/projects/keyboard/karabiner/ ~/.config/karabiner
 
 ln ~/projects/dotfiles/tmux.conf ~/.tmux.conf
-ln ~/projects/dotfiles/zshenv ~/.zshenv
-ln ~/projects/dotfiles/zshrc ~/.zshrc
-ln ~/projects/dotfiles/fzf.zsh ~/.fzf.zsh
 
 ln ~/projects/keyboard/.skhdrc ~/.skhdrc
 ln ~/projects/keyboard/.yabairc ~/.yabairc
@@ -341,8 +336,6 @@ cp ~/projects/dotfiles/xterm-24bit.terminfo ~/
 
 # add terminfo ---------------------------------------------------------------------------------------------------------------------------------------------------------
 tic -x xterm-24bit.terminfo
-
-# source ~/.zshrc
 
 # setup asdf plugins ---------------------------------------------------------------------------------------------------------------------------------------------------------
 asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git
@@ -358,8 +351,7 @@ asdf install
 asdf global erlang 22.2.1
 asdf global elixir 1.9.4-otp-22
 asdf global nodejs 13.5.0
-
-source ~/.zshrc
+npm i -g bash-language-server
 
 # setup python ---------------------------------------------------------------------------------------------------------------------------------------------------------
 python3.7 -m venv global
@@ -369,5 +361,13 @@ pip install --user neovim
 # nvim setup ---------------------------------------------------------------------------------------------------------------------------------------------------------
 curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 nvim +PlugInstall +UpdateRemotePlugins +qa > /dev/null
+
+
+# override zshrc  ---------------------------------------------------------------------------------------------------------------------------------------------------------
+ln ~/projects/dotfiles/zshenv ~/.zshenv
+ln ~/projects/dotfiles/zshrc ~/.zshrc
+ln ~/projects/dotfiles/fzf.zsh ~/.fzf.zsh
+
+source ~/.zshrc
 
 echo "-------------------------------------------Installation Complete----------------------------------------------"

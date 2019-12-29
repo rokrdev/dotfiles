@@ -52,6 +52,8 @@ cp ~/projects/dotfiles/xterm-24bit.terminfo ~/
 # add terminfo ---------------------------------------------------------------------------------------------------------------------------------------------------------
 tic -x xterm-24bit.terminfo
 
+source ~/.zshrc
+
 # setup asdf plugins ---------------------------------------------------------------------------------------------------------------------------------------------------------
 asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git
 asdf plugin-add erlang https://github.com/asdf-vm/asdf-erlang.git

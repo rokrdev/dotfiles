@@ -1,6 +1,5 @@
 #!/bin/zsh
 
-
 brewConfig () {
   echo "install brew packages ---------------------------------------------------------------------"
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -33,7 +32,7 @@ preztoConfig () {
   echo "PREZTO CONFIG COMPLETE *************************************************"
 }
 
-asdfTermConfremove {
+asdfTermConfig () {
   echo "asdf config ---------------------------------------------------------------------"
   asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git
   asdf plugin-add erlang https://github.com/asdf-vm/asdf-erlang.git
@@ -51,9 +50,10 @@ asdfTermConfremove {
   echo "ASDF CONFIG COMPLETE *************************************************"
 }
 
-pythonConf () {
+pythonConfig () {
   echo "python conf ---------------------------------------------------------------------"
-  echo "changeps1: False" > ~/.condarc
+  touch ~/.condarc
+  echo "changeps1: False" >> ~/.condarc
   python3.7 -m venv global
   pip3 install --user neovim
   echo "PYTHON CONFIG COMPLETE *************************************************"
@@ -108,5 +108,5 @@ vimAndNpmConfig () {
 }
 
 
-brewConfig; preztoConfig; asdfTermConfig; pythonConf; loadDotfiles; vimAndNpmConfig;
+brewConfig; preztoConfig; asdfTermConfig; pythonConfig; loadDotfiles; vimAndNpmConfig;
 echo "-------------------------------------------Installation Complete----------------------------------------------"

@@ -481,7 +481,7 @@ nnoremap <leader>* :RgPlus<CR>
 nnoremap <leader>mc :nohl<CR>
 nnoremap <leader>p :Files<CR>
 nnoremap <leader>n :NERDTreeToggle<CR>
-nnoremap <leader>w :bd<CR>
+nnoremap gq :bd<CR>
 nnoremap H :bprevious<CR>
 nnoremap L :bnext<CR>
 nnoremap Q @q

@@ -13,20 +13,19 @@ brew cask install 1password 1password-cli adobe-acrobat-reader aerial alacritty 
 
 mkdir ~/projects
 
-# clone required projects ---------------------------------------------------------------------------------------------------------------------------------------------------------
-git clone https://github.com/jbharat/dotfiles ~/projects/dotfiles
-
-git clone https://github.com/jbharat/keyboard.git ~/projects/keyboard
-
-git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
-
 # install prezto modules ---------------------------------------------------------------------------------------------------------------------------------------------------------
+git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
 setopt EXTENDED_GLOB
 for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
   ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
 done
 
 mkdir ~/.config
+
+# clone required projects ---------------------------------------------------------------------------------------------------------------------------------------------------------
+git clone https://github.com/jbharat/dotfiles ~/projects/dotfiles
+
+git clone https://github.com/jbharat/keyboard.git ~/projects/keyboard
 
 # setup links ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ln -s ~/projects/dotfiles/alacritty/ ~/.config/alacritty

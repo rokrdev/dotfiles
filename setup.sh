@@ -7,9 +7,9 @@ brewConfig () {
   brew tap homebrew/bundle
   brew tap homebrew/cask
   brew tap homebrew/cask-fonts
-  brew tap homebrew/cask-versions
   brew tap homebrew/core
   brew tap homebrew/services
+  brew tap AdoptOpenJDK/openjdk
   brew tap koekeishiya/formulae
 
   brew install git
@@ -215,7 +215,7 @@ vimAndNpmConfig () {
   echo "Vim pluging install ---------------------------------------------------------------------"
   curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   nvim +PlugInstall +UpdateRemotePlugins +qa > /dev/null
-  npm i -g bash-language-server
+  npm i -g bash-language-server rimraf
   echo "VIM AND NPM CONFIG COMPLETE *************************************************"
 }
 

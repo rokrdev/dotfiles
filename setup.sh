@@ -11,14 +11,120 @@ brewConfig () {
   brew tap homebrew/core
   brew tap homebrew/services
   brew tap koekeishiya/formulae
-  brew tap adoptopenjdk/openjdk
 
-  brew install git asdf aspell bash bat bluetoothconnector boost carthage coreutils curl curl-openssl editorconfig fasd fd ffmpeg fontconfig fzf fzy gcc gd gdbm git git-crypt gnu-sed gnu-tar gnu-time gnupg gpg graphicsmagick graphviz grep htop httpie imagemagick ispell jq kpcli mps-youtube nmap nnn openssl pandoc python python3 qt ranger readline ren rename ripgrep screenfetch screenresolution skhd speedtest-cli sqlite ssh-copy-id swiftlint telnet tesseract tmux tree unbound wget yabai youtube-dl zsh zsh-completions zsh-syntax-highlighting
-
-  brew cask install 1password adoptopenjdk8 aerial alacritty alfred anaconda android-file-transfer android-platform-tools bartender brave-browser calibre db-browser-for-sqlite docker dropbox evernote firefox folx font-hasklig-nerd-font-mono font-meslo-nerd-font-mono font-sourcecodepro-nerd-font-mono gimp google-backup-and-sync google-chrome graphiql intellij-idea-ce iterm2 kap karabiner-elements kindle macmediakeyforwarder now qbittorrent slack sourcetree spotify spotmenu the-unarchiver visual-studio-code vlc whatsapp xmind
-
+  brew install git
+  brew install asdf
+  brew install aspell
+  brew install bash
+  brew install bat
+  brew install bluetoothconnector
+  brew install boost
+  brew install carthage
+  brew install coreutils
+  brew install curl
+  brew install curl-openssl
+  brew install editorconfig
+  brew install fasd
+  brew install fd
+  brew install ffmpeg
+  brew install fontconfig
+  brew install fzf
+  brew install fzy
+  brew install gcc
+  brew install gd
+  brew install gdbm
+  brew install git
+  brew install git-crypt
+  brew install gnu-sed
+  brew install gnu-tar
+  brew install gnu-time
+  brew install gnupg
+  brew install gpg
+  brew install graphicsmagick
+  brew install graphviz
+  brew install grep
+  brew install htop
+  brew install httpie
+  brew install imagemagick
+  brew install ispell
+  brew install jq
+  brew install kpcli
+  brew install mps-youtube
   brew install neovim
+  brew install nmap
+  brew install nnn
+  brew install openssl
+  brew install pandoc
+  brew install python
+  brew install python3
+  brew install qt
+  brew install ranger
+  brew install readline
+  brew install ren
+  brew install rename
+  brew install ripgrep
+  brew install screenfetch
+  brew install screenresolution
+  brew install skhd
+  brew install speedtest-cli
+  brew install sqlite
+  brew install ssh-copy-id
+  brew install swiftlint
+  brew install telnet
+  brew install tesseract
+  brew install tmux
+  brew install tree
+  brew install unbound
+  brew install wget
+  brew install yabai
+  brew install youtube-dl
+  brew install zsh
   brew install zsh-autosuggestions
+  brew install zsh-completions
+  brew install zsh-syntax-highlighting
+
+  brew cask install 1password
+  brew cask install adoptopenjdk8
+  brew cask install aerial
+  brew cask install alacritty
+  brew cask install alfred
+  brew cask install anaconda
+  brew cask install android-file-transfer
+  brew cask install android-platform-tools
+  brew cask install bartender
+  brew cask install brave-browser
+  brew cask install calibre
+  brew cask install db-browser-for-sqlite
+  brew cask install docker
+  brew cask install dropbox
+  brew cask install evernote
+  brew cask install firefox
+  brew cask install folx
+  brew cask install font-hasklig-nerd-font-mono
+  brew cask install font-meslo-nerd-font-mono
+  brew cask install font-sourcecodepro-nerd-font-mono
+  brew cask install gimp
+  brew cask install google-backup-and-sync
+  brew cask install google-chrome
+  brew cask install graphiql
+  brew cask install intellij-idea-ce
+  brew cask install iterm2
+  brew cask install kap
+  brew cask install karabiner-elements
+  brew cask install kindle
+  brew cask install macmediakeyforwarder
+  brew cask install now
+  brew cask install qbittorrent
+  brew cask install slack
+  brew cask install sourcetree
+  brew cask install spotify
+  brew cask install spotmenu
+  brew cask install the-unarchiver
+  brew cask install visual-studio-code
+  brew cask install vlc
+  brew cask install whatsapp
+  brew cask install xmind
+
   echo "BREW CONFIG COMPLETE *************************************************"
 }
 
@@ -97,6 +203,10 @@ loadDotfiles () {
   ln ~/projects/dotfiles/fzf.zsh ~/.fzf.zsh
 
   source ~/.zshrc
+  yabai --install-sa
+
+  brew services start yabai
+  brew services start skhd
   echo "DOTFILES LOADED *************************************************"
 }
 

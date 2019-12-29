@@ -3,7 +3,14 @@
 # install brew packages ---------------------------------------------------------------------------------------------------------------------------------------------------------
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
-brew tap homebrew/bundle homebrew/cask homebrew/cask-fonts homebrew/cask-versions homebrew/core homebrew/services koekeishiya/formulae neovim/neovim
+brew tap homebrew/bundle
+brew tap homebrew/cask
+brew tap homebrew/cask-fonts
+brew tap homebrew/cask-versions
+brew tap homebrew/core
+brew tap homebrew/services
+brew tap koekeishiya/formulae
+brew tap neovim/neovim
 
 brew install git
 
@@ -12,8 +19,6 @@ brew install adns aom apr apr-util asdf aspcud aspell augeas autoconf automake b
 brew cask install 1password 1password-cli adobe-acrobat-reader aerial alacritty alfred anaconda android-file-transfer android-platform-tools bartender brave-browser calibre db-browser-for-sqlite docker dropbox evernote firefox folx font-hasklig-nerd-font-mono font-meslo-nerd-font-mono font-microsoft-office font-sourcecodepro-nerd-font-mono font-symbola gimp google-backup-and-sync google-chrome graphiql intellij-idea-ce iterm2 java8 kap karabiner karabiner-elements kindle macmediakeyforwarder now qbittorrent slack sourcetree spotify spotmenu superbeam the-unarchiver visual-studio-code vlc whatsapp xmind zoom
 
 mkdir ~/projects
-
-zsh
 
 # install prezto modules ---------------------------------------------------------------------------------------------------------------------------------------------------------
 git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"

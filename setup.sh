@@ -13,11 +13,12 @@ brewConfig () {
   brew tap koekeishiya/formulae
   brew tap adoptopenjdk/openjdk
 
-  brew install git asdf aspell bash bat bluetoothconnector boost carthage coreutils curl curl-openssl editorconfig fasd fd ffmpeg fontconfig fzf fzy gcc gd gdbm git git-crypt gnu-sed gnu-tar gnu-time gnupg gpg graphicsmagick graphviz grep htop httpie imagemagick ispell jq kpcli mps-youtube nmap nnn openssl pandoc python python3 qt ranger readline ren rename ripgrep screenfetch screenresolution skhd speedtest-cli sqlite ssh-copy-id swiftlint telnet tesseract tmux tree unbound wget yabai youtube-dl zsh zsh-autosuggestions zsh-completions zsh-syntax-highlighting
+  brew install git asdf aspell bash bat bluetoothconnector boost carthage coreutils curl curl-openssl editorconfig fasd fd ffmpeg fontconfig fzf fzy gcc gd gdbm git git-crypt gnu-sed gnu-tar gnu-time gnupg gpg graphicsmagick graphviz grep htop httpie imagemagick ispell jq kpcli mps-youtube nmap nnn openssl pandoc python python3 qt ranger readline ren rename ripgrep screenfetch screenresolution skhd speedtest-cli sqlite ssh-copy-id swiftlint telnet tesseract tmux tree unbound wget yabai youtube-dl zsh zsh-completions zsh-syntax-highlighting
 
   brew cask install 1password adoptopenjdk8 aerial alacritty alfred anaconda android-file-transfer android-platform-tools bartender brave-browser calibre db-browser-for-sqlite docker dropbox evernote firefox folx font-hasklig-nerd-font-mono font-meslo-nerd-font-mono font-sourcecodepro-nerd-font-mono gimp google-backup-and-sync google-chrome graphiql intellij-idea-ce iterm2 kap karabiner-elements kindle macmediakeyforwarder now qbittorrent slack sourcetree spotify spotmenu the-unarchiver visual-studio-code vlc whatsapp xmind
 
   brew install neovim
+  brew install zsh-autosuggestions
   echo "BREW CONFIG COMPLETE *************************************************"
 }
 

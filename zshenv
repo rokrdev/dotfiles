@@ -46,16 +46,6 @@ export FZF_CTRL_R_OPTS='--sort --exact'
 export FZF_TMUX=1
 
 eval "$(fasd --init auto)"
-rbenv() {
-  eval "$(rbenv init -)"
-  rbenv "$@"
-}
-
-jv() {
-  eval "$(jenv init - --no-rehash)"
-  (jenv rehash &) 2> /dev/null
-}
-
 typeset -U path
 export PATH
 

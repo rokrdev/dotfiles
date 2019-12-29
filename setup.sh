@@ -49,7 +49,6 @@ brewConfig () {
   brew install ispell
   brew install jq
   brew install kpcli
-  brew install mps-youtube
   brew install neovim
   brew install nmap
   brew install nnn
@@ -69,7 +68,6 @@ brewConfig () {
   brew install speedtest-cli
   brew install sqlite
   brew install ssh-copy-id
-  brew install swiftlint
   brew install telnet
   brew install tesseract
   brew install tmux
@@ -124,7 +122,10 @@ brewConfig () {
   brew cask install vlc
   brew cask install whatsapp
   brew cask install xmind
+  brew cask install xquartz
 
+  brew install mps-youtube
+  brew cask install mpv
   echo "BREW CONFIG COMPLETE *************************************************"
 }
 

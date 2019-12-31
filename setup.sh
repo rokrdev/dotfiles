@@ -33,6 +33,7 @@ brewConfig () {
   brew install gcc
   brew install gd
   brew install gdbm
+  brew install ghostscript
   brew install git
   brew install git-crypt
   brew install gnu-sed

@@ -26,8 +26,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'sheerun/vim-polyglot'
-Plug 'matthewbdaly/vim-filetype-settings'
-" Comments
 Plug 'Yggdroot/indentLine'
 Plug 'mattn/emmet-vim'
 Plug 'ap/vim-css-color'
@@ -35,7 +33,6 @@ Plug 'airblade/vim-gitgutter'
 Plug 'jiangmiao/auto-pairs'
 Plug 'xolox/vim-session'
 Plug 'xolox/vim-misc'
-Plug 'shougo/context_filetype.vim'
 Plug 'joshdick/onedark.vim'
 Plug 'terryma/vim-expand-region'
 Plug 'andymass/vim-matchup'
@@ -49,7 +46,6 @@ Plug 'udalov/kotlin-vim'
 Plug 'ayu-theme/ayu-vim'
 Plug 'francoiscabrol/ranger.vim'
 Plug 'rbgrouleff/bclose.vim'
-Plug 'elixir-editors/vim-elixir'
 " Plug 'RRethy/vim-illuminate'
 Plug 'djoshea/vim-autoread'
 Plug 'SirVer/ultisnips'
@@ -62,13 +58,6 @@ autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 "
 
 let g:sneak#label = 1
-
-" tern
-if exists('g:plugs["tern_for_vim"]')
-  let g:tern_show_argument_hints = 'on_hold'
-  let g:tern_show_signature_in_pum = 1
-  autocmd FileType javascript setlocal omnifunc=tern#Complete
-endif
 
 let g:loaded_matchit = 1
 
@@ -117,7 +106,7 @@ set background=dark
 let ayucolor="mirage"
 let g:nord_plus_bold=1
 let g:nord_plus_italic=1
-colorscheme nord
+colorscheme nord_plus
 " colorscheme nord_plus
 let g:airline_theme='nord'
 

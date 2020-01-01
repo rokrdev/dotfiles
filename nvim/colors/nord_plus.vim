@@ -638,6 +638,13 @@ hi! link jsThis Keyword
 hi! link jsNoise Delimiter
 hi! link jsPrototype Keyword
 hi! link jsRegexpString SpecialChar
+hi! link jsStorageClass Keyword
+hi! link jsImport Keyword
+hi! link jsExport Keyword
+hi! link jsExportDefault Keyword
+hi! link jsExportDefaultGroup Keyword
+hi! link jsFrom Keyword
+hi! link jsAll Keyword
 
 " Markdown
 " > plasticboy/vim-markdown

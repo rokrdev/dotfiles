@@ -180,6 +180,8 @@ loadDotfiles () {
 
   git clone https://github.com/jbharat/keyboard.git ~/projects/keyboard
 
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
   # setup links ---------------------------------------------------------------------------------------------------------------------------------------------------------
   ln -s ~/projects/dotfiles/alacritty/ ~/.config/alacritty
   ln -s ~/projects/dotfiles/nvim/ ~/.config/nvim

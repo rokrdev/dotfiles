@@ -51,6 +51,7 @@ Plug 'djoshea/vim-autoread'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'mhinz/vim-hugefile'
 
 call plug#end()
 
@@ -67,6 +68,9 @@ let g:EasyMotion_leader_key = '<Leader>'
 "     au!
 "     au FileType javascript setlocal foldmethod=syntax
 " augroup END
+
+" set file > 10MB has huge file
+let g:hugefile_trigger_size = 10
 
 set clipboard=unnamed
 let NERDTreeMapOpen='<ENTER>'

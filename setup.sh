@@ -96,7 +96,6 @@ brewConfig () {
   brew cask install db-browser-for-sqlite
   brew cask install docker
   brew cask install dropbox
-  brew cask install evernote
   brew cask install firefox
   brew cask install folx
   brew cask install font-hasklig-nerd-font-mono
@@ -112,6 +111,7 @@ brewConfig () {
   brew cask install karabiner-elements
   brew cask install kindle
   brew cask install macmediakeyforwarder
+  brew cask install notion
   brew cask install now
   brew cask install qbittorrent
   brew cask install slack

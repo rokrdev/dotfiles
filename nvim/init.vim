@@ -44,7 +44,7 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'udalov/kotlin-vim'
 Plug 'ayu-theme/ayu-vim'
-Plug 'francoiscabrol/ranger.vim'
+Plug 'rafaqz/ranger.vim'
 Plug 'rbgrouleff/bclose.vim'
 " Plug 'RRethy/vim-illuminate'
 Plug 'djoshea/vim-autoread'
@@ -462,7 +462,17 @@ nnoremap <leader>sc :CloseSession<CR>
 nnoremap <leader>sc :CloseSession<CR>
 nnoremap <leader>sn :SaveSession default<CR> :OpenSession NOTES<CR>
 
-let g:ranger_map_keys = 0
+let g:NERDTreeHijackNetrw = 0
+map <leader>rr :RangerEdit<cr>
+map <leader>rv :RangerVSplit<cr>
+map <leader>rs :RangerSplit<cr>
+map <leader>rt :RangerTab<cr>
+map <leader>ri :RangerInsert<cr>
+map <leader>ra :RangerAppend<cr>
+map <leader>rc :set operatorfunc=RangerChangeOperator<cr>g@
+map <leader>rd :RangerCD<cr>
+map <leader>rld :RangerLCD<cr>
+
 nmap gs :%s!!!g<Left><Left><Left>
 nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
@@ -472,6 +482,7 @@ nnoremap <leader>f :Rg<CR>
 nnoremap <leader>r :Ranger<CR>
 nnoremap <leader>* :RgPlus<CR>
 " vnoremap <leader>* :<C-U>RgVPlus<CR>
+nnoremap <leader>c :e %:h/
 nnoremap <leader>mc :nohl<CR>
 nnoremap <leader>p :Files<CR>
 nnoremap <leader>n :NERDTreeToggle<CR>

@@ -52,6 +52,8 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'mhinz/vim-hugefile'
+Plug 'jesseleite/vim-agriculture'
+Plug 'jreybert/vimagit'
 
 call plug#end()
 
@@ -220,8 +222,8 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap <leader>rn <Plug>(coc-rename)
 
 " Remap for format selected region
-" xmap <leader>f  <Plug>(coc-format-selected)
-" nmap <leader>f  <Plug>(coc-format-selected)
+xmap <leader>cm <Plug>(coc-format-selected)
+nmap <leader>cm <Plug>(coc-format-selected)
 
 augroup mygroup
   autocmd!
@@ -232,13 +234,13 @@ augroup mygroup
 augroup end
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
+xmap <leader>a <Plug>(coc-codeaction-selected)
+nmap <leader>a <Plug>(coc-codeaction-selected)
 
 " Remap for do codeAction of current line
-nmap <leader>ac  <Plug>(coc-codeaction)
+nmap <leader>ac <Plug>(coc-codeaction)
 " Fix autofix problem of current line
-nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <leader>qf <Plug>(coc-fix-current)
 
 " Create mappings for function text object, requires document symbols feature of languageserver.
 xmap if <Plug>(coc-funcobj-i)
@@ -250,10 +252,10 @@ omap af <Plug>(coc-funcobj-a)
 command! -nargs=0 Format :call CocAction('format')
 
 " Use `:Fold` to fold current buffer
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
 
 " use `:OR` for organize import of current buffer
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
 
 " Add status line support, for integration with other plugin, checkout `:h coc-status`
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
@@ -326,7 +328,7 @@ let g:multi_cursor_use_default_mapping=0
 
 let g:indentLine_enabled = 1
 let g:indentLine_char = '┆'
-let g:indentLine_leadingSpaceEnabled = 1
+let g:indentLine_leadingSpaceEnabled = 0
 let g:indentLine_leadingSpaceChar = "·"
 autocmd TermOpen * IndentLinesDisable
 
@@ -373,33 +375,7 @@ let g:airline_right_alt_sep = ''
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
-
-" --column: Show column number
-" --line-number: Show line number
-" --no-heading: Do not show file headings in results
-" --fixed-strings: Search term as a literal string
-" --ignore-case: Case insensitive search
-" --no-ignore: Do not respect .gitignore, etc...
-" --hidden: Search hidden files and folders
-" --follow: Follow symlinks
-" --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
-" --color: Search color options
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow '.shellescape(<q-args>), 1, <bang>0)
-command! -bang -nargs=* RgPlus call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow '.shellescape(expand('<cword>')), 1, <bang>0)
-
-" function! init#visualSelection()
-"   try
-"     let a_save = @a
-"     normal! gv"ay
-"     return @a
-"   finally
-"     let @a = a_save
-"   endtry
-" endfunction
-" command! -bang -nargs=* RgVPlus call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow ' + init#visualSelection(), 1, <bang>0)
-
 set guicursor=
-
 
 " Required for operations modifying multiple buffers like rename.
 set hidden
@@ -479,9 +455,9 @@ nnoremap <C-k> :m .-2<CR>==
 nnoremap <leader>S :Scratchy<CR>
 nnoremap <leader>b :Buffers<CR>
 nnoremap <leader>f :Rg<CR>
-nnoremap <leader>r :Ranger<CR>
-nnoremap <leader>* :RgPlus<CR>
-" vnoremap <leader>* :<C-U>RgVPlus<CR>
+nmap <leader>\ <Plug>RgRawSearch
+nmap <leader>* <Plug>RgRawWordUnderCursor<CR>
+vmap <leader>* <Plug>RgRawVisualSelection<CR>
 nnoremap <leader>c :e %:h/
 nnoremap <leader>mc :nohl<CR>
 nnoremap <leader>p :Files<CR>
@@ -491,7 +467,6 @@ nnoremap H :bprevious<CR>
 nnoremap L :bnext<CR>
 nnoremap Q @q
 nnoremap [w :PrevTrailingWhitespace<CR>
-nnoremap \ :Find<SPACE>
 nnoremap ]w :NextTrailingWhitespace<CR>
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv

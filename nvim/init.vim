@@ -439,15 +439,15 @@ nnoremap <leader>sc :CloseSession<CR>
 nnoremap <leader>sn :SaveSession default<CR> :OpenSession NOTES<CR>
 
 let g:NERDTreeHijackNetrw = 0
-map <leader>rr :RangerEdit<cr>
-map <leader>rv :RangerVSplit<cr>
-map <leader>rs :RangerSplit<cr>
-map <leader>rt :RangerTab<cr>
-map <leader>ri :RangerInsert<cr>
-map <leader>ra :RangerAppend<cr>
-map <leader>rc :set operatorfunc=RangerChangeOperator<cr>g@
-map <leader>rd :RangerCD<cr>
-map <leader>rld :RangerLCD<cr>
+map <leader>rr :RangerEdit<CR>
+map <leader>rv :RangerVSplit<CR>
+map <leader>rs :RangerSplit<CR>
+map <leader>rt :RangerTab<CR>
+map <leader>ri :RangerInsert<CR>
+map <leader>ra :RangerAppend<CR>
+map <leader>rc :set operatorfunc=RangerChangeOperator<CR>g@
+map <leader>rd :RangerCD<CR>
+map <leader>rld :RangerLCD<CR>
 
 nmap gs :%s!!!g<Left><Left><Left>
 nnoremap <C-j> :m .+1<CR>==
@@ -472,7 +472,7 @@ vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
 vnoremap Q :norm @q<CR>
 
-nnoremap <leader>gg :Git<CR>
+nnoremap <leader>gg :Magit<CR>
 nnoremap <leader>gb :Gblame<CR>
 nnoremap <leader>gd :Gdiff<CR>
 nnoremap <leader>gl :Gllog<CR>

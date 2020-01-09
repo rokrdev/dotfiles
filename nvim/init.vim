@@ -8,12 +8,8 @@ call plug#begin('~/.config/nvim/autoload')
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 Plug 'junegunn/vim-easy-align'
 
-" Any valid git URL is allowed
-Plug 'https://github.com/junegunn/vim-github-dashboard.git'
-
 " On-demand loading
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-fugitive'
 " Specify a directory for plugins
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
@@ -54,6 +50,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'mhinz/vim-hugefile'
 Plug 'jesseleite/vim-agriculture'
 Plug 'jreybert/vimagit'
+Plug 'zivyangll/git-blame.vim'
 
 call plug#end()
 
@@ -474,10 +471,8 @@ vnoremap <C-k> :m '<-2<CR>gv=gv
 vnoremap Q :norm @q<CR>
 
 nnoremap <leader>gg :Magit<CR>
-nnoremap <leader>gb :Gblame<CR>
-nnoremap <leader>gd :Gdiff<CR>
-nnoremap <leader>gl :Gllog<CR>
-nnoremap <leader>gf :Gpull<CR>
-nnoremap <leader>gp :Gpush<CR>
-
+nnoremap <leader>gl :!git log<CR>
+nnoremap <leader>gf :!git pull<SPACE>
+nnoremap <leader>gp :!git push<SPACE>
+nnoremap <Leader>gb :<C-u>call gitblame#echo()<CR>
 

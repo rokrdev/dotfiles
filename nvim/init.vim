@@ -51,6 +51,8 @@ Plug 'mhinz/vim-hugefile'
 Plug 'jesseleite/vim-agriculture'
 Plug 'jreybert/vimagit'
 Plug 'zivyangll/git-blame.vim'
+Plug 'plasticboy/vim-markdown'
+Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 
 call plug#end()
 
@@ -452,8 +454,7 @@ nnoremap <C-k> :m .-2<CR>==
 nnoremap <leader>S :Scratchy<CR>
 nnoremap <leader>b :Buffers<CR>
 nnoremap <leader>f :Rg<CR>
-nmap <leader>\ <Plug>RgRawWordUnderCursor<SPACE>
-vmap <leader>\ <Plug>RgRawVisualSelection<SPACE>
+nmap <leader>\ <Plug>RgRawSearch
 nmap <leader>* <Plug>RgRawWordUnderCursor<CR>
 vmap <leader>* <Plug>RgRawVisualSelection<CR>
 nnoremap <leader>c :e %:h/

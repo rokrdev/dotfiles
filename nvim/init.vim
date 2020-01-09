@@ -134,6 +134,7 @@ set nocursorline
 set nojoinspaces        " Prevents inserting two spaces after punctuation on a join (J)
 set encoding=utf-8
 set autoread
+set lazyredraw
 
 " More natural splits
 set splitbelow          " Horizontal split below current.

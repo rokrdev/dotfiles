@@ -53,6 +53,7 @@ Plug 'jreybert/vimagit'
 Plug 'zivyangll/git-blame.vim'
 Plug 'plasticboy/vim-markdown'
 Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
+Plug 'skywind3000/asyncrun.vim'
 
 call plug#end()
 
@@ -472,8 +473,8 @@ vnoremap <C-k> :m '<-2<CR>gv=gv
 vnoremap Q :norm @q<CR>
 
 nnoremap <leader>gg :Magit<CR>
-nnoremap <leader>gl :!git log<CR>
-nnoremap <leader>gf :!git pull<SPACE>
-nnoremap <leader>gp :!git push<SPACE>
+nnoremap <leader>gl :AsyncRun git log<CR>
+nnoremap <leader>gf :AsyncRun git pull<SPACE>
+nnoremap <leader>gp :AsyncRun git push<SPACE>
 nnoremap <Leader>gb :<C-u>call gitblame#echo()<CR>
 

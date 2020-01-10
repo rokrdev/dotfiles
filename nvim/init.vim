@@ -385,6 +385,10 @@ let g:strip_whitespace_on_save=1
 
 let g:nord_comment_brightness = 20
 
+" auto show quickfix window
+autocmd QuickFixCmdPost [^l]* nested cwindow
+autocmd QuickFixCmdPost    l* nested lwindow
+
 function! s:ScratchGenerator()
   exe "e!" . "__Scratchy__"
 endfunction

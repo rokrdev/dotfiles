@@ -183,28 +183,28 @@ loadDotfiles () {
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
   # setup links ---------------------------------------------------------------------------------------------------------------------------------------------------------
-  ln -s ~/projects/dotfiles/alacritty/ ~/.config/alacritty
-  ln -s ~/projects/dotfiles/nvim/ ~/.config/nvim
-  ln -s ~/projects/keyboard/karabiner/ ~/.config/karabiner
+  ln -sf ~/projects/dotfiles/alacritty/ ~/.config/alacritty
+  ln -sf ~/projects/dotfiles/nvim/ ~/.config/nvim
+  ln -sf ~/projects/keyboard/karabiner/ ~/.config/karabiner
 
-  ln ~/projects/dotfiles/tmux.conf ~/.tmux.conf
+  ln -f ~/projects/dotfiles/tmux.conf ~/.tmux.conf
 
-  ln ~/projects/keyboard/.skhdrc ~/.skhdrc
-  ln ~/projects/keyboard/.yabairc ~/.yabairc
+  ln -f ~/projects/keyboard/.skhdrc ~/.skhdrc
+  ln -f ~/projects/keyboard/.yabairc ~/.yabairc
 
   cp ~/projects/dotfiles/xterm-24bit.terminfo ~/
 
   echo "term config  ---------------------------------------------------------------------"
   tic -x xterm-24bit.terminfo
 
-  echo "override zsh files ---------------------------------------------------------------------"
-  rm ~/.zshrc
-  rm ~/.zshenv
-  rm ~/.fzf.zsh
+  # echo "override zsh files ---------------------------------------------------------------------"
+  # rm ~/.zshrc
+  # rm ~/.zshenv
+  # rm ~/.fzf.zsh
 
-  ln ~/projects/dotfiles/zshenv ~/.zshenv
-  ln ~/projects/dotfiles/zshrc ~/.zshrc
-  ln ~/projects/dotfiles/fzf.zsh ~/.fzf.zsh
+  ln -f ~/projects/dotfiles/zshenv ~/.zshenv
+  ln -f ~/projects/dotfiles/zshrc ~/.zshrc
+  ln -f ~/projects/dotfiles/fzf.zsh ~/.fzf.zsh
 
   source ~/.zshrc
   sudo yabai --install-sa

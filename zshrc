@@ -82,6 +82,7 @@ setopt HIST_SAVE_NO_DUPS
 setopt HIST_BEEP
 
 source ~/.fzf.zsh
+source ~/.custom_fzf.zsh
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

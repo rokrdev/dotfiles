@@ -17,7 +17,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'haishanh/night-owl.vim'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all && cd ~/projects/dotfiles && git checkout fzf.zsh && ln -f ~/projects/dotfiles/fzf.zsh ~/.fzf.zsh' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all && source ~/.zshrc' }
 Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'

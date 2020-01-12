@@ -204,7 +204,7 @@ loadDotfiles () {
 
   ln -f ~/projects/dotfiles/zshenv ~/.zshenv
   ln -f ~/projects/dotfiles/zshrc ~/.zshrc
-  ln -f ~/projects/dotfiles/fzf.zsh ~/.fzf.zsh
+  ln -f ~/projects/dotfiles/fzf.zsh ~/.custom_fzf.zsh
 
   source ~/.zshrc
   sudo yabai --install-sa

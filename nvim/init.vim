@@ -32,7 +32,7 @@ Plug 'xolox/vim-misc'
 Plug 'joshdick/onedark.vim'
 Plug 'terryma/vim-expand-region'
 Plug 'andymass/vim-matchup'
-" Plug 'skwp/vim-easymotion'
+Plug 'easymotion/vim-easymotion'
 Plug 'justinmk/vim-sneak'
 Plug 'arcticicestudio/nord-vim'
 Plug 'dracula/vim', { 'as': 'dracula' }
@@ -482,3 +482,17 @@ nnoremap <leader>gf :AsyncRun git pull<SPACE>
 nnoremap <leader>gp :AsyncRun git push<SPACE>
 nnoremap <Leader>gb :<C-u>call gitblame#echo()<CR>
 
+" <Leader>f{char} to move to {char}
+map  <Leader>sf <Plug>(easymotion-bd-f)
+nmap <Leader>sf <Plug>(easymotion-overwin-f)
+
+" s{char}{char} to move to {char}{char}
+nmap <Leader>ss <Plug>(easymotion-overwin-f2)
+
+" Move to line
+map <Leader>sl <Plug>(easymotion-bd-jk)
+nmap <Leader>sl <Plug>(easymotion-overwin-line)
+
+" Move to word
+map  <Leader>sw <Plug>(easymotion-bd-w)
+nmap <Leader>sw <Plug>(easymotion-overwin-w)

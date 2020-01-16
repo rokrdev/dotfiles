@@ -33,7 +33,6 @@ Plug 'joshdick/onedark.vim'
 Plug 'terryma/vim-expand-region'
 Plug 'andymass/vim-matchup'
 Plug 'easymotion/vim-easymotion'
-Plug 'justinmk/vim-sneak'
 Plug 'arcticicestudio/nord-vim'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'terryma/vim-multiple-cursors'
@@ -58,9 +57,6 @@ Plug 'skywind3000/asyncrun.vim'
 call plug#end()
 
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-"
-
-let g:sneak#label = 1
 
 let g:loaded_matchit = 1
 
@@ -402,7 +398,6 @@ endfunction
 autocmd BufNewFile __Scratchy__ call s:ScratchMarkBuffer()
 command! Scratchy call s:ScratchGenerator()
 
-highlight Sneak cterm=NONE guifg=black guibg=#B48EAD ctermfg=black ctermbg=175
 highlight multiple_cursors_cursor term=reverse cterm=reverse gui=reverse
 highlight link multiple_cursors_visual Visual
 highlight Comment cterm=italic gui=italic
@@ -412,10 +407,6 @@ highlight Function cterm=italic gui=italic
 " Manually trigger tag autocomplete
 inoremap <silent> <expr> <C-]> utils#manualTagComplete()
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
-map t <Plug>Sneak_t
-map T <Plug>Sneak_T
 au TermOpen * tnoremap <buffer> <Esc> <c-\><c-n>
 au FileType fzf tunmap <buffer> <Esc>
 
@@ -482,17 +473,23 @@ nnoremap <leader>gf :AsyncRun git pull<SPACE>
 nnoremap <leader>gp :AsyncRun git push<SPACE>
 nnoremap <Leader>gb :<C-u>call gitblame#echo()<CR>
 
-" <Leader>f{char} to move to {char}
-map  <Leader>sf <Plug>(easymotion-bd-f)
-nmap <Leader>sf <Plug>(easymotion-overwin-f)
+let g:EasyMotion_smartcase = 1 " turn on case insensitive feature
+let g:EasyMotion_do_mapping = 0 " disable default mappings
+let g:EasyMotion_use_smartsign_us = 1 " 1 will match 1 and !
+let g:EasyMotion_use_upper = 1
+let g:EasyMotion_keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ;'
+let g:EasyMotion_space_jump_first = 1
+let g:EasyMotion_enter_jump_first = 1
 
-" s{char}{char} to move to {char}{char}
-nmap <Leader>ss <Plug>(easymotion-overwin-f2)
+nmap <leader>s <Plug>(easymotion-bd-w)
+nmap \ <Plug>(easymotion-s2)
+map t <Plug>(easymotion-bd-t)
+map f <Plug>(easymotion-bd-f)
+omap t <Plug>(easymotion-tl)
+omap f <Plug>(easymotion-fl)
 
-" Move to line
-map <Leader>sl <Plug>(easymotion-bd-jk)
-nmap <Leader>sl <Plug>(easymotion-overwin-line)
+" jk motions: line motions
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
 
-" Move to word
-map  <Leader>sw <Plug>(easymotion-bd-w)
-nmap <Leader>sw <Plug>(easymotion-overwin-w)
+" end of easymotion

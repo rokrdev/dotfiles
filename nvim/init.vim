@@ -466,6 +466,7 @@ nnoremap ]w :NextTrailingWhitespace<CR>
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
 vnoremap Q :norm @q<CR>
+vnoremap <leader>ms :s/\s/\r/<CR> :nohl<CR>
 
 nnoremap <leader>gg :Magit<CR>
 nnoremap <leader>gl :AsyncRun git log<CR>
@@ -491,5 +492,4 @@ omap f <Plug>(easymotion-fl)
 " jk motions: line motions
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
-
 " end of easymotion

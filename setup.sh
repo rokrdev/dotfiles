@@ -187,7 +187,7 @@ loadDotfiles () {
   ln -sf ~/projects/dotfiles/nvim/ ~/.config/nvim
   ln -sf ~/projects/keyboard/karabiner/ ~/.config/karabiner
 
-  ln -f ~/projects/dotfiles/tmux.conf ~/.tmux.conf
+  ln -f ~/projects/dotfiles/.tmux.conf ~/.tmux.conf
 
   ln -f ~/projects/keyboard/.skhdrc ~/.skhdrc
   ln -f ~/projects/keyboard/.yabairc ~/.yabairc
@@ -202,9 +202,9 @@ loadDotfiles () {
   # rm ~/.zshenv
   # rm ~/.fzf.zsh
 
-  ln -f ~/projects/dotfiles/zshenv ~/.zshenv
-  ln -f ~/projects/dotfiles/zshrc ~/.zshrc
-  ln -f ~/projects/dotfiles/fzf.zsh ~/.custom_fzf.zsh
+  ln -f ~/projects/dotfiles/.zshenv ~/.zshenv
+  ln -f ~/projects/dotfiles/.zshrc ~/.zshrc
+  ln -f ~/projects/dotfiles/.fzf.zsh ~/.custom_fzf.zsh
 
   source ~/.zshrc
   sudo yabai --install-sa

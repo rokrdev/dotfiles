@@ -57,6 +57,7 @@ alias yt='yarn test'
 alias ya='yarn add'
 alias zz='fasd_cd -d -i' # cd with interactive selection
 alias python3=python
+alias vimup='vim +PlugUpgrade +PlugUpdate +PlugClean +qall > /dev/null'
 
 # exclude="priv,.config,.git,node_modules,vendor,build,package-lock.json,yarn.lock,mix.lock,dist"
 # alias rg='rg --hidden -g "!{'$exclude'}/*"'

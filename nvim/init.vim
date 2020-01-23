@@ -449,14 +449,14 @@ nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
 nnoremap <leader>S :Scratchy<CR>
 nnoremap <leader>b :Buffers<CR>
-nnoremap <leader>f :Rg<CR>
+nnoremap <leader>/ :Rg<CR>
 nmap <leader>\ <Plug>RgRawSearch
 nmap <leader>* <Plug>RgRawWordUnderCursor<CR>
 vmap <leader>* <Plug>RgRawVisualSelection<CR>
 nnoremap <leader>c :e %:h/
 nnoremap <leader>mc :nohl<CR>
 nnoremap <leader>p :Files<CR>
-nnoremap <leader>n :NERDTreeToggle<CR>
+nnoremap <leader>n :NERDTreeToggle %<CR>
 nnoremap <leader>q :bd<CR>
 nnoremap H :bprevious<CR>
 nnoremap L :bnext<CR>

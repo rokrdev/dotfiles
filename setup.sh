@@ -102,6 +102,7 @@ brewConfig () {
   brew cask install font-meslo-nerd-font-mono
   brew cask install font-sourcecodepro-nerd-font-mono
   brew cask install gimp
+  brew cask install gitkraken
   brew cask install google-backup-and-sync
   brew cask install google-chrome
   brew cask install graphiql
@@ -111,6 +112,7 @@ brewConfig () {
   brew cask install karabiner-elements
   brew cask install kindle
   brew cask install macmediakeyforwarder
+  brew cask install microsoft-edge
   brew cask install notion
   brew cask install now
   brew cask install qbittorrent

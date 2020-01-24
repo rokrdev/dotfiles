@@ -102,7 +102,6 @@ brewConfig () {
   brew cask install font-meslo-nerd-font-mono
   brew cask install font-sourcecodepro-nerd-font-mono
   brew cask install gimp
-  brew cask install gitkraken
   brew cask install google-backup-and-sync
   brew cask install google-chrome
   brew cask install graphiql

@@ -9,7 +9,6 @@ call plug#begin('~/.config/nvim/autoload')
 Plug 'junegunn/vim-easy-align'
 
 " On-demand loading
-Plug 'tpope/vim-surround'
 " Specify a directory for plugins
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
@@ -53,6 +52,7 @@ Plug 'zivyangll/git-blame.vim'
 Plug 'plasticboy/vim-markdown'
 Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 Plug 'skywind3000/asyncrun.vim'
+Plug 'machakann/vim-sandwich'
 
 call plug#end()
 

@@ -38,6 +38,7 @@ alias v=nvim
 alias y=yarn
 alias zl='fasd_cd -d'     # cd, same functionality as j in autojump
 alias sudo='sudo '       # to use sudo with alias
+alias br="br --sizes -dp"
 alias brup='brew update; brew upgrade; brew cask upgrade; brew cleanup; brew doctor'
 alias dc='docker-compose'
 alias gtr='git log --oneline --graph --decorate --all'
@@ -105,3 +106,5 @@ unset __conda_setup
 . /usr/local/opt/asdf/etc/bash_completion.d/asdf.bash
 
 # zprof
+
+source /Users/bharat/Library/Preferences/org.dystroy.broot/launcher/bash/br

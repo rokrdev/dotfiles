@@ -19,6 +19,7 @@ brewConfig () {
   brew install bat
   brew install bluetoothconnector
   brew install boost
+  brew install broot
   brew install carthage
   brew install coreutils
   brew install curl

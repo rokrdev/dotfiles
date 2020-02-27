@@ -120,8 +120,8 @@ let mapleader=" "
 set foldmethod=syntax
 set foldlevel=20
 set showmatch           " Show matching brackets.
-" set number              " Show the line numbers on the left side.
-set number relativenumber
+set number              " Show the line numbers on the left side.
+" set number relativenumber
 set formatoptions+=o    " Continue comment marker in new lines.
 set expandtab           " Insert spaces when TAB is pressed.
 set tabstop=2           " Render TABs using this many spaces.

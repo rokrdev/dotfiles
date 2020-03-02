@@ -108,3 +108,9 @@ unset __conda_setup
 # zprof
 
 source /Users/bharat/Library/Preferences/org.dystroy.broot/launcher/bash/br
+asdf current java 2>&1 > /dev/null
+
+if [[ "$?" -eq 0 ]]
+then
+    export JAVA_HOME=$(asdf where java)
+fi

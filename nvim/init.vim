@@ -322,7 +322,7 @@ filetype plugin indent on
 
 let g:multi_cursor_use_default_mapping=0
 
-let g:indentLine_enabled = 1
+let g:indentLine_enabled = 0
 let g:indentLine_char = '|'
 let g:indentLine_leadingSpaceEnabled = 0
 let g:indentLine_leadingSpaceChar = "·"

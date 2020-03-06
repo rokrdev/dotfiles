@@ -460,8 +460,8 @@ nnoremap <leader>mc :nohl<CR>
 nnoremap <leader>p :Files<CR>
 nnoremap <leader>n :NERDTreeToggle %<CR>
 nnoremap <leader>! :bd<CR>
-nnoremap H :bprevious<CR>
-nnoremap L :bnext<CR>
+nnoremap <C-h> :bprevious<CR>
+nnoremap <C-l> :bnext<CR>
 nnoremap Q @q
 nnoremap [w :PrevTrailingWhitespace<CR>
 nnoremap ]w :NextTrailingWhitespace<CR>
@@ -495,3 +495,5 @@ omap f <Plug>(easymotion-fl)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 " end of easymotion
+
+com! FJ %!jq .

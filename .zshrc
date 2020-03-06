@@ -7,6 +7,10 @@ fi
 
 source ~/.zshenv
 
+# enable bash complete compatibility in zsh
+autoload bashcompinit
+bashcompinit
+
 # Customize to your needs...
 function startEmacs {
    emacs  "$1" &

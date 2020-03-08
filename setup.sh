@@ -220,7 +220,8 @@ vimAndNpmConfig () {
   echo "Vim pluging install ---------------------------------------------------------------------"
   curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   nvim +PlugInstall +UpdateRemotePlugins +qa > /dev/null
-  npm i -g bash-language-server rimraf instant-markdown-d
+  npm i -g yarn
+  yarn add global bash-language-server rimraf instant-markdown-d
   echo "VIM AND NPM CONFIG COMPLETE *************************************************"
 }
 

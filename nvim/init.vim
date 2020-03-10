@@ -53,6 +53,7 @@ Plug 'plasticboy/vim-markdown'
 Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 Plug 'skywind3000/asyncrun.vim'
 Plug 'machakann/vim-sandwich'
+Plug 'haishanh/night-owl.vim'
 
 call plug#end()
 
@@ -108,9 +109,9 @@ set background=dark
 let ayucolor="mirage"
 let g:nord_plus_bold=1
 let g:nord_plus_italic=1
-colorscheme nord_plus
+colorscheme night-owl
 " colorscheme nord_plus
-let g:airline_theme='nord'
+let g:airline_theme='night_owl'
 
 let g:UltiSnipsExpandTrigger="<C-f>"
 " let g:airline#extensions#tabline#fnamemod = ':t'

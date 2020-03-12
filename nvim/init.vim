@@ -461,8 +461,6 @@ nnoremap <leader>mc :nohl<CR>
 nnoremap <leader>p :Files<CR>
 nnoremap <leader>n :NERDTreeToggle %<CR>
 nnoremap <leader>! :bd<CR>
-nnoremap <C-h> :bprevious<CR>
-nnoremap <C-l> :bnext<CR>
 nnoremap Q @q
 nnoremap [w :PrevTrailingWhitespace<CR>
 nnoremap ]w :NextTrailingWhitespace<CR>

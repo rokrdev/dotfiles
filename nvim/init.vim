@@ -333,6 +333,7 @@ autocmd TermEnter * IndentLinesDisable
 
 let g:matchup_matchparen_status_offscreen = 0
 
+let g:airline#extensions#coc#enabled = 0
 let g:airline#extensions#default#section_truncate_width = {
       \ 'b': 79,
       \ 'x': 60,

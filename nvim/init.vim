@@ -388,8 +388,12 @@ let g:nord_comment_brightness = 20
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 
+function Rand()
+    return str2nr(matchstr(reltimestr(reltime()), '\v\.@<=\d+')[1:])
+endfunction
+
 function! s:ScratchGenerator()
-  exe "e!" . "__Scratchy__"
+  exe "e!" . "__Scratchy__" . Rand()
 endfunction
 
 function! s:ScratchMarkBuffer()
@@ -460,7 +464,9 @@ nnoremap <leader>c :e %:h/
 nnoremap <leader>mc :nohl<CR>
 nnoremap <leader>p :Files<CR>
 nnoremap <leader>n :NERDTreeToggle %<CR>
-nnoremap <leader>! :bd<CR>
+nnoremap <leader>! :bd!<CR>
+nnoremap <C-h> :bp<CR>
+nnoremap <C-l> :bn<CR>
 nnoremap Q @q
 nnoremap [w :PrevTrailingWhitespace<CR>
 nnoremap ]w :NextTrailingWhitespace<CR>

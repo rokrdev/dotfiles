@@ -28,16 +28,13 @@ Plug 'airblade/vim-gitgutter'
 Plug 'jiangmiao/auto-pairs'
 Plug 'xolox/vim-session'
 Plug 'xolox/vim-misc'
-Plug 'joshdick/onedark.vim'
 Plug 'terryma/vim-expand-region'
 Plug 'andymass/vim-matchup'
 Plug 'easymotion/vim-easymotion'
 Plug 'arcticicestudio/nord-vim'
-Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'terryma/vim-multiple-cursors'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'udalov/kotlin-vim'
-Plug 'ayu-theme/ayu-vim'
 Plug 'rafaqz/ranger.vim'
 Plug 'rbgrouleff/bclose.vim'
 " Plug 'RRethy/vim-illuminate'
@@ -408,7 +405,7 @@ command! Scratchy call s:ScratchGenerator()
 
 highlight multiple_cursors_cursor term=reverse cterm=reverse gui=reverse
 highlight link multiple_cursors_visual Visual
-highlight Comment cterm=italic gui=italic
+highlight Comment cterm=italic gui=italic guifg=#8187A2
 highlight Function cterm=italic gui=italic
 
 " All mappings

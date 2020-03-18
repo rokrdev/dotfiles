@@ -317,7 +317,6 @@ inoremap <silent><expr> <c-space> coc#refresh()
 
 filetype plugin indent on
 
-
 let g:multi_cursor_use_default_mapping=0
 
 let g:indentLine_enabled = 0
@@ -325,8 +324,6 @@ let g:indentLine_char = '|'
 let g:indentLine_leadingSpaceEnabled = 0
 let g:indentLine_leadingSpaceChar = "·"
 autocmd TermEnter * IndentLinesDisable
-
-" let g:fuzzy_opencmd = 'tab drop'
 
 let g:matchup_matchparen_status_offscreen = 0
 

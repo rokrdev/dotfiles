@@ -450,6 +450,7 @@ nmap gs :%s!!!g<Left><Left><Left>
 nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
 nnoremap <leader>S :Scratchy<CR>
+nnoremap <leader>l :ls<CR>:b<space>
 nnoremap <leader>b :Buffers<CR>
 nnoremap <leader>/ :Rg<CR>
 nmap <leader>\ <Plug>RgRawSearch
@@ -460,8 +461,8 @@ nnoremap <leader>mc :nohl<CR>
 nnoremap <leader>p :Files<CR>
 nnoremap <leader>n :NERDTreeToggle %<CR>
 nnoremap <leader>! :bd!<CR>
-nnoremap <C-h> :bp<CR>
-nnoremap <C-l> :bn<CR>
+nnoremap <S-Tab> :bp<CR>
+nnoremap <Tab> :bn<CR>
 nnoremap Q @q
 nnoremap [w :PrevTrailingWhitespace<CR>
 nnoremap ]w :NextTrailingWhitespace<CR>

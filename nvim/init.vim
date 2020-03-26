@@ -167,6 +167,10 @@ set shortmess+=c
 " always show signcolumns
 set signcolumn=yes
 
+" set wildcharm=<Tab>
+" set wildmenu
+" set wildmode=full
+
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
@@ -451,7 +455,7 @@ nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
 nnoremap <leader>S :Scratchy<CR>
 nnoremap <leader>l :ls<CR>:b<space>
-nnoremap <leader>b :Buffers<CR>
+nnoremap <leader><SPACE> :Buffers<CR>
 nnoremap <leader>/ :Rg<CR>
 nmap <leader>\ <Plug>RgRawSearch
 nmap <leader>* <Plug>RgRawWordUnderCursor<CR>
@@ -463,6 +467,7 @@ nnoremap <leader>n :NERDTreeToggle %<CR>
 nnoremap <leader>! :bd!<CR>
 nnoremap <S-Tab> :bp<CR>
 nnoremap <Tab> :bn<CR>
+" nnoremap <Tab> :buffer<Space><Tab>
 nnoremap Q @q
 nnoremap [w :PrevTrailingWhitespace<CR>
 nnoremap ]w :NextTrailingWhitespace<CR>

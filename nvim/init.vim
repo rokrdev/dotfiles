@@ -12,10 +12,7 @@ Plug 'junegunn/vim-easy-align'
 " Specify a directory for plugins
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'haishanh/night-owl.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all && source ~/.zshrc' }
 Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
@@ -36,8 +33,6 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'udalov/kotlin-vim'
 Plug 'rafaqz/ranger.vim'
-Plug 'rbgrouleff/bclose.vim'
-" Plug 'RRethy/vim-illuminate'
 Plug 'djoshea/vim-autoread'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -118,8 +113,8 @@ let mapleader=" "
 set foldmethod=syntax
 set foldlevel=20
 set showmatch           " Show matching brackets.
-set number              " Show the line numbers on the left side.
-" set number relativenumber
+" set number              " Show the line numbers on the left side.
+set number relativenumber
 set formatoptions+=o    " Continue comment marker in new lines.
 set expandtab           " Insert spaces when TAB is pressed.
 set tabstop=2           " Render TABs using this many spaces.
@@ -323,7 +318,7 @@ filetype plugin indent on
 
 let g:multi_cursor_use_default_mapping=0
 
-let g:indentLine_enabled = 0
+let g:indentLine_enabled = 1
 let g:indentLine_char = '|'
 let g:indentLine_leadingSpaceEnabled = 0
 let g:indentLine_leadingSpaceChar = "·"

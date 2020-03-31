@@ -30,7 +30,7 @@ alias b=bat
 alias fk="fkill"
 alias m=make
 alias n=npm
-alias nn=nnn
+alias nn='nnn -d -n -e -H'
 alias nv="~/.npm-packages/bin/n"
 alias ssh="TERM=xterm-256color ssh"
 alias t=tmux

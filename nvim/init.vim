@@ -88,7 +88,7 @@ let g:fzf_action = {
 
 let g:nnn#layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Comment' } }
 
-let g:nnn#command = 'nnn -d'
+let g:nnn#command = 'nnn -d -n -e -H'
 
 let $TERM="xterm-24bit"
 
@@ -326,10 +326,12 @@ filetype plugin indent on
 let g:multi_cursor_use_default_mapping=0
 
 let g:indentLine_enabled = 1
-let g:indentLine_char = '|'
+let g:indentLine_char_list = ['|']
+let g:indentLine_first_char = '|'
 let g:indentLine_leadingSpaceEnabled = 0
 let g:indentLine_leadingSpaceChar = "·"
 let g:indentLine_fileTypeExclude = ['php']
+let g:indentLine_showFirstIndentLevel = 1
 autocmd TermEnter * IndentLinesDisable
 
 let g:matchup_matchparen_status_offscreen = 0

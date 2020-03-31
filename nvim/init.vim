@@ -88,7 +88,7 @@ let g:fzf_action = {
 
 let g:nnn#layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Comment' } }
 
-let g:nnn#command = 'nnn -d -n -e -H'
+let g:nnn#command = 'nnn -d -e -H'
 
 let $TERM="xterm-24bit"
 

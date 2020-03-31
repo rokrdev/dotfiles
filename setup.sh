@@ -59,7 +59,6 @@ brewConfig () {
   brew install python
   brew install python3
   brew install qt
-  brew install ranger
   brew install readline
   brew install ren
   brew install rename

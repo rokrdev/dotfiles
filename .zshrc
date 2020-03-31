@@ -68,7 +68,8 @@ alias yt='yarn test'
 alias ya='yarn add'
 alias zz='fasd_cd -d -i' # cd with interactive selection
 alias python3=python
-alias vimup='vim +PlugUpgrade +PlugUpdate +PlugClean +qall > /dev/null'
+alias vimup='vim +PlugUpgrade +PlugUpdate +PlugClean! +qall > /dev/null'
+alias st=speedtest-cli
 
 # exclude="priv,.config,.git,node_modules,vendor,build,package-lock.json,yarn.lock,mix.lock,dist"
 # alias rg='rg --hidden -g "!{'$exclude'}/*"'
@@ -124,3 +125,5 @@ if [[ "$?" -eq 0 ]]
 then
     export JAVA_HOME=$(asdf where java)
 fi
+
+export NNN_PLUG='o:fzopen;d:diffs;g:_git diff;l:_git log;v:imgviu;t:treeview'

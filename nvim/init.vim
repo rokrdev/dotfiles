@@ -12,7 +12,6 @@ Plug 'junegunn/vim-easy-align'
 " Specify a directory for plugins
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all && source ~/.zshrc' }
 Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
@@ -32,7 +31,6 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'udalov/kotlin-vim'
-Plug 'rafaqz/ranger.vim'
 Plug 'djoshea/vim-autoread'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -46,6 +44,7 @@ Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 Plug 'skywind3000/asyncrun.vim'
 Plug 'machakann/vim-sandwich'
 Plug 'haishanh/night-owl.vim'
+Plug 'mcchrish/nnn.vim'
 
 call plug#end()
 
@@ -64,7 +63,11 @@ let g:EasyMotion_leader_key = '<Leader>'
 let g:hugefile_trigger_size = 10
 
 set clipboard=unnamed
-let NERDTreeMapOpen='<ENTER>'
+
+highlight NormalFloat cterm=NONE ctermfg=14 ctermbg=0 gui=NONE guifg=#93a1a1 guibg=#002931
+
+" let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'border': 'rounded' }}
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
@@ -82,6 +85,10 @@ let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
+
+let g:nnn#layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Comment' } }
+
+let g:nnn#command = 'nnn -d'
 
 let $TERM="xterm-24bit"
 
@@ -435,17 +442,6 @@ nnoremap <leader>sc :CloseSession<CR>
 nnoremap <leader>sc :CloseSession<CR>
 nnoremap <leader>sn :SaveSession default<CR> :OpenSession NOTES<CR>
 
-let g:NERDTreeHijackNetrw = 0
-map <leader>rr :RangerEdit<CR>
-map <leader>rv :RangerVSplit<CR>
-map <leader>rs :RangerSplit<CR>
-map <leader>rt :RangerTab<CR>
-map <leader>ri :RangerInsert<CR>
-map <leader>ra :RangerAppend<CR>
-map <leader>rc :set operatorfunc=RangerChangeOperator<CR>g@
-map <leader>rd :RangerCD<CR>
-map <leader>rld :RangerLCD<CR>
-
 nmap gs :%s!!!g<Left><Left><Left>
 nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
@@ -459,11 +455,11 @@ vmap <leader>* <Plug>RgRawVisualSelection<CR>
 nnoremap <leader>c :e %:h/
 nnoremap <leader>mc :nohl<CR>
 nnoremap <leader>p :Files<CR>
-nnoremap <leader>n :NERDTreeToggle %<CR>
 nnoremap <leader>! :bd!<CR>
 nnoremap <S-Tab> :bp<CR>
 nnoremap <Tab> :bn<CR>
 " nnoremap <Tab> :buffer<Space><Tab>
+nnoremap <leader>n :NnnPicker '%:p:h'<CR>
 nnoremap Q @q
 nnoremap [w :PrevTrailingWhitespace<CR>
 nnoremap ]w :NextTrailingWhitespace<CR>

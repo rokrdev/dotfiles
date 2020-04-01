@@ -3,10 +3,6 @@
 "
 call plug#begin('~/.config/nvim/autoload')
 
-" Make sure you use single quotes
-
-" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
-Plug 'junegunn/vim-easy-align'
 
 " On-demand loading
 " Specify a directory for plugins
@@ -437,6 +433,8 @@ let g:session_autoload = "no"
 let g:session_autosave = "no"
 let g:session_command_alias = 1
 
+let g:nnn#set_default_mappings = 0
+
 nnoremap <leader>so :OpenSession<SPACE>
 nnoremap <leader>ss :SaveSession<SPACE>
 nnoremap <leader>sd :DeleteSession<CR>
@@ -484,16 +482,20 @@ let g:EasyMotion_keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ;'
 let g:EasyMotion_space_jump_first = 1
 let g:EasyMotion_enter_jump_first = 1
 
-nmap <leader>s <Plug>(easymotion-bd-w)
-nmap \ <Plug>(easymotion-s2)
-map t <Plug>(easymotion-bd-t)
-map f <Plug>(easymotion-bd-f)
-omap t <Plug>(easymotion-tl)
-omap f <Plug>(easymotion-fl)
+" <Leader>f{char} to move to {char}
+map  <leader>f <Plug>(easymotion-bd-f)
+nmap <leader>f <Plug>(easymotion-overwin-f)
+
+" s{char}{char} to move to {char}{char}
+nmap s <Plug>(easymotion-overwin-f2)
 
 " jk motions: line motions
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
+map <leader>j <Plug>(easymotion-j)
+map <leader>k <Plug>(easymotion-k)
+
+" Move to word
+map  <leader>w <Plug>(easymotion-bd-w)
+nmap <leader>w <Plug>(easymotion-overwin-w)
 " end of easymotion
 
 com! FJ %!jq .

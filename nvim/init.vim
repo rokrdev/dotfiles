@@ -22,8 +22,6 @@ Plug 'xolox/vim-session'
 Plug 'xolox/vim-misc'
 Plug 'terryma/vim-expand-region'
 Plug 'andymass/vim-matchup'
-Plug 'easymotion/vim-easymotion'
-Plug 'arcticicestudio/nord-vim'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'udalov/kotlin-vim'
@@ -41,6 +39,7 @@ Plug 'skywind3000/asyncrun.vim'
 Plug 'machakann/vim-sandwich'
 Plug 'haishanh/night-owl.vim'
 Plug 'mcchrish/nnn.vim'
+Plug 'justinmk/vim-sneak'
 
 call plug#end()
 
@@ -59,8 +58,6 @@ let g:EasyMotion_leader_key = '<Leader>'
 let g:hugefile_trigger_size = 10
 
 set clipboard=unnamed
-
-highlight NormalFloat cterm=NONE ctermfg=14 ctermbg=0 gui=NONE guifg=#93a1a1 guibg=#002931
 
 " let g:fzf_layout = { 'window': 'call FloatingFZF()' }
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'border': 'rounded' }}
@@ -102,10 +99,7 @@ endif
 syntax enable
 set background=dark
 let ayucolor="mirage"
-let g:nord_plus_bold=1
-let g:nord_plus_italic=1
 colorscheme night-owl
-" colorscheme nord_plus
 let g:airline_theme='night_owl'
 
 let g:UltiSnipsExpandTrigger="<C-f>"
@@ -116,8 +110,8 @@ let mapleader=" "
 set foldmethod=syntax
 set foldlevel=20
 set showmatch           " Show matching brackets.
-set number              " Show the line numbers on the left side.
-" set number relativenumber
+" set number              " Show the line numbers on the left side.
+set number relativenumber
 set formatoptions+=o    " Continue comment marker in new lines.
 set expandtab           " Insert spaces when TAB is pressed.
 set tabstop=2           " Render TABs using this many spaces.
@@ -382,8 +376,6 @@ set hidden
 let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1
 
-let g:nord_comment_brightness = 20
-
 " auto show quickfix window
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
@@ -404,11 +396,6 @@ endfunction
 
 autocmd BufNewFile __Scratchy__ call s:ScratchMarkBuffer()
 command! Scratchy call s:ScratchGenerator()
-
-highlight multiple_cursors_cursor term=reverse cterm=reverse gui=reverse
-highlight link multiple_cursors_visual Visual
-highlight Comment cterm=italic gui=italic guifg=#8187A2
-highlight Function cterm=italic gui=italic
 
 " All mappings
 " Manually trigger tag autocomplete
@@ -482,20 +469,15 @@ let g:EasyMotion_keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ;'
 let g:EasyMotion_space_jump_first = 1
 let g:EasyMotion_enter_jump_first = 1
 
-" <Leader>f{char} to move to {char}
-map  <leader>f <Plug>(easymotion-bd-f)
-nmap <leader>f <Plug>(easymotion-overwin-f)
-
-" s{char}{char} to move to {char}{char}
-nmap s <Plug>(easymotion-overwin-f2)
-
-" jk motions: line motions
-map <leader>j <Plug>(easymotion-j)
-map <leader>k <Plug>(easymotion-k)
-
-" Move to word
-map  <leader>w <Plug>(easymotion-bd-w)
-nmap <leader>w <Plug>(easymotion-overwin-w)
-" end of easymotion
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
 
 com! FJ %!jq .
+highlight Sneak guifg=#011627 ctermfg=233 guibg=#ff5874 ctermbg=204 gui=NONE cterm=NONE
+highlight NormalFloat cterm=NONE ctermfg=14 ctermbg=0 gui=NONE guifg=#93a1a1 guibg=#002931
+highlight multiple_cursors_cursor term=reverse cterm=reverse gui=reverse
+highlight link multiple_cursors_visual Visual
+highlight Comment cterm=italic gui=italic guifg=#8187A2
+highlight Function cterm=italic gui=italic

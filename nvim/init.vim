@@ -13,7 +13,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'sheerun/vim-polyglot'
-Plug 'Yggdroot/indentLine'
 Plug 'mattn/emmet-vim'
 Plug 'ap/vim-css-color'
 Plug 'airblade/vim-gitgutter'
@@ -110,8 +109,8 @@ let mapleader=" "
 set foldmethod=syntax
 set foldlevel=20
 set showmatch           " Show matching brackets.
-" set number              " Show the line numbers on the left side.
-set number relativenumber
+set number              " Show the line numbers on the left side.
+" set number relativenumber
 set formatoptions+=o    " Continue comment marker in new lines.
 set expandtab           " Insert spaces when TAB is pressed.
 set tabstop=2           " Render TABs using this many spaces.
@@ -314,15 +313,6 @@ inoremap <silent><expr> <c-space> coc#refresh()
 filetype plugin indent on
 
 let g:multi_cursor_use_default_mapping=0
-
-let g:indentLine_enabled = 1
-let g:indentLine_char_list = ['|']
-let g:indentLine_first_char = '|'
-let g:indentLine_leadingSpaceEnabled = 0
-let g:indentLine_leadingSpaceChar = "·"
-let g:indentLine_fileTypeExclude = ['php']
-let g:indentLine_showFirstIndentLevel = 1
-autocmd TermEnter * IndentLinesDisable
 
 let g:matchup_matchparen_status_offscreen = 0
 

@@ -106,8 +106,8 @@ let g:UltiSnipsExpandTrigger="<C-f>"
 
 let mapleader=" "
 
-set foldmethod=syntax
-set foldlevel=20
+set foldmethod=indent
+set foldcolumn=2
 set showmatch           " Show matching brackets.
 set number              " Show the line numbers on the left side.
 " set number relativenumber
@@ -161,14 +161,30 @@ set signcolumn=yes
 " set wildcharm=<Tab>
 " set wildmenu
 " set wildmode=full
-
-" Use tab for trigger completion with characters ahead and navigate.
+"
+"
+"" Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+autocmd FileType javascript setlocal foldmethod=expr
+autocmd FileType javascript setlocal foldexpr=JSFolds()
+function! JSFolds()
+  let thisline = getline(v:lnum)
+  if thisline =~? '\v^\s*$'
+    return '-1'
+  endif
+
+  if thisline =~ '^import.*$'
+    return 1
+  else
+    return indent(v:lnum) / &shiftwidth
+  endif
+endfunction
 
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -471,3 +487,5 @@ highlight multiple_cursors_cursor term=reverse cterm=reverse gui=reverse
 highlight link multiple_cursors_visual Visual
 highlight Comment cterm=italic gui=italic guifg=#8187A2
 highlight Function cterm=italic gui=italic
+highlight FoldColumn guifg=#806e6f
+highlight Folded guifg=#806e6f

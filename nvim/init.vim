@@ -109,6 +109,7 @@ let mapleader=" "
 set foldmethod=indent
 set foldcolumn=2
 set showmatch           " Show matching brackets.
+set cursorline
 set number              " Show the line numbers on the left side.
 " set number relativenumber
 set formatoptions+=o    " Continue comment marker in new lines.
@@ -116,7 +117,6 @@ set expandtab           " Insert spaces when TAB is pressed.
 set tabstop=2           " Render TABs using this many spaces.
 set shiftwidth=2        " Indentation amount for < and > commands.
 set softtabstop=2
-set nocursorline
 set nojoinspaces        " Prevents inserting two spaces after punctuation on a join (J)
 set encoding=utf-8
 set autoread
@@ -489,3 +489,4 @@ highlight Comment cterm=italic gui=italic guifg=#8187A2
 highlight Function cterm=italic gui=italic
 highlight FoldColumn guifg=#806e6f
 highlight Folded guifg=#806e6f
+highlight LineNr guifg=#8187A2

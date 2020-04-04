@@ -115,3 +115,4 @@ then
 fi
 
 export NNN_PLUG='o:fzopen;d:diffs;g:_git diff;l:_git log;v:imgviu;t:treeview'
+export NNN_BMS='d:~/Downloads;p:~/projects;D:~/Documents'

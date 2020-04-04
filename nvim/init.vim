@@ -143,6 +143,8 @@ let g:lightline = {
 \   },
 \ }
 
+set guicursor=
+
 function! LightlineReadonly()
   return &readonly ? '' : ''
 endfunction
@@ -471,10 +473,11 @@ vnoremap Q :norm @q<CR>
 vnoremap <leader>ms :s/\(^\s*\)\@<!\s/\r/<CR> :nohl<CR>
 
 nnoremap <leader>gg :Gstatus<CR>
-nnoremap <leader>gl :AsyncRun git log<CR>
-nnoremap <leader>gf :AsyncRun git pull<SPACE>
-nnoremap <leader>gp :AsyncRun git push<SPACE>
-nnoremap <Leader>gb :<C-u>call gitblame#echo()<CR>
+nnoremap <leader>gl :Glog<CR>
+nnoremap <leader>gf :Gpull<SPACE>
+nnoremap <leader>gp :Gpush<SPACE>
+nnoremap <leader>gb :Gblame<CR>
+nnoremap <Leader>gB :<C-u>call gitblame#echo()<CR>
 
 let g:EasyMotion_smartcase = 1 " turn on case insensitive feature
 let g:EasyMotion_do_mapping = 0 " disable default mappings

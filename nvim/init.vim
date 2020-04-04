@@ -10,8 +10,6 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all && source ~/.zshrc' }
 Plug 'junegunn/fzf.vim'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'sheerun/vim-polyglot'
 Plug 'mattn/emmet-vim'
 Plug 'ap/vim-css-color'
@@ -39,6 +37,9 @@ Plug 'machakann/vim-sandwich'
 Plug 'haishanh/night-owl.vim'
 Plug 'mcchrish/nnn.vim'
 Plug 'justinmk/vim-sneak'
+Plug 'itchyny/lightline.vim'
+Plug 'itchyny/vim-gitbranch'
+Plug 'mengelbrecht/lightline-bufferline'
 
 call plug#end()
 
@@ -97,12 +98,38 @@ endif
 """"" enable the theme
 syntax enable
 set background=dark
-let ayucolor="mirage"
 colorscheme night-owl
-let g:airline_theme='night_owl'
+set showtabline=2
+let g:lightline = {
+\   'colorscheme': 'nightowl',
+\   'mode_map': {
+        \ 'n' : 'N',
+        \ 'i' : 'I',
+        \ 'R' : 'R',
+        \ 'v' : 'V',
+        \ 'V' : 'VL',
+        \ "\<C-v>": 'VB',
+        \ 'c' : 'C',
+        \ 's' : 'S',
+        \ 'S' : 'SL',
+        \ "\<C-s>": 'SB',
+        \ 't': 'T',
+     \ },
+\   'active': {
+\     'left': [ [ 'mode', 'paste' ],
+\               [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+\   },
+\   'component_function': {
+\     'gitbranch': 'gitbranch#name'
+\   },
+\   'tabline': {'left': [['buffers']], 'right':[]},
+\   'component_expand': {'buffers': 'lightline#bufferline#buffers'},
+\   'component_type': {'buffers': 'tabsel'}
+\ }
+
+autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
 
 let g:UltiSnipsExpandTrigger="<C-f>"
-" let g:airline#extensions#tabline#fnamemod = ':t'
 
 let mapleader=" "
 
@@ -331,50 +358,6 @@ filetype plugin indent on
 let g:multi_cursor_use_default_mapping=0
 
 let g:matchup_matchparen_status_offscreen = 0
-
-let g:airline#extensions#coc#enabled = 0
-let g:airline#extensions#default#section_truncate_width = {
-      \ 'b': 79,
-      \ 'x': 60,
-      \ 'y': 88,
-      \ 'z': 45,
-      \ }
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
-let b:airline_whitespace_checks = [ 'indent', 'mixed-indent-file' ]
-let g:airline_powerline_fonts = 1
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-" unicode symbols
-let g:airline_left_sep = '»'
-let g:airline_left_sep = '▶'
-let g:airline_right_sep = '«'
-let g:airline_right_sep = '◀'
-let g:airline_symbols.linenr = '␊'
-let g:airline_symbols.linenr = '␤'
-let g:airline_symbols.linenr = '¶'
-let g:airline_symbols.branch = '⎇'
-let g:airline_symbols.paste = 'ρ'
-let g:airline_symbols.paste = 'Þ'
-let g:airline_symbols.paste = '∥'
-let g:airline_symbols.whitespace = 'Ξ'
-
-" airline symbols
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-" let g:airline_left_sep = ''
-" let g:airline_left_alt_sep = ''
-" let g:airline_right_sep = ''
-" let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr = ''
-set guicursor=
 
 " Required for operations modifying multiple buffers like rename.
 set hidden

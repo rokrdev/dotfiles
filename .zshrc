@@ -12,18 +12,6 @@ autoload bashcompinit
 bashcompinit
 
 # Customize to your needs...
-function startEmacs {
-   emacs  "$1" &
-}
-
-function notion {
-  cd $NOTION
-  ssh git@github.com
-  if [ $? -eq 0 ]; then
-    git pull
-  fi
-  emacs -nw $NOTION/clip.org
-}
 
 alias k="/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
 alias b=bat

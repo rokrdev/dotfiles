@@ -13,7 +13,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'mattn/emmet-vim'
 Plug 'ap/vim-css-color'
-Plug 'airblade/vim-gitgutter'
 Plug 'jiangmiao/auto-pairs'
 Plug 'xolox/vim-session'
 Plug 'xolox/vim-misc'
@@ -28,7 +27,6 @@ Plug 'honza/vim-snippets'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'mhinz/vim-hugefile'
 Plug 'jesseleite/vim-agriculture'
-Plug 'jreybert/vimagit'
 Plug 'zivyangll/git-blame.vim'
 Plug 'plasticboy/vim-markdown'
 Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
@@ -38,8 +36,9 @@ Plug 'haishanh/night-owl.vim'
 Plug 'mcchrish/nnn.vim'
 Plug 'justinmk/vim-sneak'
 Plug 'itchyny/lightline.vim'
-Plug 'itchyny/vim-gitbranch'
 Plug 'mengelbrecht/lightline-bufferline'
+Plug 'niklaas/lightline-gitdiff'
+Plug 'tpope/vim-fugitive'
 
 call plug#end()
 
@@ -103,30 +102,57 @@ set showtabline=2
 let g:lightline = {
 \   'colorscheme': 'nightowl',
 \   'mode_map': {
-        \ 'n' : 'N',
-        \ 'i' : 'I',
-        \ 'R' : 'R',
-        \ 'v' : 'V',
-        \ 'V' : 'VL',
-        \ "\<C-v>": 'VB',
-        \ 'c' : 'C',
-        \ 's' : 'S',
-        \ 'S' : 'SL',
-        \ "\<C-s>": 'SB',
-        \ 't': 'T',
-     \ },
+\     'n' : 'N',
+\     'i' : 'I',
+\     'R' : 'R',
+\     'v' : 'V',
+\     'V' : 'VL',
+\     "\<C-v>": 'VB',
+\     'c' : 'C',
+\     's' : 'S',
+\     'S' : 'SL',
+\     "\<C-s>": 'SB',
+\     't': 'T',
+\   },
 \   'active': {
 \     'left': [ [ 'mode', 'paste' ],
-\               [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+\               [ 'fugitive', 'filename', 'readonly', 'modified' ],
+\              [ 'gitdiff' ] ],
+\     'right': [ [ 'lineinfo' ],
+\              [ 'percent' ] ],
+\   },
+\   'inactive': {
+\     'left': [ [ 'mode', 'paste' ],
+\               [ 'fugitive', 'filename', 'readonly', 'modified' ],
+\              [ 'gitdiff' ] ],
+\     'right': [ [ 'lineinfo' ],
+\              [ 'percent' ] ],
 \   },
 \   'component_function': {
-\     'gitbranch': 'gitbranch#name'
+\     'readonly': 'LightlineReadonly',
+\     'fugitive': 'LightlineFugitive',
 \   },
 \   'tabline': {'left': [['buffers']], 'right':[]},
-\   'component_expand': {'buffers': 'lightline#bufferline#buffers'},
-\   'component_type': {'buffers': 'tabsel'}
+\   'component_expand': {
+\     'buffers': 'lightline#bufferline#buffers',
+\     'gitdiff': 'lightline#gitdiff#get',
+\   },
+\   'component_type': {
+\     'buffers': 'tabsel',
+\     'gitdiff': 'middle',
+\   },
 \ }
 
+function! LightlineReadonly()
+  return &readonly ? '' : ''
+endfunction
+function! LightlineFugitive()
+  if exists('*FugitiveHead')
+     let branch = FugitiveHead()
+     return branch !=# '' ? ' '.branch : ''
+  endif
+  return ''
+endfunction
 autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
 
 let g:UltiSnipsExpandTrigger="<C-f>"
@@ -444,7 +470,7 @@ vnoremap <C-k> :m '<-2<CR>gv=gv
 vnoremap Q :norm @q<CR>
 vnoremap <leader>ms :s/\(^\s*\)\@<!\s/\r/<CR> :nohl<CR>
 
-nnoremap <leader>gg :Magit<CR>
+nnoremap <leader>gg :Gstatus<CR>
 nnoremap <leader>gl :AsyncRun git log<CR>
 nnoremap <leader>gf :AsyncRun git pull<SPACE>
 nnoremap <leader>gp :AsyncRun git push<SPACE>

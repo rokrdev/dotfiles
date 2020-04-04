@@ -155,7 +155,7 @@ function! LightlineFugitive()
   endif
   return ''
 endfunction
-autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
+autocmd BufWritePost,TextChanged,TextChangedI,TermLeave * call lightline#update()
 
 let g:UltiSnipsExpandTrigger="<C-f>"
 

@@ -162,7 +162,7 @@ let g:UltiSnipsExpandTrigger="<C-f>"
 let mapleader=" "
 
 set foldmethod=indent
-set foldcolumn=2
+" set foldcolumn=2
 set showmatch           " Show matching brackets.
 set cursorline
 set number              " Show the line numbers on the left side.

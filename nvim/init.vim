@@ -39,6 +39,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'niklaas/lightline-gitdiff'
 Plug 'tpope/vim-fugitive'
+Plug 'kdheepak/lazygit.vim'
 
 call plug#end()
 
@@ -81,6 +82,9 @@ let g:fzf_action = {
 let g:nnn#layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Comment' } }
 
 let g:nnn#command = 'nnn -d -e -H'
+
+let g:lazygit_floating_window_winblend = 0 " transparency of floating window
+let g:lazygit_floating_window_scaling_factor = 0.9 " scaling factor for floating window
 
 let $TERM="xterm-24bit"
 
@@ -162,6 +166,7 @@ let g:UltiSnipsExpandTrigger="<C-f>"
 let mapleader=" "
 
 set foldmethod=indent
+set foldlevel=2
 " set foldcolumn=2
 set showmatch           " Show matching brackets.
 set cursorline
@@ -458,8 +463,10 @@ nmap <leader>* <Plug>RgRawWordUnderCursor<CR>
 vmap <leader>* <Plug>RgRawVisualSelection<CR>
 nnoremap <leader>c :e %:h/
 nnoremap <leader>mc :nohl<CR>
-nnoremap <leader>p :Files<CR>
+nnoremap <leader>f :Files<CR>
 nnoremap <leader>! :bd!<CR>
+noremap <Leader>y "+y
+noremap <Leader>p "+p
 nnoremap <S-Tab> :bp<CR>
 nnoremap <Tab> :bn<CR>
 " nnoremap <Tab> :buffer<Space><Tab>
@@ -472,6 +479,7 @@ vnoremap <C-k> :m '<-2<CR>gv=gv
 vnoremap Q :norm @q<CR>
 vnoremap <leader>ms :s/\(^\s*\)\@<!\s/\r/<CR> :nohl<CR>
 
+nnoremap <silent><leader>G :Lazygit<CR>
 nnoremap <leader>gg :Gstatus<CR>
 nnoremap <leader>gl :Glog<CR>
 nnoremap <leader>gf :Gpull<SPACE>

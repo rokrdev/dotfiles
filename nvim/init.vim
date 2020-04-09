@@ -40,10 +40,17 @@ Plug 'mengelbrecht/lightline-bufferline'
 Plug 'niklaas/lightline-gitdiff'
 Plug 'tpope/vim-fugitive'
 Plug 'kdheepak/lazygit.vim'
+Plug 'preservim/nerdtree'
 
 call plug#end()
 
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+autocmd StdinReadPre * let s:std_in=1
+
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 let g:loaded_matchit = 1
 
@@ -170,8 +177,8 @@ set foldlevel=2
 " set foldcolumn=2
 set showmatch           " Show matching brackets.
 set cursorline
-set number              " Show the line numbers on the left side.
-" set number relativenumber
+" set number              " Show the line numbers on the left side.
+set number relativenumber
 set formatoptions+=o    " Continue comment marker in new lines.
 set expandtab           " Insert spaces when TAB is pressed.
 set tabstop=2           " Render TABs using this many spaces.
@@ -470,6 +477,7 @@ nnoremap <S-Tab> :bp<CR>
 nnoremap <Tab> :bn<CR>
 " nnoremap <Tab> :buffer<Space><Tab>
 nnoremap <leader>n :NnnPicker '%:p:h'<CR>
+nnoremap <leader>N :NERDTreeToggle<CR>
 nnoremap Q @q
 nnoremap [w :PrevTrailingWhitespace<CR>
 nnoremap ]w :NextTrailingWhitespace<CR>

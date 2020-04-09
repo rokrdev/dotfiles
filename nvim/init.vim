@@ -331,7 +331,6 @@ let g:coc_global_extensions = [
   \ 'coc-elixir',
   \ 'coc-emmet',
   \ 'coc-eslint',
-  \ 'coc-highlight',
   \ 'coc-html',
   \ 'coc-json',
   \ 'coc-markdownlint',

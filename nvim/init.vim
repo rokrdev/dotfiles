@@ -172,6 +172,7 @@ let g:UltiSnipsExpandTrigger="<C-f>"
 
 let mapleader=" "
 
+set directory^=$HOME/.vim/swap//
 set foldmethod=indent
 set foldlevel=2
 " set foldcolumn=2
@@ -477,7 +478,7 @@ nnoremap <S-Tab> :bp<CR>
 nnoremap <Tab> :bn<CR>
 " nnoremap <Tab> :buffer<Space><Tab>
 nnoremap <leader>n :NnnPicker '%:p:h'<CR>
-nnoremap <leader>N :NERDTreeToggle<CR>
+nnoremap <leader>t :NERDTreeToggle<CR>
 nnoremap Q @q
 nnoremap [w :PrevTrailingWhitespace<CR>
 nnoremap ]w :NextTrailingWhitespace<CR>

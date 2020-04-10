@@ -14,7 +14,7 @@ source ~/.env
 set FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude .git'
 set FZF_CTRL_R_OPTS '--sort --exact'
 set FZF_TMUX 1
-set -gx FZF_DEFAULT_OPTS ' --height 40% --no-reverse --color=fg:#d6deeb,bg:#011627,hl:#addb67 --color=fg+:#82aaff,bg+:#011627,hl+:#82aaff --color=info:#7fdbca,prompt:#c792ea,pointer:#c792ea --color=marker:#82aaff,spinner:#c792ea,header:#7fdbca'
+set -gx FZF_DEFAULT_OPTS '--no-reverse --color=fg:#d6deeb,bg:#011627,hl:#addb67 --color=fg+:#82aaff,bg+:#011627,hl+:#82aaff --color=info:#7fdbca,prompt:#c792ea,pointer:#c792ea --color=marker:#82aaff,spinner:#c792ea,header:#7fdbca'
 
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 # defaults write NSGlobalDomain KeyRepeat -float 1.5
@@ -108,7 +108,7 @@ function kp --description 'Fuzzy search and kill process'
 end
 
 function f --description 'Fuzzy find file and open in vim'
-    set files (echo (eval "fzf --multi --exit-0"))
+    set files (echo (eval "$FZF_DEFAULT_COMMAND | fzf --multi --exit-0"))
     if test -n $files
       v (echo $files | string split ' ')
     end
@@ -120,4 +120,3 @@ function z --description 'Fuzzy jump to directory'
         cd $tgt_dir
     end
 end
-

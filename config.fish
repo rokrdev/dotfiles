@@ -7,14 +7,14 @@ export EDITOR="$VISUAL"
 export PATH="/usr/local/anaconda3/bin:$PATH"
 export PATH="$HOME/.jenv/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="/usr/local/bin:$PATH"
+export PATH="/usr/local/bin:/usr/local/sbin/:$PATH"
 
 source ~/.env
 
-set FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude .git'
-set FZF_CTRL_R_OPTS '--sort --exact'
-set FZF_TMUX 1
-set -gx FZF_DEFAULT_OPTS '--no-reverse --color=fg:#d6deeb,bg:#011627,hl:#addb67 --color=fg+:#82aaff,bg+:#011627,hl+:#82aaff --color=info:#7fdbca,prompt:#c792ea,pointer:#c792ea --color=marker:#82aaff,spinner:#c792ea,header:#7fdbca'
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow'
+export FZF_CTRL_R_OPTS='--sort --exact'
+export FZF_TMUX=1
+export FZF_DEFAULT_OPTS='--no-reverse --color=fg:#d6deeb,bg:#011627,hl:#addb67 --color=fg+:#82aaff,bg+:#011627,hl+:#82aaff --color=info:#7fdbca,prompt:#c792ea,pointer:#c792ea --color=marker:#82aaff,spinner:#c792ea,header:#7fdbca'
 
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 # defaults write NSGlobalDomain KeyRepeat -float 1.5
@@ -37,7 +37,7 @@ alias y=yarn
 alias zl='fasd_cd -d'     # cd, same functionality as j in autojump
 alias sudo='sudo '       # to use sudo with alias
 alias br="br --sizes -dp"
-alias brup='brew update; brew upgrade; brew cask upgade; brew cleanup; brew doctor'
+alias brup='brew update; brew upgrade; brew cask upgrade; brew cleanup; brew doctor'
 alias dc='docker-compose'
 alias g=git
 alias ga='git add'
@@ -74,9 +74,6 @@ if [ -f '~/google-cloud-sdk/path.zsh.inc' ]; then . '~/google-cloud-sdk/path.zsh
 
 # The next line enables shell command completion for gcloud.
 if [ -f '~/google-cloud-sdk/completion.zsh.inc' ]; then . '~/google-cloud-sdk/completion.zsh.inc'; end
-
-# source ~/.fzf.zsh
-# source ~/.custom_fzf.zsh
 
 # asdf
 . /usr/local/opt/asdf/asdf.fish

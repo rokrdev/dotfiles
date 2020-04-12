@@ -67,7 +67,7 @@ let g:hugefile_trigger_size = 10
 set clipboard=unnamed
 
 " let g:fzf_layout = { 'window': 'call FloatingFZF()' }
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'border': 'rounded' }}
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.6, 'border': 'rounded' }}
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
@@ -86,7 +86,9 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-let g:nnn#layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Comment' } }
+let g:fzf_preview_window = ''
+
+let g:nnn#layout = { 'window': { 'width': 0.8, 'height': 0.6, 'border': 'rounder', 'highlight': 'Comment' } }
 
 let g:nnn#command = 'nnn -d -e -H'
 

@@ -477,7 +477,7 @@ noremap <Leader>p "+p
 nnoremap <S-Tab> :bp<CR>
 nnoremap <Tab> :bn<CR>
 " nnoremap <Tab> :buffer<Space><Tab>
-nnoremap <leader>n :NnnPicker<CR>
+nnoremap <leader>n :NnnPicker '%:p:h'<CR>
 nnoremap <leader>t :NERDTreeToggle %<CR>
 nnoremap Q @q
 nnoremap [w :PrevTrailingWhitespace<CR>

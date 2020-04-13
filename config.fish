@@ -1,5 +1,3 @@
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-# export PATH="$PATH:$HOME/.rvm/bin"
 export ALTERNATE_EDITOR="nvim"
 export VISUAL="nvim"
 export EDITOR="$VISUAL"
@@ -75,10 +73,8 @@ if [ -f '~/google-cloud-sdk/path.zsh.inc' ]; then . '~/google-cloud-sdk/path.zsh
 # The next line enables shell command completion for gcloud.
 if [ -f '~/google-cloud-sdk/completion.zsh.inc' ]; then . '~/google-cloud-sdk/completion.zsh.inc'; end
 
-# asdf
-. /usr/local/opt/asdf/asdf.fish
-
-# zprof
+# asdf erlang fails without this in fish
+set CFLAGS "-O2 -g" $CFLAGS
 
 asdf current java 2>&1 > /dev/null
 
@@ -117,3 +113,9 @@ function z --description 'Fuzzy jump to directory'
         cd $tgt_dir
     end
 end
+
+# for shell error
+set -x SHELL /bin/zsh
+
+# asdf
+source /usr/local/opt/asdf/asdf.fish

@@ -48,8 +48,6 @@ autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
 autocmd StdinReadPre * let s:std_in=1
 
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 let g:loaded_matchit = 1
@@ -223,7 +221,7 @@ set cmdheight=1
 set updatetime=100
 
 " don't give |ins-completion-menu| messages.
-set shortmess+=c
+set shortmess+=cI
 
 " always show signcolumns
 set signcolumn=yes

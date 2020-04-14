@@ -1,12 +1,9 @@
-# Source Prezto.
 # zmodload zsh/zprof
-
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-fi
 
 source ~/.zshenv
 
+autoload -Uz compinit
+compinit
 # enable bash complete compatibility in zsh
 autoload bashcompinit
 bashcompinit
@@ -64,8 +61,6 @@ alias st=speedtest-cli
 
 # source autosuggestions
 source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-prompt pure
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '~/google-cloud-sdk/path.zsh.inc' ]; then . '~/google-cloud-sdk/path.zsh.inc'; fi

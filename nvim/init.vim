@@ -350,6 +350,8 @@ inoremap <silent><expr> <c-space> coc#refresh()
 filetype plugin indent on
 
 let g:multi_cursor_use_default_mapping=0
+let g:multi_cursor_exit_from_visual_mode=1
+let g:multi_cursor_exit_from_insert_mode=1
 
 let g:matchup_matchparen_status_offscreen = 0
 
@@ -377,9 +379,9 @@ command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-hea
 
 " Default mapping
 let g:multi_cursor_start_word_key      = '<C-n>'
-let g:multi_cursor_select_all_word_key = '<leader>aa'
+let g:multi_cursor_select_all_word_key = '<C-m>'
 let g:multi_cursor_start_key           = 'g<C-n>'
-let g:multi_cursor_select_all_key      = 'g<leader>ak'
+let g:multi_cursor_select_all_key      = 'g<C-m>'
 let g:multi_cursor_next_key            = '<C-n>'
 let g:multi_cursor_prev_key            = '<C-p>'
 let g:multi_cursor_skip_key            = '<C-x>'
@@ -418,7 +420,6 @@ noremap <Leader>y "+y
 noremap <Leader>p "+p
 nnoremap <S-Tab> :bp<CR>
 nnoremap <Tab> :bn<CR>
-" nnoremap <Tab> :buffer<Space><Tab>
 nnoremap <leader>n :NnnPicker '%:p:h'<CR>
 nnoremap <leader>t :NERDTreeToggle %<CR>
 nnoremap Q @q
@@ -427,7 +428,7 @@ nnoremap ]w :NextTrailingWhitespace<CR>
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
 vnoremap Q :norm @q<CR>
-vnoremap <leader>ms :s/\(^\s*\)\@<!\s/\r/<CR> :nohl<CR>
+" vnoremap <leader>ms :s/\(^\s*\)\@<!\s/\r/<CR> :nohl<CR>
 
 nnoremap <leader>gg :call ToggleLazyGit()<CR>
 nnoremap <Leader>gb :<C-u>call gitblame#echo()<CR>

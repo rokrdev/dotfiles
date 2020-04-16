@@ -3,7 +3,6 @@
 "
 call plug#begin('~/.config/nvim/autoload')
 
-
 " On-demand loading
 " Specify a directory for plugins
 Plug 'tpope/vim-commentary'
@@ -34,11 +33,13 @@ Plug 'mcchrish/nnn.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'niklaas/lightline-gitdiff'
-Plug 'tpope/vim-fugitive'
-Plug 'kdheepak/lazygit.vim'
 Plug 'preservim/nerdtree'
+Plug 'itchyny/vim-gitbranch'
+Plug 'zivyangll/git-blame.vim'
 
 call plug#end()
+
+source ~/.config/nvim/functions.vim
 
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
@@ -85,9 +86,6 @@ let g:fzf_preview_window = ''
 let g:nnn#layout = { 'window': { 'width': 0.8, 'height': 0.6, 'border': 'rounder', 'highlight': 'Comment' } }
 
 let g:nnn#command = 'nnn -d -e -H'
-
-let g:lazygit_floating_window_winblend = 0 " transparency of floating window
-let g:lazygit_floating_window_scaling_factor = 0.9 " scaling factor for floating window
 
 let $TERM="xterm-24bit"
 
@@ -152,16 +150,6 @@ let g:lightline = {
 
 set guicursor=
 
-function! LightlineReadonly()
-  return &readonly ? '' : ''
-endfunction
-function! LightlineFugitive()
-  if exists('*FugitiveHead')
-     let branch = FugitiveHead()
-     return branch !=# '' ? ' '.branch : ''
-  endif
-  return ''
-endfunction
 autocmd BufWritePost,TextChanged,TextChangedI,TermLeave * call lightline#update()
 
 let g:UltiSnipsExpandTrigger="<C-f>"
@@ -237,23 +225,6 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 autocmd FileType javascript setlocal foldmethod=expr
 autocmd FileType javascript setlocal foldexpr=JSFolds()
-function! JSFolds()
-  let thisline = getline(v:lnum)
-  if thisline =~? '\v^\s*$'
-    return '-1'
-  endif
-
-  if thisline =~ '^import.*$'
-    return 1
-  else
-    return indent(v:lnum) / &shiftwidth
-  endif
-endfunction
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
 
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
@@ -276,14 +247,6 @@ nmap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
 
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
@@ -355,11 +318,6 @@ inoremap <silent><expr> <TAB>
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
 
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
 let g:coc_snippet_next = '<tab>'
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -404,20 +362,6 @@ let g:strip_whitespace_on_save=1
 " auto show quickfix window
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
-
-function Rand()
-    return str2nr(matchstr(reltimestr(reltime()), '\v\.@<=\d+')[1:])
-endfunction
-
-function! s:ScratchGenerator()
-  exe "e!" . "__Scratchy__" . Rand()
-endfunction
-
-function! s:ScratchMarkBuffer()
-  setlocal buftype=nofile
-  setlocal bufhidden=hide
-  setlocal noswapfile
-endfunction
 
 autocmd BufNewFile __Scratchy__ call s:ScratchMarkBuffer()
 command! Scratchy call s:ScratchGenerator()
@@ -485,13 +429,9 @@ vnoremap <C-k> :m '<-2<CR>gv=gv
 vnoremap Q :norm @q<CR>
 vnoremap <leader>ms :s/\(^\s*\)\@<!\s/\r/<CR> :nohl<CR>
 
-nnoremap <silent><leader>G :Lazygit<CR>
-nnoremap <leader>gg :Gstatus<CR>
-nnoremap <leader>gl :Glog<CR>
-nnoremap <leader>gf :Gpull<SPACE>
-nnoremap <leader>gp :Gpush<SPACE>
-nnoremap <leader>gb :Gblame<CR>
-nnoremap <Leader>gB :<C-u>call gitblame#echo()<CR>
+nnoremap <leader>gg :call ToggleLazyGit()<CR>
+nnoremap <Leader>gb :<C-u>call gitblame#echo()<CR>
+nnoremap <leader>T :call ToggleScratchTerm()<CR>
 
 com! FJ %!jq .
 highlight Sneak guifg=#011627 ctermfg=233 guibg=#ff5874 ctermbg=204 gui=NONE cterm=NONE
@@ -503,3 +443,4 @@ highlight Function cterm=italic gui=italic
 highlight FoldColumn guifg=#806e6f
 highlight Folded guifg=#806e6f
 highlight LineNr guifg=#8187A2
+

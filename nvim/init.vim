@@ -36,6 +36,7 @@ Plug 'niklaas/lightline-gitdiff'
 Plug 'preservim/nerdtree'
 Plug 'itchyny/vim-gitbranch'
 Plug 'zivyangll/git-blame.vim'
+Plug 'nelstrom/vim-visual-star-search'
 
 call plug#end()
 
@@ -252,11 +253,11 @@ nnoremap <silent> K :call <SID>show_documentation()<CR>
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
+nmap <Leader>rn <Plug>(coc-rename)
 
 " Remap for format selected region
-xmap <leader>cm <Plug>(coc-format-selected)
-nmap <leader>cm <Plug>(coc-format-selected)
+xmap <Leader>cm <Plug>(coc-format-selected)
+nmap <Leader>cm <Plug>(coc-format-selected)
 
 augroup mygroup
   autocmd!
@@ -266,14 +267,14 @@ augroup mygroup
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
-" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap <leader>a <Plug>(coc-codeaction-selected)
-nmap <leader>a <Plug>(coc-codeaction-selected)
+" Remap for do codeAction of selected region, ex: `<Leader>aap` for current paragraph
+xmap <Leader>a <Plug>(coc-codeaction-selected)
+nmap <Leader>a <Plug>(coc-codeaction-selected)
 
 " Remap for do codeAction of current line
-nmap <leader>ac <Plug>(coc-codeaction)
+nmap <Leader>ac <Plug>(coc-codeaction)
 " Fix autofix problem of current line
-nmap <leader>qf <Plug>(coc-fix-current)
+nmap <Leader>qf <Plug>(coc-fix-current)
 
 " Create mappings for function text object, requires document symbols feature of languageserver.
 xmap if <Plug>(coc-funcobj-i)
@@ -395,44 +396,48 @@ let g:session_command_alias = 1
 
 let g:nnn#set_default_mappings = 0
 
-nnoremap <leader>so :OpenSession<SPACE>
-nnoremap <leader>ss :SaveSession<SPACE>
-nnoremap <leader>sd :DeleteSession<CR>
-nnoremap <leader>sc :CloseSession<CR>
-nnoremap <leader>sc :CloseSession<CR>
-nnoremap <leader>sn :SaveSession default<CR> :OpenSession NOTES<CR>
+nnoremap <Leader>so :OpenSession<Space>
+nnoremap <Leader>ss :SaveSession<Space>
+nnoremap <Leader>sd :DeleteSession<CR>
+nnoremap <Leader>sc :CloseSession<CR>
+nnoremap <Leader>sc :CloseSession<CR>
+nnoremap <Leader>sn :SaveSession default<CR> :OpenSession NOTES<CR>
 
-nmap gs :%s!!!g<Left><Left><Left>
 nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
-nnoremap <leader>S :Scratchy<CR>
-nnoremap <leader>l :ls<CR>:b<space>
-nnoremap <leader><SPACE> :Buffers<CR>
-nnoremap <leader>/ :Rg<CR>
-nmap <leader>\ <Plug>RgRawSearch
-nmap <leader>* <Plug>RgRawWordUnderCursor<CR>
-vmap <leader>* <Plug>RgRawVisualSelection<CR>
-nnoremap <leader>c :e %:h/
-nnoremap <leader>mc :nohl<CR>
-nnoremap <leader>f :Files<CR>
-nnoremap <leader>! :bd!<CR>
+nnoremap <Leader>S :Scratchy<CR>
+nnoremap <Leader>l :ls<CR>:b<space>
+nnoremap <Leader><Space> :Buffers<CR>
+nnoremap <Leader>/ :Rg<CR>
+nmap <Leader>\ <Plug>RgRawSearch
+nmap <Leader>* <Plug>RgRawWordUnderCursor<CR>
+vmap <Leader>* <Plug>RgRawVisualSelection<CR>
+nnoremap <Leader>c :e %:h/
+nnoremap <Leader>mc :nohl<CR>
+nnoremap <Leader>f :Files<CR>
+nnoremap <Leader>! :bd!<CR>
 noremap <Leader>y "+y
 noremap <Leader>p "+p
 nnoremap <S-Tab> :bp<CR>
 nnoremap <Tab> :bn<CR>
-nnoremap <leader>n :NnnPicker '%:p:h'<CR>
-nnoremap <leader>t :NERDTreeToggle %<CR>
+nnoremap <Leader>n :NnnPicker '%:p:h'<CR>
+nnoremap <Leader>t :NERDTreeToggle %<CR>
 nnoremap Q @q
 nnoremap [w :PrevTrailingWhitespace<CR>
 nnoremap ]w :NextTrailingWhitespace<CR>
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
 vnoremap Q :norm @q<CR>
-" vnoremap <leader>ms :s/\(^\s*\)\@<!\s/\r/<CR> :nohl<CR>
+" vnoremap <Leader>ms :s/\(^\s*\)\@<!\s/\r/<CR> :nohl<CR>
 
-nnoremap <leader>gg :call ToggleLazyGit()<CR>
+nnoremap <Leader>gg :call ToggleLazyGit()<CR>
 nnoremap <Leader>gb :<C-u>call gitblame#echo()<CR>
-nnoremap <leader>T :call ToggleScratchTerm()<CR>
+nnoremap <Leader>T :call ToggleScratchTerm()<CR>
+
+nnoremap <Leader>r :%s///g<Left><Left>
+nnoremap <Leader>rc :%s///gc<Left><Left><Left>
+xnoremap <Leader>r :s///g<Left><Left>
+xnoremap <Leader>rc :s///gc<Left><Left><Left>
 
 com! FJ %!jq .
 highlight Sneak guifg=#011627 ctermfg=233 guibg=#ff5874 ctermbg=204 gui=NONE cterm=NONE

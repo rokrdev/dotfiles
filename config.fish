@@ -66,6 +66,7 @@ alias zz='fasd_cd -d -i' # cd with interactive selection
 alias python3=python
 alias vimup='vim +PlugUpgrade +PlugUpdate +PlugClean! +qall > /dev/null'
 alias st=speedtest-cli
+alias lg=lazygit
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '~/google-cloud-sdk/path.zsh.inc' ]; then . '~/google-cloud-sdk/path.zsh.inc'; end

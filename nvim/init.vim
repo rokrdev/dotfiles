@@ -19,7 +19,7 @@ Plug 'andymass/vim-matchup'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'udalov/kotlin-vim'
-Plug 'djoshea/vim-autoread'
+" Plug 'djoshea/vim-autoread'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -445,3 +445,10 @@ highlight FoldColumn guifg=#806e6f
 highlight Folded guifg=#806e6f
 highlight LineNr guifg=#8187A2
 
+
+" reload file on change
+autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
+      \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
+
+autocmd FileChangedShellPost *
+      \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None

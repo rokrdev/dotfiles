@@ -16,7 +16,6 @@ Plug 'ap/vim-css-color'
 Plug 'jiangmiao/auto-pairs'
 Plug 'xolox/vim-session'
 Plug 'xolox/vim-misc'
-Plug 'terryma/vim-expand-region'
 Plug 'andymass/vim-matchup'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'ntpeters/vim-better-whitespace'
@@ -27,14 +26,11 @@ Plug 'honza/vim-snippets'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'mhinz/vim-hugefile'
 Plug 'jesseleite/vim-agriculture'
-Plug 'zivyangll/git-blame.vim'
 Plug 'plasticboy/vim-markdown'
 Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
-Plug 'skywind3000/asyncrun.vim'
 Plug 'machakann/vim-sandwich'
 Plug 'haishanh/night-owl.vim'
 Plug 'mcchrish/nnn.vim'
-Plug 'justinmk/vim-sneak'
 Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'niklaas/lightline-gitdiff'
@@ -496,19 +492,6 @@ nnoremap <leader>gf :Gpull<SPACE>
 nnoremap <leader>gp :Gpush<SPACE>
 nnoremap <leader>gb :Gblame<CR>
 nnoremap <Leader>gB :<C-u>call gitblame#echo()<CR>
-
-let g:EasyMotion_smartcase = 1 " turn on case insensitive feature
-let g:EasyMotion_do_mapping = 0 " disable default mappings
-let g:EasyMotion_use_smartsign_us = 1 " 1 will match 1 and !
-let g:EasyMotion_use_upper = 1
-let g:EasyMotion_keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ;'
-let g:EasyMotion_space_jump_first = 1
-let g:EasyMotion_enter_jump_first = 1
-
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
-map t <Plug>Sneak_t
-map T <Plug>Sneak_T
 
 com! FJ %!jq .
 highlight Sneak guifg=#011627 ctermfg=233 guibg=#ff5874 ctermbg=204 gui=NONE cterm=NONE

@@ -406,15 +406,15 @@ nnoremap <Leader>sn :SaveSession default<CR> :OpenSession NOTES<CR>
 nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
 nnoremap <Leader>S :Scratchy<CR>
-nnoremap <Leader>l :ls<CR>:b<space>
-nnoremap <Leader><Space> :Buffers<CR>
-nnoremap <Leader>/ :Rg<CR>
+nnoremap <Leader>l :Lines<space>
+nnoremap <Leader><Enter> :Buffers<CR>
+nnoremap <Leader>f :Rg<CR>
 nmap <Leader>\ <Plug>RgRawSearch
 nmap <Leader>* <Plug>RgRawWordUnderCursor<CR>
 vmap <Leader>* <Plug>RgRawVisualSelection<CR>
 nnoremap <Leader>c :e %:h/
 nnoremap <Leader>mc :nohl<CR>
-nnoremap <Leader>f :Files<CR>
+nnoremap <silent> <C-p> :Files<CR>
 nnoremap <Leader>! :bd!<CR>
 noremap <Leader>y "+y
 noremap <Leader>p "+p
@@ -438,6 +438,17 @@ nnoremap <Leader>r :%s///g<Left><Left>
 nnoremap <Leader>rc :%s///gc<Left><Left><Left>
 xnoremap <Leader>r :s///g<Left><Left>
 xnoremap <Leader>rc :s///gc<Left><Left><Left>
+nnoremap <silent> s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
+xnoremap <silent> s* "sy:let @/=@s<CR>cgn
+
+function! SingleToMulti() abort
+    normal! 0f{
+    execute "normal! ci{\<CR>\<CR>\<Up>\<C-r>\""
+    s/ *$/,
+    s/, /,\r
+    normal =i{
+endfunction
+nnoremap s# :<C-u>silent call SingleToMulti()<CR>
 
 com! FJ %!jq .
 highlight Sneak guifg=#011627 ctermfg=233 guibg=#ff5874 ctermbg=204 gui=NONE cterm=NONE

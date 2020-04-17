@@ -1,8 +1,6 @@
 {
-  "typescript.validate.enable": false,
   "codeLens.enable": true,
   "suggest.noselect": false,
-  "elixir.pathToElixirLS": "~/.local/bin/elixir-ls/release/language_server.sh",
   "languageserver": {
     "bash": {
       "command": "bash-language-server",
@@ -14,6 +12,10 @@
       "command": "docker-langserver",
       "filetypes": ["dockerfile"],
       "args": ["--stdio"]
+    },
+    "elixirLS": {
+      "command": "~/.local/bin/elixir-ls/release/language_server.sh",
+      "filetypes": ["elixir", "eelixir"]
     }
   }
 }

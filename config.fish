@@ -12,7 +12,7 @@ source ~/.env
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow'
 export FZF_CTRL_R_OPTS='--sort --exact'
 export FZF_TMUX=1
-export FZF_DEFAULT_OPTS='--no-reverse --color=fg:#d6deeb,bg:#011627,hl:#addb67 --color=fg+:#82aaff,bg+:#011627,hl+:#82aaff --color=info:#7fdbca,prompt:#c792ea,pointer:#c792ea --color=marker:#82aaff,spinner:#c792ea,header:#7fdbca'
+export FZF_DEFAULT_OPTS='--no-reverse --bind=ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all --color=fg:#d6deeb,bg:#011627,hl:#addb67 --color=fg+:#82aaff,bg+:#011627,hl+:#82aaff --color=info:#7fdbca,prompt:#c792ea,pointer:#c792ea --color=marker:#82aaff,spinner:#c792ea,header:#7fdbca'
 
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 # defaults write NSGlobalDomain KeyRepeat -float 1.5

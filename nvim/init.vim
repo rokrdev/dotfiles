@@ -16,7 +16,6 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'xolox/vim-session'
 Plug 'xolox/vim-misc'
 Plug 'andymass/vim-matchup'
-Plug 'terryma/vim-multiple-cursors'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'udalov/kotlin-vim'
 " Plug 'djoshea/vim-autoread'
@@ -37,6 +36,7 @@ Plug 'preservim/nerdtree'
 Plug 'itchyny/vim-gitbranch'
 Plug 'zivyangll/git-blame.vim'
 Plug 'nelstrom/vim-visual-star-search'
+Plug 'AndrewRadev/splitjoin.vim'
 
 call plug#end()
 
@@ -350,10 +350,6 @@ inoremap <silent><expr> <c-space> coc#refresh()
 
 filetype plugin indent on
 
-let g:multi_cursor_use_default_mapping=0
-let g:multi_cursor_exit_from_visual_mode=1
-let g:multi_cursor_exit_from_insert_mode=1
-
 let g:matchup_matchparen_status_offscreen = 0
 
 " Required for operations modifying multiple buffers like rename.
@@ -377,16 +373,6 @@ au TermOpen * tnoremap <buffer> <Esc> <c-\><c-n>
 au FileType fzf tunmap <buffer> <Esc>
 
 command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
-
-" Default mapping
-let g:multi_cursor_start_word_key      = '<C-n>'
-let g:multi_cursor_select_all_word_key = '<C-m>'
-let g:multi_cursor_start_key           = 'g<C-n>'
-let g:multi_cursor_select_all_key      = 'g<C-m>'
-let g:multi_cursor_next_key            = '<C-n>'
-let g:multi_cursor_prev_key            = '<C-p>'
-let g:multi_cursor_skip_key            = '<C-x>'
-let g:multi_cursor_quit_key            = '<Esc>'
 
 " Session config
 let g:session_directory = "~/.vim/session"
@@ -453,8 +439,6 @@ nnoremap s# :<C-u>silent call SingleToMulti()<CR>
 com! FJ %!jq .
 highlight Sneak guifg=#011627 ctermfg=233 guibg=#ff5874 ctermbg=204 gui=NONE cterm=NONE
 highlight NormalFloat cterm=NONE ctermfg=14 ctermbg=0 gui=NONE guifg=#93a1a1 guibg=#002931
-highlight multiple_cursors_cursor term=reverse cterm=reverse gui=reverse
-highlight link multiple_cursors_visual Visual
 highlight Comment cterm=italic gui=italic guifg=#8187A2
 highlight Function cterm=italic gui=italic
 highlight FoldColumn guifg=#806e6f

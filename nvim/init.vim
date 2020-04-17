@@ -392,7 +392,7 @@ nnoremap <Leader>sn :SaveSession default<CR> :OpenSession NOTES<CR>
 nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
 nnoremap <Leader>S :Scratchy<CR>
-nnoremap <Leader>l :Lines<space>
+nnoremap <Leader>l :BLines<space>
 nnoremap <Leader><Enter> :Buffers<CR>
 nnoremap <Leader>f :Rg<CR>
 nmap <Leader>\ <Plug>RgRawSearch

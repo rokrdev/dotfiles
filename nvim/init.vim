@@ -157,7 +157,7 @@ let g:UltiSnipsExpandTrigger="<C-f>"
 
 let mapleader=" "
 
-set directory^=$HOME/.vim/swap//
+set dir=~/.vim/swap//
 set foldmethod=indent
 set foldlevel=2
 " set foldcolumn=2

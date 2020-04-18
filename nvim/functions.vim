@@ -105,3 +105,11 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+function! SingleToMulti() abort
+    normal! 0f{
+    execute "normal! ci{\<CR>\<CR>\<Up>\<C-r>\""
+    s/ *$/,
+    s/, /,\r
+    normal =i{
+endfunction
+

@@ -36,7 +36,6 @@ Plug 'preservim/nerdtree'
 Plug 'itchyny/vim-gitbranch'
 Plug 'zivyangll/git-blame.vim'
 Plug 'nelstrom/vim-visual-star-search'
-Plug 'AndrewRadev/splitjoin.vim'
 
 call plug#end()
 
@@ -393,7 +392,7 @@ nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
 nnoremap <Leader>S :Scratchy<CR>
 nnoremap <Leader>l :BLines<space>
-nnoremap <Leader><Enter> :Buffers<CR>
+nnoremap <Leader><Space> :Buffers<CR>
 nnoremap <Leader>f :Rg<CR>
 nmap <Leader>\ <Plug>RgRawSearch
 nmap <Leader>* <Plug>RgRawWordUnderCursor<CR>
@@ -408,12 +407,12 @@ nnoremap <S-Tab> :bp<CR>
 nnoremap <Tab> :bn<CR>
 nnoremap <Leader>n :NnnPicker '%:p:h'<CR>
 nnoremap <Leader>t :NERDTreeToggle %<CR>
-nnoremap Q @q
+nnoremap Q @@
 nnoremap [w :PrevTrailingWhitespace<CR>
 nnoremap ]w :NextTrailingWhitespace<CR>
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
-vnoremap Q :norm @q<CR>
+" vnoremap Q :norm @q<CR>
 " vnoremap <Leader>ms :s/\(^\s*\)\@<!\s/\r/<CR> :nohl<CR>
 
 nnoremap <Leader>gg :call ToggleLazyGit()<CR>
@@ -427,9 +426,11 @@ xnoremap <Leader>rc :s///gc<Left><Left><Left>
 nnoremap <silent> s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
 xnoremap <silent> s* "sy:let @/=@s<CR>cgn
 
+" saved macro to replace next space to newline in a line
+let @s = 'f cll'
+
 autocmd FileType javascript nnoremap <buffer> s# :<C-u>silent call SingleToMulti()<CR>
 " nnoremap s# ci{<CR><C-R>=split(@@)<CR><ESC>=`[f}gea,<ESC>
-
 com! FJ %!jq .
 highlight Sneak guifg=#011627 ctermfg=233 guibg=#ff5874 ctermbg=204 gui=NONE cterm=NONE
 highlight NormalFloat cterm=NONE ctermfg=14 ctermbg=0 gui=NONE guifg=#93a1a1 guibg=#002931

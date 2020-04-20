@@ -428,11 +428,11 @@ xnoremap <silent> s* "sy:let @/=@s<CR>cgn
 
 " saved macro to replace next space to newline in a line
 let @s = 'f cll'
+nnoremap ! @s
 
 autocmd FileType javascript nnoremap <buffer> s# :<C-u>silent call SingleToMulti()<CR>
 " nnoremap s# ci{<CR><C-R>=split(@@)<CR><ESC>=`[f}gea,<ESC>
 com! FJ %!jq .
-highlight Sneak guifg=#011627 ctermfg=233 guibg=#ff5874 ctermbg=204 gui=NONE cterm=NONE
 highlight NormalFloat cterm=NONE ctermfg=14 ctermbg=0 gui=NONE guifg=#93a1a1 guibg=#002931
 highlight Comment cterm=italic gui=italic guifg=#8187A2
 highlight Function cterm=italic gui=italic

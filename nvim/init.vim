@@ -426,8 +426,8 @@ xnoremap <Leader>r :s///g<Left><Left>
 xnoremap <Leader>rc :s///gc<Left><Left><Left>
 nnoremap <silent> s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
 xnoremap <silent> s* "sy:let @/=@s<CR>cgn
-nnoremap s# :<C-u>silent call SingleToMulti()<CR>
 
+autocmd FileType javascript nnoremap <buffer> s# :<C-u>silent call SingleToMulti()<CR>
 " nnoremap s# ci{<CR><C-R>=split(@@)<CR><ESC>=`[f}gea,<ESC>
 
 com! FJ %!jq .

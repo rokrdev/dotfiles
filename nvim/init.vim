@@ -187,9 +187,10 @@ set nostartofline       " Do not jump to first character with page commands.
 
 set smartcase           " ... unless the query has capital letters.
 set gdefault
-set mouse=a
+set mouse=nicr
 set incsearch
 set noshowmode
+set splitbelow splitright
 
 " if hidden is not set, TextEdit might fail.
 set hidden
@@ -430,6 +431,11 @@ xnoremap <silent> s* "sy:let @/=@s<CR>cgn
 " saved macro to replace next space to newline in a line
 let @s = "f cl\<CR>\<ESC>l"
 nnoremap ! @s
+
+noremap <silent> <C-H> :vert res +3<CR>
+noremap <silent> <C-L> :vert res -3<CR>
+noremap <silent> <C-J> :res +3<CR>
+noremap <silent> <C-K> :res -3<CR>
 
 autocmd FileType javascript nnoremap <buffer> s# :<C-u>silent call SingleToMulti()<CR>
 " nnoremap s# ci{<CR><C-R>=split(@@)<CR><ESC>=`[f}gea,<ESC>

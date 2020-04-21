@@ -405,6 +405,7 @@ noremap <Leader>y "+y
 noremap <Leader>p "+p
 nnoremap <S-Tab> :bp<CR>
 nnoremap <Tab> :bn<CR>
+nnoremap gh :b#<CR>
 nnoremap <Leader>n :NnnPicker '%:p:h'<CR>
 nnoremap <Leader>t :NERDTreeToggle %<CR>
 nnoremap Q @@
@@ -427,7 +428,7 @@ nnoremap <silent> s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
 xnoremap <silent> s* "sy:let @/=@s<CR>cgn
 
 " saved macro to replace next space to newline in a line
-let @s = 'f cll'
+let @s = "f cl\<CR>\<ESC>l"
 nnoremap ! @s
 
 autocmd FileType javascript nnoremap <buffer> s# :<C-u>silent call SingleToMulti()<CR>

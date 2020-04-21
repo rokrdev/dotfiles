@@ -1,6 +1,9 @@
 {
-  "codeLens.enable": true,
+  "codeLens.enable": false,
   "suggest.noselect": false,
+  "diagnostic.messageTarget": "float",
+  "diagnostic.virtualText": true,
+  "diagnostic.level": "warning",
   "languageserver": {
     "bash": {
       "command": "bash-language-server",

@@ -36,6 +36,7 @@ Plug 'preservim/nerdtree'
 Plug 'itchyny/vim-gitbranch'
 Plug 'zivyangll/git-blame.vim'
 Plug 'nelstrom/vim-visual-star-search'
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
 call plug#end()
 
@@ -89,19 +90,12 @@ let g:nnn#command = 'nnn -d -e -H'
 
 let $TERM="xterm-24bit"
 
-" If you have vim >=8.0 or Neovim >= 0.1.5
-if (has("termguicolors"))
+if has("termguicolors")
   set termguicolors
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-endif
-
-" " For Neovim 0.1.3 and 0.1.4
-" let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+end
 
 """"" enable the theme
 syntax enable
-set background=dark
 colorscheme night-owl
 set showtabline=2
 let g:lightline = {

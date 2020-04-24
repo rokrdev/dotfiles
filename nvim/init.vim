@@ -426,11 +426,6 @@ xnoremap <silent> s* "sy:let @/=@s<CR>cgn
 let @s = "f cl\<CR>\<ESC>l"
 nnoremap ! @s
 
-noremap <silent> <C-H> :vert res +3<CR>
-noremap <silent> <C-L> :vert res -3<CR>
-noremap <silent> <C-J> :res +3<CR>
-noremap <silent> <C-K> :res -3<CR>
-
 autocmd FileType javascript nnoremap <buffer> s# :<C-u>silent call SingleToMulti()<CR>
 " nnoremap s# ci{<CR><C-R>=split(@@)<CR><ESC>=`[f}gea,<ESC>
 com! FJ %!jq .

@@ -9,7 +9,7 @@ export PATH="/usr/local/bin:/usr/local/sbin/:$PATH"
 
 source ~/.env
 
-export FZF_DEFAULT_COMMAND='rg --files --hidden --follow'
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -S'
 export FZF_CTRL_R_OPTS='--sort --exact'
 export FZF_TMUX=1
 export FZF_DEFAULT_OPTS='--no-reverse --bind=ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all --color=fg:#d6deeb,bg:#011627,hl:#addb67 --color=fg+:#82aaff,bg+:#011627,hl+:#82aaff --color=info:#7fdbca,prompt:#c792ea,pointer:#c792ea --color=marker:#82aaff,spinner:#c792ea,header:#7fdbca'

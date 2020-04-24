@@ -2,7 +2,7 @@
   "codeLens.enable": false,
   "suggest.noselect": false,
   "diagnostic.messageTarget": "float",
-  "diagnostic.virtualText": true,
+  "diagnostic.virtualText": false,
   "diagnostic.level": "warning",
   "languageserver": {
     "bash": {

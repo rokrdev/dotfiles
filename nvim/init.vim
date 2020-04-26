@@ -40,6 +40,8 @@ Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
 call plug#end()
 
+packadd cfilter
+
 source ~/.config/nvim/functions.vim
 
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
@@ -204,6 +206,9 @@ set shortmess+=cI
 
 " always show signcolumns
 set signcolumn=yes
+
+" set rg as grep command
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 
 " set wildcharm=<Tab>
 " set wildmenu

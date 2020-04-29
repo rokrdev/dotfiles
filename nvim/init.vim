@@ -169,7 +169,6 @@ set nojoinspaces        " Prevents inserting two spaces after punctuation on a j
 set encoding=utf-8
 set autoread
 set lazyredraw
-
 " More natural splits
 set splitbelow          " Horizontal split below current.
 set splitright          " Vertical split to right of current.
@@ -354,6 +353,9 @@ let g:matchup_matchparen_status_offscreen = 0
 " Required for operations modifying multiple buffers like rename.
 set hidden
 
+au BufRead *.md setlocal spell
+au BufRead *.markdown setlocal spell
+
 let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1
 
@@ -361,8 +363,8 @@ let g:strip_whitespace_on_save=1
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 
-autocmd BufNewFile __Scratchy__ call s:ScratchMarkBuffer()
-command! Scratchy call s:ScratchGenerator()
+autocmd BufNewFile __Scratchy__ call ScratchMarkBuffer()
+command! Scratchy call ScratchGenerator()
 
 " All mappings
 " Manually trigger tag autocomplete
@@ -390,7 +392,7 @@ nnoremap <Leader>sn :SaveSession default<CR> :OpenSession NOTES<CR>
 
 nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
-nnoremap <Leader>S :Scratchy<CR>
+nnoremap <Leader>S :call ScratchGenerator()<CR>
 nnoremap <Leader>l :BLines<space>
 nnoremap <Leader><Space> :Buffers<CR>
 nnoremap <Leader>f :Rg<CR>

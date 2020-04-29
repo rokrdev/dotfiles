@@ -56,11 +56,11 @@ function Rand()
     return str2nr(matchstr(reltimestr(reltime()), '\v\.@<=\d+')[1:])
 endfunction
 
-function! s:ScratchGenerator()
-  exe "e!" . "__Scratchy__" . Rand()
+function! ScratchGenerator()
+  exe "e!" . "__Scratchy__" . Rand() . ".md"
 endfunction
 
-function! s:ScratchMarkBuffer()
+function! ScratchMarkBuffer()
   setlocal buftype=nofile
   setlocal bufhidden=hide
   setlocal noswapfile

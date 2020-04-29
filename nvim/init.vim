@@ -417,6 +417,11 @@ vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
 " vnoremap Q :norm @q<CR>
 " vnoremap <Leader>ms :s/\(^\s*\)\@<!\s/\r/<CR> :nohl<CR>
+nnoremap <silent> <A-=> :vertical resize +10<CR>
+nnoremap <silent> <A--> :vertical resize -10<CR>
+nnoremap <silent> <A-+> :resize +10<CR>
+nnoremap <silent> <A-_> :resize -10<CR>
+
 
 nnoremap <Leader>gg :call ToggleLazyGit()<CR>
 nnoremap <Leader>gb :<C-u>call gitblame#echo()<CR>

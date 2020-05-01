@@ -180,6 +180,7 @@ if !&sidescrolloff
 endif
 set nostartofline       " Do not jump to first character with page commands.
 
+set ignorecase
 set smartcase           " ... unless the query has capital letters.
 set gdefault
 set mouse=nicr
@@ -350,7 +351,9 @@ inoremap <silent><expr> <c-space> coc#refresh()
 
 filetype plugin indent on
 
-let g:matchup_matchparen_status_offscreen = 0
+let g:matchup_matchparen_deferred = 1
+let g:matchup_matchparen_deferred_show_delay = 50
+let g:matchup_matchparen_deferred_hide_delay = 700
 
 " Required for operations modifying multiple buffers like rename.
 set hidden

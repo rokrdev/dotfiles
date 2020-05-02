@@ -37,6 +37,7 @@ Plug 'itchyny/vim-gitbranch'
 Plug 'zivyangll/git-blame.vim'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+Plug 'Yggdroot/indentLine'
 
 call plug#end()
 
@@ -50,9 +51,10 @@ autocmd StdinReadPre * let s:std_in=1
 
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-let g:loaded_matchit = 1
+let g:indentLine_enabled = 1
+let g:indentLine_char = '|'
 
-let g:EasyMotion_leader_key = '<Leader>'
+let g:loaded_matchit = 1
 
 " augroup javascript_folding
 "     au!

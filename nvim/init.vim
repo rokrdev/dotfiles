@@ -49,8 +49,6 @@ autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
 autocmd StdinReadPre * let s:std_in=1
 
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
 let g:indentLine_enabled = 1
 let g:indentLine_char = '│'
 let g:indentLine_showFirstIndentLevel = 1
@@ -153,6 +151,7 @@ set guicursor=
 autocmd BufWritePost,TextChanged,TextChangedI,TermLeave * call lightline#update()
 
 let g:UltiSnipsExpandTrigger="<C-f>"
+let g:UltiSnipsEditSplit="vertical"
 
 let mapleader=" "
 
@@ -375,6 +374,9 @@ autocmd QuickFixCmdPost    l* nested lwindow
 autocmd BufNewFile __Scratchy__ call ScratchMarkBuffer()
 command! Scratchy call ScratchGenerator()
 
+" Highlight currently open buffer in NERDTree
+autocmd BufEnter * call SyncTree()
+
 " All mappings
 " Manually trigger tag autocomplete
 inoremap <silent> <expr> <C-]> utils#manualTagComplete()
@@ -418,7 +420,7 @@ nnoremap <S-Tab> :bp<CR>
 nnoremap <Tab> :bn<CR>
 nnoremap gh :b#<CR>
 nnoremap <Leader>n :NnnPicker '%:p:h'<CR>
-nnoremap <Leader>t :NERDTreeToggle %<CR>
+nnoremap <Leader>t :call ToggleNerdTree()<CR>
 nnoremap Q @@
 nnoremap [w :PrevTrailingWhitespace<CR>
 nnoremap ]w :NextTrailingWhitespace<CR>

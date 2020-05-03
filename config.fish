@@ -6,6 +6,9 @@ export PATH="/usr/local/anaconda3/bin:$PATH"
 export PATH="$HOME/.jenv/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="/usr/local/bin:/usr/local/sbin/:$PATH"
+export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
+# set yarn prefix first with this `yarn config set prefix "~/.yarn/"`
+export PATH="$HOME/.yarn/bin:$PATH"
 
 source ~/.env
 
@@ -120,3 +123,4 @@ set -x SHELL /bin/zsh
 
 # asdf
 source /usr/local/opt/asdf/asdf.fish
+

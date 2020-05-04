@@ -35,7 +35,6 @@ alias ssh="TERM=xterm-256color ssh"
 alias t=tmux
 alias v=nvim
 alias y=yarn
-alias zl='fasd_cd -d'     # cd, same functionality as j in autojump
 alias sudo='sudo '       # to use sudo with alias
 alias br="br --sizes -dp"
 alias brup='brew update; brew upgrade; brew cask upgrade; brew cleanup; brew doctor'
@@ -65,7 +64,6 @@ alias yr='yarn run'
 alias ys='yarn start'
 alias yt='yarn test'
 alias ya='yarn add'
-alias zz='fasd_cd -d -i' # cd with interactive selection
 alias python3=python
 alias vimup='vim +PlugUpgrade +PlugUpdate +PlugClean! +qall > /dev/null'
 alias st=speedtest-cli
@@ -108,13 +106,6 @@ function f --description 'Fuzzy find file and open in vim'
     set files (echo (eval "$FZF_DEFAULT_COMMAND | fzf --multi --exit-0"))
     if test -n $files
       v (echo $files | string split ' ')
-    end
-end
-
-function zz --description 'Fuzzy jump to directory'
-    set -l tgt_dir (fasd -dlR | eval "fzf $FZF_DEFAULT_OPTS")
-    if [ (echo $tgt_dir) ]
-        cd $tgt_dir
     end
 end
 

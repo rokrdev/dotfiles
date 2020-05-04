@@ -111,7 +111,7 @@ function f --description 'Fuzzy find file and open in vim'
     end
 end
 
-function z --description 'Fuzzy jump to directory'
+function zz --description 'Fuzzy jump to directory'
     set -l tgt_dir (fasd -dlR | eval "fzf $FZF_DEFAULT_OPTS")
     if [ (echo $tgt_dir) ]
         cd $tgt_dir

@@ -57,7 +57,7 @@ function Rand()
 endfunction
 
 function! ScratchGenerator()
-  exe "e!" . "__Scratchy__" . Rand() . ".md"
+  exe "e!" . "__Scratchy__" . Rand()
 endfunction
 
 function! ScratchMarkBuffer()

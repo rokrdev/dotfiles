@@ -213,6 +213,8 @@ set signcolumn=yes
 " set rg as grep command
 set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 
+set shell=/usr/local/bin/fish
+
 " set wildcharm=<Tab>
 " set wildmenu
 " set wildmode=full
@@ -360,6 +362,9 @@ let g:matchup_matchparen_deferred_hide_delay = 700
 " Required for operations modifying multiple buffers like rename.
 set hidden
 
+au TermOpen * startinsert
+au TermOpen * setlocal listchars= nonumber norelativenumber
+
 au BufRead *.md setlocal spell
 au BufRead *.markdown setlocal spell
 
@@ -370,8 +375,7 @@ let g:strip_whitespace_on_save=1
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 
-autocmd BufNewFile __Scratchy__ call ScratchMarkBuffer()
-command! Scratchy call ScratchGenerator()
+command! Scratch call ScratchGenerator()
 
 " Highlight currently open buffer in NERDTree
 autocmd BufEnter * call SyncTree()
@@ -393,6 +397,9 @@ let g:session_command_alias = 1
 
 let g:nnn#set_default_mappings = 0
 
+command! -nargs=* T split | terminal <args>
+command! -nargs=* VT vsplit | terminal <args>
+
 nnoremap <Leader>so :OpenSession<Space>
 nnoremap <Leader>ss :SaveSession<Space>
 nnoremap <Leader>sd :DeleteSession<CR>
@@ -402,7 +409,7 @@ nnoremap <Leader>sn :SaveSession default<CR> :OpenSession NOTES<CR>
 
 nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
-nnoremap <Leader>S :call ScratchGenerator()<CR>
+nnoremap <Leader>S :Scratch<CR>
 nnoremap <Leader>l :BLines<space>
 nnoremap <Leader><Space> :Buffers<CR>
 nnoremap <Leader>f :Rg<CR>
@@ -420,6 +427,8 @@ nnoremap <Tab> :bn<CR>
 nnoremap gh :b#<CR>
 nnoremap <Leader>n :NnnPicker '%:p:h'<CR>
 nnoremap <Leader>t :call ToggleNerdTree()<CR>
+nnoremap <Leader>T :T<CR>
+nnoremap <Leader>& :stop<CR>
 nnoremap Q @@
 nnoremap [w :PrevTrailingWhitespace<CR>
 nnoremap ]w :NextTrailingWhitespace<CR>
@@ -432,10 +441,7 @@ nnoremap <silent> <A--> :vertical resize -10<CR>
 nnoremap <silent> <A-+> :resize +10<CR>
 nnoremap <silent> <A-_> :resize -10<CR>
 
-
-nnoremap <Leader>gg :call ToggleLazyGit()<CR>
 nnoremap <Leader>gb :<C-u>call gitblame#echo()<CR>
-nnoremap <Leader>T :call ToggleScratchTerm()<CR>
 
 nnoremap <Leader>r :%s///g<Left><Left>
 nnoremap <Leader>rc :%s///gc<Left><Left><Left>

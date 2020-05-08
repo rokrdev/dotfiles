@@ -425,7 +425,7 @@ noremap <Leader>p "+p
 nnoremap <S-Tab> :bp<CR>
 nnoremap <Tab> :bn<CR>
 nnoremap gh :b#<CR>
-nnoremap <Leader>n :NnnPicker '%:p:h'<CR>
+nnoremap <Leader>n :NnnPicker (%:p:h)<CR>
 nnoremap <Leader>t :call ToggleNerdTree()<CR>
 nnoremap <Leader>T :T<CR>
 nnoremap <Leader># :stop<CR>

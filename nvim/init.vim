@@ -428,7 +428,7 @@ nnoremap gh :b#<CR>
 nnoremap <Leader>n :NnnPicker (%:p:h)<CR>
 nnoremap <Leader>t :call ToggleNerdTree()<CR>
 nnoremap <Leader>T :T<CR>
-nnoremap <Leader># :stop<CR>
+nnoremap <Leader>\| :stop<CR>
 nnoremap Q @@
 nnoremap [w :PrevTrailingWhitespace<CR>
 nnoremap ]w :NextTrailingWhitespace<CR>

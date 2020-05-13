@@ -412,19 +412,21 @@ nnoremap <C-k> :m .-2<CR>==
 nnoremap <Leader>S :Scratch<CR>
 nnoremap <Leader>l :BLines<space>
 nnoremap <Leader><Space> :Buffers<CR>
-nnoremap <Leader>f :Rg<CR>
+nnoremap <Leader>/ :Rg<CR>
 nmap <Leader>\ <Plug>RgRawSearch
 nmap <Leader>* <Plug>RgRawWordUnderCursor<CR>
 vmap <Leader>* <Plug>RgRawVisualSelection<CR>
 nnoremap <Leader>c :e %:h/
 nnoremap <Leader>mc :nohl<CR>
-nnoremap <silent> <C-p> :Files<CR>
+nnoremap <Leader>f :Files<CR>
 nnoremap <Leader>! :bd!<CR>
 noremap <Leader>y "+y
 noremap <Leader>p "+p
 nnoremap <S-Tab> :bp<CR>
 nnoremap <Tab> :bn<CR>
 nnoremap gh :b#<CR>
+nnoremap go o<Esc>
+nnoremap gO O<Esc>
 nnoremap <Leader>n :NnnPicker (%:p:h)<CR>
 nnoremap <Leader>t :call ToggleNerdTree()<CR>
 nnoremap <Leader>T :T<CR>

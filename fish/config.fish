@@ -68,6 +68,7 @@ alias python3=python
 alias vimup='vim +PlugUpgrade +PlugUpdate +PlugClean! +qall > /dev/null'
 alias st=speedtest-cli
 alias lg=lazygit
+alias fg='fg 2>/dev/null'
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '~/google-cloud-sdk/path.zsh.inc' ]; then . '~/google-cloud-sdk/path.zsh.inc'; end
@@ -87,38 +88,12 @@ end
 export NNN_PLUG='o:fzopen;d:diffs;g:_git diff;l:_git log;v:imgviu;t:treeview'
 export NNN_BMS='d:~/Downloads;p:~/projects;D:~/Documents'
 
-function kp --description 'Fuzzy search and kill process'
-    ### PROCESS
-    # mnemonic: [K]ill [P]rocess
-    # show output of "ps -ef", use [tab] to select one or multiple entries
-    # press [enter] to kill selected processes and go back to the process list.
-    # or press [escape] to go back to the process list. Press [escape] twice to exit completely.
-
-    set pid (ps aux | sed 1d | eval "fzf $FZF_DEFAULT_OPTS -m --header='[kill:process]'" | awk '{print $2}')
-
-    if test "x$pid" != "x"
-        echo $pid | xargs kill -9
-        kp
-    end
-end
-
-function f --description 'Fuzzy find file and open in vim'
-    set files (echo (eval "$FZF_DEFAULT_COMMAND | fzf --multi --exit-0"))
-    if test -n $files
-      v (echo $files | string split ' ')
-    end
-end
-
 # for shell error
 set -x SHELL /bin/zsh
-
-bind \ch 'fg'
 
 # asdf
 source /usr/local/opt/asdf/asdf.fish
 
-function fish_greeting
-  printf "%s\n\n"
-  fortune -s 10% art 10% law 10% science 10% ascii-art 10% wisdom 10% startrek 10% work 10% humorists 10% fortunes 10% computers
-  printf "%s\n\n"
+for f in ~/.config/fish/custom/*
+  source $f
 end

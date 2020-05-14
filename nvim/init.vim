@@ -32,7 +32,6 @@ Plug 'mcchrish/nnn.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'niklaas/lightline-gitdiff'
-Plug 'preservim/nerdtree'
 Plug 'itchyny/vim-gitbranch'
 Plug 'zivyangll/git-blame.vim'
 Plug 'nelstrom/vim-visual-star-search'
@@ -303,6 +302,7 @@ let g:coc_global_extensions = [
   \ 'coc-css',
   \ 'coc-docker',
   \ 'coc-elixir',
+  \ 'coc-explorer',
   \ 'coc-emmet',
   \ 'coc-eslint',
   \ 'coc-html',
@@ -331,7 +331,7 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
-
+autocmd FileType coc-explorer IndentLinesDisable
 " " Using CocList
 " " Show all diagnostics
 " nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
@@ -376,9 +376,6 @@ autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 
 command! Scratch call ScratchGenerator()
-
-" Highlight currently open buffer in NERDTree
-autocmd BufEnter * call SyncTree()
 
 " All mappings
 " Manually trigger tag autocomplete
@@ -428,7 +425,6 @@ nnoremap gh :b#<CR>
 nnoremap go o<Esc>
 nnoremap gO O<Esc>
 nnoremap <Leader>n :NnnPicker (%:p:h)<CR>
-nnoremap <Leader>t :call ToggleNerdTree()<CR>
 nnoremap <Leader>T :T<CR>
 nnoremap <Leader>\| :stop<CR>
 nnoremap Q @@
@@ -436,6 +432,8 @@ nnoremap [w :PrevTrailingWhitespace<CR>
 nnoremap ]w :NextTrailingWhitespace<CR>
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
+nmap <Leader>t :CocCommand explorer<CR>
+
 " vnoremap Q :norm @q<CR>
 " vnoremap <Leader>ms :s/\(^\s*\)\@<!\s/\r/<CR> :nohl<CR>
 nnoremap <silent> <A-=> :vertical resize +10<CR>

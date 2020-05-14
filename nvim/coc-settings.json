@@ -22,5 +22,10 @@
     }
   },
   "emmet.showExpandedAbbreviation": "always",
-  "emmet.includeLanguages": { "javascript": "javascriptreact" }
+  "emmet.includeLanguages": { "javascript": "javascriptreact" },
+  "explorer.width": 30,
+  "explorer.previewAction.onHover": false,
+  "explorer.keyMappings": {
+    "<cr>": ["expandable?", "expand", "open"]
+  }
 }

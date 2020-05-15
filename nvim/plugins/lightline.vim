@@ -1,3 +1,13 @@
+
+function! LightlineReadonly()
+  return &readonly ? '' : ''
+endfunction
+
+function! LightlineFugitive()
+   let branch = gitbranch#name()
+   return branch !=# '' ? ' '.branch : ''
+endfunction
+
 let g:lightline = {
 \   'colorscheme': 'nightowl',
 \   'mode_map': {

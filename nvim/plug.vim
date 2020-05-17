@@ -40,6 +40,7 @@ Plug 'udalov/kotlin-vim'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
 Plug 'zivyangll/git-blame.vim'
+Plug 'voldikss/vim-floaterm'
 
 call plug#end()
 

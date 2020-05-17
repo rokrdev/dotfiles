@@ -32,12 +32,6 @@ set lazyredraw
 " More natural splits
 set splitbelow          " Horizontal split below current.
 set splitright          " Vertical split to right of current.
-if !&scrolloff
-    set scrolloff=3       " Show next 3 lines while scrolling.
-endif
-if !&sidescrolloff
-    set sidescrolloff=5   " Show next 5 columns while side-scrolling.
-endif
 set nostartofline       " Do not jump to first character with page commands.
 set ignorecase
 set smartcase           " ... unless the query has capital letters.

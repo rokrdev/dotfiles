@@ -138,4 +138,4 @@ autocmd FileType coc-explorer IndentLinesDisable
 " " Resume latest coc list
 " nnoremap <silent> <space>p  :<C-u>CocListResume<CR>h
 
-nmap <Leader>t :CocCommand explorer<CR>
+nmap <Leader>tt :CocCommand explorer<CR>

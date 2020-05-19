@@ -11,8 +11,8 @@ window:
   #  y: 0
 
   padding:
-    x: 3
-    y: 0
+    x: 4
+    y: 3
 
   dynamic_padding: false
 

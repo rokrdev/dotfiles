@@ -22,7 +22,6 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all && source ~/.zshr
 Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-sneak'
 Plug 'machakann/vim-sandwich'
-Plug 'mattn/emmet-vim'
 Plug 'mcchrish/nnn.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
@@ -40,7 +39,6 @@ Plug 'udalov/kotlin-vim'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
 Plug 'zivyangll/git-blame.vim'
-Plug 'voldikss/vim-floaterm'
 
 call plug#end()
 

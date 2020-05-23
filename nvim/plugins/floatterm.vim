@@ -4,7 +4,14 @@ function! CreateCenteredFloatingWindow(opts)
   let height = float2nr(&lines * a:opts.height)
   let row = ((&lines - height) / 2) - 1
   let col = (&columns - width) / 2
-  let opts = {'relative': 'editor', 'row': row, 'col': col, 'width': width, 'height': height, 'style': 'minimal'}
+  let opts = {
+        \ 'relative': 'editor',
+        \ 'row': row,
+        \ 'col': col,
+        \ 'width': width,
+        \ 'height': height,
+        \ 'style': 'minimal'
+        \ }
 
   let top = "╭" . repeat("─", width - 2) . "╮"
   let mid = "│" . repeat(" ", width - 2) . "│"

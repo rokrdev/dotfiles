@@ -19,3 +19,13 @@ function! SingleToMulti() abort
     s/, /,\r
     normal =i{
 endfunction
+
+function! ToggleNumberDisplay()
+  if(&rnu == 1)
+    set nu rnu!
+  elseif(&nu == 1)
+    set nu!
+  else
+    set nu rnu
+  endif
+endfunction

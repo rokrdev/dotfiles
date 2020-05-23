@@ -11,5 +11,4 @@ highlight Function cterm=italic gui=italic
 highlight FoldColumn guifg=#806e6f
 highlight Folded guifg=#806e6f
 highlight LineNr guifg=#8187A2
-highlight CursorLine guibg=#323a42
-
+highlight CursorLine guibg=#263147

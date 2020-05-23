@@ -3,12 +3,7 @@ let mapleader=" "
 set clipboard=unnamed
 let $TERM="xterm-24bit"
 
-if has("termguicolors")
-  set termguicolors
-end
-
 syntax enable
-colorscheme night-owl
 
 set showtabline=2
 set guicursor=
@@ -107,10 +102,4 @@ nnoremap ! @s
 " nnoremap s# ci{<CR><C-R>=split(@@)<CR><ESC>=`[f}gea,<ESC>
 command! FJ %!jq .
 
-highlight NormalFloat cterm=NONE ctermfg=14 ctermbg=0 gui=NONE guifg=#93a1a1 guibg=#002931
-highlight Comment cterm=italic gui=italic guifg=#8187A2
-highlight Function cterm=italic gui=italic
-highlight FoldColumn guifg=#806e6f
-highlight Folded guifg=#806e6f
-highlight LineNr guifg=#8187A2
-
+noremap <expr> <Leader>0 ToggleNumberDisplay()

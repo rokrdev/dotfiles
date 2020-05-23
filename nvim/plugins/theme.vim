@@ -12,3 +12,4 @@ highlight FoldColumn guifg=#806e6f
 highlight Folded guifg=#806e6f
 highlight LineNr guifg=#8187A2
 highlight CursorLine guibg=#263147
+highlight Sneak guifg=black guibg=#ffd494

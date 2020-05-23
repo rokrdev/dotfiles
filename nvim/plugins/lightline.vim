@@ -20,9 +20,9 @@ let s:p.normal.right = [[["#d6deeb", 253], ["#263147", 235]], [["#263147", 235],
 let s:p.normal.error = [[["#263147", 235], ["#82aaff", 111]]]
 let s:p.normal.warning = [[["#263147", 235], ["#82aaff", 111]]]
 
-let s:p.inactive.left = [[["#d6deeb", 253], ["#011627", 235]], [["#d6deeb", 253], ["#011627", 235]]]
-let s:p.inactive.middle = [[["#d6deeb", 253], ["#011627", 235]]]
-let s:p.inactive.right = [[["#d6deeb", 253], ["#011627", 235]], [["#d6deeb", 253], ["#011627", 235]]]
+let s:p.inactive.left = [[["#d6deeb", 253], ["#112630", 235]], [["#d6deeb", 253], ["#112630", 235]]]
+let s:p.inactive.middle = [[["#d6deeb", 253], ["#112630", 235]]]
+let s:p.inactive.right = [[["#d6deeb", 253], ["#112630", 235]], [["#d6deeb", 253], ["#112630", 235]]]
 
 let s:p.insert.left = [[["#263147", 235], ["#addb67", 149]], [["#d6deeb", 253], ["#263147", 235]]]
 let s:p.insert.middle = [[["#d6deeb", 253], ["#263147", 235]]]

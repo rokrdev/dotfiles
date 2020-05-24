@@ -14,3 +14,4 @@ highlight LineNr guifg=#8187A2
 highlight CursorLineNr guifg=#8187A2 guibg=#263147
 highlight CursorLine guibg=#263147
 highlight Sneak guifg=black guibg=#ffd494
+highlight CocHighlightText guibg=#406885

@@ -140,3 +140,5 @@ autocmd FileType coc-explorer IndentLinesDisable
 " nnoremap <silent> <space>p  :<C-u>CocListResume<CR>h
 
 nmap <Leader>tt :CocCommand explorer<CR>
+
+highlight CocHighlightText guibg=#406885

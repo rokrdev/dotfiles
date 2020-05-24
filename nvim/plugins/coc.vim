@@ -94,6 +94,7 @@ let g:coc_global_extensions = [
   \ 'coc-emmet',
   \ 'coc-eslint',
   \ 'coc-html',
+  \ 'coc-highlight',
   \ 'coc-json',
   \ 'coc-markdownlint',
   \ 'coc-pairs',

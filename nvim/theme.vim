@@ -12,3 +12,5 @@ highlight Folded guifg=#806e6f
 highlight LineNr guifg=#8187A2
 highlight CursorLineNr guifg=#8187A2 guibg=#263147
 highlight CursorLine guibg=#263147
+" hide tilde end of buffer marker
+highlight EndOfBuffer guifg=#011627

@@ -15,3 +15,5 @@ map s <Plug>Sneak_s
 map S <Plug>Sneak_S
 map gS <Plug>Sneak_,
 map gs <Plug>Sneak_;
+
+highlight Sneak guifg=black guibg=#ffd494

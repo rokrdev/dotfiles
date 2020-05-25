@@ -94,7 +94,6 @@ let g:coc_global_extensions = [
   \ 'coc-emmet',
   \ 'coc-eslint',
   \ 'coc-html',
-  \ 'coc-highlight',
   \ 'coc-json',
   \ 'coc-markdownlint',
   \ 'coc-pairs',
@@ -140,5 +139,3 @@ autocmd FileType coc-explorer IndentLinesDisable
 " nnoremap <silent> <space>p  :<C-u>CocListResume<CR>h
 
 nmap <Leader>tt :CocCommand explorer<CR>
-
-highlight CocHighlightText guibg=#406885

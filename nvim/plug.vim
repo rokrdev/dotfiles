@@ -38,6 +38,7 @@ Plug 'udalov/kotlin-vim'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
 Plug 'zivyangll/git-blame.vim'
+Plug 'RRethy/vim-illuminate'
 
 call plug#end()
 

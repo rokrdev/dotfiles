@@ -103,3 +103,5 @@ nnoremap ! @s
 command! FJ %!jq .
 
 noremap <expr> <Leader>0 ToggleNumberDisplay()
+
+let g:Illuminate_delay = 500

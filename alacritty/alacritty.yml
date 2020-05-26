@@ -12,7 +12,7 @@ window:
 
   padding:
     x: 4
-    y: 3
+    y: 0
 
   dynamic_padding: false
 

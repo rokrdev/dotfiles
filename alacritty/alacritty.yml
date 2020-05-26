@@ -25,7 +25,7 @@ window:
 scrolling:
   history: 10000
 
-  multiplier: 3
+  multiplier: 10
 
 # Font configuration
 font:
@@ -57,7 +57,7 @@ font:
 
   use_thin_strokes: true
 
-draw_bold_text_with_bright_colors: false
+draw_bold_text_with_bright_colors: true
 
 # Colors (Tomorrow Night Bright)
 colors:

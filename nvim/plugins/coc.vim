@@ -43,7 +43,7 @@ nmap <silent> gr <Plug>(coc-references)
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 " Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
+" autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Remap for rename current word
 nmap <Leader>rn <Plug>(coc-rename)
@@ -96,7 +96,6 @@ let g:coc_global_extensions = [
   \ 'coc-html',
   \ 'coc-json',
   \ 'coc-markdownlint',
-  \ 'coc-pairs',
   \ 'coc-prettier',
   \ 'coc-python',
   \ 'coc-snippets',

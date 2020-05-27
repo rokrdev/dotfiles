@@ -70,8 +70,8 @@ colors:
     #bright_foreground: '#ffffff'
 
   cursor:
-    text: '0xffffff'
-    cursor: '0x7e57c2'
+    text: '0x000000'
+    cursor: '0xA599E9'
 
   # Vi mode cursor colors
   #

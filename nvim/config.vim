@@ -12,7 +12,7 @@ set foldmethod=indent
 set foldlevel=2
 " set foldcolumn=2
 set showmatch           " Show matching brackets.
-" set cursorline
+set cursorline
 " set number              " Show the line numbers on the left side.
 set number relativenumber
 set formatoptions+=o    " Continue comment marker in new lines.

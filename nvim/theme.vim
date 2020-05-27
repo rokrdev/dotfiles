@@ -15,3 +15,4 @@ highlight CursorLine guibg=#263147
 " hide tilde end of buffer marker
 highlight EndOfBuffer guifg=#011627
 highlight illuminatedWord guibg=#2b5678
+

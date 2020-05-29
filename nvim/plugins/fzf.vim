@@ -27,5 +27,5 @@ nnoremap <Leader><Space> :Buffers<CR>
 nmap <Leader>\ <Plug>RgRawSearch
 nmap <Leader>* <Plug>RgRawWordUnderCursor<CR>
 vmap <Leader>* <Plug>RgRawVisualSelection<CR>
-nnoremap <Leader>fp :Files<CR>
-nnoremap <Leader>ff :Rg<CR>
+nnoremap <Leader><enter> :Files<CR>
+nnoremap <Leader>f :Rg<CR>

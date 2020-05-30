@@ -3,7 +3,6 @@ export VISUAL="nvim"
 export EDITOR="$VISUAL"
 
 export PATH="/usr/local/anaconda3/bin:$PATH"
-export PATH="$HOME/.jenv/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="/usr/local/bin:/usr/local/sbin/:$PATH"
 export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
@@ -36,7 +35,7 @@ alias t=tmux
 alias v=nvim
 alias y=yarn
 alias sudo='sudo '       # to use sudo with alias
-alias br="br --sizes -dp"
+alias br="broot --sizes -dp"
 alias brup='brew update; brew upgrade; brew cask upgrade; brew cleanup; brew doctor'
 alias dc='docker-compose'
 alias g=git

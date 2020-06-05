@@ -49,7 +49,7 @@ function! OpenScratchTerm()
 endfunction
 
 function! OpenLazyGit()
-    call OpenTerm('lazygit', {'height': 0.9, 'width': 0.9})
+    call OpenTerm('lazygit', {'height': 0.95, 'width': 0.95})
 endfunction
 
 function! OnTermExit(job_id, code, event) dict

@@ -12,7 +12,7 @@ set foldmethod=indent
 set foldlevel=2
 " set foldcolumn=2
 set showmatch           " Show matching brackets.
-" set cursorline
+set cursorline
 " set number              " Show the line numbers on the left side.
 set number relativenumber
 set formatoptions+=o    " Continue comment marker in new lines.
@@ -23,6 +23,7 @@ set softtabstop=2
 set nojoinspaces        " Prevents inserting two spaces after punctuation on a join (J)
 set encoding=utf-8
 set autoread
+set redrawtime=10000
 set lazyredraw
 " More natural splits
 set splitbelow          " Horizontal split below current.
@@ -71,8 +72,8 @@ nnoremap <Leader>mc :nohl<CR>
 nnoremap <Leader>! :bd!<CR>
 noremap <Leader>y "+y
 noremap <Leader>p "+p
-nnoremap <S-Tab> :bp<CR>
-nnoremap <Tab> :bn<CR>
+nnoremap gN :bp<CR>
+nnoremap gn :bn<CR>
 nnoremap gh :b#<CR>
 nnoremap go o<Esc>
 nnoremap gO O<Esc>

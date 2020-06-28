@@ -39,6 +39,7 @@ Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
 Plug 'zivyangll/git-blame.vim'
 Plug 'RRethy/vim-illuminate'
+Plug 'APZelos/blamer.nvim'
 
 call plug#end()
 

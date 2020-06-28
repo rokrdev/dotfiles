@@ -1,4 +1,4 @@
-let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.6, 'border': 'rounded' }}
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9, 'border': 'rounded' }}
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
@@ -24,8 +24,8 @@ au FileType fzf tunmap <buffer> <Esc>
 command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
 nnoremap <Leader><Space> :Buffers<CR>
-nmap <Leader>\ <Plug>RgRawSearch
 nmap <Leader>* <Plug>RgRawWordUnderCursor<CR>
 vmap <Leader>* <Plug>RgRawVisualSelection<CR>
 nnoremap <Leader><enter> :Files<CR>
 nnoremap <Leader>f :Rg<CR>
+nmap <Leader>F <Plug>RgRawSearch

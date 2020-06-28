@@ -8,9 +8,10 @@ syntax enable
 set showtabline=2
 set guicursor=
 set dir=~/.vim/swap//
-set foldmethod=indent
-set foldlevel=2
+" set foldmethod=indent
+" set foldlevel=2
 " set foldcolumn=2
+set nofoldenable
 set showmatch           " Show matching brackets.
 set cursorline
 " set number              " Show the line numbers on the left side.
@@ -72,8 +73,8 @@ nnoremap <Leader>mc :nohl<CR>
 nnoremap <Leader>! :bd!<CR>
 noremap <Leader>y "+y
 noremap <Leader>p "+p
-nnoremap gN :bp<CR>
-nnoremap gn :bn<CR>
+nnoremap <C-h> :bp<CR>
+nnoremap <C-l> :bn<CR>
 nnoremap gh :b#<CR>
 nnoremap go o<Esc>
 nnoremap gO O<Esc>

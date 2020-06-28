@@ -23,51 +23,55 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 set $fish_term24bit to "1"
 set fish_color_command blue
 
-alias k="/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
 alias b=bat
-alias fk="fkill"
-alias m=make
-alias n=npm
-alias nn='nnn -d -e -H'
-alias nv="~/.npm-packages/bin/n"
-alias ssh="TERM=xterm-256color ssh"
-alias t=tmux
-alias v=nvim
-alias y=yarn
-alias sudo='sudo '       # to use sudo with alias
 alias br="broot --sizes -dp"
 alias brup='brew update; brew upgrade; brew cask upgrade; brew cleanup; brew doctor'
 alias dc='docker-compose'
+alias fg='fg 2>/dev/null'
+alias fk="fkill"
 alias g=git
 alias ga='git add'
-alias gs='git status'
-alias gd='git diff'
 alias gb='git branch'
 alias gc='git checkout'
-alias gco='git commit -m'
 alias gca='git commit --amend'
-alias gtr='git log --oneline --graph --decorate --all'
-alias gp='git push'
+alias gco='git commit -m'
+alias gd='git diff'
 alias gfm='git pull'
+alias gp='git push'
+alias gs='git status'
+alias gtr='git log --oneline --graph --decorate --all'
+alias k="/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
+alias lg=lazygit
+alias m=make
 alias mi='make install'
 alias mu='make update'
+alias n=npm
 alias ni='npm install'
+alias nn='nnn -d -e -H'
 alias nq=notion
 alias nr='npm run'
 alias nt='npm test'
+alias nv="~/.npm-packages/bin/n"
 alias p=python
+alias python3=python
 alias rf=rimraf
+alias sar="brew services restart skhd"
+alias ssh="TERM=xterm-256color ssh"
+alias st=speedtest-cli
+alias sudo='sudo '       # to use sudo with alias
+alias t=tmux
 alias ta='tmux attach || tmux new'
+alias v=nvim
 alias vim=nvim
+alias vimup='vim +PlugUpgrade +PlugUpdate +PlugClean! +qall > /dev/null'
+alias y=yarn
+alias ya='yarn add'
+alias yar='brew services restart yabai'
+alias yas='brew services stop yabai'
+alias yast='brew services start yabai'
 alias yr='yarn run'
 alias ys='yarn start'
 alias yt='yarn test'
-alias ya='yarn add'
-alias python3=python
-alias vimup='vim +PlugUpgrade +PlugUpdate +PlugClean! +qall > /dev/null'
-alias st=speedtest-cli
-alias lg=lazygit
-alias fg='fg 2>/dev/null'
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '~/google-cloud-sdk/path.zsh.inc' ]; then . '~/google-cloud-sdk/path.zsh.inc'; end

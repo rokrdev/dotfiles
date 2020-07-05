@@ -8,6 +8,7 @@ export PATH="/usr/local/bin:/usr/local/sbin/:$PATH"
 export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
 # set yarn prefix first with this `yarn config set prefix "~/.yarn/"`
 export PATH="$HOME/.yarn/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
 
 source ~/.env
 
@@ -22,6 +23,10 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
 set $fish_term24bit to "1"
 set fish_color_command blue
+
+function neoVide
+  neovide $argv &
+end
 
 alias b=bat
 alias br="broot --sizes -dp"
@@ -52,6 +57,7 @@ alias nq=notion
 alias nr='npm run'
 alias nt='npm test'
 alias nv="~/.npm-packages/bin/n"
+alias nz=neoVide
 alias p=python
 alias python3=python
 alias rf=rimraf

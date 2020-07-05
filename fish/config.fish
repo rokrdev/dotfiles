@@ -5,8 +5,10 @@ export EDITOR="$VISUAL"
 export PATH="/usr/local/anaconda3/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="/usr/local/bin:/usr/local/sbin/:$PATH"
+export GEM_HOME="$HOME/.gem"
 export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
 # set yarn prefix first with this `yarn config set prefix "~/.yarn/"`
+export PATH="$GEM_HOME/bin:$HOME/.yarn/bin:$PATH"
 export PATH="$HOME/.yarn/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 
@@ -32,6 +34,8 @@ alias b=bat
 alias br="broot --sizes -dp"
 alias brup='brew update; brew upgrade; brew cask upgrade; brew cleanup; brew doctor'
 alias dc='docker-compose'
+alias dcu='docker-compose up'
+alias dcd='docker-compose down'
 alias fg='fg 2>/dev/null'
 alias fk="fkill"
 alias g=git

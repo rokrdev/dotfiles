@@ -61,6 +61,7 @@ autocmd BufRead *.markdown setlocal spell
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 autocmd FileType javascript nnoremap <buffer> s# :<C-u>silent call SingleToMulti()<CR>
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 " reload file on change
 autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
       \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif

@@ -26,10 +26,6 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 set $fish_term24bit to "1"
 set fish_color_command blue
 
-function neoVide
-  neovide $argv &
-end
-
 alias b=bat
 alias br="broot --sizes -dp"
 alias brup='brew update; brew upgrade; brew cask upgrade; brew cleanup; brew doctor'
@@ -61,7 +57,6 @@ alias nq=notion
 alias nr='npm run'
 alias nt='npm test'
 alias nv="~/.npm-packages/bin/n"
-alias nz=neoVide
 alias p=python
 alias python3=python
 alias rf=rimraf

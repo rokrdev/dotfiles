@@ -61,7 +61,7 @@ let g:lightline = {
 \   'active': {
 \     'left': [ [ 'mode', 'paste' ],
 \               [ 'fugitive', 'filename', 'readonly', 'modified' ],
-\              [ 'gitdiff' ] ],
+\              [ 'gitdiff', 'cocstatus' ] ],
 \     'right': [ [ 'lineinfo' ],
 \              [ 'percent' ] ],
 \   },

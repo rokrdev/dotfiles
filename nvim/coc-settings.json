@@ -21,6 +21,7 @@
       "filetypes": ["elixir", "eelixir"]
     }
   },
+  "python.jediEnabled": false,
   "emmet.showExpandedAbbreviation": "always",
   "emmet.includeLanguages": { "javascript": "javascriptreact" },
   "explorer.width": 30,

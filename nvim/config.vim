@@ -6,7 +6,6 @@ let $TERM="xterm-24bit"
 syntax enable
 
 set showtabline=2
-set guicursor=
 set dir=~/.vim/swap//
 " set foldmethod=indent
 " set foldlevel=2

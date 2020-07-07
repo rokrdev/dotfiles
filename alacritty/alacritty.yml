@@ -1,5 +1,5 @@
 env:
-  TERM: xterm-24bit
+  TERM: alacritty
 
 window:
   #dimensions:
@@ -71,7 +71,7 @@ colors:
 
   cursor:
     text: '0x000000'
-    cursor: '0xA599E9'
+    cursor: '0x90A7B2'
 
   # Vi mode cursor colors
   #

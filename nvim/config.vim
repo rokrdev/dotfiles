@@ -1,7 +1,7 @@
 
 let mapleader=" "
 set clipboard=unnamed
-let $TERM="xterm-24bit"
+let $TERM="alacritty"
 
 syntax enable
 

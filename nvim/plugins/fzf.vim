@@ -26,6 +26,6 @@ command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-hea
 nnoremap <Leader><Space> :Buffers<CR>
 nmap <Leader>* <Plug>RgRawWordUnderCursor<CR>
 vmap <Leader>* <Plug>RgRawVisualSelection<CR>
-nnoremap <Leader><enter> :Files<CR>
+nnoremap <Leader>o :Files<CR>
 nnoremap <Leader>f :Rg<CR>
 nmap <Leader>F <Plug>RgRawSearch

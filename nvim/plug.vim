@@ -24,7 +24,6 @@ Plug 'machakann/vim-sandwich'
 Plug 'mcchrish/nnn.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
-Plug 'mhinz/vim-hugefile'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'niklaas/lightline-gitdiff'

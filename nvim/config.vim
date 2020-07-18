@@ -7,9 +7,9 @@ syntax enable
 
 set showtabline=2
 set dir=~/.vim/swap//
-" set foldmethod=indent
-" set foldlevel=2
-" set foldcolumn=2
+set foldmethod=manual
+set foldlevel=2
+set foldcolumn=2
 set nofoldenable
 set showmatch           " Show matching brackets.
 set cursorline
@@ -47,10 +47,9 @@ set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 set shell=/bin/zsh
 set guifont=MonoLisa:h12
 
-" set file > 10MB has huge file
-let g:hugefile_trigger_size = 10
 filetype plugin indent on
 
+autocmd BufReadPre * if getfsize(expand("%")) > 10000000 | syntax clear | endif
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 autocmd StdinReadPre * let s:std_in=1
 autocmd FileType javascript setlocal foldmethod=expr

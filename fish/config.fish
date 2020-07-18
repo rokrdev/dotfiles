@@ -10,7 +10,6 @@ export GEM_HOME="$HOME/.gem"
 export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
 # set yarn prefix first with this `yarn config set prefix "~/.yarn/"`
 export PATH="$GEM_HOME/bin:$HOME/.yarn/bin:$PATH"
-export PATH="$HOME/.yarn/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 
 source ~/.env

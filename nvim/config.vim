@@ -48,8 +48,10 @@ set shell=/bin/zsh
 set guifont=MonoLisa:h12
 
 filetype plugin indent on
+let g:large_file = 1024 * 1024 * 5  "5MB as large file
+autocmd BufReadPre * let curFile=expand("<afile>") | if getfsize(curFile)
+            \ > g:large_file | set noswapfile | syntax off | setlocal nu! rnu! | endif
 
-autocmd BufReadPre * if getfsize(expand("%")) > 10000000 | syntax clear | endif
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 autocmd StdinReadPre * let s:std_in=1
 autocmd FileType javascript setlocal foldmethod=expr

@@ -9,7 +9,7 @@ set showtabline=2
 set dir=~/.vim/swap//
 set foldmethod=manual
 set foldlevel=2
-set foldcolumn=2
+" set foldcolumn=2
 set nofoldenable
 set showmatch           " Show matching brackets.
 set cursorline

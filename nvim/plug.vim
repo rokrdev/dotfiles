@@ -19,7 +19,6 @@ Plug 'jesseleite/vim-agriculture'
 Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all && source ~/.zshrc' }
 Plug 'junegunn/fzf.vim'
-Plug 'justinmk/vim-sneak'
 Plug 'machakann/vim-sandwich'
 Plug 'mcchrish/nnn.vim'
 Plug 'mengelbrecht/lightline-bufferline'
@@ -39,6 +38,7 @@ Plug 'xolox/vim-session'
 Plug 'zivyangll/git-blame.vim'
 Plug 'RRethy/vim-illuminate'
 Plug 'APZelos/blamer.nvim'
+Plug 'easymotion/vim-easymotion'
 
 call plug#end()
 

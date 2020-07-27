@@ -4,6 +4,8 @@ let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyz'
 
 let g:EasyMotion_prompt = '{n}>>> '
 
+map <Leader>e <Plug>(easymotion-prefix)
+
 "" <Leader>f{char} to move to {char}
 nmap sf <Plug>(easymotion-overwin-f)
 

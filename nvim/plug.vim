@@ -38,6 +38,7 @@ Plug 'APZelos/blamer.nvim'
 Plug 'easymotion/vim-easymotion'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+Plug 'idanarye/vim-merginal'
 
 call plug#end()
 

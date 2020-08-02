@@ -1,11 +1,14 @@
-
 function! LightlineReadonly()
   return &readonly ? '' : ''
 endfunction
 
 function! LightlineFugitive()
-   let branch = gitbranch#name()
+   let branch = FugitiveHead()
    return branch !=# '' ? ' '.branch : ''
+endfunction
+
+function! LightlineGitGutterStatus()
+  return join(filter(map(['A','M','D'], {i,v -> v.': '.GitGutterGetHunkSummary()[i]}), 'v:val[-1:]'), ' ')
 endfunction
 
 " ============================================================
@@ -75,11 +78,12 @@ let g:lightline = {
 \   'component_function': {
 \     'readonly': 'LightlineReadonly',
 \     'fugitive': 'LightlineFugitive',
+\     'gitdiff': 'LightlineGitGutterStatus',
 \   },
 \   'tabline': {'left': [['buffers']], 'right':[]},
 \   'component_expand': {
 \     'buffers': 'lightline#bufferline#buffers',
-\     'gitdiff': 'lightline#gitdiff#get',
+\     'gitdiff': 'LightlineGitGutterStatus',
 \   },
 \   'component_type': {
 \     'buffers': 'tabsel',

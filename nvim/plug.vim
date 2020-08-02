@@ -39,6 +39,8 @@ Plug 'zivyangll/git-blame.vim'
 Plug 'RRethy/vim-illuminate'
 Plug 'APZelos/blamer.nvim'
 Plug 'easymotion/vim-easymotion'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
 
 call plug#end()
 

@@ -107,5 +107,8 @@ nnoremap ! @s
 command! FJ %!jq .
 
 noremap <expr> <Leader>0 ToggleNumberDisplay()
+nnoremap <silent> <leader>[ :cnext<CR>
+nnoremap <silent> <leader>] :cprevious<CR>
+nnoremap <silent> <leader>- :cclose<CR>
 
 let g:Illuminate_delay = 500

@@ -22,10 +22,13 @@ window:
 
   title: Alacritty
 
+  dynamic_title: true
+
 scrolling:
   history: 10000
 
   multiplier: 10
+
 
 # Font configuration
 font:
@@ -136,7 +139,7 @@ colors:
   #
   #indexed_colors: []
 
-visual_bell:
+bell:
   animation: EaseOutExpo
   duration: 0
   color: '#ffffff'
@@ -146,8 +149,6 @@ background_opacity: 1.0
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
   save_to_clipboard: false
-
-dynamic_title: true
 
 cursor:
   style: Block

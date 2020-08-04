@@ -195,6 +195,9 @@ bind generic <C-R> refresh
 # override page content view
 bind generic p none
 
+bind generic * view-refs
+bind generic ^ view-log
+
 # toggle case sensitive for search
 bind generic w :toggle ignore-case
 

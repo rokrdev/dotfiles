@@ -37,8 +37,8 @@ Plug 'RRethy/vim-illuminate'
 Plug 'APZelos/blamer.nvim'
 Plug 'easymotion/vim-easymotion'
 Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
-Plug 'idanarye/vim-merginal'
+Plug 'itchyny/vim-gitbranch'
+Plug 'codeindulgence/vim-tig'
 
 call plug#end()
 

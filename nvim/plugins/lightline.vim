@@ -3,7 +3,7 @@ function! LightlineReadonly()
 endfunction
 
 function! LightlineFugitive()
-   let branch = FugitiveHead()
+   let branch = gitbranch#name()
    return branch !=# '' ? ' '.branch : ''
 endfunction
 

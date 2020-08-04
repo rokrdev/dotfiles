@@ -189,10 +189,8 @@ bind generic G move-last-line
 bind generic <C-H> scroll-left
 bind generic <C-L> scroll-right
 
-# redraw, refresh, source tigrc
+#  refresh
 bind generic <C-R> refresh
-bind generic R :source ~/.tigrc
-bind generic <Esc>l screen-redraw
 
 # override page content view
 bind generic p none
@@ -204,9 +202,6 @@ bind generic w :toggle ignore-case
 # bind generic gl ?git checkout HEAD@{"%(prompt Enter HEAD@{} number: )"}
 # bind generic gL ?git reset --hard HEAD@{"%(prompt Enter HEAD@{} number: )"}
 
-# highlight diff without +/-
-set diff-show-signs = false
-set diff_column_highlight = ALL
 set diff-highlight = true
 
 # misc settings
@@ -274,14 +269,17 @@ bind status k :?^[MCADRUT?]
 # update index
 bind status A @git add .
 bind status R @git reset
+bind status a @git add %(file)
+bind status r @git reset %(file)
+bind status x @git checkout %(file)
 
 # stash
-bind status s ?>git stash
-bind status S @git stash push -m "%(prompt Enter stash name: )"
+bind status tt ?>git stash
+bind status tT @git stash push -m "%(prompt Enter stash name: )"
 
 # quick commit
 bind status c @git commit -m "%(prompt Enter commit message: )"
-bind status a !>git commit --amend
+bind status C !>git commit --amend -m "%(prompt Enter commit message to amend: )"
 
 #====================
 # stash view

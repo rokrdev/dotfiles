@@ -38,7 +38,6 @@ Plug 'APZelos/blamer.nvim'
 Plug 'easymotion/vim-easymotion'
 Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/vim-gitbranch'
-Plug 'codeindulgence/vim-tig'
 
 call plug#end()
 

@@ -58,7 +58,12 @@ function! OnTermExit(job_id, code, event) dict
   endif
 endfunction
 
+function! OpenTig()
+  call termopen('tig status', { 'on_exit': function('OnTermExit') })
+endfunction
+
 nmap <Leader>tg :call OpenLazyGit()<CR>
 nmap <Leader>tT :call OpenScratchTerm()<CR>
+nmap <Leader>gg :call OpenTig()<CR>
 
 highlight NormalFloat cterm=NONE ctermfg=14 ctermbg=0 gui=NONE guifg=#93a1a1 guibg=#002931

@@ -59,12 +59,14 @@ function! OnTermExit(job_id, code, event) dict
 endfunction
 
 function! OpenTig()
+  execute 'enew'
   call termopen('tig status', { 'on_exit': function('OnTermExit') })
 endfunction
 
 function! OpenTigCurrentFile()
   let current = expand('%')
-  call termopen('tig' . ' ' . current , { 'on_exit': function('OnTermExit') })
+  execute 'enew'
+  call termopen('tig ' . current, { 'on_exit': function('OnTermExit') })
 endfunction
 
 nmap <Leader>tg :call OpenLazyGit()<CR>

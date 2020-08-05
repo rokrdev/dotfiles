@@ -69,9 +69,15 @@ function! OpenTigCurrentFile()
   call termopen('tig ' . current, { 'on_exit': function('OnTermExit') })
 endfunction
 
+function! OpenTigUnpushed()
+  execute 'enew'
+  call termopen('tig log @{u}.. -p', { 'on_exit': function('OnTermExit') })
+endfunction
+
 nmap <Leader>tg :call OpenLazyGit()<CR>
 nmap <Leader>tT :call OpenScratchTerm()<CR>
 nmap <Leader>gg :call OpenTig()<CR>
 nmap <Leader>gb :call OpenTigCurrentFile()<CR>
+nmap <Leader>gu :call OpenTigUnpushed()<CR>
 
 highlight NormalFloat cterm=NONE ctermfg=14 ctermbg=0 gui=NONE guifg=#93a1a1 guibg=#002931

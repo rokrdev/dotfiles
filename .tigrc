@@ -207,14 +207,18 @@ bind generic	7	view-stash
 bind generic	8	view-grep
 bind generic	0	view-help
 bind generic	L	none
-bind generic	t	none
-bind generic	f	none
 bind generic	b	none
-bind generic	p	none
-bind generic	h	none
 bind generic	c	none
-bind generic	y	none
+bind generic	f	none
 bind generic	g	none
+bind generic	h	none
+bind generic	l	none
+bind generic	p	none
+bind generic	r	none
+bind generic	s	none
+bind generic	t	none
+bind generic	y	none
+bind generic  m none
 
 bind generic	O	maximize		# Maximize the current view
 bind generic	q	view-close		# Close the current view

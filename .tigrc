@@ -293,7 +293,6 @@ bind diff m >tig -- %(file)
 bind diff u @git checkout %(commit)^ -- %(file)
 
 # branch
-bind main b none
 bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
 bind main bc @git checkout -b "%(prompt Checkout at new branch: )" %(commit)
 bind generic bd @git branch -d "%(prompt Delete branch: )"
@@ -311,12 +310,23 @@ bind refs bO >tig "%(prompt Enter branch: )"
 bind refs ba >tig --all
 
 # push
-bind main p none # override default pager binding
 bind main pp ?git push
 bind main pF ?git push --force
 bind main pd ?git push %(remote) :%(branch)
 bind main pu !git pull
 bind main pU ?git pull --rebase
+
+bind refs pp ?git push
+bind refs pF ?git push --force
+bind refs pd ?git push %(remote) :%(branch)
+bind refs pu !git pull
+bind refs pU ?git pull --rebase
+
+bind status pp ?git push
+bind status pF ?git push --force
+bind status pd ?git push %(remote) :%(branch)
+bind status pu !git pull
+bind status pU ?git pull --rebase
 
 # reset/rebase/revert
 bind main uu ?git reset %(commit) --soft

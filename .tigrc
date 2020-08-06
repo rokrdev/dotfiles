@@ -310,21 +310,20 @@ bind refs bO >tig "%(prompt Enter branch: )"
 bind refs ba >tig --all
 
 # push
-bind main pp ?git push
-bind main pF ?git push --force
-bind main pd ?git push %(remote) :%(branch)
+bind main pp ?git push -u %(remote) %(branch)
+bind main pF ?git push --force %(remote) %(branch)
 bind main pu !git pull
 bind main pU ?git pull --rebase
 
-bind refs pp ?git push
-bind refs pF ?git push --force
-bind refs pd ?git push %(remote) :%(branch)
+bind refs pp ?git push -u %(remote) %(branch)
+bind refs pF ?git push --force %(remote) %(branch)
 bind refs pu !git pull
 bind refs pU ?git pull --rebase
 
-bind status pp ?git push
-bind status pF ?git push --force
-bind status pd ?git push %(remote) :%(branch)
+bind refs	C	?git checkout %(branch)
+
+bind status pp ?git push -u %(remote) %(branch)
+bind status pF ?git push --force %(remote) %(branch)
 bind status pu !git pull
 bind status pU ?git pull --rebase
 

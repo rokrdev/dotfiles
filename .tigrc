@@ -67,9 +67,13 @@
 #    - commit-title-overflow (boolint)	: Highlight overflow in log and diff view?
 #
 
+set main-view = \
+    date:relative \
+    author:abbreviated \
+    id \
+    commit-title:graph=v2,refs=true
 set blame-view	= id:yes,color file-name:auto author:full date:default line-number:yes,interval=1 text
 set grep-view	= file-name:no line-number:yes,interval=1 text
-set main-view	= line-number:no,interval=5 id:no date:default author:full commit-title:yes,graph,refs,overflow=no
 set reflog-view	= line-number:no,interval=5 id:yes date:no author:no commit-title:yes,refs,overflow=no
 set refs-view	= line-number:no id:no date:default author:full ref commit-title
 set stash-view	= line-number:no,interval=5 id:no date:default author:full commit-title
@@ -179,9 +183,43 @@ set pgrp			= no		# Make tig process-group leader
 #   %(diffargs)		The diff options from `diff-options` or `TIG_DIFF_OPTS`
 #   %(prompt)		Prompt for the argument value.
 
-# vim-like g binding, 'gp' for git grep
-bind generic g none
-bind generic gp view-grep
+# bind main	C	?git cherry-pick %(commit)
+# bind status	C	!git commit
+# bind stash	A	?git stash apply %(stash)
+# bind stash	P	?git stash pop %(stash)
+# bind stash	!	?git stash drop %(stash)
+# bind refs	C	?git checkout %(branch)
+# bind refs	!	?git branch -D %(branch)
+# bind reflog	C	?git checkout %(branch)
+# bind reflog	!	?git reset --hard %(commit)
+
+# Normal commands
+# ---------------
+
+# View switching
+bind generic	1	view-main
+bind generic	2	view-refs
+bind generic	3	view-status
+bind generic	4	view-blame
+bind generic	5	view-stage
+bind generic	6	view-log
+bind generic	7	view-stash
+bind generic	8	view-grep
+bind generic	0	view-help
+bind generic	L	none
+bind generic	t	none
+bind generic	f	none
+bind generic	b	none
+bind generic	p	none
+bind generic	h	none
+bind generic	c	none
+bind generic	y	none
+bind generic	g	none
+
+bind generic	O	maximize		# Maximize the current view
+bind generic	q	view-close		# Close the current view
+bind generic	Q	quit			# Close all views and quit
+bind generic	<C-C>	quit			# Close all views and quit
 bind generic gg move-first-line
 bind generic G move-last-line
 
@@ -192,40 +230,63 @@ bind generic <C-L> scroll-right
 #  refresh
 bind generic <C-R> refresh
 
-# override page content view
-bind generic p none
-
-bind generic * view-refs
-bind generic ^ view-log
-
-# toggle case sensitive for search
+# toggle case-sensitive search
 bind generic w :toggle ignore-case
 
-# # see reflog, reset refernece
-# bind generic gl ?git checkout HEAD@{"%(prompt Enter HEAD@{} number: )"}
-# bind generic gL ?git reset --hard HEAD@{"%(prompt Enter HEAD@{} number: )"}
+#====================
+# status view
+#====================
+bind status j :/^[MCADRUT?]
+bind status k :?^[MCADRUT?]
 
-set diff-highlight = true
+# update index
+bind status S @git add .
+bind status U @git reset
+bind status s @git add %(file)
+bind status u @git reset %(file)
+bind status r @git checkout %(file)
 
-# misc settings
-set ignore-case = true
-set line-graphics = utf-8
-set refresh-mode = auto
+# stash
+bind status tt ?>git stash
+bind status tT @git stash push -m "%(prompt Enter stash name: )"
 
-set main-view = \
-    date:relative \
-    author:abbreviated \
-    id \
-    commit-title:graph=v2,refs=true
+# quick commit
+bind status c @git commit -m "%(prompt Enter commit message: )"
+bind status a !>git commit --amend -m "%(prompt Enter commit message to amend: )"
 
-# override graph toggling
-bind main G move-last-line
-bind main ` :toggle commit-title-graph
-bind generic F none
-bind generic <C-T> :toggle commit-title-refs
+#====================
+# stash view
+#====================
+bind stash a ?git stash apply %(stash)
+bind stash d ?>git stash drop %(stash)
+bind stash p ?>git stash pop %(stash)
 
-# edit tigrc
-bind main e >sh -c "vim ~/.tigrc"
+#====================
+# stage view
+#====================
+bind stage <C-J> :/^@@
+bind stage <C-K> :?^@@
+bind stage <Esc>j :/^diff --(git|cc)
+bind stage <Esc>k :?^diff --(git|cc)
+bind stage s status-update
+bind stage r status-revert
+
+#====================
+# log view
+#====================
+bind log <C-J> :/^commit
+bind log <C-K> :?^commit
+
+#====================
+# diff view
+#====================
+bind diff <C-J> :/^@@
+bind diff <C-K> :?^@@
+bind diff <Esc>j :/^diff --(git|cc)
+bind diff <Esc>k :?^diff --(git|cc)
+
+bind diff m >tig -- %(file)
+bind diff u @git checkout %(commit)^ -- %(file)
 
 # branch
 bind main b none
@@ -237,9 +298,13 @@ bind main bo >tig %(branch)
 bind main bO >tig "%(prompt Enter branch: )"
 bind main ba >tig --all
 
-# commit
-bind main a !>git commit --amend
-bind main E >git commit --allow-empty -m "%(prompt Empty commit, enter message: )"
+# create/delete branch from refs
+bind refs bn @git branch "%(prompt Enter branch name: )" %(commit)
+bind refs bc @git checkout -b "%(prompt Checkout at new branch: )" %(commit)
+bind refs bbd @git branch -d %(branch)
+bind refs bo >tig %(branch)
+bind refs bO >tig "%(prompt Enter branch: )"
+bind refs ba >tig --all
 
 # push
 bind main p none # override default pager binding
@@ -262,77 +327,6 @@ bind main S >sh -c 'git log -S "%(prompt Search: )" --pretty=raw | tig --pretty=
 # blame view
 #====================
 bind blame m >tig --follow -- %(file)
-
-#====================
-# status view
-#====================
-bind status j :/^[MCADRUT?]
-bind status k :?^[MCADRUT?]
-
-# update index
-bind status A @git add .
-bind status R @git reset
-bind status a @git add %(file)
-bind status r @git reset %(file)
-bind status x @git checkout %(file)
-
-# stash
-bind status tt ?>git stash
-bind status tT @git stash push -m "%(prompt Enter stash name: )"
-
-# quick commit
-bind status c @git commit -m "%(prompt Enter commit message: )"
-bind status C !>git commit --amend -m "%(prompt Enter commit message to amend: )"
-
-#====================
-# stash view
-#====================
-bind stash a ?git stash apply %(stash)
-bind stash d ?>git stash drop %(stash)
-bind stash p ?>git stash pop %(stash)
-
-#====================
-# stage view
-#====================
-bind stage <C-J> :/^@@
-bind stage <C-K> :?^@@
-bind stage <Esc>j :/^diff --(git|cc)
-bind stage <Esc>k :?^diff --(git|cc)
-
-#====================
-# tree view
-#====================
-bind tree l enter
-bind tree h back
-
-bind tree t +git cat-file -p %(commit)
-
-bind tree d ?rm %(file)
-bind tree m >tig --follow -- %(file)
-
-#====================
-# log view
-#====================
-bind log <C-J> :/^commit
-bind log <C-K> :?^commit
-
-#====================
-# diff view
-#====================
-bind diff <C-J> :/^@@
-bind diff <C-K> :?^@@
-bind diff <Esc>j :/^diff --(git|cc)
-bind diff <Esc>k :?^diff --(git|cc)
-
-bind diff m >tig -- %(file)
-bind diff u @git checkout %(commit)^ -- %(file)
-
-#====================
-# help view
-#====================
-
-# edit tigrc
-bind help e >sh -c "vim ~/.tigrc"
 
 # Colors
 # ------

@@ -295,8 +295,8 @@ bind diff u @git checkout %(commit)^ -- %(file)
 # branch
 bind main bn @git branch "%(prompt Enter branch name: )" %(commit)
 bind main bc @git checkout -b "%(prompt Checkout at new branch: )" %(commit)
-bind generic bd @git branch -d "%(prompt Delete branch: )"
-bind main bbd @git branch -d %(branch)
+bind main bd ?git branch -d %(branch)
+bind main bD ?git branch -D %(branch)
 bind main bo >tig %(branch)
 bind main bO >tig "%(prompt Enter branch: )"
 bind main ba >tig --all
@@ -304,25 +304,24 @@ bind main ba >tig --all
 # create/delete branch from refs
 bind refs bn @git branch "%(prompt Enter branch name: )" %(commit)
 bind refs bc @git checkout -b "%(prompt Checkout at new branch: )" %(commit)
-bind refs bbd @git branch -d %(branch)
-bind refs bo >tig %(branch)
-bind refs bO >tig "%(prompt Enter branch: )"
-bind refs ba >tig --all
+bind refs bd ?git branch -d %(branch)
+bind refs bD ?git branch -D %(branch)
 
 # push
-bind main pp ?git push -u %(remote) %(branch)
+bind main pp ?git push %(remote) %(branch)
 bind main pF ?git push --force %(remote) %(branch)
 bind main pu !git pull
 bind main pU ?git pull --rebase
 
-bind refs pp ?git push -u %(remote) %(branch)
+bind refs pp ?git push %(remote) %(branch)
 bind refs pF ?git push --force %(remote) %(branch)
 bind refs pu !git pull
 bind refs pU ?git pull --rebase
 
 bind refs	C	?git checkout %(branch)
 
-bind status pp ?git push -u %(remote) %(branch)
+bind status bc @git checkout -b "%(prompt Checkout at new branch: )" %(commit)
+bind status pp ?git push %(remote) %(branch)
 bind status pF ?git push --force %(remote) %(branch)
 bind status pu !git pull
 bind status pU ?git pull --rebase

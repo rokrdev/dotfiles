@@ -1,0 +1,18 @@
+[core]
+  excludesfile = ~/.gitignore_global
+[diff]
+  tool = vimdiff
+[merge]
+  tool = vimdiff
+[difftool]
+  prompt = false
+[pull]
+  ff = only
+[push]
+  default = current
+[includeIf "gitdir:~/projects/**/.git"]
+  path = ~/Workspace/config.personal
+[includeIf "gitdir:~/Workspace/**/.git"]
+  path = ~/Workspace/config.ib
+[includeIf "gitdir:~/Documents/**/.git"]
+  path = ~/Documents/config.ib

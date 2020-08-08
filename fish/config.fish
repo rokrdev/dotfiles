@@ -66,6 +66,7 @@ alias st=speedtest-cli
 alias sudo='sudo '       # to use sudo with alias
 alias t=tmux
 alias ta='tmux attach || tmux new'
+alias tg=tig
 alias v=nvim
 alias vim=nvim
 alias vimup='vim +PlugUpgrade +PlugUpdate +PlugClean! +qall > /dev/null'

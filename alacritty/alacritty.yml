@@ -98,15 +98,15 @@ colors:
     black:   '0x000000'
     red:     '0xef5350'
     green:   '0x22da6e'
-    yellow:  '0xaddb67'
+    yellow:  '0xffeb95'
     blue:    '0x82aaff'
     magenta: '0xc792ea'
-    cyan:    '0x21c7a8'
+    cyan:    '0x7fdbca'
     white:   '0xffffff'
 
   # Bright colors
   bright:
-    black:   '0x575656'
+    black:   '0x000000'
     red:     '0xef5350'
     green:   '0x22da6e'
     yellow:  '0xffeb95'

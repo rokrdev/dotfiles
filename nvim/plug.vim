@@ -38,6 +38,7 @@ Plug 'APZelos/blamer.nvim'
 Plug 'easymotion/vim-easymotion'
 Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/vim-gitbranch'
+Plug 'jxnblk/vim-mdx-js'
 
 call plug#end()
 

@@ -258,6 +258,9 @@ bind status tT @git stash push -m "%(prompt Enter stash name: )"
 bind status c @git commit -m "%(prompt Enter commit message: )"
 bind status a !>git commit --amend -m "%(prompt Enter commit message to amend: )"
 
+# clean
+bind status X ?>git clean -f
+
 #====================
 # stash view
 #====================

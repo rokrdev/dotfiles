@@ -82,6 +82,8 @@ nnoremap go o<Esc>
 nnoremap gO O<Esc>
 nnoremap <Leader>\| :stop<CR>
 nnoremap Q @@
+nnoremap gq q
+nnoremap q <Nop>
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
 

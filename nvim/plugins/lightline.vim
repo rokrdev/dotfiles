@@ -89,8 +89,6 @@ let g:lightline = {
 \     'buffers': 'tabsel',
 \     'gitdiff': 'middle',
 \   },
-\  'separator': { 'left': '', 'right': '' },
-\  'subseparator': { 'left': '', 'right': '' }
 \ }
 
 autocmd BufWritePost,TextChanged,TextChangedI,TermLeave * call lightline#update()

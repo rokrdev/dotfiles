@@ -106,3 +106,5 @@ source /usr/local/opt/asdf/asdf.fish
 for f in ~/.config/fish/custom/*
   source $f
 end
+
+set pure_color_mute C792EA

@@ -39,6 +39,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/vim-gitbranch'
 Plug 'jxnblk/vim-mdx-js'
+Plug 'samoshkin/vim-mergetool'
 
 call plug#end()
 

@@ -15,12 +15,9 @@
       "command": "docker-langserver",
       "filetypes": ["dockerfile"],
       "args": ["--stdio"]
-    },
-    "elixirLS": {
-      "command": "~/.local/bin/elixir-ls/release/language_server.sh",
-      "filetypes": ["elixir", "eelixir"]
     }
   },
+  "elixir.pathToElixirLS": "~/.local/bin/elixir-ls/release/language_server.sh",
   "python.jediEnabled": false,
   "emmet.showExpandedAbbreviation": "always",
   "emmet.includeLanguages": { "javascript": "javascriptreact" },

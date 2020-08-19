@@ -47,6 +47,9 @@ set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 set shell=/bin/zsh
 set guifont=MonoLisa:h12
 
+set list
+set listchars=tab:>-,eol:¬
+
 filetype plugin indent on
 let g:large_file = 1024 * 1024 * 5  "5MB as large file
 autocmd BufReadPre * let curFile=expand("<afile>") | if getfsize(curFile)

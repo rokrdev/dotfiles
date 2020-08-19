@@ -17,7 +17,7 @@ set number              " Show the line numbers on the left side.
 " set number relativenumber
 set formatoptions+=o    " Continue comment marker in new lines.
 set expandtab           " Insert spaces when TAB is pressed.
-set tabstop=2           " Render TABs using this many spaces.
+" set tabstop=2           " Render TABs using this many spaces.
 set shiftwidth=2        " Indentation amount for < and > commands.
 set softtabstop=2
 set nojoinspaces        " Prevents inserting two spaces after punctuation on a join (J)

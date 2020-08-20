@@ -81,6 +81,19 @@ alias yr='yarn run'
 alias ys='yarn start'
 alias yt='yarn test'
 
+# Changing "ls" to "exa"
+alias ls='exa -a --color=always --group-directories-first'  # all files and dirs
+alias ll='exa -al --color=always --group-directories-first'  # long format
+alias lt='exa -aT --color=always --group-directories-first' # tree listing
+alias l.='exa -a | egrep "^\."'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias .3='cd ../../..'
+alias .4='cd ../../..'
+alias .5='cd ../../../..'
+alias .6='cd ../../../../..'
+
+
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '~/google-cloud-sdk/path.zsh.inc' ]; then . '~/google-cloud-sdk/path.zsh.inc'; end
 

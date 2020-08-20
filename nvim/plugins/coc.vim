@@ -102,6 +102,7 @@ let g:coc_global_extensions = [
   \ 'coc-markdownlint',
   \ 'coc-prettier',
   \ 'coc-python',
+  \ 'coc-sh',
   \ 'coc-snippets',
   \ 'coc-tsserver',
   \ 'coc-yaml',

@@ -56,21 +56,25 @@ function! OnTermExit(job_id, code, event) dict
   if a:code == 0
     bwipeout!
   endif
+  set laststatus=2
 endfunction
 
 function! OpenTig()
   execute 'enew'
+  set laststatus=0
   call termopen('tig status', { 'on_exit': function('OnTermExit') })
 endfunction
 
 function! OpenTigCurrentFile()
   let current = expand('%')
   execute 'enew'
+  set laststatus=0
   call termopen('tig ' . current, { 'on_exit': function('OnTermExit') })
 endfunction
 
 function! OpenTigUnpushed()
   execute 'enew'
+  set laststatus=0
   call termopen('tig log @{u}.. -p', { 'on_exit': function('OnTermExit') })
 endfunction
 

@@ -12,6 +12,8 @@
     }
   },
   "elixir.pathToElixirLS": "~/.local/bin/elixir-ls/release/language_server.sh",
+  "elixirLS.dialyzerEnabled": true,
+  "elixirLS.mixEnv": "dev",
   "python.jediEnabled": false,
   "emmet.showExpandedAbbreviation": "always",
   "emmet.includeLanguages": { "javascript": "javascriptreact" },

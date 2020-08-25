@@ -65,7 +65,7 @@ let g:lightline = {
 \     'left': [ [ 'mode', 'paste' ],
 \               [ 'fugitive', 'filename', 'readonly', 'modified' ],
 \              [ 'gitdiff', 'cocstatus' ] ],
-\     'right': [ [ 'lineinfo' ],
+\     'right': [ [ 'lineinfo', 'filetype', 'fileencoding' ],
 \              [ 'percent' ] ],
 \   },
 \   'inactive': {

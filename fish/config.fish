@@ -26,9 +26,9 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 set $fish_term24bit to "1"
 set fish_color_command blue
 
-alias b=bat
 alias br="broot --sizes -dp"
 alias brup='brew update; brew upgrade; brew cask upgrade; brew cleanup; brew doctor'
+alias cat=bat
 alias dc='docker-compose'
 alias dcu='docker-compose up'
 alias dcd='docker-compose down'
@@ -68,6 +68,7 @@ alias sudo='sudo '       # to use sudo with alias
 alias t=tmux
 alias ta='tmux attach || tmux new'
 alias tg=tig
+alias top=btm
 alias v=nvim
 alias vim=nvim
 alias vimdiff='nvim -d'

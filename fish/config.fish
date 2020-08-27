@@ -11,6 +11,7 @@ export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod
 # set yarn prefix first with this `yarn config set prefix "~/.yarn/"`
 export PATH="$GEM_HOME/bin:$HOME/.yarn/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/google-cloud-sdk/bin:$PATH"
 
 source ~/.env
 
@@ -62,7 +63,7 @@ alias p=python
 alias python3=python
 alias rf=rimraf
 alias sar="brew services restart skhd"
-alias ssh="TERM=xterm-256color ssh"
+alias ssh="bash ~/start_ssh.sh"
 alias st=speedtest-cli
 alias sudo='sudo '       # to use sudo with alias
 alias t=tmux

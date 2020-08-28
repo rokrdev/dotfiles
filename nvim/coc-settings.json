@@ -11,8 +11,12 @@
       "args": ["--stdio"]
     }
   },
+  "python.formatting.provider": "black",
   "elixir.pathToElixirLS": "~/.local/bin/elixir-ls/release/language_server.sh",
   "elixirLS.dialyzerEnabled": true,
+  "coc.preferences.formatOnSaveFiletypes": [
+    "python"
+  ],
   "elixirLS.mixEnv": "dev",
   "python.jediEnabled": false,
   "emmet.showExpandedAbbreviation": "always",

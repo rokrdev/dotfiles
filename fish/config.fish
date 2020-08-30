@@ -3,15 +3,16 @@ export VISUAL="nvim"
 export EDITOR="$VISUAL"
 set TERMINFO ~/.terminfo/
 
-export PATH="/usr/local/anaconda3/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="/usr/local/bin:/usr/local/sbin/:$PATH"
-export GEM_HOME="$HOME/.gem"
 export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
+
+set -gx fish_user_paths "$HOME/opt/miniconda3/bin" $fish_user_paths
+set -gx fish_user_paths "$HOME/.local/bin" $fish_user_paths
+set -gx fish_user_paths "/usr/local/bin" $fish_user_paths
+set -gx fish_user_paths "/usr/local/sbin" $fish_user_paths
+set -gx fish_user_paths "$HOME/.gem" $fish_user_paths
 # set yarn prefix first with this `yarn config set prefix "~/.yarn/"`
-export PATH="$GEM_HOME/bin:$HOME/.yarn/bin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$HOME/google-cloud-sdk/bin:$PATH"
+set -gx fish_user_paths "$HOME/.yarn/bin" $fish_user_paths
+set -gx fish_user_paths "$HOME/google-cloud-sdk/bin" $fish_user_paths
 
 source ~/.env
 
@@ -59,8 +60,9 @@ alias nq=notion
 alias nr='npm run'
 alias nt='npm test'
 alias nv="~/.npm-packages/bin/n"
-alias p=python
-alias python3=python
+alias p=python3
+alias pip=pip3
+alias python=python3
 alias rf=rimraf
 alias sar="brew services restart skhd"
 alias ssh="bash ~/start_ssh.sh"
@@ -94,13 +96,6 @@ alias .3='cd ../../..'
 alias .4='cd ../../..'
 alias .5='cd ../../../..'
 alias .6='cd ../../../../..'
-
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '~/google-cloud-sdk/path.zsh.inc' ]; then . '~/google-cloud-sdk/path.zsh.inc'; end
-
-# The next line enables shell command completion for gcloud.
-if [ -f '~/google-cloud-sdk/completion.zsh.inc' ]; then . '~/google-cloud-sdk/completion.zsh.inc'; end
 
 # asdf erlang fails without this in fish
 set CFLAGS "-O2 -g" $CFLAGS

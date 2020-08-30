@@ -12,11 +12,12 @@
     }
   },
   "python.formatting.provider": "black",
+  "python.formatting.blackPath": "~/opt/miniconda3/bin/black",
+  "python.linting.enabled": true,
+  "coc.preferences.formatOnType": true,
+  "coc.preferences.formatOnSaveFiletypes": ["python"],
   "elixir.pathToElixirLS": "~/.local/bin/elixir-ls/release/language_server.sh",
   "elixirLS.dialyzerEnabled": true,
-  "coc.preferences.formatOnSaveFiletypes": [
-    "python"
-  ],
   "elixirLS.mixEnv": "dev",
   "python.jediEnabled": false,
   "emmet.showExpandedAbbreviation": "always",

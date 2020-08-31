@@ -117,3 +117,6 @@ nnoremap ][q :copen<CR>
 nnoremap []q :cclose<CR>
 nnoremap ][l :lopen<CR>
 nnoremap []l :lclose<CR>
+
+let g:cursorhold_updatetime = 100
+

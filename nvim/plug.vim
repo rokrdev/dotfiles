@@ -43,6 +43,8 @@ Plug 'samoshkin/vim-mergetool'
 Plug 'elixir-editors/vim-elixir'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
+Plug 'antoinemadec/FixCursorHold.nvim' "cursor hold issue with neovim
+Plug 'lambdalisue/fern.vim'
 
 call plug#end()
 

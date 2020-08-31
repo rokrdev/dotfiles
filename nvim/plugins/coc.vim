@@ -94,7 +94,6 @@ let g:coc_global_extensions = [
   \ 'coc-css',
   \ 'coc-docker',
   \ 'coc-elixir',
-  \ 'coc-explorer',
   \ 'coc-emmet',
   \ 'coc-eslint',
   \ 'coc-html',
@@ -142,4 +141,4 @@ autocmd FileType coc-explorer IndentLinesDisable
 " " Resume latest coc list
 " nnoremap <silent> <space>p  :<C-u>CocListResume<CR>h
 
-nmap <Leader>tt :CocCommand explorer<CR>
+" nmap <Leader>tt :CocCommand explorer<CR>

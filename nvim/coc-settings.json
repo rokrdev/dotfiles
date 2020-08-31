@@ -15,7 +15,13 @@
   "python.formatting.blackPath": "~/opt/miniconda3/bin/black",
   "python.linting.enabled": true,
   "coc.preferences.formatOnType": true,
-  "coc.preferences.formatOnSaveFiletypes": ["python"],
+  "coc.preferences.formatOnSaveFiletypes": [
+    "python",
+    "css",
+    "markdown",
+    "javascript",
+    "javascriptreact"
+  ],
   "elixir.pathToElixirLS": "~/.local/bin/elixir-ls/release/language_server.sh",
   "elixirLS.dialyzerEnabled": true,
   "elixirLS.mixEnv": "dev",

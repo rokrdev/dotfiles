@@ -16,11 +16,15 @@
   "python.linting.enabled": true,
   "coc.preferences.formatOnType": true,
   "coc.preferences.formatOnSaveFiletypes": [
-    "python",
     "css",
-    "markdown",
+    "graphql",
     "javascript",
-    "javascriptreact"
+    "javascriptreact",
+    "json",
+    "markdown",
+    "mdx",
+    "python",
+    "typescript"
   ],
   "elixir.pathToElixirLS": "~/.local/bin/elixir-ls/release/language_server.sh",
   "elixirLS.dialyzerEnabled": true,

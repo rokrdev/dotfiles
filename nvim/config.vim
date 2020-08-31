@@ -112,3 +112,8 @@ nnoremap <Leader>qr :cfdo %s///g \| update<Left><Left><Left><Left><Left><Left><L
 nnoremap <silent> <leader>qq :cclose<CR>
 
 let g:Illuminate_delay = 500
+
+nnoremap ][q :copen<CR>
+nnoremap []q :cclose<CR>
+nnoremap ][l :lopen<CR>
+nnoremap []l :lclose<CR>

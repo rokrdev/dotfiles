@@ -41,6 +41,8 @@ Plug 'itchyny/vim-gitbranch'
 Plug 'jxnblk/vim-mdx-js'
 Plug 'samoshkin/vim-mergetool'
 Plug 'elixir-editors/vim-elixir'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-repeat'
 
 call plug#end()
 

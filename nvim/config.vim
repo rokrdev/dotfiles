@@ -81,8 +81,6 @@ noremap <Leader>p "+p
 nnoremap <C-h> :bp<CR>
 nnoremap <C-l> :bn<CR>
 nnoremap gh :b#<CR>
-nnoremap go o<Esc>
-nnoremap gO O<Esc>
 nnoremap <Leader>\| :stop<CR>
 nnoremap Q @@
 nnoremap gq q
@@ -94,8 +92,6 @@ nnoremap <silent> <A-=> :vertical resize +10<CR>
 nnoremap <silent> <A--> :vertical resize -10<CR>
 nnoremap <silent> <A-+> :resize +10<CR>
 nnoremap <silent> <A-_> :resize -10<CR>
-
-nnoremap <Leader>b :<C-u>call gitblame#echo()<CR>
 
 nnoremap <Leader>r :%s///g<Left><Left>
 nnoremap <Leader>rc :%s///gc<Left><Left><Left>
@@ -112,8 +108,7 @@ nnoremap ! @s
 command! FJ %!jq .
 
 noremap <expr> <Leader>0 ToggleNumberDisplay()
-nnoremap <silent> <leader>qn :cnext<CR>
-nnoremap <silent> <leader>qp :cprevious<CR>
+nnoremap <Leader>qr :cfdo %s///g \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
 nnoremap <silent> <leader>qq :cclose<CR>
 
 let g:Illuminate_delay = 500

@@ -59,27 +59,14 @@ function! OnTermExit(job_id, code, event) dict
   set laststatus=2
 endfunction
 
-function! OpenTig()
+function! OpenTig(cmd)
   execute 'enew'
   set laststatus=0
-  call termopen('tig status', { 'on_exit': function('OnTermExit') })
+  call termopen(a:cmd, { 'on_exit': function('OnTermExit') })
 endfunction
 
-function! OpenTigCurrentFile()
-  let current = expand('%')
-  execute 'enew'
-  set laststatus=0
-  call termopen('tig ' . current, { 'on_exit': function('OnTermExit') })
-endfunction
-
-function! OpenTigUnpushed()
-  execute 'enew'
-  set laststatus=0
-  call termopen('tig log @{u}.. -p', { 'on_exit': function('OnTermExit') })
-endfunction
-
-nmap <Leader>gg :call OpenTig()<CR>
-nmap <Leader>gb :call OpenTigCurrentFile()<CR>
-nmap <Leader>gu :call OpenTigUnpushed()<CR>
+nmap <Leader>gg :call OpenTig('tig status')<CR>
+nmap <Leader>gb :call OpenTig('tig ' . expand('%'))<CR>
+nmap <Leader>gu :call OpenTig('tig log @{u}.. -p')<CR>
 
 highlight NormalFloat cterm=NONE ctermfg=14 ctermbg=0 gui=NONE guifg=#93a1a1 guibg=#002931

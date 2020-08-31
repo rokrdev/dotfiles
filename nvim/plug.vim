@@ -45,6 +45,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 Plug 'antoinemadec/FixCursorHold.nvim' "cursor hold issue with neovim
 Plug 'lambdalisue/fern.vim'
+Plug 'voldikss/vim-floaterm'
 
 call plug#end()
 

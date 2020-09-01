@@ -11,7 +11,7 @@ call plug#begin('~/.config/nvim/autoload')
 Plug 'SirVer/ultisnips'
 Plug 'Yggdroot/indentLine'
 Plug 'andymass/vim-matchup'
-Plug 'ap/vim-css-color'
+Plug 'ap/vim-css-color', { 'for': ['css', 'scss'] }
 Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
 Plug 'jesseleite/vim-agriculture'
@@ -19,32 +19,25 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all && source ~/.zshrc' }
 Plug 'junegunn/fzf.vim'
 Plug 'machakann/vim-sandwich'
-Plug 'mcchrish/nnn.vim'
+Plug 'mcchrish/nnn.vim', { 'on': 'NnnPicker' }
 Plug 'mengelbrecht/lightline-bufferline'
-Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+Plug 'mg979/vim-visual-multi', { 'branch': 'master' }
 Plug 'nelstrom/vim-visual-star-search'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'ntpeters/vim-better-whitespace'
-Plug 'plasticboy/vim-markdown'
 Plug 'sheerun/vim-polyglot'
-Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
+Plug 'suan/vim-instant-markdown', { 'for': 'markdown' }
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-eunuch'
-Plug 'udalov/kotlin-vim'
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-session'
 Plug 'RRethy/vim-illuminate'
 Plug 'zivyangll/git-blame.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/vim-gitbranch'
-Plug 'jxnblk/vim-mdx-js'
 Plug 'samoshkin/vim-mergetool'
-Plug 'elixir-editors/vim-elixir'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 Plug 'antoinemadec/FixCursorHold.nvim' "cursor hold issue with neovim
-Plug 'lambdalisue/fern.vim'
+Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
 Plug 'voldikss/vim-floaterm'
 
 call plug#end()

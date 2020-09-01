@@ -123,4 +123,4 @@ let g:cursorhold_updatetime = 100
 " fix for <CR> in vim-visual-multiedit when coc-completion is visible
 autocmd User visual_multi_mappings  imap <buffer><expr> <CR> pumvisible() ? "\<C-Y>" : "\<Plug>(VM-I-Return)"
 
-nnoremap <Leader>b :<C-u>call gitblame#echo()<CR>
+nmap gb <Plug>(git-messenger)

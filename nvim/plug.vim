@@ -29,7 +29,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'suan/vim-instant-markdown', { 'for': 'markdown' }
 Plug 'tpope/vim-commentary'
 Plug 'RRethy/vim-illuminate'
-Plug 'zivyangll/git-blame.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/vim-gitbranch'
@@ -39,6 +38,7 @@ Plug 'tpope/vim-repeat'
 Plug 'antoinemadec/FixCursorHold.nvim' "cursor hold issue with neovim
 Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
 Plug 'voldikss/vim-floaterm'
+Plug 'rhysd/git-messenger.vim'
 
 call plug#end()
 

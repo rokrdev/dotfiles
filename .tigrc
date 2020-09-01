@@ -405,7 +405,7 @@ color "    Acked-by"		yellow	default
 color "    Tested-by"		yellow	default
 color "    Reviewed-by"		yellow	default
 color default			default	default	normal
-color cursor			black	153 bold
+color cursor			232	7 bold
 color status			green	default
 color delimiter			magenta	default
 color date			blue	default

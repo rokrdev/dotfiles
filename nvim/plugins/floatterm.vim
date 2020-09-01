@@ -6,4 +6,4 @@ nmap <Leader>gg :call OpenTig('tig status', 'Status')<CR>
 nmap <Leader>gb :call OpenTig('tig ' . expand('%'), 'Blame')<CR>
 nmap <Leader>gu :call OpenTig('tig log @{u}.. -p', 'Unpushed')<CR>
 
-" highlight FloatermBorder guifg=#c792ea
+highlight FloatermBorder guifg=#82aaff

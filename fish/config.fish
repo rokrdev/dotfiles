@@ -4,12 +4,15 @@ export EDITOR="$VISUAL"
 set TERMINFO ~/.terminfo/
 
 export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
+export GEM_HOME="$HOME/.gem"
 
+# using ruby from brew
+set -gx fish_user_paths "/usr/local/opt/ruby/bin" $fish_user_paths
+set -gx fish_user_paths "$HOME/.gem/bin" $fish_user_paths
 set -gx fish_user_paths "$HOME/opt/miniconda3/bin" $fish_user_paths
 set -gx fish_user_paths "$HOME/.local/bin" $fish_user_paths
 set -gx fish_user_paths "/usr/local/bin" $fish_user_paths
 set -gx fish_user_paths "/usr/local/sbin" $fish_user_paths
-set -gx fish_user_paths "$HOME/.gem" $fish_user_paths
 # set yarn prefix first with this `yarn config set prefix "~/.yarn/"`
 set -gx fish_user_paths "$HOME/.yarn/bin" $fish_user_paths
 set -gx fish_user_paths "$HOME/google-cloud-sdk/bin" $fish_user_paths

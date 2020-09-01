@@ -41,17 +41,19 @@ function! FernInit() abort
   nmap <buffer> n <Plug>(fern-action-new-path)
   nmap <buffer> d <Plug>(fern-action-remove)
   nmap <buffer> m <Plug>(fern-action-move)
+  nmap <buffer> c <Plug>(fern-action-copy)
   nmap <buffer> M <Plug>(fern-action-rename)
-  nmap <buffer> h <Plug>(fern-action-hidden-toggle)
+  nmap <buffer> H <Plug>(fern-action-hidden-toggle)
   nmap <buffer> r <Plug>(fern-action-reload)
-  nmap <buffer> k <Plug>(fern-action-mark-toggle)
   nmap <buffer> b <Plug>(fern-action-open:split)
   nmap <buffer> v <Plug>(fern-action-open:vsplit)
   nmap <buffer> ! <Plug>(fern-action-mark-toggle)
   nmap <buffer> k <Up>
   nmap <buffer> j <Down>
-  nmap <buffer><nowait> < <Plug>(fern-action-leave)
-  nmap <buffer><nowait> > <Plug>(fern-action-enter)
+  nmap <buffer> h <Plug>(fern-action-collapse)
+  nmap <buffer> l <Plug>(fern-action-open-or-expand)
+  nmap <buffer> < <Plug>(fern-action-leave)
+  nmap <buffer> > <Plug>(fern-action-enter)
 endfunction
 
 augroup FernGroup

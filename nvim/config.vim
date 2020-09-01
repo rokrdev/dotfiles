@@ -96,7 +96,7 @@ nnoremap <silent> <A-_> :resize -10<CR>
 nnoremap <Leader>r :%s///g<Left><Left>
 nnoremap <Leader>rc :%s///gc<Left><Left><Left>
 xnoremap <Leader>r :s///g<Left><Left>
-xnoremap <Leader>rc :s///gc<Left><Left><Left>
+xnoremap <Leader>rc :s/\<'.expand('<cword>').'\>'//gc<Left><Left><Left>
 nnoremap <silent> s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
 xnoremap <silent> s* "sy:let @/=@s<CR>cgn
 
@@ -119,4 +119,7 @@ nnoremap ][l :lopen<CR>
 nnoremap []l :lclose<CR>
 
 let g:cursorhold_updatetime = 100
+
+" fix for <CR> in vim-visual-multiedit when coc-completion is visible
+autocmd User visual_multi_mappings  imap <buffer><expr> <CR> pumvisible() ? "\<C-Y>" : "\<Plug>(VM-I-Return)"
 

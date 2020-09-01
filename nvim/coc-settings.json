@@ -1,6 +1,7 @@
 {
   "codeLens.enable": false,
   "suggest.noselect": false,
+  "suggest.enablePreview": true,
   "suggest.enablePreselect": true,
   "diagnostic.messageTarget": "float",
   "diagnostic.virtualText": false,

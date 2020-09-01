@@ -1,4 +1,4 @@
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9, 'border': 'rounded' }}
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9, 'border': 'rounded', 'highlight': 'Directory' }}
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1

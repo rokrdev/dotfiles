@@ -97,8 +97,8 @@ nnoremap <Leader>r :%s///g<Left><Left>
 nnoremap <Leader>rc :%s///gc<Left><Left><Left>
 xnoremap <Leader>r :s///g<Left><Left>
 xnoremap <Leader>rc :s/\<'.expand('<cword>').'\>'//gc<Left><Left><Left>
-nnoremap <silent> s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
-xnoremap <silent> s* "sy:let @/=@s<CR>cgn
+nnoremap <silent>s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
+xnoremap <silent>s* "sy:let @/=@s<CR>cgn
 
 " saved macro to replace next space to newline in a line
 let @s = "f cl\<CR>\<ESC>l"
@@ -124,3 +124,5 @@ let g:cursorhold_updatetime = 100
 autocmd User visual_multi_mappings  imap <buffer><expr> <CR> pumvisible() ? "\<C-Y>" : "\<Plug>(VM-I-Return)"
 
 nmap gb <Plug>(git-messenger)
+
+command! Gcd call GoToRoot()

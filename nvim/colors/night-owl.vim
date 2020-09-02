@@ -37,11 +37,12 @@ hi Title guifg=#82aaff ctermfg=111 gui=bold cterm=bold
 " hi Visual guifg=#d6deeb ctermfg=253 guibg=#2d2c5d ctermbg=236 gui=NONE cterm=NONE
 hi Visual guibg=#1d3b53
 hi EndOfBuffer guifg=#444444 ctermfg=238 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
-hi Comment guifg=#637777 ctermfg=243 gui=italic cterm=italic
+hi Comment guifg=#8187A2 ctermfg=243 gui=italic cterm=italic
 hi Constant guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
 hi String guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
 hi Identifier guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
 hi Statement guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
+hi Function guifg=#82aaff ctermfg=111 cterm=italic gui=italic
 hi Operator guifg=#c792ea ctermfg=176 gui=NONE cterm=NONE
 hi Exception guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
 hi PreProc guifg=#c792ea ctermfg=176 gui=NONE cterm=NONE
@@ -55,7 +56,7 @@ hi jsOperator guifg=#c792ea ctermfg=176 gui=NONE cterm=NONE
 hi jsArrowFunction guifg=#c792ea ctermfg=176 gui=NONE cterm=NONE
 hi jsString guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
 hi jsComment guifg=#637777 ctermfg=243 gui=italic cterm=italic
-hi jsFuncCall guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
+hi link jsFuncCall Function
 hi jsNumber guifg=#f78c6c ctermfg=209 gui=NONE cterm=NONE
 hi jsSpecial guifg=#f78c6c ctermfg=209 gui=NONE cterm=NONE
 hi jsObjectProp guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
@@ -64,7 +65,7 @@ hi jsBooleanFalse guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
 hi jsBooleanTrue guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
 hi jsRegexpString guifg=#5ca7e4 ctermfg=74 gui=NONE cterm=NONE
 hi jsConditional guifg=#c792ea ctermfg=176 gui=NONE cterm=NONE
-hi jsFunction guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
+hi link jsFunction Function
 hi jsReturn guifg=#c792ea ctermfg=176 gui=NONE cterm=NONE
 hi jsFuncName guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
 hi link jsParensError jsFuncParens
@@ -82,7 +83,7 @@ hi javaScriptBoolean guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
 hi javaScriptBraces guifg=#d6deeb ctermfg=253 gui=NONE cterm=NONE
 hi javaScriptLineComment guifg=#637777 ctermfg=243 gui=italic cterm=italic
 hi javaScriptSpecial guifg=#f78c6c ctermfg=209 gui=NONE cterm=NONE
-hi javaScriptFunction guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
+hi link javaScriptFunction Function
 hi javaScriptStatement guifg=#c792ea ctermfg=176 gui=NONE cterm=NONE
 hi javaScriptException guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
 hi scssSelectorName guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
@@ -100,7 +101,7 @@ hi cssBorderProp guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
 hi cssBackgroundProp guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
 hi cssUIProp guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
 hi cssIEUIProp guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
-hi scssFunctionName guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
+hi link scssFunctionName Function
 hi cssPositioningAttr guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
 hi cssTableAttr guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
 hi cssCommonAttr guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE

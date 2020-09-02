@@ -5,8 +5,6 @@ end
 
 colorscheme night-owl
 
-highlight Comment cterm=italic gui=italic guifg=#8187A2
-highlight Function cterm=italic gui=italic
 highlight FoldColumn guifg=#806e6f
 highlight Folded guifg=#806e6f
 highlight LineNr guifg=#4b6479

@@ -16,7 +16,10 @@ Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
 Plug 'jesseleite/vim-agriculture'
 Plug 'jiangmiao/auto-pairs'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all && source ~/.zshrc' }
+Plug 'junegunn/fzf', {
+      \'dir': '~/.fzf',
+      \'do': './install --all && source ~/.zshrc'
+      \}
 Plug 'junegunn/fzf.vim'
 Plug 'machakann/vim-sandwich'
 Plug 'mcchrish/nnn.vim', { 'on': 'NnnPicker' }
@@ -39,6 +42,10 @@ Plug 'antoinemadec/FixCursorHold.nvim' "cursor hold issue with neovim
 Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
 Plug 'voldikss/vim-floaterm', { 'on': 'FloatermNew' }
 Plug 'rhysd/git-messenger.vim'
+Plug 'styled-components/vim-styled-components', {
+      \'branch': 'main',
+      \'for': ['javascript', 'typescript', 'javascriptreact']
+      \}
 
 call plug#end()
 

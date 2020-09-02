@@ -29,3 +29,7 @@ function! ToggleNumberDisplay()
     set nu rnu
   endif
 endfunction
+
+function! GoToRoot()
+  exec 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))
+endfunction

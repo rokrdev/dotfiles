@@ -26,7 +26,15 @@ endfunction
 " Custom settings and mappings.
 let g:fern#disable_default_mappings = 1
 
-noremap <silent> <Leader>tt :Fern . -reveal=% <CR>
+function! OpenFern()
+  if bufname("%") == ""
+    exe "Fern . "
+  else
+    exe "Fern . -reveal=% "
+  endif
+endfunction
+
+noremap <silent> <Leader>tt :call OpenFern()<CR>
 
 function! FernInit() abort
   nmap <buffer><expr>

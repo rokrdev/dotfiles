@@ -33,5 +33,6 @@
   "elixirLS.mixEnv": "dev",
   "python.jediEnabled": false,
   "emmet.showExpandedAbbreviation": "always",
-  "emmet.includeLanguages": { "javascript": "javascriptreact" }
+  "emmet.includeLanguages": { "javascript": "javascriptreact" },
+  "snippets.ultisnips.directories": ["UltiSnips"]
 }

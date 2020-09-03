@@ -1,6 +1,7 @@
 export ALTERNATE_EDITOR="nvim"
 export VISUAL="nvim"
 export EDITOR="$VISUAL"
+export FISH_CONFIG="$HOME/.config/fish/config.fish"
 set TERMINFO ~/.terminfo/
 
 export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
@@ -31,6 +32,7 @@ alias dc='docker-compose'
 alias dcu='docker-compose up'
 alias dcd='docker-compose down'
 alias fg='fg 2>/dev/null'
+alias fr='source $FISH_CONFIG'
 alias fk="fkill"
 alias g=git
 alias ga='git add'

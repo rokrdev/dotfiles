@@ -9,7 +9,7 @@ export GEM_HOME="$HOME/.gem"
 
 # using ruby from brew
 # setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`
-export PATH="/usr/local/opt/ruby/bin:$HOME/.gem/bin:$HOME/.asdf/shims:/usr/local/opt/asdf/shims:/usr/local/opt/asdf/bin:$HOME/opt/miniconda3/bin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="$HOME/opt/miniconda3/bin:/usr/local/opt/ruby/bin:$HOME/.gem/bin:$HOME/.asdf/shims:/usr/local/opt/asdf/shims:/usr/local/opt/asdf/bin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 source ~/.env
 
@@ -58,9 +58,9 @@ alias nq=notion
 alias nr='npm run'
 alias nt='npm test'
 alias nv="~/.npm-packages/bin/n"
-alias p=python3
-alias pip=pip3
-alias python=python3
+alias python=~/opt/miniconda3/bin/python
+alias pip=~/opt/miniconda3/bin/pip
+alias p=~/opt/miniconda3/bin/python
 alias rf=rimraf
 alias sar="brew services restart skhd"
 alias ssh="bash ~/start_ssh.sh"
@@ -89,11 +89,11 @@ alias ll='exa -al --color=always --group-directories-first'  # long format
 alias lt='exa -aT --color=always --group-directories-first' # tree listing
 alias l.='exa -a | egrep "^\."'
 alias ..='cd ..'
-alias ...='cd ../..'
-alias .3='cd ../../..'
-alias .4='cd ../../..'
-alias .5='cd ../../../..'
-alias .6='cd ../../../../..'
+alias ...='cd ../../'
+alias .3='cd ../../../'
+alias .4='cd ../../../'
+alias .5='cd ../../../../'
+alias .6='cd ../../../../../'
 
 # asdf erlang fails without this in fish
 set CFLAGS "-O2 -g" $CFLAGS

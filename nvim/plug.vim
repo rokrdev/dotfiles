@@ -16,10 +16,7 @@ Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
 Plug 'jesseleite/vim-agriculture'
 Plug 'jiangmiao/auto-pairs'
-Plug 'junegunn/fzf', {
-      \'dir': '~/.fzf',
-      \'do': './install --all && source ~/.zshrc'
-      \}
+Plug 'junegunn/fzf',
 Plug 'junegunn/fzf.vim'
 Plug 'machakann/vim-sandwich'
 Plug 'mcchrish/nnn.vim', { 'on': 'NnnPicker' }

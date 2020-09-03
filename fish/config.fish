@@ -7,15 +7,8 @@ export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod
 export GEM_HOME="$HOME/.gem"
 
 # using ruby from brew
-set -gx fish_user_paths "/usr/local/opt/ruby/bin" $fish_user_paths
-set -gx fish_user_paths "$HOME/.gem/bin" $fish_user_paths
-set -gx fish_user_paths "$HOME/opt/miniconda3/bin" $fish_user_paths
-set -gx fish_user_paths "$HOME/.local/bin" $fish_user_paths
-set -gx fish_user_paths "/usr/local/bin" $fish_user_paths
-set -gx fish_user_paths "/usr/local/sbin" $fish_user_paths
-# set yarn prefix first with this `yarn config set prefix "~/.yarn/"`
-set -gx fish_user_paths "$HOME/.yarn/bin" $fish_user_paths
-set -gx fish_user_paths "$HOME/google-cloud-sdk/bin" $fish_user_paths
+# setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`
+export PATH="/usr/local/opt/ruby/bin:$HOME/.gem/bin:$HOME/.asdf/shims:/usr/local/opt/asdf/shims:/usr/local/opt/asdf/bin:$HOME/opt/miniconda3/bin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 source ~/.env
 
@@ -114,9 +107,6 @@ export NNN_BMS='d:~/Downloads;p:~/projects;D:~/Documents'
 
 # for shell error
 set -x SHELL /bin/zsh
-
-# asdf
-source /usr/local/opt/asdf/asdf.fish
 
 for f in ~/.config/fish/custom/*
   source $f

@@ -37,7 +37,7 @@ Plug 'tpope/vim-repeat'
 Plug 'antoinemadec/FixCursorHold.nvim' "cursor hold issue with neovim
 Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
 Plug 'voldikss/vim-floaterm', { 'on': 'FloatermNew' }
-Plug 'rhysd/git-messenger.vim'
+Plug 'rhysd/git-messenger.vim', { 'on': '<Plug>(git-messenger)' }
 Plug 'styled-components/vim-styled-components', {
       \'branch': 'main',
       \'for': ['javascript', 'typescript', 'javascriptreact']
@@ -47,8 +47,8 @@ call plug#end()
 
 packadd cfilter
 
-" Automatically install missing plugins on startup
-autocmd VimEnter *
-  \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-  \|   PlugInstall --sync | q
-  \| endif
+" " Automatically install missing plugins on startup
+" autocmd VimEnter *
+"   \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+"   \|   PlugInstall --sync | q
+"   \| endif

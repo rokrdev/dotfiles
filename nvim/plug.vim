@@ -31,7 +31,7 @@ Plug 'RRethy/vim-illuminate'
 Plug 'easymotion/vim-easymotion'
 Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/vim-gitbranch'
-Plug 'samoshkin/vim-mergetool'
+Plug 'samoshkin/vim-mergetool', { 'on': 'MergetoolStart' }
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 Plug 'antoinemadec/FixCursorHold.nvim' "cursor hold issue with neovim

@@ -42,7 +42,7 @@ Plug 'styled-components/vim-styled-components', {
       \'for': ['javascript', 'typescript', 'javascriptreact']
       \}
 " stick to vim-sneak
-Plug 'justinmk/vim-sneak'
+" Plug 'justinmk/vim-sneak'
 
 call plug#end()
 

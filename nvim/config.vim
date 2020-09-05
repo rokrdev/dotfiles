@@ -74,7 +74,6 @@ autocmd FileChangedShellPost *
 nnoremap <A-j> :m .+1<CR>==
 nnoremap <A-k> :m .-2<CR>==
 nnoremap <Leader>c :e %:h/
-nnoremap <Leader>mc :nohl<CR>
 nnoremap <Leader>! :bd!<CR>
 noremap <Leader>y "+y
 noremap <Leader>p "+p
@@ -87,6 +86,8 @@ nnoremap Q @@
 " for vim-sandwich
 nmap s <Nop>
 xmap s <Nop>
+
+nmap sc :nohl<CR>
 
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv

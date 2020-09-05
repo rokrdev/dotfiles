@@ -1,6 +1,7 @@
 export ALTERNATE_EDITOR="nvim"
 export VISUAL="nvim"
 export EDITOR="$VISUAL"
+export TERM="xterm-256color"
 export FISH_CONFIG="$HOME/.config/fish/config.fish"
 set TERMINFO ~/.terminfo/
 

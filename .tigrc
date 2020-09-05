@@ -222,7 +222,7 @@ bind generic  m none
 
 bind generic	O	maximize		# Maximize the current view
 bind generic	q	view-close		# Close the current view
-bind generic	Q	quit			# Close all views and quit
+bind generic	gq	quit			# Close all views and quit
 bind generic	<C-C>	quit			# Close all views and quit
 bind generic gg move-first-line
 bind generic G move-last-line

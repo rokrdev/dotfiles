@@ -1,4 +1,4 @@
-"" auto-install vim-plug
+" auto-install vim-plug
 "if empty(glob('~/.config/nvim/autoload/plug.vim'))
 "  silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
 "    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -28,7 +28,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'suan/vim-instant-markdown', { 'for': 'markdown' }
 Plug 'tpope/vim-commentary'
 Plug 'RRethy/vim-illuminate'
-Plug 'easymotion/vim-easymotion'
 Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/vim-gitbranch'
 Plug 'samoshkin/vim-mergetool', { 'on': 'MergetoolStart' }
@@ -42,6 +41,8 @@ Plug 'styled-components/vim-styled-components', {
       \'branch': 'main',
       \'for': ['javascript', 'typescript', 'javascriptreact']
       \}
+" stick to vim-sneak
+Plug 'justinmk/vim-sneak'
 
 call plug#end()
 

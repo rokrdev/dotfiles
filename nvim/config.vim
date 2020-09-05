@@ -83,9 +83,11 @@ nnoremap <C-l> :bn<CR>
 nnoremap gh :b#<CR>
 nnoremap <Leader>\| :stop<CR>
 nnoremap Q @@
-nnoremap gq q
-nnoremap g! q:
-nnoremap q <Nop>
+
+" for vim-sandwich
+nmap s <Nop>
+xmap s <Nop>
+
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
 

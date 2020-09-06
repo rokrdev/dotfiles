@@ -8,7 +8,6 @@
 
 call plug#begin('~/.config/nvim/autoload')
 
-Plug 'Yggdroot/indentLine'
 Plug 'andymass/vim-matchup'
 Plug 'ap/vim-css-color', { 'for': ['css', 'scss'] }
 Plug 'honza/vim-snippets'

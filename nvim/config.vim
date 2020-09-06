@@ -12,8 +12,8 @@ set foldlevel=2
 " set foldcolumn=2
 set nofoldenable
 set showmatch           " Show matching brackets.
-set cursorline
-set number              " Show the line numbers on the left side.
+set nocursorline
+set nu rnu              " Show the line numbers on the left side.
 " set number relativenumber
 set formatoptions+=o    " Continue comment marker in new lines.
 set expandtab           " Insert spaces when TAB is pressed.
@@ -47,6 +47,7 @@ set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 set shell=/bin/zsh
 set guifont=MonoLisa:h12
 set termguicolors
+set guicursor=
 
 set list
 set listchars=tab:>-,eol:¬

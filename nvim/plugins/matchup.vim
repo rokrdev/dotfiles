@@ -8,4 +8,4 @@ let g:matchup_matchpref = {
     \ 'vue':  { 'tagnameonly': 1, },
     \}
 
-highlight MatchParen guibg=#82AAFF guifg=#000000
+highlight MatchParen guibg=#011627 guifg=#7fdbca gui=underline

@@ -30,7 +30,12 @@ Plug 'tpope/vim-commentary'
 Plug 'RRethy/vim-illuminate'
 Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/vim-gitbranch'
-Plug 'samoshkin/vim-mergetool', { 'on': 'MergetoolStart' }
+Plug 'samoshkin/vim-mergetool', {
+      \'on': [
+      \  'MergetoolStart',
+      \  'MergetoolToggle',
+      \  '<Plug>(MergetoolToggle)'
+      \]}
 Plug 'tpope/vim-repeat'
 Plug 'antoinemadec/FixCursorHold.nvim' "cursor hold issue with neovim
 Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }

@@ -68,6 +68,5 @@ endfunction
 augroup FernGroup
   autocmd!
   autocmd FileType fern call FernInit()
-  autocmd FileType fern :IndentLinesDisable
 augroup END
 

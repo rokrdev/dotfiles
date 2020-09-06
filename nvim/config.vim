@@ -123,6 +123,10 @@ nnoremap ][q :copen<CR>
 nnoremap []q :cclose<CR>
 nnoremap ][l :lopen<CR>
 nnoremap []l :lclose<CR>
+nnoremap [<Space> O<Esc>
+nnoremap ]<Space> o<Esc>
+nnoremap [q :cprevious<CR>
+nnoremap ]q :cnext<CR>
 
 let g:cursorhold_updatetime = 100
 

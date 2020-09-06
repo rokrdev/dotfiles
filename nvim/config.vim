@@ -134,5 +134,8 @@ let g:cursorhold_updatetime = 100
 autocmd User visual_multi_mappings  imap <buffer><expr> <CR> pumvisible() ? "\<C-Y>" : "\<Plug>(VM-I-Return)"
 
 nmap gb <Plug>(git-messenger)
+let g:mergetool_layout = 'mr'
+let g:mergetool_prefer_revision = 'local'
+nmap <Leader>gm <Plug>(MergetoolToggle)
 
 command! Gcd call GoToRoot()

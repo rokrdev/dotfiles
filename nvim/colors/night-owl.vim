@@ -34,8 +34,7 @@ hi SpecialKey guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
 hi StatusLine guifg=#eeeeee ctermfg=255 guibg=#112630 ctermbg=235 gui=NONE cterm=NONE
 hi StatusLineNC guifg=#777777 ctermfg=243 guibg=#112630 ctermbg=235 gui=NONE cterm=NONE
 hi Title guifg=#82aaff ctermfg=111 gui=bold cterm=bold
-" hi Visual guifg=#d6deeb ctermfg=253 guibg=#2d2c5d ctermbg=236 gui=NONE cterm=NONE
-hi Visual guibg=#1d3b53
+hi Visual guifg=#000000 ctermfg=233 guibg=#ecc48d ctermbg=222 gui=NONE cterm=NONE
 hi EndOfBuffer guifg=#444444 ctermfg=238 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
 hi Comment guifg=#8187A2 ctermfg=243 gui=italic cterm=italic
 hi Constant guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE

@@ -41,8 +41,6 @@ Plug 'styled-components/vim-styled-components', {
       \'branch': 'main',
       \'for': ['javascript', 'typescript', 'javascriptreact']
       \}
-" stick to vim-sneak
-" Plug 'justinmk/vim-sneak'
 
 call plug#end()
 

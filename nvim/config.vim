@@ -46,6 +46,7 @@ set signcolumn=yes
 set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 set shell=/bin/zsh
 set guifont=MonoLisa:h12
+set termguicolors
 
 set list
 set listchars=tab:>-,eol:¬

@@ -113,11 +113,11 @@ set -x SHELL /bin/zsh
 
 
 
-# function fish_greeting --description 'Override fish_greeting'
-#   printf "%s\n\n"
-#   fortune -s 10% art 10% law 10% science 10% ascii-art 10% wisdom 10% startrek 10% work 10% humorists 10% fortunes 10% computers
-#   printf "%s\n\n"
-# end
+function fish_greeting --description 'Override fish_greeting'
+  printf "%s\n"
+  fortune -s 50% wisdom 50% computers
+  printf "%s\n"
+end
 
 # function f --description 'Fuzzy find file and open in vim'
 #     set files (echo (eval "$FZF_DEFAULT_COMMAND | fzf --multi --exit-0"))
@@ -141,6 +141,3 @@ function kp --description 'Fuzzy search and kill process'
     end
 end
 
-
-
-set pure_color_mute C792EA

@@ -1,8 +1,4 @@
 
-if has("termguicolors")
-  set termguicolors
-end
-
 colorscheme night-owl
 
 highlight FoldColumn guifg=#806e6f

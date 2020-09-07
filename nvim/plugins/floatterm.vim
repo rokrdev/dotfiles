@@ -1,9 +1,20 @@
-function! OpenTig(cmd, title)
-  execute 'FloatermNew --height=0.99 --width=0.99 --autoclose=1 --name='. a:title . ' ' . a:cmd
+function! OpenFloaterm(cmd, title, height, width, ...)
+  let pre = a:0 >= 1 ? a:1 : ''
+  exe pre
+
+  let cmdList = ['FloatermNew']
+  call add(cmdList, '--height='.string(a:height))
+  call add(cmdList, '--width='.string(a:width))
+  call add(cmdList, '--autoclose=1')
+  call add(cmdList, '--name='.a:title)
+  call add(cmdList, a:cmd)
+
+  exe join(cmdList, ' ')
 endfunction
 
-nmap <Leader>gg :call OpenTig('tig status', 'Status')<CR>
-nmap <Leader>gb :call OpenTig('tig ' . expand('%'), 'Blame')<CR>
-nmap <Leader>gu :call OpenTig('tig log @{u}.. -p', 'Unpushed')<CR>
+nmap <Leader>gg :call OpenFloaterm('tig status', 'Status', 0.99, 0.99)<CR>
+nmap <Leader>gb :call OpenFloaterm('tig ' . expand('%'), 'Blame', 0.99, 0.99)<CR>
+nmap <Leader>gu :call OpenFloaterm('tig log @{u}.. -p', 'Unpushed', 0.99, 0.99)<CR>
+nmap <Leader>n :call OpenFloaterm('nnn -d', 'NNN', 0.60, 0.80, 'lcd %:p:h')<CR>
 
 highlight FloatermBorder guifg=#82aaff

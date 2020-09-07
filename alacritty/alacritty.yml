@@ -52,11 +52,11 @@ font:
 
   offset:
     x: 1
-    y: 0
+    y: 1
 
-  #glyph_offset:
-  #  x: 0
-  #  y: 0
+  glyph_offset:
+    x: 0
+    y: 1
 
   use_thin_strokes: true
 
@@ -74,7 +74,7 @@ colors:
 
   cursor:
     text: '0x000000'
-    cursor: '0xC792EA'
+    cursor: '0x8cd1ff'
 
   # Vi mode cursor colors
   #
@@ -270,6 +270,8 @@ key_bindings:
   - { key: Equals,     mods: Alt|Shift,           chars: "\x1b+"         }
   - { key: Minus,      mods: Alt,                 chars: "\x1b-"         }
   - { key: Minus,      mods: Alt|Shift,           chars: "\x1b_"         }
+  - { key: J,          mods: Alt,                 chars: "\x1bj"         }
+  - { key: K,          mods: Alt,                 chars: "\x1bk"         }
 
 #debug:
   # Display the time it takes to redraw each frame.

@@ -107,7 +107,7 @@ shift + cmd + ctrl - n : open -a /Applications/Evernote.app
 # shift + cmd + ctrl - p : open -a /Applications/Todoist.app
 shift + cmd + ctrl - s : open -a /Applications/Safari.app
 # shift + cmd + ctrl - t : open -a /Applications/Alacritty.app
-shift + cmd + ctrl - t : open -a /Applications/iTerm.app
+shift + cmd + ctrl - t : open -a /Applications/Alacritty.app
 shift + cmd + ctrl - v : open -a /Applications/Visual\ Studio\ Code.app
 
 # '-' char

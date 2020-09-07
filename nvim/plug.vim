@@ -17,7 +17,6 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf',
 Plug 'junegunn/fzf.vim'
 Plug 'machakann/vim-sandwich'
-Plug 'mcchrish/nnn.vim', { 'on': 'NnnPicker' }
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'mg979/vim-visual-multi', { 'branch': 'master' }
 Plug 'nelstrom/vim-visual-star-search'

@@ -9,24 +9,23 @@
 call plug#begin('~/.config/nvim/autoload')
 
 Plug 'andymass/vim-matchup'
-Plug 'ap/vim-css-color', { 'for': ['css', 'scss'] }
 Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
+Plug 'itchyny/vim-gitbranch'
+Plug 'mengelbrecht/lightline-bufferline'
+Plug 'ap/vim-css-color'
 Plug 'jesseleite/vim-agriculture'
 Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf',
 Plug 'junegunn/fzf.vim'
 Plug 'machakann/vim-sandwich'
-Plug 'mengelbrecht/lightline-bufferline'
 Plug 'mg979/vim-visual-multi', { 'branch': 'master' }
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'sheerun/vim-polyglot'
-Plug 'suan/vim-instant-markdown', { 'for': 'markdown' }
 Plug 'tpope/vim-commentary'
 Plug 'RRethy/vim-illuminate'
 Plug 'airblade/vim-gitgutter'
-Plug 'itchyny/vim-gitbranch'
 Plug 'samoshkin/vim-mergetool', {
       \'on': [
       \  'MergetoolStart',

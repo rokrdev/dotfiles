@@ -1,3 +1,5 @@
+let g:floaterm_shell="fish"
+
 function! OpenFloaterm(cmd, title, height, width, ...)
   let pre = a:0 >= 1 ? a:1 : ''
   exe pre
@@ -16,5 +18,6 @@ nmap <Leader>gg :call OpenFloaterm('tig status', 'Status', 0.99, 0.99)<CR>
 nmap <Leader>gb :call OpenFloaterm('tig ' . expand('%'), 'Blame', 0.99, 0.99)<CR>
 nmap <Leader>gu :call OpenFloaterm('tig log @{u}.. -p', 'Unpushed', 0.99, 0.99)<CR>
 nmap <Leader>n :call OpenFloaterm('nnn -d', 'NNN', 0.60, 0.80, 'lcd %:p:h')<CR>
+" nmap <Leader>- :call OpenFloaterm('', 'Term', 0.60, 0.80)<CR>
 
 highlight FloatermBorder guifg=#82aaff

@@ -13,8 +13,8 @@ set foldlevel=2
 set nofoldenable
 set showmatch           " Show matching brackets.
 set nocursorline
+set cc=80
 set nu rnu              " Show the line numbers on the left side.
-" set number relativenumber
 set formatoptions+=o    " Continue comment marker in new lines.
 set expandtab           " Insert spaces when TAB is pressed.
 " set tabstop=2           " Render TABs using this many spaces.
@@ -89,7 +89,7 @@ nnoremap Q @@
 nmap s <Nop>
 xmap s <Nop>
 
-nmap sc :nohl<CR>
+nnoremap <esc><esc> :silent! nohl<CR>
 
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
@@ -127,6 +127,8 @@ nnoremap [<Space> O<Esc>
 nnoremap ]<Space> o<Esc>
 nnoremap [q :cprevious<CR>
 nnoremap ]q :cnext<CR>
+
+inoremap <C-c> <esc>
 
 let g:cursorhold_updatetime = 100
 

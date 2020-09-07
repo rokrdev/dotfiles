@@ -27,7 +27,7 @@ window:
 scrolling:
   history: 10000
 
-  multiplier: 10
+  multiplier: 5
 
 
 # Font configuration

@@ -4,4 +4,4 @@ _build
 .elixir_ls
 .git
 package.lock
-yarn.log
+yarn.lock

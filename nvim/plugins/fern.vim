@@ -58,7 +58,7 @@ function! FernInit() abort
   nmap <buffer> ! <Plug>(fern-action-mark:toggle)
   nmap <buffer> k <Up>
   nmap <buffer> j <Down>
-  nmap <buffer> gq :bd<CR>
+  nmap <buffer> q :bd<CR>
   nmap <buffer> h <Plug>(fern-action-collapse)
   nmap <buffer> l <Plug>(fern-action-open-or-expand)
   nmap <buffer> < <Plug>(fern-action-leave)

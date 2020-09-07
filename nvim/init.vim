@@ -21,7 +21,6 @@ Plug 'mengelbrecht/lightline-bufferline'
 Plug 'mg979/vim-visual-multi', { 'branch': 'master' }
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-Plug 'ntpeters/vim-better-whitespace'
 Plug 'sheerun/vim-polyglot'
 Plug 'suan/vim-instant-markdown', { 'for': 'markdown' }
 Plug 'tpope/vim-commentary'
@@ -681,9 +680,12 @@ nnoremap <Leader>ts :T<CR>
 nnoremap <Leader>tv :VT<CR>
 
 
+highlight default link EndOfLineSpace ErrorMsg
+match EndOfLineSpace / \+$/
+autocmd InsertEnter * hi link EndOfLineSpace Normal
+autocmd InsertLeave * hi link EndOfLineSpace ErrorMsg
 
-let g:better_whitespace_enabled=1
-let g:strip_whitespace_on_save=1
+
 
 nnoremap [w :PrevTrailingWhitespace<CR>
 nnoremap ]w :NextTrailingWhitespace<CR>

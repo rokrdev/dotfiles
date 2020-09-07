@@ -112,6 +112,9 @@ export NNN_BMS='d:~/Downloads;p:~/projects;D:~/Documents'
 set -x SHELL /bin/zsh
 
 
+set __fish_git_prompt_show_informative_status
+set __fish_git_prompt_showcolorhints
+set __fish_git_prompt_showupstream "informative"
 
 function fish_greeting --description 'Override fish_greeting'
   printf "%s\n"

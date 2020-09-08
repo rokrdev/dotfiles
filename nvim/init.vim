@@ -383,6 +383,10 @@ augroup END
 
 
 let g:floaterm_shell="fish"
+if has('nvim')
+  let $GIT_EDITOR = 'nvr -cc split --remote-wait'
+endif
+autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
 
 function! OpenFloaterm(cmd, title, height, width, ...)
   let pre = a:0 >= 1 ? a:1 : ''

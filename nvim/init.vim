@@ -477,6 +477,9 @@ function! LightlineSignify()
    endif
 endfunction
 
+" show signify status in statusline without delay
+autocmd User Signify call lightline#update()
+
 " ============================================================
 " nightowl
 " ============================================================

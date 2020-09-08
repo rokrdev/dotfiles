@@ -17,7 +17,7 @@ Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-commentary'
 Plug 'RRethy/vim-illuminate'
-Plug 'airblade/vim-gitgutter'
+Plug 'mhinz/vim-signify'
 Plug 'samoshkin/vim-mergetool', {
       \'on': [
       \  'MergetoolStart',
@@ -441,6 +441,12 @@ nnoremap <Leader>f :Rg<CR>
 nmap <Leader>F <Plug>RgRawSearch
 
 
+set updatetime=100
+highlight SignifySignAdd    ctermbg=233 ctermfg=149 guifg=#addb67 guibg=#011627 cterm=NONE gui=NONE
+highlight SignifySignDelete ctermbg=233 ctermfg=204 guifg=#ff5874 guibg=#011627 cterm=NONE gui=NONE
+highlight SignifySignChange ctermbg=233 ctermfg=222 guifg=#ecc48d guibg=#011627 cterm=NONE gui=NONE
+
+
 
 function! LightlineReadonly()
   return &readonly ? '' : ''
@@ -451,8 +457,24 @@ function! LightlineFugitive()
    return branch !=# '' ? ' '.branch : ''
 endfunction
 
-function! LightlineGitGutterStatus()
-  return join(filter(map(['A','M','D'], {i,v -> v.': '.GitGutterGetHunkSummary()[i]}), 'v:val[-1:]'), ' ')
+function! LightlineSignify()
+   let [added, modified, removed] = sy#repo#get_stats()
+   let l:sy = ''
+   for [flag, flagcount] in [
+                     \   [exists("g:signify_sign_add")?g:signify_sign_add:'+', added],
+                     \   [exists("g:signify_sign_delete")?g:signify_sign_delete:'-', removed],
+                     \   [exists("g:signify_sign_change")?g:signify_sign_change:'!', modified]
+                     \ ]
+         if flagcount> 0
+               let l:sy .= printf('%s%d', flag, flagcount)
+         endif
+   endfor
+   if !empty(l:sy)
+         let l:sy = printf('[%s]', l:sy)
+         return printf('%s', l:sy)
+   else
+         return ''
+   endif
 endfunction
 
 " ============================================================
@@ -522,12 +544,12 @@ let g:lightline = {
 \   'component_function': {
 \     'readonly': 'LightlineReadonly',
 \     'fugitive': 'LightlineFugitive',
-\     'gitdiff': 'LightlineGitGutterStatus',
+\     'gitdiff': 'LightlineSignify'
 \   },
 \   'tabline': {'left': [['buffers']], 'right':[]},
 \   'component_expand': {
 \     'buffers': 'lightline#bufferline#buffers',
-\     'gitdiff': 'LightlineGitGutterStatus',
+\     'gitdiff': 'LightlineSignify'
 \   },
 \   'component_type': {
 \     'buffers': 'tabsel',

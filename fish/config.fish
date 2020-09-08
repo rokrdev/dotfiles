@@ -115,6 +115,12 @@ set -x SHELL /bin/zsh
 set __fish_git_prompt_show_informative_status
 set __fish_git_prompt_showcolorhints
 set __fish_git_prompt_showupstream "informative"
+set fish_color_cwd blue
+set __fish_git_prompt_color_branch magenta
+
+function fish_prompt --description 'Write out the prompt'
+    echo -n -s (set_color $fish_color_cwd) (prompt_pwd) (fish_vcs_prompt) (set_color normal) '> '
+end
 
 function fish_greeting --description 'Override fish_greeting'
   printf "%s\n"

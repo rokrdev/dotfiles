@@ -1,11 +1,3 @@
-" auto-install vim-plug
-"if empty(glob('~/.config/nvim/autoload/plug.vim'))
-"  silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
-"    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-"  "autocmd VimEnter * PlugInstall
-"  autocmd VimEnter * PlugInstall | source $MYVIMRC
-"endif
-
 call plug#begin('~/.config/nvim/autoload')
 
 Plug 'andymass/vim-matchup'
@@ -47,26 +39,7 @@ call plug#end()
 
 packadd cfilter
 
-" " Automatically install missing plugins on startup
-" autocmd VimEnter *
-"   \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-"   \|   PlugInstall --sync | q
-"   \| endif
 
-
-
-function! JSFolds()
-  let thisline = getline(v:lnum)
-  if thisline =~? '\v^\s*$'
-    return '-1'
-  endif
-
-  if thisline =~ '^import.*$'
-    return 1
-  else
-    return indent(v:lnum) / &shiftwidth
-  endif
-endfunction
 
 function! SingleToMulti() abort
     normal! 0f{
@@ -152,8 +125,6 @@ autocmd BufReadPre * let curFile=expand("<afile>") | if getfsize(curFile)
 
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 autocmd StdinReadPre * let s:std_in=1
-autocmd FileType javascript setlocal foldmethod=expr
-autocmd FileType javascript setlocal foldexpr=JSFolds()
 autocmd BufRead *.md setlocal spell
 autocmd BufRead *.markdown setlocal spell
 autocmd QuickFixCmdPost [^l]* nested cwindow
@@ -263,21 +234,6 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" " Use tab for trigger completion with characters ahead and navigate.
-" " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" " other plugin before putting this into your config.
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? "\<C-n>" :
-"       \ <SID>check_back_space() ? "\<TAB>" :
-"       \ coc#refresh()
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? coc#_select_confirm() :
-"       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-"       \ <SID>check_back_space() ? "\<TAB>" :
-"       \ coc#refresh()
-
 let g:coc_snippet_next = '<tab>'
 
 " Use <c-space> to trigger completion.
@@ -308,41 +264,8 @@ nnoremap <silent> K :call <SID>show_documentation()<CR>
 " Highlight symbol under cursor on CursorHold
 " autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Remap for rename current word
-nmap <Leader>rn <Plug>(coc-rename)
-
-" Remap for format selected region
-xmap <Leader>cm <Plug>(coc-format-selected)
-nmap <Leader>cm <Plug>(coc-format-selected)
-
-augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
-
-" Remap for do codeAction of selected region, ex: `<Leader>aap` for current paragraph
-xmap <Leader>a <Plug>(coc-codeaction-selected)
-nmap <Leader>a <Plug>(coc-codeaction-selected)
-
-" Remap for do codeAction of current line
-nmap <Leader>ac <Plug>(coc-codeaction)
-" Fix autofix problem of current line
-nmap <Leader>qf <Plug>(coc-fix-current)
-
-" Create mappings for function text object, requires document symbols feature of languageserver.
-xmap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap if <Plug>(coc-funcobj-i)
-omap af <Plug>(coc-funcobj-a)
-
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
-
-" Use `:Fold` to fold current buffer
-command! -nargs=? Fold :call CocAction('fold', <f-args>)
 
 " use `:OR` for organize import of current buffer
 command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
@@ -684,8 +607,6 @@ match EndOfLineSpace / \+$/
 autocmd InsertEnter * hi link EndOfLineSpace Normal
 autocmd InsertLeave * hi link EndOfLineSpace ErrorMsg
 
-
-
-nnoremap [w :PrevTrailingWhitespace<CR>
-nnoremap ]w :NextTrailingWhitespace<CR>
+command! DisableTrailingWhitespace hi link EndOfLineSpace Normal
+command! EnableTrailingWhitespace hi link EndOfLineSpace ErrorMsg
 

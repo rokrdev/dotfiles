@@ -331,8 +331,8 @@ bind status pu !git pull
 bind status pU ?git pull --rebase
 
 # reset/rebase/revert
-bind main uu ?git reset %(commit) --soft
-bind main uh ?git reset %(commit) --hard
+bind main uu ?git reset --soft HEAD~1
+bind main uh ?git reset --hard HEAD~1
 bind main B !?git rebase -i %(commit)
 bind main ! ?git revert %(commit)
 

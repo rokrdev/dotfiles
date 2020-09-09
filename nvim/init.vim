@@ -27,7 +27,6 @@ Plug 'samoshkin/vim-mergetool', {
 Plug 'tpope/vim-repeat'
 Plug 'antoinemadec/FixCursorHold.nvim' "cursor hold issue with neovim
 Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
-Plug 'voldikss/vim-floaterm', { 'on': 'FloatermNew' }
 Plug 'rhysd/git-messenger.vim', { 'on': '<Plug>(git-messenger)' }
 Plug 'styled-components/vim-styled-components', {
       \'branch': 'main',
@@ -382,37 +381,29 @@ augroup END
 
 
 
-let g:floaterm_shell="fish"
+" run pip install neovim-remote for nvr
 if has('nvim')
-  let $GIT_EDITOR = 'nvr -cc split --remote-wait'
+      let $GIT_EDITOR = 'nvr -cc split --remote-wait'
 endif
+" :wq saves commit message and close the split
 autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
 
-function! OpenFloaterm(cmd, title, height, width, ...)
-  let pre = a:0 >= 1 ? a:1 : ''
-  exe pre
-
-  let cmdList = ['FloatermNew']
-  call add(cmdList, '--height='.string(a:height))
-  call add(cmdList, '--width='.string(a:width))
-  call add(cmdList, '--autoclose=1')
-  call add(cmdList, '--name='.a:title)
-  call add(cmdList, a:cmd)
-
-  exe join(cmdList, ' ')
+function! OpenTerm(cmd, ...)
+      let pre = a:0 >= 1 ? a:1 : ''
+      exe pre
+      exe 'term '.a:cmd
 endfunction
 
-nmap <Leader>gg :call OpenFloaterm('tig status', 'Status', 0.99, 0.99)<CR>
-nmap <Leader>gb :call OpenFloaterm('tig ' . expand('%'), 'Blame', 0.99, 0.99)<CR>
-nmap <Leader>gu :call OpenFloaterm('tig log @{u}.. -p', 'Unpushed', 0.99, 0.99)<CR>
-nmap <Leader>n :call OpenFloaterm('nnn -d', 'NNN', 0.60, 0.80, 'lcd %:p:h')<CR>
-" nmap <Leader>- :call OpenFloaterm('', 'Term', 0.60, 0.80)<CR>
+autocmd TermClose * bd!
 
-highlight FloatermBorder guifg=#82aaff
-
+nmap <Leader>gg :call OpenTerm('tig status')<CR>
+nmap <Leader>gb :call OpenTerm('tig ' . expand('%'))<CR>
+nmap <Leader>gu :call OpenTerm('tig log @{u}.. -p')<CR>
+nmap <Leader>n :call OpenTerm('nnn -d', 'lcd %:p:h')<CR>
 
 
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9, 'border': 'rounded', 'highlight': 'Directory' }}
+
+" let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9, 'border': 'rounded', 'highlight': 'Directory' }}
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1

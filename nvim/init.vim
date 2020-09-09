@@ -199,9 +199,14 @@ let g:cursorhold_updatetime = 100
 autocmd User visual_multi_mappings  imap <buffer><expr> <CR> pumvisible() ? "\<C-Y>" : "\<Plug>(VM-I-Return)"
 
 nmap gb <Plug>(git-messenger)
+
+
+
 let g:mergetool_layout = 'mr'
 let g:mergetool_prefer_revision = 'local'
 nmap <Leader>gm <Plug>(MergetoolToggle)
+
+
 
 command! Gcd call GoToRoot()
 
@@ -403,6 +408,7 @@ nmap <Leader>n :call OpenTerm('nnn -d', 'lcd %:p:h')<CR>
 
 
 
+let g:fzf_layout = { 'window': 'enew'  }
 " let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9, 'border': 'rounded', 'highlight': 'Directory' }}
 
 " [Buffers] Jump to the existing window if possible
@@ -434,6 +440,15 @@ vmap <Leader>* <Plug>RgRawVisualSelection<CR>
 nnoremap <Leader>o :Files<CR>
 nnoremap <Leader>f :Rg<CR>
 nmap <Leader>F <Plug>RgRawSearch
+
+function! s:fzf_statusline()
+  " Override statusline as you like
+  highlight fzf1 guifg=#ecc48d guibg=#011627
+  setlocal statusline=%#fzf1#\ >\ %#fzf1#fzf
+endfunction
+
+autocmd! User FzfStatusLine call <SID>fzf_statusline()
+
 
 
 set updatetime=100

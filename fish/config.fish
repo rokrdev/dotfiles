@@ -27,7 +27,7 @@ set $fish_term24bit to "1"
 set fish_color_command blue
 
 alias br="broot --sizes -dp"
-alias brup='brew update; brew upgrade; brew cask upgrade; brew cleanup; brew doctor'
+alias brup='brew update; brew upgrade; brew upgrade --cask; brew cleanup; brew doctor'
 alias cat=bat
 alias dc='docker-compose'
 alias dcu='docker-compose up'

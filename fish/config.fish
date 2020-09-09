@@ -1,6 +1,6 @@
 export ALTERNATE_EDITOR="nvim"
 export VISUAL="nvim"
-export EDITOR="$VISUAL"
+export EDITOR="nvim"
 export TERM="alacritty"
 export FISH_CONFIG="$HOME/.config/fish/config.fish"
 set TERMINFO ~/.terminfo/

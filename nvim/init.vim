@@ -145,8 +145,10 @@ nnoremap <Leader>p "+p
 nnoremap <C-k> :bn<CR>
 nnoremap <C-j> :bp<CR>
 nnoremap gh :b#<CR>
-nnoremap <Leader>\| :stop<CR>
-nnoremap Q @@
+nnoremap Q q
+nnoremap q <Nop>
+nnoremap \| @@
+
 
 " for vim-sandwich
 nmap s <Nop>
@@ -452,7 +454,6 @@ autocmd! User FzfStatusLine call <SID>fzf_statusline()
 
 
 
-set updatetime=100
 highlight SignifySignAdd    ctermbg=233 ctermfg=149 guifg=#addb67 guibg=#011627 cterm=NONE gui=NONE
 highlight SignifySignDelete ctermbg=233 ctermfg=204 guifg=#ff5874 guibg=#011627 cterm=NONE gui=NONE
 highlight SignifySignChange ctermbg=233 ctermfg=222 guifg=#ecc48d guibg=#011627 cterm=NONE gui=NONE

@@ -140,8 +140,8 @@ nnoremap <A-j> :m .+1<CR>==
 nnoremap <A-k> :m .-2<CR>==
 nnoremap <Leader>c :e %:h/
 nnoremap <Leader>! :bd!<CR>
-noremap <Leader>y "+y
-noremap <Leader>p "+p
+nnoremap <Leader>y "+y
+nnoremap <Leader>p "+p
 nnoremap <C-k> :bn<CR>
 nnoremap <C-j> :bp<CR>
 nnoremap gh :b#<CR>
@@ -216,8 +216,6 @@ highlight Folded guifg=#806e6f
 highlight LineNr guifg=#4b6479
 highlight CursorLineNr guifg=#C5E4FD guibg=#011627
 " highlight CursorLine guibg=#263147
-" hide tilde end of buffer marker
-highlight EndOfBuffer guifg=#011627
 highlight illuminatedWord guibg=#32384C
 
 

@@ -43,13 +43,13 @@ ctrl + alt + shift - d : yabai -m window --resize right:-20:0
 #                   yabai -m space --focus "${index}"
 
 # fish command to create desktop, move window and follow focus
-fn - n  : yabai -m space --create && \
+ctrl + shift - n  : yabai -m space --create && \
          set index (yabai -m query --spaces --display | jq 'map(select(."native-fullscreen" == 0))[-1].index') && \
          yabai -m window --space $index && \
          yabai -m space --focus $index
 
 # destroy desktop
-fn - x : yabai -m space --destroy
+ctrl + shift  - x : yabai -m space --destroy
 
 # fast focus desktop
 ctrl - 0 : yabai -m space --focus recent
@@ -79,14 +79,8 @@ shift + alt - 9 : yabai -m window --space 9; yabai -m space --focus 9
 # equalize size of windows
 shift + alt - 0 : yabai -m space --balance
 
-# # rotate tree
-fn - r : yabai -m space --rotate 90
-
 # # toggle window fullscreen
-fn - f : yabai -m window --toggle zoom-fullscreen
-
-# # toggle window parent zoom
-fn - z : yabai -m window --toggle zoom-parent
+ctrl + shift - f : yabai -m window --toggle zoom-fullscreen
 
 # # toggle window native fullscreen
 cmd + ctrl  - f : yabai -m window --toggle native-fullscreen

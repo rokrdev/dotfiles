@@ -11,7 +11,6 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf',
 Plug 'junegunn/fzf.vim'
 Plug 'machakann/vim-sandwich'
-Plug 'mg979/vim-visual-multi', { 'branch': 'master' }
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'sheerun/vim-polyglot'
@@ -163,10 +162,10 @@ nnoremap <silent> <A--> :vertical resize -10<CR>
 nnoremap <silent> <A-+> :resize +10<CR>
 nnoremap <silent> <A-_> :resize -10<CR>
 
-nnoremap <Leader>r :%s///g<Left><Left>
-nnoremap <Leader>rc :%s///gc<Left><Left><Left>
-xnoremap <Leader>r :s///g<Left><Left>
-xnoremap <Leader>rc :s/\<'.expand('<cword>').'\>'//gc<Left><Left><Left>
+nnoremap <Leader>r :%s///g<Left><Left><Left>
+nnoremap <Leader>rc :%s///gc<Left><Left><Left><Left>
+nnoremap <silent>s# :let @/='\<'.expand('<cword>').'\>'<CR>cgN
+xnoremap <silent>s# "sy:let @/=@s<CR>cgN
 nnoremap <silent>s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
 xnoremap <silent>s* "sy:let @/=@s<CR>cgn
 
@@ -195,9 +194,6 @@ nnoremap ]q :cnext<CR>
 inoremap <C-c> <esc>
 
 let g:cursorhold_updatetime = 100
-
-" fix for <CR> in vim-visual-multiedit when coc-completion is visible
-autocmd User visual_multi_mappings  imap <buffer><expr> <CR> pumvisible() ? "\<C-Y>" : "\<Plug>(VM-I-Return)"
 
 nmap gb <Plug>(git-messenger)
 

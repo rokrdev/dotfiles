@@ -254,6 +254,9 @@ nmap <silent><Leader>gy <Plug>(coc-type-definition)
 nmap <silent><Leader>gi <Plug>(coc-implementation)
 nmap <silent><Leader>gr <Plug>(coc-references)
 
+nmap <Leader>ss :CocSearch<Space>
+nmap <Leader>sw :CocSearch <C-R>=expand("<cword>")<CR><CR>
+
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
@@ -553,7 +556,8 @@ let g:lightline = {
 \   'component_function': {
 \     'readonly': 'LightlineReadonly',
 \     'fugitive': 'LightlineFugitive',
-\     'gitdiff': 'LightlineSignify'
+\     'gitdiff': 'LightlineSignify',
+\     'cocstatus': 'coc#status',
 \   },
 \   'tabline': {'left': [['buffers']], 'right':[]},
 \   'component_expand': {
@@ -571,19 +575,6 @@ autocmd BufWritePost,TextChanged,TextChangedI,TermLeave * call lightline#update(
 
 
 let g:vim_markdown_conceal = 0
-
-
-
-" let g:loaded_matchit = 1
-" let g:matchup_matchparen_deferred = 1
-" let g:matchup_matchparen_deferred_show_delay = 50
-" let g:matchup_matchparen_deferred_hide_delay = 700
-" let g:matchup_matchpref = {
-"     \ 'html': { 'tagnameonly': 1, },
-"     \ 'vue':  { 'tagnameonly': 1, },
-"     \}
-
-" highlight MatchParen guibg=#011627 guifg=#7fdbca gui=underline
 
 
 

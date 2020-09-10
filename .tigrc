@@ -321,7 +321,7 @@ bind refs pF ?git push --force %(remote) %(branch)
 bind refs pu !git pull
 bind refs pU ?git pull --rebase
 
-bind refs	C	?git checkout %(branch)
+bind refs	c	?git checkout %(branch)
 
 bind status bc @git checkout -b "%(prompt Checkout at new branch: )" %(commit)
 bind status pp ?git push %(remote) %(branch)

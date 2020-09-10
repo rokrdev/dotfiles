@@ -1,3 +1,55 @@
+set showtabline=2
+set guicursor=
+set relativenumber
+set hidden
+set noerrorbells
+set tabstop=4 softtabstop=4
+set shiftwidth=4
+set expandtab
+set smartindent
+set nu
+set nowrap
+set smartcase
+set noswapfile
+set nobackup
+set undodir=~/.vim/undodir
+set undofile
+set incsearch
+set termguicolors
+set scrolloff=8
+set noshowmode
+set completeopt=menuone,noinsert,noselect
+
+" Give more space for displaying messages.
+set cmdheight=1
+
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=50
+
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=cI
+
+set colorcolumn=100
+set termguicolors
+
+set list
+set listchars=tab:>-,eol:¬
+
+set dir=~/.vim/swap//
+set showmatch           " Show matching brackets.
+set nocursorline
+set colorcolumn=100
+set autoread
+set redrawtime=10000
+set lazyredraw
+" More natural splits
+set splitbelow          " Horizontal split below current.
+set splitright          " Vertical split to right of current.
+set nowritebackup
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+set shell=/bin/zsh
+
 call plug#begin('~/.config/nvim/autoload')
 
 Plug 'andymass/vim-matchup'
@@ -31,7 +83,6 @@ Plug 'styled-components/vim-styled-components', {
       \'for': ['javascript', 'typescript', 'javascriptreact']
       \}
 Plug 'mcchrish/nnn.vim', { 'on': 'NnnPicker' }
-" Plug 'justinmk/vim-sneak'
 
 call plug#end()
 
@@ -64,58 +115,8 @@ endfunction
 
 
 let mapleader=" "
-set clipboard=unnamed
 let $TERM="alacritty"
-
 syntax enable
-
-set showtabline=2
-set dir=~/.vim/swap//
-set foldmethod=manual
-set foldlevel=2
-" set foldcolumn=2
-set nofoldenable
-set showmatch           " Show matching brackets.
-set nocursorline
-set cc=100
-set nu rnu              " Show the line numbers on the left side.
-set formatoptions+=o    " Continue comment marker in new lines.
-set expandtab           " Insert spaces when TAB is pressed.
-" set tabstop=2           " Render TABs using this many spaces.
-set shiftwidth=2        " Indentation amount for < and > commands.
-set softtabstop=2
-set nojoinspaces        " Prevents inserting two spaces after punctuation on a join (J)
-set encoding=utf-8
-set autoread
-set redrawtime=10000
-set lazyredraw
-" More natural splits
-set splitbelow          " Horizontal split below current.
-set splitright          " Vertical split to right of current.
-set nostartofline       " Do not jump to first character with page commands.
-set ignorecase
-set smartcase          " ... unless the query has capital letters.
-set gdefault
-set mouse=nicr
-set incsearch
-set noshowmode
-set splitbelow splitright
-set hidden
-set nobackup
-set nowritebackup
-set cmdheight=1
-set updatetime=100
-set shortmess+=cI
-set signcolumn=yes
-set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
-set shell=/bin/zsh
-set guifont=MonoLisa:h12
-set termguicolors
-set guicursor=
-
-set list
-set listchars=tab:>-,eol:¬
-
 filetype plugin indent on
 let g:large_file = 1024 * 1024 * 5  "5MB as large file
 autocmd BufReadPre * let curFile=expand("<afile>") | if getfsize(curFile)
@@ -123,11 +124,9 @@ autocmd BufReadPre * let curFile=expand("<afile>") | if getfsize(curFile)
 
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 autocmd StdinReadPre * let s:std_in=1
-autocmd BufRead *.md setlocal spell
-autocmd BufRead *.markdown setlocal spell
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
-autocmd FileType javascript nnoremap <buffer> s# :<C-u>silent call SingleToMulti()<CR>
+" autocmd FileType javascript nnoremap <buffer> s# :<C-u>silent call SingleToMulti()<CR>
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 " reload file on change
 autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
@@ -607,19 +606,6 @@ endfunction
 command! Scratch call ScratchGenerator()
 
 nnoremap <Leader>S :Scratch<CR>
-
-
-
-" let g:sneak#use_ic_scs = 1
-
-" map f <Plug>Sneak_f
-" map F <Plug>Sneak_F
-" map t <Plug>Sneak_t
-" map T <Plug>Sneak_T
-" map ss <Plug>SneakLabel_s
-" map SS <Plug>SneakLabel_S
-
-" highlight Sneak guifg=black guibg=#82aaff ctermfg=black ctermbg=cyan
 
 
 

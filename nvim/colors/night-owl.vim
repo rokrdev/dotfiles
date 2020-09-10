@@ -22,6 +22,7 @@ hi DiffText guifg=#011627 ctermfg=233 guibg=#addb67 ctermbg=149 gui=NONE cterm=N
 hi diffAdded guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
 hi diffRemoved guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
 hi VertSplit guifg=#777777 ctermfg=243 gui=NONE cterm=NONE
+hi MatchParen guifg=#7fdbca guibg=#011627 ctermfg=111 gui=underline cterm=underline
 hi Folded guifg=#777777 ctermfg=243 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
 hi FoldColumn guifg=#333333 ctermfg=236 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
 hi SignColumn guifg=NONE ctermfg=NONE guibg=#011627 ctermbg=233 gui=NONE cterm=NONE

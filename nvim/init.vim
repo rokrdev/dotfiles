@@ -52,7 +52,6 @@ set shell=/bin/zsh
 
 call plug#begin('~/.config/nvim/autoload')
 
-Plug 'andymass/vim-matchup'
 Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
 Plug 'itchyny/vim-gitbranch'
@@ -575,16 +574,16 @@ let g:vim_markdown_conceal = 0
 
 
 
-let g:loaded_matchit = 1
-let g:matchup_matchparen_deferred = 1
-let g:matchup_matchparen_deferred_show_delay = 50
-let g:matchup_matchparen_deferred_hide_delay = 700
-let g:matchup_matchpref = {
-    \ 'html': { 'tagnameonly': 1, },
-    \ 'vue':  { 'tagnameonly': 1, },
-    \}
+" let g:loaded_matchit = 1
+" let g:matchup_matchparen_deferred = 1
+" let g:matchup_matchparen_deferred_show_delay = 50
+" let g:matchup_matchparen_deferred_hide_delay = 700
+" let g:matchup_matchpref = {
+"     \ 'html': { 'tagnameonly': 1, },
+"     \ 'vue':  { 'tagnameonly': 1, },
+"     \}
 
-highlight MatchParen guibg=#011627 guifg=#7fdbca gui=underline
+" highlight MatchParen guibg=#011627 guifg=#7fdbca gui=underline
 
 
 
@@ -629,3 +628,7 @@ autocmd InsertLeave * hi link EndOfLineSpace ErrorMsg
 command! DisableTrailingWhitespace hi link EndOfLineSpace Normal
 command! EnableTrailingWhitespace hi link EndOfLineSpace ErrorMsg
 
+augroup highlight_yank
+    autocmd!
+    autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=250, on_visual=false}
+augroup END

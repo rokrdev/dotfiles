@@ -22,4 +22,4 @@
 [includeIf "gitdir:~/Documents/**/.git"]
 	path = ~/Documents/config.ib
 [commit]
-	template = /Users/bharat/.git_commit_msg.txt
+	template = ~/.git_commit_msg.txt

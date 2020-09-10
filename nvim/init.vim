@@ -82,7 +82,6 @@ Plug 'styled-components/vim-styled-components', {
       \'branch': 'main',
       \'for': ['javascript', 'typescript', 'javascriptreact']
       \}
-Plug 'mcchrish/nnn.vim', { 'on': 'NnnPicker' }
 
 call plug#end()
 
@@ -401,13 +400,6 @@ endfunction
 nmap <Leader>gg :call OpenTerm('tig status')<CR>
 nmap <Leader>gb :call OpenTerm('tig ' . expand('%'))<CR>
 nmap <Leader>gu :call OpenTerm('tig log @{u}.. -p')<CR>
-
-
-
-let g:nnn#set_default_mappings = 0
-let g:nnn#layout = 'tabnew' " or vnew, tabnew etc.
-let g:nnn#command = 'nnn -d'
-nnoremap <leader>n :NnnPicker '%:p:h'<CR>
 
 
 

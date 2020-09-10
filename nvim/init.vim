@@ -15,7 +15,6 @@ Plug 'nelstrom/vim-visual-star-search'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-commentary'
-Plug 'RRethy/vim-illuminate'
 Plug 'mhinz/vim-signify'
 Plug 'samoshkin/vim-mergetool', {
       \'on': [
@@ -182,7 +181,6 @@ noremap <expr> <Leader>0 ToggleNumberDisplay()
 nnoremap <Leader>qr :cfdo %s///g \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
 nnoremap <silent> <leader>qq :cclose<CR>
 
-let g:Illuminate_delay = 500
 
 nnoremap ][q :copen<CR>
 nnoremap []q :cclose<CR>
@@ -218,7 +216,6 @@ highlight Folded guifg=#806e6f
 highlight LineNr guifg=#4b6479
 highlight CursorLineNr guifg=#C5E4FD guibg=#011627
 " highlight CursorLine guibg=#263147
-highlight illuminatedWord guibg=#32384C
 
 
 
@@ -305,7 +302,6 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
-autocmd FileType coc-explorer IndentLinesDisable
 
 
 

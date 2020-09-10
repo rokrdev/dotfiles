@@ -388,12 +388,12 @@ endif
 autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
 
 function! OnTermExit(id, status, event)
-    exec 'bw!'
+    exe 'bw!'
 endfunction
 
 function! OpenTerm(cmd)
-  execute 'enew'
-  call termopen(a:cmd, {'on_exit': 'OnTermExit'})
+    exe 'tabnew'
+    call termopen(a:cmd, { 'on_exit': 'OnTermExit' })
 endfunction
 
 

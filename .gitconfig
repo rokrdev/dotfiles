@@ -1,23 +1,25 @@
 [core]
-  excludesfile = ~/.gitignore_global
+	excludesfile = ~/.gitignore_global
 [difftool]
-  prompt = true
+	prompt = true
 [diff]
-  tool = nvimdiff
+	tool = nvimdiff
 [difftool "nvimdiff"]
-  cmd = nvim -d "$REMOTE" "$LOCAL"
+	cmd = nvim -d "$REMOTE" "$LOCAL"
 [merge]
-  tool = nvimdiff
-  conflictStyle = diff3
+	tool = nvimdiff
+	conflictStyle = diff3
 [mergetool "nvimdiff"]
-  cmd = nvim -f -c "MergetoolStart" "$MERGED" "$BASE" "$LOCAL" "REMOTE"
+	cmd = nvim -f -c "MergetoolStart" "$MERGED" "$BASE" "$LOCAL" "REMOTE"
 [pull]
-  ff = only
+	ff = only
 [push]
-  default = current
+	default = current
 [includeIf "gitdir:~/projects/**/.git"]
-  path = ~/projects/config.personal
+	path = ~/projects/config.personal
 [includeIf "gitdir:~/Workspace/**/.git"]
-  path = ~/Workspace/config.ib
+	path = ~/Workspace/config.ib
 [includeIf "gitdir:~/Documents/**/.git"]
-  path = ~/Documents/config.ib
+	path = ~/Documents/config.ib
+[commit]
+	template = /Users/bharat/.git_commit_msg.txt

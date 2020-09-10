@@ -9,6 +9,7 @@ set expandtab
 set smartindent
 set nu
 set nowrap
+set ignorecase
 set smartcase
 set noswapfile
 set nobackup

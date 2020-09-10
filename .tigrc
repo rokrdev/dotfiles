@@ -255,6 +255,7 @@ bind status tt ?>git stash
 bind status tT @git stash push -m "%(prompt Enter stash name: )"
 
 # quick commit
+bind status c !git commit
 bind status a !>git commit --amend --no-edit
 bind status A !>git commit --amend
 

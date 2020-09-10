@@ -335,14 +335,14 @@ endfunction
 let g:fern#disable_default_mappings = 1
 
 function! OpenFern()
-  if bufname("%") == ""
-    exe "Fern . "
-  else
-    exe "Fern . -reveal=% "
-  endif
+    if bufname("%") == ""
+        exe "Fern . -drawer -toggle"
+    else
+        exe "Fern . -reveal=% -drawer -toggle"
+    endif
 endfunction
 
-noremap <silent> <Leader>tt :call OpenFern()<CR>
+noremap <silent> <Leader>n :call OpenFern()<CR>
 
 function! FernInit() abort
   nmap <buffer><expr>
@@ -358,12 +358,12 @@ function! FernInit() abort
   nmap <buffer> d <Plug>(fern-action-remove)
   nmap <buffer> m <Plug>(fern-action-move)
   nmap <buffer> c <Plug>(fern-action-copy)
-  nmap <buffer> M <Plug>(fern-action-rename)
-  nmap <buffer> H <Plug>(fern-action-hidden-toggle)
-  nmap <buffer> r <Plug>(fern-action-reload)
+  nmap <buffer> r <Plug>(fern-action-rename)
+  nmap <buffer> ! <Plug>(fern-action-hidden:toggle)
+  nmap <buffer> R <Plug>(fern-action-reload)
   nmap <buffer> b <Plug>(fern-action-open:split)
   nmap <buffer> v <Plug>(fern-action-open:vsplit)
-  nmap <buffer> ! <Plug>(fern-action-mark:toggle)
+  nmap <buffer> - <Plug>(fern-action-mark:toggle)
   nmap <buffer> k <Up>
   nmap <buffer> j <Down>
   nmap <buffer> q :bd<CR>
@@ -419,7 +419,6 @@ let g:fzf_tags_command = 'ctags &'
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
 let g:fzf_action = {
-  \ 'ctrl-t': 'tab split',
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 

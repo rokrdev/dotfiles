@@ -40,9 +40,7 @@ set listchars=tab:>-,eol:¬
 set dir=~/.vim/swap//
 set showmatch           " Show matching brackets.
 set nocursorline
-set colorcolumn=100
 set autoread
-set redrawtime=10000
 set lazyredraw
 " More natural splits
 set splitbelow          " Horizontal split below current.
@@ -74,7 +72,6 @@ Plug 'samoshkin/vim-mergetool', {
       \  'MergetoolToggle',
       \  '<Plug>(MergetoolToggle)'
       \]}
-Plug 'tpope/vim-repeat'
 Plug 'antoinemadec/FixCursorHold.nvim' "cursor hold issue with neovim
 Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
 Plug 'rhysd/git-messenger.vim', { 'on': '<Plug>(git-messenger)' }

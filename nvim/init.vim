@@ -388,13 +388,15 @@ endif
 " :wq saves commit message and close the split
 autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
 
-function! OpenTerm(cmd, ...)
-      let pre = a:0 >= 1 ? a:1 : ''
-      exe pre
-      exe 'term '.a:cmd
+function! OnTermExit(id, status, event)
+    exec 'bw!'
 endfunction
 
-autocmd TermClose * bd!
+function! OpenTerm(cmd)
+  execute 'enew'
+  call termopen(a:cmd, {'on_exit': 'OnTermExit'})
+endfunction
+
 
 nmap <Leader>gg :call OpenTerm('tig status')<CR>
 nmap <Leader>gb :call OpenTerm('tig ' . expand('%'))<CR>

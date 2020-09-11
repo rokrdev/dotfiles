@@ -268,8 +268,8 @@ bind stash p ?>git stash pop %(stash)
 #====================
 # stage view
 #====================
-bind stage <Esc>j  :/^@@
-bind stage <Esc>k  :?^@@
+bind stage <C-n>  :/^@@
+bind stage <C-p>  :?^@@
 bind stage s status-update
 bind stage r status-revert
 
@@ -282,10 +282,8 @@ bind log <C-K> :?^commit
 #====================
 # diff view
 #====================
-bind diff <C-J> :/^@@
-bind diff <C-K> :?^@@
-bind diff <Esc>j :/^diff --(git|cc)
-bind diff <Esc>k :?^diff --(git|cc)
+bind diff <C-n> :/^@@
+bind diff <C-p> :?^@@
 
 bind diff m >tig -- %(file)
 bind diff u @git checkout %(commit)^ -- %(file)

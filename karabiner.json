@@ -41,23 +41,6 @@
             ]
           },
           {
-            "description": "change left ctrl to ctrl+shift",
-            "manipulators": [
-              {
-                "from": {
-                  "key_code": "left_control"
-                },
-                "to": [
-                  {
-                    "key_code": "left_control",
-                    "modifiers": ["left_shift"]
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
             "description": "Disable fn key if pressed alone",
             "manipulators": [
               {
@@ -83,13 +66,13 @@
             ]
           },
           {
-            "description": "Map left_ctrl+shift+h/i/j/k as arrows.",
+            "description": "Map left_ctrl+h/i/j/k as arrows.",
             "manipulators": [
               {
                 "from": {
                   "key_code": "h",
                   "modifiers": {
-                    "mandatory": ["control", "shift"]
+                    "mandatory": ["control"]
                   }
                 },
                 "to": [
@@ -103,7 +86,7 @@
                 "from": {
                   "key_code": "l",
                   "modifiers": {
-                    "mandatory": ["control", "shift"]
+                    "mandatory": ["control"]
                   }
                 },
                 "to": [
@@ -117,7 +100,7 @@
                 "from": {
                   "key_code": "j",
                   "modifiers": {
-                    "mandatory": ["control", "shift"]
+                    "mandatory": ["control"]
                   }
                 },
                 "to": [
@@ -131,45 +114,12 @@
                 "from": {
                   "key_code": "k",
                   "modifiers": {
-                    "mandatory": ["control", "shift"]
+                    "mandatory": ["control"]
                   }
                 },
                 "to": [
                   {
                     "key_code": "up_arrow"
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "Map control+shift+u/d as page-up/down.",
-            "manipulators": [
-              {
-                "from": {
-                  "key_code": "u",
-                  "modifiers": {
-                    "mandatory": ["control", "shift"]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "page_up"
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "d",
-                  "modifiers": {
-                    "mandatory": ["control", "shift"]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "page_down"
                   }
                 ],
                 "type": "basic"

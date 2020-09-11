@@ -130,15 +130,14 @@ autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
 autocmd FileChangedShellPost *
       \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
-nnoremap <A-j> :m .+1<CR>==
-nnoremap <A-k> :m .-2<CR>==
+nnoremap <C-n> :m .+1<CR>==
+nnoremap <C-p> :m .-2<CR>==
 nnoremap <Leader>c :e %:h/
 nnoremap <Leader>! :bd!<CR>
 nnoremap <Leader>y "+y
 nnoremap <Leader>p "+p
-nnoremap <A-l> :bn<CR>
-nnoremap <A-h> :bp<CR>
 nnoremap gh :b#<CR>
+nnoremap <C-b> :ls<cr>:b<space>
 nnoremap Q q
 nnoremap q <Nop>
 nnoremap \| @@
@@ -150,8 +149,8 @@ xmap s <Nop>
 
 nnoremap <esc><esc> :silent! nohl<CR>
 
-vnoremap <A-j> :m '>+1<CR>gv=gv
-vnoremap <A-k> :m '<-2<CR>gv=gv
+vnoremap <C-n> :m '>+1<CR>gv=gv
+vnoremap <C-p> :m '<-2<CR>gv=gv
 
 nnoremap <silent> <A-=> :vertical resize +10<CR>
 nnoremap <silent> <A--> :vertical resize -10<CR>

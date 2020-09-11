@@ -17,7 +17,7 @@ source ~/.env
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -S'
 export FZF_CTRL_R_OPTS='--sort --exact'
 export FZF_TMUX=1
-export FZF_DEFAULT_OPTS='--no-reverse --bind=ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all --color=fg:#d6deeb,bg:#011627,hl:#addb67 --color=fg+:#82aaff,bg+:#022a4a,hl+:#82aaff --color=info:#7fdbca,gutter:#011627,prompt:#c792ea,pointer:#c792ea --color=marker:#82aaff,spinner:#c792ea,header:#7fdbca'
+export FZF_DEFAULT_OPTS='--layout=reverse --bind=ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all --color=fg:#d6deeb,bg:#011627,hl:#addb67 --color=fg+:#82aaff,bg+:#022a4a,hl+:#82aaff --color=info:#7fdbca,gutter:#011627,prompt:#c792ea,pointer:#c792ea --color=marker:#82aaff,spinner:#c792ea,header:#7fdbca'
 
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 # defaults write NSGlobalDomain KeyRepeat -float 1.5
@@ -62,7 +62,7 @@ alias nv="~/.npm-packages/bin/n"
 alias python=~/opt/miniconda3/bin/python
 alias pip=~/opt/miniconda3/bin/pip
 alias p=~/opt/miniconda3/bin/python
-alias rf=rimraf
+alias rf=trash
 alias sar="brew services restart skhd"
 # alias ssh="bash ~/start_ssh.sh"
 alias st=speedtest-cli

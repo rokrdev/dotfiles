@@ -418,11 +418,14 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-let g:fzf_preview_window = ''
+let g:fzf_preview_window = 'right:50%'
 
 au FileType fzf tunmap <buffer> <Esc>
 
-command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
+command! -bang -nargs=* Rg
+            \call fzf#vim#grep(
+            \  "rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1,
+            \  fzf#vim#with_preview(), <bang>0)
 
 nnoremap <Leader><Space> :Buffers<CR>
 nmap <Leader>* <Plug>RgRawWordUnderCursor<CR>

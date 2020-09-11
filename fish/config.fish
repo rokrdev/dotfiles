@@ -112,6 +112,7 @@ export NNN_BMS='d:~/Downloads;p:~/projects;D:~/Documents'
 set -x SHELL /bin/zsh
 
 
+fish_vi_key_bindings
 set __fish_git_prompt_show_informative_status
 set __fish_git_prompt_showcolorhints 'yes'
 set __fish_git_prompt_showupstream 'informative'
@@ -125,32 +126,49 @@ set __fish_git_prompt_color_upstream cyan
 set fish_color_cwd blue
 set __fish_git_prompt_color_branch magenta
 
+function fish_mode_prompt --description 'Displays the current mode'
+    # Do nothing if not in vi mode
+    if test "$fish_key_bindings" = "fish_vi_key_bindings"
+        switch $fish_bind_mode
+            case default
+                set_color --bold blue
+                echo ▲
+            case insert
+                set_color --bold green
+                echo ▲
+            case replace-one
+                set_color --bold yellow
+                echo ▲
+            case visual
+                set_color --bold brmagenta
+                echo ▲
+        end
+        set_color normal
+        printf " "
+    end
+end
+
 function fish_prompt --description 'Write out the prompt'
-  set -l prompt ' ~>> '
+    set -l prompt ' ~>> '
 
-  set -l prompt_color blue
-  if test $status -ne 0
-    set prompt_color red
-  end
+    set -l prompt_color blue
+    if test $status -ne 0
+        set prompt_color red
+    end
 
-  set -l pwd (prompt_pwd)
-  if test $pwd = '~'
-    set pwd ''
-    # remove extra space from at the beginning of prompt
-    set prompt '~>> '
-  end
+    set -l pwd (prompt_pwd)
+    if test $pwd = '~'
+        set pwd ''
+        # remove extra space from at the beginning of prompt
+        set prompt '~>> '
+    end
 
-  set -l vcs (fish_vcs_prompt)
+    set -l vcs (fish_vcs_prompt)
 
-  echo -n -s (set_color $fish_color_cwd) $pwd $vcs (set_color $prompt_color) $prompt
+    echo -n -s (set_color $fish_color_cwd) $pwd $vcs (set_color $prompt_color) $prompt
 end
 
 set fish_greeting
-# function fish_greeting --description 'Override fish_greeting'
-#   # printf "\n"
-#   # fortune -s 50% wisdom 50% computers
-#   # printf "\n"
-# end
 
 # function f --description 'Fuzzy find file and open in vim'
 #     set files (echo (eval "$FZF_DEFAULT_COMMAND | fzf --multi --exit-0"))
@@ -173,4 +191,5 @@ function kp --description 'Fuzzy search and kill process'
         kp
     end
 end
+
 

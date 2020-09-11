@@ -136,8 +136,8 @@ nnoremap <Leader>c :e %:h/
 nnoremap <Leader>! :bd!<CR>
 nnoremap <Leader>y "+y
 nnoremap <Leader>p "+p
-nnoremap <C-k> :bn<CR>
-nnoremap <C-j> :bp<CR>
+nnoremap <A-l> :bn<CR>
+nnoremap <A-h> :bp<CR>
 nnoremap gh :b#<CR>
 nnoremap Q q
 nnoremap q <Nop>

@@ -227,10 +227,6 @@ bind generic	<C-C>	quit			# Close all views and quit
 bind generic gg move-first-line
 bind generic G move-last-line
 
-# scroll right easily
-bind generic <C-H> scroll-left
-bind generic <C-L> scroll-right
-
 #  refresh
 bind generic <C-R> refresh
 
@@ -272,10 +268,8 @@ bind stash p ?>git stash pop %(stash)
 #====================
 # stage view
 #====================
-bind stage <C-J> :/^@@
-bind stage <C-K> :?^@@
-bind stage <Esc>j :/^diff --(git|cc)
-bind stage <Esc>k :?^diff --(git|cc)
+bind stage <Esc>j  :/^@@
+bind stage <Esc>k  :?^@@
 bind stage s status-update
 bind stage r status-revert
 

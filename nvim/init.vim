@@ -1,4 +1,4 @@
-set showtabline=2
+set showtabline=0
 set guicursor=
 set number relativenumber
 set hidden
@@ -41,7 +41,6 @@ call plug#begin('~/.config/nvim/autoload')
 Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
 Plug 'itchyny/vim-gitbranch'
-Plug 'mengelbrecht/lightline-bufferline'
 Plug 'ap/vim-css-color'
 Plug 'jesseleite/vim-agriculture'
 Plug 'jiangmiao/auto-pairs'
@@ -509,13 +508,10 @@ let g:lightline = {
             \     'gitdiff': 'LightlineSignify',
             \     'cocstatus': 'coc#status',
             \   },
-            \   'tabline': {'left': [['buffers']], 'right':[]},
             \   'component_expand': {
-            \     'buffers': 'lightline#bufferline#buffers',
             \     'gitdiff': 'LightlineSignify'
             \   },
             \   'component_type': {
-            \     'buffers': 'tabsel',
             \     'gitdiff': 'middle',
             \   },
             \ }

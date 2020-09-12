@@ -33,6 +33,7 @@ set splitright          " Vertical split to right of current.
 set nowritebackup
 set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 set shell=/bin/zsh
+set nowrap
 
 
 
@@ -285,6 +286,10 @@ endfunction
 
 " Custom settings and mappings.
 let g:fern#disable_default_mappings = 1
+let g:fern#default_hidden = 1
+let g:fern#renderer#default#leaf_symbol = "  "
+let g:fern#renderer#default#collapsed_symbol = "+ "
+let g:fern#renderer#default#expanded_symbol = "- "
 
 function! OpenFern()
     if bufname("%") == ""
@@ -297,6 +302,7 @@ endfunction
 noremap <silent> - :call OpenFern()<CR>
 
 function! FernInit() abort
+    setlocal nonumber norelativenumber
     nmap <buffer><expr>
                 \ <Plug>(fern-my-open-expand-collapse)
                 \ fern#smart#leaf(
@@ -315,7 +321,7 @@ function! FernInit() abort
     nmap <buffer> R <Plug>(fern-action-reload)
     nmap <buffer> b <Plug>(fern-action-open:split)
     nmap <buffer> v <Plug>(fern-action-open:vsplit)
-    nmap <buffer> ! <Plug>(fern-action-mark:toggle)
+    nmap <buffer> <Tab> <Plug>(fern-action-mark:toggle)
     nmap <buffer> k <Up>
     nmap <buffer> j <Down>
     nmap <buffer> q :bd<CR>

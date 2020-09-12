@@ -399,8 +399,8 @@ nmap <Leader>gu :call OpenTerm('tig log @{u}.. -p')<CR>
 
 
 
-let g:fzf_layout = { 'window': 'enew'  }
-" let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9, 'border': 'rounded', 'highlight': 'Directory' }}
+" let g:fzf_layout = { 'window': 'split enew'  }
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9, 'border': 'rounded', 'highlight': 'Directory' }}
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1

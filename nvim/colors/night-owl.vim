@@ -22,14 +22,14 @@ hi DiffText guifg=#011627 ctermfg=233 guibg=#addb67 ctermbg=149 gui=NONE cterm=N
 hi diffAdded guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
 hi diffRemoved guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
 hi VertSplit guifg=#777777 ctermfg=243 gui=NONE cterm=NONE
-hi MatchParen guifg=#7fdbca guibg=#011627 ctermfg=111 gui=underline cterm=underline
+hi MatchParen guifg=#7fdbca guibg=#011627 ctermfg=111 gui=bold cterm=bold
 hi Folded guifg=#777777 ctermfg=243 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
 hi FoldColumn guifg=#333333 ctermfg=236 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
 hi SignColumn guifg=NONE ctermfg=NONE guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
 hi IncSearch guifg=#011627 ctermfg=255 guibg=#8187A2 ctermbg=222 gui=NONE cterm=NONE
 hi NonText guifg=#444444 ctermfg=238 gui=NONE cterm=NONE
-hi PMenu guibg=#2d2c5d ctermbg=236 gui=NONE cterm=NONE
-hi PMenuSel guibg=#c792ea ctermbg=176 gui=NONE cterm=NONE
+hi PMenu guibg=#2d2c5d ctermbg=236 guifg=#d6deeb ctermfg=253 gui=NONE cterm=NONE
+hi PMenuSel guibg=#82aaff ctermbg=111 guifg=#011627 ctermfg=233 gui=bold cterm=bold
 hi Search guifg=#011627 ctermfg=233 guibg=#8187A2 ctermbg=222 gui=NONE cterm=NONE
 hi SpecialKey guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
 hi StatusLine guifg=#eeeeee ctermfg=255 guibg=#112630 ctermbg=235 gui=NONE cterm=NONE

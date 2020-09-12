@@ -1,14 +1,11 @@
 set showtabline=2
 set guicursor=
-set relativenumber
+set number relativenumber
 set hidden
-set noerrorbells
 set tabstop=4 softtabstop=4
 set shiftwidth=4
 set expandtab
 set smartindent
-set nu
-set nowrap
 set ignorecase
 set smartcase
 set noswapfile
@@ -20,34 +17,24 @@ set termguicolors
 set scrolloff=8
 set noshowmode
 set completeopt=menuone,noinsert,noselect
-
-" Give more space for displaying messages.
 set cmdheight=1
-
-" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
-" delays and poor user experience.
-set updatetime=50
-
-" Don't pass messages to |ins-completion-menu|.
+set updatetime=50       " Having longer updatetime leads to noticeable delays and poor user experience.
 set shortmess+=cI
-
 set colorcolumn=100
 set termguicolors
-
 set list
 set listchars=tab:>-,eol:¬
-
 set dir=~/.vim/swap//
 set showmatch           " Show matching brackets.
 set nocursorline
-set autoread
 set lazyredraw
-" More natural splits
 set splitbelow          " Horizontal split below current.
 set splitright          " Vertical split to right of current.
 set nowritebackup
 set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 set shell=/bin/zsh
+
+
 
 call plug#begin('~/.config/nvim/autoload')
 
@@ -67,18 +54,19 @@ Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-commentary'
 Plug 'mhinz/vim-signify'
 Plug 'samoshkin/vim-mergetool', {
-      \'on': [
-      \  'MergetoolStart',
-      \  'MergetoolToggle',
-      \  '<Plug>(MergetoolToggle)'
-      \]}
+            \'on': [
+            \  'MergetoolStart',
+            \  'MergetoolToggle',
+            \  '<Plug>(MergetoolToggle)'
+            \]}
 Plug 'antoinemadec/FixCursorHold.nvim' "cursor hold issue with neovim
 Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
 Plug 'rhysd/git-messenger.vim', { 'on': '<Plug>(git-messenger)' }
 Plug 'styled-components/vim-styled-components', {
-      \'branch': 'main',
-      \'for': ['javascript', 'typescript', 'javascriptreact']
-      \}
+            \'branch': 'main',
+            \'for': ['javascript', 'typescript', 'javascriptreact']
+            \}
+Plug 'svermeulen/vim-extended-ft'
 
 call plug#end()
 
@@ -95,17 +83,17 @@ function! SingleToMulti() abort
 endfunction
 
 function! ToggleNumberDisplay()
-  if(&rnu == 1)
-    set nu rnu!
-  elseif(&nu == 1)
-    set nu!
-  else
-    set nu rnu
-  endif
+    if(&rnu == 1)
+        set nu rnu!
+    elseif(&nu == 1)
+        set nu!
+    else
+        set nu rnu
+    endif
 endfunction
 
 function! GoToRoot()
-  exec 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))
+    exec 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))
 endfunction
 
 
@@ -114,21 +102,8 @@ let mapleader=" "
 let $TERM="alacritty"
 syntax enable
 filetype plugin indent on
-let g:large_file = 1024 * 1024 * 5  "5MB as large file
-autocmd BufReadPre * let curFile=expand("<afile>") | if getfsize(curFile)
-            \ > g:large_file | set noswapfile | syntax off | setlocal nu! rnu! | endif
 
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-autocmd StdinReadPre * let s:std_in=1
-autocmd QuickFixCmdPost [^l]* nested cwindow
-autocmd QuickFixCmdPost    l* nested lwindow
-" autocmd FileType javascript nnoremap <buffer> s# :<C-u>silent call SingleToMulti()<CR>
-autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
-" reload file on change
-autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
-      \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
-autocmd FileChangedShellPost *
-      \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
+
 
 nnoremap <C-n> :m .+1<CR>==
 nnoremap <C-p> :m .-2<CR>==
@@ -137,55 +112,37 @@ nnoremap <Leader>! :bd!<CR>
 nnoremap <Leader>y "+y
 nnoremap <Leader>p "+p
 nnoremap gh :b#<CR>
-nnoremap <C-b> :ls<cr>:b<space>
+nnoremap <Leader>b :ls<cr>:b<space>
 nnoremap Q q
 nnoremap q <Nop>
 nnoremap \| @@
-
-
 " for vim-sandwich
 nmap s <Nop>
 xmap s <Nop>
-
 nnoremap <esc><esc> :silent! nohl<CR>
-
 vnoremap <C-n> :m '>+1<CR>gv=gv
 vnoremap <C-p> :m '<-2<CR>gv=gv
-
 nnoremap <silent> <A-=> :vertical resize +10<CR>
 nnoremap <silent> <A--> :vertical resize -10<CR>
 nnoremap <silent> <A-+> :resize +10<CR>
 nnoremap <silent> <A-_> :resize -10<CR>
-
 nnoremap <Leader>r :%s///g<Left><Left><Left>
 nnoremap <Leader>rc :%s///gc<Left><Left><Left><Left>
 nnoremap <silent>s# :let @/='\<'.expand('<cword>').'\>'<CR>cgN
 xnoremap <silent>s# "sy:let @/=@s<CR>cgN
 nnoremap <silent>s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
 xnoremap <silent>s* "sy:let @/=@s<CR>cgn
-
 " saved macro to replace next space to newline in a line
 let @s = "f cl\<CR>\<ESC>l"
 nnoremap ! @s
-
-" nnoremap s# ci{<CR><C-R>=split(@@)<CR><ESC>=`[f}gea,<ESC>
 command! FJ %!jq .
-
 noremap <expr> <Leader>0 ToggleNumberDisplay()
 nnoremap <Leader>qr :cfdo %s///g \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
-nnoremap <silent> <leader>qq :cclose<CR>
-
-
-nnoremap ][q :copen<CR>
-nnoremap []q :cclose<CR>
-nnoremap ][l :lopen<CR>
-nnoremap []l :lclose<CR>
 nnoremap [<Space> O<Esc>
 nnoremap ]<Space> o<Esc>
 nnoremap [q :cprevious<CR>
 nnoremap ]q :cnext<CR>
 
-inoremap <C-c> <esc>
 
 let g:cursorhold_updatetime = 100
 
@@ -195,7 +152,7 @@ nmap gb <Plug>(git-messenger)
 
 let g:mergetool_layout = 'mr'
 let g:mergetool_prefer_revision = 'local'
-nmap <Leader>gm <Plug>(MergetoolToggle)
+nmap <Leader>gM <Plug>(MergetoolToggle)
 
 
 
@@ -214,16 +171,16 @@ highlight CursorLineNr guifg=#C5E4FD guibg=#011627
 
 
 function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    else
+        call CocAction('doHover')
+    endif
 endfunction
 
 function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 let g:coc_snippet_next = '<tab>'
@@ -235,9 +192,9 @@ inoremap <silent><expr> <c-space> coc#refresh()
 " position. Coc only does snippet and additional edit on confirm.
 " <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
 if exists('*complete_info')
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+    inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 else
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+    inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
 
 " Use `[g` and `]g` to navigate diagnostics
@@ -268,29 +225,29 @@ command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport
 " Add status line support, for integration with other plugin, checkout `:h coc-status`
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 let g:coc_global_extensions = [
-  \ 'coc-css',
-  \ 'coc-docker',
-  \ 'coc-elixir',
-  \ 'coc-emmet',
-  \ 'coc-eslint',
-  \ 'coc-html',
-  \ 'coc-json',
-  \ 'coc-markdownlint',
-  \ 'coc-prettier',
-  \ 'coc-python',
-  \ 'coc-sh',
-  \ 'coc-snippets',
-  \ 'coc-tsserver',
-  \ 'coc-yaml',
-  \ ]
+            \ 'coc-css',
+            \ 'coc-docker',
+            \ 'coc-elixir',
+            \ 'coc-emmet',
+            \ 'coc-eslint',
+            \ 'coc-html',
+            \ 'coc-json',
+            \ 'coc-markdownlint',
+            \ 'coc-prettier',
+            \ 'coc-python',
+            \ 'coc-sh',
+            \ 'coc-snippets',
+            \ 'coc-tsserver',
+            \ 'coc-yaml',
+            \ ]
 
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+            \ pumvisible() ? coc#_select_confirm() :
+            \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+            \ <SID>check_back_space() ? "\<TAB>" :
+            \ coc#refresh()
 
 let g:coc_snippet_next = '<tab>'
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
@@ -314,17 +271,17 @@ let g:loaded_netrwFileHandlers = 1
 let g:fern#disable_viewer_hide_cursor=1
 
 augroup my-fern-hijack
-  autocmd!
-  autocmd BufEnter * ++nested call s:hijack_directory()
+    autocmd!
+    autocmd BufEnter * ++nested call s:hijack_directory()
 augroup END
 
 function! s:hijack_directory() abort
-  let path = expand('%:p')
-  if !isdirectory(path)
-    return
-  endif
-  bwipeout %
-  execute printf('Fern %s', fnameescape(path))
+    let path = expand('%:p')
+    if !isdirectory(path)
+        return
+    endif
+    bwipeout %
+    execute printf('Fern %s', fnameescape(path))
 endfunction
 
 " Custom settings and mappings.
@@ -338,47 +295,47 @@ function! OpenFern()
     endif
 endfunction
 
-noremap <silent> <Leader>n :call OpenFern()<CR>
+noremap <silent> - :call OpenFern()<CR>
 
 function! FernInit() abort
-  nmap <buffer><expr>
-        \ <Plug>(fern-my-open-expand-collapse)
-        \ fern#smart#leaf(
-        \   "\<Plug>(fern-action-open:select)",
-        \   "\<Plug>(fern-action-expand)",
-        \   "\<Plug>(fern-action-collapse)",
-        \ )
-  nmap <buffer> <CR> <Plug>(fern-my-open-expand-collapse)
-  nmap <buffer> <2-LeftMouse> <Plug>(fern-my-open-expand-collapse)
-  nmap <buffer> n <Plug>(fern-action-new-path)
-  nmap <buffer> d <Plug>(fern-action-remove)
-  nmap <buffer> m <Plug>(fern-action-move)
-  nmap <buffer> c <Plug>(fern-action-copy)
-  nmap <buffer> r <Plug>(fern-action-rename)
-  nmap <buffer> ! <Plug>(fern-action-hidden:toggle)
-  nmap <buffer> R <Plug>(fern-action-reload)
-  nmap <buffer> b <Plug>(fern-action-open:split)
-  nmap <buffer> v <Plug>(fern-action-open:vsplit)
-  nmap <buffer> - <Plug>(fern-action-mark:toggle)
-  nmap <buffer> k <Up>
-  nmap <buffer> j <Down>
-  nmap <buffer> q :bd<CR>
-  nmap <buffer> h <Plug>(fern-action-collapse)
-  nmap <buffer> l <Plug>(fern-action-open-or-expand)
-  nmap <buffer> < <Plug>(fern-action-leave)
-  nmap <buffer> > <Plug>(fern-action-enter)
+    nmap <buffer><expr>
+                \ <Plug>(fern-my-open-expand-collapse)
+                \ fern#smart#leaf(
+                \   "\<Plug>(fern-action-open:select)",
+                \   "\<Plug>(fern-action-expand)",
+                \   "\<Plug>(fern-action-collapse)",
+                \ )
+    nmap <buffer> <CR> <Plug>(fern-my-open-expand-collapse)
+    nmap <buffer> <2-LeftMouse> <Plug>(fern-my-open-expand-collapse)
+    nmap <buffer> n <Plug>(fern-action-new-path)
+    nmap <buffer> d <Plug>(fern-action-remove)
+    nmap <buffer> m <Plug>(fern-action-move)
+    nmap <buffer> c <Plug>(fern-action-copy)
+    nmap <buffer> r <Plug>(fern-action-rename)
+    nmap <buffer> ! <Plug>(fern-action-hidden:toggle)
+    nmap <buffer> R <Plug>(fern-action-reload)
+    nmap <buffer> b <Plug>(fern-action-open:split)
+    nmap <buffer> v <Plug>(fern-action-open:vsplit)
+    nmap <buffer> ! <Plug>(fern-action-mark:toggle)
+    nmap <buffer> k <Up>
+    nmap <buffer> j <Down>
+    nmap <buffer> q :bd<CR>
+    nmap <buffer> h <Plug>(fern-action-collapse)
+    nmap <buffer> l <Plug>(fern-action-open-or-expand)
+    nmap <buffer> < <Plug>(fern-action-leave)
+    nmap <buffer> > <Plug>(fern-action-enter)
 endfunction
 
 augroup FernGroup
-  autocmd!
-  autocmd FileType fern call FernInit()
+    autocmd!
+    autocmd FileType fern call FernInit()
 augroup END
 
 
 
 " run pip install neovim-remote for nvr
 if has('nvim')
-      let $GIT_EDITOR = 'nvr -cc split --remote-wait'
+    let $GIT_EDITOR = 'nvr -cc split --remote-wait'
 endif
 " :wq saves commit message and close the split
 autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
@@ -415,8 +372,8 @@ let g:fzf_tags_command = 'ctags &'
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
 let g:fzf_action = {
-  \ 'ctrl-x': 'split',
-  \ 'ctrl-v': 'vsplit' }
+            \ 'ctrl-x': 'split',
+            \ 'ctrl-v': 'vsplit' }
 
 let g:fzf_preview_window = 'right:50%'
 
@@ -427,7 +384,7 @@ command! -bang -nargs=* Rg
             \  "rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1,
             \  fzf#vim#with_preview(), <bang>0)
 
-nnoremap <Leader><Space> :Buffers<CR>
+nnoremap <Leader>B :Buffers<CR>
 nmap <Leader>* <Plug>RgRawWordUnderCursor<CR>
 vmap <Leader>* <Plug>RgRawVisualSelection<CR>
 nnoremap <Leader>o :Files<CR>
@@ -435,9 +392,9 @@ nnoremap <Leader>f :Rg<CR>
 nmap <Leader>F <Plug>RgRawSearch
 
 function! s:fzf_statusline()
-  " Override statusline as you like
-  highlight fzf1 guifg=#ecc48d guibg=#011627
-  setlocal statusline=%#fzf1#\ >\ %#fzf1#fzf
+    " Override statusline as you like
+    highlight fzf1 guifg=#ecc48d guibg=#011627
+    setlocal statusline=%#fzf1#\ >\ %#fzf1#fzf
 endfunction
 
 autocmd! User FzfStatusLine call <SID>fzf_statusline()
@@ -451,32 +408,32 @@ highlight SignifySignChange ctermbg=233 ctermfg=222 guifg=#ecc48d guibg=#011627 
 
 
 function! LightlineReadonly()
-  return &readonly ? '' : ''
+    return &readonly ? '' : ''
 endfunction
 
 function! LightlineFugitive()
-   let branch = gitbranch#name()
-   return branch !=# '' ? ' '.branch : ''
+    let branch = gitbranch#name()
+    return branch !=# '' ? ' '.branch : ''
 endfunction
 
 function! LightlineSignify()
-   let [added, modified, removed] = sy#repo#get_stats()
-   let l:sy = ''
-   for [flag, flagcount] in [
-                     \   [exists("g:signify_sign_add")?g:signify_sign_add:'+', added],
-                     \   [exists("g:signify_sign_delete")?g:signify_sign_delete:'-', removed],
-                     \   [exists("g:signify_sign_change")?g:signify_sign_change:'!', modified]
-                     \ ]
-         if flagcount> 0
-               let l:sy .= printf('%s%d', flag, flagcount)
-         endif
-   endfor
-   if !empty(l:sy)
-         let l:sy = printf('[%s]', l:sy)
-         return printf('%s', l:sy)
-   else
-         return ''
-   endif
+    let [added, modified, removed] = sy#repo#get_stats()
+    let l:sy = ''
+    for [flag, flagcount] in [
+                \   [exists("g:signify_sign_add")?g:signify_sign_add:'+', added],
+                \   [exists("g:signify_sign_delete")?g:signify_sign_delete:'-', removed],
+                \   [exists("g:signify_sign_change")?g:signify_sign_change:'!', modified]
+                \ ]
+        if flagcount> 0
+            let l:sy .= printf('%s%d', flag, flagcount)
+        endif
+    endfor
+    if !empty(l:sy)
+        let l:sy = printf('[%s]', l:sy)
+        return printf('%s', l:sy)
+    else
+        return ''
+    endif
 endfunction
 
 " show signify status in statusline without delay
@@ -518,50 +475,50 @@ let s:p.tabline.right = [[["#d6deeb", 253], ["#ff5874", 204]]]
 let g:lightline#colorscheme#nightowl#palette = lightline#colorscheme#flatten(s:p)
 
 let g:lightline = {
-\   'colorscheme': 'nightowl',
-\   'mode_map': {
-\     'n' : 'N',
-\     'i' : 'I',
-\     'R' : 'R',
-\     'v' : 'V',
-\     'V' : 'VL',
-\     "\<C-v>": 'VB',
-\     'c' : 'C',
-\     's' : 'S',
-\     'S' : 'SL',
-\     "\<C-s>": 'SB',
-\     't': 'T',
-\   },
-\   'active': {
-\     'left': [ [ 'mode', 'paste' ],
-\               [ 'fugitive', 'filename', 'readonly', 'modified' ],
-\              [ 'gitdiff', 'cocstatus' ] ],
-\     'right': [ [ 'lineinfo', 'filetype', 'fileencoding' ],
-\              [ 'percent' ] ],
-\   },
-\   'inactive': {
-\     'left': [ [ 'mode', 'paste' ],
-\               [ 'fugitive', 'filename', 'readonly', 'modified' ],
-\              [ 'gitdiff' ] ],
-\     'right': [ [ 'lineinfo' ],
-\              [ 'percent' ] ],
-\   },
-\   'component_function': {
-\     'readonly': 'LightlineReadonly',
-\     'fugitive': 'LightlineFugitive',
-\     'gitdiff': 'LightlineSignify',
-\     'cocstatus': 'coc#status',
-\   },
-\   'tabline': {'left': [['buffers']], 'right':[]},
-\   'component_expand': {
-\     'buffers': 'lightline#bufferline#buffers',
-\     'gitdiff': 'LightlineSignify'
-\   },
-\   'component_type': {
-\     'buffers': 'tabsel',
-\     'gitdiff': 'middle',
-\   },
-\ }
+            \   'colorscheme': 'nightowl',
+            \   'mode_map': {
+            \     'n' : 'N',
+            \     'i' : 'I',
+            \     'R' : 'R',
+            \     'v' : 'V',
+            \     'V' : 'VL',
+            \     "\<C-v>": 'VB',
+            \     'c' : 'C',
+            \     's' : 'S',
+            \     'S' : 'SL',
+            \     "\<C-s>": 'SB',
+            \     't': 'T',
+            \   },
+            \   'active': {
+            \     'left': [ [ 'mode', 'paste' ],
+            \               [ 'fugitive', 'filename', 'readonly', 'modified' ],
+            \              [ 'gitdiff', 'cocstatus' ] ],
+            \     'right': [ [ 'lineinfo', 'filetype', 'fileencoding' ],
+            \              [ 'percent' ] ],
+            \   },
+            \   'inactive': {
+            \     'left': [ [ 'mode', 'paste' ],
+            \               [ 'fugitive', 'filename', 'readonly', 'modified' ],
+            \              [ 'gitdiff' ] ],
+            \     'right': [ [ 'lineinfo' ],
+            \              [ 'percent' ] ],
+            \   },
+            \   'component_function': {
+            \     'readonly': 'LightlineReadonly',
+            \     'fugitive': 'LightlineFugitive',
+            \     'gitdiff': 'LightlineSignify',
+            \     'cocstatus': 'coc#status',
+            \   },
+            \   'tabline': {'left': [['buffers']], 'right':[]},
+            \   'component_expand': {
+            \     'buffers': 'lightline#bufferline#buffers',
+            \     'gitdiff': 'LightlineSignify'
+            \   },
+            \   'component_type': {
+            \     'buffers': 'tabsel',
+            \     'gitdiff': 'middle',
+            \   },
+            \ }
 
 autocmd BufWritePost,TextChanged,TextChangedI,TermLeave * call lightline#update()
 
@@ -574,8 +531,6 @@ let g:vim_markdown_conceal = 0
 let g:mergetool_layout = 'mr'
 let g:mergetool_prefer_revision = 'local'
 
-nmap <leader>mt <plug>(MergetoolToggle)
-
 
 
 function Rand()
@@ -583,7 +538,7 @@ function Rand()
 endfunction
 
 function! ScratchGenerator()
-  exe "e!" . "__Scratchy__" . Rand() | setlocal buftype=nofile bufhidden=hide noswapfile
+    exe "e!" . "__Scratchy__" . Rand() | setlocal buftype=nofile bufhidden=hide noswapfile
 endfunction
 
 command! Scratch call ScratchGenerator()

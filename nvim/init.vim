@@ -66,7 +66,7 @@ Plug 'styled-components/vim-styled-components', {
             \'branch': 'main',
             \'for': ['javascript', 'typescript', 'javascriptreact']
             \}
-Plug 'svermeulen/vim-extended-ft'
+Plug 'justinmk/vim-sneak'
 
 call plug#end()
 
@@ -567,3 +567,14 @@ augroup highlight_yank
     autocmd!
     autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=250, on_visual=false}
 augroup END
+
+let g:sneak#use_ic_scs = 1
+let g:sneak#use_ic_scs = 1
+
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
+map ss <Plug>SneakLabel_s
+map SS <Plug>SneakLabel_S
+

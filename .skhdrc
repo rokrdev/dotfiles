@@ -80,7 +80,7 @@ shift + alt - 9 : yabai -m window --space 9; yabai -m space --focus 9
 shift + alt - 0 : yabai -m space --balance
 
 # # toggle window fullscreen
-ctrl + shift - f : yabai -m window --toggle zoom-fullscreen
+alt - f : yabai -m window --toggle zoom-fullscreen
 
 # # toggle window native fullscreen
 cmd + ctrl  - f : yabai -m window --toggle native-fullscreen

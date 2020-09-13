@@ -142,6 +142,8 @@ nnoremap [<Space> O<Esc>
 nnoremap ]<Space> o<Esc>
 nnoremap [q :cprevious<CR>
 nnoremap ]q :cnext<CR>
+inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
 
 
 let g:cursorhold_updatetime = 100
@@ -157,16 +159,12 @@ nmap <Leader>gM <Plug>(MergetoolToggle)
 
 
 command! Gcd call GoToRoot()
+command! Config :e $MYVIMRC
+command! Reload :so $MYVIMRC
 
 
 
 colorscheme night-owl
-
-highlight FoldColumn guifg=#806e6f
-highlight Folded guifg=#806e6f
-highlight LineNr guifg=#4b6479
-highlight CursorLineNr guifg=#C5E4FD guibg=#011627
-" highlight CursorLine guibg=#263147
 
 
 
@@ -183,19 +181,7 @@ function! s:check_back_space() abort
     return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-let g:coc_snippet_next = '<tab>'
 
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
-
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-" position. Coc only does snippet and additional edit on confirm.
-" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
-if exists('*complete_info')
-    inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-    inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
 
 " Use `[g` and `]g` to navigate diagnostics
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
@@ -241,20 +227,12 @@ let g:coc_global_extensions = [
             \ 'coc-yaml',
             \ ]
 
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-            \ pumvisible() ? coc#_select_confirm() :
-            \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-            \ <SID>check_back_space() ? "\<TAB>" :
-            \ coc#refresh()
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? coc#_select_confirm() :
+"       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
 
-let g:coc_snippet_next = '<tab>'
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" imap <C-f> <Plug>(coc-snippets-expand)
-
-" Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
 

@@ -47,7 +47,7 @@ call plug#begin('~/.config/nvim/autoload')
 Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
 Plug 'itchyny/vim-gitbranch'
-Plug 'ap/vim-css-color'
+Plug 'norcalli/nvim-colorizer.lua'
 Plug 'jesseleite/vim-agriculture'
 Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf',
@@ -155,6 +155,8 @@ let g:cursorhold_updatetime = 100
 
 nmap gb <Plug>(git-messenger)
 
+" setup colorizer
+lua require'colorizer'.setup()
 
 
 let g:mergetool_layout = 'mr'

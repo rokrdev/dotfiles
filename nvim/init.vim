@@ -556,7 +556,6 @@ augroup highlight_yank
 augroup END
 
 let g:sneak#use_ic_scs = 1
-let g:sneak#use_ic_scs = 1
 
 map f <Plug>Sneak_f
 map F <Plug>Sneak_F

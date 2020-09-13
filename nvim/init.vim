@@ -406,12 +406,6 @@ autocmd! User FzfStatusLine call <SID>fzf_statusline()
 
 
 
-highlight SignifySignAdd    ctermbg=233 ctermfg=149 guifg=#addb67 guibg=#011627 cterm=NONE gui=NONE
-highlight SignifySignDelete ctermbg=233 ctermfg=204 guifg=#ff5874 guibg=#011627 cterm=NONE gui=NONE
-highlight SignifySignChange ctermbg=233 ctermfg=222 guifg=#ecc48d guibg=#011627 cterm=NONE gui=NONE
-
-
-
 function! LightlineReadonly()
     return &readonly ? '' : ''
 endfunction

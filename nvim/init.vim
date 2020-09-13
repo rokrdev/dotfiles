@@ -382,7 +382,7 @@ let g:fzf_action = {
 
 let g:fzf_preview_window = 'right:50%'
 
-au FileType fzf tunmap <buffer> <Esc>
+autocmd! FileType fzf tunmap <buffer> <Esc>
 
 command! -bang -nargs=* Rg
             \call fzf#vim#grep(

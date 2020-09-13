@@ -373,6 +373,8 @@ vmap <Leader>* <Plug>RgRawVisualSelection<CR>
 nnoremap <Leader>o :Files<CR>
 nnoremap <Leader>f :Rg<CR>
 nmap <Leader>F <Plug>RgRawSearch
+nnoremap <Leader>co :Commands<CR>
+nnoremap <Leader>cc :BCommits<CR>
 
 function! s:fzf_statusline()
     " Override statusline as you like

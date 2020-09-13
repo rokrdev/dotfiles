@@ -10,9 +10,9 @@ endif
 let g:colors_name="night-owl"
 
 hi Normal guifg=#d6deeb ctermfg=253 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
-hi LineNr guifg=#444444 ctermfg=238 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
+hi LineNr guifg=#4b6479 ctermfg=66 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
 hi CursorLine guibg=#112630 ctermbg=235 gui=NONE cterm=NONE
-hi CursorLineNr guifg=#aaaaaa ctermfg=248 guibg=#112630 ctermbg=235 gui=NONE cterm=NONE
+hi CursorLineNr guifg=#C5E4FD guibg=#011627 ctermfg=159 ctermbg=233 gui=NONE cterm=NONE
 hi ColorColumn guibg=#151d24 ctermbg=235 gui=NONE cterm=NONE
 hi Directory guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
 hi DiffAdd guifg=#011627 ctermfg=233 guibg=#addb67 ctermbg=149 gui=NONE cterm=NONE
@@ -23,12 +23,12 @@ hi diffAdded guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
 hi diffRemoved guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
 hi VertSplit guifg=#777777 ctermfg=243 gui=NONE cterm=NONE
 hi MatchParen guifg=#7fdbca guibg=#011627 ctermfg=111 gui=bold cterm=bold
-hi Folded guifg=#777777 ctermfg=243 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
-hi FoldColumn guifg=#333333 ctermfg=236 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
+hi Folded guifg=#806e6f ctermfg=138 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
+hi FoldColumn guifg=#806e6f ctermfg=138 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
 hi SignColumn guifg=NONE ctermfg=NONE guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
 hi IncSearch guifg=#011627 ctermfg=255 guibg=#8187A2 ctermbg=222 gui=NONE cterm=NONE
 hi NonText guifg=#444444 ctermfg=238 gui=NONE cterm=NONE
-hi PMenu guibg=#2d2c5d ctermbg=236 guifg=#d6deeb ctermfg=253 gui=NONE cterm=NONE
+hi PMenu guibg=#1d3c69 ctermbg=235 guifg=#d6deeb ctermfg=253 gui=NONE cterm=NONE
 hi PMenuSel guibg=#82aaff ctermbg=111 guifg=#011627 ctermfg=233 gui=bold cterm=bold
 hi Search guifg=#011627 ctermfg=233 guibg=#8187A2 ctermbg=222 gui=NONE cterm=NONE
 hi SpecialKey guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
@@ -140,6 +140,11 @@ hi GitGutterAdd guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
 hi GitGutterChange guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
 hi GitGutterDelete guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
 hi GitGutterChangeDelete guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
+hi Sneak guifg=black guibg=#82aaff ctermfg=black ctermbg=cyan gui=bold term=bold
+hi SneakLabel guifg=black guibg=#82aaff ctermfg=black ctermbg=cyan gui=bold term=bold
+hi SignifySignAdd ctermbg=233 ctermfg=149 guifg=#addb67 guibg=#011627 cterm=NONE gui=NONE
+hi SignifySignDelete ctermbg=233 ctermfg=204 guifg=#ff5874 guibg=#011627 cterm=NONE gui=NONE
+hi SignifySignChange ctermbg=233 ctermfg=222 guifg=#ecc48d guibg=#011627 cterm=NONE gui=NONE
 
 let g:terminal_color_foreground = "#d6deeb"
 let g:terminal_color_background = "#011627"

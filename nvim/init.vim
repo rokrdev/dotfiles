@@ -113,7 +113,7 @@ filetype plugin indent on
 nnoremap <C-n> :m .+1<CR>==
 nnoremap <C-p> :m .-2<CR>==
 nnoremap <Leader>c :e %:h/
-nnoremap <Leader>! :bd!<CR>
+nnoremap <Leader>! :bw!<CR>
 nnoremap <Leader>y "+y
 nnoremap <Leader>p "+p
 nnoremap gh :b#<CR>

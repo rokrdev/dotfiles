@@ -28,6 +28,7 @@ set dir=~/.vim/swap//
 set showmatch           " Show matching brackets.
 set nocursorline
 set lazyredraw
+set redrawtime=10000    " Some php files takes long to redraw else syntax gets disabled
 set splitbelow          " Horizontal split below current.
 set splitright          " Vertical split to right of current.
 set nowritebackup

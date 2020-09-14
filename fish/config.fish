@@ -42,6 +42,7 @@ alias gc='git checkout'
 alias gca='git commit --amend'
 alias gco='git commit -m'
 alias gd='git diff'
+alias gds='git diff --staged'
 alias gfm='git pull'
 alias gmt="git mergetool"
 alias gp='git push'

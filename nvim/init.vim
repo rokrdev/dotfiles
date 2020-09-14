@@ -151,6 +151,18 @@ nnoremap ]q :cnext<CR>
 inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
 
+" https://github.com/wincent/loupe/blob/cf2d75a4b32a639e1b0a477c2ebdaebb1b70bf27/autoload/loupe/private.vim
+" E486: Pattern not found: \<foo\bar\>
+function! EscapeSlashes(cword) abort
+  return substitute(a:cword, '\\', '\\\\', 'g')
+endfunction
+
+" */#/g*/g# mapping that obeys smartcase and  ignorecase
+nmap <silent># :let @/='\V\<'.EscapeSlashes(expand('<cword>')).'\>'<CR>:let v:searchforward=0<CR>n
+nmap <silent>* :let @/='\V\<'.EscapeSlashes(expand('<cword>')).'\>'<CR>:let v:searchforward=1<CR>n
+nmap <silent>g# :let @/='\V'.EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=0<CR>n
+nmap <silent>g* :let @/='\V'.EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=1<CR>n
+
 
 let g:cursorhold_updatetime = 100
 

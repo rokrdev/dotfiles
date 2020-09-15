@@ -569,11 +569,11 @@ augroup highlight_yank
 augroup END
 
 let g:sneak#use_ic_scs = 1
+let g:sneak#target_labels = "asdfjkl;ghqweruioptyzxcvnmb"
 
 map f <Plug>Sneak_f
 map F <Plug>Sneak_F
 map t <Plug>Sneak_t
 map T <Plug>Sneak_T
-map ss <Plug>SneakLabel_s
-map SS <Plug>SneakLabel_S
-
+nmap sj <Plug>SneakLabel_s
+nmap sk <Plug>SneakLabel_S

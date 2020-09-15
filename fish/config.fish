@@ -169,6 +169,12 @@ function fish_prompt --description 'Write out the prompt'
     echo -n -s (set_color $fish_color_cwd) $pwd $vcs (set_color $prompt_color) $prompt
 end
 
+function fish_user_key_bindings
+    for mode in insert default visual
+        bind -M $mode \cf forward-char
+    end
+end
+
 set fish_greeting
 
 # function f --description 'Fuzzy find file and open in vim'

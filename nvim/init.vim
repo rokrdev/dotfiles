@@ -54,7 +54,6 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf',
 Plug 'junegunn/fzf.vim'
 Plug 'machakann/vim-sandwich'
-Plug 'nelstrom/vim-visual-star-search'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-commentary'
@@ -137,8 +136,8 @@ xnoremap <silent>s# "sy:let @/=@s<CR>cgN
 nnoremap <silent>s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
 xnoremap <silent>s* "sy:let @/=@s<CR>cgn
 " saved macro to replace next space to newline in a line
-let @s = "f cl\<CR>\<ESC>l"
-nnoremap ! @s
+let @z = "f cl\<CR>\<ESC>l"
+nnoremap ! @z
 command! FJ %!jq .
 noremap <expr> <Leader>0 ToggleNumberDisplay()
 nnoremap <Leader>qr :cfdo %s///g \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
@@ -160,6 +159,17 @@ nmap <silent># :let @/='\V\<'.EscapeSlashes(expand('<cword>')).'\>'<CR>:let v:se
 nmap <silent>* :let @/='\V\<'.EscapeSlashes(expand('<cword>')).'\>'<CR>:let v:searchforward=1<CR>n
 nmap <silent>g# :let @/='\V'.EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=0<CR>n
 nmap <silent>g* :let @/='\V'.EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=1<CR>n
+
+" makes * and # work on visual mode too.
+function! s:VSetSearch(cmdtype, ...)
+    let l:temp = @s
+    norm! gv"sy
+    let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
+    let @s = temp
+endfunction
+
+xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
+xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
 
 
 let g:cursorhold_updatetime = 100

@@ -1,6 +1,6 @@
 set showtabline=0
 set guicursor=
-set number relativenumber
+set number
 set hidden
 set tabstop=4 softtabstop=4
 set shiftwidth=4

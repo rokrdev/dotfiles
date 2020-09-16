@@ -116,7 +116,7 @@ nnoremap s- :bw<CR>
 nnoremap <Leader>y "+y
 nnoremap <Leader>p "+p
 nnoremap gh :b#<CR>
-nnoremap <Leader>b :ls<cr>:b<space>
+nnoremap sb :Buffers<CR>
 nnoremap \| @@
 " for vim-sandwich
 nmap s <Nop>
@@ -394,7 +394,7 @@ command! -bang -nargs=* Rg
             \  "rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1,
             \  fzf#vim#with_preview(), <bang>0)
 
-nnoremap <Leader>B :Buffers<CR>
+" nnoremap <Leader>B :Buffers<CR>
 nmap <Leader>* <Plug>RgRawWordUnderCursor<CR>
 vmap <Leader>* <Plug>RgRawVisualSelection<CR>
 nnoremap <Leader>o :Files<CR>

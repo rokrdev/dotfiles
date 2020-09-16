@@ -36,12 +36,10 @@ set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 set shell=/bin/zsh
 set nowrap
 
-augroup checktime
-    autocmd!
-    "silent! necessary otherwise throws errors when using command line window.
-    autocmd BufEnter,FocusGained,BufEnter,FocusLost,WinLeave * checktime
-augroup END
-
+autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
+      \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
+autocmd FileChangedShellPost *
+      \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
 call plug#begin('~/.config/nvim/autoload')
 

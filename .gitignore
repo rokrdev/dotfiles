@@ -1,4 +1,5 @@
 .git
 nvim/.netrwhist
 .DS_Store
-autoload
+nvim/autoload/*
+!nvim/autoload/custom.vim

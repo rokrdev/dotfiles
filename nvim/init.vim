@@ -1,3 +1,5 @@
+" set commands {{{
+
 set showtabline=0
 set guicursor=
 set number
@@ -18,7 +20,7 @@ set scrolloff=8
 set noshowmode
 set completeopt=menuone,noinsert,noselect
 set cmdheight=1
-set updatetime=50       " Having longer updatetime leads to noticeable delays and poor user experience.
+set updatetime=250       " Having longer updatetime leads to noticeable delays and poor user experience.
 set shortmess+=cI
 set colorcolumn=100
 set termguicolors
@@ -35,11 +37,10 @@ set nowritebackup
 set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 set shell=/bin/zsh
 set nowrap
+set foldmethod=marker
+" }}}
 
-autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
-      \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
-autocmd FileChangedShellPost *
-      \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
+" Plug {{{
 
 call plug#begin('~/.config/nvim/autoload')
 
@@ -47,7 +48,13 @@ Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
 Plug 'itchyny/vim-gitbranch'
 Plug 'norcalli/nvim-colorizer.lua'
-Plug 'jesseleite/vim-agriculture'
+Plug 'jesseleite/vim-agriculture', {
+            \'on': [
+            \  'RgRawWordUnderCursor',
+            \  'RgRawVisualSelection',
+            \  'RgRawSearch'
+            \]}
+
 Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf',
 Plug 'junegunn/fzf.vim'
@@ -75,156 +82,39 @@ call plug#end()
 
 packadd cfilter
 
+" }}}
 
+" other {{{
 
-function! SingleToMulti() abort
-    normal! 0f{
-    execute "normal! ci{\<CR>\<CR>\<Up>\<C-r>\""
-    s/ *$/,
-    s/, /,\r
-    normal =i{
-endfunction
-
-function! ToggleNumberDisplay()
-    if(&rnu == 1)
-        set nu rnu!
-    elseif(&nu == 1)
-        set nu!
-    else
-        set nu rnu
-    endif
-endfunction
-
-function! GoToRoot()
-    exec 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))
-endfunction
-
-
+autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
+      \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
+autocmd FileChangedShellPost *
+      \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
 let mapleader=" "
 let $TERM="alacritty"
 syntax enable
 filetype plugin indent on
-
-
-
-nnoremap <C-n> :m .+1<CR>==
-nnoremap <C-p> :m .-2<CR>==
-nnoremap <Leader>c :e %:h/
-nnoremap s_ :bw!<CR>
-nnoremap s- :bw<CR>
-nnoremap <Leader>y "+y
-nnoremap <Leader>p "+p
-nnoremap gh :b#<CR>
-nnoremap sb :Buffers<CR>
-nnoremap \| @@
-" for vim-sandwich
-nmap s <Nop>
-xmap s <Nop>
-nnoremap <esc><esc> :silent! nohl<CR>
-vnoremap <C-n> :m '>+1<CR>gv=gv
-vnoremap <C-p> :m '<-2<CR>gv=gv
-nnoremap <silent> <A-=> :vertical resize +10<CR>
-nnoremap <silent> <A--> :vertical resize -10<CR>
-nnoremap <silent> <A-+> :resize +10<CR>
-nnoremap <silent> <A-_> :resize -10<CR>
-nnoremap <Leader>r :%s///g<Left><Left><Left>
-nnoremap <Leader>rc :%s///gc<Left><Left><Left><Left>
-nnoremap <silent>s# :let @/='\<'.expand('<cword>').'\>'<CR>cgN
-xnoremap <silent>s# "sy:let @/=@s<CR>cgN
-nnoremap <silent>s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
-xnoremap <silent>s* "sy:let @/=@s<CR>cgn
-" saved macro to replace next space to newline in a line
-let @z = "f cl\<CR>\<ESC>l"
-nnoremap ! @z
-command! FJ %!jq .
-noremap <expr> <Leader>0 ToggleNumberDisplay()
-nnoremap <Leader>qr :cfdo %s///g \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
-nnoremap [<Space> O<Esc>
-nnoremap ]<Space> o<Esc>
-nnoremap [q :cprevious<CR>
-nnoremap ]q :cnext<CR>
-inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
-
-" https://github.com/wincent/loupe/blob/cf2d75a4b32a639e1b0a477c2ebdaebb1b70bf27/autoload/loupe/private.vim
-" E486: Pattern not found: \<foo\bar\>
-function! EscapeSlashes(cword) abort
-  return substitute(a:cword, '\\', '\\\\', 'g')
-endfunction
-
-" */#/g*/g# mapping that obeys smartcase and  ignorecase
-nmap <silent># :let @/='\V\<'.EscapeSlashes(expand('<cword>')).'\>'<CR>:let v:searchforward=0<CR>n
-nmap <silent>* :let @/='\V\<'.EscapeSlashes(expand('<cword>')).'\>'<CR>:let v:searchforward=1<CR>n
-nmap <silent>g# :let @/='\V'.EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=0<CR>n
-nmap <silent>g* :let @/='\V'.EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=1<CR>n
-
-" makes * and # work on visual mode too.
-function! s:VSetSearch(cmdtype, ...)
-    let l:temp = @s
-    norm! gv"sy
-    let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
-    let @s = temp
-endfunction
-
-xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
-xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
-
-
 let g:cursorhold_updatetime = 100
-
-nmap gb <Plug>(git-messenger)
-
 " setup colorizer
 lua require'colorizer'.setup()
 
-
-let g:mergetool_layout = 'mr'
-let g:mergetool_prefer_revision = 'local'
-nmap <Leader>gM <Plug>(MergetoolToggle)
-
-
-
-command! Gcd call GoToRoot()
+command! Gcd call custom#GoToRoot()
 command! Config :e $MYVIMRC
 command! Reload :so $MYVIMRC
 
-
-
 colorscheme night-owl
+let g:vim_markdown_conceal = 0
+command! Scratch call custom#ScratchGenerator()
+" run pip install neovim-remote for nvr
+if has('nvim')
+    let $GIT_EDITOR = 'nvr -cc split --remote-wait'
+endif
+" :wq saves commit message and close the split
+autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
+" }}}
 
-
-
-function! s:show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-        execute 'h '.expand('<cword>')
-    else
-        call CocAction('doHover')
-    endif
-endfunction
-
-function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-
-
-" Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" Remap keys for gotos
-nmap <silent><Leader>gd <Plug>(coc-definition)
-nmap <silent><Leader>gy <Plug>(coc-type-definition)
-nmap <silent><Leader>gi <Plug>(coc-implementation)
-nmap <silent><Leader>gr <Plug>(coc-references)
-
-nmap <Leader>ss :CocSearch<Space>
-nmap <Leader>sw :CocSearch <C-R>=expand("<cword>")<CR><CR>
-
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+" COC {{{
 
 " Highlight symbol under cursor on CursorHold
 " autocmd CursorHold * silent call CocActionAsync('highlight')
@@ -260,43 +150,31 @@ let g:coc_global_extensions = [
 "       \ <SID>check_back_space() ? "\<TAB>" :
 "       \ coc#refresh()
 
-inoremap <silent><expr> <c-space> coc#refresh()
+" inoremap <silent><expr> <c-space> coc#refresh()
 
+" }}}
 
-
-" .............................................................................
-" lambdalisue/fern.vim
-" .............................................................................
+" lambdalisue/fern.vim {{{
 
 " Disable netrw.
 let g:loaded_netrw  = 1
 let g:loaded_netrwPlugin = 1
 let g:loaded_netrwSettings = 1
 let g:loaded_netrwFileHandlers = 1
-let g:fern#disable_viewer_hide_cursor=1
 
 augroup my-fern-hijack
     autocmd!
-    autocmd BufEnter * ++nested call s:hijack_directory()
+    autocmd BufEnter * ++nested call custom#hijack_directory()
 augroup END
 
-function! s:hijack_directory() abort
-    let path = expand('%:p')
-    if !isdirectory(path)
-        return
-    endif
-    bwipeout %
-    execute printf('Fern %s', fnameescape(path))
-endfunction
-
-" Custom settings and mappings.
-let g:fern#disable_default_mappings = 1
-let g:fern#default_hidden = 1
-let g:fern#renderer#default#leaf_symbol = "  "
-let g:fern#renderer#default#collapsed_symbol = "+ "
-let g:fern#renderer#default#expanded_symbol = "- "
-
 function! OpenFern()
+    " Custom settings and mappings.
+    let g:fern#disable_viewer_hide_cursor=1
+    let g:fern#disable_default_mappings = 1
+    let g:fern#default_hidden = 1
+    let g:fern#renderer#default#leaf_symbol = "  "
+    let g:fern#renderer#default#collapsed_symbol = "+ "
+    let g:fern#renderer#default#expanded_symbol = "- "
     if bufname("%") == ""
         exe "Fern . -drawer -toggle"
     else
@@ -306,65 +184,13 @@ endfunction
 
 noremap <silent> - :call OpenFern()<CR>
 
-function! FernInit() abort
-    setlocal nonumber norelativenumber
-    nmap <buffer><expr>
-                \ <Plug>(fern-my-open-expand-collapse)
-                \ fern#smart#leaf(
-                \   "\<Plug>(fern-action-open:select)",
-                \   "\<Plug>(fern-action-expand)",
-                \   "\<Plug>(fern-action-collapse)",
-                \ )
-    nmap <buffer> <CR> <Plug>(fern-my-open-expand-collapse)
-    nmap <buffer> <2-LeftMouse> <Plug>(fern-my-open-expand-collapse)
-    nmap <buffer> n <Plug>(fern-action-new-path)
-    nmap <buffer> d <Plug>(fern-action-remove)
-    nmap <buffer> m <Plug>(fern-action-move)
-    nmap <buffer> c <Plug>(fern-action-copy)
-    nmap <buffer> r <Plug>(fern-action-rename)
-    nmap <buffer> ! <Plug>(fern-action-hidden:toggle)
-    nmap <buffer> R <Plug>(fern-action-reload)
-    nmap <buffer> b <Plug>(fern-action-open:split)
-    nmap <buffer> v <Plug>(fern-action-open:vsplit)
-    nmap <buffer> <Tab> <Plug>(fern-action-mark:toggle)
-    nmap <buffer> k <Up>
-    nmap <buffer> j <Down>
-    nmap <buffer> gq :bd<CR>
-    nmap <buffer> h <Plug>(fern-action-collapse)
-    nmap <buffer> l <Plug>(fern-action-open-or-expand)
-    nmap <buffer> < <Plug>(fern-action-leave)
-    nmap <buffer> > <Plug>(fern-action-enter)
-endfunction
-
 augroup FernGroup
     autocmd!
-    autocmd FileType fern call FernInit()
+    autocmd FileType fern call custom#FernInit()
 augroup END
+" }}}
 
-
-
-" run pip install neovim-remote for nvr
-if has('nvim')
-    let $GIT_EDITOR = 'nvr -cc split --remote-wait'
-endif
-" :wq saves commit message and close the split
-autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
-
-function! OnTermExit(id, status, event)
-    exe 'bw!'
-endfunction
-
-function! OpenTerm(cmd)
-    exe 'tabnew'
-    call termopen(a:cmd, { 'on_exit': 'OnTermExit' })
-endfunction
-
-
-nmap <Leader>gg :call OpenTerm('tig status')<CR>
-nmap <Leader>gb :call OpenTerm('tig ' . expand('%'))<CR>
-nmap <Leader>gu :call OpenTerm('tig log @{u}.. -p')<CR>
-
-
+" Fzf {{{
 
 " let g:fzf_layout = { 'window': 'split enew'  }
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9, 'border': 'rounded', 'highlight': 'Directory' }}
@@ -391,24 +217,10 @@ command! -bang -nargs=* Rg
             \  "rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1,
             \  fzf#vim#with_preview(), <bang>0)
 
-" nnoremap <Leader>B :Buffers<CR>
-nmap <Leader>* <Plug>RgRawWordUnderCursor<CR>
-vmap <Leader>* <Plug>RgRawVisualSelection<CR>
-nnoremap <Leader>o :Files<CR>
-nnoremap <Leader>f :Rg<CR>
-nmap <Leader>F <Plug>RgRawSearch
-nnoremap <Leader>co :Commands<CR>
-nnoremap <Leader>cc :BCommits<CR>
+autocmd! User FzfStatusLine call custom#fzf_statusline()
+" }}}
 
-function! s:fzf_statusline()
-    " Override statusline as you like
-    highlight fzf1 guifg=#ecc48d guibg=#011627
-    setlocal statusline=%#fzf1#\ >\ %#fzf1#fzf
-endfunction
-
-autocmd! User FzfStatusLine call <SID>fzf_statusline()
-
-
+" Lightline  {{{
 
 function! LightlineReadonly()
     return &readonly ? '' : ''
@@ -442,9 +254,6 @@ endfunction
 " show signify status in statusline without delay
 autocmd User Signify call lightline#update()
 
-" ============================================================
-" nightowl
-" ============================================================
 
 let s:p = {"normal": {}, "inactive": {}, "insert": {}, "replace": {}, "visual": {}, "tabline": {} }
 
@@ -521,31 +330,9 @@ let g:lightline = {
             \ }
 
 autocmd BufWritePost,TextChanged,TextChangedI,TermLeave * call lightline#update()
+" }}}
 
-
-
-let g:vim_markdown_conceal = 0
-
-
-
-let g:mergetool_layout = 'mr'
-let g:mergetool_prefer_revision = 'local'
-
-
-
-function Rand()
-    return str2nr(matchstr(reltimestr(reltime()), '\v\.@<=\d+')[1:])
-endfunction
-
-function! ScratchGenerator()
-    exe "e!" . "__Scratchy__" . Rand() | setlocal buftype=nofile bufhidden=hide noswapfile
-endfunction
-
-command! Scratch call ScratchGenerator()
-
-nnoremap <Leader>S :Scratch<CR>
-
-
+" Term {{{
 
 autocmd TermOpen * startinsert
 autocmd TermOpen * setlocal listchars= nonumber norelativenumber
@@ -554,7 +341,9 @@ autocmd TermOpen * tnoremap <buffer> <Esc> <c-\><c-n>
 command! -bang Term terminal<bang> /usr/local/bin/fish
 command! -nargs=* T split | Term <args>
 command! -nargs=* VT vsplit | Term <args>
+" }}}
 
+" whitepace {{{
 
 highlight default link EndOfLineSpace ErrorMsg
 match EndOfLineSpace / \+$/
@@ -568,13 +357,92 @@ augroup highlight_yank
     autocmd!
     autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=250, on_visual=false}
 augroup END
+" }}}
+
+" sneak {{{
 
 let g:sneak#use_ic_scs = 1
 let g:sneak#target_labels = "asdfjkl;ghqweruioptyzxcvnmb"
 
+" }}}
+
+" mappings {{{
+
+nnoremap <C-n> :m .+1<CR>==
+nnoremap <C-p> :m .-2<CR>==
+nnoremap <Leader>c :e %:h/
+nnoremap s_ :bw!<CR>
+nnoremap s- :bw<CR>
+nnoremap <Leader>y "+y
+nnoremap <Leader>p "+p
+nnoremap gh :b#<CR>
+nnoremap ss :Buffers<CR>
+nnoremap \| @@
+" for vim-sandwich
+nmap s <Nop>
+xmap s <Nop>
+nnoremap <esc><esc> :silent! nohl<CR>
+vnoremap <C-n> :m '>+1<CR>gv=gv
+vnoremap <C-p> :m '<-2<CR>gv=gv
+nnoremap <silent> <A-=> :vertical resize +10<CR>
+nnoremap <silent> <A--> :vertical resize -10<CR>
+nnoremap <silent> <A-+> :resize +10<CR>
+nnoremap <silent> <A-_> :resize -10<CR>
+nnoremap <Leader>r :%s///g<Left><Left><Left>
+nnoremap <Leader>rc :%s///gc<Left><Left><Left><Left>
+nnoremap <silent>s# :let @/='\<'.expand('<cword>').'\>'<CR>cgN
+xnoremap <silent>s# "sy:let @/=@s<CR>cgN
+nnoremap <silent>s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
+xnoremap <silent>s* "sy:let @/=@s<CR>cgn
+" saved macro to replace next space to newline in a line
+let @z = "f cl\<CR>\<ESC>l"
+nnoremap ! @z
+command! FJ %!jq .
+noremap <expr> <Leader>0 custom#ToggleNumberDisplay()
+nnoremap <Leader>qr :cfdo %s///g \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
+nnoremap [<Space> O<Esc>
+nnoremap ]<Space> o<Esc>
+nnoremap [q :cprevious<CR>
+nnoremap ]q :cnext<CR>
+inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
+" */#/g*/g# mapping that obeys smartcase and  ignorecase
+nmap <silent># :let @/='\V\<'.custom#EscapeSlashes(expand('<cword>')).'\>'<CR>:let v:searchforward=0<CR>n
+nmap <silent>* :let @/='\V\<'.custom#EscapeSlashes(expand('<cword>')).'\>'<CR>:let v:searchforward=1<CR>n
+nmap <silent>g# :let @/='\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=0<CR>n
+nmap <silent>g* :let @/='\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=1<CR>n
+xnoremap * :<C-u>call custom#VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
+xnoremap # :<C-u>call custom#VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
+nmap <Leader>* <Plug>RgRawWordUnderCursor<CR>
+vmap <Leader>* <Plug>RgRawVisualSelection<CR>
+nnoremap <Leader>o :Files<CR>
+nnoremap <Leader>f :Rg<CR>
+nmap <Leader>F <Plug>RgRawSearch
+nnoremap <Leader>co :Commands<CR>
+nnoremap <Leader>cc :BCommits<CR>
 map f <Plug>Sneak_f
 map F <Plug>Sneak_F
 map t <Plug>Sneak_t
 map T <Plug>Sneak_T
 nmap sj <Plug>SneakLabel_s
 nmap sk <Plug>SneakLabel_S
+nnoremap <Leader>S :Scratch<CR>
+nmap <Leader>gg :call custom#OpenTerm('tig status')<CR>
+nmap <Leader>gb :call custom#OpenTerm('tig ' . expand('%'))<CR>
+nmap <Leader>gu :call custom#OpenTerm('tig log @{u}.. -p')<CR>
+nmap gb <Plug>(git-messenger)
+noremap <Leader>gms :call custom#OpenMergetool()<CR>
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+" Remap keys for gotos
+nmap <silent><Leader>gd <Plug>(coc-definition)
+nmap <silent><Leader>gy <Plug>(coc-type-definition)
+nmap <silent><Leader>gi <Plug>(coc-implementation)
+nmap <silent><Leader>gr <Plug>(coc-references)
+nmap <Leader>ss :CocSearch<Space>
+nmap <Leader>sw :CocSearch <C-R>=expand("<cword>")<CR><CR>
+" Use K to show documentation in preview window
+nnoremap <silent> K :call custom#show_documentation()<CR>
+" }}}
+

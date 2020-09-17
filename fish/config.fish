@@ -106,13 +106,6 @@ set CFLAGS "-O2 -g" $CFLAGS
 #   export JAVA_HOME=(asdf where java)
 # end
 
-export NNN_PLUG='o:fzopen;d:diffs;g:_git diff;l:_git log;v:imgviu;t:treeview'
-export NNN_BMS='d:~/Downloads;p:~/projects;D:~/Documents'
-
-# for shell error
-set -x SHELL /bin/zsh
-
-
 fish_vi_key_bindings
 set __fish_git_prompt_show_informative_status
 set __fish_git_prompt_showcolorhints 'yes'

@@ -388,10 +388,10 @@ xmap s <Nop>
 nnoremap <esc><esc> :silent! nohl<CR>
 vnoremap <C-n> :m '>+1<CR>gv=gv
 vnoremap <C-p> :m '<-2<CR>gv=gv
-nnoremap <silent> <A-=> :vertical resize +10<CR>
-nnoremap <silent> <A--> :vertical resize -10<CR>
-nnoremap <silent> <A-+> :resize +10<CR>
-nnoremap <silent> <A-_> :resize -10<CR>
+nnoremap <silent> <A-a> :vertical resize +5<CR>
+nnoremap <silent> <A-d> :vertical resize -5<CR>
+nnoremap <silent> <A-w> :resize +5<CR>
+nnoremap <silent> <A-s> :resize -5<CR>
 nnoremap <Leader>r :%s///g<Left><Left><Left>
 nnoremap <Leader>rc :%s///gc<Left><Left><Left><Left>
 nnoremap <silent>s# :let @/='\<'.expand('<cword>').'\>'<CR>cgN

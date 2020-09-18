@@ -374,8 +374,8 @@ let g:sneak#target_labels = "asdfjkl;ghqweruioptyzxcvnmb"
 nnoremap <C-n> :m .+1<CR>==
 nnoremap <C-p> :m .-2<CR>==
 nnoremap <Leader>c :e %:h/
-nnoremap s_ :bw!<CR>
-nnoremap s- :bw<CR>
+nnoremap s_ :bd!<CR>
+nnoremap s- :bd<CR>
 nnoremap sp "+p
 vnoremap sy "+y
 vnoremap sp "+p

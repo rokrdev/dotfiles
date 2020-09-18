@@ -48,12 +48,6 @@ Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
 Plug 'itchyny/vim-gitbranch'
 Plug 'norcalli/nvim-colorizer.lua'
-Plug 'jesseleite/vim-agriculture', {
-            \'on': [
-            \  'RgRawWordUnderCursor',
-            \  'RgRawVisualSelection',
-            \  'RgRawSearch'
-            \]}
 Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf',
 Plug 'junegunn/fzf.vim'
@@ -77,7 +71,7 @@ Plug 'styled-components/vim-styled-components', {
 Plug 'justinmk/vim-sneak'
 Plug 'elixir-editors/vim-elixir', { 'for': ['elixir', 'eelixir'] }
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
-Plug 'mxw/vim-jsx', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'dag/vim-fish', { 'for': 'fish' }
 
 call plug#end()
@@ -211,13 +205,18 @@ let g:fzf_action = {
             \ 'ctrl-v': 'vsplit' }
 
 let g:fzf_preview_window = 'right:50%'
-
 autocmd! FileType fzf tunmap <buffer> <Esc>
 
 command! -bang -nargs=* Rg
             \call fzf#vim#grep(
             \  "rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1,
             \  fzf#vim#with_preview(), <bang>0)
+
+ command! -bang -nargs=* RgRaw
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case '.(<q-args>), 1,
+  \   fzf#vim#with_preview(),  <bang>0)
+
 
 autocmd! User FzfStatusLine call custom#fzf_statusline()
 " }}}
@@ -370,6 +369,7 @@ let g:sneak#target_labels = "asdfjkl;ghqweruioptyzxcvnmb"
 
 " mappings {{{
 
+
 nnoremap <C-n> :m .+1<CR>==
 nnoremap <C-p> :m .-2<CR>==
 nnoremap <Leader>c :e %:h/
@@ -415,11 +415,11 @@ nmap <silent>g# :let @/='\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:s
 nmap <silent>g* :let @/='\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=1<CR>n
 xnoremap * :<C-u>call custom#VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
 xnoremap # :<C-u>call custom#VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
-nmap <Leader>* <Plug>RgRawWordUnderCursor<CR>
-vmap <Leader>* <Plug>RgRawVisualSelection<CR>
+nmap <Leader>* :call custom#RgWordUnderCursor()<CR>
+vmap <Leader>* :call custom#RgRawVisualSelection()<CR>
 nnoremap <Leader>o :Files<CR>
 nnoremap <Leader>f :Rg<CR>
-nmap <Leader>F <Plug>RgRawSearch
+nmap <Leader>F :RgRaw<Space>
 nnoremap <Leader>co :Commands<CR>
 nnoremap <Leader>cc :BCommits<CR>
 map f <Plug>Sneak_f

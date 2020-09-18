@@ -55,12 +55,6 @@ Plug 'machakann/vim-sandwich'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'tpope/vim-commentary'
 Plug 'mhinz/vim-signify'
-Plug 'samoshkin/vim-mergetool', {
-            \'on': [
-            \  'MergetoolStart',
-            \  'MergetoolToggle',
-            \  '<Plug>(MergetoolToggle)'
-            \]}
 Plug 'antoinemadec/FixCursorHold.nvim' "cursor hold issue with neovim
 Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
 Plug 'rhysd/git-messenger.vim', { 'on': '<Plug>(git-messenger)' }
@@ -213,11 +207,16 @@ command! -bang -nargs=* Rg
             \  "rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1,
             \  fzf#vim#with_preview(), <bang>0)
 
- command! -bang -nargs=* RgRaw
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case '.(<q-args>), 1,
-  \   fzf#vim#with_preview(),  <bang>0)
+command! -bang -nargs=* RgRaw
+            \ call fzf#vim#grep(
+            \   'rg --column --line-number --no-heading --color=always --smart-case '.(<q-args>), 1,
+            \   fzf#vim#with_preview(),  <bang>0)
 
+command! -bang -nargs=* GConflicts
+            \ call fzf#run(
+            \    fzf#wrap({'source': 'git diff --name-only --diff-filter=U',
+            \      'options': ['--multi', '--prompt', 'Conflicts?> ', '--preview', 'cat {}']
+            \    }, <bang>0))
 
 autocmd! User FzfStatusLine call custom#fzf_statusline()
 " }}}
@@ -440,7 +439,6 @@ nnoremap <Leader>gg :call custom#OpenTerm('tig status')<CR>
 nnoremap <Leader>gb :call custom#OpenTerm('tig ' . expand('%'))<CR>
 nnoremap <Leader>gu :call custom#OpenTerm('tig log @{u}.. -p')<CR>
 nnoremap gb <Plug>(git-messenger)
-nnoremap <Leader>gms :call custom#OpenMergetool()<CR>
 " Use `[g` and `]g` to navigate diagnostics
 nnoremap <silent> [g <Plug>(coc-diagnostic-prev)
 nnoremap <silent> ]g <Plug>(coc-diagnostic-next)

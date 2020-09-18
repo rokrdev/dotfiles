@@ -162,10 +162,16 @@ function fish_prompt --description 'Write out the prompt'
     echo -n -s (set_color $fish_color_cwd) $pwd $vcs (set_color $prompt_color) $prompt
 end
 
+function fzf_history_search
+    history merge
+    history -z | fzf --read0 --print0 --tiebreak=index | read -lz result
+    and commandline -- $result
+    commandline -f repaint
+end
+
 function fish_user_key_bindings
-    for mode in insert default visual
-        bind -M $mode \cf forward-char
-    end
+    bind -M insert -m default \cr fzf_history_search
+    bind -M insert -m default \cf forward-char
 end
 
 set fish_greeting

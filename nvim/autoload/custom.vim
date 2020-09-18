@@ -121,3 +121,10 @@ function! custom#ScratchGenerator()
     exe "e!" . "__Scratchy__" . custom#Rand() | setlocal buftype=nofile bufhidden=hide noswapfile
 endfunction
 
+function! custom#RgWordUnderCursor()
+    exe 'Rg '.expand('<cword>')
+endfunction
+
+function! custom#RgRawVisualSelection()
+    exe 'Rg '.custom#EscapeSlashes(expand('<cword>'))
+endfunction

@@ -8,7 +8,6 @@
 	cmd = nvim -d "$REMOTE" "$LOCAL"
 [merge]
 	tool = nvimdiff
-	conflictStyle = diff3
 [mergetool "nvimdiff"]
 	cmd = nvim -f -c "MergetoolStart" "$MERGED" "$BASE" "$LOCAL" "REMOTE"
 [pull]

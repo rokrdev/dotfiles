@@ -37,13 +37,6 @@ function! custom#VSetSearch(cmdtype, ...)
     let @s = temp
 endfunction
 
-function! custom#OpenMergetool()
-    let g:mergetool_layout = 'mr'
-    let g:mergetool_prefer_revision = 'local'
-    nmap <Leader>gmt <Plug>(MergetoolToggle)
-    exe "MergetoolStart"
-endfunction
-
 function! custom#show_documentation()
     if (index(['vim','help'], &filetype) >= 0)
         execute 'h '.expand('<cword>')

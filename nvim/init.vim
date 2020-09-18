@@ -376,8 +376,9 @@ nnoremap <C-p> :m .-2<CR>==
 nnoremap <Leader>c :e %:h/
 nnoremap s_ :bw!<CR>
 nnoremap s- :bw<CR>
-nnoremap <Leader>y "+y
-nnoremap <Leader>p "+p
+nnoremap sp "+p
+vnoremap sy "+y
+vnoremap sp "+p
 nnoremap gh :b#<CR>
 nnoremap ss :Buffers<CR>
 nnoremap \| @@
@@ -401,7 +402,7 @@ xnoremap <silent>s* "sy:let @/=@s<CR>cgn
 let @z = "f cl\<CR>\<ESC>l"
 nnoremap ! @z
 command! FJ %!jq .
-noremap <expr> <Leader>0 custom#ToggleNumberDisplay()
+nnoremap <expr> <Leader>0 custom#ToggleNumberDisplay()
 nnoremap <Leader>qr :cfdo %s///g \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
 nnoremap [<Space> O<Esc>
 nnoremap ]<Space> o<Esc>
@@ -410,41 +411,46 @@ nnoremap ]q :cnext<CR>
 inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
 " */#/g*/g# mapping that obeys smartcase and  ignorecase
-nmap <silent># :let @/='\V\<'.custom#EscapeSlashes(expand('<cword>')).'\>'<CR>:let v:searchforward=0<CR>n
-nmap <silent>* :let @/='\V\<'.custom#EscapeSlashes(expand('<cword>')).'\>'<CR>:let v:searchforward=1<CR>n
-nmap <silent>g# :let @/='\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=0<CR>n
-nmap <silent>g* :let @/='\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=1<CR>n
+nnoremap <silent># :let @/='\V\<'.custom#EscapeSlashes(expand('<cword>')).'\>'<CR>:let v:searchforward=0<CR>n
+nnoremap <silent>* :let @/='\V\<'.custom#EscapeSlashes(expand('<cword>')).'\>'<CR>:let v:searchforward=1<CR>n
+nnoremap <silent>g# :let @/='\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=0<CR>n
+nnoremap <silent>g* :let @/='\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=1<CR>n
 xnoremap * :<C-u>call custom#VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
 xnoremap # :<C-u>call custom#VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
-nmap <Leader>* :call custom#RgWordUnderCursor()<CR>
-vmap <Leader>* :call custom#RgRawVisualSelection()<CR>
+nnoremap <Leader>* :call custom#RgWordUnderCursor()<CR>
+vnoremap <Leader>* :call custom#RgRawVisualSelection()<CR>
 nnoremap <Leader>o :Files<CR>
 nnoremap <Leader>f :Rg<CR>
-nmap <Leader>F :RgRaw<Space>
+nnoremap <Leader>F :RgRaw<Space>
+nnoremap <Leader>G :GF?<CR>
 nnoremap <Leader>co :Commands<CR>
 nnoremap <Leader>cc :BCommits<CR>
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
-map t <Plug>Sneak_t
-map T <Plug>Sneak_T
-nmap sj <Plug>SneakLabel_s
-nmap sk <Plug>SneakLabel_S
+nnoremap f <Plug>Sneak_f
+nnoremap F <Plug>Sneak_F
+nnoremap t <Plug>Sneak_t
+nnoremap T <Plug>Sneak_T
+vnoremap f <Plug>Sneak_f
+vnoremap F <Plug>Sneak_F
+vnoremap t <Plug>Sneak_t
+vnoremap T <Plug>Sneak_T
+nnoremap sj <Plug>SneakLabel_s
+nnoremap sk <Plug>SneakLabel_S
 nnoremap <Leader>S :Scratch<CR>
-nmap <Leader>gg :call custom#OpenTerm('tig status')<CR>
-nmap <Leader>gb :call custom#OpenTerm('tig ' . expand('%'))<CR>
-nmap <Leader>gu :call custom#OpenTerm('tig log @{u}.. -p')<CR>
-nmap gb <Plug>(git-messenger)
-noremap <Leader>gms :call custom#OpenMergetool()<CR>
+nnoremap <Leader>gg :call custom#OpenTerm('tig status')<CR>
+nnoremap <Leader>gb :call custom#OpenTerm('tig ' . expand('%'))<CR>
+nnoremap <Leader>gu :call custom#OpenTerm('tig log @{u}.. -p')<CR>
+nnoremap gb <Plug>(git-messenger)
+nnoremap <Leader>gms :call custom#OpenMergetool()<CR>
 " Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nnoremap <silent> [g <Plug>(coc-diagnostic-prev)
+nnoremap <silent> ]g <Plug>(coc-diagnostic-next)
 " Remap keys for gotos
-nmap <silent><Leader>gd <Plug>(coc-definition)
-nmap <silent><Leader>gy <Plug>(coc-type-definition)
-nmap <silent><Leader>gi <Plug>(coc-implementation)
-nmap <silent><Leader>gr <Plug>(coc-references)
-nmap <Leader>ss :CocSearch<Space>
-nmap <Leader>sw :CocSearch <C-R>=expand("<cword>")<CR><CR>
+nnoremap <silent><Leader>gd <Plug>(coc-definition)
+nnoremap <silent><Leader>gy <Plug>(coc-type-definition)
+nnoremap <silent><Leader>gi <Plug>(coc-implementation)
+nnoremap <silent><Leader>gr <Plug>(coc-references)
+nnoremap <Leader>ss :CocSearch<Space>
+nnoremap <Leader>sw :CocSearch <C-R>=expand("<cword>")<CR><CR>
 " Use K to show documentation in preview window
 nnoremap <silent> K :call custom#show_documentation()<CR>
 " }}}

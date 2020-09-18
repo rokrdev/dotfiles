@@ -54,13 +54,11 @@ Plug 'jesseleite/vim-agriculture', {
             \  'RgRawVisualSelection',
             \  'RgRawSearch'
             \]}
-
 Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf',
 Plug 'junegunn/fzf.vim'
 Plug 'machakann/vim-sandwich'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-commentary'
 Plug 'mhinz/vim-signify'
 Plug 'samoshkin/vim-mergetool', {
@@ -77,6 +75,10 @@ Plug 'styled-components/vim-styled-components', {
             \'for': ['javascript', 'typescript', 'javascriptreact']
             \}
 Plug 'justinmk/vim-sneak'
+Plug 'elixir-editors/vim-elixir'
+Plug 'pangloss/vim-javascript'
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
 
 call plug#end()
 

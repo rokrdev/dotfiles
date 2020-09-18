@@ -170,12 +170,12 @@ end
 
 set fish_greeting
 
-# function f --description 'Fuzzy find file and open in vim'
-#     set files (echo (eval "$FZF_DEFAULT_COMMAND | fzf --multi --exit-0"))
-#     if test -n $files
-#       v (echo $files | string split ' ')
-#     end
-# end
+function f --description 'Fuzzy find file and open in vim'
+    set files (echo (eval "$FZF_DEFAULT_COMMAND | fzf --multi --exit-0"))
+    if test -n $files
+      v (echo $files | string split ' ')
+    end
+end
 
 function kp --description 'Fuzzy search and kill process'
     ### PROCESS

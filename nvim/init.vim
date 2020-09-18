@@ -106,6 +106,7 @@ command! Scratch call custom#ScratchGenerator()
 if has('nvim')
     let $GIT_EDITOR = 'nvr -cc split --remote-wait'
 endif
+autocmd Filetype javascript setlocal ts=2 sw=2 sts=0
 " :wq saves commit message and close the split
 autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
 " }}}

@@ -75,10 +75,10 @@ Plug 'styled-components/vim-styled-components', {
             \'for': ['javascript', 'typescript', 'javascriptreact']
             \}
 Plug 'justinmk/vim-sneak'
-Plug 'elixir-editors/vim-elixir'
-Plug 'pangloss/vim-javascript'
-Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
+Plug 'elixir-editors/vim-elixir', { 'for': ['elixir', 'eelixir'] }
+Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+Plug 'mxw/vim-jsx', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'dag/vim-fish', { 'for': 'fish' }
 
 call plug#end()
 

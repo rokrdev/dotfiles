@@ -214,7 +214,6 @@ command! -bang -nargs=* GConflicts
             \      'options': ['--multi', '--prompt', 'Conflicts?> ', '--preview', 'cat {}']
             \    }, <bang>0))
 
-autocmd! User FzfStatusLine call custom#fzf_statusline()
 " }}}
 
 " Lightline  {{{
@@ -434,7 +433,7 @@ nnoremap <Leader>S :Scratch<CR>
 nnoremap <Leader>gg :call custom#OpenTerm('tig status')<CR>
 nnoremap <Leader>gb :call custom#OpenTerm('tig ' . expand('%'))<CR>
 nnoremap <Leader>gu :call custom#OpenTerm('tig log @{u}.. -p')<CR>
-nnoremap gb <Plug>(git-messenger)
+nmap gb <Plug>(git-messenger)
 " Use `[g` and `]g` to navigate diagnostics
 nnoremap <silent> [g <Plug>(coc-diagnostic-prev)
 nnoremap <silent> ]g <Plug>(coc-diagnostic-next)

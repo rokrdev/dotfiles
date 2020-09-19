@@ -69,12 +69,6 @@ function! custom#OpenTerm(cmd)
     call termopen(a:cmd, { 'on_exit': 'custom#OnTermExit' })
 endfunction
 
-function! custom#fzf_statusline()
-    " Override statusline as you like
-    highlight fzf1 guifg=#ecc48d guibg=#011627
-    setlocal statusline=%#fzf1#\ >\ %#fzf1#fzf
-endfunction
-
 function! custom#FernInit() abort
     setlocal nonumber norelativenumber
     nmap <buffer><expr>

@@ -11,10 +11,10 @@ window:
   #  y: 0
 
   padding:
-    x: 4
+    x: 2
     y: 0
 
-  dynamic_padding: false
+  dynamic_padding: true
 
   decorations: buttonless
 

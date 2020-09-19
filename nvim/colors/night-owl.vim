@@ -26,18 +26,18 @@ hi MatchParen guifg=#7fdbca guibg=#011627 ctermfg=111 gui=bold cterm=bold
 hi Folded guifg=#806e6f ctermfg=138 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
 hi FoldColumn guifg=#806e6f ctermfg=138 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
 hi SignColumn guifg=NONE ctermfg=NONE guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
-hi IncSearch guifg=#011627 ctermfg=255 guibg=#8187A2 ctermbg=222 gui=NONE cterm=NONE
+hi IncSearch guifg=#011627 ctermfg=255 guibg=#82aaff ctermbg=222 gui=NONE cterm=NONE
 hi NonText guifg=#444444 ctermfg=238 gui=NONE cterm=NONE
 hi PMenu guibg=#1d3c69 ctermbg=235 guifg=#d6deeb ctermfg=253 gui=NONE cterm=NONE
 hi PMenuSel guibg=#82aaff ctermbg=111 guifg=#011627 ctermfg=233 gui=bold cterm=bold
-hi Search guifg=#011627 ctermfg=233 guibg=#8187A2 ctermbg=222 gui=NONE cterm=NONE
+hi Search guifg=#011627 ctermfg=233 guibg=#82aaff ctermbg=222 gui=NONE cterm=NONE
 hi SpecialKey guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
 hi StatusLine guifg=#eeeeee ctermfg=255 guibg=#112630 ctermbg=235 gui=NONE cterm=NONE
 hi StatusLineNC guifg=#777777 ctermfg=243 guibg=#112630 ctermbg=235 gui=NONE cterm=NONE
 hi Title guifg=#82aaff ctermfg=111 gui=bold cterm=bold
-hi Visual guifg=#011627 ctermfg=255 guibg=#8187A2 ctermbg=222 gui=NONE cterm=NONE
+hi Visual guifg=#011627 ctermfg=255 guibg=#74788A ctermbg=222 gui=NONE cterm=NONE
 hi EndOfBuffer guifg=#444444 ctermfg=238 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
-hi Comment guifg=#8187A2 ctermfg=243 gui=italic cterm=italic
+hi Comment guifg=#74788A ctermfg=243 gui=italic cterm=italic
 hi Constant guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
 hi String guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
 hi Identifier guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE

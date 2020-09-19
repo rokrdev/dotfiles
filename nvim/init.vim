@@ -63,10 +63,7 @@ Plug 'styled-components/vim-styled-components', {
             \'for': ['javascript', 'typescript', 'javascriptreact']
             \}
 Plug 'justinmk/vim-sneak'
-Plug 'elixir-editors/vim-elixir', { 'for': ['elixir', 'eelixir'] }
-Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
-Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
-Plug 'dag/vim-fish', { 'for': 'fish' }
+Plug 'sheerun/vim-polyglot'
 
 call plug#end()
 
@@ -100,7 +97,6 @@ command! Scratch call custom#ScratchGenerator()
 if has('nvim')
     let $GIT_EDITOR = 'nvr -cc split --remote-wait'
 endif
-autocmd Filetype javascript setlocal ts=2 sw=2 sts=0
 " :wq saves commit message and close the split
 autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
 " }}}
@@ -424,16 +420,16 @@ nnoremap <Leader>F :RgRaw<Space>
 nnoremap <Leader>G :GF?<CR>
 nnoremap <Leader>co :Commands<CR>
 nnoremap <Leader>cc :BCommits<CR>
-nnoremap f <Plug>Sneak_f
-nnoremap F <Plug>Sneak_F
-nnoremap t <Plug>Sneak_t
-nnoremap T <Plug>Sneak_T
-vnoremap f <Plug>Sneak_f
-vnoremap F <Plug>Sneak_F
-vnoremap t <Plug>Sneak_t
-vnoremap T <Plug>Sneak_T
-nnoremap sj <Plug>SneakLabel_s
-nnoremap sk <Plug>SneakLabel_S
+nmap f <Plug>Sneak_f
+nmap F <Plug>Sneak_F
+nmap t <Plug>Sneak_t
+nmap T <Plug>Sneak_T
+vmap f <Plug>Sneak_f
+vmap F <Plug>Sneak_F
+vmap t <Plug>Sneak_t
+vmap T <Plug>Sneak_T
+nmap sj <Plug>SneakLabel_s
+nmap sk <Plug>SneakLabel_S
 nnoremap <Leader>S :Scratch<CR>
 nnoremap <Leader>gg :call custom#OpenTerm('tig status')<CR>
 nnoremap <Leader>gb :call custom#OpenTerm('tig ' . expand('%'))<CR>

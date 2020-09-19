@@ -28,7 +28,7 @@ set list
 set listchars=tab:>-,eol:¬
 set dir=~/.vim/swap//
 set showmatch           " Show matching brackets.
-set nocursorline
+set cursorline
 set lazyredraw
 set redrawtime=10000    " Some php files takes long to redraw else syntax gets disabled
 set splitbelow          " Horizontal split below current.
@@ -36,7 +36,7 @@ set splitright          " Vertical split to right of current.
 set nowritebackup
 set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 set shell=/bin/zsh
-set nowrap
+set wrap
 set foldmethod=marker
 " }}}
 
@@ -254,31 +254,31 @@ autocmd User Signify call lightline#update()
 
 let s:p = {"normal": {}, "inactive": {}, "insert": {}, "replace": {}, "visual": {}, "tabline": {} }
 
-let s:p.normal.left = [[["#263147", 235], ["#82aaff", 111]], [["#d6deeb", 253], ["#263147", 235]]]
-let s:p.normal.middle = [[["#d6deeb", 253], ["#263147", 235]]]
-let s:p.normal.right = [[["#d6deeb", 253], ["#263147", 235]], [["#263147", 235], ["#82aaff", 111]]]
-let s:p.normal.error = [[["#263147", 235], ["#82aaff", 111]]]
-let s:p.normal.warning = [[["#263147", 235], ["#82aaff", 111]]]
+let s:p.normal.left = [[["#1a2b4a", 235], ["#82aaff", 111]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
+let s:p.normal.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
+let s:p.normal.right = [[["#d6deeb", 253], ["#1a2b4a", 235]], [["#1a2b4a", 235], ["#82aaff", 111]]]
+let s:p.normal.error = [[["#1a2b4a", 235], ["#82aaff", 111]]]
+let s:p.normal.warning = [[["#1a2b4a", 235], ["#82aaff", 111]]]
 
 let s:p.inactive.left = [[["#d6deeb", 253], ["#112630", 235]], [["#d6deeb", 253], ["#112630", 235]]]
 let s:p.inactive.middle = [[["#d6deeb", 253], ["#112630", 235]]]
 let s:p.inactive.right = [[["#d6deeb", 253], ["#112630", 235]], [["#d6deeb", 253], ["#112630", 235]]]
 
-let s:p.insert.left = [[["#263147", 235], ["#addb67", 149]], [["#d6deeb", 253], ["#263147", 235]]]
-let s:p.insert.middle = [[["#d6deeb", 253], ["#263147", 235]]]
-let s:p.insert.right = [[["#d6deeb", 253], ["#263147", 235]], [["#263147", 235], ["#addb67", 149]]]
+let s:p.insert.left = [[["#1a2b4a", 235], ["#addb67", 149]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
+let s:p.insert.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
+let s:p.insert.right = [[["#d6deeb", 253], ["#1a2b4a", 235]], [["#1a2b4a", 235], ["#addb67", 149]]]
 
-let s:p.replace.left = [[["#263147", 235], ["#ff5874", 204]], [["#d6deeb", 253], ["#263147", 235]]]
-let s:p.replace.middle = [[["#d6deeb", 253], ["#263147", 235]]]
-let s:p.replace.right = [[["#d6deeb", 253], ["#263147", 235]], [["#263147", 235], ["#ff5874", 204]]]
+let s:p.replace.left = [[["#1a2b4a", 235], ["#ff5874", 204]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
+let s:p.replace.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
+let s:p.replace.right = [[["#d6deeb", 253], ["#1a2b4a", 235]], [["#1a2b4a", 235], ["#ff5874", 204]]]
 
-let s:p.visual.left = [[["#263147", 235], ["#c792ea", 176]], [["#d6deeb", 253], ["#263147", 235]]]
-let s:p.visual.middle = [[["#d6deeb", 253], ["#263147", 235]]]
-let s:p.visual.right = [[["#d6deeb", 253], ["#263147", 235]], [["#263147", 235], ["#c792ea", 176]]]
+let s:p.visual.left = [[["#1a2b4a", 235], ["#c792ea", 176]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
+let s:p.visual.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
+let s:p.visual.right = [[["#d6deeb", 253], ["#1a2b4a", 235]], [["#1a2b4a", 235], ["#c792ea", 176]]]
 
-let s:p.tabline.left = [[["#d6deeb", 253], ["#263147", 235]]]
-let s:p.tabline.tabsel = [[["#263147", 235], ["#82aaff", 111]]]
-let s:p.tabline.middle = [[["#d6deeb", 253], ["#263147", 235]]]
+let s:p.tabline.left = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
+let s:p.tabline.tabsel = [[["#1a2b4a", 235], ["#82aaff", 111]]]
+let s:p.tabline.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
 let s:p.tabline.right = [[["#d6deeb", 253], ["#ff5874", 204]]]
 
 let g:lightline#colorscheme#nightowl#palette = lightline#colorscheme#flatten(s:p)

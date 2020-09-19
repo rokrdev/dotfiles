@@ -36,7 +36,7 @@ set splitright          " Vertical split to right of current.
 set nowritebackup
 set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 set shell=/bin/zsh
-set wrap
+set nowrap
 set foldmethod=marker
 " }}}
 

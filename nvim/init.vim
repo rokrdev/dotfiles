@@ -22,7 +22,7 @@ set completeopt=menuone,noinsert,noselect
 set cmdheight=1
 set updatetime=250       " Having longer updatetime leads to noticeable delays and poor user experience.
 set shortmess+=cI
-set colorcolumn=100
+set colorcolumn=0
 set termguicolors
 set list
 set listchars=tab:>-,eol:¬
@@ -91,6 +91,7 @@ lua require'colorizer'.setup()
 command! Gcd call custom#GoToRoot()
 command! Config :e $MYVIMRC
 command! Reload :so $MYVIMRC
+command! Tcc call custom#Togglecolorcolumn()
 
 colorscheme night-owl
 let g:vim_markdown_conceal = 0

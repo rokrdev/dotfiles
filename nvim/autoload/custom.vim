@@ -136,3 +136,11 @@ function! custom#RgRawVisualSelection()
     let str = custom#VisualSelection()
     exe 'Rg '.str
 endfunction
+
+function! custom#Togglecolorcolumn()
+    if &colorcolumn
+        set colorcolumn=0
+    else
+        set colorcolumn=100
+    endif
+endfunction

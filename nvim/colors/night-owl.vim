@@ -11,8 +11,8 @@ let g:colors_name="night-owl"
 
 hi Normal guifg=#d6deeb ctermfg=253 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
 hi LineNr guifg=#4b6479 ctermfg=66 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
-hi CursorLine guibg=#002340 ctermbg=235 gui=NONE cterm=NONE
-hi CursorLineNr guifg=#C5E4FD guibg=#002340 ctermfg=159 ctermbg=233 gui=NONE cterm=NONE
+hi CursorLine guibg=#011e36 ctermbg=235 gui=NONE cterm=NONE
+hi CursorLineNr guifg=#C5E4FD guibg=#011e36 ctermfg=159 ctermbg=233 gui=NONE cterm=NONE
 hi ColorColumn guibg=#151d24 ctermbg=235 gui=NONE cterm=NONE
 hi Directory guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
 hi DiffAdd guifg=#011627 ctermfg=233 guibg=#addb67 ctermbg=149 gui=NONE cterm=NONE

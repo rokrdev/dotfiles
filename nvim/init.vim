@@ -38,6 +38,8 @@ set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 set shell=/bin/zsh
 set nowrap
 set foldmethod=marker
+set inccommand=split
+set signcolumn=yes
 " }}}
 
 " Plug {{{

@@ -95,18 +95,10 @@ shift + cmd + ctrl - b : open -a /Applications/Google Chrome.app
 shift + cmd + ctrl - c : open -a /Applications/Slack.app
 # shift + cmd + ctrl - d : open -a /System/Applications/Calendar.app
 shift + cmd + ctrl - f : open -a /System/Library/CoreServices/Finder.app
-# shift + cmd + ctrl - g : open -a /System/Applications/Mail.app
-shift + cmd + ctrl - i : open -a /Applications/IntelliJ\ IDEA\ CE.app
-shift + cmd + ctrl - n : open -a /Applications/Evernote.app
-# shift + cmd + ctrl - p : open -a /Applications/Todoist.app
+shift + cmd + ctrl - n : open -a /Applications/Standard Notes.app
 shift + cmd + ctrl - s : open -a /Applications/Safari.app
-# shift + cmd + ctrl - t : open -a /Applications/Alacritty.app
 shift + cmd + ctrl - t : open -a /Applications/Alacritty.app
 shift + cmd + ctrl - v : open -a /Applications/Visual\ Studio\ Code.app
-
-# '-' char
-# toggle bluetooth headset
-# cmd + ctrl - 0x1B : BluetoothConnector 70-26-05-0f-ff-f3g
 
 # '=' char
 # lungo

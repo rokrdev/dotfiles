@@ -11,8 +11,8 @@ let g:colors_name="night-owl"
 
 hi Normal guifg=#d6deeb ctermfg=253 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
 hi LineNr guifg=#4b6479 ctermfg=66 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
-hi CursorLine guibg=#1a2b4a ctermbg=235 gui=NONE cterm=NONE
-hi CursorLineNr guifg=#C5E4FD guibg=#011627 ctermfg=159 ctermbg=233 gui=NONE cterm=NONE
+hi CursorLine guibg=#002340 ctermbg=235 gui=NONE cterm=NONE
+hi CursorLineNr guifg=#C5E4FD guibg=#002340 ctermfg=159 ctermbg=233 gui=NONE cterm=NONE
 hi ColorColumn guibg=#151d24 ctermbg=235 gui=NONE cterm=NONE
 hi Directory guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
 hi DiffAdd guifg=#011627 ctermfg=233 guibg=#addb67 ctermbg=149 gui=NONE cterm=NONE
@@ -28,7 +28,7 @@ hi FoldColumn guifg=#806e6f ctermfg=138 guibg=#011627 ctermbg=233 gui=NONE cterm
 hi SignColumn guifg=NONE ctermfg=NONE guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
 hi IncSearch guifg=#011627 ctermfg=255 guibg=#82aaff ctermbg=222 gui=NONE cterm=NONE
 hi NonText guifg=#444444 ctermfg=238 gui=NONE cterm=NONE
-hi PMenu guibg=#1d3c69 ctermbg=235 guifg=#d6deeb ctermfg=253 gui=NONE cterm=NONE
+hi PMenu guibg=#002340 ctermbg=235 guifg=#d6deeb ctermfg=253 gui=NONE cterm=NONE
 hi PMenuSel guibg=#82aaff ctermbg=111 guifg=#011627 ctermfg=233 gui=bold cterm=bold
 hi Search guifg=#011627 ctermfg=233 guibg=#82aaff ctermbg=222 gui=NONE cterm=NONE
 hi SpecialKey guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
@@ -126,7 +126,7 @@ hi link htmlH3 htmlH1
 hi htmlH4 guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
 hi link htmlH5 htmlH4
 hi htmlBold guifg=#c792ea ctermfg=176 guibg=#011627 ctermbg=233 gui=bold cterm=bold
-hi shComment guifg=#637777 ctermfg=243 guibg=#011627 ctermbg=233 gui=italic cterm=italic
+hi link shComment Comment
 hi NERDTreeDir guifg=#5f7e97 ctermfg=66 gui=NONE cterm=NONE
 hi NERDTreeOpenable guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
 hi NERDTreeClosable guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE

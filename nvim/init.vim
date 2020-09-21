@@ -57,7 +57,6 @@ Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'tpope/vim-commentary'
 Plug 'mhinz/vim-signify'
 Plug 'antoinemadec/FixCursorHold.nvim' "cursor hold issue with neovim
-Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
 Plug 'rhysd/git-messenger.vim', { 'on': '<Plug>(git-messenger)' }
 Plug 'styled-components/vim-styled-components', {
             \'branch': 'main',
@@ -66,6 +65,7 @@ Plug 'styled-components/vim-styled-components', {
 Plug 'justinmk/vim-sneak'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-obsession', { 'on': ['Obsession', 'Obsess'] }
+Plug 'vifm/vifm.vim', { 'on': 'Vifm' }
 
 call plug#end()
 
@@ -153,42 +153,6 @@ let g:coc_global_extensions = [
 
 " inoremap <silent><expr> <c-space> coc#refresh()
 
-" }}}
-
-" lambdalisue/fern.vim {{{
-
-" Disable netrw.
-let g:loaded_netrw  = 1
-let g:loaded_netrwPlugin = 1
-let g:loaded_netrwSettings = 1
-let g:loaded_netrwFileHandlers = 1
-
-augroup my-fern-hijack
-    autocmd!
-    autocmd BufEnter * ++nested call custom#hijack_directory()
-augroup END
-
-function! OpenFern()
-    " Custom settings and mappings.
-    let g:fern#disable_viewer_hide_cursor=1
-    let g:fern#disable_default_mappings = 1
-    let g:fern#default_hidden = 1
-    let g:fern#renderer#default#leaf_symbol = "  "
-    let g:fern#renderer#default#collapsed_symbol = "+ "
-    let g:fern#renderer#default#expanded_symbol = "- "
-    if bufname("%") == ""
-        exe "Fern . -drawer -toggle"
-    else
-        exe "Fern . -reveal=% -drawer -toggle"
-    endif
-endfunction
-
-noremap <silent> - :call OpenFern()<CR>
-
-augroup FernGroup
-    autocmd!
-    autocmd FileType fern call custom#FernInit()
-augroup END
 " }}}
 
 " Fzf {{{
@@ -431,6 +395,8 @@ nnoremap <Leader>F :RgRaw<Space>
 nnoremap <Leader>G :GF?<CR>
 nnoremap <Leader>co :Commands<CR>
 nnoremap <Leader>cc :BCommits<CR>
+nnoremap - :Vifm<CR>
+tmap - :q<CR>
 nmap f <Plug>Sneak_f
 nmap F <Plug>Sneak_F
 nmap t <Plug>Sneak_t

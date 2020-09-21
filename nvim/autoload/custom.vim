@@ -50,16 +50,6 @@ function! custom#check_back_space() abort
     return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-function! custom#hijack_directory() abort
-    let path = expand('%:p')
-    if !isdirectory(path)
-        return
-    endif
-    bwipeout %
-    execute printf('Fern %s', fnameescape(path))
-endfunction
-
-
 function! custom#OnTermExit(id, status, event)
     exe 'bw!'
 endfunction
@@ -67,36 +57,6 @@ endfunction
 function! custom#OpenTerm(cmd)
     exe 'tabnew'
     call termopen(a:cmd, { 'on_exit': 'custom#OnTermExit' })
-endfunction
-
-function! custom#FernInit() abort
-    setlocal nonumber norelativenumber
-    nmap <buffer><expr>
-                \ <Plug>(fern-my-open-expand-collapse)
-                \ fern#smart#leaf(
-                \   "\<Plug>(fern-action-open:select)",
-                \   "\<Plug>(fern-action-expand)",
-                \   "\<Plug>(fern-action-collapse)",
-                \ )
-    nmap <buffer> <CR> <Plug>(fern-my-open-expand-collapse)
-    nmap <buffer> <2-LeftMouse> <Plug>(fern-my-open-expand-collapse)
-    nmap <buffer> n <Plug>(fern-action-new-path)
-    nmap <buffer> d <Plug>(fern-action-remove)
-    nmap <buffer> m <Plug>(fern-action-move)
-    nmap <buffer> c <Plug>(fern-action-copy)
-    nmap <buffer> r <Plug>(fern-action-rename)
-    nmap <buffer> ! <Plug>(fern-action-hidden:toggle)
-    nmap <buffer> R <Plug>(fern-action-reload)
-    nmap <buffer> b <Plug>(fern-action-open:split)
-    nmap <buffer> v <Plug>(fern-action-open:vsplit)
-    nmap <buffer> <Tab> <Plug>(fern-action-mark:toggle)
-    nmap <buffer> k <Up>
-    nmap <buffer> j <Down>
-    nmap <buffer> gq :bd<CR>
-    nmap <buffer> h <Plug>(fern-action-collapse)
-    nmap <buffer> l <Plug>(fern-action-open-or-expand)
-    nmap <buffer> < <Plug>(fern-action-leave)
-    nmap <buffer> > <Plug>(fern-action-enter)
 endfunction
 
 function! custom#VisualSelection()

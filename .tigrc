@@ -258,6 +258,7 @@ bind status A !>git commit --amend
 
 # clean
 bind status X ?>git clean -f
+bind status - ?>git checkout .
 
 #====================
 # stash view

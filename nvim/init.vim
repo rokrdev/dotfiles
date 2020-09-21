@@ -65,6 +65,7 @@ Plug 'styled-components/vim-styled-components', {
             \}
 Plug 'justinmk/vim-sneak'
 Plug 'sheerun/vim-polyglot'
+Plug 'tpope/vim-obsession', { 'on': ['Obsession', 'Obsess'] }
 
 call plug#end()
 

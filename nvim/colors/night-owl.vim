@@ -140,8 +140,8 @@ hi GitGutterAdd guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
 hi GitGutterChange guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
 hi GitGutterDelete guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
 hi GitGutterChangeDelete guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
-hi Sneak guifg=black guibg=#82aaff ctermfg=black ctermbg=cyan gui=bold term=bold
-hi SneakLabel guifg=black guibg=#82aaff ctermfg=black ctermbg=cyan gui=bold term=bold
+hi Sneak guifg=black guibg=#c792ea ctermfg=black ctermbg=cyan gui=bold term=bold
+hi SneakLabel guifg=black guibg=#c792ea ctermfg=black ctermbg=cyan gui=bold term=bold
 hi SignifySignAdd ctermbg=233 ctermfg=149 guifg=#addb67 guibg=#011627 cterm=NONE gui=NONE
 hi SignifySignDelete ctermbg=233 ctermfg=204 guifg=#ff5874 guibg=#011627 cterm=NONE gui=NONE
 hi SignifySignChange ctermbg=233 ctermfg=222 guifg=#ecc48d guibg=#011627 cterm=NONE gui=NONE

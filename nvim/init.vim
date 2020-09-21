@@ -100,6 +100,17 @@ command! Scratch call custom#ScratchGenerator()
 if has('nvim')
     let $GIT_EDITOR = 'nvr -cc split --remote-wait'
 endif
+
+" fix for slow movement in large php files
+let g:php_syntax_extensions_enabled=[]
+let php_var_selector_is_identifier=1
+let php_sql_query=0
+let php_sql_heredoc=0
+let php_sql_nowdoc=0
+let php_html_load=0
+let php_html_in_heredoc=0
+let php_html_in_nowdoc=0
+
 " :wq saves commit message and close the split
 autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
 " }}}

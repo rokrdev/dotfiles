@@ -395,8 +395,7 @@ nnoremap <Leader>F :RgRaw<Space>
 nnoremap <Leader>G :GF?<CR>
 nnoremap <Leader>co :Commands<CR>
 nnoremap <Leader>cc :BCommits<CR>
-nnoremap - :Vifm<CR>
-tmap - :q<CR>
+nnoremap <Leader>n :Vifm<CR>
 nmap f <Plug>Sneak_f
 nmap F <Plug>Sneak_F
 nmap t <Plug>Sneak_t

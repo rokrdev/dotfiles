@@ -45,7 +45,6 @@ set signcolumn=yes
 
 call plug#begin('~/.config/nvim/autoload')
 
-Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
 Plug 'itchyny/vim-gitbranch'
 Plug 'norcalli/nvim-colorizer.lua'

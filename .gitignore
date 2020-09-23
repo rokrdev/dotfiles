@@ -28,6 +28,19 @@
 .config/karabiner/*
 !.config/karabiner/karabiner.json
 
+!.newsboat
+.newsboat/*
+!.newsboat/config
+!.newsboat/urls
+
+!.vifm
+.vifm/*
+!.vifm/vifmrc
+
+!.w3m
+.w3m/*
+!.w3m/keymap
+
 !.gitconfig
 !.gitignore_global
 !.rgignore

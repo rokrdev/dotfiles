@@ -107,7 +107,6 @@ set CFLAGS "-O2 -g" $CFLAGS
 #   export JAVA_HOME=(asdf where java)
 # end
 
-fish_vi_key_bindings
 set __fish_git_prompt_show_informative_status
 set __fish_git_prompt_showcolorhints 'yes'
 set __fish_git_prompt_showupstream 'informative'
@@ -120,28 +119,6 @@ set __fish_git_prompt_char_upstream_diverged '<>'
 set __fish_git_prompt_color_upstream cyan
 set fish_color_cwd blue
 set __fish_git_prompt_color_branch magenta
-
-function fish_mode_prompt --description 'Displays the current mode'
-    # Do nothing if not in vi mode
-    if test "$fish_key_bindings" = "fish_vi_key_bindings"
-        switch $fish_bind_mode
-            case default
-                set_color --bold blue
-                echo ▲
-            case insert
-                set_color --bold green
-                echo ▲
-            case replace-one
-                set_color --bold yellow
-                echo ▲
-            case visual
-                set_color --bold brmagenta
-                echo ▲
-        end
-        set_color normal
-        printf " "
-    end
-end
 
 function fish_prompt --description 'Write out the prompt'
     set -l prompt ' ~>> '
@@ -168,11 +145,6 @@ function fzf_history_search
     history -z | fzf --read0 --print0 --tiebreak=index | read -lz result
     and commandline -- $result
     commandline -f repaint
-end
-
-function fish_user_key_bindings
-    bind -M insert -m default \cr fzf_history_search
-    bind -M insert -m default \cf forward-char
 end
 
 set fish_greeting

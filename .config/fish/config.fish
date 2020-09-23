@@ -128,14 +128,17 @@ function fish_prompt --description 'Write out the prompt'
         set prompt_color red
     end
 
-    set -l pwd (prompt_pwd)
-    if test $pwd = '~'
+    set -l path (prompt_pwd)
+    if test $path = '~'
         set pwd ''
-        # remove extra space from at the beginning of prompt
         set prompt '~>> '
+        set vcs ''
+    else
+        set vcs (fish_vcs_prompt)
+        set pwd $path
     end
 
-    set -l vcs (fish_vcs_prompt)
+
 
     echo -n -s (set_color $fish_color_cwd) $pwd $vcs (set_color $prompt_color) $prompt
 end

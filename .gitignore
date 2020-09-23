@@ -3,6 +3,9 @@
 !.config/alacritty/alacritty.yml
 !.config/fish/config.fish
 !.config/nvim/init.nvim
+!.config/nvim/coc-settings.json
+!.config/nvim/UltiSnips/javascript.snippets
+!.config/nvim/colors/night-owl.vim
 !.config/nvim/autoload/custom.vim
 !.gitconfig
 !.gitignore

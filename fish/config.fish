@@ -54,6 +54,7 @@ alias m=make
 alias mi='make install'
 alias mu='make update'
 alias n=npm
+alias nb=newsboat
 alias ni='npm install'
 alias nn='nnn -d -e -H'
 alias nq=notion

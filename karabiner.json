@@ -66,13 +66,14 @@
             ]
           },
           {
-            "description": "Map left_ctrl+h/i/j/k as arrows.",
+            "description": "Map fn+h/i/j/k as arrows.",
             "manipulators": [
               {
                 "from": {
                   "key_code": "h",
                   "modifiers": {
-                    "mandatory": ["control"]
+                    "mandatory": ["fn"],
+                    "optional": ["any"]
                   }
                 },
                 "to": [
@@ -86,7 +87,8 @@
                 "from": {
                   "key_code": "l",
                   "modifiers": {
-                    "mandatory": ["control"]
+                    "mandatory": ["fn"],
+                    "optional": ["any"]
                   }
                 },
                 "to": [
@@ -100,7 +102,8 @@
                 "from": {
                   "key_code": "j",
                   "modifiers": {
-                    "mandatory": ["control"]
+                    "mandatory": ["fn"],
+                    "optional": ["any"]
                   }
                 },
                 "to": [
@@ -114,7 +117,8 @@
                 "from": {
                   "key_code": "k",
                   "modifiers": {
-                    "mandatory": ["control"]
+                    "mandatory": ["fn"],
+                    "optional": ["any"]
                   }
                 },
                 "to": [
@@ -127,13 +131,13 @@
             ]
           },
           {
-            "description": "Map ctrl+shift+ m/,/. as mute/vol down/vol up.",
+            "description": "Map fn+ m/,/. as mute/vol down/vol up.",
             "manipulators": [
               {
                 "from": {
                   "key_code": "m",
                   "modifiers": {
-                    "mandatory": ["control", "shift"]
+                    "mandatory": ["fn"]
                   }
                 },
                 "to": [
@@ -147,7 +151,7 @@
                 "from": {
                   "key_code": "comma",
                   "modifiers": {
-                    "mandatory": ["control", "shift"]
+                    "mandatory": ["fn"]
                   }
                 },
                 "to": [
@@ -161,7 +165,7 @@
                 "from": {
                   "key_code": "period",
                   "modifiers": {
-                    "mandatory": ["control", "shift"]
+                    "mandatory": ["fn"]
                   }
                 },
                 "to": [
@@ -174,13 +178,13 @@
             ]
           },
           {
-            "description": "Map ctrl + shift + t/y as brightness down/up.",
+            "description": "Map fn + t/y as brightness down/up.",
             "manipulators": [
               {
                 "from": {
                   "key_code": "t",
                   "modifiers": {
-                    "mandatory": ["control", "shift"]
+                    "mandatory": ["fn"]
                   }
                 },
                 "to": [
@@ -194,7 +198,7 @@
                 "from": {
                   "key_code": "y",
                   "modifiers": {
-                    "mandatory": ["control", "shift"]
+                    "mandatory": ["fn"]
                   }
                 },
                 "to": [
@@ -207,13 +211,13 @@
             ]
           },
           {
-            "description": "Map ctrl + shift +q/w/e as previous/play_or_pause/next media keys.",
+            "description": "Map fn +q/w/e as previous/play_or_pause/next media keys.",
             "manipulators": [
               {
                 "from": {
                   "key_code": "q",
                   "modifiers": {
-                    "mandatory": ["control", "shift"]
+                    "mandatory": ["fn"]
                   }
                 },
                 "to": [
@@ -227,7 +231,7 @@
                 "from": {
                   "key_code": "w",
                   "modifiers": {
-                    "mandatory": ["control", "shift"]
+                    "mandatory": ["fn"]
                   }
                 },
                 "to": [
@@ -241,7 +245,7 @@
                 "from": {
                   "key_code": "e",
                   "modifiers": {
-                    "mandatory": ["control", "shift"]
+                    "mandatory": ["fn"]
                   }
                 },
                 "to": [
@@ -590,6 +594,15 @@
               },
               "to": {
                 "key_code": "right_option"
+              }
+            },
+            {
+              "from": {
+                "key_code": "left_control"
+              },
+              "to": {
+                "key_code": "fn",
+                "lazy": true
               }
             },
             {

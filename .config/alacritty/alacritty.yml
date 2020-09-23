@@ -1,0 +1,319 @@
+env:
+  TERM: alacritty
+
+window:
+  #dimensions:
+  #  columns: 0
+  #  lines: 0
+
+  #position:
+  #  x: 0
+  #  y: 0
+
+  padding:
+    x: 2
+    y: 0
+
+  dynamic_padding: true
+
+  decorations: buttonless
+
+  startup_mode: Windowed
+
+  title: Alacritty
+
+  dynamic_title: true
+
+scrolling:
+  history: 10000
+
+  multiplier: 5
+
+
+# Font configuration
+font:
+  normal:
+    family: MonoLisa
+    style: Regular
+
+  bold:
+    family: MonoLisa
+    style: Bold
+
+  italic:
+    family: MonoLisa
+    style: Regular Italic
+
+  bold_italic:
+    family: MonoLisa
+    style: Bold Italic
+
+  size: 12.0
+
+  offset:
+    x: 1
+    y: 0
+
+  glyph_offset:
+    x: 0
+    y: 0
+
+  use_thin_strokes: true
+
+draw_bold_text_with_bright_colors: true
+
+# Colors (Tomorrow Night Bright)
+colors:
+  # Default colors
+  primary:
+      background: '0x011627'
+      foreground: '0xd6deeb'
+
+    #dim_foreground: '#9a9a9a'
+    #bright_foreground: '#ffffff'
+
+  cursor:
+    text: '0x000000'
+    cursor: '0x8cd1ff'
+
+  # Vi mode cursor colors
+  #
+  # Colors for the cursor when the vimode is active. If these are unset, the
+  # cursor color will be the inverse of the cell color.
+  #vi_mode_cursor:
+  #  text: '#000000'
+  #  cursor: '#ffffff'
+
+  # Selection colors
+  #
+  # Colors which should be used to draw the selection area. If selection
+  # background is unset, selection color will be the inverse of the cell colors.
+  # If only text is unset the cell text color will remain the same.
+  #selection:
+  #  text: '#eaeaea'
+  #  background: '#404040'
+
+# Normal colors
+  normal:
+    black:   '#000000'
+    red:     '#ef5350'
+    green:   '#22da6e'
+    yellow:  '#addb67'
+    blue:    '#82aaff'
+    magenta: '#c792ea'
+    cyan:    '#21c7a8'
+    white:   '#ffffff'
+
+  # Bright colors
+  bright:
+    black:   '#575656'
+    red:     '#ef5350'
+    green:   '#22da6e'
+    yellow:  '#ffeb95'
+    blue:    '#82aaff'
+    magenta: '#c792ea'
+    cyan:    '#7fdbca'
+    white:   '#ffffff'
+
+  # Dim colors
+  #
+  # If the dim colors are not set, they will be calculated automatically based
+  # on the `normal` colors.
+  #dim:
+  #  black:   '#000000'
+  #  red:     '#8c3336'
+  #  green:   '#7a8530'
+  #  yellow:  '#97822e'
+  #  blue:    '#506d8f'
+  #  magenta: '#80638e'
+  #  cyan:    '#497e7a'
+  #  white:   '#9a9a9a'
+
+  # Indexed Colors
+  #
+  # The indexed colors include all colors from 16 to 256.
+  # When these are not set, they're filled with sensible defaults.
+  #
+  # Example:
+  #   `- { index: 16, color: '#ff00ff' }`
+  #
+  #indexed_colors: []
+
+bell:
+  animation: EaseOutExpo
+  duration: 0
+  color: '#ffffff'
+
+background_opacity: 1.0
+
+selection:
+  semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
+  save_to_clipboard: false
+
+cursor:
+  style: Block
+
+  # Vi mode cursor style
+  #
+  # If the vi mode cursor style is `None` or not specified, it will fall back to
+  # the style of the active value of the normal cursor.
+  #
+  # See `cursor.style` for available options.
+  #vi_mode_style: None
+
+  # If this is `true`, the cursor will be rendered as a hollow box when the
+  # window is not focused.
+  unfocused_hollow: true
+
+  # Thickness of the cursor relative to the cell width as floating point number
+  # from `0.0` to `1.0`.
+  #thickness: 0.15
+
+# Live config reload (changes require restart)
+live_config_reload: true
+
+shell:
+  program: /usr/local/bin/fish
+  args:
+    - --login
+
+alt_send_esc: true
+
+mouse:
+  double_click: { threshold: 300 }
+  triple_click: { threshold: 300 }
+
+mouse_bindings:
+  - { mouse: Middle, action: PasteSelection }
+
+key_bindings:
+  #- { key: L,         mods: Control,             action: ClearLogNotice }
+  #- { key: L,         mods: Control, mode: ~Vi,  chars: "\x0c"          }
+  #- { key: PageUp,    mods: Shift,   mode: ~Alt, action: ScrollPageUp,  }
+  #- { key: PageDown,  mods: Shift,   mode: ~Alt, action: ScrollPageDown }
+  #- { key: Home,      mods: Shift,   mode: ~Alt, action: ScrollToTop,   }
+  #- { key: End,       mods: Shift,   mode: ~Alt, action: ScrollToBottom }
+
+  # Vi Mode
+  #- { key: Space,  mods: Shift|Control, mode: Vi, action: ScrollToBottom          }
+  # - { key: Space,  mods: Shift|Control,           action: ToggleViMode            }
+  #- { key: Escape,                      mode: Vi, action: ClearSelection          }
+  #- { key: I,                           mode: Vi, action: ScrollToBottom          }
+  #- { key: I,                           mode: Vi, action: ToggleViMode            }
+  #- { key: Y,      mods: Control,       mode: Vi, action: ScrollLineUp            }
+  #- { key: E,      mods: Control,       mode: Vi, action: ScrollLineDown          }
+  #- { key: G,                           mode: Vi, action: ScrollToTop             }
+  #- { key: G,      mods: Shift,         mode: Vi, action: ScrollToBottom          }
+  #- { key: B,      mods: Control,       mode: Vi, action: ScrollPageUp            }
+  #- { key: F,      mods: Control,       mode: Vi, action: ScrollPageDown          }
+  #- { key: U,      mods: Control,       mode: Vi, action: ScrollHalfPageUp        }
+  #- { key: D,      mods: Control,       mode: Vi, action: ScrollHalfPageDown      }
+  #- { key: Y,                           mode: Vi, action: Copy                    }
+  #- { key: Y,                           mode: Vi, action: ClearSelection          }
+  #- { key: Copy,                        mode: Vi, action: ClearSelection          }
+  #- { key: V,                           mode: Vi, action: ToggleNormalSelection   }
+  #- { key: V,      mods: Shift,         mode: Vi, action: ToggleLineSelection     }
+  #- { key: V,      mods: Control,       mode: Vi, action: ToggleBlockSelection    }
+  #- { key: V,      mods: Alt,           mode: Vi, action: ToggleSemanticSelection }
+  #- { key: Return,                      mode: Vi, action: Open                    }
+  #- { key: K,                           mode: Vi, action: Up                      }
+  #- { key: J,                           mode: Vi, action: Down                    }
+  #- { key: H,                           mode: Vi, action: Left                    }
+  #- { key: L,                           mode: Vi, action: Right                   }
+  #- { key: Up,                          mode: Vi, action: Up                      }
+  #- { key: Down,                        mode: Vi, action: Down                    }
+  #- { key: Left,                        mode: Vi, action: Left                    }
+  #- { key: Right,                       mode: Vi, action: Right                   }
+  #- { key: Key0,                        mode: Vi, action: First                   }
+  #- { key: Key4,   mods: Shift,         mode: Vi, action: Last                    }
+  #- { key: Key6,   mods: Shift,         mode: Vi, action: FirstOccupied           }
+  #- { key: H,      mods: Shift,         mode: Vi, action: High                    }
+  #- { key: M,      mods: Shift,         mode: Vi, action: Middle                  }
+  #- { key: L,      mods: Shift,         mode: Vi, action: Low                     }
+  #- { key: B,                           mode: Vi, action: SemanticLeft            }
+  #- { key: W,                           mode: Vi, action: SemanticRight           }
+  #- { key: E,                           mode: Vi, action: SemanticRightEnd        }
+  #- { key: B,      mods: Shift,         mode: Vi, action: WordLeft                }
+  #- { key: W,      mods: Shift,         mode: Vi, action: WordRight               }
+  #- { key: E,      mods: Shift,         mode: Vi, action: WordRightEnd            }
+  #- { key: Key5,   mods: Shift,         mode: Vi, action: Bracket                 }
+
+  # (Windows, Linux, and BSD only)
+  #- { key: V,        mods: Control|Shift,           action: Paste            }
+  #- { key: C,        mods: Control|Shift,           action: Copy             }
+  #- { key: C,        mods: Control|Shift, mode: Vi, action: ClearSelection   }
+  #- { key: Insert,   mods: Shift,                   action: PasteSelection   }
+  #- { key: Key0,     mods: Control,                 action: ResetFontSize    }
+  #- { key: Equals,   mods: Control,                 action: IncreaseFontSize }
+  #- { key: Add,      mods: Control,                 action: IncreaseFontSize }
+  #- { key: Subtract, mods: Control,                 action: DecreaseFontSize }
+  #- { key: Minus,    mods: Control,                 action: DecreaseFontSize }
+
+  # (Windows only)
+  #- { key: Return,   mods: Alt,           action: ToggleFullscreen }
+
+  # (macOS only)
+  - { key: Key0,   mods: Command,            action: ResetFontSize    }
+  - { key: Equals, mods: Command,            action: IncreaseFontSize }
+  - { key: Add,    mods: Command,            action: IncreaseFontSize }
+  - { key: Minus,  mods: Command,            action: DecreaseFontSize }
+  - { key: K,      mods: Command,            action: ClearHistory     }
+  - { key: V,      mods: Command,            action: Paste            }
+  - { key: C,      mods: Command,            action: Copy             }
+  - { key: H,      mods: Command,            action: Hide             }
+  - { key: M,      mods: Command,            action: Minimize         }
+  - { key: Q,      mods: Command,            action: Quit             }
+  - { key: W,      mods: Command,            action: Quit             }
+  - { key: N,      mods: Command,            action: SpawnNewInstance }
+  - { key: F,      mods: Command|Control,    action: ToggleFullscreen }
+  - { key: Equals,     mods: Alt,                 chars: "\x1b="         }
+  - { key: Equals,     mods: Alt|Shift,           chars: "\x1b+"         }
+  - { key: Minus,      mods: Alt,                 chars: "\x1b-"         }
+  - { key: Minus,      mods: Alt|Shift,           chars: "\x1b_"         }
+  - { key: A,          mods: Alt,                 chars: "\x1ba"         }
+  - { key: B,          mods: Alt,                 chars: "\x1bb"         }
+  - { key: C,          mods: Alt,                 chars: "\x1bc"         }
+  - { key: D,          mods: Alt,                 chars: "\x1bd"         }
+  - { key: E,          mods: Alt,                 chars: "\x1be"         }
+  - { key: F,          mods: Alt,                 chars: "\x1bf"         }
+  - { key: G,          mods: Alt,                 chars: "\x1bg"         }
+  - { key: H,          mods: Alt,                 chars: "\x1b7"         }
+  - { key: I,          mods: Alt,                 chars: "\x1bi"         }
+  - { key: J,          mods: Alt,                 chars: "\x1bj"         }
+  - { key: K,          mods: Alt,                 chars: "\x1bk"         }
+  - { key: L,          mods: Alt,                 chars: "\x1bl"         }
+  - { key: M,          mods: Alt,                 chars: "\x1bm"         }
+  - { key: N,          mods: Alt,                 chars: "\x1bn"         }
+  - { key: O,          mods: Alt,                 chars: "\x1bo"         }
+  - { key: P,          mods: Alt,                 chars: "\x1bp"         }
+  - { key: Q,          mods: Alt,                 chars: "\x1bq"         }
+  - { key: R,          mods: Alt,                 chars: "\x1br"         }
+  - { key: S,          mods: Alt,                 chars: "\x1bs"         }
+  - { key: T,          mods: Alt,                 chars: "\x1bt"         }
+  - { key: U,          mods: Alt,                 chars: "\x1bu"         }
+  - { key: V,          mods: Alt,                 chars: "\x1bv"         }
+  - { key: W,          mods: Alt,                 chars: "\x1bw"         }
+  - { key: X,          mods: Alt,                 chars: "\x1bx"         }
+  - { key: Y,          mods: Alt,                 chars: "\x1by"         }
+  - { key: Z,          mods: Alt,                 chars: "\x1bz"         }
+
+#debug:
+  # Display the time it takes to redraw each frame.
+  #render_timer: false
+
+  # Keep the log file after quitting Alacritty.
+  #persistent_logging: false
+
+  # Log level
+  #
+  # Values for `log_level`:
+  #   - None
+  #   - Error
+  #   - Warn
+  #   - Info
+  #   - Debug
+  #   - Trace
+  #log_level: Warn
+
+  # Print all received window events.
+  #print_events: falseam: "/usr/local/bin/tmux", args: ["select-window", "-t", "9"] } } 

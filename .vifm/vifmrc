@@ -1,4 +1,7 @@
 set quickview
+set dotfiles
+
+
 " palenight color scheme for vifm
 
 " Reset all styles first
@@ -30,3 +33,4 @@ highlight Socket	cterm=bold	ctermfg=005	ctermbg=default
 
 nnoremap cf :touch<space>
 nnoremap cd :mkdir!<space>
+

@@ -11,6 +11,7 @@ delete-read-articles-on-quit yes
 # -- display -------------------------------------------------------------------
 
 show-read-feeds no
+article-sort-order date-desc
 feed-sort-order unreadarticlecount-asc
 
 color background          color236   default

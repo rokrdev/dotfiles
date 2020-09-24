@@ -27,3 +27,6 @@ highlight BrokenLink	cterm=bold	ctermfg=001	ctermbg=default
 highlight Device	cterm=bold,standout	ctermfg=000	ctermbg=011
 highlight Fifo		cterm=none	ctermfg=003	ctermbg=default
 highlight Socket	cterm=bold	ctermfg=005	ctermbg=default
+
+nnoremap cf :touch<space>
+nnoremap cd :mkdir!<space>

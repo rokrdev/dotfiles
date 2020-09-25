@@ -244,7 +244,4 @@ keymap t TAB_GOTO
 keymap T TAB_MENU
 
 ########## quit ##########
-keymap ZZ EXIT
-keymap C-Q EXIT
-keymap ZQ QUIT
-keymap :q QUITC
+keymap Q EXIT

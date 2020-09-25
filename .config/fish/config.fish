@@ -106,7 +106,6 @@ set CFLAGS "-O2 -g" $CFLAGS
 # if test $status -eq 0
 #   export JAVA_HOME=(asdf where java)
 # end
-
 set __fish_git_prompt_show_informative_status
 set __fish_git_prompt_showcolorhints 'yes'
 set __fish_git_prompt_showupstream 'informative'
@@ -137,8 +136,6 @@ function fish_prompt --description 'Write out the prompt'
         set vcs (fish_vcs_prompt)
         set pwd $path
     end
-
-
 
     echo -n -s (set_color $fish_color_cwd) $pwd $vcs (set_color $prompt_color) $prompt
 end

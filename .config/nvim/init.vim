@@ -420,6 +420,7 @@ nnoremap <silent><Leader>gi <Plug>(coc-implementation)
 nnoremap <silent><Leader>gr <Plug>(coc-references)
 nnoremap <Leader>ss :CocSearch<Space>
 nnoremap <Leader>sw :CocSearch <C-R>=expand("<cword>")<CR><CR>
+imap <C-f> <Plug>(coc-snippets-expand)
 " Use K to show documentation in preview window
 nnoremap <silent> K :call custom#show_documentation()<CR>
 " }}}

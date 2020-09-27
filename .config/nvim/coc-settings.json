@@ -34,6 +34,5 @@
   "python.jediEnabled": false,
   "emmet.showExpandedAbbreviation": "always",
   "emmet.includeLanguages": { "javascript": "javascriptreact" },
-  "snippets.ultisnips.directories": ["UltiSnips"],
-  "coc.source.ultisnips.filetypes": ["javascript"]
+  "snippets.ultisnips.directories": ["UltiSnips"]
 }

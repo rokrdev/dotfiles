@@ -36,7 +36,9 @@ set nowritebackup
 set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 set shell=/bin/zsh
 set nowrap
-set foldmethod=marker
+set foldmethod=indent
+set foldnestmax=10
+set foldlevel=2
 set inccommand=split
 set signcolumn=yes
 " }}}

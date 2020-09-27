@@ -316,4 +316,4 @@ key_bindings:
   #log_level: Warn
 
   # Print all received window events.
-  #print_events: falseam: "/usr/local/bin/tmux", args: ["select-window", "-t", "9"] } } 
+  #print_events: falseam: "/usr/local/bin/tmux", args: ["select-window", "-t", "9"] } }

@@ -37,8 +37,6 @@ text-width 80
 
 goto-next-feed no
 
-browser "open -g -a 'Google Chrome' %u"
-
 # unbind keys
 unbind-key ENTER
 unbind-key j
@@ -73,3 +71,6 @@ bind-key x pb-delete
 
 # -- misc ----------------------------------------------------------------------
 browser "w3m %u"
+macro c set browser "open -g -a 'Google Chrome' %u"; open-in-browser ; set browser "w3m %u"
+macro m set browser "mpv %u"; open-in-browser ; set browser "w3m %u"
+

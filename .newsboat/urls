@@ -1,3 +1,10 @@
+
+# Starred article
+"query:Starred:flags # \"s\""
+"query:Read Later:flags # \"l\""
+"query:Unread:unread = \"yes\""
+
+
 https://news.ycombinator.com/rss "~Hacker news" news
 
 https://www.reddit.com/r/neovim/.rss "~neovim" reddit vim tech

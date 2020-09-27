@@ -5,14 +5,13 @@ reload-threads 4
 download-retries 4
 download-timeout 10
 prepopulate-query-feeds yes
-delete-read-articles-on-quit yes
+delete-read-articles-on-quit no
 
 
 # -- display -------------------------------------------------------------------
 
-show-read-feeds no
-article-sort-order date-desc
-feed-sort-order unreadarticlecount-asc
+show-read-feeds yes
+article-sort-order date-asc
 
 color background          color236   default
 color listnormal          color248   default

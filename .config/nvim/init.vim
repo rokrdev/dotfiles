@@ -133,6 +133,7 @@ let g:coc_global_extensions = [
             \ 'coc-css',
             \ 'coc-docker',
             \ 'coc-elixir',
+            \ 'coc-explorer',
             \ 'coc-emmet',
             \ 'coc-eslint',
             \ 'coc-html',
@@ -423,6 +424,7 @@ nnoremap <silent><Leader>gr <Plug>(coc-references)
 nnoremap <Leader>ss :CocSearch<Space>
 nnoremap <Leader>sw :CocSearch <C-R>=expand("<cword>")<CR><CR>
 imap <C-f> <Plug>(coc-snippets-expand)
+nmap <Leader>t :CocCommand explorer<CR>
 " Use K to show documentation in preview window
 nnoremap <silent> K :call custom#show_documentation()<CR>
 " }}}

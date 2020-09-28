@@ -5,15 +5,15 @@ reload-threads 4
 download-retries 4
 download-timeout 10
 prepopulate-query-feeds yes
-delete-read-articles-on-quit no
+delete-read-articles-on-quit yes
 
 
 # -- display -------------------------------------------------------------------
 
 show-read-feeds yes
-article-sort-order date-asc
+article-sort-order date-desc
 
-color background          color236   default
+color background          color153   default
 color listnormal          color248   default
 color listnormal_unread   color6     default
 color listfocus           color236   color12
@@ -65,7 +65,7 @@ bind-key U show-urls
 bind-key x pb-delete
 
 # -- bookmarks -----------------------------------------------------------------
-
+bookmark-cmd "~/.newsboat/save_bookmarks.sh"
 
 
 # -- misc ----------------------------------------------------------------------

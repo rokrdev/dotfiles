@@ -32,8 +32,6 @@ alias cat=bat
 alias dc='docker-compose'
 alias dcu='docker-compose up'
 alias dcd='docker-compose down'
-# https://www.electricmonk.nl/log/2015/06/22/keep-your-home-dir-in-git-with-a-detached-working-directory/
-alias dg='git --git-dir ~/.dotfiles/.git --work-tree=$HOME'
 alias dc='docker-compose'
 alias fm=vifm
 alias fr='source $FISH_CONFIG'
@@ -69,6 +67,7 @@ alias pip=~/opt/miniconda3/bin/pip
 alias p=~/opt/miniconda3/bin/python
 alias rf=trash
 alias sar="brew services restart skhd"
+alias sd="cd ~/.dotfiles && rsync -r --exclude-from \"exclude_from_sync.txt\" . ~"
 # alias ssh="bash ~/start_ssh.sh"
 alias st=speedtest-cli
 alias sudo='sudo '       # to use sudo with alias
@@ -134,12 +133,11 @@ function fish_prompt --description 'Write out the prompt'
     if test $path = '~'
         set pwd ''
         set prompt '~>> '
-        set vcs ''
     else
-        set vcs (fish_vcs_prompt)
         set pwd $path
     end
 
+    set vcs (fish_vcs_prompt)
     echo -n -s (set_color $fish_color_cwd) $pwd $vcs (set_color $prompt_color) $prompt
 end
 

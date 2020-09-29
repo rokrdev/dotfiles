@@ -32,7 +32,8 @@ alias cat=bat
 alias dc='docker-compose'
 alias dcu='docker-compose up'
 alias dcd='docker-compose down'
-alias dgit='git --git-dir ~/.dotfiles/.git --work-tree=$HOME'
+# https://www.electricmonk.nl/log/2015/06/22/keep-your-home-dir-in-git-with-a-detached-working-directory/
+alias dg='git --git-dir ~/.dotfiles/.git --work-tree=$HOME'
 alias dc='docker-compose'
 alias fm=vifm
 alias fr='source $FISH_CONFIG'

@@ -11,8 +11,8 @@ let g:colors_name="night-owl"
 
 hi Normal guifg=#d6deeb ctermfg=253 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
 hi LineNr guifg=#4b6479 ctermfg=66 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
-hi CursorLine guibg=#011321 ctermbg=235 gui=NONE cterm=NONE
-hi CursorLineNr guifg=#C5E4FD guibg=#011321 ctermfg=159 ctermbg=233 gui=NONE cterm=NONE
+hi CursorLine guibg=#00111F ctermbg=235 gui=NONE cterm=NONE
+hi CursorLineNr guifg=#C5E4FD guibg=#00111F ctermfg=159 ctermbg=233 gui=NONE cterm=NONE
 hi ColorColumn guibg=#151d24 ctermbg=235 gui=NONE cterm=NONE
 hi Directory guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
 hi DiffAdd guifg=#011627 ctermfg=233 guibg=#addb67 ctermbg=149 gui=NONE cterm=NONE
@@ -37,7 +37,7 @@ hi StatusLineNC guifg=#777777 ctermfg=243 guibg=#112630 ctermbg=235 gui=NONE cte
 hi Title guifg=#82aaff ctermfg=111 gui=bold cterm=bold
 hi Visual guibg=#1D3B53 ctermbg=222 gui=NONE cterm=NONE
 hi EndOfBuffer guifg=#444444 ctermfg=238 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
-hi Comment guifg=#74788A ctermfg=243 gui=italic cterm=italic
+hi Comment guifg=#637777 ctermfg=243 gui=italic cterm=italic
 hi Constant guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
 hi String guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
 hi Identifier guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE

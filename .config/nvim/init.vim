@@ -428,6 +428,7 @@ nnoremap <Leader>ss :CocSearch<Space>
 nnoremap <Leader>sw :CocSearch <C-R>=expand("<cword>")<CR><CR>
 imap <C-f> <Plug>(coc-snippets-expand-jump)
 nmap <Leader>t :CocCommand explorer<CR>
+nmap <Leader>T :call coc#util#float_hide()<CR>
 " Use K to show documentation in preview window
 nnoremap <silent> K :call custom#show_documentation()<CR>
 " }}}

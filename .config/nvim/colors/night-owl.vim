@@ -145,6 +145,7 @@ hi SneakLabel guifg=black guibg=#c792ea ctermfg=black ctermbg=cyan gui=bold term
 hi SignifySignAdd ctermbg=233 ctermfg=149 guifg=#addb67 guibg=#011627 cterm=NONE gui=NONE
 hi SignifySignDelete ctermbg=233 ctermfg=204 guifg=#ff5874 guibg=#011627 cterm=NONE gui=NONE
 hi SignifySignChange ctermbg=233 ctermfg=222 guifg=#ecc48d guibg=#011627 cterm=NONE gui=NONE
+hi illuminatedWord guibg=#263838 ctermbg=235 cterm=NONE gui=NONE
 
 let g:terminal_color_foreground = "#d6deeb"
 let g:terminal_color_background = "#011627"

@@ -67,6 +67,7 @@ Plug 'justinmk/vim-sneak'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-obsession', { 'on': ['Obsession', 'Obsess'] }
 Plug 'vifm/vifm.vim', { 'on': 'Vifm' }
+Plug 'rrethy/vim-illuminate'
 
 call plug#end()
 
@@ -86,6 +87,8 @@ let $TERM="alacritty"
 syntax enable
 filetype plugin indent on
 let g:cursorhold_updatetime = 100
+let g:Illuminate_delay = 500
+let g:Illuminate_highlightUnderCursor = 1
 " setup colorizer
 lua require'colorizer'.setup()
 

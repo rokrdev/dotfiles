@@ -24,7 +24,7 @@ set shortmess+=cI
 set colorcolumn=0
 set termguicolors
 set list
-set listchars=tab:>-,eol:¬
+set listchars=tab:>-,eol:¬,space:·
 set dir=~/.vim/swap//
 set showmatch           " Show matching brackets.
 set cursorline

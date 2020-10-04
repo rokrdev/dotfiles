@@ -21,8 +21,6 @@ function! custom#GoToRoot()
     exec 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))
 endfunction
 
-
-
 " https://github.com/wincent/loupe/blob/cf2d75a4b32a639e1b0a477c2ebdaebb1b70bf27/autoload/loupe/private.vim
 " E486: Pattern not found: \<foo\bar\>
 function! custom#EscapeSlashes(cword) abort

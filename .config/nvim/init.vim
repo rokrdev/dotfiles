@@ -24,7 +24,7 @@ set shortmess+=cI
 set colorcolumn=0
 set termguicolors
 set list
-set listchars=tab:>-,eol:¬,space:·,extends:»,precedes:«
+set listchars=tab:>-,eol:¬,extends:»,precedes:«
 set dir=~/.vim/swap//
 set showmatch           " Show matching brackets.
 set cursorline
@@ -68,6 +68,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-obsession', { 'on': ['Obsession', 'Obsess'] }
 Plug 'vifm/vifm.vim', { 'on': 'Vifm' }
 Plug 'rrethy/vim-illuminate'
+Plug 'Yggdroot/indentLine'
 
 call plug#end()
 
@@ -89,6 +90,10 @@ filetype plugin indent on
 let g:cursorhold_updatetime = 100
 let g:Illuminate_delay = 500
 let g:Illuminate_highlightUnderCursor = 1
+
+let g:indentLine_char = 'c'
+let g:indentLine_char_list = ['│']
+
 " setup colorizer
 lua require'colorizer'.setup()
 
@@ -331,25 +336,12 @@ autocmd InsertLeave * hi link EndOfLineSpace ErrorMsg
 
 command! DisableTrailingWhitespace hi link EndOfLineSpace Normal
 command! EnableTrailingWhitespace hi link EndOfLineSpace ErrorMsg
-
-function EnableWhiteSpace ()
-    set listchars+=space:·
-    exe "EnableTrailingWhitespace"
-endfunction
-
-function DisableWhiteSpace ()
-    set listchars-=space:·
-    exe "DisableTrailingWhitespace"
-endfunction
-
-autocmd! InsertEnter * call DisableWhiteSpace()
-autocmd! InsertLeave * call EnableWhiteSpace()
+" }}}
 
 augroup highlight_yank
     autocmd!
     autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=250, on_visual=false}
 augroup END
-" }}}
 
 " sneak {{{
 

@@ -27,7 +27,7 @@ set $fish_term24bit to "1"
 set fish_color_command blue
 
 abbr -a -g br "broot --sizes -dp"
-abbr -a -g brup 'brew update; brew upgrade; brew upgrade --cask; brew cleanup; brew doctor'
+abbr -a -g brup 'brew update && brew upgrade && brew upgrade --cask && brew cleanup && brew doctor'
 abbr -a -g cat bat
 abbr -a -g dc 'docker-compose'
 abbr -a -g dcu 'docker-compose up'
@@ -74,6 +74,7 @@ abbr -a -g t tmux
 abbr -a -g ta 'tmux attach || tmux new'
 abbr -a -g tg tig
 abbr -a -g top btm
+abbr -a -g upa 'brew update && brew upgrade && brew upgrade --cask && brew cleanup && brew doctor && vim +PlugUpgrade +PlugUpdate +PlugClean! +qall > /dev/null'
 abbr -a -g v nvim
 abbr -a -g vim nvim
 abbr -a -g vimdiff 'nvim -d'

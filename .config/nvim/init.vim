@@ -332,6 +332,19 @@ autocmd InsertLeave * hi link EndOfLineSpace ErrorMsg
 command! DisableTrailingWhitespace hi link EndOfLineSpace Normal
 command! EnableTrailingWhitespace hi link EndOfLineSpace ErrorMsg
 
+function EnableWhiteSpace ()
+    set listchars+=space:·
+    exe "EnableTrailingWhitespace"
+endfunction
+
+function DisableWhiteSpace ()
+    set listchars-=space:·
+    exe "DisableTrailingWhitespace"
+endfunction
+
+autocmd! InsertEnter * call DisableWhiteSpace()
+autocmd! InsertLeave * call EnableWhiteSpace()
+
 augroup highlight_yank
     autocmd!
     autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=250, on_visual=false}

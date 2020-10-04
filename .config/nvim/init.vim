@@ -95,6 +95,7 @@ let g:indentLine_char = 'c'
 let g:indentLine_char_list = ['│']
 let g:indentLine_fileTypeExclude = ['coc-explorer']
 let g:indentLine_bufTypeExclude = ['help', 'terminal']
+let g:indentLine_bufNameExclude = ['vifm']
 
 " setup colorizer
 lua require'colorizer'.setup()
@@ -323,7 +324,6 @@ autocmd BufWritePost,TextChanged,TextChangedI,TermLeave * call lightline#update(
 function OnTermOpen()
     startinsert
     setlocal listchars= nonumber norelativenumber
-    let g:indentLine_setConceal = 0
     tnoremap <buffer> <Esc> <c-\><c-n>
 endfunction
 

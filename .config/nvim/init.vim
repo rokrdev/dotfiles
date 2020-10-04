@@ -93,6 +93,8 @@ let g:Illuminate_highlightUnderCursor = 1
 
 let g:indentLine_char = 'c'
 let g:indentLine_char_list = ['│']
+let g:indentLine_fileTypeExclude = ['coc-explorer']
+let g:indentLine_bufTypeExclude = ['help', 'terminal']
 
 " setup colorizer
 lua require'colorizer'.setup()
@@ -318,9 +320,14 @@ autocmd BufWritePost,TextChanged,TextChangedI,TermLeave * call lightline#update(
 
 " Term {{{
 
-autocmd TermOpen * startinsert
-autocmd TermOpen * setlocal listchars= nonumber norelativenumber
-autocmd TermOpen * tnoremap <buffer> <Esc> <c-\><c-n>
+function OnTermOpen()
+    startinsert
+    setlocal listchars= nonumber norelativenumber
+    let g:indentLine_setConceal = 0
+    tnoremap <buffer> <Esc> <c-\><c-n>
+endfunction
+
+autocmd TermOpen * call OnTermOpen()
 
 command! -bang Term terminal<bang> /usr/local/bin/fish
 command! -nargs=* T split | Term <args>

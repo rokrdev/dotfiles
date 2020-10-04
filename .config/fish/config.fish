@@ -26,79 +26,78 @@ export FZF_DEFAULT_OPTS='--bind=ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:tog
 set $fish_term24bit to "1"
 set fish_color_command blue
 
-alias br="broot --sizes -dp"
-alias brup='brew update; brew upgrade; brew upgrade --cask; brew cleanup; brew doctor'
-alias cat=bat
-alias dc='docker-compose'
-alias dcu='docker-compose up'
-alias dcd='docker-compose down'
-alias dc='docker-compose'
-alias fm=vifm
-alias fr='source $FISH_CONFIG'
-alias fk="fkill"
-alias g=git
-alias ga='git add'
-alias gb='git branch'
-alias gc='git checkout'
-alias gca='git commit --amend'
-alias gco='git commit -m'
-alias gd='git diff'
-alias gds='git diff --staged'
-alias gfm='git pull'
-alias gmt="git mergetool"
-alias gp='git push'
-alias gs='git status'
-alias gtr='git log --oneline --graph --decorate --all'
-alias k="/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
-alias lg=lazygit
-alias m=make
-alias mi='make install'
-alias mu='make update'
-alias n=npm
-alias nb=newsboat
-alias ni='npm install'
-alias nn='nnn -d -e -H'
-alias nq=notion
-alias nr='npm run'
-alias nt='npm test'
-alias nv="~/.npm-packages/bin/n"
-alias python=~/opt/miniconda3/bin/python
-alias pip=~/opt/miniconda3/bin/pip
-alias p=~/opt/miniconda3/bin/python
-alias rf=trash
-alias sar="brew services restart skhd"
-alias sd="cd ~/.dotfiles && rsync -r --exclude-from \"exclude_from_sync.txt\" . ~"
-# alias ssh="bash ~/start_ssh.sh"
-alias st=speedtest-cli
-alias sudo='sudo '       # to use sudo with alias
-alias t=tmux
-alias ta='tmux attach || tmux new'
-alias tg=tig
-alias top=btm
-alias v=nvim
-alias vim=nvim
-alias vimdiff='nvim -d'
-alias vimup='vim +PlugUpgrade +PlugUpdate +PlugClean! +qall > /dev/null'
-alias y=yarn
-alias ya='yarn add'
-alias yar='brew services restart yabai'
-alias yas='brew services stop yabai'
-alias yast='brew services start yabai'
-alias yr='yarn run'
-alias ys='yarn start'
-alias yt='yarn test'
+abbr -a -g br "broot --sizes -dp"
+abbr -a -g brup 'brew update; brew upgrade; brew upgrade --cask; brew cleanup; brew doctor'
+abbr -a -g cat bat
+abbr -a -g dc 'docker-compose'
+abbr -a -g dcu 'docker-compose up'
+abbr -a -g dcd 'docker-compose down'
+abbr -a -g dc 'docker-compose'
+abbr -a -g fm vifm
+abbr -a -g fr 'source $FISH_CONFIG'
+abbr -a -g g git
+abbr -a -g ga 'git add'
+abbr -a -g gb 'git branch'
+abbr -a -g gc 'git checkout'
+abbr -a -g gca 'git commit --amend'
+abbr -a -g gco 'git commit -m'
+abbr -a -g gd 'git diff'
+abbr -a -g gds 'git diff --staged'
+abbr -a -g gfm 'git pull'
+abbr -a -g gmt "git mergetool"
+abbr -a -g gp 'git push'
+abbr -a -g gs 'git status'
+abbr -a -g gtr 'git log --oneline --graph --decorate --all'
+abbr -a -g k "/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
+abbr -a -g lg lazygit
+abbr -a -g m make
+abbr -a -g mi 'make install'
+abbr -a -g mu 'make update'
+abbr -a -g n npm
+abbr -a -g nb newsboat
+abbr -a -g ni 'npm install'
+abbr -a -g nn 'nnn -d -e -H'
+abbr -a -g nq notion
+abbr -a -g nr 'npm run'
+abbr -a -g nt 'npm test'
+abbr -a -g nv "~/.npm-packages/bin/n"
+abbr -a -g python ~/opt/miniconda3/bin/python
+abbr -a -g pip ~/opt/miniconda3/bin/pip
+abbr -a -g p ~/opt/miniconda3/bin/python
+abbr -a -g rf trash
+abbr -a -g sar "brew services restart skhd"
+abbr -a -g sd "pushd ~/.dotfiles && rsync -r --exclude-from \"exclude_from_sync.txt\" . ~ && popd"
+# abbr ssh="bash ~/start_ssh.sh"
+abbr -a -g st speedtest-cli
+abbr -a -g sudo 'sudo '       # to use sudo with abbr
+abbr -a -g t tmux
+abbr -a -g ta 'tmux attach || tmux new'
+abbr -a -g tg tig
+abbr -a -g top btm
+abbr -a -g v nvim
+abbr -a -g vim nvim
+abbr -a -g vimdiff 'nvim -d'
+abbr -a -g vimup 'vim +PlugUpgrade +PlugUpdate +PlugClean! +qall > /dev/null'
+abbr -a -g y yarn
+abbr -a -g ya 'yarn add'
+abbr -a -g yar 'brew services restart yabai'
+abbr -a -g yas 'brew services stop yabai'
+abbr -a -g yast 'brew services start yabai'
+abbr -a -g yr 'yarn run'
+abbr -a -g ys 'yarn start'
+abbr -a -g yt 'yarn test'
 
 # Changing "ls" to "exa"
-alias ls='exa -a --color=always --group-directories-first'  # all files and dirs
-alias ll='exa -al --color=always --group-directories-first'  # long format
-alias lt='exa -aT --color=always --group-directories-first' # tree listing
-alias l.='exa -a | egrep "^\."'
-alias ..='cd ..'
-alias ...='cd ../../'
-alias .3='cd ../../../'
-alias .4='cd ../../../'
-alias .5='cd ../../../../'
-alias .6='cd ../../../../../'
+abbr -a -g ls 'exa -a --color=always --group-directories-first'  # all files and dirs
+abbr -a -g ll 'exa -al --color=always --group-directories-first'  # long format
+abbr -a -g lt 'exa -aT --color=always --group-directories-first' # tree listing
+abbr -a -g l. 'exa -a | egrep "^\."'
+abbr -a -g .. 'cd ..'
+abbr -a -g ... 'cd ../../'
+abbr -a -g .3 'cd ../../../'
+abbr -a -g .4 'cd ../../../'
+abbr -a -g .5 'cd ../../../../'
+abbr -a -g .6 'cd ../../../../../'
 
 # asdf erlang fails without this in fish
 set CFLAGS "-O2 -g" $CFLAGS

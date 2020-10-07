@@ -358,8 +358,8 @@ let g:sneak#target_labels = "asdfjkl;ghqweruioptyzxcvnmb"
 " }}}
 
 " mappings {{{
-nnoremap <A-s> :m .+1<CR>==
-nnoremap <A-w> :m .-2<CR>==
+nnoremap <C-down> :m .+1<CR>==
+nnoremap <C-up> :m .-2<CR>==
 nnoremap <Leader>c :e %:h/
 nnoremap s_ :bd!<CR>
 nnoremap s- :bd<CR>
@@ -373,12 +373,12 @@ nnoremap \| @@
 nmap s <Nop>
 xmap s <Nop>
 nnoremap <esc><esc> :silent! nohl<CR>
-vnoremap <A-s> :m '>+1<CR>gv=gv
-vnoremap <A-w> :m '<-2<CR>gv=gv
-nnoremap <silent> <A--> :vertical resize +5<CR>
-nnoremap <silent> <A-=> :vertical resize -5<CR>
-nnoremap <silent> <A-_> :resize +5<CR>
-nnoremap <silent> <A-+> :resize -5<CR>
+vnoremap <C-down> :m '>+1<CR>gv=gv
+vnoremap <C-up> :m '<-2<CR>gv=gv
+nnoremap <silent> <A-a> :vertical resize +5<CR>
+nnoremap <silent> <A-d> :vertical resize -5<CR>
+nnoremap <silent> <A-w> :resize +5<CR>
+nnoremap <silent> <A-s> :resize -5<CR>
 nnoremap <Leader>r :%s///g<Left><Left><Left>
 nnoremap <Leader>rc :%s///gc<Left><Left><Left><Left>
 nnoremap <silent>s# :let @/='\<'.expand('<cword>').'\>'<CR>cgN

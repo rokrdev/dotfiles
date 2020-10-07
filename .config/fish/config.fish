@@ -48,6 +48,7 @@ abbr -a -g gmt "git mergetool"
 abbr -a -g gp 'git push'
 abbr -a -g gs 'git status'
 abbr -a -g gtr 'git log --oneline --graph --decorate --all'
+abbr -a -g h 'z dot'
 abbr -a -g k "/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
 abbr -a -g lg lazygit
 abbr -a -g m make

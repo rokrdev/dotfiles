@@ -51,7 +51,6 @@ Plug 'itchyny/lightline.vim'
 Plug 'itchyny/vim-gitbranch'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'jiangmiao/auto-pairs'
-Plug 'junegunn/fzf',
 Plug 'junegunn/fzf.vim'
 Plug 'machakann/vim-sandwich'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
@@ -78,6 +77,7 @@ packadd cfilter
 
 " other {{{
 
+set rtp+=/usr/local/opt/fzf
 autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
       \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
 autocmd FileChangedShellPost *

@@ -45,12 +45,6 @@ const $1 = styled.$2\`
 \`;
 endsnippet
 
-snippet arf "Array function"
-= () => {
-  $1
-}
-endsnippet
-
 snippet frg "React fragment"
 <>
   $1
@@ -67,7 +61,7 @@ snippet oct "Open Close tag"
 </$1>
 endsnippet
 
-snippet af "arrow function"
+snippet arf "arrow function"
 ($1) => {$2}
 endsnippet
 
@@ -81,3 +75,10 @@ function $1($2) {
 }
 endsnippet
 
+snippet try "try catch"
+try {
+  $1
+} catch (error) {
+  $2
+}
+endsnippet

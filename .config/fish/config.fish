@@ -4,6 +4,7 @@ export EDITOR="nvim"
 export TERM="alacritty"
 export FISH_CONFIG="$HOME/.config/fish/config.fish"
 set TERMINFO ~/.terminfo/
+export LANG="en_US.UTF-8"
 
 export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
 export GEM_HOME="$HOME/.gem"
@@ -62,9 +63,9 @@ abbr -a -g nq notion
 abbr -a -g nr 'npm run'
 abbr -a -g nt 'npm test'
 abbr -a -g nv "~/.npm-packages/bin/n"
-abbr -a -g python ~/opt/miniconda3/bin/python
-abbr -a -g pip ~/opt/miniconda3/bin/pip
-abbr -a -g p ~/opt/miniconda3/bin/python
+alias python=~/opt/miniconda3/bin/python
+alias pip=~/opt/miniconda3/bin/pip
+alias p=~/opt/miniconda3/bin/python
 abbr -a -g rf trash
 abbr -a -g sar "brew services restart skhd"
 abbr -a -g sd "pushd ~/.dotfiles && rsync -r --exclude-from \"exclude_from_sync.txt\" . ~ && popd"

@@ -91,8 +91,9 @@ abbr -a -g ys 'yarn start'
 abbr -a -g yt 'yarn test'
 
 # Changing "ls" to "exa"
-abbr -a -g ls 'exa -a --color=always --group-directories-first'  # all files and dirs
-abbr -a -g ll 'exa -al --color=always --group-directories-first'  # long format
+abbr -a -g ls 'exa --color=always --group-directories-first'  # all files and dirs
+abbr -a -g la 'exa -a --color=always --group-directories-first'  # all files and dirs
+abbr -a -g ll 'exa -lah --color=always --group-directories-first'  # long format
 abbr -a -g lt 'exa -aT --color=always --group-directories-first' # tree listing
 abbr -a -g l. 'exa -a | egrep "^\."'
 abbr -a -g .. 'cd ..'

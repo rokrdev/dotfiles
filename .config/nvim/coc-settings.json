@@ -29,7 +29,6 @@
     "python",
     "typescript"
   ],
-  "elixir.pathToElixirLS": "~/.local/bin/elixir-ls/release/language_server.sh",
   "elixirLS.dialyzerEnabled": true,
   "elixirLS.mixEnv": "dev",
   "python.jediEnabled": false,

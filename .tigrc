@@ -318,7 +318,7 @@ bind refs pU ?git pull --rebase
 
 bind refs	c	?git checkout %(branch)
 
-bind status bc @git checkout -b "%(prompt Checkout at new branch: )" %(commit)
+bind status bc ?git checkout -b "%(prompt Checkout at new branch: )" %(commit)
 bind status pp ?git push %(remote) %(branch)
 bind status pF ?git push --force %(remote) %(branch)
 bind status pu !git pull

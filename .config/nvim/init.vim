@@ -409,6 +409,7 @@ vnoremap <Leader>* :call custom#RgRawVisualSelection()<CR>
 nnoremap <Leader>o :Files<CR>
 nnoremap <Leader>f :Rg<CR>
 nnoremap <Leader>F :RgRaw<Space>
+nnoremap <Leader>/ :BLines<CR>
 nnoremap <Leader>G :GF?<CR>
 nnoremap <Leader>co :Commands<CR>
 nnoremap <Leader>cc :BCommits<CR>

@@ -246,6 +246,7 @@ bind status U @git reset
 bind status s @git add %(file)
 bind status u @git reset %(file)
 bind status r @git checkout %(file)
+bind status x @rm %(file)
 
 # stash
 bind status tt ?>git stash

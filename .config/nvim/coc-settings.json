@@ -36,5 +36,6 @@
   "emmet.includeLanguages": { "javascript": "javascriptreact" },
   "snippets.ultisnips.directories": ["UltiSnips"],
   "explorer.file.showHiddenFiles": true,
-  "explorer.previewAction.onHover": false
+  "explorer.previewAction.onHover": false,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true
 }

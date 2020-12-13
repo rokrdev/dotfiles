@@ -34,4 +34,5 @@ highlight Socket	cterm=bold	ctermfg=005	ctermbg=default
 nnoremap cf :touch<space>
 nnoremap cd :mkdir!<space>
 nnoremap Q :quit!<cr>
+nnoremap qq :quit!<cr>
 

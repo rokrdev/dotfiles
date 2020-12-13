@@ -324,7 +324,7 @@ autocmd BufWritePost,TextChanged,TextChangedI,TermLeave * call lightline#update(
 function OnTermOpen()
     startinsert
     setlocal listchars= nonumber norelativenumber
-    tnoremap <buffer> <Esc> <c-\><c-n>
+    tnoremap <buffer> <Esc> <Nop>
 endfunction
 
 autocmd TermOpen * call OnTermOpen()

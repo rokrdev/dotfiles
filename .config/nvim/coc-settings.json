@@ -1,0 +1,41 @@
+{
+  "codeLens.enable": false,
+  "suggest.noselect": false,
+  "suggest.enablePreview": true,
+  "suggest.enablePreselect": true,
+  "diagnostic.messageTarget": "float",
+  "diagnostic.virtualText": false,
+  "diagnostic.level": "warning",
+  "languageserver": {
+    "dockerfile": {
+      "command": "docker-langserver",
+      "filetypes": ["dockerfile"],
+      "args": ["--stdio"]
+    }
+  },
+  "python.formatting.provider": "black",
+  "python.formatting.blackPath": "~/opt/miniconda3/bin/black",
+  "python.linting.enabled": true,
+  "coc.preferences.formatOnType": true,
+  "coc.preferences.formatOnSaveFiletypes": [
+    "css",
+    "graphql",
+    "html",
+    "javascript",
+    "javascriptreact",
+    "json",
+    "markdown",
+    "mdx",
+    "python",
+    "typescript"
+  ],
+  "elixirLS.dialyzerEnabled": true,
+  "elixirLS.mixEnv": "dev",
+  "python.jediEnabled": false,
+  "emmet.showExpandedAbbreviation": "always",
+  "emmet.includeLanguages": { "javascript": "javascriptreact" },
+  "snippets.ultisnips.directories": ["UltiSnips"],
+  "explorer.file.showHiddenFiles": true,
+  "explorer.previewAction.onHover": false,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true
+}

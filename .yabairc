@@ -1,0 +1,62 @@
+#!/bin/zsh
+
+# killall limelight &> /dev/null
+# limelight &> /dev/null &
+
+# global settings
+yabai -m config mouse_follows_focus          on
+yabai -m config focus_follows_mouse          autoraise
+yabai -m config window_placement             first_child
+yabai -m config window_topmost               on
+yabai -m config window_opacity               on
+yabai -m config window_opacity_duration      0.0
+yabai -m config window_shadow                on
+yabai -m config insert_feedback_color        0xaad75f5f
+yabai -m config active_window_opacity        1.0
+yabai -m config normal_window_opacity        0.90
+yabai -m config split_ratio                  0.50
+yabai -m config auto_balance                 on
+yabai -m config mouse_modifier               fn
+yabai -m config mouse_action1                move
+yabai -m config mouse_action2                resize
+
+# general space settings
+yabai -m config layout                       bsp
+yabai -m config top_padding                  0
+yabai -m config bottom_padding               0
+yabai -m config left_padding                 0
+yabai -m config right_padding                0
+yabai -m config window_gap                   0
+
+
+yabai -m rule --add \
+    app="^Finder$" \
+    manage=off \
+    topmost=on
+
+yabai -m rule --add \
+    title="Preferences$" \
+    manage=off \
+    topmost=on
+
+yabai -m rule --add \
+    app="^Emacs$" \
+    manage=on \
+    sticky=off
+
+# disable the border on the MS teams window
+yabai -m rule --add \
+    app='^Microsoft Teams$' \
+    title='^Microsoft Teams Notification$' \
+    border=off
+
+# The below signal only works on current master, not in 1.1.2
+# Tries to focus the window under the cursor whenever the MS teams notification gains focus
+# Probably conflicts with mouse follows focus in some ways
+yabai -m signal --add \
+    event=window_focused \
+    app='^Microsoft Teams$' \
+    title='^Microsoft Teams Notification$' \
+    action='yabai -m window --focus mouse > /dev/null 2>&1'
+
+echo "yabai configuration loaded.."

@@ -1,0 +1,37 @@
+
+# Starred article
+"query:Starred:flags # \"s\""
+"query:Read Later:flags # \"l\""
+"query:Unread:unread = \"yes\""
+
+
+https://news.ycombinator.com/rss "~Hacker news" news
+
+https://www.reddit.com/r/neovim/.rss "~neovim" reddit vim tech
+https://www.reddit.com/r/vim/.rss "~vim" reddit vim tech
+https://www.reddit.com/r/reactjs/.rss "~reactjs" reddit tech
+
+https://www.youtube.com/feeds/videos.xml?channel_id=UCXPHFM88IlFn68OmLwtPmZA "~Greg Hurrell" youtube tech vim
+https://www.youtube.com/feeds/videos.xml?channel_id=UCd3dNckv1Za2coSaHGHl5aA "~Dj DeVries" youtube tech vim
+https://www.youtube.com/feeds/videos.xml?channel_id=UC8ENHE5xdFSwx71u3fDH5Xw "~ThePrimeagen" youtube tech vim
+https://www.youtube.com/feeds/videos.xml?channel_id=UCorzANoC3fX9VVefJHM5wtA "~Nick Janetakis" youtube tech vim
+https://www.youtube.com/feeds/videos.xml?channel_id=UCtxCXg-UvSnTKPOzLH4wJaQ "~Coding Tech" youtube tech
+https://www.youtube.com/feeds/videos.xml?channel_id=UC29ju8bIPH5as8OGnQzwJyA "~Traversy Media" youtube tech
+https://www.youtube.com/feeds/videos.xml?channel_id=UC4QZ_LsYcvcq7qOsOhpAX4A "~ColdFusionTV" youtube tech
+https://www.youtube.com/feeds/videos.xml?channel_id=UC8butISFwT-Wl7EV0hUK0BQ "~FreeCodeCamp" youtube tech
+https://www.youtube.com/feeds/videos.xml?channel_id=UCNc-Wa_ZNBAGzFkYbAHw9eg "~InterviewingIO" youtube tech
+https://www.youtube.com/feeds/videos.xml?channel_id=UCbGZKLIHpox2l0whz6_RYyg "~Techsith" youtube tech
+https://www.youtube.com/feeds/videos.xml?channel_id=UCyU5wkjgQYGRB0hIHMwm2Sg "~Keyframers" youtube tech
+https://www.youtube.com/feeds/videos.xml?channel_id=UCnUYZLuoy1rq1aVMwx4aTzw "~Google Chrome Developers" youtube tech
+https://www.youtube.com/feeds/videos.xml?channel_id=UCX7Y2qWriXpqocG97SFW2OQ "~Jeremy Howard" youtube tech mldl
+https://www.youtube.com/feeds/videos.xml?channel_id=UCVpankR4HtoAVtYnFDUieYA "~zefrank1" youtube fun
+https://www.youtube.com/feeds/videos.xml?channel_id=UCwcsDWGip6vtiZyCnvDoClQ "~Kitisaurus" youtube fun
+https://www.youtube.com/feeds/videos.xml?channel_id=UCsXVk37bltHxD1rDPwtNM8Q "~Kurzgesagt" youtube fun
+https://www.youtube.com/feeds/videos.xml?channel_id=UCY1kMZp36IQSyNx_9h4mpCg "~Mark Rober" youtube fun
+https://www.youtube.com/feeds/videos.xml?channel_id=UCqoAEDirJPjEUFcF2FklnBA "~StarTalk" youtube fun
+https://www.youtube.com/feeds/videos.xml?channel_id=UC8jkbVLPvztz8TuE98OYo8Q "~FPT" youtube fun
+https://www.youtube.com/feeds/videos.xml?channel_id=UCVYamHliCI9rw1tHR1xbkfw "~Dave2D" youtube review
+https://www.youtube.com/feeds/videos.xml?channel_id=UCSJbGtTlrDami-tDGPUV9-w "~Ben Vallack" youtube review
+https://www.youtube.com/feeds/videos.xml?channel_id=UCBJycsmduvYEL83R_U4JriQ "~MKBHD" youtube review
+https://www.youtube.com/feeds/videos.xml?channel_id=UCSOpcUkE-is7u7c4AkLgqTw "~MrMobile" youtube review
+

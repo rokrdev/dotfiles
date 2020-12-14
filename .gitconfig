@@ -1,0 +1,26 @@
+[core]
+	excludesfile = ~/.gitignore_global
+[difftool]
+	prompt = true
+[diff]
+	tool = nvimdiff
+[difftool "nvimdiff"]
+	cmd = nvim -d "$REMOTE" "$LOCAL"
+[merge]
+	tool = nvimdiff
+[mergetool "nvimdiff"]
+	cmd = nvim -f -c "MergetoolStart" "$MERGED" "$BASE" "$LOCAL" "REMOTE"
+[pull]
+	ff = only
+[push]
+	default = current
+[includeIf "gitdir:~/**/.git"]
+	path = ~/projects/config.personal
+[includeIf "gitdir:~/projects/**/.git"]
+	path = ~/projects/config.personal
+[includeIf "gitdir:~/Workspace/**/.git"]
+	path = ~/Workspace/config.ib
+[includeIf "gitdir:~/Documents/**/.git"]
+	path = ~/Documents/config.ib
+[commit]
+	template = ~/.git_commit_msg.txt

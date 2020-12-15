@@ -360,14 +360,15 @@ let g:sneak#target_labels = "asdfjkl;ghqweruioptyzxcvnmb"
 " mappings {{{
 nnoremap <C-down> :m .+1<CR>==
 nnoremap <C-up> :m .-2<CR>==
-nnoremap <Leader>c :e %:h/
+nnoremap <Leader>C :e %:p:h/
 nnoremap s_ :bd!<CR>
 nnoremap s- :bd<CR>
 nnoremap sp "+p
 vnoremap sy "+y
 vnoremap sp "+p
 nnoremap gh :b#<CR>
-nnoremap ss :Buffers<CR>
+nnoremap sh :Buffers<CR>
+nnoremap ss :ls<CR>:b<Space>
 nnoremap \| @@
 " for vim-sandwich
 nmap s <Nop>
@@ -430,18 +431,18 @@ nnoremap <Leader>gb :call custom#OpenTerm('tig ' . expand('%'))<CR>
 nnoremap <Leader>gu :call custom#OpenTerm('tig log @{u}.. -p')<CR>
 nmap gb <Plug>(git-messenger)
 " Use `[g` and `]g` to navigate diagnostics
-nnoremap <silent> [g <Plug>(coc-diagnostic-prev)
-nnoremap <silent> ]g <Plug>(coc-diagnostic-next)
+nnoremap <silent><Leader>ck <Plug>(coc-diagnostic-prev)
+nnoremap <silent><Leader>cj <Plug>(coc-diagnostic-next)
 " Remap keys for gotos
-nnoremap <silent><Leader>gd <Plug>(coc-definition)
-nnoremap <silent><Leader>gy <Plug>(coc-type-definition)
-nnoremap <silent><Leader>gi <Plug>(coc-implementation)
-nnoremap <silent><Leader>gr <Plug>(coc-references)
-nnoremap <Leader>ss :CocSearch<Space>
-nnoremap <Leader>sw :CocSearch <C-R>=expand("<cword>")<CR><CR>
+nnoremap <silent><Leader>cd <Plug>(coc-definition)
+nnoremap <silent><Leader>cy <Plug>(coc-type-definition)
+nnoremap <silent><Leader>ci <Plug>(coc-implementation)
+nnoremap <silent><Leader>cr <Plug>(coc-references)
+nnoremap <Leader>cs :CocSearch<Space>
+nnoremap <Leader>cw :CocSearch <C-R>=expand("<cword>")<CR><CR>
 imap <C-f> <Plug>(coc-snippets-expand-jump)
-nmap <Leader>t :CocCommand explorer<CR>
-nmap <Leader>T :call coc#util#float_hide()<CR>
+nmap <Leader>ct :CocCommand explorer<CR>
+nmap <Leader>cT :call coc#float#close_all()<CR>
 " Use K to show documentation in preview window
 nnoremap <silent> K :call custom#show_documentation()<CR>
 " }}}

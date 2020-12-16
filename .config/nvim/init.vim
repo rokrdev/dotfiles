@@ -41,6 +41,7 @@ set foldnestmax=10
 set foldlevel=2
 set inccommand=split
 set signcolumn=yes
+set wildignorecase
 " }}}
 
 " Plug {{{
@@ -367,8 +368,7 @@ nnoremap sp "+p
 vnoremap sy "+y
 vnoremap sp "+p
 nnoremap gh :b#<CR>
-nnoremap sh :Buffers<CR>
-nnoremap ss :ls<CR>:b<Space>
+nnoremap ss :Buffers<CR>
 nnoremap \| @@
 " for vim-sandwich
 nmap s <Nop>

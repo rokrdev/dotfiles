@@ -172,7 +172,7 @@ let g:coc_global_extensions = [
 " Fzf {{{
 
 " let g:fzf_layout = { 'window': 'split enew'  }
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9, 'border': 'rounded', 'highlight': 'Directory' }}
+let g:fzf_layout = { 'window': { 'width': 1, 'height': 1, 'border': 'rounded', 'highlight': 'Directory' }}
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
@@ -431,13 +431,13 @@ nnoremap <Leader>gb :call custom#OpenTerm('tig ' . expand('%'))<CR>
 nnoremap <Leader>gu :call custom#OpenTerm('tig log @{u}.. -p')<CR>
 nmap gb <Plug>(git-messenger)
 " Use `[g` and `]g` to navigate diagnostics
-nnoremap <silent><Leader>ck <Plug>(coc-diagnostic-prev)
-nnoremap <silent><Leader>cj <Plug>(coc-diagnostic-next)
+nmap <Leader>ck <Plug>(coc-diagnostic-prev)
+nmap <Leader>cj <Plug>(coc-diagnostic-next)
 " Remap keys for gotos
-nnoremap <silent><Leader>cd <Plug>(coc-definition)
-nnoremap <silent><Leader>cy <Plug>(coc-type-definition)
-nnoremap <silent><Leader>ci <Plug>(coc-implementation)
-nnoremap <silent><Leader>cr <Plug>(coc-references)
+nmap <Leader>cd <Plug>(coc-definition)
+nmap <Leader>cy <Plug>(coc-type-definition)
+nmap <Leader>ci <Plug>(coc-implementation)
+nmap <Leader>cr <Plug>(coc-references)
 nnoremap <Leader>cs :CocSearch<Space>
 nnoremap <Leader>cw :CocSearch <C-R>=expand("<cword>")<CR><CR>
 imap <C-f> <Plug>(coc-snippets-expand-jump)

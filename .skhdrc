@@ -61,11 +61,7 @@ alt - 6 : yabai -m space --focus 6
 alt - 7 : yabai -m space --focus 7
 alt - 8 : yabai -m space --focus 8
 alt - 9 : yabai -m space --focus 9
-alt - 0 : yabai -m space --focus 10
-
-ctrl + cmd - r : yabai -m space --focus recent
-ctrl + cmd - n : yabai -m space --focus next
-ctrl + cmd - p : yabai -m space --focus prev
+alt - 0 : yabai -m space --focus recent
 
 shift + alt - 1 : yabai -m window --space 1; yabai -m space --focus 1
 shift + alt - 2 : yabai -m window --space 2; yabai -m space --focus 2

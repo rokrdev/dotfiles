@@ -71,7 +71,6 @@ abbr -a -g sar "brew services restart skhd"
 abbr -a -g sd "pushd ~/.dotfiles && rsync -r --exclude-from \"exclude_from_sync.txt\" . ~ && popd"
 # abbr ssh="bash ~/start_ssh.sh"
 abbr -a -g st speedtest-cli
-abbr -a -g sudo 'sudo '       # to use sudo with abbr
 abbr -a -g t tmux
 abbr -a -g ta 'tmux attach || tmux new'
 abbr -a -g tg tig

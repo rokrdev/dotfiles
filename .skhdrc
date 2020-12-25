@@ -81,6 +81,9 @@ shift + alt - 0 : yabai -m space --balance
 # # toggle window fullscreen
 alt - f : yabai -m window --toggle zoom-fullscreen
 
+# # toggle window fullscreen
+alt - r : yabai -m space --rotate 90
+
 # # toggle window native fullscreen
 cmd + ctrl  - f : yabai -m window --toggle native-fullscreen
 

@@ -392,10 +392,6 @@ nnoremap ! @z
 command! FJ %!jq .
 nnoremap <expr> <Leader>0 custom#ToggleNumberDisplay()
 nnoremap <Leader>qr :cfdo %s///g \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
-nnoremap [<Space> O<Esc>
-nnoremap ]<Space> o<Esc>
-nnoremap [q :cprevious<CR>
-nnoremap ]q :cnext<CR>
 inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
 " */#/g*/g# mapping that obeys smartcase and  ignorecase
@@ -430,10 +426,8 @@ nnoremap <Leader>gg :call custom#OpenTerm('tig status')<CR>
 nnoremap <Leader>gb :call custom#OpenTerm('tig ' . expand('%'))<CR>
 nnoremap <Leader>gu :call custom#OpenTerm('tig log @{u}.. -p')<CR>
 nmap gb <Plug>(git-messenger)
-" Use `[g` and `]g` to navigate diagnostics
 nmap <Leader>ck <Plug>(coc-diagnostic-prev)
 nmap <Leader>cj <Plug>(coc-diagnostic-next)
-" Remap keys for gotos
 nmap <Leader>cd <Plug>(coc-definition)
 nmap <Leader>cy <Plug>(coc-type-definition)
 nmap <Leader>ci <Plug>(coc-implementation)
@@ -443,7 +437,10 @@ nnoremap <Leader>cw :CocSearch <C-R>=expand("<cword>")<CR><CR>
 imap <C-f> <Plug>(coc-snippets-expand-jump)
 nmap <Leader>ct :CocCommand explorer<CR>
 nmap <Leader>cT :call coc#float#close_all()<CR>
-" Use K to show documentation in preview window
 nnoremap <silent> K :call custom#show_documentation()<CR>
+nnoremap <Leader>; o<ESC>
+nnoremap <Leader>: O<ESC>
+" nnoremap <Leader>\> :cnext<CR>
+" nnoremap <Leader>\< :cprevious<CR>
 " }}}
 

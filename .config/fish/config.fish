@@ -11,7 +11,9 @@ export GEM_HOME="$HOME/.gem"
 
 # using ruby from brew
 # setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`
-export PATH="$HOME/opt/miniconda3/bin:/usr/local/opt/ruby/bin:$HOME/.gem/bin:$HOME/.asdf/shims:/usr/local/opt/asdf/shims:/usr/local/opt/asdf/bin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$HOME/.pyenv/bin:$PATH"
+export PATH="/usr/local/opt/ruby/bin:$HOME/.gem/bin:$HOME/.asdf/shims:/usr/local/opt/asdf/shims:/usr/local/opt/asdf/bin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 source ~/.env
 
@@ -19,6 +21,10 @@ export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -S'
 export FZF_CTRL_R_OPTS='--sort --exact'
 export FZF_TMUX=1
 export FZF_DEFAULT_OPTS='--bind=ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all --color=fg:#d6deeb,bg:#011627,hl:#addb67 --color=fg+:#82aaff,bg+:#00111F,hl+:#82aaff --color=info:#7fdbca,gutter:#011627,prompt:#c792ea,pointer:#c792ea --color=marker:#82aaff,spinner:#c792ea,header:#7fdbca'
+
+pyenv init - --no-rehash | source
+export LDFLAGS="-L/usr/local/opt/zlib/lib"
+export CPPFLAGS="-I/usr/local/opt/zlib/include"
 
 # defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 # defaults write NSGlobalDomain KeyRepeat -float 1.5
@@ -35,7 +41,6 @@ abbr -a -g dcu 'docker-compose up'
 abbr -a -g dcd 'docker-compose down'
 abbr -a -g dc 'docker-compose'
 abbr -a -g fm vifm
-abbr -a -g fr 'source $FISH_CONFIG'
 abbr -a -g g git
 abbr -a -g ga 'git add'
 abbr -a -g gb 'git branch'
@@ -63,13 +68,10 @@ abbr -a -g nq notion
 abbr -a -g nr 'npm run'
 abbr -a -g nt 'npm test'
 abbr -a -g nv "~/.npm-packages/bin/n"
-alias python=~/opt/miniconda3/bin/python
-alias pip=~/opt/miniconda3/bin/pip
-alias p=~/opt/miniconda3/bin/python
 abbr -a -g rf trash
 abbr -a -g sar "brew services restart skhd"
 abbr -a -g sd "pushd ~/.dotfiles && rsync -r --exclude-from \"exclude_from_sync.txt\" . ~ && popd"
-# abbr ssh="bash ~/start_ssh.sh"
+abbr -a -g sf 'source $FISH_CONFIG'
 abbr -a -g st speedtest-cli
 abbr -a -g t tmux
 abbr -a -g ta 'tmux attach || tmux new'
@@ -101,6 +103,9 @@ abbr -a -g .3 'cd ../../../'
 abbr -a -g .4 'cd ../../../'
 abbr -a -g .5 'cd ../../../../'
 abbr -a -g .6 'cd ../../../../../'
+
+alias python3=python
+alias p=python
 
 # asdf erlang fails without this in fish
 set CFLAGS "-O2 -g" $CFLAGS

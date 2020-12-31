@@ -69,6 +69,7 @@ Plug 'tpope/vim-obsession', { 'on': ['Obsession', 'Obsess'] }
 Plug 'vifm/vifm.vim', { 'on': 'Vifm' }
 Plug 'rrethy/vim-illuminate'
 Plug 'Yggdroot/indentLine'
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
 call plug#end()
 
@@ -401,8 +402,8 @@ nnoremap <silent>g# :let @/='\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let
 nnoremap <silent>g* :let @/='\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=1<CR>n
 xnoremap * :<C-u>call custom#VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
 xnoremap # :<C-u>call custom#VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
-nnoremap <Leader>* :call custom#RgWordUnderCursor()<CR>
-vnoremap <Leader>* :call custom#RgRawVisualSelection()<CR>
+" nnoremap <Leader>* :call custom#RgWordUnderCursor()<CR>
+" vnoremap <Leader>* :call custom#RgRawVisualSelection()<CR>
 nnoremap <Leader>o :Files<CR>
 nnoremap <Leader>f :Rg<CR>
 nnoremap <Leader>F :RgRaw<Space>
@@ -440,6 +441,11 @@ nmap <Leader>cT :call coc#float#close_all()<CR>
 nnoremap <silent> K :call custom#show_documentation()<CR>
 nnoremap <Leader>; o<ESC>
 nnoremap <Leader>: O<ESC>
+let g:VM_maps = {}
+let g:VM_maps['Find Under']         = '<C-n>'           " replace C-n
+let g:VM_maps['Find Subword Under'] = '<C-n>'           " replace visual C-n
+let g:VM_maps["Select Cursor Down"] = '<M-C-Down>'      " start selecting down
+let g:VM_maps["Select Cursor Up"]   = '<M-C-Up>'        " start selecting up
 " nnoremap <Leader>\> :cnext<CR>
 " nnoremap <Leader>\< :cprevious<CR>
 " }}}

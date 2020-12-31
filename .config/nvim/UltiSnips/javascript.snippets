@@ -88,3 +88,20 @@ if ($1) {
   $2
 }
 endsnippet
+
+snippet ust "useState"
+const [$1, $2] = useState($3);
+endsnippet
+
+snippet uef "useEffect"
+useEffect(
+  () => {
+    $1
+  },
+  [$2]
+);
+endsnippet
+
+snippet uref "useRef"
+const $1 = useRef($2);
+endsnippet

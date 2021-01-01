@@ -42,6 +42,7 @@ set foldlevel=2
 set inccommand=split
 set signcolumn=yes
 set wildignorecase
+set formatoptions-=cro
 " }}}
 
 " Plug {{{

@@ -73,6 +73,7 @@ abbr -a -g sar "brew services restart skhd"
 abbr -a -g sd "pushd ~/.dotfiles && rsync -r --exclude-from \"exclude_from_sync.txt\" . ~ && popd"
 abbr -a -g sf 'source $FISH_CONFIG'
 abbr -a -g st speedtest-cli
+abbr -a -g sv nvim -S Session.vim
 abbr -a -g t tmux
 abbr -a -g ta 'tmux attach || tmux new'
 abbr -a -g tg tig

@@ -334,6 +334,8 @@ autocmd TermOpen * call OnTermOpen()
 command! -bang Term terminal<bang> /usr/local/bin/fish
 command! -nargs=* T split | Term <args>
 command! -nargs=* VT vsplit | Term <args>
+
+command! SS Obsess! | Obsess | wq
 " }}}
 
 " whitepace {{{

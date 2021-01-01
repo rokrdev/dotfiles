@@ -249,7 +249,7 @@ let s:p = {"normal": {}, "inactive": {}, "insert": {}, "replace": {}, "visual": 
 
 let s:p.normal.left = [[["#1a2b4a", 235], ["#82aaff", 111]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
 let s:p.normal.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
-let s:p.normal.right = [[["#d6deeb", 253], ["#1a2b4a", 235]], [["#1a2b4a", 235], ["#82aaff", 111]]]
+let s:p.normal.right = [[["#1a2b4a", 235], ["#82aaff", 111]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
 let s:p.normal.error = [[["#1a2b4a", 235], ["#82aaff", 111]]]
 let s:p.normal.warning = [[["#1a2b4a", 235], ["#82aaff", 111]]]
 
@@ -259,15 +259,15 @@ let s:p.inactive.right = [[["#d6deeb", 253], ["#112630", 235]], [["#d6deeb", 253
 
 let s:p.insert.left = [[["#1a2b4a", 235], ["#addb67", 149]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
 let s:p.insert.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
-let s:p.insert.right = [[["#d6deeb", 253], ["#1a2b4a", 235]], [["#1a2b4a", 235], ["#addb67", 149]]]
+let s:p.insert.right = [[["#1a2b4a", 235], ["#addb67", 149]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
 
 let s:p.replace.left = [[["#1a2b4a", 235], ["#ff5874", 204]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
 let s:p.replace.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
-let s:p.replace.right = [[["#d6deeb", 253], ["#1a2b4a", 235]], [["#1a2b4a", 235], ["#ff5874", 204]]]
+let s:p.replace.right = [[["#1a2b4a", 235], ["#ff5874", 204]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
 
 let s:p.visual.left = [[["#1a2b4a", 235], ["#c792ea", 176]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
 let s:p.visual.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
-let s:p.visual.right = [[["#d6deeb", 253], ["#1a2b4a", 235]], [["#1a2b4a", 235], ["#c792ea", 176]]]
+let s:p.visual.right = [[["#1a2b4a", 235], ["#c792ea", 176]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
 
 let s:p.tabline.left = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
 let s:p.tabline.tabsel = [[["#1a2b4a", 235], ["#82aaff", 111]]]
@@ -295,15 +295,13 @@ let g:lightline = {
             \     'left': [ [ 'mode', 'paste' ],
             \               [ 'fugitive', 'filename', 'readonly', 'modified' ],
             \              [ 'gitdiff', 'cocstatus' ] ],
-            \     'right': [ [ 'lineinfo', 'filetype', 'fileencoding' ],
-            \              [ 'percent' ] ],
+            \     'right': [ [ 'lineinfo'], [ 'filetype', 'fileencoding', 'percent' ] ],
             \   },
             \   'inactive': {
             \     'left': [ [ 'mode', 'paste' ],
             \               [ 'fugitive', 'filename', 'readonly', 'modified' ],
             \              [ 'gitdiff' ] ],
-            \     'right': [ [ 'lineinfo' ],
-            \              [ 'percent' ] ],
+            \     'right': [ [ 'lineinfo'], [ 'percent' ] ],
             \   },
             \   'component_function': {
             \     'readonly': 'LightlineReadonly',

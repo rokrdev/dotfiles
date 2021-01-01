@@ -447,6 +447,8 @@ nnoremap <Leader>: O<ESC>
 let g:VM_maps = {}
 let g:VM_maps['Find Under']         = '<C-n>'           " replace C-n
 let g:VM_maps['Find Subword Under'] = '<C-n>'           " replace visual C-n
+let g:VM_maps["Add Cursor Down"] = '<M-Down>'
+let g:VM_maps["Add Cursor Up"] = '<M-Up>'
 let g:VM_maps["Select Cursor Down"] = '<M-C-Down>'      " start selecting down
 let g:VM_maps["Select Cursor Up"]   = '<M-C-Up>'        " start selecting up
 " nnoremap <Leader>\> :cnext<CR>

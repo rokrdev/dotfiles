@@ -42,8 +42,8 @@ set foldlevel=2
 set inccommand=split
 set signcolumn=yes
 set wildignorecase
-set formatoptions-=cro
 " }}}
+
 
 " Plug {{{
 
@@ -99,6 +99,8 @@ let g:indentLine_char_list = ['│']
 let g:indentLine_fileTypeExclude = ['coc-explorer']
 let g:indentLine_bufTypeExclude = ['help', 'terminal']
 let g:indentLine_bufNameExclude = ['vifm']
+
+autocmd FileType * setlocal formatoptions-=cro
 
 " setup colorizer
 lua require'colorizer'.setup()
@@ -295,13 +297,13 @@ let g:lightline = {
             \     'left': [ [ 'mode', 'paste' ],
             \               [ 'fugitive', 'filename', 'readonly', 'modified' ],
             \              [ 'gitdiff', 'cocstatus' ] ],
-            \     'right': [ [ 'lineinfo'], [ 'filetype', 'fileencoding', 'percent' ] ],
+            \     'right': [ [ 'percent' ], [ 'filetype', 'fileencoding', 'lineinfo' ] ],
             \   },
             \   'inactive': {
             \     'left': [ [ 'mode', 'paste' ],
             \               [ 'fugitive', 'filename', 'readonly', 'modified' ],
             \              [ 'gitdiff' ] ],
-            \     'right': [ [ 'lineinfo'], [ 'percent' ] ],
+            \     'right': [ [ 'percent' ], [ 'lineinfo'] ],
             \   },
             \   'component_function': {
             \     'readonly': 'LightlineReadonly',

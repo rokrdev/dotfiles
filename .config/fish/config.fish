@@ -11,8 +11,6 @@ export GEM_HOME="$HOME/.gem"
 
 # using ruby from brew
 # setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$HOME/.pyenv/bin:$PATH"
 export PATH="/usr/local/opt/ruby/bin:$HOME/.gem/bin:$HOME/.asdf/shims:/usr/local/opt/asdf/shims:/usr/local/opt/asdf/bin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 source ~/.env
@@ -22,7 +20,6 @@ export FZF_CTRL_R_OPTS='--sort --exact'
 export FZF_TMUX=1
 export FZF_DEFAULT_OPTS='--bind=ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all --color=fg:#d6deeb,bg:#011627,hl:#addb67 --color=fg+:#82aaff,bg+:#00111F,hl+:#82aaff --color=info:#7fdbca,gutter:#011627,prompt:#c792ea,pointer:#c792ea --color=marker:#82aaff,spinner:#c792ea,header:#7fdbca'
 
-pyenv init - --no-rehash | source
 export LDFLAGS="-L/usr/local/opt/zlib/lib"
 export CPPFLAGS="-I/usr/local/opt/zlib/include"
 

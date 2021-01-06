@@ -88,17 +88,17 @@ abbr -a -g ys 'yarn start'
 abbr -a -g yt 'yarn test'
 
 # Changing "ls" to "exa"
-abbr -a -g ls 'exa --color=always --group-directories-first'  # all files and dirs
-abbr -a -g la 'exa -a --color=always --group-directories-first'  # all files and dirs
-abbr -a -g ll 'exa -lah --color=always --group-directories-first'  # long format
-abbr -a -g lt 'exa -aT --color=always --group-directories-first' # tree listing
-abbr -a -g l. 'exa -a | egrep "^\."'
-abbr -a -g .. 'cd ..'
-abbr -a -g ... 'cd ../../'
-abbr -a -g .3 'cd ../../../'
-abbr -a -g .4 'cd ../../../'
-abbr -a -g .5 'cd ../../../../'
-abbr -a -g .6 'cd ../../../../../'
+alias ls='exa --color=always --group-directories-first'  # all files and dirs
+alias la='exa -a --color=always --group-directories-first'  # all files and dirs
+alias ll='exa -lah --color=always --group-directories-first'  # long format
+alias lt='exa -aT --color=always --group-directories-first' # tree listing
+alias l.='exa -a | egrep "^\."'
+alias ..='cd ..'
+alias ..= 'cd ../../'
+alias .3='cd ../../../'
+alias .4='cd ../../../'
+alias .5='cd ../../../../'
+alias .6='cd ../../../../../'
 
 alias python3=python
 alias p=python

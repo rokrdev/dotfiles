@@ -373,7 +373,6 @@ vnoremap sy "+y
 vnoremap sp "+p
 nnoremap gh :b#<CR>
 nnoremap ss :Buffers<CR>
-nnoremap \| @@
 " for vim-sandwich
 nmap s <Nop>
 xmap s <Nop>

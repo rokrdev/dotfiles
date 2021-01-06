@@ -7,11 +7,9 @@ set TERMINFO ~/.terminfo/
 export LANG="en_US.UTF-8"
 
 export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
-export GEM_HOME="$HOME/.gem"
 
-# using ruby from brew
 # setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`
-export PATH="/usr/local/opt/ruby/bin:$HOME/.gem/bin:$HOME/.asdf/shims:/usr/local/opt/asdf/shims:/usr/local/opt/asdf/bin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="$HOME/.asdf/shims:/usr/local/opt/asdf/shims:/usr/local/opt/asdf/bin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 source ~/.env
 

@@ -33,7 +33,7 @@ set redrawtime=10000    " Some php files takes long to redraw else syntax gets d
 set splitbelow          " Horizontal split below current.
 set splitright          " Vertical split to right of current.
 set nowritebackup
-set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --hidden
 set shell=/bin/zsh
 set nowrap
 set foldmethod=manual
@@ -194,14 +194,14 @@ let g:fzf_action = {
 let g:fzf_preview_window = 'right:50%'
 autocmd! FileType fzf tunmap <buffer> <Esc>
 
-command! -bang -nargs=* Rg
-            \call fzf#vim#grep(
-            \  "rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1,
+command! -bang -nargs=* CustomRg
+            \ call fzf#vim#grep(
+            \  'rg --column --line-number --no-heading --hidden --color=always --smart-case '.shellescape(<q-args>), 1,
             \  fzf#vim#with_preview(), <bang>0)
 
-command! -bang -nargs=* RgRaw
+command! -bang -nargs=* CustomRgRaw
             \ call fzf#vim#grep(
-            \   'rg --column --line-number --no-heading --color=always --smart-case '.(<q-args>), 1,
+            \   'rg --column --line-number --no-heading --hidden --color=always --smart-case '.(<q-args>), 1,
             \   fzf#vim#with_preview(),  <bang>0)
 
 command! -bang -nargs=* GConflicts
@@ -404,11 +404,11 @@ nnoremap <silent>g# :let @/='\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let
 nnoremap <silent>g* :let @/='\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=1<CR>n
 xnoremap * :<C-u>call custom#VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
 xnoremap # :<C-u>call custom#VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
-" nnoremap <Leader>* :call custom#RgWordUnderCursor()<CR>
-" vnoremap <Leader>* :call custom#RgRawVisualSelection()<CR>
+nnoremap <Leader>* :call custom#RgWordUnderCursor()<CR>
+vnoremap <Leader>* :call custom#RgRawVisualSelection()<CR>
 nnoremap <Leader>o :Files<CR>
-nnoremap <Leader>f :Rg<CR>
-nnoremap <Leader>F :RgRaw<Space>
+nnoremap <Leader>f :CustomRg<CR>
+nnoremap <Leader>F :CustomRgRaw<Space>
 nnoremap <Leader>/ :BLines<CR>
 nnoremap <Leader>G :GF?<CR>
 nnoremap <Leader>co :Commands<CR>

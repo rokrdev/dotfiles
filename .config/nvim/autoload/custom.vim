@@ -87,12 +87,12 @@ function! custom#ScratchGenerator()
 endfunction
 
 function! custom#RgWordUnderCursor()
-    exe 'CustomRg '.expand('<cword>')
+    exe 'RG '.expand('<cword>')
 endfunction
 
 function! custom#RgRawVisualSelection()
     let str = custom#VisualSelection()
-    exe 'CustomRg '.str
+    exe 'RG '.str
 endfunction
 
 function! custom#Togglecolorcolumn()

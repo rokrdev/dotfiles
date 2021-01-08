@@ -194,12 +194,12 @@ let g:fzf_action = {
 let g:fzf_preview_window = 'right:50%'
 autocmd! FileType fzf tunmap <buffer> <Esc>
 
-command! -bang -nargs=* CustomRg
+command! -bang -nargs=* RG
             \ call fzf#vim#grep(
             \  'rg --column --line-number --no-heading --hidden --color=always --smart-case '.shellescape(<q-args>), 1,
             \  fzf#vim#with_preview(), <bang>0)
 
-command! -bang -nargs=* CustomRgRaw
+command! -bang -nargs=* RGRaw
             \ call fzf#vim#grep(
             \   'rg --column --line-number --no-heading --hidden --color=always --smart-case '.(<q-args>), 1,
             \   fzf#vim#with_preview(),  <bang>0)
@@ -407,8 +407,8 @@ xnoremap # :<C-u>call custom#VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
 nnoremap <Leader>* :call custom#RgWordUnderCursor()<CR>
 vnoremap <Leader>* :call custom#RgRawVisualSelection()<CR>
 nnoremap <Leader>o :Files<CR>
-nnoremap <Leader>f :CustomRg<CR>
-nnoremap <Leader>F :CustomRgRaw<Space>
+nnoremap <Leader>f :RG<CR>
+nnoremap <Leader>F :RGRaw<Space>
 nnoremap <Leader>/ :BLines<CR>
 nnoremap <Leader>G :GF?<CR>
 nnoremap <Leader>co :Commands<CR>

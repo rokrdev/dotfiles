@@ -45,6 +45,7 @@ abbr -a -g gco 'git commit -m'
 abbr -a -g gd 'git diff'
 abbr -a -g gds 'git diff --staged'
 abbr -a -g gfm 'git pull'
+abbr -a -g gpc 'git pull origin (git branch --show-current)'
 abbr -a -g gmt "git mergetool"
 abbr -a -g gp 'git push'
 abbr -a -g gs 'git status'

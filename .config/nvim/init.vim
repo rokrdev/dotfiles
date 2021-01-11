@@ -196,6 +196,11 @@ command! -bang -nargs=* GConflicts
             \      'options': ['--multi', '--prompt', 'Conflicts?> ', '--preview', 'cat {}']
             \    }, <bang>0))
 
+command! -bang -nargs=* LinesWithPreview
+            \ call fzf#vim#grep(
+            \   'rg --with-filename --column --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
+            \   fzf#vim#with_preview({'options': '--delimiter : --nth 4.. --no-sort'}, 'right:50%', '?'),
+            \   1)
 " }}}
 
 " Lightline  {{{
@@ -375,7 +380,7 @@ vnoremap <Leader>* :call custom#RgRawVisualSelection()<CR>
 nnoremap <Leader>o :Files<CR>
 nnoremap <Leader>f :RG<CR>
 nnoremap <Leader>F :RGRaw<Space>
-nnoremap <Leader>/ :BLines<CR>
+nnoremap <Leader>/ :LinesWithPreview<CR>
 nnoremap <Leader>G :GF?<CR>
 nnoremap <Leader>co :Commands<CR>
 nnoremap <Leader>cc :BCommits<CR>

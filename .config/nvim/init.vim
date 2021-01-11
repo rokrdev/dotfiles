@@ -1,7 +1,6 @@
-" set commands {{{
+" basic config {{{
 
 set showtabline=0
-" set guicursor=
 set number
 set hidden
 set tabstop=4 softtabstop=4
@@ -42,6 +41,9 @@ set foldlevel=2
 set inccommand=split
 set signcolumn=yes
 set wildignorecase
+set rtp+=/usr/local/opt/fzf
+syntax enable
+filetype plugin indent on
 " }}}
 
 
@@ -80,16 +82,8 @@ packadd cfilter
 
 " other {{{
 
-set rtp+=/usr/local/opt/fzf
-autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
-      \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
-autocmd FileChangedShellPost *
-      \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
-
 let mapleader=" "
 let $TERM="alacritty"
-syntax enable
-filetype plugin indent on
 let g:cursorhold_updatetime = 100
 let g:Illuminate_delay = 500
 let g:Illuminate_highlightUnderCursor = 1
@@ -99,8 +93,6 @@ let g:indentLine_char_list = ['│']
 let g:indentLine_fileTypeExclude = ['coc-explorer']
 let g:indentLine_bufTypeExclude = ['help', 'terminal']
 let g:indentLine_bufNameExclude = ['vifm']
-
-autocmd FileType * setlocal formatoptions-=cro
 
 " setup colorizer
 lua require'colorizer'.setup()
@@ -128,14 +120,9 @@ let php_html_load=0
 let php_html_in_heredoc=0
 let php_html_in_nowdoc=0
 
-" :wq saves commit message and close the split
-autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
 " }}}
 
 " COC {{{
-
-" Highlight symbol under cursor on CursorHold
-" autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
@@ -192,7 +179,6 @@ let g:fzf_action = {
             \ 'ctrl-v': 'vsplit' }
 
 let g:fzf_preview_window = 'right:50%'
-autocmd! FileType fzf tunmap <buffer> <Esc>
 
 command! -bang -nargs=* RG
             \ call fzf#vim#grep(
@@ -242,10 +228,6 @@ function! LightlineSignify()
         return ''
     endif
 endfunction
-
-" show signify status in statusline without delay
-autocmd User Signify call lightline#update()
-
 
 let s:p = {"normal": {}, "inactive": {}, "insert": {}, "replace": {}, "visual": {}, "tabline": {} }
 
@@ -319,18 +301,9 @@ let g:lightline = {
             \   },
             \ }
 
-autocmd BufWritePost,TextChanged,TextChangedI,TermLeave * call lightline#update()
 " }}}
 
 " Term {{{
-
-function OnTermOpen()
-    startinsert
-    setlocal listchars= nonumber norelativenumber
-    tnoremap <buffer> <Esc> <Nop>
-endfunction
-
-autocmd TermOpen * call OnTermOpen()
 
 command! -bang Term terminal<bang> /usr/local/bin/fish
 command! -nargs=* T split | Term <args>
@@ -343,17 +316,10 @@ command! SS Obsess! | Obsess | wq
 
 highlight default link EndOfLineSpace ErrorMsg
 match EndOfLineSpace / \+$/
-autocmd InsertEnter * hi link EndOfLineSpace Normal
-autocmd InsertLeave * hi link EndOfLineSpace ErrorMsg
 
 command! DisableTrailingWhitespace hi link EndOfLineSpace Normal
 command! EnableTrailingWhitespace hi link EndOfLineSpace ErrorMsg
 " }}}
-
-augroup highlight_yank
-    autocmd!
-    autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=250, on_visual=false}
-augroup END
 
 " sneak {{{
 
@@ -362,7 +328,7 @@ let g:sneak#target_labels = "asdfjkl;ghqweruioptyzxcvnmb"
 
 " }}}
 
-" mappings {{{
+" key bindings {{{
 nnoremap <C-down> :m .+1<CR>==
 nnoremap <C-up> :m .-2<CR>==
 nnoremap <Leader>C :e %:p:h/
@@ -454,3 +420,30 @@ let g:VM_maps["Select Cursor Up"]   = '<M-C-Up>'        " start selecting up
 " nnoremap <Leader>\< :cprevious<CR>
 " }}}
 
+" autocmd group {{{
+augroup MY_AUTOCMDS
+  autocmd!
+  autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
+        \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
+  autocmd FileChangedShellPost *
+        \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
+
+  autocmd FileType * setlocal formatoptions-=cro
+
+  " :wq saves commit message and close the split
+  autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
+
+  autocmd! FileType fzf tunmap <buffer> <Esc>
+
+  " show signify status in statusline without delay
+  autocmd User Signify call lightline#update()
+
+  autocmd BufWritePost,TextChanged,TextChangedI,TermLeave * call lightline#update()
+
+  autocmd TermOpen * call custom#OnTermOpen()
+
+  autocmd InsertEnter * hi link EndOfLineSpace Normal
+  autocmd InsertLeave * hi link EndOfLineSpace ErrorMsg
+  autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=250, on_visual=false}
+augroup END
+" }}}

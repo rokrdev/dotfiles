@@ -103,3 +103,9 @@ function! custom#Togglecolorcolumn()
     endif
 endfunction
 
+function! custom#OnTermOpen()
+    startinsert
+    setlocal listchars= nonumber norelativenumber
+    tnoremap <buffer> <Esc> <Nop>
+endfunction
+

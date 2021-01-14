@@ -100,6 +100,7 @@ alias ....='cd ../../../'
 alias .....='cd ../../../'
 alias ......='cd ../../../../'
 alias .......='cd ../../../../../'
+alias please=sudo
 
 alias python3=python
 alias p=python

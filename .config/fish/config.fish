@@ -95,11 +95,11 @@ alias ll='exa -lah --color=always --group-directories-first'  # long format
 alias lt='exa -aT --color=always --group-directories-first' # tree listing
 alias l.='exa -a | egrep "^\."'
 alias ..='cd ..'
-alias ..= 'cd ../../'
-alias .3='cd ../../../'
-alias .4='cd ../../../'
-alias .5='cd ../../../../'
-alias .6='cd ../../../../../'
+alias ...='cd ../../'
+alias ....='cd ../../../'
+alias .....='cd ../../../'
+alias ......='cd ../../../../'
+alias .......='cd ../../../../../'
 
 alias python3=python
 alias p=python

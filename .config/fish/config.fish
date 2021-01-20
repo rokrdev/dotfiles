@@ -6,6 +6,8 @@ export FISH_CONFIG="$HOME/.config/fish/config.fish"
 set TERMINFO ~/.terminfo/
 export LANG="en_US.UTF-8"
 
+source /usr/local/opt/asdf/asdf.fish
+
 export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
 
 # setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`

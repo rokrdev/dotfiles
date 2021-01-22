@@ -14,7 +14,7 @@ set __fish_git_prompt_color_branch magenta
 function fish_prompt --description 'Write out the prompt'
     set -l prompt ' ❯ '
 
-    set -l prompt_color magenta
+    set -l prompt_color green
     if test $status -ne 0
         set prompt_color red
     end

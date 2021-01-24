@@ -400,7 +400,8 @@ nnoremap <Leader>S :Scratch<CR>
 nnoremap <Leader>gg :call custom#OpenTerm('tig status')<CR>
 nnoremap <Leader>gb :call custom#OpenTerm('tig ' . expand('%'))<CR>
 nnoremap <Leader>gu :call custom#OpenTerm('tig log @{u}.. -p')<CR>
-nmap gb <Plug>(git-messenger)
+" nmap gb <Plug>(git-messenger)
+nnoremap gb :GitMessenger<CR>
 nmap <Leader>ck <Plug>(coc-diagnostic-prev)
 nmap <Leader>cj <Plug>(coc-diagnostic-next)
 nmap <Leader>cd <Plug>(coc-definition)

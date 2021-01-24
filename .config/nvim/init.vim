@@ -1,4 +1,6 @@
-lua require('init')
+lua require('plugins')
+lua require('setters')
+
 " basic config {{{
 
 " set showtabline=0
@@ -84,7 +86,7 @@ lua require('init')
 " other {{{
 
 let mapleader=" "
-let $TERM="alacritty"
+" let $TERM="alacritty"
 let g:cursorhold_updatetime = 100
 let g:Illuminate_delay = 500
 let g:Illuminate_highlightUnderCursor = 1

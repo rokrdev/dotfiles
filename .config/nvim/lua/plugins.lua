@@ -41,15 +41,16 @@ return require('packer').startup(function()
 
   -- cursor hold issue with neovim
   use 'antoinemadec/FixCursorHold.nvim'
-  use {'rhysd/git-messenger.vim', cmd = '<Plug>(git-messenger)' }
+  use {'rhysd/git-messenger.vim', opt = true, cmd = 'GitMessenger' }
   use {'styled-components/vim-styled-components',
             branch = 'main',
+            opt = true,
             ft = {'javascript', 'typescript', 'javascriptreact'},
       }
   use 'justinmk/vim-sneak'
   use 'sheerun/vim-polyglot'
-  use {'tpope/vim-obsession', cmd = {'Obsession', 'Obsess'} }
-  use {'vifm/vifm.vim',  cmd = 'Vifm' }
+  use {'tpope/vim-obsession', opt = true, cmd = {'Obsession', 'Obsess'} }
+  use {'vifm/vifm.vim',  opt = true, cmd = 'Vifm' }
   use 'rrethy/vim-illuminate'
   use 'Yggdroot/indentLine'
   use {'mg979/vim-visual-multi', branch = 'master'}

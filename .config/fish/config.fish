@@ -57,6 +57,7 @@ abbr -a -g k "/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/kara
 abbr -a -g lg lazygit
 abbr -a -g m make
 abbr -a -g mi 'make install'
+abbr -a -g mk 'mkdir -p'
 abbr -a -g mu 'make update'
 abbr -a -g n npm
 abbr -a -g nb newsboat

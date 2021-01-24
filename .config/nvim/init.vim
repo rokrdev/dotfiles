@@ -1,5 +1,6 @@
 lua require('plugins')
 lua require('setters')
+lua require('config')
 
 " basic config {{{
 
@@ -85,33 +86,33 @@ lua require('setters')
 
 " other {{{
 
-let mapleader=" "
-" let $TERM="alacritty"
-let g:cursorhold_updatetime = 100
-let g:Illuminate_delay = 500
-let g:Illuminate_highlightUnderCursor = 1
+" let mapleader=" "
+"" let $TERM="alacritty"
+" let g:cursorhold_updatetime = 100
+" let g:Illuminate_delay = 500
+" let g:Illuminate_highlightUnderCursor = 1
 
-let g:indentLine_char = 'c'
-let g:indentLine_char_list = ['│']
-let g:indentLine_fileTypeExclude = ['coc-explorer']
-let g:indentLine_bufTypeExclude = ['help', 'terminal']
-let g:indentLine_bufNameExclude = ['vifm']
+" let g:indentLine_char = 'c'
+" let g:indentLine_char_list = ['│']
+" let g:indentLine_fileTypeExclude = ['coc-explorer']
+" let g:indentLine_bufTypeExclude = ['help', 'terminal']
+" let g:indentLine_bufNameExclude = ['vifm']
 
-" setup colorizer
-lua require'colorizer'.setup()
+" " setup colorizer
+" lua require'colorizer'.setup()
 
 command! Gcd call custom#GoToRoot()
 command! Config :e $MYVIMRC
 command! Reload :so $MYVIMRC
 command! Tcc call custom#Togglecolorcolumn()
 
-colorscheme night-owl
-let g:vim_markdown_conceal = 0
+" colorscheme night-owl
+" let g:vim_markdown_conceal = 0
 command! Scratch call custom#ScratchGenerator()
 " run pip install neovim-remote for nvr
-if has('nvim')
-    let $GIT_EDITOR = 'nvr -cc split --remote-wait'
-endif
+" if has('nvim')
+"     let $GIT_EDITOR = 'nvr -cc split --remote-wait'
+" endif
 
 " fix for slow movement in large php files
 let g:php_syntax_extensions_enabled=[]

@@ -1,82 +1,83 @@
+lua require('init')
 " basic config {{{
 
-set showtabline=0
-set number
-set hidden
-set tabstop=4 softtabstop=4
-set shiftwidth=4
-set expandtab
-set smartindent
-set ignorecase
-set smartcase
-set noswapfile
-set nobackup
-set undodir=~/.vim/undodir
-set undofile
-set incsearch
-set scrolloff=8
-set noshowmode
-set completeopt=menuone,noinsert,noselect
-set cmdheight=1
-set updatetime=250       " Having longer updatetime leads to noticeable delays and poor user experience.
-set shortmess+=cI
-set colorcolumn=0
-set termguicolors
-set list
-set listchars=tab:>-,eol:¬,extends:»,precedes:«
-set dir=~/.vim/swap//
-set showmatch           " Show matching brackets.
-set cursorline
-set lazyredraw
-set redrawtime=10000    " Some php files takes long to redraw else syntax gets disabled
-set splitbelow          " Horizontal split below current.
-set splitright          " Vertical split to right of current.
-set nowritebackup
-set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --hidden
-set shell=/bin/zsh
-set nowrap
-set foldmethod=manual
-set foldnestmax=10
-set foldlevel=2
-set inccommand=split
-set signcolumn=yes
-set wildignorecase
-set rtp+=/usr/local/opt/fzf
-syntax enable
-filetype plugin indent on
+" set showtabline=0
+" set number
+" set hidden
+" set tabstop=4 softtabstop=4
+" set shiftwidth=4
+" set expandtab
+" set smartindent
+" set ignorecase
+" set smartcase
+" set noswapfile
+" set nobackup
+" set undodir=~/.vim/undodir
+" set undofile
+" set incsearch
+" set scrolloff=8
+" set noshowmode
+" set completeopt=menuone,noinsert,noselect
+" set cmdheight=1
+" set updatetime=250       " Having longer updatetime leads to noticeable delays and poor user experience.
+" set shortmess+=cI
+" set colorcolumn=0
+" set termguicolors
+" set list
+" set listchars=tab:>-,eol:¬,extends:»,precedes:«
+" set dir=~/.vim/swap//
+" set showmatch           " Show matching brackets.
+" set cursorline
+" set lazyredraw
+" set redrawtime=10000    " Some php files takes long to redraw else syntax gets disabled
+" set splitbelow          " Horizontal split below current.
+" set splitright          " Vertical split to right of current.
+" set nowritebackup
+" set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --hidden
+" set shell=/bin/zsh
+" set nowrap
+" set foldmethod=manual
+" set foldnestmax=10
+" set foldlevel=2
+" set inccommand=split
+" set signcolumn=yes
+" set wildignorecase
+" set rtp+=/usr/local/opt/fzf
+" syntax enable
+" filetype plugin indent on
 " }}}
 
 
 " Plug {{{
 
-call plug#begin('~/.config/nvim/autoload')
+" call plug#begin('~/.config/nvim/autoload')
 
-Plug 'itchyny/lightline.vim'
-Plug 'itchyny/vim-gitbranch'
-Plug 'norcalli/nvim-colorizer.lua'
-Plug 'jiangmiao/auto-pairs'
-Plug 'junegunn/fzf.vim'
-Plug 'machakann/vim-sandwich'
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-Plug 'tpope/vim-commentary'
-Plug 'mhinz/vim-signify'
-Plug 'antoinemadec/FixCursorHold.nvim' "cursor hold issue with neovim
-Plug 'rhysd/git-messenger.vim', { 'on': '<Plug>(git-messenger)' }
-Plug 'styled-components/vim-styled-components', {
-            \'branch': 'main',
-            \'for': ['javascript', 'typescript', 'javascriptreact']
-            \}
-Plug 'justinmk/vim-sneak'
-Plug 'sheerun/vim-polyglot'
-Plug 'tpope/vim-obsession', { 'on': ['Obsession', 'Obsess'] }
-Plug 'vifm/vifm.vim', { 'on': 'Vifm' }
-Plug 'rrethy/vim-illuminate'
-Plug 'Yggdroot/indentLine'
-Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+" Plug 'itchyny/lightline.vim'
+" Plug 'itchyny/vim-gitbranch'
+" Plug 'norcalli/nvim-colorizer.lua'
+" Plug 'jiangmiao/auto-pairs'
+" Plug 'junegunn/fzf.vim'
+" Plug 'machakann/vim-sandwich'
+" Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+" Plug 'tpope/vim-commentary'
+" Plug 'mhinz/vim-signify'
+" Plug 'antoinemadec/FixCursorHold.nvim' "cursor hold issue with neovim
+" Plug 'rhysd/git-messenger.vim', { 'on': '<Plug>(git-messenger)' }
+" Plug 'styled-components/vim-styled-components', {
+"             \'branch': 'main',
+"             \'for': ['javascript', 'typescript', 'javascriptreact']
+"             \}
+" Plug 'justinmk/vim-sneak'
+" Plug 'sheerun/vim-polyglot'
+" Plug 'tpope/vim-obsession', { 'on': ['Obsession', 'Obsess'] }
+" Plug 'vifm/vifm.vim', { 'on': 'Vifm' }
+" Plug 'rrethy/vim-illuminate'
+" Plug 'Yggdroot/indentLine'
+" Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
-call plug#end()
+" call plug#end()
 
-packadd cfilter
+" packadd cfilter
 
 " }}}
 

@@ -114,15 +114,15 @@ command! Scratch call custom#ScratchGenerator()
 "     let $GIT_EDITOR = 'nvr -cc split --remote-wait'
 " endif
 
-" fix for slow movement in large php files
-let g:php_syntax_extensions_enabled=[]
-let php_var_selector_is_identifier=1
-let php_sql_query=0
-let php_sql_heredoc=0
-let php_sql_nowdoc=0
-let php_html_load=0
-let php_html_in_heredoc=0
-let php_html_in_nowdoc=0
+" " fix for slow movement in large php files
+" let g:php_syntax_extensions_enabled=[]
+" let php_var_selector_is_identifier=1
+" let php_sql_query=0
+" let php_sql_heredoc=0
+" let php_sql_nowdoc=0
+" let php_html_load=0
+" let php_html_in_heredoc=0
+" let php_html_in_nowdoc=0
 
 " }}}
 
@@ -134,33 +134,33 @@ command! -nargs=0 Format :call CocAction('format')
 " use `:OR` for organize import of current buffer
 command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
 
-" Add status line support, for integration with other plugin, checkout `:h coc-status`
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-let g:coc_global_extensions = [
-            \ 'coc-css',
-            \ 'coc-docker',
-            \ 'coc-elixir',
-            \ 'coc-explorer',
-            \ 'coc-emmet',
-            \ 'coc-eslint',
-            \ 'coc-html',
-            \ 'coc-json',
-            \ 'coc-markdownlint',
-            \ 'coc-prettier',
-            \ 'coc-python',
-            \ 'coc-sh',
-            \ 'coc-snippets',
-            \ 'coc-tsserver',
-            \ 'coc-yaml',
-            \ ]
+" " Add status line support, for integration with other plugin, checkout `:h coc-status`
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+" let g:coc_global_extensions = [
+"             \ 'coc-css',
+"             \ 'coc-docker',
+"             \ 'coc-elixir',
+"             \ 'coc-explorer',
+"             \ 'coc-emmet',
+"             \ 'coc-eslint',
+"             \ 'coc-html',
+"             \ 'coc-json',
+"             \ 'coc-markdownlint',
+"             \ 'coc-prettier',
+"             \ 'coc-python',
+"             \ 'coc-sh',
+"             \ 'coc-snippets',
+"             \ 'coc-tsserver',
+"             \ 'coc-yaml',
+"             \ ]
 
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? coc#_select_confirm() :
-"       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-"       \ <SID>check_back_space() ? "\<TAB>" :
-"       \ coc#refresh()
+" " inoremap <silent><expr> <TAB>
+" "       \ pumvisible() ? coc#_select_confirm() :
+" "       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+" "       \ <SID>check_back_space() ? "\<TAB>" :
+" "       \ coc#refresh()
 
-" inoremap <silent><expr> <c-space> coc#refresh()
+" " inoremap <silent><expr> <c-space> coc#refresh()
 
 " }}}
 

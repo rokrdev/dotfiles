@@ -6,17 +6,17 @@ if not packer_exists then
   end
 
   local directory = string.format(
-  '%s/site/pack/packer/opt/',
-  vim.fn.stdpath('data')
-  )
+    '%s/site/pack/packer/opt/',
+    vim.fn.stdpath('data')
+    )
 
   vim.fn.mkdir(directory, 'p')
 
   local git_clone_cmd = vim.fn.system(string.format(
-  'git clone %s %s',
-  'https://github.com/wbthomason/packer.nvim',
-  directory .. '/packer.nvim'
-  ))
+      'git clone %s %s',
+      'https://github.com/wbthomason/packer.nvim',
+      directory .. '/packer.nvim'
+    ))
 
   print(git_clone_cmd)
   print("Installing packer.nvim...")
@@ -43,14 +43,38 @@ return require('packer').startup(function()
   use 'antoinemadec/FixCursorHold.nvim'
   use {'rhysd/git-messenger.vim', opt = true, cmd = 'GitMessenger' }
   use {'styled-components/vim-styled-components',
-            branch = 'main',
-            opt = true,
-            ft = {'javascript', 'typescript', 'javascriptreact'},
-      }
+    branch = 'main',
+    opt = true,
+    ft = {'javascript', 'typescript', 'javascriptreact'},
+  }
   use 'justinmk/vim-sneak'
-  use 'sheerun/vim-polyglot'
+  use {'sheerun/vim-polyglot',
+    opt = true,
+    ft = {
+      'elixir',
+      'fish',
+      'graphql',
+      'html',
+      'javascript',
+      'javascriptreact',
+      'json',
+      'jsx',
+      'lua',
+      'markdown',
+      'mdx',
+      'php',
+      'python',
+      'ruby',
+      'scss',
+      'sh',
+      'svelte',
+      'svg',
+      'typescript',
+      'vue',
+    }
+  }
   use {'tpope/vim-obsession', opt = true, cmd = {'Obsession', 'Obsess'} }
-  use {'vifm/vifm.vim',  opt = true, cmd = 'Vifm' }
+  use {'vifm/vifm.vim', opt = true, cmd = 'Vifm' }
   use 'rrethy/vim-illuminate'
   use 'Yggdroot/indentLine'
   use {'mg979/vim-visual-multi', branch = 'master'}

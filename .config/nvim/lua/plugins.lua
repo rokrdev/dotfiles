@@ -56,30 +56,42 @@ return require('packer').startup(function()
     ft = {'javascript', 'typescript', 'javascriptreact'},
   }
   use 'justinmk/vim-sneak'
-  use {'sheerun/vim-polyglot',
+  use {'elixir-editors/vim-elixir',
     opt = true,
-    ft = {
-      'elixir',
-      'fish',
-      'graphql',
-      'html',
-      'javascript',
-      'javascriptreact',
-      'json',
-      'jsx',
-      'lua',
-      'markdown',
-      'mdx',
-      'php',
-      'python',
-      'ruby',
-      'scss',
-      'sh',
-      'svelte',
-      'svg',
-      'typescript',
-      'vue',
-    }
+    ft = {'elixir'}
+  }
+  use {'dag/vim-fish'}
+  use {'jparise/vim-graphql',
+    opt = true,
+    ft = {'graphql'}
+  }
+  use {'othree/html5.vim',
+    opt = true,
+    ft = {'html'}
+  }
+  use {'maxmellon/vim-jsx-pretty',
+    requries = {'pangloss/vim-javascript'},
+    config = function()
+        vim.g.vim_jsx_pretty_enable_jsx_highlight = 1
+        vim.g.vim_jsx_pretty_colorful_config = 1
+        vim.g.vim_jsx_pretty_disable_js = 0
+    end
+  }
+  use {'tbastos/vim-lua',
+    opt = true,
+    ft = {'lua'}
+  }
+  use {'jxnblk/vim-mdx-js',
+    opt = true,
+    ft = {'mdx'}
+  }
+  use {'StanAngeloff/php.vim',
+    opt = true,
+    ft = {'php', 'phtml'}
+  }
+  use {'vim-python/python-syntax',
+    opt = true,
+    ft = {'python'}
   }
   use {'tpope/vim-obsession', opt = true, cmd = {'Obsession', 'Obsess'} }
   use {'vifm/vifm.vim', opt = true, cmd = 'Vifm' }

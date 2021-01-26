@@ -12,17 +12,17 @@ function nvim_create_augroups(definitions)
 end
 
 local autocmds = {
-    MY_AUTOCMDS = {
-        {"FocusGained,BufEnter,CursorHold,CursorHoldI", "*", "if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif"},
-        {"FileChangedShellPost", "*", "echohl WarningMsg | echo 'File changed on disk. Buffer reloaded.' | echohl None"},
-        {"BufRead,BufNewFile", "*", "setlocal formatoptions-=cro"},
-        {"FileType", "gitcommit,gitrebase,gitconfig", "set bufhidden=delete"},
-        {"FileType", "fzf", "tunmap <buffer> <Esc>"},
-        {"TermOpen", "*", "call custom#OnTermOpen()"},
-        {"InsertEnter", "*", "hi link EndOfLineSpace Normal"},
-        {"InsertLeave", "*", "hi link EndOfLineSpace ErrorMsg"},
-        {"TextYankPost", "*", "silent! lua vim.highlight.on_yank {higroup='IncSearch', timeout=250, on_visual=false}"},
-    }
+  MY_AUTOCMDS = {
+    {"FocusGained,BufEnter,CursorHold,CursorHoldI", "*", "if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif"},
+    {"FileChangedShellPost", "*", "echohl WarningMsg | echo 'File changed on disk. Buffer reloaded.' | echohl None"},
+    {"BufRead,BufNewFile", "*", "setlocal formatoptions-=cro"},
+    {"FileType", "gitcommit,gitrebase,gitconfig", "set bufhidden=delete"},
+    {"FileType", "fzf", "tunmap <buffer> <Esc>"},
+    {"TermOpen", "*", "call custom#OnTermOpen()"},
+    {"InsertEnter", "*", "hi link EndOfLineSpace Normal"},
+    {"InsertLeave", "*", "hi link EndOfLineSpace ErrorMsg"},
+    {"TextYankPost", "*", "silent! lua vim.highlight.on_yank {higroup='IncSearch', timeout=250, on_visual=false}"},
+  }
 }
 
 nvim_create_augroups(autocmds)

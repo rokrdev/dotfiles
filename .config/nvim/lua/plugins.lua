@@ -5,18 +5,15 @@ if not packer_exists then
     return
   end
 
-  local directory = string.format(
-    '%s/site/pack/packer/opt/',
-    vim.fn.stdpath('data')
-    )
+  local directory = string.format('%s/site/pack/packer/opt/', vim.fn.stdpath('data'))
 
   vim.fn.mkdir(directory, 'p')
 
   local git_clone_cmd = vim.fn.system(string.format(
-      'git clone %s %s',
-      'https://github.com/wbthomason/packer.nvim',
-      directory .. '/packer.nvim'
-    ))
+  'git clone %s %s',
+  'https://github.com/wbthomason/packer.nvim',
+  directory .. '/packer.nvim'
+  ))
 
   print(git_clone_cmd)
   print("Installing packer.nvim...")
@@ -50,46 +47,55 @@ return require('packer').startup(function()
   -- cursor hold issue with neovim
   use 'antoinemadec/FixCursorHold.nvim'
   use {'rhysd/git-messenger.vim', opt = true, cmd = 'GitMessenger' }
-  use {'styled-components/vim-styled-components',
+  use {
+    'styled-components/vim-styled-components',
     branch = 'main',
     opt = true,
     ft = {'javascript', 'typescript', 'javascriptreact'},
   }
   use 'justinmk/vim-sneak'
-  use {'elixir-editors/vim-elixir',
+  use {
+    'elixir-editors/vim-elixir',
     opt = true,
     ft = {'elixir'}
   }
-  use {'dag/vim-fish'}
-  use {'jparise/vim-graphql',
+  use 'dag/vim-fish'
+  use {
+    'jparise/vim-graphql',
     opt = true,
     ft = {'graphql'}
   }
-  use {'othree/html5.vim',
+  use {
+    'othree/html5.vim',
     opt = true,
     ft = {'html'}
   }
-  use {'maxmellon/vim-jsx-pretty',
+  use {
+    'maxmellon/vim-jsx-pretty',
     requries = {'pangloss/vim-javascript'},
     config = function()
-        vim.g.vim_jsx_pretty_enable_jsx_highlight = 1
-        vim.g.vim_jsx_pretty_colorful_config = 1
-        vim.g.vim_jsx_pretty_disable_js = 0
+      vim.g.vim_jsx_pretty_enable_jsx_highlight = 1
+      vim.g.vim_jsx_pretty_colorful_config = 1
+      vim.g.vim_jsx_pretty_disable_js = 0
     end
   }
-  use {'tbastos/vim-lua',
+  use {
+    'tbastos/vim-lua',
     opt = true,
     ft = {'lua'}
   }
-  use {'jxnblk/vim-mdx-js',
+  use {
+    'jxnblk/vim-mdx-js',
     opt = true,
     ft = {'mdx'}
   }
-  use {'StanAngeloff/php.vim',
+  use {
+    'StanAngeloff/php.vim',
     opt = true,
     ft = {'php', 'phtml'}
   }
-  use {'vim-python/python-syntax',
+  use {
+    'vim-python/python-syntax',
     opt = true,
     ft = {'python'}
   }

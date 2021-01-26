@@ -77,11 +77,11 @@ abbr -a -g t tmux
 abbr -a -g ta 'tmux attach || tmux new'
 abbr -a -g tg tig
 abbr -a -g top btm
-abbr -a -g upa 'brew update && brew upgrade && brew upgrade --cask && brew cleanup && brew doctor; nvim +PlugUpgrade +PlugUpdate +PlugClean! +qall > /dev/null'
+abbr -a -g upa 'brew update && brew upgrade && brew upgrade --cask && brew cleanup && brew doctor; nvim +PackerSync +PackerCompile +qall > /dev/null'
 abbr -a -g v nvim
 abbr -a -g vim nvim
 abbr -a -g vimdiff 'nvim -d'
-abbr -a -g vimup 'nvim +PlugUpgrade +PlugUpdate +PlugClean! +qall > /dev/null'
+abbr -a -g vimup 'nvim +PackerSync +PackerCompile +qall > /dev/null'
 abbr -a -g y yarn
 abbr -a -g ya 'yarn add'
 abbr -a -g yar 'brew services restart yabai'

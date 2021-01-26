@@ -50,3 +50,34 @@ g.coc_global_extensions = {
  'coc-tsserver',
  'coc-yaml',
 }
+
+
+g.fzf_layout = { 
+  ['window'] = { 
+    ['width'] = 0.9, 
+    ['height'] = 0.9, 
+    ['border'] = 'rounded', 
+    ['highlight'] = 'Directory'
+  }
+}
+
+g.fzf_buffers_jump = 1
+
+g.fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+
+g.fzf_commands_expect = 'alt-enter,ctrl-x'
+
+g.fzf_action = {
+  ['ctrl-x'] = 'split',
+  ['ctrl-v'] = 'vsplit'
+}
+
+g.fzf_preview_window = 'right:50%'
+
+cmd("highlight default link EndOfLineSpace ErrorMsg")
+cmd("match EndOfLineSpace / \\+$/")
+
+
+g['sneak#use_ic_scs'] = 1
+g['sneak#target_labels'] = "asdfjkl;ghqweruioptyzxcvnmb"
+

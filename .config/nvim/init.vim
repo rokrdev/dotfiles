@@ -101,14 +101,8 @@ lua require('config')
 " " setup colorizer
 " lua require'colorizer'.setup()
 
-command! Gcd call custom#GoToRoot()
-command! Config :e $MYVIMRC
-command! Reload :so $MYVIMRC
-command! Tcc call custom#Togglecolorcolumn()
-
 " colorscheme night-owl
 " let g:vim_markdown_conceal = 0
-command! Scratch call custom#ScratchGenerator()
 " run pip install neovim-remote for nvr
 " if has('nvim')
 "     let $GIT_EDITOR = 'nvr -cc split --remote-wait'
@@ -128,11 +122,6 @@ command! Scratch call custom#ScratchGenerator()
 
 " COC {{{
 
-" Use `:Format` to format current buffer
-command! -nargs=0 Format :call CocAction('format')
-
-" use `:OR` for organize import of current buffer
-command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
 
 " " Add status line support, for integration with other plugin, checkout `:h coc-status`
 " set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
@@ -166,77 +155,27 @@ command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport
 
 " Fzf {{{
 
-" let g:fzf_layout = { 'window': 'split enew'  }
-let g:fzf_layout = { 'window': { 'width': 1, 'height': 1, 'border': 'rounded', 'highlight': 'Directory' }}
+" " let g:fzf_layout = { 'window': 'split enew'  }
+" let g:fzf_layout = { 'window': { 'width': 1, 'height': 1, 'border': 'rounded', 'highlight': 'Directory' }}
 
-" [Buffers] Jump to the existing window if possible
-let g:fzf_buffers_jump = 1
+" " [Buffers] Jump to the existing window if possible
+" let g:fzf_buffers_jump = 1
 
-" [[B]Commits] Customize the options used by 'git log':
-let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+" " [[B]Commits] Customize the options used by 'git log':
+" let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
 
-" [Commands] --expect expression for directly executing the command
-let g:fzf_commands_expect = 'alt-enter,ctrl-x'
+" " [Commands] --expect expression for directly executing the command
+" let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
-let g:fzf_action = {
-            \ 'ctrl-x': 'split',
-            \ 'ctrl-v': 'vsplit' }
+" let g:fzf_action = {
+"             \ 'ctrl-x': 'split',
+"             \ 'ctrl-v': 'vsplit' }
 
-let g:fzf_preview_window = 'right:50%'
+" let g:fzf_preview_window = 'right:50%'
 
-command! -bang -nargs=* RG
-            \ call fzf#vim#grep(
-            \  'rg --column --line-number --no-heading --hidden --color=always --smart-case '.shellescape(<q-args>), 1,
-            \  fzf#vim#with_preview(), <bang>0)
-
-command! -bang -nargs=* RGRaw
-            \ call fzf#vim#grep(
-            \   'rg --column --line-number --no-heading --hidden --color=always --smart-case '.(<q-args>), 1,
-            \   fzf#vim#with_preview(),  <bang>0)
-
-command! -bang -nargs=* GConflicts
-            \ call fzf#run(
-            \    fzf#wrap({'source': 'git diff --name-only --diff-filter=U',
-            \      'options': ['--multi', '--prompt', 'Conflicts?> ', '--preview', 'cat {}']
-            \    }, <bang>0))
-
-command! -bang -nargs=* LinesWithPreview
-            \ call fzf#vim#grep(
-            \   'rg --with-filename --column --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
-            \   fzf#vim#with_preview({'options': '--delimiter : --nth 4.. --no-sort'}, 'right:50%', '?'),
-            \   1)
 " }}}
 
 " Lightline  {{{
-
-function! LightlineReadonly()
-    return &readonly ? '' : ''
-endfunction
-
-function! LightlineFugitive()
-    let branch = gitbranch#name()
-    return branch !=# '' ? ' '.branch : ''
-endfunction
-
-function! LightlineSignify()
-    let [added, modified, removed] = sy#repo#get_stats()
-    let l:sy = ''
-    for [flag, flagcount] in [
-                \   [exists("g:signify_sign_add")?g:signify_sign_add:'+', added],
-                \   [exists("g:signify_sign_delete")?g:signify_sign_delete:'-', removed],
-                \   [exists("g:signify_sign_change")?g:signify_sign_change:'!', modified]
-                \ ]
-        if flagcount> 0
-            let l:sy .= printf('%s%d', flag, flagcount)
-        endif
-    endfor
-    if !empty(l:sy)
-        let l:sy = printf('[%s]', l:sy)
-        return printf('%s', l:sy)
-    else
-        return ''
-    endif
-endfunction
 
 let s:p = {"normal": {}, "inactive": {}, "insert": {}, "replace": {}, "visual": {}, "tabline": {} }
 
@@ -297,13 +236,13 @@ let g:lightline = {
             \     'right': [ [ 'percent' ], [ 'lineinfo'] ],
             \   },
             \   'component_function': {
-            \     'readonly': 'LightlineReadonly',
-            \     'fugitive': 'LightlineFugitive',
-            \     'gitdiff': 'LightlineSignify',
+            \     'readonly': 'custom#LightlineReadonly',
+            \     'fugitive': 'custom#LightlineFugitive',
+            \     'gitdiff': 'custom#LightlineSignify',
             \     'cocstatus': 'coc#status',
             \   },
             \   'component_expand': {
-            \     'gitdiff': 'LightlineSignify'
+            \     'gitdiff': 'custom#LightlineSignify'
             \   },
             \   'component_type': {
             \     'gitdiff': 'middle',
@@ -312,122 +251,168 @@ let g:lightline = {
 
 " }}}
 
-" Term {{{
-
-command! -bang Term terminal<bang> /usr/local/bin/fish
-command! -nargs=* T split | Term <args>
-command! -nargs=* VT vsplit | Term <args>
-
-command! SS Obsess! | Obsess | wq
-" }}}
 
 " whitepace {{{
 
-highlight default link EndOfLineSpace ErrorMsg
-match EndOfLineSpace / \+$/
+" highlight default link EndOfLineSpace ErrorMsg
+" match EndOfLineSpace / \+$/
 
-command! DisableTrailingWhitespace hi link EndOfLineSpace Normal
-command! EnableTrailingWhitespace hi link EndOfLineSpace ErrorMsg
 " }}}
 
 " sneak {{{
 
-let g:sneak#use_ic_scs = 1
-let g:sneak#target_labels = "asdfjkl;ghqweruioptyzxcvnmb"
+" let g:sneak#use_ic_scs = 1
+" let g:sneak#target_labels = "asdfjkl;ghqweruioptyzxcvnmb"
 
 " }}}
 
-" key bindings {{{
-nnoremap <C-down> :m .+1<CR>==
-nnoremap <C-up> :m .-2<CR>==
-nnoremap <Leader>C :e %:p:h/
-nnoremap s_ :bd!<CR>
-nnoremap s- :bd<CR>
-nnoremap sp "+p
-vnoremap sy "+y
-vnoremap sp "+p
-nnoremap gh :b#<CR>
-nnoremap ss :Buffers<CR>
-" for vim-sandwich
-nmap s <Nop>
-xmap s <Nop>
-nnoremap <esc><esc> :silent! nohl<CR>
-vnoremap <C-down> :m '>+1<CR>gv=gv
-vnoremap <C-up> :m '<-2<CR>gv=gv
-nnoremap <silent> <A-a> :vertical resize +5<CR>
-nnoremap <silent> <A-d> :vertical resize -5<CR>
-nnoremap <silent> <A-w> :resize +5<CR>
-nnoremap <silent> <A-s> :resize -5<CR>
-nnoremap <Leader>r :%s///g<Left><Left><Left>
-nnoremap <Leader>rc :%s///gc<Left><Left><Left><Left>
-nnoremap <silent>s# :let @/='\<'.expand('<cword>').'\>'<CR>cgN
-xnoremap <silent>s# "sy:let @/=@s<CR>cgN
-nnoremap <silent>s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
-xnoremap <silent>s* "sy:let @/=@s<CR>cgn
-" saved macro to replace next space to newline in a line
-let @z = "f cl\<CR>\<ESC>l"
-nnoremap ! @z
+
+" ---------------Command-----------------------
+command! Gcd call custom#GoToRoot()
+command! Config :e $MYVIMRC
+command! Reload :so $MYVIMRC
+command! Tcc call custom#Togglecolorcolumn()
+command! Scratch call custom#ScratchGenerator()
+
+" coc
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+" use `:OR` for organize import of current buffer
+command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
+
+" FZF
+command! -bang -nargs=* RG
+            \ call fzf#vim#grep(
+            \  'rg --column --line-number --no-heading --hidden --color=always --smart-case '.shellescape(<q-args>), 1,
+            \  fzf#vim#with_preview(), <bang>0)
+
+command! -bang -nargs=* RGRaw
+            \ call fzf#vim#grep(
+            \   'rg --column --line-number --no-heading --hidden --color=always --smart-case '.(<q-args>), 1,
+            \   fzf#vim#with_preview(),  <bang>0)
+
+command! -bang -nargs=* GConflicts
+            \ call fzf#run(
+            \    fzf#wrap({'source': 'git diff --name-only --diff-filter=U',
+            \      'options': ['--multi', '--prompt', 'Conflicts?> ', '--preview', 'cat {}']
+            \    }, <bang>0))
+
+command! -bang -nargs=* LinesWithPreview
+            \ call fzf#vim#grep(
+            \   'rg --with-filename --column --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
+            \   fzf#vim#with_preview({'options': '--delimiter : --nth 4.. --no-sort'}, 'right:50%', '?'),
+            \   1)
+
+" Term
+command! -bang Term terminal<bang> /usr/local/bin/fish
+command! -nargs=* T split | Term <args>
+command! -nargs=* VT vsplit | Term <args>
+
+" Session
+command! SS Obsess! | Obsess | wq
+
+" whitepace
+command! DisableTrailingWhitespace hi link EndOfLineSpace Normal
+command! EnableTrailingWhitespace hi link EndOfLineSpace ErrorMsg
+
+" Json format
 command! FJ %!jq .
-nnoremap <expr> <Leader>0 custom#ToggleNumberDisplay()
-nnoremap <Leader>qr :cfdo %s///g \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
-inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
+" ---------------Command-----------------------
+
+
+" call mappings.lua after defining custom commands
+lua require('mappings')
+
+
+" " key bindings {{{
+" nnoremap <C-down> :m .+1<CR>==
+" nnoremap <C-up> :m .-2<CR>==
+" nnoremap <Leader>C :e %:p:h/
+" nnoremap s_ :bd!<CR>
+" nnoremap s- :bd<CR>
+" nnoremap sp "+p
+" vnoremap sy "+y
+" vnoremap sp "+p
+" nnoremap gh :b#<CR>
+" nnoremap ss :Buffers<CR>
+" for vim-sandwich
+" nmap s <Nop>
+" xmap s <Nop>
+" nnoremap <esc><esc> :silent! nohl<CR>
+" vnoremap <C-down> :m '>+1<CR>gv=gv
+" vnoremap <C-up> :m '<-2<CR>gv=gv
+" nnoremap <silent> <A-a> :vertical resize +5<CR>
+" nnoremap <silent> <A-d> :vertical resize -5<CR>
+" nnoremap <silent> <A-w> :resize +5<CR>
+" nnoremap <silent> <A-s> :resize -5<CR>
+" nnoremap <Leader>r :%s///g<Left><Left><Left>
+" nnoremap <Leader>rc :%s///gc<Left><Left><Left><Left>
+" nnoremap <silent>s# :let @/='\<'.expand('<cword>').'\>'<CR>cgN
+" xnoremap <silent>s# "sy:let @/=@s<CR>cgN
+" nnoremap <silent>s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
+" xnoremap <silent>s* "sy:let @/=@s<CR>cgn
+" saved macro to replace next space to newline in a line
+" let @z = "f cl\<CR>\<ESC>l"
+" nnoremap ! @z
+" nnoremap <expr> <Leader>0 custom#ToggleNumberDisplay()
+" inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+" inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
 " */#/g*/g# mapping that obeys smartcase and  ignorecase
-nnoremap <silent># :let @/='\V\<'.custom#EscapeSlashes(expand('<cword>')).'\>'<CR>:let v:searchforward=0<CR>n
-nnoremap <silent>* :let @/='\V\<'.custom#EscapeSlashes(expand('<cword>')).'\>'<CR>:let v:searchforward=1<CR>n
-nnoremap <silent>g# :let @/='\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=0<CR>n
-nnoremap <silent>g* :let @/='\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=1<CR>n
-xnoremap * :<C-u>call custom#VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
-xnoremap # :<C-u>call custom#VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
-nnoremap <Leader>* :call custom#RgWordUnderCursor()<CR>
-vnoremap <Leader>* :call custom#RgRawVisualSelection()<CR>
-nnoremap <Leader>o :Files<CR>
-nnoremap <Leader>f :RG<CR>
-nnoremap <Leader>F :RGRaw<Space>
-nnoremap <Leader>/ :LinesWithPreview<CR>
-nnoremap <Leader>G :GF?<CR>
-nnoremap <Leader>co :Commands<CR>
-nnoremap <Leader>cc :BCommits<CR>
-nnoremap <Leader>n :Vifm<CR>
-nmap f <Plug>Sneak_f
-nmap F <Plug>Sneak_F
-nmap t <Plug>Sneak_t
-nmap T <Plug>Sneak_T
-vmap f <Plug>Sneak_f
-vmap F <Plug>Sneak_F
-vmap t <Plug>Sneak_t
-vmap T <Plug>Sneak_T
-nmap sj <Plug>SneakLabel_s
-nmap sk <Plug>SneakLabel_S
-nnoremap <Leader>S :Scratch<CR>
-nnoremap <Leader>gg :call custom#OpenTerm('tig status')<CR>
-nnoremap <Leader>gb :call custom#OpenTerm('tig ' . expand('%'))<CR>
-nnoremap <Leader>gu :call custom#OpenTerm('tig log @{u}.. -p')<CR>
-" nmap gb <Plug>(git-messenger)
-nnoremap gb :GitMessenger<CR>
-nmap <Leader>ck <Plug>(coc-diagnostic-prev)
-nmap <Leader>cj <Plug>(coc-diagnostic-next)
-nmap <Leader>cd <Plug>(coc-definition)
-nmap <Leader>cy <Plug>(coc-type-definition)
-nmap <Leader>ci <Plug>(coc-implementation)
-nmap <Leader>cr <Plug>(coc-references)
-nnoremap <Leader>cs :CocSearch<Space>
-nnoremap <Leader>cw :CocSearch <C-R>=expand("<cword>")<CR><CR>
-imap <C-f> <Plug>(coc-snippets-expand-jump)
-nmap <Leader>ct :CocCommand explorer<CR>
-nmap <Leader>cT :call coc#float#close_all()<CR>
-nnoremap <silent> K :call custom#show_documentation()<CR>
-nnoremap <Leader>; o<ESC>
-nnoremap <Leader>: O<ESC>
-let g:VM_maps = {}
-let g:VM_maps['Find Under']         = '<C-n>'           " replace C-n
-let g:VM_maps['Find Subword Under'] = '<C-n>'           " replace visual C-n
-let g:VM_maps["Add Cursor Down"] = '<M-Down>'
-let g:VM_maps["Add Cursor Up"] = '<M-Up>'
-let g:VM_maps["Select Cursor Down"] = '<M-C-Down>'      " start selecting down
-let g:VM_maps["Select Cursor Up"]   = '<M-C-Up>'        " start selecting up
-" nnoremap <Leader>\> :cnext<CR>
-" nnoremap <Leader>\< :cprevious<CR>
+" nnoremap <silent># :let @/='\V\<'.custom#EscapeSlashes(expand('<cword>')).'\>'<CR>:let v:searchforward=0<CR>n
+" nnoremap <silent>* :let @/='\V\<'.custom#EscapeSlashes(expand('<cword>')).'\>'<CR>:let v:searchforward=1<CR>n
+" nnoremap <silent>g# :let @/='\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=0<CR>n
+" nnoremap <silent>g* :let @/='\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=1<CR>n
+" xnoremap * :<C-u>call custom#VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
+" xnoremap # :<C-u>call custom#VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
+" nnoremap <Leader>* :call custom#RgWordUnderCursor()<CR>
+" vnoremap <Leader>* :call custom#RgRawVisualSelection()<CR>
+" nnoremap <Leader>o :Files<CR>
+" nnoremap <Leader>f :RG<CR>
+" nnoremap <Leader>F :RGRaw<Space>
+" nnoremap <Leader>/ :LinesWithPreview<CR>
+" nnoremap <Leader>G :GF?<CR>
+" nnoremap <Leader>co :Commands<CR>
+" nnoremap <Leader>cc :BCommits<CR>
+" nnoremap <Leader>n :Vifm<CR>
+" nmap f <Plug>Sneak_f
+" nmap F <Plug>Sneak_F
+" nmap t <Plug>Sneak_t
+" nmap T <Plug>Sneak_T
+" vmap f <Plug>Sneak_f
+" vmap F <Plug>Sneak_F
+" vmap t <Plug>Sneak_t
+" vmap T <Plug>Sneak_T
+" nmap sj <Plug>SneakLabel_s
+" nmap sk <Plug>SneakLabel_S
+" nnoremap <Leader>S :Scratch<CR>
+" nnoremap <Leader>gg :call custom#OpenTerm('tig status')<CR>
+" nnoremap <Leader>gb :call custom#OpenTerm('tig ' . expand('%'))<CR>
+" nnoremap <Leader>gu :call custom#OpenTerm('tig log @{u}.. -p')<CR>
+" " nmap gb <Plug>(git-messenger)
+" nnoremap gb :GitMessenger<CR>
+" nmap <Leader>ck <Plug>(coc-diagnostic-prev)
+" nmap <Leader>cj <Plug>(coc-diagnostic-next)
+" nmap <Leader>cd <Plug>(coc-definition)
+" nmap <Leader>cy <Plug>(coc-type-definition)
+" nmap <Leader>ci <Plug>(coc-implementation)
+" nmap <Leader>cr <Plug>(coc-references)
+" nnoremap <Leader>cs :CocSearch<Space>
+" nnoremap <Leader>cw :CocSearch <C-R>=expand("<cword>")<CR><CR>
+" imap <C-f> <Plug>(coc-snippets-expand-jump)
+" nmap <Leader>ct :CocCommand explorer<CR>
+" nmap <Leader>cT :call coc#float#close_all()<CR>
+" nnoremap <silent> K :call custom#show_documentation()<CR>
+" nnoremap <Leader>; o<ESC>
+" nnoremap <Leader>: O<ESC>
+" let g:VM_maps = {}
+" let g:VM_maps['Find Under']         = '<C-n>'           " replace C-n
+" let g:VM_maps['Find Subword Under'] = '<C-n>'           " replace visual C-n
+" let g:VM_maps["Add Cursor Down"] = '<M-Down>'
+" let g:VM_maps["Add Cursor Up"] = '<M-Up>'
+" let g:VM_maps["Select Cursor Down"] = '<M-C-Down>'      " start selecting down
+" let g:VM_maps["Select Cursor Up"]   = '<M-C-Up>'        " start selecting up
+" " nnoremap <Leader>\> :cnext<CR>
+" " nnoremap <Leader>\< :cprevious<CR>
 " }}}
 
 " autocmd group {{{
@@ -438,7 +423,7 @@ augroup MY_AUTOCMDS
   autocmd FileChangedShellPost *
         \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
-  autocmd FileType * setlocal formatoptions-=cro
+  autocmd BufRead,BufNewFile * setlocal formatoptions-=cro
 
   " :wq saves commit message and close the split
   autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete

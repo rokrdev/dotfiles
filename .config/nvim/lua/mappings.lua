@@ -3,7 +3,7 @@ local cmd = vim.cmd
 local g = vim.g
 
 local function t(str)
-    return vim.api.nvim_replace_termcodes(str, true, true, true)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
 
@@ -41,11 +41,11 @@ g["@z"] = "f cl<CR><ESC>l"
 api.nvim_set_keymap('n', '!', g["@z"], { noremap = true })
 
 function _G.smart_tab()
-    return vim.fn.pumvisible() == 1 and t'<C-n>' or t'<Tab>'
+  return vim.fn.pumvisible() == 1 and t'<C-n>' or t'<Tab>'
 end
 
 function _G.smart_shift_tab()
-    return vim.fn.pumvisible() == 1 and t'<C-p>' or t'<Tab>'
+  return vim.fn.pumvisible() == 1 and t'<C-p>' or t'<Tab>'
 end
 
 api.nvim_set_keymap('n', '<Leader>0', 'custom#ToggleNumberDisplay', { noremap = true, expr = true })
@@ -110,15 +110,15 @@ api.nvim_set_keymap('n', '<Leader>;', "o<ESC>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>:', "O<ESC>", { noremap = true })
 
 g.VM_maps = {
-    -- replace C-n
-    ['Find Under'] = '<C-n>',
-     -- replace visual C-n
-    ['Find Subword Under'] = '<C-n>',
-    ["Add Cursor Down"] = '<M-Down>',
-    ["Add Cursor Up"] = '<M-Up>',
-    --  start selecting down
-    ["Select Cursor Down"] = '<M-C-Down>',
-    -- start selecting up
-    ["Select Cursor Up"] = '<M-C-Up>'
+  -- replace C-n
+  ['Find Under'] = '<C-n>',
+  -- replace visual C-n
+  ['Find Subword Under'] = '<C-n>',
+  ["Add Cursor Down"] = '<M-Down>',
+  ["Add Cursor Up"] = '<M-Up>',
+  --  start selecting down
+  ["Select Cursor Down"] = '<M-C-Down>',
+  -- start selecting up
+  ["Select Cursor Up"] = '<M-C-Up>'
 }
 

@@ -36,21 +36,21 @@ g.php_html_in_nowdoc = 0
 cmd("set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}")
 
 g.coc_global_extensions = {
- 'coc-css',
- 'coc-docker',
- 'coc-elixir',
- 'coc-explorer',
- 'coc-emmet',
- 'coc-eslint',
- 'coc-html',
- 'coc-json',
- 'coc-markdownlint',
- 'coc-prettier',
- 'coc-python',
- 'coc-sh',
- 'coc-snippets',
- 'coc-tsserver',
- 'coc-yaml',
+  'coc-css',
+  'coc-docker',
+  'coc-elixir',
+  'coc-explorer',
+  'coc-emmet',
+  'coc-eslint',
+  'coc-html',
+  'coc-json',
+  'coc-markdownlint',
+  'coc-prettier',
+  'coc-python',
+  'coc-sh',
+  'coc-snippets',
+  'coc-tsserver',
+  'coc-yaml',
 }
 
 

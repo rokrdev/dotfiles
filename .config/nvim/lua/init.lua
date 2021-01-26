@@ -1,0 +1,6 @@
+require('plugins')
+require('setters')
+require('config')
+require('commands')
+require('mappings')
+require('autocmds')

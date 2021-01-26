@@ -15,12 +15,12 @@ hi CursorLine guibg=#00111F ctermbg=235 gui=NONE cterm=NONE
 hi CursorLineNr guifg=#C5E4FD guibg=#00111F ctermfg=159 ctermbg=233 gui=NONE cterm=NONE
 hi ColorColumn guibg=#151d24 ctermbg=235 gui=NONE cterm=NONE
 hi Directory guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
-hi DiffAdd guifg=#011627 ctermfg=233 guibg=#addb67 ctermbg=149 gui=NONE cterm=NONE
-hi DiffChange guifg=#011627 ctermfg=233 guibg=#ecc48d ctermbg=222 gui=NONE cterm=NONE
-hi DiffDelete guifg=#011627 ctermfg=233 guibg=#ff5874 ctermbg=204 gui=NONE cterm=NONE
-hi DiffText guifg=#011627 ctermfg=233 guibg=#addb67 ctermbg=149 gui=NONE cterm=NONE
-hi diffAdded guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
-hi diffRemoved guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
+hi DiffAdd guibg=#011627 ctermfg=233 guifg=#addb67 ctermbg=149 gui=NONE cterm=NONE
+hi DiffChange guibg=#011627 ctermfg=233 guifg=#c792ea ctermbg=222 gui=NONE cterm=NONE
+hi DiffDelete guibg=#011627 ctermfg=233 guifg=#ff5874 ctermbg=204 gui=NONE cterm=NONE
+hi DiffText guibg=#011627 ctermfg=233 guifg=#addb67 ctermbg=149 gui=NONE cterm=NONE
+hi diffAdded guibg=#addb67 ctermfg=149 gui=NONE cterm=NONE
+hi diffRemoved guibg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
 hi VertSplit guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
 hi MatchParen guifg=#7fdbca guibg=#011627 ctermfg=111 gui=bold cterm=bold
 hi Folded guifg=#806e6f ctermfg=138 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE

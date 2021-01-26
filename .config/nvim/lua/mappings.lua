@@ -121,3 +121,4 @@ g.VM_maps = {
     -- start selecting up
     ["Select Cursor Up"] = '<M-C-Up>'
 }
+

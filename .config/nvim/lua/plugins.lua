@@ -29,10 +29,18 @@ vim.cmd [[packadd cfilter]]
 return require('packer').startup(function()
 
   use {'wbthomason/packer.nvim', opt = true}
-  use {'itchyny/lightline.vim', as = 'lightline'}
-  use 'itchyny/vim-gitbranch'
-  use 'norcalli/nvim-colorizer.lua'
-  use 'jiangmiao/auto-pairs'
+  use {
+    'norcalli/nvim-colorizer.lua',
+    config = function()
+      require('colorizer').setup()
+    end
+  }
+  use {
+    'windwp/nvim-autopairs',
+    config = function()
+      require('nvim-autopairs').setup()
+    end
+  }
   use 'junegunn/fzf.vim'
   use 'machakann/vim-sandwich'
   use {'neoclide/coc.nvim', branch = 'release'}
@@ -78,6 +86,33 @@ return require('packer').startup(function()
   use 'rrethy/vim-illuminate'
   use 'Yggdroot/indentLine'
   use {'mg979/vim-visual-multi', branch = 'master'}
+
+  use {
+    'hoob3rt/lualine.nvim',
+    config = function()
+      local lualine = require('lualine')
+      lualine.theme = 'nord'
+      lualine.separator = '|'
+      lualine.sections = {
+        lualine_a = { 'mode' },
+        lualine_b = { 'branch' },
+        lualine_c = { 'filename', 'signify' },
+        lualine_x = { 'encoding', 'fileformat', 'filetype' },
+        lualine_y = { 'progress' },
+        lualine_z = { 'location'  },
+      }
+      lualine.inactive_sections = {
+        lualine_a = {  },
+        lualine_b = {  },
+        lualine_c = { 'filename' },
+        lualine_x = { 'location' },
+        lualine_y = {  },
+        lualine_z = {  }
+      }
+      lualine.extensions = { 'fzf' }
+      lualine.status()
+    end
+  }
 
 end)
 

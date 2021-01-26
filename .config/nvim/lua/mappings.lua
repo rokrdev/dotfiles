@@ -87,7 +87,7 @@ api.nvim_set_keymap('n', '<Leader>gg', ":call custom#OpenTerm('tig status')<CR>"
 -- tig a file
 api.nvim_set_keymap('n', '<Leader>gb', ":call custom#OpenTerm('tig ' . expand('%'))<CR>", { noremap = true })
 -- tig show unpushed commits
-api.nvim_set_keymap('n', '<Leader>gu', ":call custom#OpenTerm('tig log @{u}.. -p')<CR>", { noremap = true })
+api.nvim_set_keymap('n', '<Leader>gl', ":call custom#OpenTerm('tig')<CR>", { noremap = true })
 
 api.nvim_set_keymap('n', 'gb', ":GitMessenger<CR>", { noremap = true })
 

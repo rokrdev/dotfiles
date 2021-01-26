@@ -1,6 +1,4 @@
-lua require('plugins')
-lua require('setters')
-lua require('config')
+lua require('init')
 
 " basic config {{{
 
@@ -175,81 +173,81 @@ lua require('config')
 
 " }}}
 
-" Lightline  {{{
+" " Lightline  {{{
 
-let s:p = {"normal": {}, "inactive": {}, "insert": {}, "replace": {}, "visual": {}, "tabline": {} }
+" let s:p = {"normal": {}, "inactive": {}, "insert": {}, "replace": {}, "visual": {}, "tabline": {} }
 
-let s:p.normal.left = [[["#1a2b4a", 235], ["#82aaff", 111]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
-let s:p.normal.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
-let s:p.normal.right = [[["#1a2b4a", 235], ["#82aaff", 111]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
-let s:p.normal.error = [[["#1a2b4a", 235], ["#82aaff", 111]]]
-let s:p.normal.warning = [[["#1a2b4a", 235], ["#82aaff", 111]]]
+" let s:p.normal.left = [[["#1a2b4a", 235], ["#82aaff", 111]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
+" let s:p.normal.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
+" let s:p.normal.right = [[["#1a2b4a", 235], ["#82aaff", 111]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
+" let s:p.normal.error = [[["#1a2b4a", 235], ["#82aaff", 111]]]
+" let s:p.normal.warning = [[["#1a2b4a", 235], ["#82aaff", 111]]]
 
-let s:p.inactive.left = [[["#d6deeb", 253], ["#112630", 235]], [["#d6deeb", 253], ["#112630", 235]]]
-let s:p.inactive.middle = [[["#d6deeb", 253], ["#112630", 235]]]
-let s:p.inactive.right = [[["#d6deeb", 253], ["#112630", 235]], [["#d6deeb", 253], ["#112630", 235]]]
+" let s:p.inactive.left = [[["#d6deeb", 253], ["#112630", 235]], [["#d6deeb", 253], ["#112630", 235]]]
+" let s:p.inactive.middle = [[["#d6deeb", 253], ["#112630", 235]]]
+" let s:p.inactive.right = [[["#d6deeb", 253], ["#112630", 235]], [["#d6deeb", 253], ["#112630", 235]]]
 
-let s:p.insert.left = [[["#1a2b4a", 235], ["#addb67", 149]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
-let s:p.insert.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
-let s:p.insert.right = [[["#1a2b4a", 235], ["#addb67", 149]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
+" let s:p.insert.left = [[["#1a2b4a", 235], ["#addb67", 149]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
+" let s:p.insert.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
+" let s:p.insert.right = [[["#1a2b4a", 235], ["#addb67", 149]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
 
-let s:p.replace.left = [[["#1a2b4a", 235], ["#ff5874", 204]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
-let s:p.replace.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
-let s:p.replace.right = [[["#1a2b4a", 235], ["#ff5874", 204]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
+" let s:p.replace.left = [[["#1a2b4a", 235], ["#ff5874", 204]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
+" let s:p.replace.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
+" let s:p.replace.right = [[["#1a2b4a", 235], ["#ff5874", 204]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
 
-let s:p.visual.left = [[["#1a2b4a", 235], ["#c792ea", 176]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
-let s:p.visual.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
-let s:p.visual.right = [[["#1a2b4a", 235], ["#c792ea", 176]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
+" let s:p.visual.left = [[["#1a2b4a", 235], ["#c792ea", 176]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
+" let s:p.visual.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
+" let s:p.visual.right = [[["#1a2b4a", 235], ["#c792ea", 176]], [["#d6deeb", 253], ["#1a2b4a", 235]]]
 
-let s:p.tabline.left = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
-let s:p.tabline.tabsel = [[["#1a2b4a", 235], ["#82aaff", 111]]]
-let s:p.tabline.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
-let s:p.tabline.right = [[["#d6deeb", 253], ["#ff5874", 204]]]
+" let s:p.tabline.left = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
+" let s:p.tabline.tabsel = [[["#1a2b4a", 235], ["#82aaff", 111]]]
+" let s:p.tabline.middle = [[["#d6deeb", 253], ["#1a2b4a", 235]]]
+" let s:p.tabline.right = [[["#d6deeb", 253], ["#ff5874", 204]]]
 
-let g:lightline#colorscheme#nightowl#palette = lightline#colorscheme#flatten(s:p)
+" let g:lightline#colorscheme#nightowl#palette = lightline#colorscheme#flatten(s:p)
 
-let g:lightline = {
-            \   'colorscheme': 'nightowl',
-            \   'mode_map': {
-            \     'n' : 'N',
-            \     'i' : 'I',
-            \     'R' : 'R',
-            \     'v' : 'V',
-            \     'V' : 'VL',
-            \     "\<C-v>": 'VB',
-            \     'c' : 'C',
-            \     's' : 'S',
-            \     'S' : 'SL',
-            \     "\<C-s>": 'SB',
-            \     't': 'T',
-            \   },
-            \   'active': {
-            \     'left': [ [ 'mode', 'paste' ],
-            \               [ 'fugitive', 'filename', 'readonly', 'modified' ],
-            \              [ 'gitdiff', 'cocstatus' ] ],
-            \     'right': [ [ 'percent' ], [ 'filetype', 'fileencoding', 'lineinfo' ] ],
-            \   },
-            \   'inactive': {
-            \     'left': [ [ 'mode', 'paste' ],
-            \               [ 'fugitive', 'filename', 'readonly', 'modified' ],
-            \              [ 'gitdiff' ] ],
-            \     'right': [ [ 'percent' ], [ 'lineinfo'] ],
-            \   },
-            \   'component_function': {
-            \     'readonly': 'custom#LightlineReadonly',
-            \     'fugitive': 'custom#LightlineFugitive',
-            \     'gitdiff': 'custom#LightlineSignify',
-            \     'cocstatus': 'coc#status',
-            \   },
-            \   'component_expand': {
-            \     'gitdiff': 'custom#LightlineSignify'
-            \   },
-            \   'component_type': {
-            \     'gitdiff': 'middle',
-            \   },
-            \ }
+" let g:lightline = {
+"             \   'colorscheme': 'nightowl',
+"             \   'mode_map': {
+"             \     'n' : 'N',
+"             \     'i' : 'I',
+"             \     'R' : 'R',
+"             \     'v' : 'V',
+"             \     'V' : 'VL',
+"             \     "\<C-v>": 'VB',
+"             \     'c' : 'C',
+"             \     's' : 'S',
+"             \     'S' : 'SL',
+"             \     "\<C-s>": 'SB',
+"             \     't': 'T',
+"             \   },
+"             \   'active': {
+"             \     'left': [ [ 'mode', 'paste' ],
+"             \               [ 'fugitive', 'filename', 'readonly', 'modified' ],
+"             \              [ 'gitdiff', 'cocstatus' ] ],
+"             \     'right': [ [ 'percent' ], [ 'filetype', 'fileencoding', 'lineinfo' ] ],
+"             \   },
+"             \   'inactive': {
+"             \     'left': [ [ 'mode', 'paste' ],
+"             \               [ 'fugitive', 'filename', 'readonly', 'modified' ],
+"             \              [ 'gitdiff' ] ],
+"             \     'right': [ [ 'percent' ], [ 'lineinfo'] ],
+"             \   },
+"             \   'component_function': {
+"             \     'readonly': 'custom#LightlineReadonly',
+"             \     'fugitive': 'custom#LightlineFugitive',
+"             \     'gitdiff': 'custom#LightlineSignify',
+"             \     'cocstatus': 'coc#status',
+"             \   },
+"             \   'component_expand': {
+"             \     'gitdiff': 'custom#LightlineSignify'
+"             \   },
+"             \   'component_type': {
+"             \     'gitdiff': 'middle',
+"             \   },
+"             \ }
 
-" }}}
+" " }}}
 
 
 " whitepace {{{
@@ -267,61 +265,60 @@ let g:lightline = {
 " }}}
 
 
-" ---------------Command-----------------------
-command! Gcd call custom#GoToRoot()
-command! Config :e $MYVIMRC
-command! Reload :so $MYVIMRC
-command! Tcc call custom#Togglecolorcolumn()
-command! Scratch call custom#ScratchGenerator()
+" " ---------------Command-----------------------
+" command! Gcd call custom#GoToRoot()
+" command! Config :e $MYVIMRC
+" command! Reload :so $MYVIMRC
+" command! Tcc call custom#Togglecolorcolumn()
+" command! Scratch call custom#ScratchGenerator()
 
-" coc
-" Use `:Format` to format current buffer
-command! -nargs=0 Format :call CocAction('format')
-" use `:OR` for organize import of current buffer
-command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
+" " coc
+" " Use `:Format` to format current buffer
+" command! -nargs=0 Format :call CocAction('format')
+" " use `:OR` for organize import of current buffer
+" command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
 
-" FZF
-command! -bang -nargs=* RG
-            \ call fzf#vim#grep(
-            \  'rg --column --line-number --no-heading --hidden --color=always --smart-case '.shellescape(<q-args>), 1,
-            \  fzf#vim#with_preview(), <bang>0)
+" " FZF
+" command! -bang -nargs=* RG
+"             \ call fzf#vim#grep(
+"             \  'rg --column --line-number --no-heading --hidden --color=always --smart-case '.shellescape(<q-args>), 1,
+"             \  fzf#vim#with_preview(), <bang>0)
 
-command! -bang -nargs=* RGRaw
-            \ call fzf#vim#grep(
-            \   'rg --column --line-number --no-heading --hidden --color=always --smart-case '.(<q-args>), 1,
-            \   fzf#vim#with_preview(),  <bang>0)
+" command! -bang -nargs=* RGRaw
+"             \ call fzf#vim#grep(
+"             \   'rg --column --line-number --no-heading --hidden --color=always --smart-case '.(<q-args>), 1,
+"             \   fzf#vim#with_preview(),  <bang>0)
 
-command! -bang -nargs=* GConflicts
-            \ call fzf#run(
-            \    fzf#wrap({'source': 'git diff --name-only --diff-filter=U',
-            \      'options': ['--multi', '--prompt', 'Conflicts?> ', '--preview', 'cat {}']
-            \    }, <bang>0))
+" command! -bang -nargs=* GConflicts
+"             \ call fzf#run(
+"             \    fzf#wrap({'source': 'git diff --name-only --diff-filter=U',
+"             \      'options': ['--multi', '--prompt', 'Conflicts?> ', '--preview', 'cat {}']
+"             \    }, <bang>0))
 
-command! -bang -nargs=* LinesWithPreview
-            \ call fzf#vim#grep(
-            \   'rg --with-filename --column --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
-            \   fzf#vim#with_preview({'options': '--delimiter : --nth 4.. --no-sort'}, 'right:50%', '?'),
-            \   1)
+" command! -bang -nargs=* LinesWithPreview
+"             \ call fzf#vim#grep(
+"             \   'rg --with-filename --column --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
+"             \   fzf#vim#with_preview({'options': '--delimiter : --nth 4.. --no-sort'}, 'right:50%', '?'),
+"             \   1)
 
-" Term
-command! -bang Term terminal<bang> /usr/local/bin/fish
-command! -nargs=* T split | Term <args>
-command! -nargs=* VT vsplit | Term <args>
+" " Term
+" command! -bang Term terminal<bang> /usr/local/bin/fish
+" command! -nargs=* T split | Term <args>
+" command! -nargs=* VT vsplit | Term <args>
 
-" Session
-command! SS Obsess! | Obsess | wq
+" " Session
+" command! SS Obsess! | Obsess | wq
 
-" whitepace
-command! DisableTrailingWhitespace hi link EndOfLineSpace Normal
-command! EnableTrailingWhitespace hi link EndOfLineSpace ErrorMsg
+" " whitepace
+" command! DisableTrailingWhitespace hi link EndOfLineSpace Normal
+" command! EnableTrailingWhitespace hi link EndOfLineSpace ErrorMsg
 
-" Json format
-command! FJ %!jq .
-" ---------------Command-----------------------
+" " Json format
+" command! FJ %!jq .
+" " ---------------Command-----------------------
 
 
 " call mappings.lua after defining custom commands
-lua require('mappings')
 
 
 " " key bindings {{{
@@ -415,30 +412,30 @@ lua require('mappings')
 " " nnoremap <Leader>\< :cprevious<CR>
 " }}}
 
-" autocmd group {{{
-augroup MY_AUTOCMDS
-  autocmd!
-  autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
-        \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
-  autocmd FileChangedShellPost *
-        \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
+" " autocmd group {{{
+" augroup MY_AUTOCMDS
+"   autocmd!
+"   autocmd FocusGained,BufEnter,CursorHold,CursorHoldI *
+"         \ if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
+"   autocmd FileChangedShellPost *
+"         \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
-  autocmd BufRead,BufNewFile * setlocal formatoptions-=cro
+"   autocmd BufRead,BufNewFile * setlocal formatoptions-=cro
 
-  " :wq saves commit message and close the split
-  autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
+"   " :wq saves commit message and close the split
+"   autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
 
-  autocmd! FileType fzf tunmap <buffer> <Esc>
+"   autocmd! FileType fzf tunmap <buffer> <Esc>
 
-  " show signify status in statusline without delay
-  autocmd User Signify call lightline#update()
+"   " show signify status in statusline without delay
+"   " autocmd User Signify call lightline#update()
 
-  autocmd BufWritePost,TextChanged,TextChangedI,TermLeave * call lightline#update()
+"   " autocmd BufWritePost,TextChanged,TextChangedI,TermLeave * call lightline#update()
 
-  autocmd TermOpen * call custom#OnTermOpen()
+"   autocmd TermOpen * call custom#OnTermOpen()
 
-  autocmd InsertEnter * hi link EndOfLineSpace Normal
-  autocmd InsertLeave * hi link EndOfLineSpace ErrorMsg
-  autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=250, on_visual=false}
-augroup END
-" }}}
+"   autocmd InsertEnter * hi link EndOfLineSpace Normal
+"   autocmd InsertLeave * hi link EndOfLineSpace ErrorMsg
+"   autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=250, on_visual=false}
+" augroup END
+" " }}}

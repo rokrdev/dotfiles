@@ -13,7 +13,9 @@ g.indentLine_fileTypeExclude = {'coc-explorer'}
 g.indentLine_bufTypeExclude = {'help', 'terminal'}
 g.indentLine_bufNameExclude = {'vifm'}
 
-require'colorizer'.setup()
+g.signify_sign_add = '│'
+g.signify_sign_change = '│'
+g.signify_sign_delete = '_'
 
 cmd('colorscheme night-owl')
 
@@ -52,11 +54,11 @@ g.coc_global_extensions = {
 }
 
 
-g.fzf_layout = { 
-  ['window'] = { 
-    ['width'] = 0.9, 
-    ['height'] = 0.9, 
-    ['border'] = 'rounded', 
+g.fzf_layout = {
+  ['window'] = {
+    ['width'] = 0.9,
+    ['height'] = 0.9,
+    ['border'] = 'rounded',
     ['highlight'] = 'Directory'
   }
 }

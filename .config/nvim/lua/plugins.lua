@@ -150,6 +150,11 @@ return require('packer').startup(function()
   use {
     'mhinz/vim-signify',
     event = 'VimEnter *',
+    config = function()
+      vim.g.signify_sign_add = '│'
+      vim.g.signify_sign_change = '│'
+      vim.g.signify_sign_delete = '_'
+    end
   }
 
   use {

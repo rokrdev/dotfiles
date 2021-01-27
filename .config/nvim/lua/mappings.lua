@@ -6,16 +6,17 @@ local function t(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
-
-api.nvim_set_keymap('n', '<C-down>', ':m .+1<CR>==', { noremap = true })
-api.nvim_set_keymap('n', '<C-up>', ':m .-2<CR>==', { noremap = true })
-api.nvim_set_keymap('v', '<C-down>', ':m .+1<CR>==', { noremap = true })
-api.nvim_set_keymap('v', '<C-up>', ':m .-2<CR>==', { noremap = true })
+api.nvim_set_keymap('n', '<A-j>', 'J', { noremap = true })
+api.nvim_set_keymap('n', 'J', ':m .+1<CR>==', { noremap = true })
+api.nvim_set_keymap('n', 'K', ':m .-2<CR>==', { noremap = true })
+api.nvim_set_keymap('v', 'J', ":m '>+1<CR>gv=gv", { noremap = true })
+api.nvim_set_keymap('v', 'K', ":m '<-2<CR>gv=gv", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>C', ':e %:p:h/', { noremap = true })
 api.nvim_set_keymap('n', 's-', ':bd<CR>', { noremap = true })
 api.nvim_set_keymap('n', 's_', ':bd!<CR>', { noremap = true })
-api.nvim_set_keymap('n', 'sy', '"+y', { noremap = true })
 api.nvim_set_keymap('n', 'sp', '"+p', { noremap = true })
+api.nvim_set_keymap('v', 'sy', '"+y', { noremap = true })
+api.nvim_set_keymap('v', 'sp', '"+p', { noremap = true })
 api.nvim_set_keymap('n', 'gh', ':b#<CR>', { noremap = true })
 api.nvim_set_keymap('n', 'ss', ':Buffers<CR>', { noremap = true })
 
@@ -105,7 +106,7 @@ api.nvim_set_keymap('i', '<C-f>', "<Plug>(coc-snippets-expand-jump)", {})
 api.nvim_set_keymap('n', '<Leader>ct', ":CocCommand explorer<CR>", {})
 api.nvim_set_keymap('n', '<Leader>cT', ":call coc#float#close_all()<CR>", {})
 
-api.nvim_set_keymap('n', 'K', ":call custom#show_documentation()<CR>", { noremap = true, silent = true })
+api.nvim_set_keymap('n', '<A-d>', ":call custom#show_documentation()<CR>", { noremap = true, silent = true })
 api.nvim_set_keymap('n', '<Leader>;', "o<ESC>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>:', "O<ESC>", { noremap = true })
 

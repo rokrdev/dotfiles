@@ -36,7 +36,7 @@ function! custom#VSetSearch(cmdtype, ...)
 endfunction
 
 function! custom#show_documentation()
-    if (index(['vim','help'], &fileype) >= 0)
+    if (index(['vim','help'], &filetype) >= 0)
         execute 'h '.expand('<cword>')
     else
         call CocAction('doHover')

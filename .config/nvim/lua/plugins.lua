@@ -109,50 +109,23 @@ return require('packer').startup(function()
   }
 
   use {
-    'jparise/vim-graphql',
-    opt = true,
-    ft = {'graphql'}
-  }
-
-  use {
-    'othree/html5.vim',
-    opt = true,
-    ft = {'html'}
-  }
-
-  use {
-    'maxmellon/vim-jsx-pretty',
-    event = 'VimEnter *',
-    requries = {'pangloss/vim-javascript'},
-    config = function()
-      vim.g.vim_jsx_pretty_enable_jsx_highlight = 1
-      vim.g.vim_jsx_pretty_colorful_config = 1
-      vim.g.vim_jsx_pretty_disable_js = 0
-    end
-  }
-
-  use {
-    'tbastos/vim-lua',
-    opt = true,
-    ft = {'lua'}
-  }
-
-  use {
     'jxnblk/vim-mdx-js',
     opt = true,
     ft = {'mdx'}
   }
 
   use {
-    'StanAngeloff/php.vim',
-    opt = true,
-    ft = {'php', 'phtml'}
-  }
-
-  use {
-    'vim-python/python-syntax',
-    opt = true,
-    ft = {'python'}
+    'nvim-treesitter/nvim-treesitter',
+    run = ':TSUpdate',
+    event = 'VimEnter *',
+    config = function()
+      require('nvim-treesitter.configs').setup {
+        ensure_installed = "all",
+        highlight = {
+          enable = true
+        }
+      }
+    end
   }
 
   use {
@@ -172,10 +145,7 @@ return require('packer').startup(function()
     event = 'VimEnter *',
   }
 
-  use {
-    'Yggdroot/indentLine',
-    event = 'VimEnter *',
-  }
+  use {'Yggdroot/indentLine'}
 
   use {
     'mg979/vim-visual-multi',

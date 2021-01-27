@@ -18,7 +18,7 @@ function! custom#ToggleNumberDisplay()
 endfunction
 
 function! custom#GoToRoot()
-    exec 'cd' fnameescape(fnamemodify(finddir('.git', escape(expand('%:p:h'), ' ') . ';'), ':h'))
+    exec 'cd' finddir('.git/..', expand('%:p:h').';')
 endfunction
 
 " https://github.com/wincent/loupe/blob/cf2d75a4b32a639e1b0a477c2ebdaebb1b70bf27/autoload/loupe/private.vim

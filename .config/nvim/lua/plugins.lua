@@ -25,53 +25,104 @@ vim.cmd [[packadd cfilter]]
 
 return require('packer').startup(function()
 
-  use {'wbthomason/packer.nvim', opt = true}
+  use {
+    'wbthomason/packer.nvim',
+    opt = true
+  }
+
   use {
     'norcalli/nvim-colorizer.lua',
+    event = 'VimEnter *',
     config = function()
       require('colorizer').setup()
     end
   }
+
   use {
     'windwp/nvim-autopairs',
+    event = 'VimEnter *',
     config = function()
       require('nvim-autopairs').setup()
     end
   }
-  use 'junegunn/fzf.vim'
-  use 'machakann/vim-sandwich'
-  use {'neoclide/coc.nvim', branch = 'release'}
-  use 'tpope/vim-commentary'
-  use 'mhinz/vim-signify'
 
-  -- cursor hold issue with neovim
-  use 'antoinemadec/FixCursorHold.nvim'
-  use {'rhysd/git-messenger.vim', opt = true, cmd = 'GitMessenger' }
+  use {
+    'junegunn/fzf.vim',
+    event = 'VimEnter *',
+  }
+
+  use {
+    'machakann/vim-sandwich',
+    event = 'VimEnter *',
+  }
+
+  use {
+    'neoclide/coc.nvim',
+    branch = 'release',
+    event = 'VimEnter *',
+  }
+
+  use {
+    'tpope/vim-commentary',
+    event = 'VimEnter *',
+  }
+
+  use {
+    'mhinz/vim-signify',
+    event = 'VimEnter *',
+  }
+
+  use {
+    'rhysd/git-messenger.vim',
+    opt = true,
+    cmd = 'GitMessenger'
+  }
+
   use {
     'styled-components/vim-styled-components',
     branch = 'main',
     opt = true,
     ft = {'javascript', 'typescript', 'javascriptreact'},
   }
-  use 'justinmk/vim-sneak'
+
+  use {
+    'justinmk/vim-sneak',
+    opt = true,
+    event = 'VimEnter *',
+    config = function()
+      vim.g["sneak#use_ic_scs"] = 1
+      vim.g["sneak#target_labels"] = "asdfjkl;ghqweruioptyzxcvnmb"
+    end
+  }
+
   use {
     'elixir-editors/vim-elixir',
     opt = true,
     ft = {'elixir'}
   }
-  use 'dag/vim-fish'
+
+  use {
+    'dag/vim-fish',
+    opt = true,
+    event = 'VimEnter *',
+    -- ft = {'fish'}
+  }
+
   use {
     'jparise/vim-graphql',
     opt = true,
     ft = {'graphql'}
   }
+
   use {
     'othree/html5.vim',
     opt = true,
     ft = {'html'}
   }
+
   use {
     'maxmellon/vim-jsx-pretty',
+    event = 'VimEnter *',
     requries = {'pangloss/vim-javascript'},
     config = function()
       vim.g.vim_jsx_pretty_enable_jsx_highlight = 1
@@ -79,31 +130,58 @@ return require('packer').startup(function()
       vim.g.vim_jsx_pretty_disable_js = 0
     end
   }
+
   use {
     'tbastos/vim-lua',
     opt = true,
     ft = {'lua'}
   }
+
   use {
     'jxnblk/vim-mdx-js',
     opt = true,
     ft = {'mdx'}
   }
+
   use {
     'StanAngeloff/php.vim',
     opt = true,
     ft = {'php', 'phtml'}
   }
+
   use {
     'vim-python/python-syntax',
     opt = true,
     ft = {'python'}
   }
-  use {'tpope/vim-obsession', opt = true, cmd = {'Obsession', 'Obsess'} }
-  use {'vifm/vifm.vim', opt = true, cmd = 'Vifm' }
-  use 'rrethy/vim-illuminate'
-  use 'Yggdroot/indentLine'
-  use {'mg979/vim-visual-multi', branch = 'master'}
+
+  use {
+    'tpope/vim-obsession',
+    opt = true,
+    cmd = {'Obsession', 'Obsess'}
+  }
+
+  use {
+    'vifm/vifm.vim',
+    opt = true,
+    cmd = 'Vifm'
+  }
+
+  use {
+    'rrethy/vim-illuminate',
+    event = 'VimEnter *',
+  }
+
+  use {
+    'Yggdroot/indentLine',
+    event = 'VimEnter *',
+  }
+
+  use {
+    'mg979/vim-visual-multi',
+    branch = 'master',
+    event = 'VimEnter *',
+  }
 
   use {
     'hoob3rt/lualine.nvim',

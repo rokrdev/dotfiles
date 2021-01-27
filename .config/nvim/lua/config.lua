@@ -2,7 +2,6 @@ local g = vim.g
 local cmd = vim.cmd
 
 g.mapleader = " "
-g.cursorhold_updatetime = 100
 
 g.Illuminate_delay = 500
 g.Illuminate_highlightUnderCursor = 1

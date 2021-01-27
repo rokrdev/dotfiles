@@ -29,7 +29,7 @@ return require('packer').startup(function()
     'hoob3rt/lualine.nvim',
     config = function()
       local lualine = require('lualine')
-      lualine.theme = 'nord'
+      lualine.theme = 'night_owl'
       lualine.separator = '|'
       lualine.sections = {
         lualine_a = { 'mode' },

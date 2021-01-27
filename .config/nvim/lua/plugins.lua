@@ -163,6 +163,7 @@ return require('packer').startup(function()
     config = function()
       vim.g.Illuminate_delay = 500
       vim.g.Illuminate_highlightUnderCursor = 1
+      vim.g.Illuminate_ftblacklist = {'NvimTree'}
     end
   }
 

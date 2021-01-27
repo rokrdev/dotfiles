@@ -26,8 +26,30 @@ vim.cmd [[packadd cfilter]]
 return require('packer').startup(function()
 
   use {
-    'wbthomason/packer.nvim',
-    opt = true
+    'hoob3rt/lualine.nvim',
+    config = function()
+      local lualine = require('lualine')
+      lualine.theme = 'nord'
+      lualine.separator = '|'
+      lualine.sections = {
+        lualine_a = { 'mode' },
+        lualine_b = { 'branch' },
+        lualine_c = { 'filename', 'signify' },
+        lualine_x = { 'encoding', 'fileformat', 'filetype' },
+        lualine_y = { 'progress' },
+        lualine_z = { 'location'  },
+      }
+      lualine.inactive_sections = {
+        lualine_a = {  },
+        lualine_b = {  },
+        lualine_c = { 'filename' },
+        lualine_x = { 'location' },
+        lualine_y = {  },
+        lualine_z = {  }
+      }
+      lualine.extensions = { 'fzf' }
+      lualine.status()
+    end
   }
 
   use {
@@ -49,6 +71,28 @@ return require('packer').startup(function()
   use {
     'junegunn/fzf.vim',
     event = 'VimEnter *',
+    config = function()
+      vim.g.fzf_layout = {
+        ['window'] = {
+          ['width'] = 0.9,
+          ['height'] = 0.9,
+          ['border'] = 'rounded',
+          ['highlight'] = 'Directory'
+        }
+      }
+
+      vim.g.fzf_buffers_jump = 1
+
+      vim.g.fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+
+      vim.g.fzf_commands_expect = 'alt-enter,ctrl-x'
+
+      vim.g.fzf_action = {
+        ['ctrl-x'] = 'split',
+        ['ctrl-v'] = 'vsplit'
+      }
+      vim.g.fzf_preview_window = 'right:50%'
+    end
   }
 
   use {
@@ -57,9 +101,45 @@ return require('packer').startup(function()
   }
 
   use {
+    'kyazdani42/nvim-tree.lua',
+    opt = true,
+    cmd = 'NvimTreeToggle',
+    config = function()
+      vim.g["nvim_tree_show_icons"] = {
+        folders = 0,
+        git = 0,
+        icons = 0
+      }
+      vim.g["nvim_tree_indent_markers"] = 1
+      vim.g["nvim_tree_follow"] = 1
+      vim.g["nvim_tree_auto_close"] = 1
+      vim.g["nvim_tree_width_allow_resize"] = 1
+    end
+  }
+
+  use {
     'neoclide/coc.nvim',
     branch = 'release',
     event = 'VimEnter *',
+    config = function()
+      vim.g.coc_global_extensions = {
+        'coc-css',
+        'coc-docker',
+        'coc-elixir',
+        'coc-emmet',
+        'coc-eslint',
+        'coc-html',
+        'coc-json',
+        'coc-markdownlint',
+        'coc-prettier',
+        'coc-python',
+        'coc-sh',
+        'coc-snippets',
+        'coc-tsserver',
+        'coc-yaml',
+      }
+    -- vim.cmd("set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}")
+    end
   }
 
   use {
@@ -70,6 +150,51 @@ return require('packer').startup(function()
   use {
     'mhinz/vim-signify',
     event = 'VimEnter *',
+  }
+
+  use {
+    'rrethy/vim-illuminate',
+    event = 'VimEnter *',
+    config = function()
+      vim.g.Illuminate_delay = 500
+      vim.g.Illuminate_highlightUnderCursor = 1
+    end
+  }
+
+  use {
+    'Yggdroot/indentLine',
+    config = function()
+      vim.g.indentLine_char = 'c'
+      vim.g.indentLine_char_list = {'│'}
+      -- vim.g.indentLine_fileTypeExclude = {'coc-explorer'}
+      vim.g.indentLine_bufTypeExclude = {'help', 'terminal'}
+      vim.g.indentLine_bufNameExclude = {'vifm'}
+    end
+  }
+
+  use {
+    'mg979/vim-visual-multi',
+    branch = 'master',
+    event = 'VimEnter *',
+  }
+
+  use {
+    'nvim-treesitter/nvim-treesitter',
+    run = ':TSUpdate',
+    event = 'VimEnter *',
+    config = function()
+      require('nvim-treesitter.configs').setup {
+        ensure_installed = "all",
+        highlight = {
+          enable = true
+        }
+      }
+    end
+  }
+
+  use {
+    'wbthomason/packer.nvim',
+    opt = true
   }
 
   use {
@@ -115,20 +240,6 @@ return require('packer').startup(function()
   }
 
   use {
-    'nvim-treesitter/nvim-treesitter',
-    run = ':TSUpdate',
-    event = 'VimEnter *',
-    config = function()
-      require('nvim-treesitter.configs').setup {
-        ensure_installed = "all",
-        highlight = {
-          enable = true
-        }
-      }
-    end
-  }
-
-  use {
     'tpope/vim-obsession',
     opt = true,
     cmd = {'Obsession', 'Obsess'}
@@ -138,46 +249,6 @@ return require('packer').startup(function()
     'vifm/vifm.vim',
     opt = true,
     cmd = 'Vifm'
-  }
-
-  use {
-    'rrethy/vim-illuminate',
-    event = 'VimEnter *',
-  }
-
-  use {'Yggdroot/indentLine'}
-
-  use {
-    'mg979/vim-visual-multi',
-    branch = 'master',
-    event = 'VimEnter *',
-  }
-
-  use {
-    'hoob3rt/lualine.nvim',
-    config = function()
-      local lualine = require('lualine')
-      lualine.theme = 'nord'
-      lualine.separator = '|'
-      lualine.sections = {
-        lualine_a = { 'mode' },
-        lualine_b = { 'branch' },
-        lualine_c = { 'filename', 'signify' },
-        lualine_x = { 'encoding', 'fileformat', 'filetype' },
-        lualine_y = { 'progress' },
-        lualine_z = { 'location'  },
-      }
-      lualine.inactive_sections = {
-        lualine_a = {  },
-        lualine_b = {  },
-        lualine_c = { 'filename' },
-        lualine_x = { 'location' },
-        lualine_y = {  },
-        lualine_z = {  }
-      }
-      lualine.extensions = { 'fzf' }
-      lualine.status()
-    end
   }
 
 end)

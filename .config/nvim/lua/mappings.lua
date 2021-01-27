@@ -22,6 +22,7 @@ api.nvim_set_keymap('n', 'ss', ':Buffers<CR>', { noremap = true })
 
 api.nvim_set_keymap('n', 's', '<Nop>', {})
 api.nvim_set_keymap('x', 's', '<Nop>', {})
+api.nvim_set_keymap('v', 's', '<Nop>', {})
 
 api.nvim_set_keymap('n', '<ESC><ESC>', ':nohl<CR>', { noremap = true, silent = true })
 
@@ -103,12 +104,13 @@ api.nvim_set_keymap('n', '<Leader>cs', ":CocSearch<Space>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>cw', ":CocSearch <C-R>=expand('<cword>')<CR><CR>", { noremap = true })
 
 api.nvim_set_keymap('i', '<C-f>', "<Plug>(coc-snippets-expand-jump)", {})
-api.nvim_set_keymap('n', '<Leader>ct', ":CocCommand explorer<CR>", {})
 api.nvim_set_keymap('n', '<Leader>cT', ":call coc#float#close_all()<CR>", {})
 
-api.nvim_set_keymap('n', '<A-d>', ":call custom#show_documentation()<CR>", { noremap = true, silent = true })
+api.nvim_set_keymap('n', '<A-D>', ":call custom#show_documentation()<CR>", { noremap = true, silent = true })
 api.nvim_set_keymap('n', '<Leader>;', "o<ESC>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>:', "O<ESC>", { noremap = true })
+
+api.nvim_set_keymap('n', '<Leader>t', ":NvimTreeToggle<CR>", { noremap = true })
 
 g.VM_maps = {
   -- replace C-n

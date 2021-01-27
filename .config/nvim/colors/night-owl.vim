@@ -22,7 +22,7 @@ hi DiffText guibg=#011627 ctermfg=233 guifg=#addb67 ctermbg=149 gui=NONE cterm=N
 hi diffAdded guibg=#addb67 ctermfg=149 gui=NONE cterm=NONE
 hi diffRemoved guibg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
 hi VertSplit guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
-hi MatchParen guifg=#7fdbca guibg=#011627 ctermfg=111 gui=bold cterm=bold
+hi MatchParen guifg=#c792ea guibg=#011627 ctermfg=233 ctermbg=222 gui=bold,underline cterm=bold,underline
 hi Folded guifg=#806e6f ctermfg=138 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
 hi FoldColumn guifg=#806e6f ctermfg=138 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
 hi SignColumn guifg=NONE ctermfg=NONE guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
@@ -41,6 +41,8 @@ hi Comment guifg=#637777 ctermfg=243 gui=italic cterm=italic
 hi Constant guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
 hi String guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
 hi Identifier guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
+hi Delimiter guifg=#d6deeb ctermfg=253 gui=NONE cterm=NONE
+hi Special guifg=#d6deeb ctermfg=252 gui=NONE cterm=NONE
 hi Statement guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
 hi Function guifg=#82aaff ctermfg=111 cterm=italic gui=italic
 hi Operator guifg=#c792ea ctermfg=176 gui=NONE cterm=NONE

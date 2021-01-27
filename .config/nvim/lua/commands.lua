@@ -30,3 +30,5 @@ nvim.nvim_command("command! EnableTrailingWhitespace hi link EndOfLineSpace Erro
 
 -- Json format
 nvim.nvim_command("command! FJ %!jq")
+
+nvim.nvim_command("command! CD cd %:h")

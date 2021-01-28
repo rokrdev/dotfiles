@@ -229,7 +229,7 @@ return require('packer').startup(function()
   use {
     'elixir-editors/vim-elixir',
     opt = true,
-    ft = {'elixir'}
+    event = 'VimEnter *'
   }
 
   use {

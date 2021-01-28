@@ -24,7 +24,7 @@ api.nvim_set_keymap('n', 's', '<Nop>', {})
 api.nvim_set_keymap('x', 's', '<Nop>', {})
 api.nvim_set_keymap('v', 's', '<Nop>', {})
 
-api.nvim_set_keymap('n', '<ESC><ESC>', ':nohl<CR>', { noremap = true, silent = true })
+api.nvim_set_keymap('n', 'sc', ':nohl<CR>', { noremap = true, silent = true })
 
 api.nvim_set_keymap('n', '<A-a>', ':vertical resize +5<CR>', { noremap = true, silent = true })
 api.nvim_set_keymap('n', '<A-d>', ':vertical resize -5<CR>', { noremap = true, silent = true })

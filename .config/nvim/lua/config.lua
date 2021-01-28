@@ -58,3 +58,5 @@ cmd('let $GIT_EDITOR = "nvr -cc split --remote-wait"')
 cmd("highlight default link EndOfLineSpace ErrorMsg")
 cmd("match EndOfLineSpace / \\+$/")
 
+vim.g["sneak#use_ic_scs"] = 1
+vim.g["sneak#target_labels"] = "asdfjkl;ghqweruioptyzxcvnmb"

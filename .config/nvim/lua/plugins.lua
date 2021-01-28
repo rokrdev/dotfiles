@@ -220,10 +220,10 @@ return require('packer').startup(function()
     'justinmk/vim-sneak',
     opt = true,
     event = 'VimEnter *',
-    config = function()
-      vim.g["sneak#use_ic_scs"] = 1
-      vim.g["sneak#target_labels"] = "asdfjkl;ghqweruioptyzxcvnmb"
-    end
+    -- config = function()
+    --   vim.g["sneak#use_ic_scs"] = 1
+    --   vim.g["sneak#target_labels"] = "asdfjkl;ghqweruioptyzxcvnmb"
+    -- end
   }
 
   use {

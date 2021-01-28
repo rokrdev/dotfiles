@@ -112,6 +112,7 @@ api.nvim_set_keymap('n', '<Leader>:', "O<ESC>", { noremap = true })
 
 api.nvim_set_keymap('n', '<Leader>t', ":NvimTreeToggle<CR>", { noremap = true })
 
+g.VM_leader = '\\'
 g.VM_maps = {
   -- replace C-n
   ['Find Under'] = '<C-n>',

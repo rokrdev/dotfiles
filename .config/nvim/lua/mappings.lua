@@ -66,7 +66,7 @@ api.nvim_set_keymap('v', '<Leader>*', ":call custom#RgRawVisualSelection()<CR>",
 
 api.nvim_set_keymap('n', '<Leader>o', ":Files<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>f', ":RG<CR>", { noremap = true })
-api.nvim_set_keymap('n', '<Leader>F', ":RGRaw<CR>", { noremap = true })
+api.nvim_set_keymap('n', '<Leader>F', ":RGRaw ", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>/', ":LinesWithPreview<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>G', ":GF?<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>co', ":Commands<CR>", { noremap = true })

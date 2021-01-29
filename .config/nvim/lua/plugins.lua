@@ -184,18 +184,25 @@ return require('packer').startup(function()
     event = 'VimEnter *',
   }
 
+  -- use {
+  --   'nvim-treesitter/nvim-treesitter',
+  --   run = ':TSUpdate',
+  --   event = 'VimEnter *',
+  --   config = function()
+  --     require('nvim-treesitter.configs').setup {
+  --       ensure_installed = "all",
+  --       highlight = {
+  --         enable = true
+  --       },
+  --       indent = {
+  --         enable = false,
+  --       }
+  --     }
+  --   end
+  -- }
   use {
-    'nvim-treesitter/nvim-treesitter',
-    run = ':TSUpdate',
+    'sheerun/vim-polyglot',
     event = 'VimEnter *',
-    config = function()
-      require('nvim-treesitter.configs').setup {
-        ensure_installed = "all",
-        highlight = {
-          enable = true
-        }
-      }
-    end
   }
 
   use {
@@ -226,24 +233,24 @@ return require('packer').startup(function()
     -- end
   }
 
-  use {
-    'elixir-editors/vim-elixir',
-    opt = true,
-    event = 'VimEnter *'
-  }
+  -- use {
+  --   'elixir-editors/vim-elixir',
+  --   opt = true,
+  --   event = 'VimEnter *'
+  -- }
 
-  use {
-    'dag/vim-fish',
-    opt = true,
-    event = 'VimEnter *',
-    -- ft = {'fish'}
-  }
+  -- use {
+  --   'dag/vim-fish',
+  --   opt = true,
+  --   event = 'VimEnter *',
+  --   -- ft = {'fish'}
+  -- }
 
-  use {
-    'jxnblk/vim-mdx-js',
-    opt = true,
-    ft = {'mdx'}
-  }
+  -- use {
+  --   'jxnblk/vim-mdx-js',
+  --   opt = true,
+  --   ft = {'mdx'}
+  -- }
 
   use {
     'tpope/vim-obsession',

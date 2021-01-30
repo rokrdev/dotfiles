@@ -6,13 +6,8 @@ local function highlight(group, guifg, guibg, attr)
   if guifg then table.insert(parts, "guifg="..guifg) end
   if guibg then table.insert(parts, "guibg="..guibg) end
   if attr then
-    if attr == 'NONE' then
-      table.insert(parts, "gui=NONE")
-      table.insert(parts, "cterm=NONE")
-    else
-      table.insert(parts, "gui="..attr)
-      table.insert(parts, "cterm="..attr)
-    end
+    table.insert(parts, "gui="..attr)
+    table.insert(parts, "cterm="..attr)
   end
 
   -- nvim.ex.highlight(parts)
@@ -85,7 +80,7 @@ highlight("diffAdded", nil, theme.green_bright, nil)
 highlight("diffRemoved", nil, theme.red, nil)
 
 highlight("VertSplit", theme.blue, nil, theme.NONE)
-highlight("MatchParen", theme.pink, nil, theme.bold..theme.underline)
+highlight("MatchParen", theme.pink, theme.NONE, theme.bold..theme.underline)
 highlight("Folded", theme.brown_light, nil, nil)
 highlight("FoldedColumn", theme.brown_light, nil, nil)
 highlight("SignColumn", nil, theme.blue_default, nil)

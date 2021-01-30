@@ -9,145 +9,32 @@ if exists("syntax_on")
 endif
 let g:colors_name="night-owl"
 
-hi Normal guifg=#d6deeb ctermfg=253 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
-hi LineNr guifg=#4b6479 ctermfg=66 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
-hi CursorLine guibg=#00111F ctermbg=235 gui=NONE cterm=NONE
-hi CursorLineNr guifg=#C5E4FD guibg=#00111F ctermfg=159 ctermbg=233 gui=NONE cterm=NONE
-hi ColorColumn guibg=#151d24 ctermbg=235 gui=NONE cterm=NONE
-hi Directory guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
-hi DiffAdd guibg=#011627 ctermfg=233 guifg=#addb67 ctermbg=149 gui=NONE cterm=NONE
-hi DiffChange guibg=#011627 ctermfg=233 guifg=#c792ea ctermbg=222 gui=NONE cterm=NONE
-hi DiffDelete guibg=#011627 ctermfg=233 guifg=#ff5874 ctermbg=204 gui=NONE cterm=NONE
-hi DiffText guibg=#011627 ctermfg=233 guifg=#addb67 ctermbg=149 gui=NONE cterm=NONE
-hi diffAdded guibg=#addb67 ctermfg=149 gui=NONE cterm=NONE
-hi diffRemoved guibg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
-hi VertSplit guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
-hi MatchParen guifg=#c792ea guibg=#011627 ctermfg=233 ctermbg=222 gui=bold,underline cterm=bold,underline
-hi Folded guifg=#806e6f ctermfg=138 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
-hi FoldColumn guifg=#806e6f ctermfg=138 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
-hi SignColumn guifg=NONE ctermfg=NONE guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
-hi IncSearch guifg=#011627 ctermfg=255 guibg=#c792ea ctermbg=222 gui=NONE cterm=NONE
-hi NonText guifg=#444444 ctermfg=238 gui=NONE cterm=NONE
-hi PMenu guibg=#002340 ctermbg=235 guifg=#d6deeb ctermfg=253 gui=NONE cterm=NONE
-hi PMenuSel guibg=#82aaff ctermbg=111 guifg=#011627 ctermfg=233 gui=bold cterm=bold
-hi Search guifg=#011627 ctermfg=233 guibg=#c792ea ctermbg=222 gui=NONE cterm=NONE
-hi SpecialKey guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
-hi StatusLine guifg=#eeeeee ctermfg=255 guibg=#112630 ctermbg=235 gui=NONE cterm=NONE
-hi StatusLineNC guifg=#777777 ctermfg=243 guibg=#112630 ctermbg=235 gui=NONE cterm=NONE
-hi Title guifg=#82aaff ctermfg=111 gui=bold cterm=bold
-hi Visual guibg=#1D3B53 ctermbg=222 gui=NONE cterm=NONE
-hi EndOfBuffer guifg=#444444 ctermfg=238 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
-hi Comment guifg=#637777 ctermfg=243 gui=italic cterm=italic
-hi Constant guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
-hi String guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
-hi Identifier guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
-hi Delimiter guifg=#d6deeb ctermfg=253 gui=NONE cterm=NONE
-hi Special guifg=#d6deeb ctermfg=252 gui=NONE cterm=NONE
-hi Statement guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
-hi Function guifg=#82aaff ctermfg=111 cterm=italic gui=italic
-hi Operator guifg=#c792ea ctermfg=176 gui=NONE cterm=NONE
-hi Exception guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
-hi PreProc guifg=#c792ea ctermfg=176 gui=NONE cterm=NONE
-hi Type guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
-hi StorageClass guifg=#c792ea ctermfg=176 gui=NONE cterm=NONE
-hi htmlTag guifg=#637777 ctermfg=243 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
-hi link htmlEndTag htmlTag
-hi Todo guifg=#777777 ctermfg=243 guibg=#ecc48d ctermbg=222 gui=NONE cterm=NONE
-hi jsStorageClass guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
-hi jsOperator guifg=#c792ea ctermfg=176 gui=NONE cterm=NONE
-hi jsArrowFunction guifg=#c792ea ctermfg=176 gui=NONE cterm=NONE
-hi jsString guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
-hi jsComment guifg=#637777 ctermfg=243 gui=italic cterm=italic
-hi link jsFuncCall Function
-hi jsNumber guifg=#f78c6c ctermfg=209 gui=NONE cterm=NONE
-hi jsSpecial guifg=#f78c6c ctermfg=209 gui=NONE cterm=NONE
-hi jsObjectProp guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
-hi jsOperatorKeyword guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
-hi jsBooleanFalse guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
-hi jsBooleanTrue guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
-hi jsRegexpString guifg=#5ca7e4 ctermfg=74 gui=NONE cterm=NONE
-hi jsConditional guifg=#c792ea ctermfg=176 gui=NONE cterm=NONE
-hi link jsFunction Function
-hi jsReturn guifg=#c792ea ctermfg=176 gui=NONE cterm=NONE
-hi jsFuncName guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
-hi link jsParensError jsFuncParens
-hi jsClassDefinition guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
-hi jsImport guifg=#c792ea ctermfg=176 gui=italic cterm=italic
-hi jsFrom guifg=#c792ea ctermfg=176 gui=italic cterm=italic
-hi jsModuleAs guifg=#c792ea ctermfg=176 gui=italic cterm=italic
-hi jsExport guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
-hi jsExportDefault guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
-hi jsExtendsKeyword guifg=#c792ea ctermfg=176 gui=italic cterm=italic
-hi javaScriptReserved guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
-hi javaScriptConditional guifg=#c792ea ctermfg=176 gui=NONE cterm=NONE
-hi javaScriptStringS guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
-hi javaScriptBoolean guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
-hi javaScriptBraces guifg=#d6deeb ctermfg=253 gui=NONE cterm=NONE
-hi javaScriptLineComment guifg=#637777 ctermfg=243 gui=italic cterm=italic
-hi javaScriptSpecial guifg=#f78c6c ctermfg=209 gui=NONE cterm=NONE
-hi link javaScriptFunction Function
-hi javaScriptStatement guifg=#c792ea ctermfg=176 gui=NONE cterm=NONE
-hi javaScriptException guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
-hi scssSelectorName guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
-hi cssTagName guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
-hi cssClassName guifg=#addb67 ctermfg=149 gui=italic cterm=italic
-hi link cssClassNameDot cssClassName
-hi cssBraces guifg=#d6deeb ctermfg=253 gui=NONE cterm=NONE
-hi cssPositioningProp guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
-hi cssBoxProp guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
-hi cssDimensionProp guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
-hi cssTransitionProp guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
-hi cssTextProp guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
-hi cssFontProp guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
-hi cssBorderProp guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
-hi cssBackgroundProp guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
-hi cssUIProp guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
-hi cssIEUIProp guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
-hi link scssFunctionName Function
-hi cssPositioningAttr guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
-hi cssTableAttr guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
-hi cssCommonAttr guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
-hi cssColorProp guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
-hi cssIncludeKeyword guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
-hi cssKeyFrameSelector guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
-hi cssPseudoClassId guifg=#addb67 ctermfg=149 gui=italic cterm=italic
-hi cssBorderAttr guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
-hi cssValueLength guifg=#f78c6c ctermfg=209 gui=NONE cterm=NONE
-hi cssUnitDecorators guifg=#fbec9f ctermfg=229 gui=NONE cterm=NONE
-hi cssIdentifier guifg=#f4d554 ctermfg=221 gui=italic cterm=italic
-hi markdownHeadingDelimiter guifg=#637777 ctermfg=243 gui=NONE cterm=NONE
-hi markdownCodeDelimiter guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
-hi markdownCode guifg=#aaaaaa ctermfg=248 gui=NONE cterm=NONE
-hi mkdCodeStart guifg=#d6deeb ctermfg=253 gui=NONE cterm=NONE
-hi mkdCodeEnd guifg=#d6deeb ctermfg=253 gui=NONE cterm=NONE
-hi mkdLinkDef guifg=#7fdbca ctermfg=116 gui=NONE cterm=NONE
-hi mkdCodeDelimiter guifg=#637777 ctermfg=243 guibg=#011627 ctermbg=233 gui=NONE cterm=NONE
-hi htmlH1 guifg=#82aaff ctermfg=111 gui=bold cterm=bold
-hi link htmlH2 htmlH1
-hi link htmlH3 htmlH1
-hi htmlH4 guifg=#82aaff ctermfg=111 gui=NONE cterm=NONE
-hi link htmlH5 htmlH4
-hi htmlBold guifg=#c792ea ctermfg=176 guibg=#011627 ctermbg=233 gui=bold cterm=bold
-hi link shComment Comment
-hi NERDTreeDir guifg=#5f7e97 ctermfg=66 gui=NONE cterm=NONE
-hi NERDTreeOpenable guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
-hi NERDTreeClosable guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
-hi NERDTreeHelp guifg=#444444 ctermfg=238 gui=italic cterm=italic
-hi NERDTreeUp guifg=#637777 ctermfg=243 gui=NONE cterm=NONE
-hi NERDTreeDirSlash guifg=#637777 ctermfg=243 gui=NONE cterm=NONE
-hi gitcommitSummary guifg=#d6deeb ctermfg=253 gui=NONE cterm=NONE
-hi IndentGuidesOdd guibg=#444444 ctermbg=238 gui=NONE cterm=NONE
-hi IndentGuidesEven guibg=#777777 ctermbg=243 gui=NONE cterm=NONE
-hi GitGutterAdd guifg=#addb67 ctermfg=149 gui=NONE cterm=NONE
-hi GitGutterChange guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
-hi GitGutterDelete guifg=#ff5874 ctermfg=204 gui=NONE cterm=NONE
-hi GitGutterChangeDelete guifg=#ecc48d ctermfg=222 gui=NONE cterm=NONE
-hi Sneak guifg=black guibg=#c792ea ctermfg=black ctermbg=cyan gui=bold term=bold
-hi SneakLabel guifg=black guibg=#c792ea ctermfg=black ctermbg=cyan gui=bold term=bold
-hi SignifySignAdd ctermbg=233 ctermfg=149 guifg=#addb67 guibg=#011627 cterm=NONE gui=NONE
-hi SignifySignDelete ctermbg=233 ctermfg=204 guifg=#ff5874 guibg=#011627 cterm=NONE gui=NONE
-hi SignifySignChange ctermbg=233 ctermfg=222 guifg=#ecc48d guibg=#011627 cterm=NONE gui=NONE
-hi illuminatedWord guibg=#263838 ctermbg=235 cterm=NONE gui=NONE
+let s:bold = "bold,"
+let s:italic = "italic,"
+let s:underline = "underline,"
+
+let s:white_default = '#d6deeb'
+let s:white_light = '#C5E4FD'
+let s:blue_default = '#011627'
+let s:grey = '#4b6479'
+let s:blue_dark = '#00111F'
+let s:blue = '#82aaff'
+let s:blue_light = '#C5E4FD'
+let s:green_bright = '#addb67'
+let s:pink = '#c792ea'
+let s:red = '#ff5874'
+let s:brown_light = '#806e6f'
+let s:brown_dark = '#444444'
+let s:orange_light = '#ecc48d'
+let s:orange = '#f78c6c'
+let s:blue_visual = '#1a2b4a'
+let s:ash_grey = '#637777'
+let s:cyan = '#7fdbca'
+let s:yellow_light = '#fbec9f'
+let s:yellow_dark = '#f4d554'
+let s:highligter = '#263838'
+let s:black_light = '#151d24'
+let s:black = '#000000'
 
 let g:terminal_color_foreground = "#d6deeb"
 let g:terminal_color_background = "#011627"
@@ -166,4 +53,188 @@ let g:terminal_color_6 = "#7fdbca"
 let g:terminal_color_14 = "#7fdbca"
 let g:terminal_color_7 = "#aaaaaa"
 let g:terminal_color_15 = "#eeeeee"
+
+" function! s:hi(group, guifg, guibg, ctermfg, ctermbg, attr, guisp)
+function! s:hi(group, guifg, guibg, attr, guisp)
+  if a:guifg != ""
+    exec "hi " . a:group . " guifg=" . a:guifg
+  endif
+  if a:guibg != ""
+    exec "hi " . a:group . " guibg=" . a:guibg
+  endif
+  " if a:ctermfg != ""
+  "   exec "hi " . a:group . " ctermfg=" . a:ctermfg
+  " endif
+  " if a:ctermbg != ""
+  "   exec "hi " . a:group . " ctermbg=" . a:ctermbg
+  " endif
+  if a:attr != ""
+    exec "hi " . a:group . " gui=" . a:attr
+    " exec "hi " . a:group . " gui=" . a:attr . " cterm=" . substitute(a:attr, "undercurl", s:underline, "")
+  endif
+  " if a:guisp != ""
+  "   exec "hi " . a:group . " guisp=" . a:guisp
+  " endif
+endfunction
+
+call s:hi("Bold", "", "", s:bold, "")
+call s:hi("Italic", "", "", s:italic, "")
+call s:hi("Underline", "", "", s:underline, "")
+
+call s:hi("Normal", s:white_default, s:blue_default, "", "")
+call s:hi("LineNr", s:grey, s:blue_default, "", "")
+call s:hi("CursorLine", "", s:blue_dark, "", "")
+call s:hi("CursorLineNr", s:white_light, s:blue_dark, "", "")
+call s:hi("ColorColumn", "", s:black_light, "", "")
+call s:hi("Directory", s:blue, "", "", "")
+call s:hi("DiffAdd", s:green_bright, s:blue_default, "", "")
+call s:hi("DiffChange", s:pink, s:blue_default, "", "")
+call s:hi("DiffDelete", s:red, s:blue_default, "", "")
+call s:hi("DiffText", s:green_bright, s:blue_default, "", "")
+call s:hi("diffAdded", "", s:green_bright, "", "")
+call s:hi("diffRemoved", "", s:red, "", "")
+call s:hi("VertSplit", "", s:blue, "", "")
+call s:hi("MatchParen", s:pink, "", s:bold.s:underline, "")
+call s:hi("Folded", s:brown_light, "", "", "")
+call s:hi("FoldedColumn", s:brown_light, "", "", "")
+call s:hi("SignColumn", "", s:blue_default, "", "")
+call s:hi("IncSearch", s:blue_default, s:pink, "", "")
+call s:hi("NonText", s:brown_dark, "", "", "")
+
+call s:hi("PMenu", s:white_default, s:blue_visual, "", "")
+call s:hi("PMenuSel", s:blue_default, s:blue, s:bold, "")
+call s:hi("Search", s:blue_default, s:pink, "", "")
+call s:hi("SpecialKey", s:orange_light, "", "", "")
+call s:hi("Title", s:blue, "", "", "")
+call s:hi("Visual", "", s:grey, "", "")
+call s:hi("EndOfBuffer", s:brown_dark, s:blue_default, "", "")
+
+
+call s:hi("Comment", s:ash_grey, "", s:italic, "")
+call s:hi("Constant", s:green_bright, "", "", "")
+call s:hi("String", s:orange_light, "", "", "")
+call s:hi("Character", s:orange_light, "", "", "")
+call s:hi("Number", s:orange, "", "", "")
+call s:hi("Boolean", s:red, "", "", "")
+call s:hi("Float", s:orange, "", "", "")
+call s:hi("Identifier", s:cyan, "", "", "")
+call s:hi("Function", s:blue, "", s:italic, "")
+call s:hi("Statement", s:blue, "", "", "")
+call s:hi("Conditional", s:white_default, "", "", "")
+call s:hi("Repeat", s:white_default, "", "", "")
+call s:hi("Label", s:white_default, "", "", "")
+call s:hi("Operator", s:pink, "", "", "")
+call s:hi("Keyword", s:blue, "", "", "")
+call s:hi("Exception", s:green_bright, "", "", "")
+call s:hi("PreProc", s:pink, "", "", "")
+call s:hi("Include", s:pink, "", "", "")
+call s:hi("Define", s:pink, "", "", "")
+call s:hi("Macro", s:white_default, "", "", "")
+call s:hi("PreCondit", s:white_default, "", "", "")
+call s:hi("Type", s:green_bright, "", "", "")
+call s:hi("StorageClass", s:pink, "", "", "")
+call s:hi("Structure", s:white_default, "", "", "")
+call s:hi("Typedef", s:white_default, "", "", "")
+call s:hi("Special", s:white_default, "", "", "")
+call s:hi("SpecialChar", "", "", "", "")
+call s:hi("Tag", "", "", "", "")
+call s:hi("Delimiter", s:white_default, "", "", "")
+call s:hi("SpecialComment", "", "", "", "")
+call s:hi("Debug", "", "", "", "")
+call s:hi("Underlined", "", "", s:underline, "")
+call s:hi("Ignore", "", "", "", "")
+call s:hi("Error", s:red, "", s:bold, "")
+call s:hi("Todo", s:cyan, "", s:bold, "")
+call s:hi("htmlTag", s:ash_grey, "", "", "")
+hi link htmlEndTag htmlTag
+
+call s:hi("jsStorageClass", s:blue, "", "", "")
+call s:hi("jsOperator", s:pink, "", "", "")
+call s:hi("jsArrowFunction", s:pink, "", "", "")
+call s:hi("jsString", s:orange_light, "", "", "")
+hi link jsCommet Comment
+hi link jsFuncCall Function
+call s:hi("jsNumber", s:orange, "", "", "")
+call s:hi("jsSpecial", s:orange, "", "", "")
+call s:hi("jsObjectProp", s:cyan, "", "", "")
+call s:hi("jsOperatorKeyword", s:cyan, "", "", "")
+call s:hi("jsBooleanFalse", s:red, "", "", "")
+call s:hi("jsBooleanTrue", s:red, "", "", "")
+call s:hi("jsRegexpString", s:blue, "", "", "")
+call s:hi("jsConditional", s:pink, "", "", "")
+hi link jsFunction Function
+call s:hi("jsReturn", s:pink, "", "", "")
+call s:hi("jsFuncName", s:blue, "", "", "")
+call s:hi("jsFuncParens", s:white_default, "", "", "")
+call s:hi("jsParensError", s:red, "", "", "")
+call s:hi("jsClassDefinition", s:orange_light, "", "", "")
+call s:hi("jsImport", s:pink, "", s:italic, "")
+call s:hi("jsFrom", s:pink, "", s:italic, "")
+call s:hi("jsModuleAs", s:pink, "", s:italic, "")
+call s:hi("jsExport", s:cyan, "", "", "")
+call s:hi("jsExportDefault", s:cyan, "", "", "")
+call s:hi("jsExtendsKeyword", s:pink, "", s:italic, "")
+call s:hi("javaScriptReserved", s:blue, "", "", "")
+call s:hi("javaScriptConditional", s:pink, "", "", "")
+call s:hi("javaScriptStringS", s:orange_light, "", "", "")
+call s:hi("javaScriptBoolean", s:red, "", "", "")
+call s:hi("javaScriptBraces", s:white_default, "", "", "")
+hi link javaScriptLineComment Comment
+call s:hi("javaScriptLineSpecial", s:orange, "", "", "")
+hi link javaScriptFunction Function
+call s:hi("javaScriptStatement", s:pink, "", "", "")
+call s:hi("javaScriptException", s:green_bright, "", "", "")
+
+call s:hi("scssSelectorName", s:green_bright, "", "", "")
+call s:hi("cssTagName", s:red, "", "", "")
+call s:hi("cssClassName", s:green_bright, "", s:italic, "")
+hi link cssClassNameDot cssClassName
+call s:hi("cssBraces", s:white_default, "", s:italic, "")
+call s:hi("cssPositioningProp", s:cyan, "", "", "")
+call s:hi("cssBoxProp", s:cyan, "", "", "")
+call s:hi("cssDimensionProp", s:cyan, "", "", "")
+call s:hi("cssTransitionProp", s:cyan, "", "", "")
+call s:hi("cssTextProp", s:cyan, "", "", "")
+call s:hi("cssFontProp", s:cyan, "", "", "")
+call s:hi("cssBorderProp", s:cyan, "", "", "")
+call s:hi("cssBackgroundProp", s:cyan, "", "", "")
+call s:hi("cssUIProp", s:cyan, "", "", "")
+call s:hi("cssIEUIProp", s:red, "", "", "")
+hi link scssFunctionName Function
+call s:hi("cssPositioningAttr", s:red, "", "", "")
+call s:hi("cssTableAttr", s:red, "", "", "")
+call s:hi("cssCommonAttr", s:red, "", "", "")
+call s:hi("cssColorProp", s:cyan, "", "", "")
+call s:hi("cssIncludeKeyword", s:cyan, "", "", "")
+call s:hi("cssKeyFrameSelector", s:cyan, "", "", "")
+call s:hi("cssPseudoClassId", s:green_bright, "", s:italic, "")
+call s:hi("cssBorderAttr", s:red, "", "", "")
+call s:hi("cssValueLength", s:orange, "", "", "")
+call s:hi("cssUnitDecorators", s:yellow_light, "", "", "")
+call s:hi("cssIdentifier", s:yellow_dark, "", s:italic, "")
+
+call s:hi("markdownHeadingDelimiter", s:ash_grey, "", "", "")
+call s:hi("markdownCodeDelimiter", s:orange_light, "", "", "")
+call s:hi("markdownCode", s:white_light, "", "", "")
+call s:hi("mkdCodeStart", s:white_light, "", "", "")
+call s:hi("mkdCodeEnd", s:white_light, "", "", "")
+call s:hi("mkdLinkDef", s:cyan, "", "", "")
+call s:hi("mkdCodeDelimiter", s:ash_grey, s:blue_default, "", "")
+
+call s:hi("htmlH1", s:blue, "", "", "")
+hi link htmlH2 htmlH1
+hi link htmlH3 htmlH1
+hi link htmlH4 htmlH1
+hi link htmlH5 htmlH1
+call s:hi("htmlBold", s:cyan, "", s:bold, "")
+
+hi link shComment Comment
+call s:hi("Sneak", s:black, s:pink, s:bold, "")
+call s:hi("SneakLabel", s:black, s:pink, s:bold, "")
+
+call s:hi("SignifySignAdd", s:green_bright, "", "", "")
+call s:hi("SignifySignDelete", s:red, "", "", "")
+call s:hi("SignifySignChange", s:orange, "", "", "")
+
+call s:hi("illuminatedWord", "", s:highligter, "", "")
 

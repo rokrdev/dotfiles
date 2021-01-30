@@ -61,11 +61,8 @@ return require('packer').startup(function()
   }
 
   use {
-    'windwp/nvim-autopairs',
-    event = 'VimEnter *',
-    config = function()
-      require('nvim-autopairs').setup()
-    end
+    'jiangmiao/auto-pairs',
+    event = 'VimEnter *'
   }
 
   use {

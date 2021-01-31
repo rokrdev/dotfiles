@@ -56,6 +56,6 @@ vim.cmd("match EndOfLineSpace / \\+$/")
 
 g.mapleader = " "
 
-vim.g["sneak#use_ic_scs"] = 1
-vim.g["sneak#target_labels"] = "asdfjkl;ghqweruioptyzxcvnmb"
+g["sneak#use_ic_scs"] = 1
+g["sneak#target_labels"] = "asdfjkl;ghqweruioptyzxcvnmb"
 

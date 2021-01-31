@@ -26,7 +26,7 @@ vim.cmd [[packadd cfilter]]
 return require('packer').startup(function()
 
   use {
-    'hoob3rt/lualine.nvim',
+    '1bharat/lualine.nvim',
     config = function()
       local lualine = require('lualine')
       lualine.theme = 'night_owl'

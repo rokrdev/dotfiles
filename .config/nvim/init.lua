@@ -1,5 +1,4 @@
 require('plugins')
-require('nightOwl')
 require('config')
 require('commands')
 require('mappings')

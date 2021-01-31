@@ -40,8 +40,8 @@ local theme = {
   yellow_light = "#fbec9f",
   yellow_dark = "#f4d554",
   highligter = "#263838",
-  black_light = "#151d24",
   black = "#000000",
+  black_1 = "#000e1a",
   blue_1 = "#283d6b"
 }
 
@@ -68,10 +68,10 @@ highlight("italic", nil, nil, theme.italic)
 highlight("Underline", nil, nil, theme.underline)
 
 highlight("Normal", theme.white_default, theme.blue_default, nil)
-highlight("LineNr", theme.grey, theme.blue_default, nil)
+highlight("LineNr", theme.grey, theme.NONE, nil)
 highlight("CursorLine", nil, theme.blue_dark, nil)
 highlight("CursorLineNr", theme.white_light, theme.blue_dark, nil)
-highlight("ColorColumn", nil, theme.black_light, nil)
+highlight("ColorColumn", nil, theme.black_1, nil)
 highlight("Directory", theme.blue, nil, nil)
 highlight("DiffAdd", theme.green_bright, theme.blue_default, nil)
 highlight("DiffChange", theme.pink, theme.blue_default, nil)
@@ -79,12 +79,14 @@ highlight("DiffDelete", theme.red, theme.blue_default, nil)
 highlight("DiffText", theme.green_bright, theme.blue_default, nil)
 highlight("diffAdded", nil, theme.green_bright, nil)
 highlight("diffRemoved", nil, theme.red, nil)
+highlight("ActiveWindow", nil, theme.blue_default, nil)
+highlight("InactiveWindow", nil, theme.black_1, nil)
 
 highlight("VertSplit", theme.blue_1, nil, theme.NONE)
 highlight("MatchParen", theme.pink, theme.NONE, theme.bold..theme.underline)
 highlight("Folded", theme.brown, nil, nil)
 highlight("FoldedColumn", theme.brown, nil, nil)
-highlight("SignColumn", nil, theme.blue_default, nil)
+highlight("SignColumn", nil, theme.NONE, nil)
 highlight("IncSearch", theme.blue_default, theme.pink, nil)
 highlight("NonText", theme.blue_1, nil, nil)
 highlight("PMenu", theme.white_default, theme.blue_visual, nil)
@@ -93,7 +95,7 @@ highlight("Search", theme.blue_default, theme.pink, nil)
 highlight("SpecialKey", theme.orange_light, nil, nil)
 highlight("Title", theme.blue, nil, nil)
 highlight("Visual", nil, theme.grey, nil)
-highlight("EndOfBuffer", theme.blue_1, nil, nil)
+highlight("EndOfBuffer", theme.blue_1, theme.NONE, nil)
 
 highlight("Comment", theme.ash_grey, nil, theme.italic)
 highlight("Constant", theme.green_bright, nil, nil)

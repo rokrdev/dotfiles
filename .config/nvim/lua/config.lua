@@ -45,6 +45,8 @@ vim.cmd('set rtp+=/usr/local/opt/fzf')
 vim.cmd('syntax enable')
 vim.cmd('filetype plugin indent on')
 vim.cmd('set encoding=UTF-8')
+vim.cmd("set winhighlight=Normal:ActiveWindow,NormalNC:InactiveWindow")
+vim.cmd("set colorcolumn=100")
 
 vim.cmd('colorscheme night-owl')
 

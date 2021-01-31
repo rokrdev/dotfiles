@@ -1,4 +1,5 @@
-vim.g.colors_name = 'night-owl'
+local g = vim.g
+g.colors_name = 'night-owl'
 
 local function highlight(group, guifg, guibg, attr)
   local parts = {group}
@@ -28,8 +29,7 @@ local theme = {
   green_bright = "#addb67",
   pink = "#c792ea",
   red = "#ff5874",
-  brown_light = "#806e6f",
-  brown_dark = "#444444",
+  brown = "#806e6f",
   orange_light = "#ecc48d",
   orange = "#f78c6c",
   blue_visual = "#1a2b4a",
@@ -42,23 +42,23 @@ local theme = {
   black = "#000000"
 }
 
-vim.g.terminal_color_foreground = "#d6deeb"
-vim.g.terminal_color_background = "#011627"
-vim.g.terminal_color_0 = "#011627"
-vim.g.terminal_color_8 = "#637777"
-vim.g.terminal_color_1 = "#ff5874"
-vim.g.terminal_color_2 = "#addb67"
-vim.g.terminal_color_10 = "#addb67"
-vim.g.terminal_color_3 = "#f78c6c"
-vim.g.terminal_color_11 = "#f78c6c"
-vim.g.terminal_color_4 = "#82aaff"
-vim.g.terminal_color_12 = "#82aaff"
-vim.g.terminal_color_5 = "#c792ea"
-vim.g.terminal_color_13 = "#c792ea"
-vim.g.terminal_color_6 = "#7fdbca"
-vim.g.terminal_color_14 = "#7fdbca"
-vim.g.terminal_color_7 = "#aaaaaa"
-vim.g.terminal_color_15 = "#eeeeee"
+g.terminal_color_foreground = "#d6deeb"
+g.terminal_color_background = "#011627"
+g.terminal_color_0 = "#011627"
+g.terminal_color_8 = "#637777"
+g.terminal_color_1 = "#ff5874"
+g.terminal_color_2 = "#addb67"
+g.terminal_color_10 = "#addb67"
+g.terminal_color_3 = "#f78c6c"
+g.terminal_color_11 = "#f78c6c"
+g.terminal_color_4 = "#82aaff"
+g.terminal_color_12 = "#82aaff"
+g.terminal_color_5 = "#c792ea"
+g.terminal_color_13 = "#c792ea"
+g.terminal_color_6 = "#7fdbca"
+g.terminal_color_14 = "#7fdbca"
+g.terminal_color_7 = "#aaaaaa"
+g.terminal_color_15 = "#eeeeee"
 
 highlight("Bold", nil, nil, theme.bold)
 highlight("italic", nil, nil, theme.italic)
@@ -79,18 +79,18 @@ highlight("diffRemoved", nil, theme.red, nil)
 
 highlight("VertSplit", theme.blue, nil, theme.NONE)
 highlight("MatchParen", theme.pink, theme.NONE, theme.bold..theme.underline)
-highlight("Folded", theme.brown_light, nil, nil)
-highlight("FoldedColumn", theme.brown_light, nil, nil)
+highlight("Folded", theme.brown, nil, nil)
+highlight("FoldedColumn", theme.brown, nil, nil)
 highlight("SignColumn", nil, theme.blue_default, nil)
 highlight("IncSearch", theme.blue_default, theme.pink, nil)
-highlight("NonText", theme.brown_dark, nil, nil)
+highlight("NonText", theme.brown, nil, nil)
 highlight("PMenu", theme.white_default, theme.blue_visual, nil)
 highlight("PMenuSel", theme.blue_default, theme.blue, theme.bold)
 highlight("Search", theme.blue_default, theme.pink, nil)
 highlight("SpecialKey", theme.orange_light, nil, nil)
 highlight("Title", theme.blue, nil, nil)
 highlight("Visual", nil, theme.grey, nil)
-highlight("EndOfBuffer", theme.brown_dark, theme.blue_default, nil)
+highlight("EndOfBuffer", theme.brown, theme.blue_default, nil)
 
 highlight("Comment", theme.ash_grey, nil, theme.italic)
 highlight("Constant", theme.green_bright, nil, nil)

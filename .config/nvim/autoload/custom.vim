@@ -109,32 +109,3 @@ function! custom#OnTermOpen()
     tnoremap <buffer> <Esc> <Nop>
 endfunction
 
-function! custom#LightlineReadonly()
-    return &readonly ? '' : ''
-endfunction
-
-function! custom#LightlineFugitive()
-    let branch = gitbranch#name()
-    return branch !=# '' ? ' '.branch : ''
-endfunction
-
-function! custom#LightlineSignify()
-    let [added, modified, removed] = sy#repo#get_stats()
-    let l:sy = ''
-    for [flag, flagcount] in [
-                \   [exists("g:signify_sign_add")?g:signify_sign_add:'+', added],
-                \   [exists("g:signify_sign_delete")?g:signify_sign_delete:'-', removed],
-                \   [exists("g:signify_sign_change")?g:signify_sign_change:'!', modified]
-                \ ]
-        if flagcount> 0
-            let l:sy .= printf('%s%d', flag, flagcount)
-        endif
-    endfor
-    if !empty(l:sy)
-        let l:sy = printf('[%s]', l:sy)
-        return printf('%s', l:sy)
-    else
-        return ''
-    endif
-endfunction
-

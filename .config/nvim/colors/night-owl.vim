@@ -1,2 +1,2 @@
-lua require('night_owl')
+lua require('nightOwl')
 

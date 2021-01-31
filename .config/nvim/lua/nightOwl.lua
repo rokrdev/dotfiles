@@ -41,7 +41,8 @@ local theme = {
   yellow_dark = "#f4d554",
   highligter = "#263838",
   black_light = "#151d24",
-  black = "#000000"
+  black = "#000000",
+  blue_1 = "#283d6b"
 }
 
 g.terminal_color_foreground = "#d6deeb"
@@ -79,20 +80,20 @@ highlight("DiffText", theme.green_bright, theme.blue_default, nil)
 highlight("diffAdded", nil, theme.green_bright, nil)
 highlight("diffRemoved", nil, theme.red, nil)
 
-highlight("VertSplit", theme.blue, nil, theme.NONE)
+highlight("VertSplit", theme.blue_1, nil, theme.NONE)
 highlight("MatchParen", theme.pink, theme.NONE, theme.bold..theme.underline)
 highlight("Folded", theme.brown, nil, nil)
 highlight("FoldedColumn", theme.brown, nil, nil)
 highlight("SignColumn", nil, theme.blue_default, nil)
 highlight("IncSearch", theme.blue_default, theme.pink, nil)
-highlight("NonText", theme.grey, nil, nil)
+highlight("NonText", theme.blue_1, nil, nil)
 highlight("PMenu", theme.white_default, theme.blue_visual, nil)
 highlight("PMenuSel", theme.blue_default, theme.blue, theme.bold)
 highlight("Search", theme.blue_default, theme.pink, nil)
 highlight("SpecialKey", theme.orange_light, nil, nil)
 highlight("Title", theme.blue, nil, nil)
 highlight("Visual", nil, theme.grey, nil)
-highlight("EndOfBuffer", theme.grey, theme.blue_default, nil)
+highlight("EndOfBuffer", theme.blue_1, nil, nil)
 
 highlight("Comment", theme.ash_grey, nil, theme.italic)
 highlight("Constant", theme.green_bright, nil, nil)
@@ -123,7 +124,7 @@ highlight("Special", theme.white_default, nil, nil)
 highlight("SpecialChar", theme.NONE, theme.NONE, theme.NONE)
 highlight("Tag", theme.NONE, theme.NONE, theme.NONE)
 highlight("Delimiter", theme.white_default, nil, nil)
-highlight("SpecialComment", theme.NONE, theme.NONE, theme.NONE)
+highlight("SpecialComment", theme.blue_1, theme.NONE, theme.NONE)
 highlight("Debug", theme.NONE, theme.NONE, theme.NONE)
 highlight("Underlined", theme.NONE, theme.NONE, theme.underline)
 highlight("Ignore", theme.NONE, theme.NONE, theme.NONE)
@@ -213,6 +214,7 @@ vim.cmd("hi link htmlH5 htmlH1")
 highlight("htmlBold", theme.cyan, nil, theme.bold)
 
 vim.cmd("hi link shComment Comment")
+
 highlight("Sneak", theme.black, theme.pink, theme.bold)
 highlight("SneakLabel", theme.black, theme.pink, theme.bold)
 
@@ -221,4 +223,6 @@ highlight("SignifySignDelete", theme.red, nil, nil)
 highlight("SignifySignChange", theme.orange, nil, nil)
 
 highlight("illuminatedWord", nil, theme.highligter, nil)
+
+highlight("NvimTreeIndentMarker", theme.blue_1, nil, nil)
 

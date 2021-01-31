@@ -1,5 +1,4 @@
 local api = vim.api
-local cmd = vim.cmd
 local g = vim.g
 
 local function t(str)

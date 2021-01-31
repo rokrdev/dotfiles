@@ -1,6 +1,8 @@
 local g = vim.g
 g.colors_name = 'night-owl'
 
+vim.cmd("set background=dark")
+
 local function highlight(group, guifg, guibg, attr)
   local parts = {group}
   if guifg then table.insert(parts, "guifg="..guifg) end
@@ -67,7 +69,7 @@ highlight("Underline", nil, nil, theme.underline)
 highlight("Normal", theme.white_default, theme.blue_default, nil)
 highlight("LineNr", theme.grey, theme.blue_default, nil)
 highlight("CursorLine", nil, theme.blue_dark, nil)
-highlight("CursorLineNr", theme.white_default, theme.blue_dark, nil)
+highlight("CursorLineNr", theme.white_light, theme.blue_dark, nil)
 highlight("ColorColumn", nil, theme.black_light, nil)
 highlight("Directory", theme.blue, nil, nil)
 highlight("DiffAdd", theme.green_bright, theme.blue_default, nil)
@@ -83,14 +85,14 @@ highlight("Folded", theme.brown, nil, nil)
 highlight("FoldedColumn", theme.brown, nil, nil)
 highlight("SignColumn", nil, theme.blue_default, nil)
 highlight("IncSearch", theme.blue_default, theme.pink, nil)
-highlight("NonText", theme.brown, nil, nil)
+highlight("NonText", theme.grey, nil, nil)
 highlight("PMenu", theme.white_default, theme.blue_visual, nil)
 highlight("PMenuSel", theme.blue_default, theme.blue, theme.bold)
 highlight("Search", theme.blue_default, theme.pink, nil)
 highlight("SpecialKey", theme.orange_light, nil, nil)
 highlight("Title", theme.blue, nil, nil)
 highlight("Visual", nil, theme.grey, nil)
-highlight("EndOfBuffer", theme.brown, theme.blue_default, nil)
+highlight("EndOfBuffer", theme.grey, theme.blue_default, nil)
 
 highlight("Comment", theme.ash_grey, nil, theme.italic)
 highlight("Constant", theme.green_bright, nil, nil)

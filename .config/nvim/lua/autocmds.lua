@@ -20,7 +20,7 @@ local autocmds = {
     {"FileType", "fzf", "tunmap <buffer> <Esc>"},
     {"TermOpen", "*", "call custom#OnTermOpen()"},
     {"InsertEnter", "*", "hi link EndOfLineSpace Normal"},
-    {"InsertLeave", "*", "hi link EndOfLineSpace ErrorMsg"},
+    {"InsertLeave", "*", "hi link EndOfLineSpace diffRemoved"},
     {"TextYankPost", "*", "silent! lua vim.highlight.on_yank {higroup='IncSearch', timeout=250, on_visual=false}"},
   }
 }

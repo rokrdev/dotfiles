@@ -250,7 +250,7 @@
 
 " whitepace {{{
 
-" highlight default link EndOfLineSpace ErrorMsg
+" highlight default link EndOfLineSpace diffRemoved
 " match EndOfLineSpace / \+$/
 
 " }}}
@@ -433,7 +433,7 @@
 "   autocmd TermOpen * call custom#OnTermOpen()
 
 "   autocmd InsertEnter * hi link EndOfLineSpace Normal
-"   autocmd InsertLeave * hi link EndOfLineSpace ErrorMsg
+"   autocmd InsertLeave * hi link EndOfLineSpace diffRemoved
 "   autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=250, on_visual=false}
 " augroup END
 " " }}}

@@ -53,7 +53,7 @@ vim.cmd('colorscheme night-owl')
 vim.cmd('let $TERM = "alacritty"')
 vim.cmd('let $GIT_EDITOR = "nvr -cc split --remote-wait"')
 
-vim.cmd("highlight default link EndOfLineSpace ErrorMsg")
+vim.cmd("highlight default link EndOfLineSpace diffRemoved")
 vim.cmd("match EndOfLineSpace / \\+$/")
 
 g.mapleader = " "

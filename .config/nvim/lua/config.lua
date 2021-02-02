@@ -48,7 +48,7 @@ vim.cmd('set encoding=UTF-8')
 vim.cmd("set winhighlight=Normal:ActiveWindow,NormalNC:InactiveWindow")
 vim.cmd("set colorcolumn=100")
 
-vim.cmd('colorscheme night-owl')
+vim.cmd('colorscheme my-theme')
 
 vim.cmd('let $TERM = "alacritty"')
 vim.cmd('let $GIT_EDITOR = "nvr -cc split --remote-wait"')

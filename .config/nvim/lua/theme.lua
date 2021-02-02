@@ -1,5 +1,5 @@
 local g = vim.g
-g.colors_name = 'night-owl'
+g.colors_name = 'my-theme'
 
 vim.cmd("set background=dark")
 

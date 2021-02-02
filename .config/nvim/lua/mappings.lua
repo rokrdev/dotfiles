@@ -5,25 +5,28 @@ local function t(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
-api.nvim_set_keymap('n', '<C-e>', '<C-w><C-w>', { noremap = true })
+api.nvim_set_keymap('n', 's', '<Nop>', {})
+api.nvim_set_keymap('x', 's', '<Nop>', {})
+api.nvim_set_keymap('v', 's', '<Nop>', {})
+
 api.nvim_set_keymap('n', '<A-j>', ':m .+1<CR>==', { noremap = true })
 api.nvim_set_keymap('n', '<A-k>', ':m .-2<CR>==', { noremap = true })
 api.nvim_set_keymap('v', '<A-j>', ":m '>+1<CR>gv=gv", { noremap = true })
 api.nvim_set_keymap('v', '<A-k>', ":m '<-2<CR>gv=gv", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>C', ':e %:p:h/', { noremap = true })
+
 api.nvim_set_keymap('n', 's-', ':bd<CR>', { noremap = true })
 api.nvim_set_keymap('n', 's_', ':bd!<CR>', { noremap = true })
 api.nvim_set_keymap('n', 'sp', '"+p', { noremap = true })
 api.nvim_set_keymap('v', 'sy', '"+y', { noremap = true })
 api.nvim_set_keymap('v', 'sp', '"+p', { noremap = true })
-api.nvim_set_keymap('n', 'gh', ':b#<CR>', { noremap = true })
-api.nvim_set_keymap('n', 'ss', ':Buffers<CR>', { noremap = true })
-
-api.nvim_set_keymap('n', 's', '<Nop>', {})
-api.nvim_set_keymap('x', 's', '<Nop>', {})
-api.nvim_set_keymap('v', 's', '<Nop>', {})
-
+api.nvim_set_keymap('n', 'sh', ':b#<CR>', { noremap = true })
 api.nvim_set_keymap('n', 'sc', ':nohl<CR>', { noremap = true, silent = true })
+api.nvim_set_keymap('n', 's#', ":let @/='\\<'.expand('<cword>').'\\>'<CR>cgN", { noremap = true, silent = true })
+api.nvim_set_keymap('x', 's#', '"sy:let @/=@s<CR>cgN', { noremap = true, silent = true })
+api.nvim_set_keymap('n', 's*', ":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn", { noremap = true, silent = true })
+api.nvim_set_keymap('x', 's*', '"sy:let @/=@s<CR>cgn', { noremap = true, silent = true })
+-- api.nvim_set_keymap('n', 'ss', ':ls<CR>:b<Space>', { noremap = true })
 
 api.nvim_set_keymap('n', '<A-a>', ':vertical resize +5<CR>', { noremap = true, silent = true })
 api.nvim_set_keymap('n', '<A-d>', ':vertical resize -5<CR>', { noremap = true, silent = true })
@@ -32,10 +35,6 @@ api.nvim_set_keymap('n', '<A-s>', ':resize -5<CR>', { noremap = true, silent = t
 
 api.nvim_set_keymap('n', '<Leader>r', ':%s///g<Left><Left><Left>', { noremap = true })
 api.nvim_set_keymap('n', '<Leader>rc', ':%s///gc<Left><Left><Left><Left>', { noremap = true })
-api.nvim_set_keymap('n', 's#', ":let @/='\\<'.expand('<cword>').'\\>'<CR>cgN", { noremap = true, silent = true })
-api.nvim_set_keymap('x', 's#', '"sy:let @/=@s<CR>cgN', { noremap = true, silent = true })
-api.nvim_set_keymap('n', 's*', ":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn", { noremap = true, silent = true })
-api.nvim_set_keymap('x', 's*', '"sy:let @/=@s<CR>cgn', { noremap = true, silent = true })
 
 g["@z"] = "f cl<CR><ESC>l"
 
@@ -50,6 +49,7 @@ function _G.smart_shift_tab()
 end
 
 api.nvim_set_keymap('n', '<Leader>0', 'custom#ToggleNumberDisplay', { noremap = true, expr = true })
+api.nvim_set_keymap('n', '<TAB>', '<C-w><C-w>', { noremap = true })
 api.nvim_set_keymap('i', '<TAB>', 'v:lua.smart_tab()', { noremap = true, expr = true })
 api.nvim_set_keymap('i', '<S-TAB>', 'v:lua.smart_shift_tab()', { noremap = true, expr = true })
 
@@ -63,6 +63,7 @@ api.nvim_set_keymap('x', '*', ":<C-u>call custom#VSetSearch('?')<CR>?<C-R>=@/<CR
 api.nvim_set_keymap('n', '<Leader>*', ":call custom#RgWordUnderCursor()<CR>", { noremap = true })
 api.nvim_set_keymap('v', '<Leader>*', ":call custom#RgRawVisualSelection()<CR>", { noremap = true })
 
+api.nvim_set_keymap('n', '<Leader>b', ':Buffers<CR>', { noremap = true })
 api.nvim_set_keymap('n', '<Leader>o', ":Files<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>f', ":RG<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>F', ":RGRaw ", { noremap = true })
@@ -125,3 +126,6 @@ g.VM_maps = {
   ["Select Cursor Up"] = '<M-C-Up>'
 }
 
+g["nvim_tree_bindings"] = {
+  ["preview"] = '<S-TAB>'
+}

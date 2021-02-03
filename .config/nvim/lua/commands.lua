@@ -1,8 +1,8 @@
-vim.cmd("command! Gcd call custom#GoToRoot()")
+vim.cmd("command! Gcd lua require('helpers').goToRoot()")
 vim.cmd("command! Config :e $MYVIMRC")
 vim.cmd("command! Reload :so $MYVIMRC")
-vim.cmd("command! Tcc call custom#Togglecolorcolumn()")
-vim.cmd("command! Scratch call custom#ScratchGenerator()")
+vim.cmd("command! Tcc lua require('helpers').toggleColorColumn()")
+vim.cmd("command! Scratch lua require('helpers').scratchGenerator()")
 
 -- coc
 vim.cmd("command! -nargs=0 Format :call CocAction('format')")

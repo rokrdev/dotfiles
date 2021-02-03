@@ -18,7 +18,7 @@ local autocmds = {
     {"BufRead,BufNewFile", "*", "setlocal formatoptions-=cro"},
     {"FileType", "gitcommit,gitrebase,gitconfig", "set bufhidden=delete"},
     {"FileType", "fzf", "tunmap <buffer> <Esc>"},
-    {"TermOpen", "*", "call custom#OnTermOpen()"},
+    {"TermOpen", "*", "lua require('helpers').onTermOpen()"},
     {"InsertEnter", "*", "hi link EndOfLineSpace Normal"},
     {"InsertLeave", "*", "hi link EndOfLineSpace diffRemoved"},
     {"TextYankPost", "*", "silent! lua vim.highlight.on_yank {higroup='IncSearch', timeout=250, on_visual=false}"},

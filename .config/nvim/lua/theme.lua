@@ -83,6 +83,7 @@ highlight("diffAdded", nil, theme.green_bright, nil)
 highlight("diffRemoved", nil, theme.red, nil)
 highlight("ActiveWindow", nil, theme.blue_default, nil)
 highlight("InactiveWindow", nil, theme.black_1, nil)
+vim.cmd("hi default link EndOfLineSpace diffRemoved")
 
 highlight("VertSplit", theme.blue_1, nil, theme.NONE)
 highlight("MatchParen", theme.pink, theme.NONE, theme.bold..theme.underline)

@@ -9,10 +9,10 @@ api.nvim_set_keymap('n', 's', '<Nop>', {})
 api.nvim_set_keymap('x', 's', '<Nop>', {})
 api.nvim_set_keymap('v', 's', '<Nop>', {})
 
-api.nvim_set_keymap('n', '<A-j>', ':m .+1<CR>==', { noremap = true })
-api.nvim_set_keymap('n', '<A-k>', ':m .-2<CR>==', { noremap = true })
-api.nvim_set_keymap('v', '<A-j>', ":m '>+1<CR>gv=gv", { noremap = true })
-api.nvim_set_keymap('v', '<A-k>', ":m '<-2<CR>gv=gv", { noremap = true })
+api.nvim_set_keymap('n', '<A-d>', ':m .+1<CR>==', { noremap = true })
+api.nvim_set_keymap('n', '<A-u>', ':m .-2<CR>==', { noremap = true })
+api.nvim_set_keymap('v', '<A-d>', ":m '>+1<CR>gv=gv", { noremap = true })
+api.nvim_set_keymap('v', '<A-u>', ":m '<-2<CR>gv=gv", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>C', ':e %:p:h/', { noremap = true })
 
 api.nvim_set_keymap('n', 's-', ':bd<CR>', { noremap = true })
@@ -28,10 +28,10 @@ api.nvim_set_keymap('n', 's*', ":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn", {
 api.nvim_set_keymap('x', 's*', '"sy:let @/=@s<CR>cgn', { noremap = true, silent = true })
 -- api.nvim_set_keymap('n', 'ss', ':ls<CR>:b<Space>', { noremap = true })
 
-api.nvim_set_keymap('n', '<A-a>', ':vertical resize +5<CR>', { noremap = true, silent = true })
-api.nvim_set_keymap('n', '<A-d>', ':vertical resize -5<CR>', { noremap = true, silent = true })
-api.nvim_set_keymap('n', '<A-w>', ':resize +5<CR>', { noremap = true, silent = true })
-api.nvim_set_keymap('n', '<A-s>', ':resize -5<CR>', { noremap = true, silent = true })
+api.nvim_set_keymap('n', '<A-+>', ':vertical resize +5<CR>', { noremap = true, silent = true })
+api.nvim_set_keymap('n', '<A-=>', ':vertical resize -5<CR>', { noremap = true, silent = true })
+api.nvim_set_keymap('n', '<A-->', ':resize -5<CR>', { noremap = true, silent = true })
+api.nvim_set_keymap('n', '<A-_>', ':resize +5<CR>', { noremap = true, silent = true })
 
 api.nvim_set_keymap('n', '<Leader>r', ':%s///g<Left><Left><Left>', { noremap = true })
 api.nvim_set_keymap('n', '<Leader>rc', ':%s///gc<Left><Left><Left><Left>', { noremap = true })
@@ -106,7 +106,7 @@ api.nvim_set_keymap('n', '<Leader>cw', ":CocSearch <C-R>=expand('<cword>')<CR><C
 api.nvim_set_keymap('i', '<C-f>', "<Plug>(coc-snippets-expand-jump)", {})
 api.nvim_set_keymap('n', '<Leader>cT', ":call coc#float#close_all()<CR>", {})
 
-api.nvim_set_keymap('n', '<A-D>', ":call custom#show_documentation()<CR>", { noremap = true, silent = true })
+api.nvim_set_keymap('n', '<A-i>', ":call custom#show_documentation()<CR>", { noremap = true, silent = true })
 api.nvim_set_keymap('n', '<Leader>;', "o<ESC>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>:', "O<ESC>", { noremap = true })
 

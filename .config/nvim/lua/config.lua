@@ -61,3 +61,14 @@ g.mapleader = " "
 g["sneak#use_ic_scs"] = 1
 g["sneak#target_labels"] = "asdfjkl;ghqweruioptyzxcvnmb"
 
+
+-- fix for slow movement in large php files
+g.php_syntax_extensions_enabled = {}
+g.php_var_selector_is_identifier = 1
+g.php_sql_query = 0
+g.php_sql_heredoc = 0
+g.php_sql_nowdoc = 0
+g.php_html_load = 0
+g.php_html_in_heredoc = 0
+g.php_html_in_nowdoc = 0
+

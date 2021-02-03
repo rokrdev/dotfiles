@@ -48,7 +48,7 @@ function _G.smart_shift_tab()
   return vim.fn.pumvisible() == 1 and t'<C-p>' or t'<Tab>'
 end
 
-api.nvim_set_keymap('n', '<Leader>0', 'custom#ToggleNumberDisplay', { noremap = true, expr = true })
+api.nvim_set_keymap('n', '<Leader>0', '<cmd>lua require("helpers").toggleNumbers()<CR>', { noremap = true })
 api.nvim_set_keymap('n', '<TAB>', '<C-w><C-w>', { noremap = true })
 api.nvim_set_keymap('i', '<TAB>', 'v:lua.smart_tab()', { noremap = true, expr = true })
 api.nvim_set_keymap('i', '<S-TAB>', 'v:lua.smart_shift_tab()', { noremap = true, expr = true })
@@ -60,7 +60,7 @@ api.nvim_set_keymap('n', 'g*', ":let @/='\\V'.custom#EscapeSlashes(expand('<cwor
 api.nvim_set_keymap('x', '*', ":<C-u>call custom#VSetSearch('/')<CR>/<C-R>=@/<CR><CR>", { noremap = true })
 api.nvim_set_keymap('x', '*', ":<C-u>call custom#VSetSearch('?')<CR>?<C-R>=@/<CR><CR>", { noremap = true })
 
-api.nvim_set_keymap('n', '<Leader>*', ":call custom#RgWordUnderCursor()<CR>", { noremap = true })
+api.nvim_set_keymap('n', '<Leader>*', "<cmd>lua require('helpers').rgWordUnderCursor()<CR>", { noremap = true })
 api.nvim_set_keymap('v', '<Leader>*', ":call custom#RgRawVisualSelection()<CR>", { noremap = true })
 
 api.nvim_set_keymap('n', '<Leader>b', ':Buffers<CR>', { noremap = true })
@@ -85,11 +85,11 @@ api.nvim_set_keymap('n', 'sj', "<Plug>SneakLabel_s", {})
 api.nvim_set_keymap('n', 'sk', "<Plug>SneakLabel_S", {})
 
 api.nvim_set_keymap('n', '<Leader>S', ":Scratch<CR>", { noremap = true })
-api.nvim_set_keymap('n', '<Leader>gg', ":call custom#OpenTerm('tig status')<CR>", { noremap = true })
+api.nvim_set_keymap('n', '<Leader>gg', "<cmd>lua require('helpers').openTerm('tig status')<CR>", { noremap = true })
 -- tig a file
-api.nvim_set_keymap('n', '<Leader>gb', ":call custom#OpenTerm('tig ' . expand('%'))<CR>", { noremap = true })
+api.nvim_set_keymap('n', '<Leader>gb', "<cmd>lua require('helpers').openTerm('tig ' . expand('%'))<CR>", { noremap = true })
 -- tig show unpushed commits
-api.nvim_set_keymap('n', '<Leader>gl', ":call custom#OpenTerm('tig')<CR>", { noremap = true })
+api.nvim_set_keymap('n', '<Leader>gl', "<cmd>lua require('helpers').openTerm('tig')<CR>", { noremap = true })
 
 api.nvim_set_keymap('n', 'gb', ":GitMessenger<CR>", { noremap = true })
 
@@ -106,7 +106,7 @@ api.nvim_set_keymap('n', '<Leader>cw', ":CocSearch <C-R>=expand('<cword>')<CR><C
 api.nvim_set_keymap('i', '<C-f>', "<Plug>(coc-snippets-expand-jump)", {})
 api.nvim_set_keymap('n', '<Leader>cT', ":call coc#float#close_all()<CR>", {})
 
-api.nvim_set_keymap('n', '<A-i>', ":call custom#show_documentation()<CR>", { noremap = true, silent = true })
+api.nvim_set_keymap('n', '<A-i>', "<cmd>lua require('helpers').show_documentation()<CR>", { noremap = true, silent = true })
 api.nvim_set_keymap('n', '<Leader>;', "o<ESC>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>:', "O<ESC>", { noremap = true })
 

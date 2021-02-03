@@ -1,25 +1,25 @@
 
-function! custom#SingleToMulti() abort
-    normal! 0f{
-    execute "normal! ci{\<CR>\<CR>\<Up>\<C-r>\""
-    s/ *$/,
-    s/, /,\r
-    normal =i{
-endfunction
+" function! custom#SingleToMulti() abort
+"     normal! 0f{
+"     execute "normal! ci{\<CR>\<CR>\<Up>\<C-r>\""
+"     s/ *$/,
+"     s/, /,\r
+"     normal =i{
+" endfunction
 
-function! custom#ToggleNumberDisplay()
-    if(&rnu == 1)
-        set nu rnu!
-    elseif(&nu == 1)
-        set nu!
-    else
-        set nu rnu
-    endif
-endfunction
+" function! custom#ToggleNumberDisplay()
+"     if(&rnu == 1)
+"         set nu rnu!
+"     elseif(&nu == 1)
+"         set nu!
+"     else
+"         set nu rnu
+"     endif
+" endfunction
 
-function! custom#GoToRoot()
-    exec 'cd' finddir('.git/..', expand('%:p:h').';')
-endfunction
+" function! custom#GoToRoot()
+"     exec 'cd' finddir('.git/..', expand('%:p:h').';')
+" endfunction
 
 " https://github.com/wincent/loupe/blob/cf2d75a4b32a639e1b0a477c2ebdaebb1b70bf27/autoload/loupe/private.vim
 " E486: Pattern not found: \<foo\bar\>
@@ -35,27 +35,27 @@ function! custom#VSetSearch(cmdtype, ...)
     let @s = temp
 endfunction
 
-function! custom#show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-        execute 'h '.expand('<cword>')
-    else
-        call CocAction('doHover')
-    endif
-endfunction
+" function! custom#show_documentation()
+"     if (index(['vim','help'], &filetype) >= 0)
+"         execute 'h '.expand('<cword>')
+"     else
+"         call CocAction('doHover')
+"     endif
+" endfunction
 
-function! custom#check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+" function! custom#check_back_space() abort
+"     let col = col('.') - 1
+"     return !col || getline('.')[col - 1]  =~# '\s'
+" endfunction
 
-function! custom#OnTermExit(id, status, event)
-    exe 'bw!'
-endfunction
+" function! custom#OnTermExit(id, status, event)
+"     exe 'bw!'
+" endfunction
 
-function! custom#OpenTerm(cmd)
-    exe 'tabnew'
-    call termopen(a:cmd, { 'on_exit': 'custom#OnTermExit' })
-endfunction
+" function! custom#OpenTerm(cmd)
+"     exe 'tabnew'
+"     call termopen(a:cmd, { 'on_exit': 'custom#OnTermExit' })
+" endfunction
 
 function! custom#VisualSelection()
     if mode()=="v"
@@ -78,34 +78,34 @@ function! custom#VisualSelection()
     return join(lines, "\n")
 endfunction
 
-function custom#Rand()
-    return str2nr(matchstr(reltimestr(reltime()), '\v\.@<=\d+')[1:])
-endfunction
+" function custom#Rand()
+"     return str2nr(matchstr(reltimestr(reltime()), '\v\.@<=\d+')[1:])
+" endfunction
 
-function! custom#ScratchGenerator()
-    exe "e!" . "__Scratchy__" . custom#Rand() | setlocal buftype=nofile bufhidden=hide noswapfile
-endfunction
+" function! custom#ScratchGenerator()
+"     exe "e!" . "__Scratchy__" . custom#Rand() | setlocal buftype=nofile bufhidden=hide noswapfile
+" endfunction
 
-function! custom#RgWordUnderCursor()
-    exe 'RG '.expand('<cword>')
-endfunction
+" function! custom#RgWordUnderCursor()
+"     exe 'RG '.expand('<cword>')
+" endfunction
 
 function! custom#RgRawVisualSelection()
     let str = custom#VisualSelection()
     exe 'RG '.str
 endfunction
 
-function! custom#Togglecolorcolumn()
-    if &colorcolumn
-        set colorcolumn=0
-    else
-        set colorcolumn=100
-    endif
-endfunction
+" function! custom#Togglecolorcolumn()
+"     if &colorcolumn
+"         set colorcolumn=0
+"     else
+"         set colorcolumn=100
+"     endif
+" endfunction
 
-function! custom#OnTermOpen()
-    startinsert
-    setlocal listchars= nonumber norelativenumber
-    tnoremap <buffer> <Esc> <Nop>
-endfunction
+" function! custom#OnTermOpen()
+"     startinsert
+"     setlocal listchars= nonumber norelativenumber
+"     tnoremap <buffer> <Esc> <Nop>
+" endfunction
 

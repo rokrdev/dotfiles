@@ -58,7 +58,7 @@ api.nvim_set_keymap('n', '*', ":let @/='\\V\\<'.custom#EscapeSlashes(expand('<cw
 api.nvim_set_keymap('n', 'g#', ":let @/='\\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=0<CR>n", { noremap = true, silent = true })
 api.nvim_set_keymap('n', 'g*', ":let @/='\\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=1<CR>n", { noremap = true, silent = true })
 api.nvim_set_keymap('x', '*', ":<C-u>call custom#VSetSearch('/')<CR>/<C-R>=@/<CR><CR>", { noremap = true })
-api.nvim_set_keymap('x', '*', ":<C-u>call custom#VSetSearch('?')<CR>?<C-R>=@/<CR><CR>", { noremap = true })
+api.nvim_set_keymap('x', '#', ":<C-u>call custom#VSetSearch('?')<CR>?<C-R>=@/<CR><CR>", { noremap = true })
 
 api.nvim_set_keymap('n', '<Leader>*', "<cmd>lua require('helpers').rgWordUnderCursor()<CR>", { noremap = true })
 api.nvim_set_keymap('v', '<Leader>*', ":call custom#RgRawVisualSelection()<CR>", { noremap = true })

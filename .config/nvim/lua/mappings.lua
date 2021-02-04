@@ -53,15 +53,11 @@ api.nvim_set_keymap('n', '<TAB>', '<C-w><C-w>', { noremap = true })
 api.nvim_set_keymap('i', '<TAB>', 'v:lua.smart_tab()', { noremap = true, expr = true })
 api.nvim_set_keymap('i', '<S-TAB>', 'v:lua.smart_shift_tab()', { noremap = true, expr = true })
 
-api.nvim_set_keymap('n', '#', ":let @/='\\V\\<'.custom#EscapeSlashes(expand('<cword>')).'\\>'<CR>:let v:searchforward=0<CR>n", { noremap = true, silent = true })
-api.nvim_set_keymap('n', '*', ":let @/='\\V\\<'.custom#EscapeSlashes(expand('<cword>')).'\\>'<CR>:let v:searchforward=1<CR>n", { noremap = true, silent = true })
-api.nvim_set_keymap('n', 'g#', ":let @/='\\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=0<CR>n", { noremap = true, silent = true })
-api.nvim_set_keymap('n', 'g*', ":let @/='\\V'.custom#EscapeSlashes(expand('<cword>'))<CR>:let v:searchforward=1<CR>n", { noremap = true, silent = true })
-api.nvim_set_keymap('x', '*', ":<C-u>call custom#VSetSearch('/')<CR>/<C-R>=@/<CR><CR>", { noremap = true })
-api.nvim_set_keymap('x', '#', ":<C-u>call custom#VSetSearch('?')<CR>?<C-R>=@/<CR><CR>", { noremap = true })
+api.nvim_set_keymap('x', '*', "<cmd>lua require('helpers').VSetSearch('/')<CR>/<C-R>=@/<CR><CR>", { noremap = true })
+api.nvim_set_keymap('x', '#', "<cmd>lua require('helpers').VSetSearch('?')<CR>?<C-R>=@/<CR><CR>", { noremap = true })
 
 api.nvim_set_keymap('n', '<Leader>*', "<cmd>lua require('helpers').rgWordUnderCursor()<CR>", { noremap = true })
-api.nvim_set_keymap('v', '<Leader>*', ":call custom#RgRawVisualSelection()<CR>", { noremap = true })
+api.nvim_set_keymap('v', '<Leader>*', "<cmd>lua require('helpers').rgVisualSelection()<CR>", { noremap = true })
 
 api.nvim_set_keymap('n', '<Leader>b', ':Buffers<CR>', { noremap = true })
 api.nvim_set_keymap('n', '<Leader>o', ":Files<CR>", { noremap = true })

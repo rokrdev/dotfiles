@@ -73,7 +73,8 @@ function M.onTermOpen()
 end
 
 function M.rgWordUnderCursor()
-  api.nvim_exec([[ exe 'RG '.expand('<cword>') ]], false)
+  local val = 'RG ' .. vim.fn.expand('<cword>')
+  api.nvim_exec(val, false)
 end
 
 local function getRandom()
@@ -96,6 +97,29 @@ function M.show_documentation()
   ]],
   false
   )
+end
+
+function M.getVisualSelection()
+  local temp = vim.fn.getreg('s')
+  vim.cmd('noau normal! "sy')
+  local val = vim.fn.getreg('s')
+  vim.fn.setreg('s', temp)
+  return val
+end
+
+function M.rgVisualSelection()
+  local val = M.getVisualSelection()
+  local str = "RG " .. val
+  api.nvim_exec(str, false)
+end
+
+function M.VSetSearch(cmdtype)
+  local temp = vim.fn.getreg('s')
+  vim.cmd('noau normal! gv"sy')
+  local escapeS = vim.fn.escape(vim.fn.getreg('s'), cmdtype .. '\\')
+  local val = '\\V' .. vim.fn.substitute(escapeS, '\\n', '\\\\n', 'g')
+  vim.fn.setreg('/', val)
+  vim.fn.setreg('s', temp)
 end
 
 return M

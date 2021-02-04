@@ -87,7 +87,7 @@ api.nvim_set_keymap('n', 'sk', "<Plug>SneakLabel_S", {})
 api.nvim_set_keymap('n', '<Leader>S', ":Scratch<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>gg', "<cmd>lua require('helpers').openTerm('tig status')<CR>", { noremap = true })
 -- tig a file
-api.nvim_set_keymap('n', '<Leader>gb', "<cmd>lua require('helpers').openTerm('tig ' . expand('%'))<CR>", { noremap = true })
+api.nvim_set_keymap('n', '<Leader>gb', "<cmd>lua require('helpers').openTerm('tig ' .. vim.fn.expand('%'))<CR>", { noremap = true })
 -- tig show unpushed commits
 api.nvim_set_keymap('n', '<Leader>gl', "<cmd>lua require('helpers').openTerm('tig')<CR>", { noremap = true })
 

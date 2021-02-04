@@ -107,9 +107,13 @@ function M.getVisualSelection()
   return val
 end
 
+function M.escape(str)
+  return vim.fn.escape(str, '\\/.*$^~[]()<>')
+end
+
 function M.rgVisualSelection()
   local val = M.getVisualSelection()
-  local str = "RG " .. val
+  local str = "RG " .. M.escape(val)
   api.nvim_exec(str, false)
 end
 

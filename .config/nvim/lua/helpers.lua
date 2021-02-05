@@ -87,16 +87,11 @@ function M.scratchGenerator()
 end
 
 function M.show_documentation()
-  api.nvim_exec(
-  [[
-    if (index(['vim','help'], &filetype) >= 0)
-        execute 'h '.expand('<cword>')
-    else
-        call CocAction('doHover')
-    endif
-  ]],
-  false
-  )
+  if vim.fn.index({'vim', 'help'}, vim.bo.filetype) >= 0 then
+    api.nvim_exec('h ' .. vim.fn.expand('<cword>'))
+  else
+    vim.fn.call('CocAction', {'doHover'})
+  end
 end
 
 function M.getVisualSelection()

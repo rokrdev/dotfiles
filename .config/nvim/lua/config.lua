@@ -35,6 +35,7 @@ setopt('undofile', true)
 -- buffer local
 setBopt('fileencoding', 'UTF-8')
 setBopt('shiftwidth', 2)
+setBopt('expandtab', true)
 setBopt('smartindent', true)
 setBopt('softtabstop', 2)
 setBopt('swapfile', false)

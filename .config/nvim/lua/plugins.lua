@@ -251,12 +251,6 @@ return require('packer').startup(function()
   -- }
 
   use {
-    'tpope/vim-obsession',
-    opt = true,
-    cmd = {'Obsession', 'Obsess'}
-  }
-
-  use {
     'vifm/vifm.vim',
     opt = true,
     cmd = 'Vifm'

@@ -66,7 +66,7 @@ vim.cmd("match EndOfLineSpace / \\+$/")
 g.mapleader = " "
 
 g["sneak#use_ic_scs"] = 1
-g["sneak#target_labels"] = "asdfjkl;ghqweruioptyzxcvnmb"
+g["sneak#target_labels"] = "asdfjkl;ghqweruioptyzxcvnmbASDFJKL:GHQWERTYUIOPZXCVNMB!@#$^&*"
 
 -- fix for slow movement in large php files
 g.php_syntax_extensions_enabled = {}

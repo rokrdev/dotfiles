@@ -54,25 +54,17 @@ abbr -a -g gs 'git status'
 abbr -a -g gtr 'git log --oneline --graph --decorate --all'
 abbr -a -g h 'z dot'
 abbr -a -g k "/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
-abbr -a -g lg lazygit
-abbr -a -g m make
-abbr -a -g mi 'make install'
 abbr -a -g mk 'mkdir -p'
-abbr -a -g mu 'make update'
 abbr -a -g n npm
 abbr -a -g nb newsboat
 abbr -a -g ni 'npm install'
 abbr -a -g nn 'nnn -d -e -H'
-abbr -a -g nq notion
-abbr -a -g nr 'npm run'
-abbr -a -g nt 'npm test'
 abbr -a -g nv "~/.npm-packages/bin/n"
 abbr -a -g rf trash
 abbr -a -g sar "brew services restart skhd"
 abbr -a -g sd "pushd ~/.dotfiles && rsync -r --exclude-from \"exclude_from_sync.txt\" . ~ && popd"
 abbr -a -g sf 'source $FISH_CONFIG'
 abbr -a -g st speedtest-cli
-abbr -a -g sv nvim -S Session.vim
 abbr -a -g t tmux
 abbr -a -g ta 'tmux attach || tmux new'
 abbr -a -g tg tig
@@ -110,42 +102,4 @@ alias p=python
 
 # asdf erlang fails without this in fish
 set CFLAGS "-O2 -g" $CFLAGS
-
-# asdf current java 2>&1 > /dev/null
-
-# if test $status -eq 0
-#   export JAVA_HOME=(asdf where java)
-# end
-
-function fzf_history_search
-    history merge
-    history -z | fzf --read0 --print0 --tiebreak=index | read -lz result
-    and commandline -- $result
-    commandline -f repaint
-end
-
-set fish_greeting
-
-function f --description 'Fuzzy find file and open in vim'
-    set files (echo (eval "$FZF_DEFAULT_COMMAND | fzf --multi --exit-0 --preview 'bat --style=plain --color=always --line-range :100 {}'"))
-    if test -n $files
-      nvim (echo $files | string split ' ')
-    end
-end
-
-function kp --description 'Fuzzy search and kill process'
-    ### PROCESS
-    # mnemonic: [K]ill [P]rocess
-    # show output of "ps -ef", use [tab] to select one or multiple entries
-    # press [enter] to kill selected processes and go back to the process list.
-    # or press [escape] to go back to the process list. Press [escape] twice to exit completely.
-
-    set pid (ps aux | sed 1d | eval "fzf $FZF_DEFAULT_OPTS -m --header='[kill:process]'" | awk '{print $2}')
-
-    if test "x$pid" != "x"
-        echo $pid | xargs kill -9
-        kp
-    end
-end
-
 

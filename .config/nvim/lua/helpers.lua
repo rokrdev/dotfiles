@@ -121,12 +121,18 @@ function M.VSetSearch(cmdtype)
   vim.fn.setreg('s', temp)
 end
 
+function M.getSessionNameFromCwd()
+  local cwd = vim.fn.getcwd()
+  return cwd:gsub("/", "_").."-"
+end
+
 function M.saveSession(name)
   local sessionName
+  local folder = M.getSessionNameFromCwd()
   if name == nil or name == '' then
-    sessionName = 'default.vim'
+    sessionName = folder .. 'default.vim'
   else
-    sessionName = name .. '.vim'
+    sessionName = folder .. name .. '.vim'
   end
   local fullPath = vim.g.SESSIONS_DIR .. sessionName
   local cmd = 'mks! '..fullPath

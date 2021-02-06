@@ -164,17 +164,17 @@ return require('packer').startup(function()
     end
   }
 
-  use {
-    'Yggdroot/indentLine',
-    config = function()
-      vim.g.indentLine_char = 'c'
-      vim.g.indentLine_char_list = {'│'}
-      -- vim.g.indentLine_fileTypeExclude = {'coc-explorer'}
-      vim.g.indentLine_bufTypeExclude = {'help', 'terminal', 'NvimTree'}
-      vim.g.indentLine_bufNameExclude = {'vifm'}
-      vim.g.indentLine_defaultGroup = 'SpecialComment'
-    end
-  }
+  -- use {
+  --   'Yggdroot/indentLine',
+  --   config = function()
+  --     vim.g.indentLine_char = 'c'
+  --     vim.g.indentLine_char_list = {'│'}
+  --     -- vim.g.indentLine_fileTypeExclude = {'coc-explorer'}
+  --     vim.g.indentLine_bufTypeExclude = {'help', 'terminal', 'NvimTree'}
+  --     vim.g.indentLine_bufNameExclude = {'vifm'}
+  --     vim.g.indentLine_defaultGroup = 'SpecialComment'
+  --   end
+  -- }
 
   use {
     'mg979/vim-visual-multi',

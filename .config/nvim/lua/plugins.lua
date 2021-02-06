@@ -250,10 +250,23 @@ return require('packer').startup(function()
   --   ft = {'mdx'}
   -- }
 
+  -- use {
+  --   'vifm/vifm.vim',
+  --   opt = true,
+  --   cmd = 'Vifm'
+  -- }
+
   use {
-    'vifm/vifm.vim',
+    'mcchrish/nnn.vim',
     opt = true,
-    cmd = 'Vifm'
+    cmd = 'NnnPicker',
+    config = function()
+      vim.g["nnn#command"] = 'nnn -d -H'
+      vim.g["nnn#action"] = {
+       ['<c-x>'] = 'split',
+       ['<c-v>'] = 'vsplit'
+     }
+    end
   }
 
 end)

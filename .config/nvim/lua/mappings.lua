@@ -67,7 +67,7 @@ api.nvim_set_keymap('n', '<Leader>/', ":LinesWithPreview<CR>", { noremap = true 
 api.nvim_set_keymap('n', '<Leader>G', ":GF?<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>co', ":Commands<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>cc', ":BCommits<CR>", { noremap = true })
-api.nvim_set_keymap('n', '<Leader>n', ":Vifm<CR>", { noremap = true })
+api.nvim_set_keymap('n', '<Leader>n', ":NnnPicker %:p:h<CR>", { noremap = true })
 
 api.nvim_set_keymap('n', 'f', "<Plug>Sneak_f", {})
 api.nvim_set_keymap('n', 'F', "<Plug>Sneak_F", {})

@@ -222,8 +222,8 @@ highlight("htmlBold", theme.cyan, nil, theme.bold)
 
 vim.cmd("hi link shComment Comment")
 
-highlight("Sneak", theme.black, theme.pink, theme.bold)
-highlight("SneakLabel", theme.black, theme.pink, theme.bold)
+highlight("Sneak", theme.blue_default, theme.blue, theme.bold)
+highlight("SneakLabel", theme.blue_default, theme.blue, theme.bold)
 
 highlight("SignifySignAdd", theme.green_bright, nil, nil)
 highlight("SignifySignDelete", theme.red, nil, nil)

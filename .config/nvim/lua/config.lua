@@ -1,5 +1,7 @@
 local g = vim.g
 
+g.SESSIONS_DIR = "~/.config/nvim/sessions/"
+
 getopt = require('helpers').getopt
 setopt = require('helpers').setopt
 setBopt = require('helpers').setBopt

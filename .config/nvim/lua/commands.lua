@@ -21,7 +21,7 @@ vim.cmd("command! -nargs=* T split | Term <args>")
 vim.cmd("command! -nargs=* VT vsplit | Term <args>")
 
 -- Session
-vim.cmd("command! SS Obsess! | Obsess | wq")
+vim.cmd("command! -nargs=* SS lua require('helpers').saveSession(vim.fn.expand('<args>'))")
 
 -- whitepace
 vim.cmd("command! DisableTrailingWhitespace hi link EndOfLineSpace Normal")
@@ -31,4 +31,5 @@ vim.cmd("command! EnableTrailingWhitespace hi link EndOfLineSpace ErrorMsg")
 vim.cmd("command! FJ %!jq")
 
 vim.cmd("command! CD cd %:h")
+vim.cmd("command! BD bufdo bd")
 

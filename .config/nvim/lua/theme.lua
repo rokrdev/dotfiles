@@ -67,6 +67,7 @@ highlight("Bold", nil, nil, theme.bold)
 highlight("italic", nil, nil, theme.italic)
 highlight("Underline", nil, nil, theme.underline)
 
+highlight("StatusLine", theme.blue_visual, theme.white_default, nil)
 highlight("Normal", theme.white_default, theme.blue_default, nil)
 highlight("LineNr", theme.grey, theme.NONE, nil)
 -- highlight("CursorLine", nil, theme.blue_dark, nil)

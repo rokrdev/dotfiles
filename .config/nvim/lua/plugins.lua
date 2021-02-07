@@ -259,14 +259,7 @@ return require('packer').startup(function()
   use {
     'mcchrish/nnn.vim',
     opt = true,
-    cmd = 'NnnPicker',
-    config = function()
-      vim.g["nnn#command"] = 'nnn -d -H'
-      vim.g["nnn#action"] = {
-       ['<c-x>'] = 'split',
-       ['<c-v>'] = 'vsplit'
-     }
-    end
+    cmd = 'NnnPicker'
   }
 
 end)

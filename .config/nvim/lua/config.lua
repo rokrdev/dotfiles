@@ -79,3 +79,15 @@ g.php_html_in_heredoc = 0
 g.php_html_in_nowdoc = 0
 
 vim.g["nnn#set_default_mappings"] = 0
+vim.g["nnn#layout"] = {
+ ["window"] = {
+   ["width"] = 0.9,
+   ["height"] = 0.9,
+   ["highlight"] = "Directory"
+ }
+}
+vim.g["nnn#command"] = 'nnn -d -H'
+vim.g["nnn#action"] = {
+ ['<c-x>'] = 'split',
+ ['<c-v>'] = 'vsplit'
+}

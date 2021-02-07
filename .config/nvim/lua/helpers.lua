@@ -139,5 +139,11 @@ function M.saveSession(name)
   vim.cmd(cmd)
 end
 
+function M.nnnPicker()
+  local currentPath = vim.fn.expand('%:p:h')
+  local cmd = 'NnnPicker '..currentPath
+  vim.cmd(cmd)
+end
+
 return M
 

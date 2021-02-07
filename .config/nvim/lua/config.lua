@@ -78,3 +78,4 @@ g.php_html_load = 0
 g.php_html_in_heredoc = 0
 g.php_html_in_nowdoc = 0
 
+vim.g["nnn#set_default_mappings"] = 0

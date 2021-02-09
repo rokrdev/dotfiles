@@ -21,8 +21,6 @@ if not packer_exists then
   return
 end
 
-vim.cmd [[packadd cfilter]]
-
 return require('packer').startup(function()
 
   use {

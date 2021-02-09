@@ -1,5 +1,11 @@
 local g = vim.g
 
+vim.cmd('let loaded_matchit = 1')
+g.loaded_python_provider = 0
+g.loaded_ruby_provider = 0
+g.loaded_perl_provider = 0
+g.loaded_node_provider = 0
+
 g.SESSIONS_DIR = "~/.config/nvim/sessions/"
 
 getopt = require('helpers').getopt

@@ -24,8 +24,8 @@ export LDFLAGS="-L/usr/local/opt/zlib/lib"
 export CPPFLAGS="-I/usr/local/opt/zlib/include"
 
 # defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
-# defaults write NSGlobalDomain KeyRepeat -float 1.5
-# defaults write NSGlobalDomain InitialKeyRepeat -int 23
+defaults write -g InitialKeyRepeat -int 15
+defaults write -g KeyRepeat -int 2
 
 set $fish_term24bit to "1"
 set fish_color_command blue

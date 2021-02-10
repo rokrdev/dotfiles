@@ -23,9 +23,9 @@ export FZF_DEFAULT_OPTS='--bind=ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:tog
 export LDFLAGS="-L/usr/local/opt/zlib/lib"
 export CPPFLAGS="-I/usr/local/opt/zlib/include"
 
-# defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
-defaults write -g InitialKeyRepeat -int 15
-defaults write -g KeyRepeat -int 2
+defaults write -g ApplePressAndHoldEnabled -bool false
+defaults write -g InitialKeyRepeat -int 10
+defaults write -g KeyRepeat -int 1
 
 set $fish_term24bit to "1"
 set fish_color_command blue

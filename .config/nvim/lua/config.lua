@@ -51,7 +51,7 @@ setBopt('tabstop', 2)
 
 -- window local
 setWopt('colorcolumn', '100')
-setWopt('cursorline', false)
+setWopt('cursorline', true)
 setWopt('foldlevel', 2)
 setWopt('foldmethod', 'manual')
 setWopt('foldnestmax', 10)

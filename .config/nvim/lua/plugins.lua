@@ -53,6 +53,7 @@ return require('packer').startup(function()
   use {
     'norcalli/nvim-colorizer.lua',
     event = 'VimEnter *',
+    opt = true,
     config = function()
       require('colorizer').setup()
     end
@@ -60,11 +61,13 @@ return require('packer').startup(function()
 
   use {
     'jiangmiao/auto-pairs',
+    opt = true,
     event = 'VimEnter *'
   }
 
   use {
     'junegunn/fzf.vim',
+    opt = true,
     event = 'VimEnter *',
     config = function()
       vim.g.fzf_layout = {
@@ -92,6 +95,7 @@ return require('packer').startup(function()
 
   use {
     'machakann/vim-sandwich',
+    opt = true,
     event = 'VimEnter *',
   }
 
@@ -115,6 +119,7 @@ return require('packer').startup(function()
   use {
     'neoclide/coc.nvim',
     branch = 'release',
+    opt = true,
     event = 'VimEnter *',
     config = function()
       vim.g.coc_global_extensions = {
@@ -139,11 +144,13 @@ return require('packer').startup(function()
 
   use {
     'tpope/vim-commentary',
+    opt = true,
     event = 'VimEnter *',
   }
 
   use {
     'mhinz/vim-signify',
+    opt = true,
     event = 'VimEnter *',
     config = function()
       vim.g.signify_sign_add = '│'
@@ -154,6 +161,7 @@ return require('packer').startup(function()
 
   use {
     'rrethy/vim-illuminate',
+    opt = true,
     event = 'VimEnter *',
     config = function()
       vim.g.Illuminate_delay = 500
@@ -162,21 +170,10 @@ return require('packer').startup(function()
     end
   }
 
-  -- use {
-  --   'Yggdroot/indentLine',
-  --   config = function()
-  --     vim.g.indentLine_char = 'c'
-  --     vim.g.indentLine_char_list = {'│'}
-  --     -- vim.g.indentLine_fileTypeExclude = {'coc-explorer'}
-  --     vim.g.indentLine_bufTypeExclude = {'help', 'terminal', 'NvimTree'}
-  --     vim.g.indentLine_bufNameExclude = {'vifm'}
-  --     vim.g.indentLine_defaultGroup = 'SpecialComment'
-  --   end
-  -- }
-
   use {
     'mg979/vim-visual-multi',
     branch = 'master',
+    opt = true,
     event = 'VimEnter *',
   }
 
@@ -198,6 +195,7 @@ return require('packer').startup(function()
   -- }
   use {
     'sheerun/vim-polyglot',
+    opt = true,
     event = 'VimEnter *',
   }
 
@@ -246,12 +244,6 @@ return require('packer').startup(function()
   --   'jxnblk/vim-mdx-js',
   --   opt = true,
   --   ft = {'mdx'}
-  -- }
-
-  -- use {
-  --   'vifm/vifm.vim',
-  --   opt = true,
-  --   cmd = 'Vifm'
   -- }
 
   use {

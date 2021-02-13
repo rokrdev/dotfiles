@@ -6,8 +6,6 @@ g.loaded_ruby_provider = 0
 g.loaded_perl_provider = 0
 g.loaded_node_provider = 0
 
-g.SESSIONS_DIR = "~/.config/nvim/sessions/"
-
 getopt = require('helpers').getopt
 setopt = require('helpers').setopt
 setBopt = require('helpers').setBopt

@@ -108,7 +108,7 @@ api.nvim_set_keymap('n', '<Leader>:', "O<ESC>", { noremap = true })
 
 api.nvim_set_keymap('n', '<Leader>t', ":NvimTreeToggle<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>ss', ":SS ", { noremap = true })
-api.nvim_set_keymap('n', '<Leader>sr', ":so " .. vim.g.SESSIONS_DIR .. require('helpers').getSessionNameFromCwd(), { noremap = true })
+api.nvim_set_keymap('n', '<Leader>sr', ":so " .. require('helpers').getSessionFilePath(), { noremap = true })
 
 g.VM_leader = '\\'
 g.VM_maps = {

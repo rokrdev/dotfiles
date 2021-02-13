@@ -6,6 +6,8 @@ local wo = vim.wo
 local api = vim.api
 local fn = vim.fn
 
+local SESSIONS_DIR = '~/.vim/sessions/'
+
 M.getopt = api.nvim_get_option
 
 function M.setopt(k, v)
@@ -122,21 +124,28 @@ function M.VSetSearch(cmdtype)
 end
 
 function M.getSessionNameFromCwd()
-  local cwd = vim.fn.getcwd()
-  return cwd:gsub("/", "_").."-"
+  local pwd = api.nvim_exec("pwd", true)
+  return pwd, pwd:gsub("/", "_").."-"
+end
+
+function M.getSessionFilePath()
+  local currentFolder, folderText = M.getSessionNameFromCwd()
+  return SESSIONS_DIR .. folderText
 end
 
 function M.saveSession(name)
   local sessionName
-  local folder = M.getSessionNameFromCwd()
+  local currentFolder, folderText = M.getSessionNameFromCwd()
+  api.nvim_exec("lcd "..SESSIONS_DIR, false)
   if name == nil or name == '' then
-    sessionName = folder .. 'default.vim'
+    sessionName = folderText .. 'default.vim'
   else
-    sessionName = folder .. name .. '.vim'
+    sessionName = folderText .. name .. '.vim'
   end
-  local fullPath = vim.g.SESSIONS_DIR .. sessionName
+  local fullPath = SESSIONS_DIR .. sessionName
   local cmd = 'mks! '..fullPath
   vim.cmd(cmd)
+  api.nvim_exec("cd "..currentFolder, false)
 end
 
 function M.nnnPicker()

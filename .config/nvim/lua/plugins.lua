@@ -24,10 +24,10 @@ end
 return require('packer').startup(function()
 
   use {
-    '1bharat/lualine.nvim',
+    'hoob3rt/lualine.nvim',
     config = function()
       local lualine = require('lualine')
-      lualine.theme = 'night_owl'
+      lualine.theme = require('helpers').getLualineTheme()
       lualine.separator = '|'
       lualine.sections = {
         lualine_a = { 'mode' },

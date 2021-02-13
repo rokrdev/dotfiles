@@ -133,6 +133,13 @@ function M.getSessionFilePath()
   return SESSIONS_DIR .. folderText
 end
 
+function M.restoreSession(path)
+  local currentFolder, folderText = M.getSessionNameFromCwd()
+  local cmd = 'so '..path
+  vim.cmd(cmd)
+  api.nvim_exec("cd "..currentFolder, false)
+end
+
 function M.saveSession(name)
   local sessionName
   local currentFolder, folderText = M.getSessionNameFromCwd()

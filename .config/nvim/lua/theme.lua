@@ -15,53 +15,25 @@ local function highlight(group, guifg, guibg, attr)
   vim.cmd('highlight '..table.concat(parts, ' '))
 end
 
-local theme = {
-  bold = "bold,",
-  italic = "italic,",
-  underline = "underline",
-  NONE = 'NONE',
+local theme = require('helpers').theme_colors
 
-  white_default = "#d6deeb",
-  white_light = "#C5E4FD",
-  blue_default = "#011627",
-  grey = "#4b6479",
-  blue_dark = "#00111F",
-  blue = "#82aaff",
-  blue_light = "#C5E4FD",
-  green_bright = "#addb67",
-  pink = "#c792ea",
-  red = "#ff5874",
-  brown = "#806e6f",
-  orange_light = "#ecc48d",
-  orange = "#f78c6c",
-  blue_visual = "#1a2b4a",
-  ash_grey = "#637777",
-  cyan = "#7fdbca",
-  yellow_light = "#fbec9f",
-  yellow_dark = "#f4d554",
-  highligter = "#263838",
-  black = "#000000",
-  black_1 = "#000e1a",
-  blue_1 = "#283d6b"
-}
-
-g.terminal_color_foreground = "#d6deeb"
-g.terminal_color_background = "#011627"
-g.terminal_color_0 = "#011627"
-g.terminal_color_8 = "#637777"
-g.terminal_color_1 = "#ff5874"
-g.terminal_color_2 = "#addb67"
-g.terminal_color_10 = "#addb67"
-g.terminal_color_3 = "#f78c6c"
-g.terminal_color_11 = "#f78c6c"
-g.terminal_color_4 = "#82aaff"
-g.terminal_color_12 = "#82aaff"
-g.terminal_color_5 = "#c792ea"
-g.terminal_color_13 = "#c792ea"
-g.terminal_color_6 = "#7fdbca"
-g.terminal_color_14 = "#7fdbca"
-g.terminal_color_7 = "#aaaaaa"
-g.terminal_color_15 = "#eeeeee"
+g.terminal_color_foreground = theme.white_default
+g.terminal_color_background = theme.blue_default
+g.terminal_color_0 = theme.blue_default
+g.terminal_color_8 = theme.ash_grey
+g.terminal_color_1 = theme.red
+g.terminal_color_2 = theme.green_bright
+g.terminal_color_10 = theme.green_bright
+g.terminal_color_3 = theme.orange
+g.terminal_color_11 = theme.orange
+g.terminal_color_4 = theme.blue
+g.terminal_color_12 = theme.blue
+g.terminal_color_5 = theme.pink
+g.terminal_color_13 = theme.pink
+g.terminal_color_6 = theme.cyan
+g.terminal_color_14 = theme.cyan
+g.terminal_color_7 = theme.ash_grey
+g.terminal_color_15 = theme.white_light
 
 highlight("Bold", nil, nil, theme.bold)
 highlight("italic", nil, nil, theme.italic)

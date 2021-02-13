@@ -56,8 +56,8 @@ snippet sct "Self Closing tag"
 endsnippet
 
 snippet oct "Open Close tag"
-<$1>
-  $2
+<$1 $2>
+  $3
 </$1>
 endsnippet
 
@@ -87,4 +87,30 @@ snippet if "if"
 if ($1) {
   $2
 }
+endsnippet
+
+snippet ust "useState"
+const [$1, $2] = React.useState($3);
+endsnippet
+
+snippet uef "useEffect"
+React.useEffect(
+  () => {
+    $1
+  },
+  [$2]
+);
+endsnippet
+
+snippet uref "useRef"
+const $1 = React.useRef($2);
+endsnippet
+
+snippet uca "useCallback"
+const $3 = React.useCallback(
+  () => {
+    $1
+  },
+  [$2]
+)
 endsnippet

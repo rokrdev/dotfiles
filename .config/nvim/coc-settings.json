@@ -16,7 +16,7 @@
   "python.formatting.provider": "black",
   "python.formatting.blackPath": "~/opt/miniconda3/bin/black",
   "python.linting.enabled": true,
-  "coc.preferences.formatOnType": true,
+  "coc.preferences.formatOnType": false,
   "coc.preferences.formatOnSaveFiletypes": [
     "css",
     "graphql",

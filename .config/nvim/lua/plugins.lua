@@ -27,7 +27,7 @@ return require('packer').startup(function()
     'hoob3rt/lualine.nvim',
     config = function()
       local lualine = require('lualine')
-      lualine.theme = require('helpers').getLualineTheme()
+      lualine.options.theme = require('helpers').getLualineTheme()
       lualine.separator = '|'
       lualine.sections = {
         lualine_a = { 'mode' },

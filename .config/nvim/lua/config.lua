@@ -57,7 +57,7 @@ setWopt('list', true)
 setWopt('number', true)
 setWopt('signcolumn', 'yes')
 setWopt('winhighlight','Normal:ActiveWindow,NormalNC:InactiveWindow')
-setWopt('wrap', true)
+setWopt('wrap', false)
 
 -- general
 vim.cmd('syntax enable')

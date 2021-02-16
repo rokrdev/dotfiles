@@ -49,7 +49,7 @@ function _G.smart_shift_tab()
 end
 
 api.nvim_set_keymap('n', '<Leader>0', '<cmd>lua require("helpers").toggleNumbers()<CR>', { noremap = true })
-api.nvim_set_keymap('n', '<C-t>', '<C-w><C-w>', { noremap = true })
+api.nvim_set_keymap('n', '<C-t>', ':wincmd w<CR>', { noremap = true })
 api.nvim_set_keymap('i', '<TAB>', 'v:lua.smart_tab()', { noremap = true, expr = true })
 api.nvim_set_keymap('i', '<S-TAB>', 'v:lua.smart_shift_tab()', { noremap = true, expr = true })
 
@@ -126,5 +126,6 @@ g.VM_maps = {
 }
 
 g["nvim_tree_bindings"] = {
-  ["preview"] = '<S-TAB>'
+  ["preview"] = '<C-TAB>',
+  ["edit_tab"] = '<C-TAB>',
 }

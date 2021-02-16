@@ -109,6 +109,7 @@ return require('packer').startup(function()
       vim.g["nvim_tree_follow"] = 1
       vim.g["nvim_tree_auto_close"] = 1
       vim.g["nvim_tree_width_allow_resize"] = 1
+      vim.g["nvim_tree_side"] = "right"
     end
   }
 

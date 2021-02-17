@@ -159,12 +159,10 @@ function M.rgVisualSelection()
 end
 
 function M.VSetSearch(cmdtype)
-  local temp = vim.fn.getreg('s')
-  vim.cmd('noau normal! gv"sy')
-  local escapeS = vim.fn.escape(vim.fn.getreg('s'), cmdtype .. '\\')
+  local yanked_text = M.getVisualSelection()
+  local escapeS = vim.fn.escape(yanked_text, cmdtype .. '\\')
   local val = '\\V' .. vim.fn.substitute(escapeS, '\\n', '\\\\n', 'g')
   vim.fn.setreg('/', val)
-  vim.fn.setreg('s', temp)
 end
 
 function M.getSessionNameFromCwd()

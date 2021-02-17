@@ -49,7 +49,7 @@ function _G.smart_shift_tab()
 end
 
 api.nvim_set_keymap('n', '<Leader>0', '<cmd>lua require("helpers").toggleNumbers()<CR>', { noremap = true })
--- api.nvim_set_keymap('n', '<C-t>', ':wincmd w<CR>', { noremap = true })
+api.nvim_set_keymap('n', '<C-e>', ':wincmd w<CR>', { noremap = true })
 api.nvim_set_keymap('n', '<M-h>', '<C-w>h', { noremap = true })
 api.nvim_set_keymap('n', '<M-j>', '<C-w>j', { noremap = true })
 api.nvim_set_keymap('n', '<M-k>', '<C-w>k', { noremap = true })

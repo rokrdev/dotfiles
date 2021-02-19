@@ -28,11 +28,12 @@ return require('packer').startup(function()
     config = function()
       local lualine = require('lualine')
       lualine.options.theme = require('helpers').getLualineTheme()
+      lualine.options.icons_enabled = false
       lualine.separator = '|'
       lualine.sections = {
         lualine_a = { 'mode' },
         lualine_b = { 'branch' },
-        lualine_c = { 'filename', 'signify' },
+        lualine_c = { 'filename', 'signify', 'g:coc_status' },
         lualine_x = { 'encoding', 'fileformat', 'filetype' },
         lualine_y = { 'progress' },
         lualine_z = { 'location'  },

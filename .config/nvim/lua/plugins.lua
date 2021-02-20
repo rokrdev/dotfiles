@@ -29,6 +29,8 @@ return require('packer').startup(function()
       local lualine = require('lualine')
       lualine.options.theme = require('helpers').getLualineTheme()
       lualine.options.icons_enabled = false
+      lualine.options.section_separators = nil
+      lualine.options.component_separators = nil
       lualine.separator = '|'
       lualine.sections = {
         lualine_a = { 'mode' },
@@ -135,7 +137,6 @@ return require('packer').startup(function()
         'coc-tsserver',
         'coc-yaml',
       }
-    -- vim.cmd("set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}")
     end
   }
 

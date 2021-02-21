@@ -38,7 +38,7 @@ return require('packer').startup(function()
         lualine_c = { 'filename', 'signify', 'g:coc_status' },
         lualine_x = { 'encoding', 'fileformat', 'filetype' },
         lualine_y = { 'progress' },
-        lualine_z = { 'location'  },
+        lualine_z = { 'location' },
       }
       lualine.inactive_sections = {
         lualine_a = {  },

@@ -54,6 +54,18 @@ M.lualine_theme_colors = {
 
 M.getopt = api.nvim_get_option
 
+function M.highlight(group, guifg, guibg, attr)
+  local parts = {group}
+  if guifg then table.insert(parts, "guifg="..guifg) end
+  if guibg then table.insert(parts, "guibg="..guibg) end
+  if attr then
+    table.insert(parts, "gui="..attr)
+    table.insert(parts, "cterm="..attr)
+  end
+
+  vim.cmd('highlight '..table.concat(parts, ' '))
+end
+
 function M.setopt(k, v)
   o[k] = v
 end

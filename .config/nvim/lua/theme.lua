@@ -1,19 +1,9 @@
 local g = vim.g
+local highlight = require('helpers').highlight
+
 g.colors_name = 'my-theme'
 
 vim.cmd("set background=dark")
-
-local function highlight(group, guifg, guibg, attr)
-  local parts = {group}
-  if guifg then table.insert(parts, "guifg="..guifg) end
-  if guibg then table.insert(parts, "guibg="..guibg) end
-  if attr then
-    table.insert(parts, "gui="..attr)
-    table.insert(parts, "cterm="..attr)
-  end
-
-  vim.cmd('highlight '..table.concat(parts, ' '))
-end
 
 local theme = require('helpers').theme_colors
 

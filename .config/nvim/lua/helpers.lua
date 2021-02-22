@@ -40,16 +40,16 @@ M.theme_colors = {
 }
 
 M.lualine_theme_colors = {
-  blue              = {M.theme_colors.blue, 111},
-  blue_default      = {M.theme_colors.blue_default, 233},
-  black_1           = {M.theme_colors.black_1, 233},
-  white_default     = {M.theme_colors.white_default, 253},
-  grey_1            = {M.theme_colors.grey_1, 222},
-  blue_visual       = {M.theme_colors.blue_visual, 235},
-  green             = {M.theme_colors.green_bright, 149},
-  pink              = {M.theme_colors.pink, 176},
-  red               = {M.theme_colors.red, 204},
-  cyan              = {M.theme_colors.cyan, 116},
+  blue              = M.theme_colors.blue,
+  blue_default      = M.theme_colors.blue_default,
+  black_1           = M.theme_colors.black_1,
+  white_default     = M.theme_colors.white_default,
+  grey_1            = M.theme_colors.grey_1,
+  blue_visual       = M.theme_colors.blue_visual,
+  green             = M.theme_colors.green_bright,
+  pink              = M.theme_colors.pink,
+  red               = M.theme_colors.red,
+  cyan              = M.theme_colors.cyan,
 }
 
 M.getopt = api.nvim_get_option
@@ -221,31 +221,31 @@ function M.getLualineTheme()
 
   night_owl.normal = {
     a = { bg = theme.blue, fg = theme.blue_default, gui = 'bold', },
-    b = { bg = theme.grey_1, fg  = theme.white_default, },
+    b = { bg = theme.grey_1, fg = theme.white_default, },
     c = { bg = theme.blue_visual, fg = theme.white_default, }
   }
 
   night_owl.insert = {
     a = { bg = theme.green, fg = theme.blue_default, gui = 'bold', },
-    b = { bg = theme.grey_1, fg  = theme.white_default, },
+    b = { bg = theme.grey_1, fg = theme.white_default, },
     c = { bg = theme.blue_visual, fg = theme.white_default, }
   }
 
   night_owl.visual = {
     a = { bg = theme.pink, fg = theme.blue_default, gui = 'bold', },
-    b = { bg = theme.grey_1, fg  = theme.white_default, },
+    b = { bg = theme.grey_1, fg = theme.white_default, },
     c = { bg = theme.blue_visual, fg = theme.white_default, }
   }
 
   night_owl.replace = {
     a = { bg = theme.red, fg = theme.blue_default, gui = 'bold', },
-    b = { bg = theme.grey_1, fg  = theme.white_default, },
+    b = { bg = theme.grey_1, fg = theme.white_default, },
     c = { bg = theme.blue_visual, fg = theme.white_default, }
   }
 
   night_owl.command = {
     a = { bg = theme.cyan, fg = theme.blue_default, gui = 'bold', },
-    b = { bg = theme.grey_1, fg  = theme.white_default, },
+    b = { bg = theme.grey_1, fg = theme.white_default, },
     c = { bg = theme.blue_visual, fg = theme.white_default, }
   }
 

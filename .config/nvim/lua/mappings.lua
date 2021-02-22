@@ -99,8 +99,11 @@ api.nvim_set_keymap('n', '<Leader>cr', "<Plug>(coc-references)", {})
 api.nvim_set_keymap('n', '<Leader>cs', ":CocSearch<Space>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>cw', ":CocSearch <C-R>=expand('<cword>')<CR><CR>", { noremap = true })
 
-api.nvim_set_keymap('i', '<C-f>', "<Plug>(coc-snippets-expand-jump)", {})
+api.nvim_set_keymap('i', '<C-j>', "<Plug>(coc-snippets-expand-jump)", {})
 api.nvim_set_keymap('n', '<Leader>cT', ":call coc#float#close_all()<CR>", {})
+
+api.nvim_set_keymap('n', '<C-f>', "coc#float#has_scroll() ? coc#float#scroll(1) : '<C-f>'", { silent = true, noremap = true, expr = true, nowait = true })
+api.nvim_set_keymap('n', '<C-b>', "coc#float#has_scroll() ? coc#float#scroll(0) : '<C-b>'", { silent = true, noremap = true, expr = true, nowait = true })
 
 api.nvim_set_keymap('n', '<M-i>', "<cmd>lua require('helpers').show_documentation()<CR>", { noremap = true, silent = true })
 api.nvim_set_keymap('n', '<Leader>;', "o<ESC>", { noremap = true })

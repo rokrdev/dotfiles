@@ -250,9 +250,9 @@ function M.getLualineTheme()
   }
 
   night_owl.inactive = {
-    a = { bg = theme.black_1, fg = theme.white_default, gui = 'bold', },
-    b = { bg = theme.black_1, fg = theme.white_default, },
-    c = { bg = theme.black_1, fg = theme.white_default, },
+    a = { bg = theme.blue_default, fg = theme.white_default, gui = 'bold', },
+    b = { bg = theme.blue_default, fg = theme.white_default, },
+    c = { bg = theme.blue_default, fg = theme.white_default, },
   }
 
   return night_owl

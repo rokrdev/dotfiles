@@ -35,7 +35,7 @@ return require('packer').startup(function()
       lualine.sections = {
         lualine_a = { 'mode' },
         lualine_b = { 'branch' },
-        lualine_c = { 'filename', 'signify', 'g:coc_status' },
+        lualine_c = { 'filename', 'diff', 'g:coc_status' },
         lualine_x = { 'encoding', 'fileformat', 'filetype' },
         lualine_y = { 'progress' },
         lualine_z = { 'location' },

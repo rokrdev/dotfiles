@@ -69,8 +69,6 @@ api.nvim_set_keymap('n', '<Leader>f', ":RG<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>F', ":RGRaw ", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>/', ":LinesWithPreview<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>G', ":GF?<CR>", { noremap = true })
-api.nvim_set_keymap('n', '<Leader>co', ":Commands<CR>", { noremap = true })
-api.nvim_set_keymap('n', '<Leader>cc', ":BCommits<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>n', "<cmd>lua require('helpers').nnnPicker()<CR>", { noremap = true })
 
 api.nvim_set_keymap('n', 'f', ":<C-U>call sneak#wrap('', 1, 0, 1, 1)<CR>", {})
@@ -80,7 +78,6 @@ api.nvim_set_keymap('n', 'T', ":<C-U>call sneak#wrap('', 1, 1, 0, 1)<CR>", {})
 api.nvim_set_keymap('n', 'sj', "<Plug>SneakLabel_s", {})
 api.nvim_set_keymap('n', 'sk', "<Plug>SneakLabel_S", {})
 
-api.nvim_set_keymap('n', '<Leader>S', ":Scratch<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>gg', "<cmd>lua require('helpers').openTerm('tig status')<CR>", { noremap = true })
 -- tig a file
 api.nvim_set_keymap('n', '<Leader>gb', "<cmd>lua require('helpers').openTerm('tig ' .. vim.fn.expand('%'))<CR>", { noremap = true })
@@ -95,24 +92,24 @@ api.nvim_set_keymap('n', '<Leader>cd', "<Plug>(coc-definition)", {})
 api.nvim_set_keymap('n', '<Leader>cy', "<Plug>(coc-type-definition)", {})
 api.nvim_set_keymap('n', '<Leader>ci', "<Plug>(coc-implementation)", {})
 api.nvim_set_keymap('n', '<Leader>cr', "<Plug>(coc-references)", {})
-
 api.nvim_set_keymap('n', '<Leader>cs', ":CocSearch<Space>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>cw', ":CocSearch <C-R>=expand('<cword>')<CR><CR>", { noremap = true })
-
-api.nvim_set_keymap('i', '<C-j>', "<Plug>(coc-snippets-expand-jump)", {})
 api.nvim_set_keymap('n', '<Leader>cT', ":call coc#float#close_all()<CR>", {})
-
+api.nvim_set_keymap('i', '<C-j>', "<Plug>(coc-snippets-expand-jump)", {})
 api.nvim_set_keymap('n', '<C-f>', "coc#float#has_scroll() ? coc#float#scroll(1) : '<C-f>'", { silent = true, noremap = true, expr = true, nowait = true })
 api.nvim_set_keymap('n', '<C-b>', "coc#float#has_scroll() ? coc#float#scroll(0) : '<C-b>'", { silent = true, noremap = true, expr = true, nowait = true })
 
 api.nvim_set_keymap('n', '<M-i>', "<cmd>lua require('helpers').show_documentation()<CR>", { noremap = true, silent = true })
+
 api.nvim_set_keymap('n', '<Leader>;', "o<ESC>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>:', "O<ESC>", { noremap = true })
 
 api.nvim_set_keymap('n', '<Leader>t', ":NvimTreeToggle<CR>", { noremap = true })
+
 api.nvim_set_keymap('n', '<Leader>ss', ":SS ", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>sr', ":SR " .. require('helpers').getSessionFilePath(), { noremap = true })
 api.nvim_set_keymap('n', '<Leader>sd', ":!rm " .. require('helpers').getSessionFilePath(), { noremap = true })
+api.nvim_set_keymap('n', '<Leader>sc', ":Scratch<CR>", { noremap = true })
 
 g.VM_leader = '\\'
 g.VM_maps = {

@@ -36,7 +36,8 @@ M.theme_colors = {
   highligter = "#263838",
   black = "#000000",
   black_1 = "#000e1a",
-  blue_1 = "#283d6b"
+  blue_1 = "#283d6b",
+  blue_2 = "#092236"
 }
 
 M.lualine_theme_colors = {
@@ -46,6 +47,8 @@ M.lualine_theme_colors = {
   white_default     = M.theme_colors.white_default,
   grey_1            = M.theme_colors.grey_1,
   blue_visual       = M.theme_colors.blue_visual,
+  blue_2            = M.theme_colors.blue_2,
+  brown             = M.theme_colors.brown,
   green             = M.theme_colors.green_bright,
   pink              = M.theme_colors.pink,
   red               = M.theme_colors.red,
@@ -250,9 +253,9 @@ function M.getLualineTheme()
   }
 
   night_owl.inactive = {
-    a = { bg = theme.blue_default, fg = theme.white_default, gui = 'bold', },
-    b = { bg = theme.blue_default, fg = theme.white_default, },
-    c = { bg = theme.blue_default, fg = theme.white_default, },
+    a = { bg = theme.blue_2, fg = theme.brown, gui = 'bold', },
+    b = { bg = theme.blue_2, fg = theme.brown, },
+    c = { bg = theme.blue_2, fg = theme.brown, },
   }
 
   return night_owl

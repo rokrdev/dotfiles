@@ -219,6 +219,14 @@ return require('packer').startup(function()
     -- end
   }
 
+    use {
+      'iamcco/markdown-preview.nvim',
+      opt = true,
+      ft = {'markdown'},
+      run = 'cd app && yarn install',
+      cmd = 'MarkdownPreview'
+    }
+
   -- use {
   --   'elixir-editors/vim-elixir',
   --   opt = true,

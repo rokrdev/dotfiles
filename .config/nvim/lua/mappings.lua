@@ -111,6 +111,8 @@ api.nvim_set_keymap('n', '<Leader>sr', ":SR " .. require('helpers').getSessionFi
 api.nvim_set_keymap('n', '<Leader>sd', ":!rm " .. require('helpers').getSessionFilePath(), { noremap = true })
 api.nvim_set_keymap('n', '<Leader>sc', ":Scratch<CR>", { noremap = true })
 
+api.nvim_set_keymap('n', '<Leader>mp', ":MarkdownPreview<CR>", { noremap = true })
+
 g.VM_leader = '\\'
 g.VM_maps = {
   -- replace C-n

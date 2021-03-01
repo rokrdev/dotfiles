@@ -24,3 +24,5 @@
 	path = ~/Documents/config.ib
 [commit]
 	template = ~/.git_commit_msg.txt
+[init]
+	defaultBranch = main

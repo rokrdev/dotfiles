@@ -71,10 +71,10 @@ api.nvim_set_keymap('n', '<Leader>/', ":LinesWithPreview<CR>", { noremap = true 
 api.nvim_set_keymap('n', '<Leader>G', ":GF?<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<Leader>n', "<cmd>lua require('helpers').nnnPicker()<CR>", { noremap = true })
 
-api.nvim_set_keymap('n', 'f', ":<C-U>call sneak#wrap('', 1, 0, 1, 1)<CR>", {})
-api.nvim_set_keymap('n', 'F', ":<C-U>call sneak#wrap('', 1, 1, 1, 1)<CR>", {})
-api.nvim_set_keymap('n', 't', ":<C-U>call sneak#wrap('', 1, 0, 0, 1)<CR>", {})
-api.nvim_set_keymap('n', 'T', ":<C-U>call sneak#wrap('', 1, 1, 0, 1)<CR>", {})
+api.nvim_set_keymap('n', 'sf', ":<C-U>call sneak#wrap('', 1, 0, 1, 1)<CR>", {})
+api.nvim_set_keymap('n', 'sF', ":<C-U>call sneak#wrap('', 1, 1, 1, 1)<CR>", {})
+api.nvim_set_keymap('n', 'st', ":<C-U>call sneak#wrap('', 1, 0, 0, 1)<CR>", {})
+api.nvim_set_keymap('n', 'sT', ":<C-U>call sneak#wrap('', 1, 1, 0, 1)<CR>", {})
 api.nvim_set_keymap('n', 'sj', "<Plug>SneakLabel_s", {})
 api.nvim_set_keymap('n', 'sk', "<Plug>SneakLabel_S", {})
 

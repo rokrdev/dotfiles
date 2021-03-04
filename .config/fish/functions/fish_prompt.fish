@@ -1,4 +1,4 @@
-# set __fish_git_prompt_show_informative_status
+set __fish_git_prompt_show_informative_status
 set __fish_git_prompt_showcolorhints 'yes'
 set __fish_git_prompt_showupstream 'informative'
 set __fish_git_prompt_showdirtystate 'yes'

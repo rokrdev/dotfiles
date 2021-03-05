@@ -90,6 +90,9 @@ return require('packer').startup(function()
         ['ctrl-v'] = 'vsplit'
       }
       vim.g.fzf_preview_window = 'right:50%'
+
+      vim.cmd([[packadd cfilter]])
+
     end
   }
 

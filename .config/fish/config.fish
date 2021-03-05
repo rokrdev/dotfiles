@@ -29,6 +29,7 @@ defaults write -g ApplePressAndHoldEnabled -bool false
 
 set $fish_term24bit to "1"
 set fish_color_command blue
+set -U fish_greeting
 
 abbr -a -g br "broot --sizes -dp"
 abbr -a -g brup 'brew update && brew upgrade && brew upgrade --cask && brew cleanup && brew doctor'

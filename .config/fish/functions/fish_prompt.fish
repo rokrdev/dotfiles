@@ -12,16 +12,17 @@ set fish_color_cwd blue
 set __fish_git_prompt_color_branch magenta
 
 function fish_prompt --description 'Write out the prompt'
+    set -l git (fish_git_prompt)
+
     set -l prompt ' ❯ '
 
     set -l prompt_color green
+
     if test $status -ne 0
-        set prompt_color red
+        set -l prompt_color red
     end
 
     set -l pwd (prompt_pwd)
 
-    set vcs (fish_vcs_prompt)
-
-    echo -n -s (set_color $fish_color_cwd) $pwd $vcs (set_color $prompt_color) $prompt
+    echo -n -s (set_color $fish_color_cwd) $pwd $git (set_color $prompt_color) $prompt
 end

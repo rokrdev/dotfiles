@@ -42,11 +42,11 @@ return require('packer').startup(function()
       }
       lualine.inactive_sections = {
         lualine_a = {  },
-        lualine_b = {  },
+        lualine_b = { 'branch' },
         lualine_c = { 'filename' },
-        lualine_x = { 'location' },
+        lualine_x = {  },
         lualine_y = {  },
-        lualine_z = {  }
+        lualine_z = { 'location' }
       }
       lualine.extensions = { 'fzf' }
       lualine.status()

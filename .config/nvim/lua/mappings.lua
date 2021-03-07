@@ -1,44 +1,54 @@
 local api = vim.api
+local map = vim.api.nvim_set_keymap
 local g = vim.g
 
 local function t(str)
-  return vim.api.nvim_replace_termcodes(str, true, true, true)
+  return api.nvim_replace_termcodes(str, true, true, true)
 end
 
-api.nvim_set_keymap('n', 's', '<Nop>', {})
-api.nvim_set_keymap('x', 's', '<Nop>', {})
-api.nvim_set_keymap('v', 's', '<Nop>', {})
+local opt = {}
+local nOpt = { noremap = true }
+local nsOpt = { noremap = true, silent = true }
+local neOpt = { noremap = true, expr = true }
+local nsenOpt = { noremap = true, silent = true, expr = true, nowait = true }
 
-api.nvim_set_keymap('n', '<M-d>', ':m .+1<CR>==', { noremap = true })
-api.nvim_set_keymap('n', '<M-u>', ':m .-2<CR>==', { noremap = true })
-api.nvim_set_keymap('v', '<M-d>', ":m '>+1<CR>gv=gv", { noremap = true })
-api.nvim_set_keymap('v', '<M-u>', ":m '<-2<CR>gv=gv", { noremap = true })
-api.nvim_set_keymap('n', '<Leader>C', ':e %:p:h/', { noremap = true })
+map('n', 's', '<Nop>', opt)
+map('x', 's', '<Nop>', opt)
+map('v', 's', '<Nop>', opt)
 
-api.nvim_set_keymap('n', 's-', ':bd<CR>', { noremap = true })
-api.nvim_set_keymap('n', 's_', ':bd!<CR>', { noremap = true })
-api.nvim_set_keymap('n', 'sp', '"+p', { noremap = true })
-api.nvim_set_keymap('v', 'sy', '"+y', { noremap = true })
-api.nvim_set_keymap('v', 'sp', '"+p', { noremap = true })
-api.nvim_set_keymap('n', 's;', ':b#<CR>', { noremap = true })
-api.nvim_set_keymap('n', 'sc', ':nohl<CR>', { noremap = true, silent = true })
-api.nvim_set_keymap('n', 's#', ":let @/='\\<'.expand('<cword>').'\\>'<CR>cgN", { noremap = true, silent = true })
-api.nvim_set_keymap('x', 's#', '"sy:let @/=@s<CR>cgN', { noremap = true, silent = true })
-api.nvim_set_keymap('n', 's*', ":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn", { noremap = true, silent = true })
-api.nvim_set_keymap('x', 's*', '"sy:let @/=@s<CR>cgn', { noremap = true, silent = true })
--- api.nvim_set_keymap('n', 'ss', ':ls<CR>:b<Space>', { noremap = true })
+map('n', '<M-d>', ':m .+1<CR>==', nOpt)
+map('n', '<M-u>', ':m .-2<CR>==', nOpt)
+map('v', '<M-d>', ":m '>+1<CR>gv=gv", nOpt)
+map('v', '<M-u>', ":m '<-2<CR>gv=gv", nOpt)
+map('n', '<Leader>C', ':e %:p:h/', nOpt)
 
-api.nvim_set_keymap('n', '<M-+>', ':vertical resize +5<CR>', { noremap = true, silent = true })
-api.nvim_set_keymap('n', '<M-=>', ':vertical resize -5<CR>', { noremap = true, silent = true })
-api.nvim_set_keymap('n', '<M-->', ':resize -5<CR>', { noremap = true, silent = true })
-api.nvim_set_keymap('n', '<M-_>', ':resize +5<CR>', { noremap = true, silent = true })
+map('n', 's-', ':bd<CR>', nOpt)
+map('n', 's_', ':bd!<CR>', nOpt)
+map('n', 'sp', '"+p', nOpt)
+map('v', 'sy', '"+y', nOpt)
+map('v', 'sp', '"+p', nOpt)
+map('n', 's;', ':b#<CR>', nOpt)
+map('n', 'sc', ':nohl<CR>', nsOpt)
+map('n', 's#', ":let @/='\\<'.expand('<cword>').'\\>'<CR>cgN", nsOpt)
+map('x', 's#', '"sy:let @/=@s<CR>cgN', nsOpt)
+map('n', 's*', ":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn", nsOpt)
+map('x', 's*', '"sy:let @/=@s<CR>cgn', nsOpt)
+-- map('n', 'ss', ':ls<CR>:b<Space>', nopt)
 
-api.nvim_set_keymap('n', '<Leader>r', ':%s///g<Left><Left><Left>', { noremap = true })
-api.nvim_set_keymap('n', '<Leader>rc', ':%s///gc<Left><Left><Left><Left>', { noremap = true })
+map('n', '<M-+>', ':vertical resize +5<CR>', nsOpt)
+map('n', '<M-=>', ':vertical resize -5<CR>', nsOpt)
+map('n', '<M-->', ':resize -5<CR>', nsOpt)
+map('n', '<M-_>', ':resize +5<CR>', nsOpt)
+
+map('n', '<Leader>r', ':%s///g<Left><Left><Left>', nOpt)
+map('n', '<Leader>rc', ':%s///gc<Left><Left><Left><Left>', nOpt)
+
+map('x', '<Leader>r', ":s///g<Left><Left><Left>", nOpt)
+map('x', '<Leader>rc', ":s///gc<Left><Left><Left><Left>", nOpt)
 
 g["@z"] = "f cl<CR><ESC>l"
 
-api.nvim_set_keymap('n', '!', g["@z"], { noremap = true })
+map('n', '!', g["@z"], nOpt)
 
 function _G.smart_tab()
   return vim.fn.pumvisible() == 1 and t'<C-n>' or t'<Tab>'
@@ -48,70 +58,70 @@ function _G.smart_shift_tab()
   return vim.fn.pumvisible() == 1 and t'<C-p>' or t'<Tab>'
 end
 
-api.nvim_set_keymap('n', '<Leader>0', '<cmd>lua require("helpers").toggleNumbers()<CR>', { noremap = true })
-api.nvim_set_keymap('n', '<C-e>', ':wincmd w<CR>', { noremap = true })
-api.nvim_set_keymap('n', '<M-h>', '<C-w>h', { noremap = true })
-api.nvim_set_keymap('n', '<M-j>', '<C-w>j', { noremap = true })
-api.nvim_set_keymap('n', '<M-k>', '<C-w>k', { noremap = true })
-api.nvim_set_keymap('n', '<M-l>', '<C-w>l', { noremap = true })
-api.nvim_set_keymap('i', '<TAB>', 'v:lua.smart_tab()', { noremap = true, expr = true })
-api.nvim_set_keymap('i', '<S-TAB>', 'v:lua.smart_shift_tab()', { noremap = true, expr = true })
+map('n', '<Leader>0', '<cmd>lua require("helpers").toggleNumbers()<CR>', nOpt)
+map('n', '<C-e>', ':wincmd w<CR>', nOpt)
+map('n', '<M-h>', '<C-w>h', nOpt)
+map('n', '<M-j>', '<C-w>j', nOpt)
+map('n', '<M-k>', '<C-w>k', nOpt)
+map('n', '<M-l>', '<C-w>l', nOpt)
+map('i', '<TAB>', 'v:lua.smart_tab()', neOpt)
+map('i', '<S-TAB>', 'v:lua.smart_shift_tab()', neOpt)
 
-api.nvim_set_keymap('x', '*', "<cmd>lua require('helpers').VSetSearch('/')<CR>/<C-R>=@/<CR><CR>", { noremap = true })
-api.nvim_set_keymap('x', '#', "<cmd>lua require('helpers').VSetSearch('?')<CR>?<C-R>=@/<CR><CR>", { noremap = true })
+map('x', '*', "<cmd>lua require('helpers').VSetSearch('/')<CR>/<C-R>=@/<CR><CR>", nOpt)
+map('x', '#', "<cmd>lua require('helpers').VSetSearch('?')<CR>?<C-R>=@/<CR><CR>", nOpt)
 
-api.nvim_set_keymap('n', '<Leader>*', "<cmd>lua require('helpers').rgWordUnderCursor()<CR>", { noremap = true })
-api.nvim_set_keymap('v', '<Leader>*', "<cmd>lua require('helpers').rgVisualSelection()<CR>", { noremap = true })
+map('n', '<Leader>*', "<cmd>lua require('helpers').rgWordUnderCursor()<CR>", nOpt)
+map('v', '<Leader>*', "<cmd>lua require('helpers').rgVisualSelection()<CR>", nOpt)
 
-api.nvim_set_keymap('n', '<Leader>b', ':Buffers<CR>', { noremap = true })
-api.nvim_set_keymap('n', '<Leader>o', ":Files<CR>", { noremap = true })
-api.nvim_set_keymap('n', '<Leader>f', ":RG<CR>", { noremap = true })
-api.nvim_set_keymap('n', '<Leader>F', ":RGRaw ", { noremap = true })
-api.nvim_set_keymap('n', '<Leader>/', ":LinesWithPreview<CR>", { noremap = true })
-api.nvim_set_keymap('n', '<Leader>G', ":GF?<CR>", { noremap = true })
-api.nvim_set_keymap('n', '<Leader>n', "<cmd>lua require('helpers').nnnPicker()<CR>", { noremap = true })
+map('n', '<Leader>b', ':Buffers<CR>', nOpt)
+map('n', '<Leader>o', ":Files<CR>", nOpt)
+map('n', '<Leader>f', ":RG<CR>", nOpt)
+map('n', '<Leader>F', ":RGRaw ", nOpt)
+map('n', '<Leader>/', ":LinesWithPreview<CR>", nOpt)
+map('n', '<Leader>G', ":GF?<CR>", nOpt)
+map('n', '<Leader>n', "<cmd>lua require('helpers').nnnPicker()<CR>", nOpt)
 
-api.nvim_set_keymap('n', 'sj', ":<C-U>call sneak#wrap('', 1, 0, 1, 2)<CR>", {})
-api.nvim_set_keymap('n', 'sk', ":<C-U>call sneak#wrap('', 1, 1, 1, 2)<CR>", {})
-api.nvim_set_keymap('n', 'sh', ":<C-U>call sneak#wrap('', 1, 0, 0, 2)<CR>", {})
-api.nvim_set_keymap('n', 'sl', ":<C-U>call sneak#wrap('', 1, 1, 0, 2)<CR>", {})
-api.nvim_set_keymap('n', 'su', "<Plug>SneakLabel_s", {})
-api.nvim_set_keymap('n', 'si', "<Plug>SneakLabel_S", {})
+map('n', 'sj', ":<C-U>call sneak#wrap('', 1, 0, 1, 2)<CR>", opt)
+map('n', 'sk', ":<C-U>call sneak#wrap('', 1, 1, 1, 2)<CR>", opt)
+map('n', 'sh', ":<C-U>call sneak#wrap('', 1, 0, 0, 2)<CR>", opt)
+map('n', 'sl', ":<C-U>call sneak#wrap('', 1, 1, 0, 2)<CR>", opt)
+map('n', 'su', "<Plug>SneakLabel_s", opt)
+map('n', 'si', "<Plug>SneakLabel_S", opt)
 
-api.nvim_set_keymap('n', '<Leader>gg', "<cmd>lua require('helpers').openTerm('tig status')<CR>", { noremap = true })
+map('n', '<Leader>gg', "<cmd>lua require('helpers').openTerm('tig status')<CR>", nOpt)
 -- tig a file
-api.nvim_set_keymap('n', '<Leader>gb', "<cmd>lua require('helpers').openTerm('tig ' .. vim.fn.expand('%'))<CR>", { noremap = true })
+map('n', '<Leader>gb', "<cmd>lua require('helpers').openTerm('tig ' .. vim.fn.expand('%'))<CR>", nOpt)
 -- tig show unpushed commits
-api.nvim_set_keymap('n', '<Leader>gl', "<cmd>lua require('helpers').openTerm('tig')<CR>", { noremap = true })
+map('n', '<Leader>gl', "<cmd>lua require('helpers').openTerm('tig')<CR>", nOpt)
 
-api.nvim_set_keymap('n', 'gb', ":GitMessenger<CR>", { noremap = true })
+map('n', 'gb', ":GitMessenger<CR>", nOpt)
 
-api.nvim_set_keymap('n', '<Leader>ck', "<Plug>(coc-diagnostic-prev)", {})
-api.nvim_set_keymap('n', '<Leader>cj', "<Plug>(coc-diagnostic-next)", {})
-api.nvim_set_keymap('n', '<Leader>cd', "<Plug>(coc-definition)", {})
-api.nvim_set_keymap('n', '<Leader>cy', "<Plug>(coc-type-definition)", {})
-api.nvim_set_keymap('n', '<Leader>ci', "<Plug>(coc-implementation)", {})
-api.nvim_set_keymap('n', '<Leader>cr', "<Plug>(coc-references)", {})
-api.nvim_set_keymap('n', '<Leader>cs', ":CocSearch<Space>", { noremap = true })
-api.nvim_set_keymap('n', '<Leader>cw', ":CocSearch <C-R>=expand('<cword>')<CR><CR>", { noremap = true })
-api.nvim_set_keymap('n', '<Leader>cT', ":call coc#float#close_all()<CR>", {})
-api.nvim_set_keymap('i', '<C-j>', "<Plug>(coc-snippets-expand-jump)", {})
-api.nvim_set_keymap('n', '<C-f>', "coc#float#has_scroll() ? coc#float#scroll(1) : '<C-f>'", { silent = true, noremap = true, expr = true, nowait = true })
-api.nvim_set_keymap('n', '<C-b>', "coc#float#has_scroll() ? coc#float#scroll(0) : '<C-b>'", { silent = true, noremap = true, expr = true, nowait = true })
+map('n', '<Leader>ck', "<Plug>(coc-diagnostic-prev)", opt)
+map('n', '<Leader>cj', "<Plug>(coc-diagnostic-next)", opt)
+map('n', '<Leader>cd', "<Plug>(coc-definition)", opt)
+map('n', '<Leader>cy', "<Plug>(coc-type-definition)", opt)
+map('n', '<Leader>ci', "<Plug>(coc-implementation)", opt)
+map('n', '<Leader>cr', "<Plug>(coc-references)", opt)
+map('n', '<Leader>cs', ":CocSearch<Space>", nOpt)
+map('n', '<Leader>cw', ":CocSearch <C-R>=expand('<cword>')<CR><CR>", nOpt)
+map('n', '<Leader>cT', ":call coc#float#close_all()<CR>", opt)
+map('i', '<C-j>', "<Plug>(coc-snippets-expand-jump)", opt)
+map('n', '<C-f>', "coc#float#has_scroll() ? coc#float#scroll(1) : '<C-f>'", nsenOpt)
+map('n', '<C-b>', "coc#float#has_scroll() ? coc#float#scroll(0) : '<C-b>'", nsenOpt)
 
-api.nvim_set_keymap('n', '<M-i>', "<cmd>lua require('helpers').show_documentation()<CR>", { noremap = true, silent = true })
+map('n', '<M-i>', "<cmd>lua require('helpers').show_documentation()<CR>", nsOpt)
 
-api.nvim_set_keymap('n', '<Leader>;', "o<ESC>", { noremap = true })
-api.nvim_set_keymap('n', '<Leader>:', "O<ESC>", { noremap = true })
+map('n', '<Leader>;', "o<ESC>", nOpt)
+map('n', '<Leader>:', "O<ESC>", nOpt)
 
-api.nvim_set_keymap('n', '<Leader>t', ":NvimTreeToggle<CR>", { noremap = true })
+map('n', '<Leader>t', ":NvimTreeToggle<CR>", nOpt)
 
-api.nvim_set_keymap('n', '<Leader>ss', ":SS ", { noremap = true })
-api.nvim_set_keymap('n', '<Leader>sr', ":SR " .. require('helpers').getSessionFilePath(), { noremap = true })
-api.nvim_set_keymap('n', '<Leader>sd', ":!rm " .. require('helpers').getSessionFilePath(), { noremap = true })
-api.nvim_set_keymap('n', '<Leader>sc', ":Scratch<CR>", { noremap = true })
+map('n', '<Leader>ss', ":SS ", nOpt)
+map('n', '<Leader>sr', ":SR " .. require('helpers').getSessionFilePath(), nOpt)
+map('n', '<Leader>sd', ":!rm " .. require('helpers').getSessionFilePath(), nOpt)
+map('n', '<Leader>sc', ":Scratch<CR>", nOpt)
 
-api.nvim_set_keymap('n', '<Leader>mp', ":MarkdownPreview<CR>", { noremap = true })
+map('n', '<Leader>mp', ":MarkdownPreview<CR>", nOpt)
 
 g.VM_leader = '\\'
 g.VM_maps = {

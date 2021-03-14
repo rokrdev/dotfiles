@@ -34,3 +34,5 @@ vim.cmd("command! FJ %!jq")
 vim.cmd("command! CD cd %:h")
 vim.cmd("command! BD bufdo bd")
 
+vim.cmd('command! -nargs=* W w')
+

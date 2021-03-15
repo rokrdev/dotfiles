@@ -109,6 +109,16 @@ map('i', '<C-j>', "<Plug>(coc-snippets-expand-jump)", opt)
 map('n', '<C-f>', "coc#float#has_scroll() ? coc#float#scroll(1) : '<C-f>'", nsenOpt)
 map('n', '<C-b>', "coc#float#has_scroll() ? coc#float#scroll(0) : '<C-b>'", nsenOpt)
 
+map('n', '<C-k>', ":lprevious<CR>", opt)
+map('n', '<C-j>', ":lnext<CR>", opt)
+map('n', '<Leader>q-', ":lclose<CR>", opt)
+map('n', '<Leader>ql', ":lopen<CR>", opt)
+
+map('n', '<Leader>k', ":cprevious<CR>", opt)
+map('n', '<Leader>j', ":cnext<CR>", opt)
+map('n', '<Leader>q_', ":cclose<CR>", opt)
+map('n', '<Leader>qq', ":copen<CR>", opt)
+
 map('n', '<M-i>', "<cmd>lua require('helpers').show_documentation()<CR>", nsOpt)
 
 map('n', '<Leader>;', "o<ESC>", nOpt)

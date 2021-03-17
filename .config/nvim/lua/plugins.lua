@@ -128,7 +128,7 @@ return require('packer').startup(function()
         'coc-css',
         'coc-docker',
         'coc-elixir',
-        'coc-emmet',
+        -- 'coc-emmet',
         'coc-eslint',
         'coc-html',
         'coc-json',

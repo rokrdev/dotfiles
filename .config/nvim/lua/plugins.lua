@@ -26,30 +26,31 @@ return require('packer').startup(function()
   use {
     'hoob3rt/lualine.nvim',
     config = function()
-      local lualine = require('lualine')
-      lualine.options.theme = require('helpers').getLualineTheme()
-      lualine.options.icons_enabled = false
-      lualine.options.section_separators = nil
-      lualine.options.component_separators = nil
-      lualine.separator = '|'
-      lualine.sections = {
-        lualine_a = { 'mode' },
-        lualine_b = { 'branch' },
-        lualine_c = { 'filename', 'diff', 'g:coc_status' },
-        lualine_x = { 'encoding', 'fileformat', 'filetype' },
-        lualine_y = { 'progress' },
-        lualine_z = { 'location' },
+      require('lualine').setup{
+        options = {
+          theme = require('helpers').getLualineTheme(),
+          icons_enabled = true,
+          section_separators = {'', ''},
+          component_separators = {'', ''},
+        },
+        sections = {
+          lualine_a = { 'mode' },
+          lualine_b = { 'branch' },
+          lualine_c = { 'filename', 'diff', 'g:coc_status' },
+          lualine_x = { 'encoding', 'fileformat', 'filetype' },
+          lualine_y = { 'progress' },
+          lualine_z = { 'location' },
+        },
+        inactive_sections = {
+          lualine_a = {  },
+          lualine_b = { 'branch' },
+          lualine_c = { 'filename' },
+          lualine_x = {  },
+          lualine_y = {  },
+          lualine_z = { 'location' }
+        },
+        extensions = { 'fzf' }
       }
-      lualine.inactive_sections = {
-        lualine_a = {  },
-        lualine_b = { 'branch' },
-        lualine_c = { 'filename' },
-        lualine_x = {  },
-        lualine_y = {  },
-        lualine_z = { 'location' }
-      }
-      lualine.extensions = { 'fzf' }
-      lualine.status()
     end
   }
 
@@ -106,16 +107,11 @@ return require('packer').startup(function()
     opt = true,
     cmd = 'NvimTreeToggle',
     config = function()
-      vim.g["nvim_tree_show_icons"] = {
-        folders = 0,
-        git = 0,
-        icons = 0
-      }
       vim.g["nvim_tree_indent_markers"] = 1
       vim.g["nvim_tree_follow"] = 1
       vim.g["nvim_tree_auto_close"] = 1
       vim.g["nvim_tree_width_allow_resize"] = 1
-      vim.g["nvim_tree_side"] = "right"
+      vim.g["nvim_tree_side"] = "left"
     end
   }
 

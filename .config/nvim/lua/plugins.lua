@@ -47,9 +47,8 @@ return require('packer').startup(function()
         options = {
           theme = require('helpers').getLualineTheme(),
           icons_enabled = true,
-          -- section_separators = nil, component_separators = nil
-          component_separators = {'', ''},
-          section_separators = {'', ''}
+          component_separators = '',
+          section_separators = ''
         },
         sections = {
           lualine_a = { 'mode' },
@@ -169,7 +168,7 @@ return require('packer').startup(function()
     config = function()
       vim.g.signify_sign_add = '│'
       vim.g.signify_sign_change = '│'
-      vim.g.signify_sign_delete = '_'
+      vim.g.signify_sign_delete = '│'
     end
   }
 

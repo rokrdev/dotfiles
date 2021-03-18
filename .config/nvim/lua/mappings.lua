@@ -81,12 +81,12 @@ map('n', '<Leader>/', ":LinesWithPreview<CR>", nOpt)
 map('n', '<Leader>G', ":GF?<CR>", nOpt)
 map('n', '<Leader>n', "<cmd>lua require('helpers').nnnPicker()<CR>", nOpt)
 
-map('n', 'sj', ":<C-U>call sneak#wrap('', 1, 0, 1, 2)<CR>", opt)
-map('n', 'sk', ":<C-U>call sneak#wrap('', 1, 1, 1, 2)<CR>", opt)
-map('n', 'sh', ":<C-U>call sneak#wrap('', 1, 0, 0, 2)<CR>", opt)
-map('n', 'sl', ":<C-U>call sneak#wrap('', 1, 1, 0, 2)<CR>", opt)
-map('n', 'su', "<Plug>SneakLabel_s", opt)
-map('n', 'si', "<Plug>SneakLabel_S", opt)
+map('n', 'sh', ":<C-U>call sneak#wrap('', 1, 0, 1, 2)<CR>", opt)
+map('n', 'sl', ":<C-U>call sneak#wrap('', 1, 1, 1, 2)<CR>", opt)
+map('n', 'sH', ":<C-U>call sneak#wrap('', 1, 0, 0, 2)<CR>", opt)
+map('n', 'sL', ":<C-U>call sneak#wrap('', 1, 1, 0, 2)<CR>", opt)
+map('n', 'sj', "<Plug>SneakLabel_s", opt)
+map('n', 'sk', "<Plug>SneakLabel_S", opt)
 
 map('n', '<Leader>gg', "<cmd>lua require('helpers').openTerm('tig status')<CR>", nOpt)
 -- tig a file

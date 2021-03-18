@@ -24,7 +24,24 @@ end
 return require('packer').startup(function()
 
   use {
+    'akinsho/nvim-bufferline.lua',
+    event = 'VimEnter *',
+    requires = {'kyazdani42/nvim-web-devicons', opt = true},
+    config = function()
+      require('bufferline').setup{
+        options = {
+          show_buffer_close_icons = false,
+          separator_style = "thick",
+          mappings = false,
+        }
+      }
+    end
+  }
+
+  use {
     'hoob3rt/lualine.nvim',
+    event = 'VimEnter *',
+    requires = {'kyazdani42/nvim-web-devicons', opt = true},
     config = function()
       require('lualine').setup{
         options = {
@@ -104,6 +121,7 @@ return require('packer').startup(function()
 
   use {
     'kyazdani42/nvim-tree.lua',
+    requires = {'kyazdani42/nvim-web-devicons', opt = true},
     opt = true,
     cmd = 'NvimTreeToggle',
     config = function()

@@ -40,15 +40,16 @@ return require('packer').startup(function()
 
   use {
     'hoob3rt/lualine.nvim',
-    event = 'VimEnter *',
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
+    event = 'VimEnter *',
     config = function()
       require('lualine').setup{
         options = {
           theme = require('helpers').getLualineTheme(),
           icons_enabled = true,
-          section_separators = {'', ''},
-          component_separators = {'', ''},
+          -- section_separators = nil, component_separators = nil
+          component_separators = {'', ''},
+          section_separators = {'', ''}
         },
         sections = {
           lualine_a = { 'mode' },

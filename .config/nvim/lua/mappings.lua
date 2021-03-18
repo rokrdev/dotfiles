@@ -132,6 +132,8 @@ map('n', '<Leader>sd', ":!rm " .. require('helpers').getSessionFilePath(), nOpt)
 map('n', '<Leader>sc', ":Scratch<CR>", nOpt)
 
 map('n', '<Leader>mp', ":MarkdownPreview<CR>", nOpt)
+map('n', '<C-h>', ":BufferLineCyclePrev<CR>", nOpt)
+map('n', '<C-l>', ":BufferLineCycleNext<CR>", nOpt)
 
 g.VM_leader = '\\'
 g.VM_maps = {

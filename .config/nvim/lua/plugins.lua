@@ -24,6 +24,18 @@ end
 return require('packer').startup(function()
 
   use {
+    'TimUntersberger/neogit',
+    opt = true,
+    cmd = 'Neogit',
+  }
+
+  use {
+    'kyazdani42/nvim-web-devicons',
+    opt = true,
+    event = 'VimEnter *',
+  }
+
+  use {
     'akinsho/nvim-bufferline.lua',
     event = 'VimEnter *',
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
@@ -87,6 +99,7 @@ return require('packer').startup(function()
 
   use {
     'junegunn/fzf.vim',
+    opt = true,
     event = 'VimEnter *',
     config = function()
       vim.g.fzf_layout = {

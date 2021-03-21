@@ -88,7 +88,9 @@ map('n', 'sL', ":<C-U>call sneak#wrap('', 1, 1, 0, 2)<CR>", opt)
 map('n', 'sj', "<Plug>SneakLabel_s", opt)
 map('n', 'sk', "<Plug>SneakLabel_S", opt)
 
-map('n', '<Leader>gg', "<cmd>lua require('helpers').openTerm('tig status')<CR>", nOpt)
+map('n', '<Leader>gg', ":Neogit<CR>", nOpt)
+-- tig status
+map('n', '<Leader>gG', "<cmd>lua require('helpers').openTerm('tig status')<CR>", nOpt)
 -- tig a file
 map('n', '<Leader>gb', "<cmd>lua require('helpers').openTerm('tig ' .. vim.fn.expand('%'))<CR>", nOpt)
 -- tig show unpushed commits

@@ -1,2 +1,2 @@
-lua require('theme')
+lua require('theme').setup()
 

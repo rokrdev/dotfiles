@@ -1,201 +1,229 @@
 local g = vim.g
-local highlight = require('helpers').highlight
+local ncmd = vim.api.nvim_command
 
-g.colors_name = 'my-theme'
+local theme_colors = require('helpers').theme_colors
 
-vim.cmd("set background=dark")
+g.terminal_color_foreground = theme_colors.white_default
+g.terminal_color_background = theme_colors.blue_default
+g.terminal_color_0 = theme_colors.blue_default
+g.terminal_color_8 = theme_colors.ash_grey
+g.terminal_color_1 = theme_colors.red
+g.terminal_color_2 = theme_colors.green_bright
+g.terminal_color_10 = theme_colors.green_bright
+g.terminal_color_3 = theme_colors.orange
+g.terminal_color_11 = theme_colors.orange
+g.terminal_color_4 = theme_colors.blue
+g.terminal_color_12 = theme_colors.blue
+g.terminal_color_5 = theme_colors.pink
+g.terminal_color_13 = theme_colors.pink
+g.terminal_color_6 = theme_colors.cyan
+g.terminal_color_14 = theme_colors.cyan
+g.terminal_color_7 = theme_colors.ash_grey
+g.terminal_color_15 = theme_colors.white_light
 
-local theme = require('helpers').theme_colors
+local function highlight(group, color)
+  local gui = color.attr and 'gui=' .. color.attr or 'gui=NONE'
+  local cterm = color.attr and 'cterm=' .. color.attr or 'cterm=NONE'
+  local fg = color.guifg and 'guifg=' .. color.guifg or 'guifg=NONE'
+  local bg = color.guibg and 'guibg=' .. color.guibg or 'guibg=NONE'
+  ncmd(string.format('highlight %s %s %s %s %s', group, fg, bg, gui, cterm))
+end
 
-g.terminal_color_foreground = theme.white_default
-g.terminal_color_background = theme.blue_default
-g.terminal_color_0 = theme.blue_default
-g.terminal_color_8 = theme.ash_grey
-g.terminal_color_1 = theme.red
-g.terminal_color_2 = theme.green_bright
-g.terminal_color_10 = theme.green_bright
-g.terminal_color_3 = theme.orange
-g.terminal_color_11 = theme.orange
-g.terminal_color_4 = theme.blue
-g.terminal_color_12 = theme.blue
-g.terminal_color_5 = theme.pink
-g.terminal_color_13 = theme.pink
-g.terminal_color_6 = theme.cyan
-g.terminal_color_14 = theme.cyan
-g.terminal_color_7 = theme.ash_grey
-g.terminal_color_15 = theme.white_light
+local function theme(colors)
+  local hi = {}
 
-highlight("Bold", nil, nil, theme.bold)
-highlight("italic", nil, nil, theme.italic)
-highlight("Underline", nil, nil, theme.underline)
+  hi.Bold = { guifg = nil, guibg = nil, attr = colors.bold }
+  hi.italic = { guifg = nil, guibg = nil, attr = colors.italic }
+  hi.Underline = { guifg = nil, guibg = nil, attr = colors.underline }
 
-highlight("StatusLine", theme.blue_visual, theme.white_default, nil)
-highlight("Normal", theme.white_default, theme.blue_default, nil)
-highlight("LineNr", theme.grey, theme.NONE, nil)
-highlight("CursorLineNr", theme.white_light, nil, nil)
-highlight("CursorLine", theme.NONE, theme.NONE, nil)
-highlight("ColorColumn", nil, theme.black_1, nil)
-highlight("Directory", theme.blue, nil, nil)
-highlight("DiffAdd", theme.green_bright, theme.blue_default, nil)
-highlight("DiffChange", theme.pink, theme.blue_default, nil)
-highlight("DiffDelete", theme.red, theme.blue_default, nil)
-highlight("DiffText", theme.green_bright, theme.blue_default, nil)
-highlight("diffAdded", theme.green_bright, theme.blue_default, nil)
-highlight("diffChanged", theme.pink, theme.blue_default, nil)
-highlight("diffRemoved", theme.red, theme.blue_default, nil)
--- highlight("ActiveWindow", nil, theme.blue_default, nil)
--- highlight("InactiveWindow", nil, theme.black_1, nil)
-highlight("C_WhiteSpace", nil, theme.red, nil)
-vim.cmd("hi default link EndOfLineSpace C_WhiteSpace")
+  hi.StatusLine = { guifg = colors.blue_visual, guibg = colors.white_default, attr = nil }
+  hi.Normal = { guifg = colors.white_default, guibg = colors.blue_default, attr = nil }
+  hi.LineNr = { guifg = colors.grey, guibg = nil, attr = nil }
+  hi.CursorLineNr = { guifg = colors.white_light, guibg = nil, attr = nil }
+  hi.CursorLine = { guifg = nil, guibg = nil, attr = nil }
+  hi.ColorColumn = { guifg = nil, guibg = colors.black_1, attr = nil }
+  hi.Directory = { guifg = colors.blue, guibg = nil, attr = nil }
+  hi.DiffAdd = { guifg = colors.green_bright, guibg = colors.blue_default, attr = nil }
+  hi.DiffChange = { guifg = colors.pink, guibg = colors.blue_default, attr = nil }
+  hi.DiffDelete = { guifg = colors.red, guibg = colors.blue_default, attr = nil }
+  hi.DiffText = { guifg = colors.green_bright, guibg = colors.blue_default, attr = nil }
+  hi.diffAdded = { guifg = colors.green_bright, guibg = colors.blue_default, attr = nil }
+  hi.diffChanged = { guifg = colors.pink, guibg = colors.blue_default, attr = nil }
+  hi.diffRemoved = { guifg = colors.red, guibg = colors.blue_default, attr = nil }
+  hi.C_WhiteSpace = { guifg = nil, guibg = colors.red, attr = nil }
+  hi.EndOfLineSpace = { guifg = nil, guibg = colors.red, attr = nil }
 
-highlight("VertSplit", theme.blue_1, nil, theme.NONE)
-highlight("MatchParen", theme.pink, theme.NONE, theme.bold..theme.underline)
-highlight("Folded", theme.brown, nil, nil)
-highlight("FoldedColumn", theme.brown, nil, nil)
-highlight("SignColumn", nil, theme.NONE, nil)
-highlight("IncSearch", theme.blue_default, theme.pink, nil)
-highlight("NonText", theme.blue_1, nil, nil)
-highlight("PMenu", theme.white_default, theme.blue_visual, nil)
-highlight("PMenuSel", theme.blue_default, theme.blue, theme.bold)
-highlight("Search", theme.blue_default, theme.pink, nil)
-highlight("SpecialKey", theme.orange_light, nil, nil)
-highlight("Title", theme.blue, nil, nil)
-highlight("Visual", nil, theme.grey, nil)
-highlight("EndOfBuffer", theme.blue_1, theme.NONE, nil)
+  hi.VertSplit = { guifg = colors.blue_1, guibg = nil, attr = nil }
+  hi.MatchParen = { guifg = colors.pink, guibg = nil, attr = colors.bold..colors.underline }
+  hi.Folded = { guifg = colors.brown, guibg = nil, attr = nil }
+  hi.FoldedColumn = { guifg = colors.brown, guibg = nil, attr = nil }
+  hi.SignColumn = { guifg = nil, guibg = nil, attr = nil }
+  hi.IncSearch = { guifg = colors.blue_default, guibg = colors.pink, attr = nil }
+  hi.NonText = { guifg = colors.blue_1, guibg = nil, attr = nil }
+  hi.PMenu = { guifg = colors.white_default, guibg = colors.blue_visual, attr = nil }
+  hi.PMenuSel = { guifg = colors.blue_default, guibg = colors.blue, attr = colors.bold }
+  hi.Search = { guifg = colors.blue_default, guibg = colors.pink, attr = nil }
+  hi.SpecialKey = { guifg = colors.orange_light, guibg = nil, attr = nil }
+  hi.Title = { guifg = colors.blue, guibg = nil, attr = nil }
+  hi.Visual = { guifg = nil, guibg = colors.grey, attr = nil }
+  hi.EndOfBuffer = { guifg = colors.blue_1, guibg = nil, attr = nil }
 
-highlight("Comment", theme.ash_grey, nil, theme.italic)
-highlight("Constant", theme.green_bright, nil, nil)
-highlight("String", theme.orange_light, nil, nil)
-highlight("Character", theme.orange_light, nil, nil)
-highlight("Number", theme.orange, nil, nil)
-highlight("Boolean", theme.red, nil, nil)
-highlight("Float", theme.orange, nil, nil)
-highlight("Identifier", theme.cyan, nil, nil)
-highlight("Function", theme.blue, nil, theme.italic)
-highlight("Statement", theme.blue, nil, nil)
-highlight("Conditional", theme.white_default, nil, nil)
-highlight("Repeat", theme.white_default, nil, nil)
-highlight("Label", theme.white_default, nil, nil)
-highlight("Operator", theme.pink, nil, nil)
-highlight("Keyword", theme.blue, nil, nil)
-highlight("Exception", theme.green_bright, nil, nil)
-highlight("PreProc", theme.pink, nil, nil)
-highlight("Include", theme.pink, nil, nil)
-highlight("Define", theme.pink, nil, nil)
-highlight("Macro", theme.white_default, nil, nil)
-highlight("PreCondit", theme.white_default, nil, nil)
-highlight("Type", theme.green_bright, nil, nil)
-highlight("StorageClass", theme.pink, nil, nil)
-highlight("Structure", theme.white_default, nil, nil)
-highlight("Typedef", theme.white_default, nil, nil)
-highlight("Special", theme.white_default, nil, nil)
-highlight("SpecialChar", theme.NONE, theme.NONE, theme.NONE)
-highlight("Tag", theme.NONE, theme.NONE, theme.NONE)
-highlight("Delimiter", theme.white_default, nil, nil)
-highlight("SpecialComment", theme.blue_1, theme.NONE, theme.NONE)
-highlight("Debug", theme.NONE, theme.NONE, theme.NONE)
-highlight("Underlined", theme.NONE, theme.NONE, theme.underline)
-highlight("Ignore", theme.NONE, theme.NONE, theme.NONE)
-highlight("Error", theme.red, nil, theme.bold)
-highlight("ErrorMsg", theme.red, theme.NONE, theme.NONE)
-highlight("WarningMsg", theme.red, theme.NONE, theme.NONE)
-highlight("Todo", theme.yellow_dark, theme.NONE, theme.bold)
-highlight("htmlTag", theme.ash_grey, nil, nil)
-vim.cmd("hi link htmlEndTag htmlTag")
+  hi.Comment = { guifg = colors.ash_grey, guibg = nil, attr = colors.italic }
+  hi.Constant = { guifg = colors.green_bright, guibg = nil, attr = nil }
+  hi.String = { guifg = colors.orange_light, guibg = nil, attr = nil }
+  hi.Character = { guifg = colors.orange_light, guibg = nil, attr = nil }
+  hi.Number = { guifg = colors.orange, guibg = nil, attr = nil }
+  hi.Boolean = { guifg = colors.red, guibg = nil, attr = nil }
+  hi.Float = { guifg = colors.orange, guibg = nil, attr = nil }
+  hi.Identifier = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.Function = { guifg = colors.blue, guibg = nil, attr = colors.italic }
+  hi.Statement = { guifg = colors.blue, guibg = nil, attr = nil }
+  hi.Conditional = { guifg = colors.white_default, guibg = nil, attr = nil }
+  hi.Repeat = { guifg = colors.white_default, guibg = nil, attr = nil }
+  hi.Label = { guifg = colors.white_default, guibg = nil, attr = nil }
+  hi.Operator = { guifg = colors.pink, guibg = nil, attr = nil }
+  hi.Keyword = { guifg = colors.blue, guibg = nil, attr = nil }
+  hi.Exception = { guifg = colors.green_bright, guibg = nil, attr = nil }
+  hi.PreProc = { guifg = colors.pink, guibg = nil, attr = nil }
+  hi.Include = { guifg = colors.pink, guibg = nil, attr = nil }
+  hi.Define = { guifg = colors.pink, guibg = nil, attr = nil }
+  hi.Macro = { guifg = colors.white_default, guibg = nil, attr = nil }
+  hi.PreCondit = { guifg = colors.white_default, guibg = nil, attr = nil }
+  hi.Type = { guifg = colors.green_bright, guibg = nil, attr = nil }
+  hi.StorageClass = { guifg = colors.pink, guibg = nil, attr = nil }
+  hi.Structure = { guifg = colors.white_default, guibg = nil, attr = nil }
+  hi.Typedef = { guifg = colors.white_default, guibg = nil, attr = nil }
+  hi.Special = { guifg = colors.white_default, guibg = nil, attr = nil }
+  hi.SpecialChar = { guifg = nil, guibg = nil, attr = nil }
+  hi.Tag = { guifg = nil, guibg = nil, attr = nil }
+  hi.Delimiter = { guifg = colors.white_default, guibg = nil, attr = nil }
+  hi.SpecialComment = { guifg = colors.blue_1, guibg = nil, attr = nil }
+  hi.Debug = { guifg = nil, guibg = nil, attr = nil }
+  hi.Underlined = { guifg = nil, guibg = nil, attr = colors.underline }
+  hi.Ignore = { guifg = nil, guibg = nil, attr = nil }
+  hi.Error = { guifg = colors.red, guibg = nil, attr = colors.bold }
+  hi.ErrorMsg = { guifg = colors.red, guibg = nil, attr = nil }
+  hi.WarningMsg = { guifg = colors.red, guibg = nil, attr = nil }
+  hi.Todo = { guifg = colors.yellow_dark, guibg = nil, attr = colors.bold }
+  hi.htmlTag = { guifg = colors.ash_grey, guibg = nil, attr = nil }
+  hi.htmlEndTag= { guifg = colors.ash_grey, guibg = nil, attr = nil }
 
-highlight("jsStorageClass", theme.blue, nil, nil)
-highlight("jsOperator", theme.pink, nil, nil)
-highlight("jsArrowFunction", theme.pink, nil, nil)
-highlight("jsString", theme.orange_light, nil, nil)
-vim.cmd("hi link jsCommet Comment")
-vim.cmd("hi link jsFuncCall Function")
-highlight("jsNumber", theme.orange, nil, nil)
-highlight("jsSpecial", theme.orange, nil, nil)
-highlight("jsObjectProp", theme.cyan, nil, nil)
-highlight("jsOperatorKeyword", theme.cyan, nil, nil)
-highlight("jsBooleanFalse", theme.red, nil, nil)
-highlight("jsBooleanTrue", theme.red, nil, nil)
-highlight("jsRegexpString", theme.blue, nil, nil)
-highlight("jsConditional", theme.pink, nil, nil)
-vim.cmd("hi link jsFunction Function")
-highlight("jsReturn", theme.pink, nil, nil)
-highlight("jsFuncName", theme.blue, nil, nil)
-highlight("jsFuncParens", theme.white_default, nil, nil)
-highlight("jsParensError", theme.red, nil, nil)
-highlight("jsClassDefinition", theme.orange_light, nil, nil)
-highlight("jsImport", theme.pink, nil, theme.italic)
-highlight("jsFrom", theme.pink, nil, theme.italic)
-highlight("jsModuleAs", theme.pink, nil, theme.italic)
-highlight("jsExport", theme.cyan, nil, nil)
-highlight("jsExportDefault", theme.cyan, nil, nil)
-highlight("jsExtendsKeyword", theme.pink, nil, theme.italic)
-highlight("javaScriptReserved", theme.blue, nil, nil)
-highlight("javaScriptConditional", theme.pink, nil, nil)
-highlight("javaScriptStringS", theme.orange_light, nil, nil)
-highlight("javaScriptBoolean", theme.red, nil, nil)
-highlight("javaScriptBraces", theme.white_default, nil, nil)
-vim.cmd("hi link javaScriptLineComment Comment")
-highlight("javaScriptLineSpecial", theme.orange, nil, nil)
-vim.cmd("hi link javaScriptFunction Function")
-highlight("javaScriptStatement", theme.pink, nil, nil)
-highlight("javaScriptException", theme.green_bright, nil, nil)
+  hi.jsStorageClass = { guifg = colors.blue, guibg = nil, attr = nil }
+  hi.jsOperator = { guifg = colors.pink, guibg = nil, attr = nil }
+  hi.jsArrowFunction = { guifg = colors.pink, guibg = nil, attr = nil }
+  hi.jsString = { guifg = colors.orange_light, guibg = nil, attr = nil }
+  hi.jsCommet = { guifg = colors.ash_grey, guibg = nil, attr = colors.italic }
+  hi.jsFuncCall = { guifg = colors.blue, guibg = nil, attr = colors.italic }
+  hi.jsNumber = { guifg = colors.orange, guibg = nil, attr = nil }
+  hi.jsSpecial = { guifg = colors.orange, guibg = nil, attr = nil }
+  hi.jsObjectProp = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.jsOperatorKeyword = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.jsBooleanFalse = { guifg = colors.red, guibg = nil, attr = nil }
+  hi.jsBooleanTrue = { guifg = colors.red, guibg = nil, attr = nil }
+  hi.jsRegexpString = { guifg = colors.blue, guibg = nil, attr = nil }
+  hi.jsConditional = { guifg = colors.pink, guibg = nil, attr = nil }
+  hi.jsFunction = { guifg = colors.blue, guibg = nil, attr = colors.italic }
+  hi.jsReturn = { guifg = colors.pink, guibg = nil, attr = nil }
+  hi.jsFuncName = { guifg = colors.blue, guibg = nil, attr = nil }
+  hi.jsFuncParens = { guifg = colors.white_default, guibg = nil, attr = nil }
+  hi.jsParensError = { guifg = colors.red, guibg = nil, attr = nil }
+  hi.jsClassDefinition = { guifg = colors.orange_light, guibg = nil, attr = nil }
+  hi.jsImport = { guifg = colors.pink, guibg = nil, attr = colors.italic }
+  hi.jsFrom = { guifg = colors.pink, guibg = nil, attr = colors.italic }
+  hi.jsModuleAs = { guifg = colors.pink, guibg = nil, attr = colors.italic }
+  hi.jsExport = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.jsExportDefault = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.jsExtendsKeyword = { guifg = colors.pink, guibg = nil, attr = colors.italic }
+  hi.javaScriptReserved = { guifg = colors.blue, guibg = nil, attr = nil }
+  hi.javaScriptConditional = { guifg = colors.pink, guibg = nil, attr = nil }
+  hi.javaScriptStringS = { guifg = colors.orange_light, guibg = nil, attr = nil }
+  hi.javaScriptBoolean = { guifg = colors.red, guibg = nil, attr = nil }
+  hi.javaScriptBraces = { guifg = colors.white_default, guibg = nil, attr = nil }
+  hi.javaScriptLineComment = { guifg = colors.ash_grey, guibg = nil, attr = colors.italic }
+  hi.javaScriptLineSpecial = { guifg = colors.orange, guibg = nil, attr = nil }
+  hi.javaScriptFunction = { guifg = colors.blue, guibg = nil, attr = colors.italic }
+  hi.javaScriptStatement = { guifg = colors.pink, guibg = nil, attr = nil }
+  hi.javaScriptException = { guifg = colors.green_bright, guibg = nil, attr = nil }
 
-highlight("scssSelectorName", theme.green_bright, nil, nil)
-highlight("cssTagName", theme.red, nil, nil)
-highlight("cssClassName", theme.green_bright, nil, theme.italic)
-vim.cmd("hi link cssClassNameDot cssClassName")
-highlight("cssBraces", theme.white_default, nil, theme.italic)
-highlight("cssPositioningProp", theme.cyan, nil, nil)
-highlight("cssBoxProp", theme.cyan, nil, nil)
-highlight("cssDimensionProp", theme.cyan, nil, nil)
-highlight("cssTransitionProp", theme.cyan, nil, nil)
-highlight("cssTextProp", theme.cyan, nil, nil)
-highlight("cssFontProp", theme.cyan, nil, nil)
-highlight("cssBorderProp", theme.cyan, nil, nil)
-highlight("cssBackgroundProp", theme.cyan, nil, nil)
-highlight("cssUIProp", theme.cyan, nil, nil)
-highlight("cssIEUIProp", theme.red, nil, nil)
-vim.cmd("hi link scssFunctionName Function")
-highlight("cssPositioningAttr", theme.red, nil, nil)
-highlight("cssTableAttr", theme.red, nil, nil)
-highlight("cssCommonAttr", theme.red, nil, nil)
-highlight("cssColorProp", theme.cyan, nil, nil)
-highlight("cssIncludeKeyword", theme.cyan, nil, nil)
-highlight("cssKeyFrameSelector", theme.cyan, nil, nil)
-highlight("cssPseudoClassId", theme.green_bright, nil, theme.italic)
-highlight("cssBorderAttr", theme.red, nil, nil)
-highlight("cssValueLength", theme.orange, nil, nil)
-highlight("cssUnitDecorators", theme.yellow_light, nil, nil)
-highlight("cssIdentifier", theme.yellow_dark, nil, theme.italic)
+  hi.scssSelectorName = { guifg = colors.green_bright, guibg = nil, attr = nil }
+  hi.cssTagName = { guifg = colors.red, guibg = nil, attr = nil }
+  hi.cssClassName = { guifg = colors.green_bright, guibg = nil, attr = colors.italic }
+  hi.cssClassNameDot = { guifg = colors.green_bright, guibg = nil, attr = colors.italic }
+  hi.cssBraces = { guifg = colors.white_default, guibg = nil, attr = colors.italic }
+  hi.cssPositioningProp = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.cssBoxProp = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.cssDimensionProp = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.cssTransitionProp = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.cssTextProp = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.cssFontProp = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.cssBorderProp = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.cssBackgroundProp = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.cssUIProp = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.cssIEUIProp = { guifg = colors.red, guibg = nil, attr = nil }
+  hi.scssFunctionName = { guifg = colors.blue, guibg = nil, attr = colors.italic }
+  hi.cssPositioningAttr = { guifg = colors.red, guibg = nil, attr = nil }
+  hi.cssTableAttr = { guifg = colors.red, guibg = nil, attr = nil }
+  hi.cssCommonAttr = { guifg = colors.red, guibg = nil, attr = nil }
+  hi.cssColorProp = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.cssIncludeKeyword = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.cssKeyFrameSelector = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.cssPseudoClassId = { guifg = colors.green_bright, guibg = nil, attr = colors.italic }
+  hi.cssBorderAttr = { guifg = colors.red, guibg = nil, attr = nil }
+  hi.cssValueLength = { guifg = colors.orange, guibg = nil, attr = nil }
+  hi.cssUnitDecorators = { guifg = colors.yellow_light, guibg = nil, attr = nil }
+  hi.cssIdentifier = { guifg = colors.yellow_dark, guibg = nil, attr = colors.italic }
 
-highlight("markdownHeadingDelimiter", theme.ash_grey, nil, nil)
-highlight("markdownCodeDelimiter", theme.orange_light, nil, nil)
-highlight("markdownCode", theme.white_light, nil, nil)
-highlight("mkdCodeStart", theme.white_light, nil, nil)
-highlight("mkdCodeEnd", theme.white_light, nil, nil)
-highlight("mkdLinkDef", theme.cyan, nil, nil)
-highlight("mkdCodeDelimiter", theme.ash_grey, theme.blue_default, nil)
+  hi.markdownHeadingDelimiter = { guifg = colors.ash_grey, guibg = nil, attr = nil }
+  hi.markdownCodeDelimiter = { guifg = colors.orange_light, guibg = nil, attr = nil }
+  hi.markdownCode = { guifg = colors.white_light, guibg = nil, attr = nil }
+  hi.mkdCodeStart = { guifg = colors.white_light, guibg = nil, attr = nil }
+  hi.mkdCodeEnd = { guifg = colors.white_light, guibg = nil, attr = nil }
+  hi.mkdLinkDef = { guifg = colors.cyan, guibg = nil, attr = nil }
+  hi.mkdCodeDelimiter = { guifg = colors.ash_grey, guibg = colors.blue_default, attr = nil }
 
-highlight("htmlH1", theme.blue, nil, nil)
-vim.cmd("hi link htmlH2 htmlH1")
-vim.cmd("hi link htmlH3 htmlH1")
-vim.cmd("hi link htmlH4 htmlH1")
-vim.cmd("hi link htmlH5 htmlH1")
-highlight("htmlBold", theme.cyan, nil, theme.bold)
+  hi.htmlH1 = { guifg = colors.blue, guibg = nil, attr = nil }
+  hi.htmlH2 = { guifg = colors.blue, guibg = nil, attr = nil }
+  hi.htmlH3 = { guifg = colors.blue, guibg = nil, attr = nil }
+  hi.htmlH4 = { guifg = colors.blue, guibg = nil, attr = nil }
+  hi.htmlH5 = { guifg = colors.blue, guibg = nil, attr = nil }
+  hi.htmlBold = { guifg = colors.cyan, guibg = nil, attr = colors.bold }
 
-vim.cmd("hi link shComment Comment")
+  hi.shComment = { guifg = colors.ash_grey, guibg = nil, attr = colors.italic }
 
-highlight("Sneak", theme.blue_default, theme.blue, theme.bold)
-highlight("SneakLabel", theme.blue_default, theme.blue, theme.bold)
+  hi.Sneak = { guifg = colors.blue_default, guibg = colors.blue, attr = colors.bold }
+  hi.SneakLabel = { guifg = colors.blue_default, guibg = colors.blue, attr = colors.bold }
 
-highlight("SignifySignAdd", theme.green_bright, nil, nil)
-highlight("SignifySignDelete", theme.red, nil, nil)
-highlight("SignifySignChange", theme.orange, nil, nil)
+  hi.SignifySignAdd = { guifg = colors.green_bright, guibg = nil, attr = nil }
+  hi.SignifySignDelete = { guifg = colors.red, guibg = nil, attr = nil }
+  hi.SignifySignChange = { guifg = colors.orange, guibg = nil, attr = nil }
 
-highlight("illuminatedWord", nil, theme.highligter, nil)
+  hi.illuminatedWord = { guifg = nil, guibg = colors.highligter, attr = nil }
 
-highlight("NvimTreeIndentMarker", theme.blue_1, nil, nil)
+  hi.NvimTreeIndentMarker = { guifg = colors.blue_1, guibg = nil, attr = nil }
 
-highlight("CocErrorSign", theme.red, nil, nil)
-highlight("CocWarningSign", theme.yellow_dark, nil, nil)
-highlight("CocInfoSign", theme.yellow_dark, nil, nil)
+  hi.CocErrorSign = { guifg = colors.red, guibg = nil, attr = nil }
+  hi.CocWarningSign = { guifg = colors.yellow_dark, guibg = nil, attr = nil }
+  hi.CocInfoSign = { guifg = colors.yellow_dark, guibg = nil, attr = nil }
+
+  return hi
+end
+
+local function setup()
+  -- vim.api.nvim_command('hi clear')
+  -- if vim.fn.exists('syntax_on') then
+  --   vim.api.nvim_command('syntax reset')
+  -- end
+  vim.api.nvim_command('set termguicolors')
+  local hi = theme(theme_colors)
+  vim.o.background = 'dark'
+  vim.o.termguicolors = true
+  vim.g.colors_name = "my-theme"
+  for group,color in pairs(hi) do
+    highlight(group, color)
+  end
+end
+
+return {
+  highlight = highlight,
+  setup = setup,
+}

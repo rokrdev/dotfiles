@@ -33,7 +33,7 @@ map('n', 's#', ":let @/='\\<'.expand('<cword>').'\\>'<CR>cgN", nsOpt)
 map('x', 's#', '"sy:let @/=@s<CR>cgN', nsOpt)
 map('n', 's*', ":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn", nsOpt)
 map('x', 's*', '"sy:let @/=@s<CR>cgn', nsOpt)
--- map('n', 'ss', ':ls<CR>:b<Space>', nopt)
+map('n', 'ss', ':ls<CR>:b<Space>', nOpt)
 
 map('n', '<M-+>', ':vertical resize +5<CR>', nsOpt)
 map('n', '<M-=>', ':vertical resize -5<CR>', nsOpt)
@@ -73,7 +73,7 @@ map('x', '#', "<cmd>lua require('helpers').VSetSearch('?')<CR>?<C-R>=@/<CR><CR>"
 map('n', '<Leader>*', "<cmd>lua require('helpers').rgWordUnderCursor()<CR>", nOpt)
 map('v', '<Leader>*', "<cmd>lua require('helpers').rgVisualSelection()<CR>", nOpt)
 
-map('n', '<Leader>b', ':Buffers<CR>', nOpt)
+map('n', '<Leader><Leader>', ':Buffers<CR>', nOpt)
 map('n', '<Leader>o', ":Files<CR>", nOpt)
 map('n', '<Leader>f', ":RG<CR>", nOpt)
 map('n', '<Leader>F', ":RGRaw ", nOpt)

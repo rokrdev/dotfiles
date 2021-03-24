@@ -51,7 +51,6 @@ local function theme(colors)
   hi.diffChanged = { guifg = colors.pink, guibg = colors.blue_default, attr = nil }
   hi.diffRemoved = { guifg = colors.red, guibg = colors.blue_default, attr = nil }
   hi.C_WhiteSpace = { guifg = nil, guibg = colors.red, attr = nil }
-  hi.EndOfLineSpace = { guifg = nil, guibg = colors.red, attr = nil }
 
   hi.VertSplit = { guifg = colors.blue_1, guibg = nil, attr = nil }
   hi.MatchParen = { guifg = colors.pink, guibg = nil, attr = colors.bold..colors.underline }
@@ -221,6 +220,7 @@ local function setup()
   for group,color in pairs(hi) do
     highlight(group, color)
   end
+  vim.cmd("hi link EndOfLineSpace C_WhiteSpace")
 end
 
 return {

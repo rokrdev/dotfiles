@@ -34,6 +34,7 @@ map('x', 's#', '"sy:let @/=@s<CR>cgN', nsOpt)
 map('n', 's*', ":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn", nsOpt)
 map('x', 's*', '"sy:let @/=@s<CR>cgn', nsOpt)
 map('n', 'ss', ':ls<CR>:b<Space>', nOpt)
+map('n', 's!', ':let @+=expand("%")<CR>', nOpt)
 
 map('n', '<M-+>', ':vertical resize +5<CR>', nsOpt)
 map('n', '<M-=>', ':vertical resize -5<CR>', nsOpt)

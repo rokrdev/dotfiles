@@ -36,6 +36,17 @@ return require('packer').startup(function()
   }
 
   use {
+    'lukas-reineke/indent-blankline.nvim',
+    branch = 'lua',
+    opt = true,
+    event = 'VimEnter *',
+    config = function()
+      vim.g.indent_blankline_filetype_exclude = { 'NvimTree' }
+      vim.g.indent_blankline_char = '│'
+    end
+  }
+
+  use {
     'akinsho/nvim-bufferline.lua',
     event = 'VimEnter *',
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
@@ -250,13 +261,13 @@ return require('packer').startup(function()
     -- end
   }
 
-    use {
-      'iamcco/markdown-preview.nvim',
-      opt = true,
-      ft = {'markdown'},
-      run = 'cd app && yarn install',
-      cmd = 'MarkdownPreview'
-    }
+  use {
+    'iamcco/markdown-preview.nvim',
+    opt = true,
+    ft = {'markdown'},
+    run = 'cd app && yarn install',
+    cmd = 'MarkdownPreview'
+  }
 
   -- use {
   --   'elixir-editors/vim-elixir',

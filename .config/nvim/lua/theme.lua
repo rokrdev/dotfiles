@@ -207,6 +207,11 @@ local function theme(colors)
   hi.IndentBlanklineChar = { guifg = colors.grey_1, guibg = nil, attr = 'nocombine' }
   hi.IndentBlanklineContextChar = { guifg = colors.orange_light, guibg = nil, attr = 'nocombine' }
 
+  hi.LspDiagnosticsDefaultHint = { guifg = colors.orange_light, guibg = nil, attr = nil }
+  hi.LspDiagnosticsDefaultError = { guifg = colors.red, guibg = nil, attr = nil }
+  hi.LspDiagnosticsDefaultWarning = { guifg = colors.yellow_dark, guibg = nil, attr = nil }
+  hi.LspDiagnosticsDefaultInformation = { guifg = colors.white_light, guibg = nil, attr = nil }
+
   return hi
 end
 

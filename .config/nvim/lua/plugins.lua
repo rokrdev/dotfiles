@@ -43,6 +43,8 @@ return require('packer').startup(function()
     config = function()
       vim.g.indent_blankline_filetype_exclude = { 'NvimTree' }
       vim.g.indent_blankline_char = '│'
+      vim.g.indent_blankline_use_treesitter = true
+      -- vim.g.indent_blankline_show_current_context = true
     end
   }
 
@@ -77,7 +79,7 @@ return require('packer').startup(function()
         sections = {
           lualine_a = { 'mode' },
           lualine_b = { 'branch' },
-          lualine_c = { 'filename', 'diff', 'g:coc_status' },
+          lualine_c = { 'filename', 'diff' },
           lualine_x = { 'encoding', 'fileformat', 'filetype' },
           lualine_y = { 'progress' },
           lualine_z = { 'location' },
@@ -159,35 +161,6 @@ return require('packer').startup(function()
   }
 
   use {
-    'neoclide/coc.nvim',
-    branch = 'release',
-    event = 'VimEnter *',
-    config = function()
-      vim.g.coc_global_extensions = {
-        'coc-css',
-        'coc-docker',
-        'coc-elixir',
-        -- 'coc-emmet',
-        'coc-eslint',
-        'coc-html',
-        'coc-json',
-        'coc-markdownlint',
-        'coc-prettier',
-        'coc-python',
-        'coc-sh',
-        'coc-snippets',
-        'coc-tsserver',
-        'coc-yaml',
-      }
-    end
-  }
-
-  use {
-    'tpope/vim-commentary',
-    event = 'VimEnter *',
-  }
-
-  use {
     'mhinz/vim-signify',
     event = 'VimEnter *',
     config = function()
@@ -213,25 +186,29 @@ return require('packer').startup(function()
     event = 'VimEnter *',
   }
 
-  -- use {
-  --   'nvim-treesitter/nvim-treesitter',
-  --   run = ':TSUpdate',
-  --   event = 'VimEnter *',
-  --   config = function()
-  --     require('nvim-treesitter.configs').setup {
-  --       ensure_installed = "all",
-  --       highlight = {
-  --         enable = true
-  --       },
-  --       indent = {
-  --         enable = false,
-  --       }
-  --     }
-  --   end
-  -- }
   use {
-    'sheerun/vim-polyglot',
-    event = 'VimEnter *',
+    'nvim-treesitter/nvim-treesitter',
+    run = ':TSUpdate',
+    config = function()
+      require('nvim-treesitter.configs').setup {
+        ensure_installed = "all",
+        highlight = {
+          enable = true
+        },
+        indent = {
+          enable = false,
+        },
+        disable = { "elixir" },
+        context_commentstring = {
+          enable = true,
+        }
+      }
+    end
+  }
+
+  use {
+    'JoosepAlviste/nvim-ts-context-commentstring',
+    requires = {'tpope/vim-commentary'},
   }
 
   use {
@@ -269,24 +246,23 @@ return require('packer').startup(function()
     cmd = 'MarkdownPreview'
   }
 
-  -- use {
-  --   'elixir-editors/vim-elixir',
-  --   opt = true,
-  --   event = 'VimEnter *'
-  -- }
+  use {
+    'elixir-editors/vim-elixir',
+    opt = true,
+    ft = {'elixir', 'exs'},
+  }
 
-  -- use {
-  --   'dag/vim-fish',
-  --   opt = true,
-  --   event = 'VimEnter *',
-  --   -- ft = {'fish'}
-  -- }
+  use {
+    'dag/vim-fish',
+    opt = true,
+    ft = {'fish'}
+  }
 
-  -- use {
-  --   'jxnblk/vim-mdx-js',
-  --   opt = true,
-  --   ft = {'mdx'}
-  -- }
+  use {
+    'jxnblk/vim-mdx-js',
+    opt = true,
+    ft = {'mdx'}
+  }
 
   use {
     'mcchrish/nnn.vim',

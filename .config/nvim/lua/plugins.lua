@@ -191,7 +191,7 @@ return require('packer').startup(function()
     run = ':TSUpdate',
     config = function()
       require('nvim-treesitter.configs').setup {
-        ensure_installed = "all",
+        ensure_installed = "maintained",
         highlight = {
           enable = true
         },
@@ -210,6 +210,8 @@ return require('packer').startup(function()
     'JoosepAlviste/nvim-ts-context-commentstring',
     requires = {'tpope/vim-commentary'},
   }
+
+  use 'neovim/nvim-lspconfig'
 
   use {
     'wbthomason/packer.nvim',

@@ -81,8 +81,7 @@ require'lspconfig'.diagnosticls.setup{
   filetypes = {"javascript", "javascriptreact", "typescript"},
   root_dir = function(fname)
     return nvim_lsp.util.root_pattern("tsconfig.json")(fname) or
-    nvim_lsp.util.root_pattern(".eslintrc.json")(fname) or
-    nvim_lsp.util.root_pattern(".eslintrc")(fname);
+    nvim_lsp.util.root_pattern(".eslintrc", ".eslintrc.js", ".eslintrc.json")(fname)
   end,
   init_options = {
     linters = {

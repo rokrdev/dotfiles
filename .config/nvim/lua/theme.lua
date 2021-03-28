@@ -205,6 +205,7 @@ local function theme(colors)
   hi.CocInfoSign = { guifg = colors.yellow_dark, guibg = nil, attr = nil }
 
   hi.IndentBlanklineChar = { guifg = colors.grey_1, guibg = nil, attr = 'nocombine' }
+  hi.IndentBlanklineContextChar = { guifg = colors.orange_light, guibg = nil, attr = 'nocombine' }
 
   return hi
 end

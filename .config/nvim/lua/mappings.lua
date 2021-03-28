@@ -2,10 +2,6 @@ local api = vim.api
 local map = vim.api.nvim_set_keymap
 local g = vim.g
 
-local function t(str)
-  return api.nvim_replace_termcodes(str, true, true, true)
-end
-
 local opt = {}
 local nOpt = { noremap = true }
 local nsOpt = { noremap = true, silent = true }
@@ -51,22 +47,12 @@ g["@z"] = "f cl<CR><ESC>l"
 
 map('n', '!', g["@z"], nOpt)
 
-function _G.smart_tab()
-  return vim.fn.pumvisible() == 1 and t'<C-n>' or t'<Tab>'
-end
-
-function _G.smart_shift_tab()
-  return vim.fn.pumvisible() == 1 and t'<C-p>' or t'<Tab>'
-end
-
 map('n', '<Leader>0', '<cmd>lua require("helpers").toggleNumbers()<CR>', nOpt)
 map('n', '<C-e>', ':wincmd w<CR>', nOpt)
 map('n', '<M-h>', '<C-w>h', nOpt)
 map('n', '<M-j>', '<C-w>j', nOpt)
 map('n', '<M-k>', '<C-w>k', nOpt)
 map('n', '<M-l>', '<C-w>l', nOpt)
-map('i', '<TAB>', 'v:lua.smart_tab()', neOpt)
-map('i', '<S-TAB>', 'v:lua.smart_shift_tab()', neOpt)
 
 map('x', '*', "<cmd>lua require('helpers').VSetSearch('/')<CR>/<C-R>=@/<CR><CR>", nOpt)
 map('x', '#', "<cmd>lua require('helpers').VSetSearch('?')<CR>?<C-R>=@/<CR><CR>", nOpt)

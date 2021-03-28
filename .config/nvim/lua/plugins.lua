@@ -106,8 +106,10 @@ return require('packer').startup(function()
   }
 
   use {
-    'jiangmiao/auto-pairs',
-    event = 'VimEnter *'
+    'windwp/nvim-autopairs',
+    config = function()
+      require('nvim-autopairs').setup()
+    end
   }
 
   use {
@@ -212,6 +214,8 @@ return require('packer').startup(function()
   }
 
   use 'neovim/nvim-lspconfig'
+
+  use 'hrsh7th/nvim-compe'
 
   use {
     'wbthomason/packer.nvim',

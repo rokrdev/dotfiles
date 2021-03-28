@@ -1,4 +1,6 @@
 local nvim_lsp = require('lspconfig')
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
@@ -36,14 +38,18 @@ end
 -- and map buffer local keybindings when the language server attaches
 local servers = { "tsserver" }
 for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup { on_attach = on_attach }
+  nvim_lsp[lsp].setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+  }
 end
 
 local home = os.getenv("HOME")
 
-require("lspconfig").elixirls.setup{
+require("lspconfig").elixirls.setup {
     cmd = { home .. "/.local/bin/elixir-ls/language_server.sh" },
     on_attach = on_attach,
+    capabilities = capabilities,
     settings = {
       dialyzerEnabled = true,
       dialyzerWarnOpts = {

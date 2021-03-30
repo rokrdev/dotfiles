@@ -57,11 +57,11 @@ local function theme(colors)
   hi.Folded = { guifg = colors.brown, guibg = nil, attr = nil }
   hi.FoldedColumn = { guifg = colors.brown, guibg = nil, attr = nil }
   hi.SignColumn = { guifg = nil, guibg = nil, attr = nil }
-  hi.IncSearch = { guifg = colors.blue_default, guibg = colors.pink, attr = nil }
+  hi.IncSearch = { guifg = colors.blue, guibg = nil, attr = colors.bold..colors.underline }
   hi.NonText = { guifg = colors.blue_1, guibg = nil, attr = nil }
   hi.PMenu = { guifg = colors.white_default, guibg = colors.blue_visual, attr = nil }
   hi.PMenuSel = { guifg = colors.blue_default, guibg = colors.blue, attr = colors.bold }
-  hi.Search = { guifg = colors.blue_default, guibg = colors.pink, attr = nil }
+  hi.Search = { guifg = colors.pink, guibg = nil, attr = colors.underline }
   hi.SpecialKey = { guifg = colors.orange_light, guibg = nil, attr = nil }
   hi.Title = { guifg = colors.blue, guibg = nil, attr = nil }
   hi.Visual = { guifg = nil, guibg = colors.grey, attr = nil }

@@ -85,14 +85,14 @@ map('n', '<Leader>gl', "<cmd>lua require('helpers').openTerm('tig')<CR>", nOpt)
 
 map('n', 'gb', ":GitMessenger<CR>", nOpt)
 
-map('n', '<C-k>', ":lprevious<CR>", opt)
-map('n', '<C-j>', ":lnext<CR>", opt)
-map('n', '<Leader>q-', ":lclose<CR>", opt)
-map('n', '<Leader>ql', ":lopen<CR>", opt)
+map('n', '<Leader>lk', ":lprevious<CR>", opt)
+map('n', '<Leader>lj', ":lnext<CR>", opt)
+map('n', '<Leader>lc', ":lclose<CR>", opt)
+map('n', '<Leader>lq', ":lopen<CR>", opt)
 
-map('n', '<Leader>k', ":cprevious<CR>", opt)
-map('n', '<Leader>j', ":cnext<CR>", opt)
-map('n', '<Leader>q_', ":cclose<CR>", opt)
+map('n', '<Leader>qk', ":cprevious<CR>", opt)
+map('n', '<Leader>qj', ":cnext<CR>", opt)
+map('n', '<Leader>qc', ":cclose<CR>", opt)
 map('n', '<Leader>qq', ":copen<CR>", opt)
 
 map('n', '<M-i>', "<cmd>lua require('helpers').show_documentation()<CR>", nsOpt)

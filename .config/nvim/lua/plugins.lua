@@ -1,3 +1,4 @@
+local map = vim.api.nvim_set_keymap
 local packer_exists = pcall(vim.cmd, [[packadd packer.nvim]])
 
 if not packer_exists then
@@ -183,9 +184,11 @@ return require('packer').startup(function()
   }
 
   use {
-    'mg979/vim-visual-multi',
-    branch = 'master',
+    'wincent/scalpel',
     event = 'VimEnter *',
+    config = function()
+      vim.g.ScalpelMap=0
+    end
   }
 
   use {
@@ -213,9 +216,13 @@ return require('packer').startup(function()
     requires = {'tpope/vim-commentary'},
   }
 
-  use 'neovim/nvim-lspconfig'
+  use {
+    'neovim/nvim-lspconfig',
+  }
 
-  use 'hrsh7th/nvim-compe'
+  use {
+    'hrsh7th/nvim-compe',
+  }
 
   use {
     'wbthomason/packer.nvim',

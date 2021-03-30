@@ -75,6 +75,9 @@ map('n', 'sL', ":<C-U>call sneak#wrap('', 1, 1, 0, 2)<CR>", opt)
 map('n', 'sj', "<Plug>SneakLabel_s", opt)
 map('n', 'sk', "<Plug>SneakLabel_S", opt)
 
+map('n', '<Leader>e', "<Plug>(Scalpel)", opt)
+map('v', '<Leader>e', "<Plug>(ScalpelVisual)", opt)
+
 map('n', '<Leader>gn', ":Neogit<CR>", nOpt)
 -- tig status
 map('n', '<Leader>gg', "<cmd>lua require('helpers').openTerm('tig status')<CR>", nOpt)

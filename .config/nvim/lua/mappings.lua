@@ -31,6 +31,7 @@ map('n', 's*', ":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn", nsOpt)
 map('x', 's*', '"sy:let @/=@s<CR>cgn', nsOpt)
 map('n', 'ss', ':ls<CR>:b<Space>', nOpt)
 map('n', 's!', ':let @+=expand("%")<CR>', nOpt)
+map('n', 'sn', '<cmd>lua require("helpers").toggleNumbers()<CR>', nOpt)
 
 map('n', '<M-+>', ':vertical resize +5<CR>', nsOpt)
 map('n', '<M-=>', ':vertical resize -5<CR>', nsOpt)
@@ -47,7 +48,6 @@ g["@z"] = "f cl<CR><ESC>l"
 
 map('n', '!', g["@z"], nOpt)
 
-map('n', '<Leader>0', '<cmd>lua require("helpers").toggleNumbers()<CR>', nOpt)
 map('n', '<C-e>', ':wincmd w<CR>', nOpt)
 map('n', '<M-h>', '<C-w>h', nOpt)
 map('n', '<M-j>', '<C-w>j', nOpt)

@@ -39,9 +39,9 @@ local function theme(colors)
   hi.StatusLine = { guifg = colors.blue_visual, guibg = colors.white_default, attr = nil }
   hi.Normal = { guifg = colors.white_default, guibg = colors.blue_default, attr = nil }
   hi.LineNr = { guifg = colors.grey, guibg = nil, attr = nil }
-  hi.CursorLineNr = { guifg = colors.white_light, guibg = colors.blue_visual, attr = nil }
-  hi.CursorLine = { guifg = nil, guibg = colors.blue_visual, attr = nil }
-  hi.ColorColumn = { guifg = nil, guibg = colors.black_1, attr = nil }
+  hi.CursorLineNr = { guifg = colors.white_light, guibg = colors.blue_2, attr = nil }
+  hi.CursorLine = { guifg = nil, guibg = colors.blue_2, attr = nil }
+  hi.ColorColumn = { guifg = nil, guibg = colors.blue_2, attr = nil }
   hi.Directory = { guifg = colors.blue, guibg = nil, attr = nil }
   hi.DiffAdd = { guifg = colors.green_bright, guibg = colors.blue_default, attr = nil }
   hi.DiffChange = { guifg = colors.pink, guibg = colors.blue_default, attr = nil }

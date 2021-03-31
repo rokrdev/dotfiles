@@ -39,8 +39,8 @@ local function theme(colors)
   hi.StatusLine = { guifg = colors.blue_visual, guibg = colors.white_default, attr = nil }
   hi.Normal = { guifg = colors.white_default, guibg = colors.blue_default, attr = nil }
   hi.LineNr = { guifg = colors.grey, guibg = nil, attr = nil }
-  hi.CursorLineNr = { guifg = colors.white_light, guibg = nil, attr = nil }
-  hi.CursorLine = { guifg = nil, guibg = nil, attr = nil }
+  hi.CursorLineNr = { guifg = colors.white_light, guibg = colors.blue_visual, attr = nil }
+  hi.CursorLine = { guifg = nil, guibg = colors.blue_visual, attr = nil }
   hi.ColorColumn = { guifg = nil, guibg = colors.black_1, attr = nil }
   hi.Directory = { guifg = colors.blue, guibg = nil, attr = nil }
   hi.DiffAdd = { guifg = colors.green_bright, guibg = colors.blue_default, attr = nil }
@@ -57,11 +57,11 @@ local function theme(colors)
   hi.Folded = { guifg = colors.brown, guibg = nil, attr = nil }
   hi.FoldedColumn = { guifg = colors.brown, guibg = nil, attr = nil }
   hi.SignColumn = { guifg = nil, guibg = nil, attr = nil }
-  hi.IncSearch = { guifg = colors.blue, guibg = nil, attr = colors.bold..colors.underline }
+  hi.IncSearch = { guifg = colors.white_light, guibg = nil, attr = colors.underline }
   hi.NonText = { guifg = colors.blue_1, guibg = nil, attr = nil }
   hi.PMenu = { guifg = colors.white_default, guibg = colors.blue_visual, attr = nil }
   hi.PMenuSel = { guifg = colors.blue_default, guibg = colors.blue, attr = colors.bold }
-  hi.Search = { guifg = colors.pink, guibg = nil, attr = colors.underline }
+  hi.Search = { guifg = colors.blue_default, guibg = colors.white_light, attr = nil }
   hi.SpecialKey = { guifg = colors.orange_light, guibg = nil, attr = nil }
   hi.Title = { guifg = colors.blue, guibg = nil, attr = nil }
   hi.Visual = { guifg = nil, guibg = colors.grey, attr = nil }

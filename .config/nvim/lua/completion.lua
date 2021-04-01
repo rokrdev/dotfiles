@@ -15,7 +15,7 @@ require'compe'.setup {
     path = true;
     buffer = true;
     calc = true;
-    -- vsnip = true;
+    vsnip = true;
     nvim_lsp = true;
     nvim_lua = true;
     spell = true;
@@ -61,8 +61,19 @@ _G.s_tab_complete = function()
   end
 end
 
+_G.snippet_expand = function()
+  if vim.fn.call("vsnip#available", {1}) == 1 then
+    return t "<Plug>(vsnip-expand-or-jump)"
+  elseif vim.fn.call("vsnip#jumpable", {1}) == 1 then
+    return t "<Plug>(vsnip-jump-next)"
+  else
+    return t "<C-j>"
+  end
+end
+
 remap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
 remap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
 remap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 remap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+remap("i", "<C-j>", "v:lua.snippet_expand()", {expr = true})
 

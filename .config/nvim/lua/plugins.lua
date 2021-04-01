@@ -225,6 +225,12 @@ return require('packer').startup(function()
   }
 
   use {
+    'hrsh7th/vim-vsnip',
+    requires = {'hrsh7th/vim-vsnip-integ'},
+  }
+
+
+  use {
     'wbthomason/packer.nvim',
     opt = true
   }

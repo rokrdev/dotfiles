@@ -206,7 +206,16 @@ return require('packer').startup(function()
         disable = { "elixir" },
         context_commentstring = {
           enable = true,
-        }
+        },
+        incremental_selection = {
+          enable = true,
+          keymaps = {
+            init_selection = "<M-h>",
+            node_incremental = "<M-j>",
+            scope_incremental = "<M-l>",
+            node_decremental = "<M-k>",
+          },
+        },
       }
     end
   }

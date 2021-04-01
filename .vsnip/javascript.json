@@ -1,0 +1,93 @@
+{
+  "React functional component": {
+    "prefix": "rfc",
+    "body": [
+      "import * as React from 'react'\n",
+      "function $1($2) {",
+      "  return (",
+      "    <div>",
+      "      $0",
+      "    </div>",
+      "  )",
+      "}\n",
+      "export default $1"
+    ],
+    "description": "React functional component"
+  },
+  "Arrow function": {
+    "prefix": "arf",
+    "body": [
+      "($1) => {",
+      "  $0",
+      "}"
+    ],
+    "description": "Arrow function"
+  },
+  "Arrow function Named": {
+    "prefix": "arfn",
+    "body": [
+      "const $1 = ($2) => {",
+      "  $0",
+      "}"
+    ],
+    "description": "Arrow function Named"
+  },
+  "Self Closing tag": {
+    "prefix": "sct",
+    "body": [
+      "<$0 />"
+    ],
+    "description": "Self Closing tag"
+  },
+  "Open Close tag": {
+    "prefix": "oct",
+    "body": [
+      "<$1>",
+      "  $0",
+      "</$1>"
+    ],
+    "description": "Open Close tag"
+  },
+  "Console log": {
+    "prefix": "cl",
+    "body": [
+      "console.log($0)"
+    ],
+    "description": "Console log"
+  },
+  "import": {
+    "prefix": "im",
+    "body": [
+      "import $0 from '$1'"
+    ],
+    "description": "import"
+  },
+  "useEffect hook": {
+    "prefix": "uef",
+    "body": [
+      "React.useEffect(",
+      "  () => {",
+      "    $0",
+      "  },",
+      "  []",
+      ")"
+    ],
+    "description": "useEffect hook"
+  },
+  "useState hook": {
+    "prefix": "ust",
+    "body": [
+      "const [$0] = React.useState($1)"
+    ],
+    "description": "useState hook"
+  },
+  "return function": {
+    "prefix": "rfn",
+    "body": [
+      "return ($1) => {",
+      "  $0",
+      "}"
+    ],
+    "description": "return function"
+  }
+}

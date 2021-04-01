@@ -60,6 +60,24 @@ return require('packer').startup(function()
           show_close_icon = false,
           separator_style = "thick",
           mappings = false,
+        },
+        highlights = {
+          buffer_selected = {
+            guibg = '#011627'
+          },
+          fill = {
+            guibg = '#092236'
+          },
+          background = {
+            guibg = '#092236'
+          },
+          separator = {
+            guibg = '#092236'
+          },
+          indicator_selected = {
+            guibg = '#011627',
+            guifg = '#82aaff'
+          }
         }
       }
     end

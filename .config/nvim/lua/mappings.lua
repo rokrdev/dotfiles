@@ -60,7 +60,7 @@ map('x', '#', "<cmd>lua require('helpers').VSetSearch('?')<CR>?<C-R>=@/<CR><CR>"
 map('n', '<Leader>*', "<cmd>lua require('helpers').rgWordUnderCursor()<CR>", nOpt)
 map('v', '<Leader>*', "<cmd>lua require('helpers').rgVisualSelection()<CR>", nOpt)
 
-map('n', '<Leader><Leader>', ':Buffers<CR>', nOpt)
+map('n', '<Leader>b', ':Buffers<CR>', nOpt)
 map('n', '<Leader>o', ":Files<CR>", nOpt)
 map('n', '<Leader>f', ":RG<CR>", nOpt)
 map('n', '<Leader>F', ":RGRaw ", nOpt)

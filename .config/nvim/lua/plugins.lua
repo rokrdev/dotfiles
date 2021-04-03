@@ -11,9 +11,9 @@ if not packer_exists then
   vim.fn.mkdir(directory, 'p')
 
   local git_clone_cmd = vim.fn.system(string.format(
-  'git clone %s %s',
-  'https://github.com/wbthomason/packer.nvim',
-  directory .. '/packer.nvim'
+    'git clone %s %s',
+    'https://github.com/wbthomason/packer.nvim',
+    directory .. '/packer.nvim'
   ))
 
   print(git_clone_cmd)

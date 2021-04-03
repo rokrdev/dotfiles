@@ -78,13 +78,24 @@ require("lspconfig").elixirls.setup {
 }
 
 require("lspconfig").diagnosticls.setup{
-  filetypes = { "javascript", "javascript.jsx" },
+  filetypes = {
+    "javascript",
+    "javascript.jsx",
+    'typescript',
+    'typescriptreact',
+    'css',
+    'scss',
+    'markdown',
+    'pandoc',
+  },
   init_options = {
     filetypes = {
       javascript = "eslint",
       ["javascript.jsx"] = "eslint",
       javascriptreact = "eslint",
       typescriptreact = "eslint",
+      markdown = 'markdownlint',
+      pandoc = 'markdownlint'
     },
     linters = {
       eslint = {
@@ -111,6 +122,28 @@ require("lspconfig").diagnosticls.setup{
         securities = {
           [2] = "error",
           [1] = "warning"
+        }
+      },
+      markdownlint = {
+        command = 'markdownlint',
+        rootPatterns = { '.git' },
+        isStderr = true,
+        debounce = 100,
+        args = { '--stdin' },
+        offsetLine = 0,
+        offsetColumn = 0,
+        sourceName = 'markdownlint',
+        securities = {
+          undefined = 'hint'
+        },
+        formatLines = 1,
+        formatPattern = {
+          '^.*:(\\d+)\\s+(.*)$',
+          {
+            line = 1,
+            column = -1,
+            message = 2,
+          }
         }
       }
     }

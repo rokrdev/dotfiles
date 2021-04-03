@@ -222,7 +222,7 @@ return require('packer').startup(function()
           enable = true
         },
         indent = {
-          enable = false,
+          enable = true,
         },
         disable = { "elixir" },
         context_commentstring = {

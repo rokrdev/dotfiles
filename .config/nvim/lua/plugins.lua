@@ -126,8 +126,10 @@ return require('packer').startup(function()
 
   use {
     'windwp/nvim-autopairs',
+    event = 'VimEnter *',
     config = function()
       require('nvim-autopairs').setup()
+      require('autopair')
     end
   }
 
@@ -211,6 +213,7 @@ return require('packer').startup(function()
 
   use {
     'nvim-treesitter/nvim-treesitter',
+    event = 'VimEnter *',
     run = ':TSUpdate',
     config = function()
       require('nvim-treesitter.configs').setup {
@@ -243,22 +246,27 @@ return require('packer').startup(function()
 
   use {
     'JoosepAlviste/nvim-ts-context-commentstring',
-    requires = {'tpope/vim-commentary'},
+    event = 'VimEnter *',
+    requires = {
+      'tpope/vim-commentary',
+      'nvim-treesitter/nvim-treesitter',
+    }
   }
 
   use {
     'neovim/nvim-lspconfig',
+    event = 'VimEnter *',
+    requires = {
+      'hrsh7th/nvim-compe',
+      'nvim-treesitter/nvim-treesitter',
+      'hrsh7th/vim-vsnip',
+      'hrsh7th/vim-vsnip-integ',
+    },
+    config = function()
+      require('lsp-config')
+      require('completion')
+    end
   }
-
-  use {
-    'hrsh7th/nvim-compe',
-  }
-
-  use {
-    'hrsh7th/vim-vsnip',
-    requires = {'hrsh7th/vim-vsnip-integ'},
-  }
-
 
   use {
     'wbthomason/packer.nvim',

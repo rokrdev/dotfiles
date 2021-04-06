@@ -64,10 +64,10 @@ local function theme(colors)
   hi.Search = { guifg = colors.blue_default, guibg = colors.white_light, attr = nil }
   hi.SpecialKey = { guifg = colors.orange_light, guibg = nil, attr = nil }
   hi.Title = { guifg = colors.blue, guibg = nil, attr = nil }
-  hi.Visual = { guifg = nil, guibg = colors.grey, attr = nil }
-  hi.EndOfBuffer = { guifg = colors.blue_1, guibg = nil, attr = nil }
+  hi.Visual = { guifg = nil, guibg = colors.grey_1, attr = nil }
+  hi.EndOfBuffer = { guifg = colors.grey, guibg = nil, attr = nil }
 
-  hi.Comment = { guifg = colors.ash_grey, guibg = nil, attr = colors.italic }
+  hi.Comment = { guifg = colors.grey, guibg = nil, attr = colors.italic }
   hi.Constant = { guifg = colors.green_bright, guibg = nil, attr = nil }
   hi.String = { guifg = colors.orange_light, guibg = nil, attr = nil }
   hi.Character = { guifg = colors.orange_light, guibg = nil, attr = nil }
@@ -96,7 +96,7 @@ local function theme(colors)
   hi.SpecialChar = { guifg = nil, guibg = nil, attr = nil }
   hi.Tag = { guifg = nil, guibg = nil, attr = nil }
   hi.Delimiter = { guifg = colors.white_default, guibg = nil, attr = nil }
-  hi.SpecialComment = { guifg = colors.blue_1, guibg = nil, attr = nil }
+  hi.SpecialComment = { guifg = colors.grey, guibg = nil, attr = nil }
   hi.Debug = { guifg = nil, guibg = nil, attr = nil }
   hi.Underlined = { guifg = nil, guibg = nil, attr = colors.underline }
   hi.Ignore = { guifg = nil, guibg = nil, attr = nil }
@@ -111,7 +111,7 @@ local function theme(colors)
   hi.jsOperator = { guifg = colors.pink, guibg = nil, attr = nil }
   hi.jsArrowFunction = { guifg = colors.pink, guibg = nil, attr = nil }
   hi.jsString = { guifg = colors.orange_light, guibg = nil, attr = nil }
-  hi.jsCommet = { guifg = colors.ash_grey, guibg = nil, attr = colors.italic }
+  hi.jsCommet = { guifg = colors.blue_2, guibg = nil, attr = colors.italic }
   hi.jsFuncCall = { guifg = colors.blue, guibg = nil, attr = colors.italic }
   hi.jsNumber = { guifg = colors.orange, guibg = nil, attr = nil }
   hi.jsSpecial = { guifg = colors.orange, guibg = nil, attr = nil }
@@ -138,7 +138,7 @@ local function theme(colors)
   hi.javaScriptStringS = { guifg = colors.orange_light, guibg = nil, attr = nil }
   hi.javaScriptBoolean = { guifg = colors.red, guibg = nil, attr = nil }
   hi.javaScriptBraces = { guifg = colors.white_default, guibg = nil, attr = nil }
-  hi.javaScriptLineComment = { guifg = colors.ash_grey, guibg = nil, attr = colors.italic }
+  hi.javaScriptLineComment = { guifg = colors.grey, guibg = nil, attr = colors.italic }
   hi.javaScriptLineSpecial = { guifg = colors.orange, guibg = nil, attr = nil }
   hi.javaScriptFunction = { guifg = colors.blue, guibg = nil, attr = colors.italic }
   hi.javaScriptStatement = { guifg = colors.pink, guibg = nil, attr = nil }
@@ -187,7 +187,7 @@ local function theme(colors)
   hi.htmlH5 = { guifg = colors.blue, guibg = nil, attr = nil }
   hi.htmlBold = { guifg = colors.cyan, guibg = nil, attr = colors.bold }
 
-  hi.shComment = { guifg = colors.ash_grey, guibg = nil, attr = colors.italic }
+  hi.shComment = { guifg = colors.grey, guibg = nil, attr = colors.italic }
 
   hi.Sneak = { guifg = colors.blue_default, guibg = colors.blue, attr = colors.bold }
   hi.SneakLabel = { guifg = colors.blue_default, guibg = colors.blue, attr = colors.bold }

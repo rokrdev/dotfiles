@@ -63,20 +63,26 @@ return require('packer').startup(function()
         },
         highlights = {
           buffer_selected = {
-            guibg = '#011627'
+            guibg = '#011627',
+            guifg = '#C5E4FD'
           },
           fill = {
-            guibg = '#092236'
+            guibg = '#1a2b4a',
+            guifg = '#C5E4FD'
           },
           background = {
-            guibg = '#092236'
+            guibg = '#1a2b4a',
+            guifg = '#C5E4FD'
           },
           separator = {
-            guibg = '#092236'
+            guibg = '#1a2b4a'
           },
           indicator_selected = {
             guibg = '#011627',
             guifg = '#82aaff'
+          },
+          modified = {
+            guibg = '#1a2b4a'
           }
         }
       }

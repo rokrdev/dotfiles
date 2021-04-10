@@ -32,6 +32,8 @@ map('x', 's*', '"sy:let @/=@s<CR>cgn', nsOpt)
 map('n', 'ss', ':ls<CR>:b<Space>', nOpt)
 map('n', 's!', ':let @+=expand("%")<CR>', nOpt)
 map('n', 'sn', '<cmd>lua require("helpers").toggleNumbers()<CR>', nOpt)
+map('n', 'sq', 'q', nOpt)
+map('n', 'q', "<Nop>", nOpt)
 
 map('n', '<M-+>', ':vertical resize +5<CR>', nsOpt)
 map('n', '<M-=>', ':vertical resize -5<CR>', nsOpt)

@@ -42,7 +42,7 @@
   "Open Close tag": {
     "prefix": "oct",
     "body": [
-      "<$1>",
+      "<$1 ${2:attr}>",
       "  $0",
       "</$1>"
     ],

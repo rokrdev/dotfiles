@@ -269,6 +269,7 @@ return require('packer').startup(function()
       'hrsh7th/vim-vsnip-integ',
     },
     config = function()
+      vim.g.vsnip_snippet_dir = '~/.config/nvim/vsnip'
       require('lsp-config')
       require('completion')
     end

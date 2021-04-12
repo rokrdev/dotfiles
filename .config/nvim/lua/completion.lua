@@ -67,7 +67,7 @@ _G.snippet_expand = function()
   elseif vim.fn.call("vsnip#jumpable", {1}) == 1 then
     return t "<Plug>(vsnip-jump-next)"
   else
-    return t "<C-j>"
+    return t "<C-f>"
   end
 end
 
@@ -75,5 +75,5 @@ remap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
 remap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
 remap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 remap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-remap("i", "<C-j>", "v:lua.snippet_expand()", {expr = true})
+remap("i", "<C-f>", "v:lua.snippet_expand()", {expr = true})
 

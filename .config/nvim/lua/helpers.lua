@@ -212,31 +212,31 @@ function M.getLualineTheme()
 
   night_owl.normal = {
     a = { bg = theme.blue, fg = theme.blue_default, gui = 'bold', },
-    b = { bg = theme.grey_1, fg = theme.white_default, },
+    b = { bg = theme.blue_visual, fg = theme.white_default, },
     c = { bg = theme.blue_visual, fg = theme.white_default, }
   }
 
   night_owl.insert = {
     a = { bg = theme.green, fg = theme.blue_default, gui = 'bold', },
-    b = { bg = theme.grey_1, fg = theme.white_default, },
+    b = { bg = theme.blue_visual, fg = theme.white_default, },
     c = { bg = theme.blue_visual, fg = theme.white_default, }
   }
 
   night_owl.visual = {
     a = { bg = theme.pink, fg = theme.blue_default, gui = 'bold', },
-    b = { bg = theme.grey_1, fg = theme.white_default, },
+    b = { bg = theme.blue_visual, fg = theme.white_default, },
     c = { bg = theme.blue_visual, fg = theme.white_default, }
   }
 
   night_owl.replace = {
     a = { bg = theme.red, fg = theme.blue_default, gui = 'bold', },
-    b = { bg = theme.grey_1, fg = theme.white_default, },
+    b = { bg = theme.blue_visual, fg = theme.white_default, },
     c = { bg = theme.blue_visual, fg = theme.white_default, }
   }
 
   night_owl.command = {
     a = { bg = theme.cyan, fg = theme.blue_default, gui = 'bold', },
-    b = { bg = theme.grey_1, fg = theme.white_default, },
+    b = { bg = theme.blue_visual, fg = theme.white_default, },
     c = { bg = theme.blue_visual, fg = theme.white_default, }
   }
 

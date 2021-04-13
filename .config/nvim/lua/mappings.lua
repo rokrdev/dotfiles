@@ -2,10 +2,6 @@ local api = vim.api
 local map = vim.api.nvim_set_keymap
 local g = vim.g
 
-local function t(str)
-  return api.nvim_replace_termcodes(str, true, true, true)
-end
-
 local opt = {}
 local nOpt = { noremap = true }
 local nsOpt = { noremap = true, silent = true }
@@ -16,10 +12,10 @@ map('n', 's', '<Nop>', opt)
 map('x', 's', '<Nop>', opt)
 map('v', 's', '<Nop>', opt)
 
-map('n', '<M-d>', ':m .+1<CR>==', nOpt)
-map('n', '<M-u>', ':m .-2<CR>==', nOpt)
-map('v', '<M-d>', ":m '>+1<CR>gv=gv", nOpt)
-map('v', '<M-u>', ":m '<-2<CR>gv=gv", nOpt)
+map('n', '<M-Down>', ':m .+1<CR>==', nOpt)
+map('n', '<M-Up>', ':m .-2<CR>==', nOpt)
+map('v', '<M-Down>', ":m '>+1<CR>gv=gv", nOpt)
+map('v', '<M-Up>', ":m '<-2<CR>gv=gv", nOpt)
 map('n', '<Leader>C', ':e %:p:h/', nOpt)
 
 map('n', 's-', ':bd<CR>', nOpt)
@@ -35,6 +31,9 @@ map('n', 's*', ":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn", nsOpt)
 map('x', 's*', '"sy:let @/=@s<CR>cgn', nsOpt)
 map('n', 'ss', ':ls<CR>:b<Space>', nOpt)
 map('n', 's!', ':let @+=expand("%")<CR>', nOpt)
+map('n', 'sn', '<cmd>lua require("helpers").toggleNumbers()<CR>', nOpt)
+map('n', 'sq', 'q', nOpt)
+map('n', 'q', "<Nop>", nOpt)
 
 map('n', '<M-+>', ':vertical resize +5<CR>', nsOpt)
 map('n', '<M-=>', ':vertical resize -5<CR>', nsOpt)
@@ -51,22 +50,11 @@ g["@z"] = "f cl<CR><ESC>l"
 
 map('n', '!', g["@z"], nOpt)
 
-function _G.smart_tab()
-  return vim.fn.pumvisible() == 1 and t'<C-n>' or t'<Tab>'
-end
-
-function _G.smart_shift_tab()
-  return vim.fn.pumvisible() == 1 and t'<C-p>' or t'<Tab>'
-end
-
-map('n', '<Leader>0', '<cmd>lua require("helpers").toggleNumbers()<CR>', nOpt)
 map('n', '<C-e>', ':wincmd w<CR>', nOpt)
 map('n', '<M-h>', '<C-w>h', nOpt)
 map('n', '<M-j>', '<C-w>j', nOpt)
 map('n', '<M-k>', '<C-w>k', nOpt)
 map('n', '<M-l>', '<C-w>l', nOpt)
-map('i', '<TAB>', 'v:lua.smart_tab()', neOpt)
-map('i', '<S-TAB>', 'v:lua.smart_shift_tab()', neOpt)
 
 map('x', '*', "<cmd>lua require('helpers').VSetSearch('/')<CR>/<C-R>=@/<CR><CR>", nOpt)
 map('x', '#', "<cmd>lua require('helpers').VSetSearch('?')<CR>?<C-R>=@/<CR><CR>", nOpt)
@@ -74,7 +62,7 @@ map('x', '#', "<cmd>lua require('helpers').VSetSearch('?')<CR>?<C-R>=@/<CR><CR>"
 map('n', '<Leader>*', "<cmd>lua require('helpers').rgWordUnderCursor()<CR>", nOpt)
 map('v', '<Leader>*', "<cmd>lua require('helpers').rgVisualSelection()<CR>", nOpt)
 
-map('n', '<Leader><Leader>', ':Buffers<CR>', nOpt)
+map('n', '<Leader>b', ':Buffers<CR>', nOpt)
 map('n', '<Leader>o', ":Files<CR>", nOpt)
 map('n', '<Leader>f', ":RG<CR>", nOpt)
 map('n', '<Leader>F', ":RGRaw ", nOpt)
@@ -89,6 +77,9 @@ map('n', 'sL', ":<C-U>call sneak#wrap('', 1, 1, 0, 2)<CR>", opt)
 map('n', 'sj', "<Plug>SneakLabel_s", opt)
 map('n', 'sk', "<Plug>SneakLabel_S", opt)
 
+map('n', '<Leader>e', "<Plug>(Scalpel)", opt)
+map('v', '<Leader>e', "<Plug>(ScalpelVisual)", opt)
+
 map('n', '<Leader>gn', ":Neogit<CR>", nOpt)
 -- tig status
 map('n', '<Leader>gg', "<cmd>lua require('helpers').openTerm('tig status')<CR>", nOpt)
@@ -99,27 +90,14 @@ map('n', '<Leader>gl', "<cmd>lua require('helpers').openTerm('tig')<CR>", nOpt)
 
 map('n', 'gb', ":GitMessenger<CR>", nOpt)
 
-map('n', '<Leader>ck', "<Plug>(coc-diagnostic-prev)", opt)
-map('n', '<Leader>cj', "<Plug>(coc-diagnostic-next)", opt)
-map('n', '<Leader>cd', "<Plug>(coc-definition)", opt)
-map('n', '<Leader>cy', "<Plug>(coc-type-definition)", opt)
-map('n', '<Leader>ci', "<Plug>(coc-implementation)", opt)
-map('n', '<Leader>cr', "<Plug>(coc-references)", opt)
-map('n', '<Leader>cs', ":CocSearch<Space>", nOpt)
-map('n', '<Leader>cw', ":CocSearch <C-R>=expand('<cword>')<CR><CR>", nOpt)
-map('n', '<Leader>cT', ":call coc#float#close_all()<CR>", opt)
-map('i', '<C-j>', "<Plug>(coc-snippets-expand-jump)", opt)
-map('n', '<C-f>', "coc#float#has_scroll() ? coc#float#scroll(1) : '<C-f>'", nsenOpt)
-map('n', '<C-b>', "coc#float#has_scroll() ? coc#float#scroll(0) : '<C-b>'", nsenOpt)
+map('n', '<Leader>lk', ":lprevious<CR>", opt)
+map('n', '<Leader>lj', ":lnext<CR>", opt)
+map('n', '<Leader>lc', ":lclose<CR>", opt)
+map('n', '<Leader>lq', ":lopen<CR>", opt)
 
-map('n', '<C-k>', ":lprevious<CR>", opt)
-map('n', '<C-j>', ":lnext<CR>", opt)
-map('n', '<Leader>q-', ":lclose<CR>", opt)
-map('n', '<Leader>ql', ":lopen<CR>", opt)
-
-map('n', '<Leader>k', ":cprevious<CR>", opt)
-map('n', '<Leader>j', ":cnext<CR>", opt)
-map('n', '<Leader>q_', ":cclose<CR>", opt)
+map('n', '<Leader>qk', ":cprevious<CR>", opt)
+map('n', '<Leader>qj', ":cnext<CR>", opt)
+map('n', '<Leader>qc', ":cclose<CR>", opt)
 map('n', '<Leader>qq', ":copen<CR>", opt)
 
 map('n', '<M-i>', "<cmd>lua require('helpers').show_documentation()<CR>", nsOpt)

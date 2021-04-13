@@ -81,6 +81,12 @@ return require('packer').startup(function()
             guibg = '#011627',
             guifg = '#82aaff'
           },
+          duplicate = {
+            guibg = '#1a2b4a',
+          },
+          duplicate_selected = {
+            guibg = '#011627',
+          },
           modified = {
             guibg = '#1a2b4a'
           }

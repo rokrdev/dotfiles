@@ -1,3 +1,4 @@
+local map = vim.api.nvim_set_keymap
 local packer_exists = pcall(vim.cmd, [[packadd packer.nvim]])
 
 if not packer_exists then
@@ -10,9 +11,9 @@ if not packer_exists then
   vim.fn.mkdir(directory, 'p')
 
   local git_clone_cmd = vim.fn.system(string.format(
-  'git clone %s %s',
-  'https://github.com/wbthomason/packer.nvim',
-  directory .. '/packer.nvim'
+    'git clone %s %s',
+    'https://github.com/wbthomason/packer.nvim',
+    directory .. '/packer.nvim'
   ))
 
   print(git_clone_cmd)
@@ -43,6 +44,8 @@ return require('packer').startup(function()
     config = function()
       vim.g.indent_blankline_filetype_exclude = { 'NvimTree' }
       vim.g.indent_blankline_char = '│'
+      vim.g.indent_blankline_use_treesitter = true
+      -- vim.g.indent_blankline_show_current_context = true
     end
   }
 
@@ -57,6 +60,30 @@ return require('packer').startup(function()
           show_close_icon = false,
           separator_style = "thick",
           mappings = false,
+        },
+        highlights = {
+          buffer_selected = {
+            guibg = '#011627',
+            guifg = '#C5E4FD'
+          },
+          fill = {
+            guibg = '#1a2b4a',
+            guifg = '#C5E4FD'
+          },
+          background = {
+            guibg = '#1a2b4a',
+            guifg = '#C5E4FD'
+          },
+          separator = {
+            guibg = '#1a2b4a'
+          },
+          indicator_selected = {
+            guibg = '#011627',
+            guifg = '#82aaff'
+          },
+          modified = {
+            guibg = '#1a2b4a'
+          }
         }
       }
     end
@@ -77,7 +104,7 @@ return require('packer').startup(function()
         sections = {
           lualine_a = { 'mode' },
           lualine_b = { 'branch' },
-          lualine_c = { 'filename', 'diff', 'g:coc_status' },
+          lualine_c = { 'filename', 'diff' },
           lualine_x = { 'encoding', 'fileformat', 'filetype' },
           lualine_y = { 'progress' },
           lualine_z = { 'location' },
@@ -104,8 +131,12 @@ return require('packer').startup(function()
   }
 
   use {
-    'jiangmiao/auto-pairs',
-    event = 'VimEnter *'
+    'windwp/nvim-autopairs',
+    event = 'VimEnter *',
+    config = function()
+      require('nvim-autopairs').setup()
+      require('autopair')
+    end
   }
 
   use {
@@ -159,35 +190,6 @@ return require('packer').startup(function()
   }
 
   use {
-    'neoclide/coc.nvim',
-    branch = 'release',
-    event = 'VimEnter *',
-    config = function()
-      vim.g.coc_global_extensions = {
-        'coc-css',
-        'coc-docker',
-        'coc-elixir',
-        -- 'coc-emmet',
-        'coc-eslint',
-        'coc-html',
-        'coc-json',
-        'coc-markdownlint',
-        'coc-prettier',
-        'coc-python',
-        'coc-sh',
-        'coc-snippets',
-        'coc-tsserver',
-        'coc-yaml',
-      }
-    end
-  }
-
-  use {
-    'tpope/vim-commentary',
-    event = 'VimEnter *',
-  }
-
-  use {
     'mhinz/vim-signify',
     event = 'VimEnter *',
     config = function()
@@ -208,30 +210,69 @@ return require('packer').startup(function()
   }
 
   use {
-    'mg979/vim-visual-multi',
-    branch = 'master',
+    'wincent/scalpel',
     event = 'VimEnter *',
+    config = function()
+      vim.g.ScalpelMap=0
+    end
   }
 
-  -- use {
-  --   'nvim-treesitter/nvim-treesitter',
-  --   run = ':TSUpdate',
-  --   event = 'VimEnter *',
-  --   config = function()
-  --     require('nvim-treesitter.configs').setup {
-  --       ensure_installed = "all",
-  --       highlight = {
-  --         enable = true
-  --       },
-  --       indent = {
-  --         enable = false,
-  --       }
-  --     }
-  --   end
-  -- }
   use {
-    'sheerun/vim-polyglot',
+    'nvim-treesitter/nvim-treesitter',
     event = 'VimEnter *',
+    run = ':TSUpdate',
+    config = function()
+      require('nvim-treesitter.configs').setup {
+        ensure_installed = {
+          'bash', 'css', 'dart', 'go', 'graphql', 'html', 'java', 'javascript', 'json', 'kotlin',
+          'lua', 'php', 'python', 'ruby', 'rust', 'svelte', 'tsx', 'typescript', 'vue', 'yaml'
+        },
+        highlight = {
+          enable = true
+        },
+        indent = {
+          enable = false,
+        },
+        disable = { "elixir" },
+        context_commentstring = {
+          enable = true,
+        },
+        incremental_selection = {
+          enable = true,
+          keymaps = {
+            init_selection = "<M-h>",
+            node_incremental = "<M-j>",
+            scope_incremental = "<M-l>",
+            node_decremental = "<M-k>",
+          },
+        },
+      }
+    end
+  }
+
+  use {
+    'JoosepAlviste/nvim-ts-context-commentstring',
+    event = 'VimEnter *',
+    requires = {
+      'tpope/vim-commentary',
+      'nvim-treesitter/nvim-treesitter',
+    }
+  }
+
+  use {
+    'neovim/nvim-lspconfig',
+    event = 'VimEnter *',
+    requires = {
+      'hrsh7th/nvim-compe',
+      'nvim-treesitter/nvim-treesitter',
+      'hrsh7th/vim-vsnip',
+      'hrsh7th/vim-vsnip-integ',
+    },
+    config = function()
+      vim.g.vsnip_snippet_dir = '~/.config/nvim/vsnip'
+      require('lsp-config')
+      require('completion')
+    end
   }
 
   use {
@@ -269,24 +310,23 @@ return require('packer').startup(function()
     cmd = 'MarkdownPreview'
   }
 
-  -- use {
-  --   'elixir-editors/vim-elixir',
-  --   opt = true,
-  --   event = 'VimEnter *'
-  -- }
+  use {
+    'elixir-editors/vim-elixir',
+    opt = true,
+    ft = {'elixir', 'exs'},
+  }
 
-  -- use {
-  --   'dag/vim-fish',
-  --   opt = true,
-  --   event = 'VimEnter *',
-  --   -- ft = {'fish'}
-  -- }
+  use {
+    'dag/vim-fish',
+    opt = true,
+    ft = {'fish'}
+  }
 
-  -- use {
-  --   'jxnblk/vim-mdx-js',
-  --   opt = true,
-  --   ft = {'mdx'}
-  -- }
+  use {
+    'jxnblk/vim-mdx-js',
+    opt = true,
+    ft = {'mdx'}
+  }
 
   use {
     'mcchrish/nnn.vim',

@@ -36,6 +36,7 @@ setopt('rtp', getopt('rtp') .. ',/usr/local/opt/fzf')
 setopt('shortmess', getopt('shortmess') .. 'cI' )
 setopt('grepprg', 'rg --vimgrep --no-heading --smart-case --hidden')
 setopt('undofile', true)
+setopt('mouse', 'a')
 
 -- buffer local
 setBopt('fileencoding', 'UTF-8')

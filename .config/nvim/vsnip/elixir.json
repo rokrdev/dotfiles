@@ -1,0 +1,9 @@
+{
+  "IO Inspect": {
+    "prefix": "ins",
+    "body": [
+      "IO.inspect($0)"
+    ],
+    "description": "IO Inspect"
+  }
+}

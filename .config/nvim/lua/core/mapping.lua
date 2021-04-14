@@ -3,6 +3,7 @@ local map_cr = bind.map_cr
 local map_cu = bind.map_cu
 local map_cmd = bind.map_cmd
 local map_args = bind.map_args
+local map_cmd_cr = bind.map_cmd_cr
 
 vim.g["@z"] = "f cl<CR><ESC>l"
 
@@ -30,6 +31,9 @@ local def_map = {
   ["n|<M-_>"]                = map_cr(":resize +5"):with_noremap():with_silent(),
   ["n|!"]                    = map_cmd(vim.g["@z"]):with_noremap(),
   ["n|<C-e>"]                = map_cr("wincmd w"):with_noremap(),
+  ["n|<Leader>gg"]           = map_cmd_cr("lua require('helpers').openTerm('tig status')"):with_noremap(),
+  ["n|<Leader>gb"]           = map_cmd_cr("lua require('helpers').openTerm('tig ' .. vim.fn.expand('%'))"):with_noremap(),
+  ["n|<Leader>gl"]           = map_cmd_cr("lua require('helpers').openTerm('tig')"):with_noremap(),
 
   -- visual mode
   ["v|s"]                    = map_cmd("<Nop>"),
@@ -39,6 +43,9 @@ local def_map = {
   ["v|sp"]                   = map_cmd("\"+p"):with_noremap(),
   ["v|s#"]                   = map_cmd("\"sy:let @/=@s<CR>cgN"):with_noremap(),
   ["v|s*"]                   = map_cmd("\"sy:let @/=@s<CR>cgn"):with_noremap(),
+  ["x|*"]                    = map_cmd("lua require('helpers').VSetSearch('/')<CR>/<C-R>=@/<CR>"):with_noremap(),
+  ["x|#"]                    = map_cmd("lua require('helpers').VSetSearch('?')<CR>/<C-R>=@/<CR>"):with_noremap(),
+
 }
 
 bind.nvim_load_mapping(def_map)

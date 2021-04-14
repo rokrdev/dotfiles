@@ -8,13 +8,18 @@ editor['windwp/nvim-autopairs'] = {
 
 editor["junegunn/fzf.vim"] = {
   opt = true,
-  event = 'VimEnter *',
+  event = 'VimEnter',
   config = conf.fzf
 }
 
 editor["mcchrish/nnn.vim"] = {
   opt = true,
-  cmd = 'NnnPicker'
+  event = 'VimEnter',
+}
+
+editor["justinmk/vim-sneak"] = {
+  opt = true,
+  event = 'VimEnter',
 }
 
 return editor

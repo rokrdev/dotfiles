@@ -17,6 +17,26 @@ local function bind_general_options(options)
   end
 end
 
+
+local function global_options()
+  vim.g["nnn#set_default_mappings"] = 0
+  vim.g["nnn#layout"] = {
+   ["window"] = {
+     ["width"] = 0.9,
+     ["height"] = 0.9,
+     ["highlight"] = "Directory"
+   }
+  }
+  vim.g["nnn#command"] = 'nnn -d -H'
+  vim.g["nnn#action"] = {
+   ['<c-x>'] = 'split',
+   ['<c-v>'] = 'vsplit'
+  }
+
+  vim.g["sneak#use_ic_scs"] = 1
+  vim.g["sneak#target_labels"] = "asdfjkl;ghqweruioptyzxcvnmbASDFJKL:GHQWERTYUIOPZXCVNMB!@#$^&*"
+end
+
 local function load_options()
   local global_local = {
     backup                 = false;
@@ -103,6 +123,7 @@ local function load_options()
   bind_option(bw_local)
   bind_option(wn_local)
   bind_general_options(general_options)
+  global_options()
 end
 
 load_options()

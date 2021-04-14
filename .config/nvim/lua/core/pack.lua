@@ -33,7 +33,7 @@ end
 function Packer:load_packer()
   if not packer then
     api.nvim_command('packadd packer.nvim')
-    packer = require('pcker')
+    packer = require('packer')
   end
   packer.init({
     compile_path = packer_compiled,
@@ -138,4 +138,4 @@ function plugins.load_compile()
   vim.cmd [[command! PackerStatus  lua require('packer').status()]]
 end
 
-return pluginsa
+return plugins

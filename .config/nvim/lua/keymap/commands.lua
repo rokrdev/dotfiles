@@ -22,6 +22,7 @@ function commands.setup()
   -- Session
   vim.cmd("command! -nargs=* SS lua require('helpers').saveSession(vim.fn.expand('<args>'))")
   vim.cmd("command! -nargs=* -complete=file SR lua require('helpers').restoreSession(vim.fn.expand('<args>'))")
+  vim.cmd("command! -nargs=* -complete=file SD lua require('helpers').deleteSession(vim.fn.expand('<args>'))")
 
   -- whitepace
   vim.cmd("command! DisableTrailingWhitespace hi link EndOfLineSpace Normal")

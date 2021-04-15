@@ -21,9 +21,15 @@ local plug_map = {
   ["n|sL"]                    = map_cu("call sneak#wrap('', 1, 1, 0, 2)"):with_noremap(),
   ["n|sj"]                    = map_cmd("<Plug>SneakLabel_s"),
   ["n|sk"]                    = map_cmd("<Plug>SneakLabel_S"),
+  ["n|<Leader>e"]             = map_cmd("<Plug>(Scalpel)"),
+  ["n|gb"]                    = map_cr("GitMessenger"),
+  ["n|<Leader>t"]             = map_cr("NvimTreeToggle"):with_noremap(),
+  ["n|<C-h>"]                 = map_cr("BufferLineCyclePrev"):with_noremap(),
+  ["n|<C-l>"]                 = map_cr("BufferLineCycleNext"):with_noremap(),
 
   -- visual
   ["v|<Leader>*"]             = map_cmd_cr("lua require('helpers').rgVisualSelection()"):with_noremap(),
+  ["v|<Leader>e"]             = map_cmd("<Plug>(ScalpelVisual)"),
 }
 
 bind.nvim_load_mapping(plug_map)

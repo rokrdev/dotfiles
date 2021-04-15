@@ -35,6 +35,11 @@ function  rhs_options:map_args(cmd_string)
   return self
 end
 
+function  rhs_options:map_wait(cmd_string)
+  self.cmd = (":%s"):format(cmd_string)
+  return self
+end
+
 function rhs_options:map_cu(cmd_string)
   self.cmd = (":<C-u>%s<CR>"):format(cmd_string)
   return self
@@ -80,6 +85,11 @@ end
 function pbind.map_cu(cmd_string)
   local ro = rhs_options:new()
   return ro:map_cu(cmd_string)
+end
+
+function pbind.map_wait(cmd_string)
+  local ro = rhs_options:new()
+  return ro:map_wait(cmd_string)
 end
 
 function pbind.map_args(cmd_string)

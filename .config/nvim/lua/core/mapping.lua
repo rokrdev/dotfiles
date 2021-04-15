@@ -3,6 +3,7 @@ local map_cr = bind.map_cr
 local map_cu = bind.map_cu
 local map_cmd = bind.map_cmd
 local map_args = bind.map_args
+local map_wait = bind.map_wait
 local map_cmd_cr = bind.map_cmd_cr
 
 vim.g["@z"] = "f cl<CR><ESC>l"
@@ -34,6 +35,12 @@ local def_map = {
   ["n|<Leader>gg"]           = map_cmd_cr("lua require('helpers').openTerm('tig status')"):with_noremap(),
   ["n|<Leader>gb"]           = map_cmd_cr("lua require('helpers').openTerm('tig ' .. vim.fn.expand('%'))"):with_noremap(),
   ["n|<Leader>gl"]           = map_cmd_cr("lua require('helpers').openTerm('tig')"):with_noremap(),
+  ["n|<Leader>;"]            = map_cmd("o<Esc>"):with_noremap(),
+  ["n|<Leader>:"]            = map_cmd("O<Esc>"):with_noremap(),
+  ["n|<Leader>ss"]           = map_args("SS"):with_noremap(),
+  ["n|<Leader>sr"]           = map_wait("SR " .. require('helpers').getSessionFilePath()):with_noremap(),
+  ["n|<Leader>sd"]           = map_wait("SD " .. require('helpers').getSessionFilePath()):with_noremap(),
+  ["n|<Leader>sc"]           = map_cr("Scratch"):with_noremap(),
 
   -- visual mode
   ["v|s"]                    = map_cmd("<Nop>"),

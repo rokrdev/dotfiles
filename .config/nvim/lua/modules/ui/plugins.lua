@@ -3,37 +3,37 @@ local conf = require('modules.ui.config')
 
 ui["lukas-reineke/indent-blankline.nvim"] = {
   branch = 'lua',
-  event = 'VimEnter',
+  event = 'BufRead',
   config = conf.indentBlankLine
 }
 
 ui["akinsho/nvim-bufferline.lua"] = {
-  event = 'VimEnter',
   config = conf.bufferline
 }
 
 ui["hoob3rt/lualine.nvim"] = {
-  requires = {'kyazdani42/nvim-web-devicons', opt = true},
+  requires = 'kyazdani42/nvim-web-devicons',
   config = conf.lualine
 }
 
 ui["norcalli/nvim-colorizer.lua"] = {
-  event = 'VimEnter',
+  event = {'BufRead','BufNewFile'},
   config = conf.colorizer
 }
 
 ui["kyazdani42/nvim-tree.lua"] = {
-  requires = {'kyazdani42/nvim-web-devicons', opt = true},
+  cmd = {'NvimTreeToggle','NvimTreeOpen'},
+  requires = 'kyazdani42/nvim-web-devicons',
   config = conf.tree
 }
 
 ui["mhinz/vim-signify"] = {
-  event = 'VimEnter',
+  event = {'BufRead','BufNewFile'},
   config = conf.signify
 }
 
 ui["rrethy/vim-illuminate"] = {
-  event = 'VimEnter',
+  event = {'BufRead','BufNewFile'},
   config = conf.illuminate
 }
 

@@ -86,6 +86,17 @@ function config.tree()
   vim.g["nvim_tree_auto_close"] = 1
   vim.g["nvim_tree_width_allow_resize"] = 1
   vim.g["nvim_tree_side"] = "left"
+  vim.g.nvim_tree_icons = {
+    default =  '',
+    symlink =  '',
+    git = {
+     unstaged = "✚",
+     staged =  "✚",
+     unmerged =  "≠",
+     renamed =  "≫",
+     untracked = "★",
+    },
+  }
 end
 
 function config.signify()

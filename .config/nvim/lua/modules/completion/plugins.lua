@@ -2,22 +2,22 @@ local completion = {}
 local conf = require('modules.completion.config')
 
 completion["neovim/nvim-lspconfig"] = {
-  event = 'VimEnter',
+  event = 'BufReadPre',
   config = conf.lspconfig
 }
 
 completion["hrsh7th/nvim-compe"] = {
-  event = 'VimEnter',
+  event = 'InsertCharPre',
   config = conf.completion
 }
 
 completion["hrsh7th/vim-vsnip"] = {
-  event = 'VimEnter',
+  event = 'InsertCharPre',
   config = conf.vsnip
 }
 
 completion["hrsh7th/vim-vsnip-integ"] = {
-  event = 'VimEnter',
+  event = 'InsertCharPre',
 }
 
 

@@ -105,8 +105,6 @@ local function load_options()
   }
 
   local general_options = {
-    "syntax enable",
-    "filetype plugin indent on",
     "colorscheme my-theme",
     "let $TERM = 'alacritty'",
     "let $GIT_EDITOR = 'nvr -cc split --remote-wait'",

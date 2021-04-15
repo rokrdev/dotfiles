@@ -29,4 +29,8 @@ function config.fzf()
   vim.cmd([[packadd cfilter]])
 end
 
+function config.scalpel()
+  vim.g.ScalpelMap=0
+end
+
 return config

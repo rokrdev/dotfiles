@@ -185,6 +185,13 @@ function M.restoreSession(path)
   api.nvim_exec("cd "..currentFolder, false)
 end
 
+function M.deleteSession(path)
+  local currentFolder, folderText = M.getSessionNameFromCwd()
+  local cmd = ':!rm '..path
+  api.nvim_exec(cmd, false)
+  api.nvim_exec("cd "..currentFolder, false)
+end
+
 function M.saveSession(name)
   local sessionName
   local currentFolder, folderText = M.getSessionNameFromCwd()

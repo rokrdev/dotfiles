@@ -23,7 +23,7 @@ local def_map = {
   ["n|s*"]                   = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn"):with_noremap():with_silent(),
   ["n|ss"]                   = map_args("ls<CR>:b"):with_noremap(),
   ["n|s!"]                   = map_cr(":let @+=expand('%')"):with_noremap(),
--- map('n', 'sn', '<cmd>lua require("helpers").toggleNumbers()<CR>', nOpt)
+  ["n|sn"]                   = map_cmd_cr("lua require('helpers').toggleNumbers()"):with_noremap(),
   ["n|sq"]                   = map_cmd("q"):with_noremap(),
   ["n|q"]                    = map_cmd("<Nop>"):with_noremap(),
   ["n|<M-+>"]                = map_cr(":vertical resize +5"):with_noremap():with_silent(),

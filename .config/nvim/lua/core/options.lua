@@ -35,6 +35,16 @@ local function global_options()
 
   vim.g["sneak#use_ic_scs"] = 1
   vim.g["sneak#target_labels"] = "asdfjkl;ghqweruioptyzxcvnmbASDFJKL:GHQWERTYUIOPZXCVNMB!@#$^&*"
+
+  -- fix for slow movement in large php files
+  vim.g.php_syntax_extensions_enabled = {}
+  vim.g.php_var_selector_is_identifier = 1
+  vim.g.php_sql_query = 0
+  vim.g.php_sql_heredoc = 0
+  vim.g.php_sql_nowdoc = 0
+  vim.g.php_html_load = 0
+  vim.g.php_html_in_heredoc = 0
+  vim.g.php_html_in_nowdoc = 0
 end
 
 local function load_options()

@@ -57,20 +57,6 @@ M.lualine_theme_colors = {
 
 M.getopt = api.nvim_get_option
 
-function M.setopt(k, v)
-  o[k] = v
-end
-
-function M.setBopt(k, v)
-  o[k] = v
-  bo[k] = v
-end
-
-function M.setWopt(k, v)
-  o[k] = v
-  wo[k] = v
-end
-
 function M.toggleNumbers()
   if wo.rnu then
     wo.rnu = false
@@ -133,14 +119,6 @@ end
 function M.scratchGenerator()
   local str = "e! __Scratchy__" .. getRandom()
   api.nvim_exec(str, false)
-end
-
-function M.show_documentation()
-  if vim.fn.index({'vim', 'help'}, vim.bo.filetype) >= 0 then
-    api.nvim_exec('h ' .. vim.fn.expand('<cword>'))
-  else
-    vim.fn.call('CocAction', {'doHover'})
-  end
 end
 
 function M.getVisualSelection()

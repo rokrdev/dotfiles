@@ -12,9 +12,13 @@ completion["hrsh7th/nvim-compe"] = {
 }
 
 completion["hrsh7th/vim-vsnip"] = {
-  requires = {'hrsh7th/vim-vsnip-integ', opt = true},
   event = 'VimEnter',
   config = conf.vsnip
 }
+
+completion["hrsh7th/vim-vsnip-integ"] = {
+  event = 'VimEnter',
+}
+
 
 return completion

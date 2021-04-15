@@ -1,6 +1,11 @@
 local config = {}
 
-local function autopair()
+function config.autopairs()
+  if packer_plugins['nvim-autopairs'] and not packer_plugins['nvim-autopairs'].loaded then
+    vim.cmd [[packadd nvim-autopairs]]
+  end
+  require('nvim-autopairs').setup()
+
   local remap = vim.api.nvim_set_keymap
   local npairs = require('nvim-autopairs')
 
@@ -25,11 +30,6 @@ local function autopair()
   end
 
   remap('i' , '<CR>','v:lua.MUtils.completion_confirm()', {expr = true , noremap = true})
-end
-
-function config.autopairs()
-  require('nvim-autopairs').setup()
-  autopair()
 end
 
 function config.fzf()

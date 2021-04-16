@@ -2,7 +2,7 @@ local editor = {}
 local conf = require('modules.editor.config')
 
 editor['windwp/nvim-autopairs'] = {
-  event = 'InsertCharPre',
+  event = 'VimEnter',
   config = conf.autopairs
 }
 

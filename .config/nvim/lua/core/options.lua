@@ -1,4 +1,3 @@
-local global = require('core.global')
 local getopt = vim.api.nvim_get_option
 
 local function bind_option(options)
@@ -110,8 +109,9 @@ local function load_options()
     "let $GIT_EDITOR = 'nvr -cc split --remote-wait'",
     "match EndOfLineSpace / \\+$/",
   }
+  local is_mac = vim.loop.os_uname().sysname == 'Darwin'
 
-  if global.is_mac then
+  if is_mac then
     vim.g.clipboard = {
       name = "macOS-clipboard",
       copy = {

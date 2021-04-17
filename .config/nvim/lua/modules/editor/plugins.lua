@@ -3,12 +3,12 @@ local conf = require('modules.editor.config')
 
 editor['windwp/nvim-autopairs'] = {
   event = 'VimEnter',
-  config = conf.autopairs
+  config = conf.autopairs,
 }
 
 editor["junegunn/fzf.vim"] = {
   event = 'VimEnter',
-  config = conf.fzf
+  config = conf.fzf,
 }
 
 editor["mcchrish/nnn.vim"] = {
@@ -21,16 +21,24 @@ editor["justinmk/vim-sneak"] = {
 
 editor['wincent/scalpel'] = {
   event = {'BufReadPre','BufNewFile'},
-  config = conf.scalpel
+  config = conf.scalpel,
 }
 
 editor['rhysd/git-messenger.vim'] = {
-  event = {'BufReadPre','BufNewFile'},
-  cmd = 'GitMessenger'
+  cmd = 'GitMessenger',
 }
 
 editor['machakann/vim-sandwich'] = {
   event = {'BufReadPre','BufNewFile'},
+}
+
+editor['rhysd/accelerated-jk'] = {
+  opt = true,
+}
+
+editor['andymass/vim-matchup'] = {
+  event = {'BufReadPre','BufNewFile'},
+  opt = true,
 }
 
 return editor

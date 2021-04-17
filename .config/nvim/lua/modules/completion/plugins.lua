@@ -20,5 +20,4 @@ completion["hrsh7th/vim-vsnip-integ"] = {
   event = 'InsertCharPre',
 }
 
-
 return completion

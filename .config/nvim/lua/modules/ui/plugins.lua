@@ -8,6 +8,7 @@ ui["lukas-reineke/indent-blankline.nvim"] = {
 }
 
 ui["akinsho/nvim-bufferline.lua"] = {
+  event = 'VimEnter',
   config = conf.bufferline,
 }
 
@@ -22,7 +23,6 @@ ui['kyazdani42/nvim-web-devicons'] = {
 
 ui["hoob3rt/lualine.nvim"] = {
   config = conf.lualine,
-  requires = 'kyazdani42/nvim-web-devicons',
 }
 
 ui['kyazdani42/nvim-tree.lua'] = {

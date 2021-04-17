@@ -4,7 +4,7 @@ local map_cu = bind.map_cu
 local map_cmd = bind.map_cmd
 local map_args = bind.map_args
 local map_wait = bind.map_wait
-local map_cmd_cr = bind.map_cmd_cr
+local map_lua = bind.map_lua
 
 vim.g["@z"] = "f cl<CR><ESC>l"
 
@@ -23,7 +23,7 @@ local def_map = {
   ["n|s*"]                   = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn"):with_noremap():with_silent(),
   ["n|ss"]                   = map_args("ls<CR>:b"):with_noremap(),
   ["n|s!"]                   = map_cr(":let @+=expand('%')"):with_noremap(),
-  ["n|sn"]                   = map_cmd_cr("lua require('helpers').toggleNumbers()"):with_noremap(),
+  ["n|sn"]                   = map_lua("require('helpers').toggleNumbers()"):with_noremap(),
   ["n|sq"]                   = map_cmd("q"):with_noremap(),
   ["n|q"]                    = map_cmd("<Nop>"):with_noremap(),
   ["n|<M-+>"]                = map_cr(":vertical resize +5"):with_noremap():with_silent(),
@@ -32,9 +32,9 @@ local def_map = {
   ["n|<M-_>"]                = map_cr(":resize +5"):with_noremap():with_silent(),
   ["n|!"]                    = map_cmd(vim.g["@z"]):with_noremap(),
   ["n|<C-e>"]                = map_cr("wincmd w"):with_noremap(),
-  ["n|<Leader>gg"]           = map_cmd_cr("lua require('helpers').openTerm('tig status')"):with_noremap(),
-  ["n|<Leader>gb"]           = map_cmd_cr("lua require('helpers').openTerm('tig ' .. vim.fn.expand('%'))"):with_noremap(),
-  ["n|<Leader>gl"]           = map_cmd_cr("lua require('helpers').openTerm('tig')"):with_noremap(),
+  ["n|<Leader>gg"]           = map_lua("require('helpers').openTerm('tig status')"):with_noremap(),
+  ["n|<Leader>gb"]           = map_lua("require('helpers').openTerm('tig ' .. vim.fn.expand('%'))"):with_noremap(),
+  ["n|<Leader>gl"]           = map_lua("require('helpers').openTerm('tig')"):with_noremap(),
   ["n|<Leader>;"]            = map_cmd("o<Esc>"):with_noremap(),
   ["n|<Leader>:"]            = map_cmd("O<Esc>"):with_noremap(),
   ["n|<Leader>ss"]           = map_args("SS"):with_noremap(),

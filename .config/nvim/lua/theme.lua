@@ -1,25 +1,55 @@
 local g = vim.g
 local ncmd = vim.api.nvim_command
 
-local theme_colors = require('helpers').theme_colors
+local theme = {
+  bold = "bold,",
+  italic = "italic,",
+  underline = "underline",
+  NONE = 'NONE',
 
-g.terminal_color_foreground = theme_colors.white_default
-g.terminal_color_background = theme_colors.blue_default
-g.terminal_color_0 = theme_colors.blue_default
-g.terminal_color_8 = theme_colors.ash_grey
-g.terminal_color_1 = theme_colors.red
-g.terminal_color_2 = theme_colors.green_bright
-g.terminal_color_10 = theme_colors.green_bright
-g.terminal_color_3 = theme_colors.orange
-g.terminal_color_11 = theme_colors.orange
-g.terminal_color_4 = theme_colors.blue
-g.terminal_color_12 = theme_colors.blue
-g.terminal_color_5 = theme_colors.pink
-g.terminal_color_13 = theme_colors.pink
-g.terminal_color_6 = theme_colors.cyan
-g.terminal_color_14 = theme_colors.cyan
-g.terminal_color_7 = theme_colors.ash_grey
-g.terminal_color_15 = theme_colors.white_light
+  white_default = "#d6deeb",
+  white_light = "#C5E4FD",
+  blue_default = "#011627",
+  grey = "#4b6479",
+  grey_1 = "#1d3b53",
+  blue_dark = "#00111F",
+  blue = "#82aaff",
+  blue_light = "#C5E4FD",
+  green_bright = "#addb67",
+  pink = "#c792ea",
+  red = "#ff5874",
+  brown = "#806e6f",
+  orange_light = "#ecc48d",
+  orange = "#f78c6c",
+  blue_visual = "#1a2b4a",
+  ash_grey = "#637777",
+  cyan = "#7fdbca",
+  yellow_light = "#fbec9f",
+  yellow_dark = "#f4d554",
+  highligter = "#263838",
+  black = "#000000",
+  black_1 = "#000e1a",
+  blue_1 = "#283d6b",
+  blue_2 = "#092236"
+}
+
+g.terminal_color_foreground = theme.white_default
+g.terminal_color_background = theme.blue_default
+g.terminal_color_0 = theme.blue_default
+g.terminal_color_8 = theme.ash_grey
+g.terminal_color_1 = theme.red
+g.terminal_color_2 = theme.green_bright
+g.terminal_color_10 = theme.green_bright
+g.terminal_color_3 = theme.orange
+g.terminal_color_11 = theme.orange
+g.terminal_color_4 = theme.blue
+g.terminal_color_12 = theme.blue
+g.terminal_color_5 = theme.pink
+g.terminal_color_13 = theme.pink
+g.terminal_color_6 = theme.cyan
+g.terminal_color_14 = theme.cyan
+g.terminal_color_7 = theme.ash_grey
+g.terminal_color_15 = theme.white_light
 
 local function highlight(group, color)
   local gui = color.attr and 'gui=' .. color.attr or 'gui=NONE'
@@ -29,7 +59,7 @@ local function highlight(group, color)
   ncmd(string.format('highlight %s %s %s %s %s', group, fg, bg, gui, cterm))
 end
 
-local function theme(colors)
+local function setTheme(colors)
   local hi = {}
 
   hi.Bold = { guifg = nil, guibg = nil, attr = colors.bold }
@@ -221,7 +251,7 @@ local function setup()
   --   vim.api.nvim_command('syntax reset')
   -- end
   vim.api.nvim_command('set termguicolors')
-  local hi = theme(theme_colors)
+  local hi = setTheme(theme)
   vim.o.background = 'dark'
   vim.o.termguicolors = true
   vim.g.colors_name = "my-theme"
@@ -231,7 +261,86 @@ local function setup()
   vim.cmd("hi link EndOfLineSpace C_WhiteSpace")
 end
 
+local function getLualineTheme()
+  local lualine = {}
+
+  lualine.normal = {
+    a = { bg = theme.blue, fg = theme.blue_default, gui = 'bold', },
+    b = { bg = theme.blue_visual, fg = theme.white_default, },
+    c = { bg = theme.blue_visual, fg = theme.white_default, }
+  }
+
+  lualine.insert = {
+    a = { bg = theme.green, fg = theme.blue_default, gui = 'bold', },
+    b = { bg = theme.blue_visual, fg = theme.white_default, },
+    c = { bg = theme.blue_visual, fg = theme.white_default, }
+  }
+
+  lualine.visual = {
+    a = { bg = theme.pink, fg = theme.blue_default, gui = 'bold', },
+    b = { bg = theme.blue_visual, fg = theme.white_default, },
+    c = { bg = theme.blue_visual, fg = theme.white_default, }
+  }
+
+  lualine.replace = {
+    a = { bg = theme.red, fg = theme.blue_default, gui = 'bold', },
+    b = { bg = theme.blue_visual, fg = theme.white_default, },
+    c = { bg = theme.blue_visual, fg = theme.white_default, }
+  }
+
+  lualine.command = {
+    a = { bg = theme.cyan, fg = theme.blue_default, gui = 'bold', },
+    b = { bg = theme.blue_visual, fg = theme.white_default, },
+    c = { bg = theme.blue_visual, fg = theme.white_default, }
+  }
+
+  lualine.inactive = {
+    a = { bg = theme.blue_2, fg = theme.brown, gui = 'bold', },
+    b = { bg = theme.blue_2, fg = theme.brown, },
+    c = { bg = theme.blue_2, fg = theme.brown, },
+  }
+
+  return lualine
+end
+
+local function getBufferlineTheme()
+  bufferline = {
+    buffer_selected = {
+      guibg = theme.blue_default,
+      guifg = theme.blue_light,
+    },
+    fill = {
+      guibg = theme.blue_visual,
+      guifg = theme.blue_light,
+    },
+    background = {
+      guibg = theme.blue_visual,
+      guifg = theme.blue_light,
+    },
+    separator = {
+      guibg = theme.blue_visual
+    },
+    duplicate = {
+      guibg = theme.blue_visual,
+    },
+    duplicate_selected = {
+      guibg = theme.blue_default,
+    },
+    indicator_selected = {
+      guibg = theme.blue_default,
+      guifg = theme.blue,
+    },
+    modified = {
+      guibg = theme.blue_visual
+    }
+  }
+
+  return bufferline;
+end
+
 return {
   highlight = highlight,
   setup = setup,
+  getLualineTheme = getLualineTheme,
+  getBufferlineTheme = getBufferlineTheme,
 }

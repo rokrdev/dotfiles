@@ -15,43 +15,14 @@ function config.bufferline()
       separator_style = "thick",
       mappings = false,
     },
-    highlights = {
-      buffer_selected = {
-        guibg = '#011627',
-        guifg = '#C5E4FD'
-      },
-      fill = {
-        guibg = '#1a2b4a',
-        guifg = '#C5E4FD'
-      },
-      background = {
-        guibg = '#1a2b4a',
-        guifg = '#C5E4FD'
-      },
-      separator = {
-        guibg = '#1a2b4a'
-      },
-      duplicate = {
-        guibg = '#1a2b4a',
-      },
-      duplicate_selected = {
-        guibg = '#011627',
-      },
-      indicator_selected = {
-        guibg = '#011627',
-        guifg = '#82aaff'
-      },
-      modified = {
-        guibg = '#1a2b4a'
-      }
-    }
+    highlights = require('theme').getBufferlineTheme()
   }
 end
 
 function config.lualine()
   require('lualine').setup{
     options = {
-      theme = require('helpers').getLualineTheme(),
+      theme = require('theme').getLualineTheme(),
       icons_enabled = true,
       component_separators = '',
       section_separators = ''

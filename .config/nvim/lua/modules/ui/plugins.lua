@@ -4,37 +4,40 @@ local conf = require('modules.ui.config')
 ui["lukas-reineke/indent-blankline.nvim"] = {
   branch = 'lua',
   event = 'BufRead',
-  config = conf.indentBlankLine
+  config = conf.indentBlankLine,
 }
 
 ui["akinsho/nvim-bufferline.lua"] = {
-  config = conf.bufferline
-}
-
-ui["hoob3rt/lualine.nvim"] = {
-  requires = 'kyazdani42/nvim-web-devicons',
-  config = conf.lualine
+  config = conf.bufferline,
 }
 
 ui["norcalli/nvim-colorizer.lua"] = {
   event = {'BufRead','BufNewFile'},
-  config = conf.colorizer
+  config = conf.colorizer,
 }
 
-ui["kyazdani42/nvim-tree.lua"] = {
-  cmd = {'NvimTreeToggle','NvimTreeOpen'},
+ui['kyazdani42/nvim-web-devicons'] = {
+  event = 'VimEnter',
+}
+
+ui["hoob3rt/lualine.nvim"] = {
+  config = conf.lualine,
   requires = 'kyazdani42/nvim-web-devicons',
-  config = conf.tree
+}
+
+ui['kyazdani42/nvim-tree.lua'] = {
+  cmd = {'NvimTreeToggle','NvimTreeOpen'},
+  config = conf.tree,
 }
 
 ui["mhinz/vim-signify"] = {
   event = {'BufRead','BufNewFile'},
-  config = conf.signify
+  config = conf.signify,
 }
 
 ui["rrethy/vim-illuminate"] = {
   event = {'BufRead','BufNewFile'},
-  config = conf.illuminate
+  config = conf.illuminate,
 }
 
 return ui

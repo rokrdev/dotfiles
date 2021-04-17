@@ -97,6 +97,7 @@ function config.tree()
      untracked = "★",
     },
   }
+  require"nvim-tree".on_enter()
 end
 
 function config.signify()

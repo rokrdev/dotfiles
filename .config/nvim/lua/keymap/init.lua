@@ -2,7 +2,7 @@ local bind = require('keymap.bind')
 local map_cr = bind.map_cr
 local map_cu = bind.map_cu
 local map_cmd = bind.map_cmd
-local map_cmd_cr= bind.map_cmd_cr
+local map_lua= bind.map_lua
 local map_args = bind.map_args
 require('keymap.commands').setup()
 require('keymap.config')
@@ -15,9 +15,9 @@ local plug_map = {
   ["n|<Leader>f"]             = map_cr("RG"):with_noremap(),
   ["n|<Leader>F"]             = map_cr("RGRaw"):with_noremap(),
   ["n|<Leader>G"]             = map_cr("GF?"):with_noremap(),
-  ["n|<Leader>*"]             = map_cmd_cr("lua require('helpers').rgWordUnderCursor()"):with_noremap(),
+  ["n|<Leader>*"]             = map_lua("require('helpers').rgWordUnderCursor()"):with_noremap(),
   -- nnn/scalpel/blame/nvimtree
-  ["n|<Leader>n"]             = map_cmd_cr("lua require('helpers').nnnPicker()"):with_noremap(),
+  ["n|<Leader>n"]             = map_lua("require('helpers').nnnPicker()"):with_noremap(),
   ["n|<Leader>e"]             = map_cmd("<Plug>(Scalpel)"),
   ["n|gb"]                    = map_cr("GitMessenger"),
   ["n|<Leader>t"]             = map_cr("NvimTreeToggle"):with_noremap(),
@@ -36,7 +36,7 @@ local plug_map = {
   ["n|k"]                     = map_cmd('v:lua.enhance_jk_move("k")'):with_silent():with_expr(),
 
   -- visual
-  ["v|<Leader>*"]             = map_cmd_cr("lua require('helpers').rgVisualSelection()"):with_noremap(),
+  ["v|<Leader>*"]             = map_lua("require('helpers').rgVisualSelection()"):with_noremap(),
   ["v|<Leader>e"]             = map_cmd("<Plug>(ScalpelVisual)"),
 
   -- insert

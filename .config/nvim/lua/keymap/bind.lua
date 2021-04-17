@@ -20,8 +20,8 @@ function rhs_options:map_cmd(cmd_string)
   return self
 end
 
-function rhs_options:map_cmd_cr(cmd_string)
-  self.cmd = ("<cmd>%s<CR>"):format(cmd_string)
+function rhs_options:map_lua(cmd_string)
+  self.cmd = ("<cmd>lua %s<CR>"):format(cmd_string)
   return self
 end
 
@@ -72,9 +72,9 @@ function pbind.map_cr(cmd_string)
   return ro:map_cr(cmd_string)
 end
 
-function pbind.map_cmd_cr(cmd_string)
+function pbind.map_lua(cmd_string)
   local ro = rhs_options:new()
-  return ro:map_cmd_cr(cmd_string)
+  return ro:map_lua(cmd_string)
 end
 
 function pbind.map_cmd(cmd_string)

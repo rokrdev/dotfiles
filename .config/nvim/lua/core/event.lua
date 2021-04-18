@@ -34,7 +34,7 @@ function autocmd.load_autocmds()
     };
 
     term = {
-      {"TermOpen", "*", "lua require('helpers').onTermOpen()"},
+      {"TermOpen", "*", "lua require('utils').onTermOpen()"},
     };
 
     mode = {

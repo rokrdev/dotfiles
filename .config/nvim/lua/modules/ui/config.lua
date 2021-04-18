@@ -30,7 +30,11 @@ function config.lualine()
     sections = {
       lualine_a = { 'mode' },
       lualine_b = { 'branch' },
-      lualine_c = { 'filename', 'diff' },
+      lualine_c = {
+        'filename',
+        {'diagnostics', sources = {'nvim_lsp'}, sections = {'error', 'warn'}},
+        'diff',
+      },
       lualine_x = { 'encoding', 'fileformat', 'filetype' },
       lualine_y = { 'progress' },
       lualine_z = { 'location' },

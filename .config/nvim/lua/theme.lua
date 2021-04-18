@@ -271,7 +271,7 @@ local function getLualineTheme()
   }
 
   lualine.insert = {
-    a = { bg = theme.green, fg = theme.blue_default, gui = 'bold', },
+    a = { bg = theme.green_bright, fg = theme.blue_default, gui = 'bold', },
     b = { bg = theme.blue_visual, fg = theme.white_default, },
     c = { bg = theme.blue_visual, fg = theme.white_default, }
   }

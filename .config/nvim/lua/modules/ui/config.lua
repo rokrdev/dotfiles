@@ -1,10 +1,29 @@
 local config = {}
 
+function config.startify()
+  vim.g.startify_lists = {}
+  vim.g.startify_fortune_use_unicode = true
+end
+
 function config.indentBlankLine()
   vim.g.indent_blankline_filetype_exclude = { 'NvimTree' }
   vim.g.indent_blankline_char = '│'
   vim.g.indent_blankline_use_treesitter = true
   -- vim.g.indent_blankline_show_current_context = true
+  vim.g.indent_blankline_filetype_exclude = {
+    "startify",
+    "log",
+    "gitcommit",
+    "packer",
+    "markdown",
+    "json",
+    "txt",
+    "NvimTree",
+    "git",
+    "undotree",
+    "" -- for all buffers without a file type
+  }
+  vim.g.indent_blankline_buftype_exclude = {"terminal", "nofile"}
 end
 
 function config.bufferline()

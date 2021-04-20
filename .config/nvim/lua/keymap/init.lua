@@ -4,6 +4,7 @@ local map_cu = bind.map_cu
 local map_cmd = bind.map_cmd
 local map_lua= bind.map_lua
 local map_args = bind.map_args
+local map_wait = bind.map_wait
 require('keymap.commands').setup()
 require('keymap.config')
 
@@ -13,7 +14,7 @@ local plug_map = {
   ["n|<Leader>b"]             = map_cr("Buffers"):with_noremap():with_nowait(),
   ["n|<Leader>fo"]            = map_cr("Files"):with_noremap():with_nowait(),
   ["n|<Leader>ff"]            = map_cr("RG"):with_noremap():with_nowait(),
-  ["n|<Leader>fF"]            = map_cr("RGRaw"):with_noremap():with_nowait(),
+  ["n|<Leader>fr"]            = map_wait("RGRaw "):with_noremap():with_nowait(),
   ["n|<Leader>G"]             = map_cr("GF?"):with_noremap():with_nowait(),
   ["n|<Leader>fw"]            = map_lua("require('utils').rgWordUnderCursor()"):with_noremap():with_nowait(),
   -- nnn/scalpel/blame/nvimtree

@@ -35,12 +35,10 @@ local def_map = {
   ["n|<Leader>gg"]           = map_lua("require('utils').openTerm('tig status')"):with_noremap(),
   ["n|<Leader>gb"]           = map_lua("require('utils').openTerm('tig ' .. vim.fn.expand('%'))"):with_noremap(),
   ["n|<Leader>gl"]           = map_lua("require('utils').openTerm('tig')"):with_noremap(),
-  ["n|<Leader>;"]            = map_cmd("o<Esc>"):with_noremap(),
-  ["n|<Leader>:"]            = map_cmd("O<Esc>"):with_noremap(),
   ["n|<Leader>ss"]           = map_args("SS"):with_noremap(),
   ["n|<Leader>sr"]           = map_wait("SR " .. require('utils').getSessionFilePath()):with_noremap(),
   ["n|<Leader>sd"]           = map_wait("SD " .. require('utils').getSessionFilePath()):with_noremap(),
-  ["n|<Leader>sc"]           = map_cr("Scratch"):with_noremap(),
+  ["n|<Leader>fc"]           = map_cr("Scratch"):with_noremap(),
   ["n|<Leader>sp"]           = map_cr("let @+ = expand('%')"):with_noremap(),
   ["n|sm"]                   = map_cmd("\"mp"):with_noremap(),
 
@@ -54,8 +52,8 @@ local def_map = {
   ["v|sm"]                   = map_cmd("\"mp"):with_noremap(),
   -- ["v|s#"]                   = map_cmd("\"sy:let @/=@s<CR>cgN"):with_noremap(),
   -- ["v|s*"]                   = map_cmd("\"sy:let @/=@s<CR>cgn"):with_noremap(),
-  ["x|*"]                    = map_cmd("lua require('utils').VSetSearch('/')<CR>/<C-R>=@/<CR>"):with_noremap(),
-  ["x|#"]                    = map_cmd("lua require('utils').VSetSearch('?')<CR>/<C-R>=@/<CR>"):with_noremap(),
+  ["v|*"]                    = map_cmd("lua require('utils').VSetSearch('/')<CR>/<C-R>=@/<CR>"):with_noremap(),
+  ["v|#"]                    = map_cmd("lua require('utils').VSetSearch('?')<CR>/<C-R>=@/<CR>"):with_noremap(),
 
 }
 

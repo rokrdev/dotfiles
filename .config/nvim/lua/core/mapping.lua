@@ -42,6 +42,7 @@ local def_map = {
   ["n|<Leader>sd"]           = map_wait("SD " .. require('utils').getSessionFilePath()):with_noremap(),
   ["n|<Leader>sc"]           = map_cr("Scratch"):with_noremap(),
   ["n|<Leader>sp"]           = map_cr("let @+ = expand('%')"):with_noremap(),
+  ["n|sm"]                   = map_cmd("\"mp"):with_noremap(),
 
   -- visual mode
   ["v|s"]                    = map_cmd("<Nop>"),
@@ -49,6 +50,8 @@ local def_map = {
   ["v|<M-Up>"]               = map_cmd(":m '<-2<CR>gv=gv"):with_noremap(),
   ["v|sy"]                   = map_cmd("\"+y"):with_noremap(),
   ["v|sp"]                   = map_cmd("\"+p"):with_noremap(),
+  ["v|sM"]                   = map_cmd("\"my"):with_noremap(),
+  ["v|sm"]                   = map_cmd("\"mp"):with_noremap(),
   ["v|s#"]                   = map_cmd("\"sy:let @/=@s<CR>cgN"):with_noremap(),
   ["v|s*"]                   = map_cmd("\"sy:let @/=@s<CR>cgn"):with_noremap(),
   ["x|*"]                    = map_cmd("lua require('utils').VSetSearch('/')<CR>/<C-R>=@/<CR>"):with_noremap(),

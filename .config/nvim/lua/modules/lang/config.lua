@@ -19,10 +19,10 @@ function config.treesitter()
     incremental_selection = {
       enable = true,
       keymaps = {
-        init_selection = "<M-h>",
-        node_incremental = "<M-j>",
-        scope_incremental = "<M-l>",
-        node_decremental = "<M-k>",
+        init_selection = "<Leader>ti",
+        node_incremental = "<Leader>tj",
+        scope_incremental = "<Leader>ta",
+        node_decremental = "<Leader>tk",
       },
     },
   }

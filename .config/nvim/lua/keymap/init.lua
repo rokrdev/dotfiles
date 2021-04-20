@@ -28,6 +28,7 @@ local plug_map = {
   ["n|sL"]                    = map_cu("call sneak#wrap('', 1, 1, 0, 2)"):with_noremap(),
   ["n|sj"]                    = map_cmd("<Plug>SneakLabel_s"),
   ["n|sk"]                    = map_cmd("<Plug>SneakLabel_S"),
+  ["n|sr"]                    = map_cr("write | edit | TSBufEnable highlight"),
   -- bufferline
   ["n|<C-h>"]                 = map_cr("BufferLineCyclePrev"):with_noremap(),
   ["n|<C-l>"]                 = map_cr("BufferLineCycleNext"):with_noremap(),

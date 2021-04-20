@@ -82,6 +82,7 @@ local function load_options()
   }
 
   local bw_local  = {
+    cursorline             = true;
     expandtab              = true;
     fileencoding           = "utf-8";
     fixeol                 = false;

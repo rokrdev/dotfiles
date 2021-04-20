@@ -17,10 +17,10 @@ local plug_map = {
   ["n|<Leader>G"]             = map_cr("GF?"):with_noremap(),
   ["n|<Leader>fw"]            = map_lua("require('utils').rgWordUnderCursor()"):with_noremap(),
   -- nnn/scalpel/blame/nvimtree
-  ["n|<Leader>n"]             = map_lua("require('utils').nnnPicker()"):with_noremap(),
+  ["n|<Leader>fn"]             = map_lua("require('utils').nnnPicker()"):with_noremap(),
   ["n|<Leader>r"]             = map_cmd("<Plug>(Scalpel)"),
   ["n|gb"]                    = map_cr("GitMessenger"),
-  ["n|<Leader>t"]             = map_cr("NvimTreeToggle"):with_noremap(),
+  ["n|<Leader>ft"]             = map_cr("NvimTreeToggle"):with_noremap(),
   -- sneak
   ["n|sh"]                    = map_cu("call sneak#wrap('', 1, 0, 1, 2)"):with_noremap(),
   ["n|sl"]                    = map_cu("call sneak#wrap('', 1, 1, 1, 2)"):with_noremap(),

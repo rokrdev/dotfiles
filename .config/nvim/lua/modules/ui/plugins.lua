@@ -1,11 +1,6 @@
 local ui = {}
 local conf = require('modules.ui.config')
 
-ui["mhinz/vim-startify"] = {
-  event = 'VimEnter',
-  config = conf.startify,
-}
-
 ui["lukas-reineke/indent-blankline.nvim"] = {
   branch = 'lua',
   event = 'BufRead',

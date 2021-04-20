@@ -11,14 +11,14 @@ local plug_map = {
   -- normal
   -- fzf/rg
   ["n|<Leader>b"]             = map_cr("Buffers"):with_noremap(),
-  ["n|<Leader>o"]             = map_cr("Files"):with_noremap(),
-  ["n|<Leader>f"]             = map_cr("RG"):with_noremap(),
-  ["n|<Leader>F"]             = map_cr("RGRaw"):with_noremap(),
+  ["n|<Leader>fo"]            = map_cr("Files"):with_noremap(),
+  ["n|<Leader>ff"]            = map_cr("RG"):with_noremap(),
+  ["n|<Leader>fF"]            = map_cr("RGRaw"):with_noremap(),
   ["n|<Leader>G"]             = map_cr("GF?"):with_noremap(),
-  ["n|<Leader>*"]             = map_lua("require('utils').rgWordUnderCursor()"):with_noremap(),
+  ["n|<Leader>fw"]            = map_lua("require('utils').rgWordUnderCursor()"):with_noremap(),
   -- nnn/scalpel/blame/nvimtree
   ["n|<Leader>n"]             = map_lua("require('utils').nnnPicker()"):with_noremap(),
-  ["n|<Leader>e"]             = map_cmd("<Plug>(Scalpel)"),
+  ["n|<Leader>r"]             = map_cmd("<Plug>(Scalpel)"),
   ["n|gb"]                    = map_cr("GitMessenger"),
   ["n|<Leader>t"]             = map_cr("NvimTreeToggle"):with_noremap(),
   -- sneak
@@ -36,8 +36,8 @@ local plug_map = {
   ["n|k"]                     = map_cmd('v:lua.enhance_jk_move("k")'):with_silent():with_expr(),
 
   -- visual
-  ["v|<Leader>*"]             = map_lua("require('utils').rgVisualSelection()"):with_noremap(),
-  ["v|<Leader>e"]             = map_cmd("<Plug>(ScalpelVisual)"),
+  ["v|<Leader>fw"]            = map_lua("require('utils').rgVisualSelection()"):with_noremap(),
+  ["v|<Leader>r"]             = map_cmd("<Plug>(ScalpelVisual)"),
 
   -- insert
   ["i|<Tab>"]                 = map_cmd("v:lua.tab_complete()"):with_silent():with_expr(),

@@ -39,4 +39,8 @@ function config.scalpel()
   vim.g.ScalpelMap=0
 end
 
+function config.matchup()
+  vim.g.matchup_matchparen_offscreen = {}
+end
+
 return config

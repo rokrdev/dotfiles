@@ -39,6 +39,7 @@ editor['rhysd/accelerated-jk'] = {
 editor['andymass/vim-matchup'] = {
   event = {'BufReadPre','BufNewFile'},
   opt = true,
+  config = conf.matchup,
 }
 
 return editor

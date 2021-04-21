@@ -12,7 +12,7 @@ local plug_map = {
   -- normal
   -- fzf/rg
   ["n|<Leader>b"]             = map_cr("Buffers"):with_noremap():with_nowait(),
-  ["n|<Leader>fo"]            = map_cr("Files"):with_noremap():with_nowait(),
+  ["n|<Leader>f;"]            = map_cr("Files"):with_noremap():with_nowait(),
   ["n|<Leader>ff"]            = map_cr("RG"):with_noremap():with_nowait(),
   ["n|<Leader>fr"]            = map_wait("RGRaw "):with_noremap():with_nowait(),
   ["n|<Leader>G"]             = map_cr("GF?"):with_noremap():with_nowait(),
@@ -20,7 +20,7 @@ local plug_map = {
   -- nnn/scalpel/blame/nvimtree
   ["n|<Leader>fn"]            = map_lua("require('utils').nnnPicker()"):with_noremap():with_nowait(),
   ["n|<Leader>r"]             = map_cmd("<Plug>(Scalpel)"):with_nowait(),
-  ["n|<Leader>gc"]                    = map_cr("GitMessenger"):with_nowait():with_silent(),
+  ["n|<Leader>g;"]            = map_cr("GitMessenger"):with_nowait():with_silent(),
   ["n|<Leader>ft"]            = map_cr("NvimTreeToggle"):with_noremap():with_nowait(),
   -- sneak
   ["n|sh"]                    = map_cu("call sneak#wrap('', 1, 0, 1, 2)"):with_noremap():with_nowait(),

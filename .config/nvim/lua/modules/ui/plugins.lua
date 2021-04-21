@@ -22,6 +22,7 @@ ui['kyazdani42/nvim-web-devicons'] = {
 }
 
 ui["hoob3rt/lualine.nvim"] = {
+  event = 'VimEnter',
   config = conf.lualine,
 }
 

@@ -24,10 +24,6 @@ editor['wincent/scalpel'] = {
   config = conf.scalpel,
 }
 
-editor['rhysd/git-messenger.vim'] = {
-  cmd = 'GitMessenger',
-}
-
 editor['machakann/vim-sandwich'] = {
   event = {'BufReadPre','BufNewFile'},
 }

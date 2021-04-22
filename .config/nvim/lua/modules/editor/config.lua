@@ -12,6 +12,7 @@ function config.autopairs()
 end
 
 function config.fzf()
+  require('utils').sourceFzfVim()
   vim.g.fzf_layout = {
     ['window'] = {
       ['width'] = 0.9,

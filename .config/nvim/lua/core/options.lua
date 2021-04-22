@@ -61,7 +61,6 @@ local function load_options()
     listchars              = "tab:>-,extends:»,precedes:«,eol:¬";
     mouse                  = "a";
     redrawtime             = 1500;
-    rtp                    = getopt("rtp") .. ",/usr/local/opt/fzf";
     scrolloff              = 3;
     shell                  = "/bin/zsh";
     shortmess              = getopt("shortmess") .. "cI";

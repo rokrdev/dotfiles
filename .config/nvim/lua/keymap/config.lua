@@ -1,29 +1,3 @@
-local remap = vim.api.nvim_set_keymap
-
-require'compe'.setup {
-  enabled = true;
-  autocomplete = true;
-  debug = true;
-  min_length = 1;
-  preselect = 'disable';
-  throttle_time = 80;
-  source_timeout = 200;
-  incomplete_delay = 400;
-  allow_prefix_unmatch = false;
-
-  source = {
-    path = true;
-    buffer = true;
-    calc = true;
-    vsnip = true;
-    nvim_lsp = true;
-    nvim_lua = true;
-    spell = true;
-    tags = true;
-    -- snippets_nvim = true;
-  };
-}
-
 local t = function(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
@@ -51,6 +25,7 @@ _G.tab_complete = function()
     return vim.fn['compe#complete']()
   end
 end
+
 _G.s_tab_complete = function()
   if vim.fn.pumvisible() == 1 then
     return t "<C-p>"
@@ -71,9 +46,28 @@ _G.snippet_expand = function()
   end
 end
 
-remap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
-remap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
-remap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-remap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-remap("i", "<C-f>", "v:lua.snippet_expand()", {expr = true})
+_G.enhance_jk_move = function(key)
+  if packer_plugins['accelerated-jk'] and not packer_plugins['accelerated-jk'].loaded then
+    vim.cmd [[packadd accelerated-jk]]
+  end
+  local map = key == 'j' and '<Plug>(accelerated_jk_gj)' or '<Plug>(accelerated_jk_gk)'
+  return t(map)
+end
 
+_G.completion_confirm = function()
+  local npairs = require('nvim-autopairs')
+
+  if vim.fn.pumvisible() ~= 0  then
+    if vim.fn.complete_info()["selected"] ~= -1 then
+      vim.fn["compe#confirm"]()
+      return npairs.esc("<c-y>")
+    else
+      vim.defer_fn(function()
+        vim.fn["compe#confirm"]("<cr>")
+      end, 20)
+      return npairs.esc("<c-n>")
+    end
+  else
+    return npairs.check_break_line_char()
+  end
+end

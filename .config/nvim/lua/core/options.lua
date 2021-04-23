@@ -106,7 +106,7 @@ local function load_options()
   }
 
   local general_options = {
-    "colorscheme my-theme",
+    "colorscheme midnight-owl",
     "let $TERM = 'alacritty'",
     "let $GIT_EDITOR = 'nvr -cc split --remote-wait'",
     "match EndOfLineSpace / \\+$/",

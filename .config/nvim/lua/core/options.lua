@@ -1,5 +1,7 @@
 local getopt = vim.api.nvim_get_option
 
+require('theme').setup()
+
 local function bind_option(options)
   for k, v in pairs(options) do
     if v == true or v == false then

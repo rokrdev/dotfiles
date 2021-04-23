@@ -258,7 +258,7 @@ local function setup()
   local hi = setTheme(theme)
   vim.o.background = 'dark'
   vim.o.termguicolors = true
-  vim.g.colors_name = "my-theme"
+  vim.g.colors_name = "midnight-owl"
   for group,color in pairs(hi) do
     highlight(group, color)
   end

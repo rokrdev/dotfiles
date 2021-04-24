@@ -35,6 +35,25 @@ function config.lspconfig()
     elseif client.resolved_capabilities.document_range_formatting then
       buf_set_keymap("n", "<space>cf", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
     end
+
+
+    local function setupSign()
+      local signs = {
+        ["Error"] = "",
+        ["Warning"] = "",
+        ["Hint"] = "",
+        ["Information"] = ""
+      }
+
+      for k, v in pairs(signs) do
+        vim.api.nvim_call_function("sign_define", {
+          "LspDiagnosticsSign"..k,
+          { text = v, texthl = "LspDiagnosticsSign" .. k }
+        })
+      end
+    end
+
+    setupSign()
   end
 
   -- Use a loop to conveniently both setup defined servers
@@ -80,7 +99,8 @@ function config.lspconfig()
       }
   }
 
-  require("lspconfig").diagnosticls.setup{
+
+  require("lspconfig").diagnosticls.setup {
     filetypes = {
       "javascript",
       "javascript.jsx",

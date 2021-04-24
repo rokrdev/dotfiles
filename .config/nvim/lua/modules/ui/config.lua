@@ -84,11 +84,11 @@ function config.tree()
     default =  '',
     symlink =  '',
     git = {
-     unstaged = "✚",
-     staged =  "✚",
-     unmerged =  "≠",
-     renamed =  "≫",
-     untracked = "★",
+      unstaged = "✚",
+      staged =  "✚",
+      unmerged =  "≠",
+      renamed =  "≫",
+      untracked = "★",
     },
   }
   require"nvim-tree".on_enter()

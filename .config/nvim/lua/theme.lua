@@ -69,9 +69,9 @@ local function setTheme(colors)
   hi.StatusLine = { fg = colors.blue_visual, bg = colors.white_default, attr = nil }
   hi.Normal = { fg = colors.white_default, bg = colors.blue_default, attr = nil }
   hi.LineNr = { fg = colors.grey, bg = nil, attr = nil }
-  hi.CursorLineNr = { fg = colors.white_light, bg = colors.blue_2, attr = nil }
-  hi.CursorLine = { fg = nil, bg = colors.blue_2, attr = nil }
-  hi.ColorColumn = { fg = nil, bg = colors.blue_2, attr = nil }
+  hi.CursorLineNr = { fg = colors.white_light, bg = colors.blue_visual, attr = nil }
+  hi.CursorLine = { fg = nil, bg = colors.blue_visual, attr = nil }
+  hi.ColorColumn = { fg = nil, bg = colors.blue_visual, attr = nil }
   hi.Directory = { fg = colors.blue, bg = nil, attr = nil }
   hi.DiffAdd = { fg = colors.green_bright, bg = colors.blue_default, attr = nil }
   hi.DiffChange = { fg = colors.pink, bg = colors.blue_default, attr = nil }
@@ -86,7 +86,7 @@ local function setTheme(colors)
   hi.MatchParen = { fg = colors.pink, bg = nil, attr = colors.bold..colors.underline }
   hi.Folded = { fg = colors.brown, bg = nil, attr = nil }
   hi.FoldedColumn = { fg = colors.brown, bg = nil, attr = nil }
-  hi.SignColumn = { fg = nil, bg = nil, attr = nil }
+  hi.SignColumn = { fg = nil, bg = colors.blue_visual, attr = nil }
   hi.IncSearch = { fg = colors.white_light, bg = nil, attr = colors.underline }
   hi.NonText = { fg = colors.blue_1, bg = nil, attr = nil }
   hi.PMenu = { fg = colors.white_default, bg = colors.blue_visual, attr = nil }
@@ -94,8 +94,8 @@ local function setTheme(colors)
   hi.Search = { fg = colors.blue_default, bg = colors.white_light, attr = nil }
   hi.SpecialKey = { fg = colors.orange_light, bg = nil, attr = nil }
   hi.Title = { fg = colors.blue, bg = nil, attr = nil }
-  hi.Visual = { fg = nil, bg = colors.grey_1, attr = nil }
-  hi.EndOfBuffer = { fg = colors.grey, bg = nil, attr = nil }
+  hi.Visual = { fg = nil, bg = colors.blue_visual, attr = nil }
+  hi.EndOfBuffer = { fg = colors.blue_visual, bg = nil, attr = nil }
 
   hi.Comment = { fg = colors.grey, bg = nil, attr = colors.italic }
   hi.Constant = { fg = colors.green_bright, bg = nil, attr = nil }
@@ -222,9 +222,9 @@ local function setTheme(colors)
   hi.Sneak = { fg = colors.blue_default, bg = colors.blue, attr = colors.bold }
   hi.SneakLabel = { fg = colors.blue_default, bg = colors.blue, attr = colors.bold }
 
-  hi.SignifySignAdd = { fg = colors.green_bright, bg = nil, attr = nil }
-  hi.SignifySignDelete = { fg = colors.red, bg = nil, attr = nil }
-  hi.SignifySignChange = { fg = colors.orange, bg = nil, attr = nil }
+  hi.SignifySignAdd = { fg = colors.green_bright, bg = colors.blue_visual, attr = nil }
+  hi.SignifySignDelete = { fg = colors.red, bg = colors.blue_visual, attr = nil }
+  hi.SignifySignChange = { fg = colors.orange, bg = colors.blue_visual, attr = nil }
 
   hi.illuminatedWord = { fg = nil, bg = colors.highligter, attr = nil }
 
@@ -241,6 +241,11 @@ local function setTheme(colors)
   hi.LspDiagnosticsDefaultError = { fg = colors.red, bg = nil, attr = nil }
   hi.LspDiagnosticsDefaultWarning = { fg = colors.yellow_dark, bg = nil, attr = nil }
   hi.LspDiagnosticsDefaultInformation = { fg = colors.white_light, bg = nil, attr = nil }
+
+  hi.LspDiagnosticsSignHint = { fg = colors.orange_light, bg = colors.blue_visual, attr = nil }
+  hi.LspDiagnosticsSignError = { fg = colors.red, bg = colors.blue_visual, attr = nil }
+  hi.LspDiagnosticsSignWarning = { fg = colors.yellow_dark, bg = colors.blue_default, attr = nil }
+  hi.LspDiagnosticsSignInformation = { fg = colors.white_light, bg = colors.blue_visual, attr = nil }
 
   TSFunction = { fg = colors.blue, bg = nil, attr = nil }
   TSMethod = { fg = colors.blue, bg = nil, attr = nil }
@@ -281,7 +286,7 @@ local function getLualineTheme()
   }
 
   lualine.visual = {
-    a = { bg = theme.pink, fg = theme.blue_default, gui = 'bold', },
+    a = { bg = theme.blue_2, fg = theme.white_default, gui = 'bold', },
     b = { bg = theme.blue_visual, fg = theme.white_default, },
     c = { bg = theme.blue_visual, fg = theme.white_default, }
   }

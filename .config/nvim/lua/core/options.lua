@@ -1,7 +1,5 @@
 local getopt = vim.api.nvim_get_option
 
-require('theme').setup()
-
 local function bind_option(options)
   for k, v in pairs(options) do
     if v == true or v == false then
@@ -106,11 +104,10 @@ local function load_options()
   }
 
   local general_options = {
-    "colorscheme midnight-owl",
     "let $TERM = 'alacritty'",
     "let $GIT_EDITOR = 'nvr -cc split --remote-wait'",
-    "match EndOfLineSpace / \\+$/",
   }
+
   local is_mac = vim.loop.os_uname().sysname == 'Darwin'
 
   if is_mac then

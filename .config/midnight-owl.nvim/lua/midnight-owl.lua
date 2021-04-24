@@ -270,6 +270,8 @@ local function setup()
   vim.cmd("hi link EndOfLineSpace C_WhiteSpace")
 end
 
+setup()
+
 local function getLualineTheme()
   local lualine = {}
 
@@ -349,7 +351,6 @@ end
 
 return {
   highlight = highlight,
-  setup = setup,
   getLualineTheme = getLualineTheme,
   getBufferlineTheme = getBufferlineTheme,
 }

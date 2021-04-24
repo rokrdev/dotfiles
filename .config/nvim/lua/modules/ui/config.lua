@@ -34,14 +34,14 @@ function config.bufferline()
       separator_style = "thick",
       mappings = false,
     },
-    highlights = require('theme').getBufferlineTheme()
+    highlights = require('midnight-owl').getBufferlineTheme()
   }
 end
 
 function config.lualine()
   require('lualine').setup{
     options = {
-      theme = require('theme').getLualineTheme(),
+      theme = require('midnight-owl').getLualineTheme(),
       icons_enabled = true,
       component_separators = '',
       section_separators = ''
@@ -148,6 +148,16 @@ function config.gitsigns()
     use_decoration_api = true,
     use_internal_diff = true,  -- If luajit is present
   }
+end
+
+function config.midnightOwl()
+  vim.api.nvim_exec(
+    [[
+      colorscheme midnight-owl
+      match EndOfLineSpace / \\+$/
+    ]],
+    false
+  )
 end
 
 return config

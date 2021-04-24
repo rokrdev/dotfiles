@@ -1,6 +1,10 @@
 local ui = {}
 local conf = require('modules.ui.config')
 
+ui['kyazdani42/nvim-web-devicons'] = {
+  event = 'VimEnter',
+}
+
 ui['lewis6991/gitsigns.nvim'] = {
   event = {'BufRead','BufNewFile'},
   requires = 'nvim-lua/plenary.nvim',
@@ -13,23 +17,24 @@ ui["lukas-reineke/indent-blankline.nvim"] = {
   config = conf.indentBlankLine,
 }
 
-ui["akinsho/nvim-bufferline.lua"] = {
+ui['~/.config/midnight-owl.nvim'] = {
   event = 'VimEnter',
+  config = conf.midnightOwl,
+}
+
+ui["akinsho/nvim-bufferline.lua"] = {
+  after = 'midnight-owl.nvim',
   config = conf.bufferline,
+}
+
+ui["hoob3rt/lualine.nvim"] = {
+  after = 'midnight-owl.nvim',
+  config = conf.lualine,
 }
 
 ui["norcalli/nvim-colorizer.lua"] = {
   event = {'BufRead','BufNewFile'},
   config = conf.colorizer,
-}
-
-ui['kyazdani42/nvim-web-devicons'] = {
-  event = 'VimEnter',
-}
-
-ui["hoob3rt/lualine.nvim"] = {
-  event = 'VimEnter',
-  config = conf.lualine,
 }
 
 ui['kyazdani42/nvim-tree.lua'] = {

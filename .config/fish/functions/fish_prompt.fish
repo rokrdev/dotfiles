@@ -1,6 +1,6 @@
-# set __fish_git_prompt_show_informative_status false
+set __fish_git_prompt_show_informative_status true
 set __fish_git_prompt_showcolorhints 'yes'
-# set __fish_git_prompt_showupstream 'informative'
+set __fish_git_prompt_showupstream 'informative'
 set __fish_git_prompt_showdirtystate 'yes'
 set __fish_git_prompt_char_cleanstate '✔'
 set __fish_git_prompt_char_dirtystate '◆'

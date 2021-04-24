@@ -11,8 +11,8 @@ window:
   #  y: 0
 
   padding:
-    x: 2
-    y: 1
+    x: 1
+    y: 0
 
   dynamic_padding: true
 
@@ -55,7 +55,7 @@ font:
     y: 0
 
   glyph_offset:
-    x: 0
+    x: 1
     y: 0
 
   use_thin_strokes: true

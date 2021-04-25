@@ -75,6 +75,7 @@ abbr -a -g v nvim
 abbr -a -g vim nvim
 abbr -a -g vimdiff 'nvim -d'
 abbr -a -g vimup 'nvim +PackerSync +PackerCompile +qall > /dev/null'
+abbr -a -g vst 'vim-startuptime -vimpath nvim'
 abbr -a -g y yarn
 abbr -a -g ya 'yarn add'
 abbr -a -g yar 'brew services restart yabai'

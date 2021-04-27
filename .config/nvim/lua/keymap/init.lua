@@ -15,7 +15,7 @@ local plug_map = {
   ["n|<Leader>f;"]            = map_cr("Files"):with_noremap():with_nowait(),
   ["n|<Leader>ff"]            = map_cr("RG"):with_noremap():with_nowait(),
   ["n|<Leader>fr"]            = map_wait("RGRaw "):with_noremap():with_nowait(),
-  ["n|<Leader>G"]             = map_cr("GF?"):with_noremap():with_nowait(),
+  ["n|<Leader>G"]             = map_cr("GConflicts"):with_noremap():with_nowait(),
   ["n|<Leader>fw"]            = map_lua("require('utils').rgWordUnderCursor()"):with_noremap():with_nowait(),
   -- nnn/scalpel/blame/nvimtree
   ["n|<Leader>fn"]            = map_lua("require('utils').nnnPicker()"):with_noremap():with_nowait(),

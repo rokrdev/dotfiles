@@ -38,7 +38,7 @@ local def_map = {
   ["n|<Leader>sr"]           = map_wait("SR " .. require('utils').getSessionFilePath()):with_noremap(),
   ["n|<Leader>sd"]           = map_wait("SD " .. require('utils').getSessionFilePath()):with_noremap(),
   ["n|<Leader>fc"]           = map_cr("Scratch"):with_noremap():with_nowait(),
-  ["n|<Leader>sp"]           = map_cr("let @+ = expand('%')"):with_noremap(),
+  ["n|<Leader>sy"]           = map_cr("let @+ = expand('%')"):with_noremap(),
   ["n|sm"]                   = map_cmd("\"mp"):with_noremap():with_nowait(),
 
   -- visual mode

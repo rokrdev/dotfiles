@@ -7,6 +7,10 @@ function commands.setup()
   vim.cmd("command! Tcc lua require('utils').toggleColorColumn()")
   vim.cmd("command! Scratch lua require('utils').scratchGenerator()")
 
+  -- git
+  vim.cmd("command! GA execute ':silent !git add %'")
+  vim.cmd("command! GR execute ':silent !git reset %'")
+
   -- fzf
   vim.cmd("command! -bang -nargs=* RG call fzf#vim#grep('rg --column --line-number --no-heading --hidden --color=always --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)")
   vim.cmd("command! -bang -nargs=* RGRaw call fzf#vim#grep('rg --column --line-number --no-heading --hidden --color=always --smart-case '.(<q-args>), 1, fzf#vim#with_preview(),  <bang>0)")

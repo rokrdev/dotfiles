@@ -9,6 +9,7 @@ editor['windwp/nvim-autopairs'] = {
 editor["junegunn/fzf.vim"] = {
   event = 'VimEnter',
   setup = conf.fzf,
+  config = conf.fzf_after,
 }
 
 editor["mcchrish/nnn.vim"] = {

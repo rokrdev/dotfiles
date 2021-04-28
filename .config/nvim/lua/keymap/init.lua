@@ -12,15 +12,16 @@ local plug_map = {
   -- normal
   -- fzf/rg
   ["n|<Leader>b"]             = map_cr("Buffers"):with_noremap():with_nowait(),
-  ["n|<Leader>f;"]            = map_cr("Files"):with_noremap():with_nowait(),
-  ["n|<Leader>ff"]            = map_cr("RG"):with_noremap():with_nowait(),
-  ["n|<Leader>fr"]            = map_wait("RGRaw "):with_noremap():with_nowait(),
-  ["n|<Leader>G"]             = map_cr("GConflicts"):with_noremap():with_nowait(),
+  ["n|<Leader>ff"]            = map_cr("Files"):with_noremap():with_nowait(),
+  ["n|<Leader>fs"]            = map_cr("RG"):with_noremap():with_nowait(),
+  ["n|<Leader>fS"]            = map_wait("RGRaw "):with_noremap():with_nowait(),
+  ["n|<Leader>fg"]            = map_cr("GConflicts"):with_noremap():with_nowait(),
   ["n|<Leader>fw"]            = map_lua("require('utils').rgWordUnderCursor()"):with_noremap():with_nowait(),
   -- nnn/scalpel/blame/nvimtree
   ["n|<Leader>fn"]            = map_lua("require('utils').nnnPicker()"):with_noremap():with_nowait(),
-  ["n|<Leader>r"]             = map_cmd("<Plug>(Scalpel)"):with_nowait(),
   ["n|<Leader>ft"]            = map_cr("NvimTreeToggle"):with_noremap():with_nowait(),
+  ["n|<Leader>fc"]            = map_cr("Scratch"):with_noremap():with_nowait(),
+  ["n|<Leader>fr"]            = map_cmd("<Plug>(Scalpel)"):with_nowait(),
   -- sneak
   ["n|sh"]                    = map_cu("call sneak#wrap('', 1, 0, 1, 2)"):with_noremap():with_nowait(),
   ["n|sl"]                    = map_cu("call sneak#wrap('', 1, 1, 1, 2)"):with_noremap():with_nowait(),
@@ -38,7 +39,7 @@ local plug_map = {
 
   -- visual
   ["v|<Leader>fw"]            = map_lua("require('utils').rgVisualSelection()"):with_noremap():with_nowait(),
-  ["v|<Leader>r"]             = map_cmd("<Plug>(ScalpelVisual)"):with_nowait(),
+  ["v|<Leader>fr"]            = map_cmd("<Plug>(ScalpelVisual)"):with_nowait(),
 
   -- insert
   ["i|<Tab>"]                 = map_cmd("v:lua.tab_complete()"):with_silent():with_expr(),

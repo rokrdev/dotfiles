@@ -11,19 +11,17 @@ vim.g["@z"] = "f cl<CR><ESC>l"
 local def_map = {
   -- normal mode
   ["n|s"]                    = map_cmd("<Nop>"),
-  ["n|<M-j>"]                = map_cmd(":m .+1<CR>=="):with_noremap():with_silent():with_nowait(),
-  ["n|<M-k>"]                = map_cmd(":m .-2<CR>=="):with_noremap():with_silent():with_nowait(),
+  -- ["n|<M-j>"]                = map_cmd(":m .+1<CR>=="):with_noremap():with_silent():with_nowait(),
+  -- ["n|<M-k>"]                = map_cmd(":m .-2<CR>=="):with_noremap():with_silent():with_nowait(),
   ["n|s-"]                   = map_cr("bd"):with_noremap():with_nowait(),
   ["n|s_"]                   = map_cr("bd!"):with_noremap():with_nowait(),
-  ["n|sp"]                   = map_cmd("\"+p"):with_noremap():with_nowait(),
   ["n|s;"]                   = map_cr("b#"):with_noremap():with_nowait(),
   ["n|sc"]                   = map_cr("nohl"):with_noremap():with_silent():with_nowait(),
-  -- ["n|s#"]                   = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgN"):with_noremap():with_silent(),
-  -- ["n|s*"]                   = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn"):with_noremap():with_silent(),
+  ["n|s#"]                   = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgN"):with_noremap():with_silent(),
+  ["n|s*"]                   = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn"):with_noremap():with_silent(),
   ["n|ss"]                   = map_args("ls<CR>:b"):with_noremap():with_nowait(),
-  ["n|s!"]                   = map_cr(":let @+=expand('%')"):with_noremap():with_nowait(),
   ["n|sn"]                   = map_lua("require('utils').toggleNumbers()"):with_noremap():with_nowait(),
-  ["n|sq"]                   = map_cmd("q"):with_noremap():with_nowait(),
+  ["n|<M-q>"]                = map_cmd("q"):with_noremap():with_nowait(),
   ["n|q"]                    = map_cmd("<Nop>"):with_noremap(),
   ["n|<M-+>"]                = map_cr(":vertical resize +5"):with_noremap():with_silent(),
   ["n|<M-=>"]                = map_cr(":vertical resize -5"):with_noremap():with_silent(),
@@ -37,23 +35,31 @@ local def_map = {
   ["n|<Leader>ss"]           = map_args("SS"):with_noremap(),
   ["n|<Leader>sr"]           = map_wait("SR " .. require('utils').getSessionFilePath()):with_noremap(),
   ["n|<Leader>sd"]           = map_wait("SD " .. require('utils').getSessionFilePath()):with_noremap(),
-  ["n|<Leader>fc"]           = map_cr("Scratch"):with_noremap():with_nowait(),
-  ["n|<Leader>sy"]           = map_cr("let @+ = expand('%')"):with_noremap(),
-  ["n|sm"]                   = map_cmd("\"mp"):with_noremap():with_nowait(),
 
   -- visual mode
   ["v|s"]                    = map_cmd("<Nop>"),
-  ["v|<M-j>"]                = map_cmd(":m '>+1<CR>gv=gv"):with_noremap():with_nowait(),
-  ["v|<M-k>"]                = map_cmd(":m '<-2<CR>gv=gv"):with_noremap():with_nowait(),
-  ["v|sy"]                   = map_cmd("\"+y"):with_noremap():with_nowait(),
-  ["v|sp"]                   = map_cmd("\"+p"):with_noremap():with_nowait(),
-  ["v|sM"]                   = map_cmd("\"my"):with_noremap():with_nowait(),
-  ["v|sm"]                   = map_cmd("\"mp"):with_noremap():with_nowait(),
-  -- ["v|s#"]                   = map_cmd("\"sy:let @/=@s<CR>cgN"):with_noremap(),
-  -- ["v|s*"]                   = map_cmd("\"sy:let @/=@s<CR>cgn"):with_noremap(),
+  -- ["v|<M-j>"]                = map_cmd(":m '>+1<CR>gv=gv"):with_noremap():with_nowait(),
+  -- ["v|<M-k>"]                = map_cmd(":m '<-2<CR>gv=gv"):with_noremap():with_nowait(),
+  ["v|s#"]                   = map_cmd("\"sy:let @/=@s<CR>cgN"):with_noremap(),
+  ["v|s*"]                   = map_cmd("\"sy:let @/=@s<CR>cgn"):with_noremap(),
   ["v|*"]                    = map_cmd("lua require('utils').VSetSearch('/')<CR>/<C-R>=@/<CR>"):with_noremap():with_nowait(),
   ["v|#"]                    = map_cmd("lua require('utils').VSetSearch('?')<CR>/<C-R>=@/<CR>"):with_noremap():with_nowait(),
 
+  --- Copy/Paste
+  -- paste from clipboard
+  ["n|<Leader>cp"]           = map_cmd("\"+p"):with_noremap():with_nowait(),
+  -- yank current file path to clipboard
+  ["n|<Leader>cf"]           = map_cr("let @+ = expand('%')"):with_noremap(),
+  -- paste from m register
+  ["n|<Leader>cm"]           = map_cmd("\"mp"):with_noremap():with_nowait(),
+  -- copy visual selection to clipboard
+  ["v|<Leader>cy"]           = map_cmd("\"+y"):with_noremap():with_nowait(),
+  -- paste over visual selection from clipboard
+  ["v|<Leader>cp"]           = map_cmd("\"+p"):with_noremap():with_nowait(),
+  -- copy visual selection to register m
+  ["v|<Leader>cM"]           = map_cmd("\"my"):with_noremap():with_nowait(),
+  -- paste over visual selection from register m
+  ["v|<Leader>cm"]           = map_cmd("\"mp"):with_noremap():with_nowait(),
 }
 
 bind.nvim_load_mapping(def_map)

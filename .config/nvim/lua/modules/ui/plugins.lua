@@ -44,7 +44,7 @@ ui['kyazdani42/nvim-tree.lua'] = {
 
 ui["rrethy/vim-illuminate"] = {
   event = {'BufRead','BufNewFile'},
-  config = conf.illuminate,
+  setup = conf.illuminate,
 }
 
 return ui

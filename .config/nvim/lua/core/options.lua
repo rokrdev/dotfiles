@@ -81,7 +81,6 @@ local function load_options()
   }
 
   local bw_local  = {
-    cursorline             = true;
     expandtab              = true;
     fileencoding           = "utf-8";
     fixeol                 = false;
@@ -93,8 +92,9 @@ local function load_options()
   }
 
   local wn_local  = {
-    colorcolumn            = "100";
-    foldlevel       = 2;
+    cursorline             = true;
+    colorcolumn            = "0";
+    foldlevel              = 2;
     foldmethod             = "manual";
     foldnestmax            = 10;
     list                   = true;

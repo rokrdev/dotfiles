@@ -10,7 +10,7 @@ local theme = {
   white_default = "#d6deeb",
   white_light = "#C5E4FD",
   blue_default = "#011627",
-  grey = "#4b6479",
+  cello = "#324363",
   grey_1 = "#1d3b53",
   blue_dark = "#00111F",
   blue = "#82aaff",
@@ -68,9 +68,9 @@ local function setTheme(colors)
 
   hi.StatusLine = { fg = colors.blue_visual, bg = colors.white_default, attr = nil }
   hi.Normal = { fg = colors.white_default, bg = colors.blue_default, attr = nil }
-  hi.LineNr = { fg = colors.grey, bg = nil, attr = nil }
-  hi.CursorLineNr = { fg = colors.white_light, bg = colors.blue_visual, attr = nil }
-  hi.CursorLine = { fg = nil, bg = colors.blue_visual, attr = nil }
+  hi.LineNr = { fg = colors.cello, bg = nil, attr = nil }
+  hi.CursorLineNr = { fg = colors.white_light, bg = nil, attr = nil }
+  hi.CursorLine = { fg = nil, bg = colors.blue_2, attr = nil }
   hi.ColorColumn = { fg = nil, bg = colors.blue_visual, attr = nil }
   hi.Directory = { fg = colors.blue, bg = nil, attr = nil }
   hi.DiffAdd = { fg = colors.green_bright, bg = colors.blue_default, attr = nil }
@@ -86,7 +86,7 @@ local function setTheme(colors)
   hi.MatchParen = { fg = colors.pink, bg = nil, attr = colors.bold..colors.underline }
   hi.Folded = { fg = colors.brown, bg = nil, attr = nil }
   hi.FoldedColumn = { fg = colors.brown, bg = nil, attr = nil }
-  hi.SignColumn = { fg = nil, bg = colors.blue_visual, attr = nil }
+  hi.SignColumn = { fg = nil, bg = nil, attr = nil }
   hi.IncSearch = { fg = colors.white_light, bg = nil, attr = colors.underline }
   hi.NonText = { fg = colors.blue_1, bg = nil, attr = nil }
   hi.PMenu = { fg = colors.white_default, bg = colors.blue_visual, attr = nil }
@@ -95,9 +95,9 @@ local function setTheme(colors)
   hi.SpecialKey = { fg = colors.orange_light, bg = nil, attr = nil }
   hi.Title = { fg = colors.blue, bg = nil, attr = nil }
   hi.Visual = { fg = nil, bg = colors.blue_visual, attr = nil }
-  hi.EndOfBuffer = { fg = colors.blue_visual, bg = nil, attr = nil }
+  hi.EndOfBuffer = { fg = colors.blue_default, bg = nil, attr = nil }
 
-  hi.Comment = { fg = colors.grey, bg = nil, attr = colors.italic }
+  hi.Comment = { fg = colors.cello, bg = nil, attr = colors.italic }
   hi.Constant = { fg = colors.green_bright, bg = nil, attr = nil }
   hi.String = { fg = colors.orange_light, bg = nil, attr = nil }
   hi.Character = { fg = colors.orange_light, bg = nil, attr = nil }
@@ -126,7 +126,7 @@ local function setTheme(colors)
   hi.SpecialChar = { fg = nil, bg = nil, attr = nil }
   hi.Tag = { fg = nil, bg = nil, attr = nil }
   hi.Delimiter = { fg = colors.white_default, bg = nil, attr = nil }
-  hi.SpecialComment = { fg = colors.grey, bg = nil, attr = nil }
+  hi.SpecialComment = { fg = colors.cello, bg = nil, attr = nil }
   hi.Debug = { fg = nil, bg = nil, attr = nil }
   hi.Underlined = { fg = nil, bg = nil, attr = colors.underline }
   hi.Ignore = { fg = nil, bg = nil, attr = nil }
@@ -168,7 +168,7 @@ local function setTheme(colors)
   hi.javaScriptStringS = { fg = colors.orange_light, bg = nil, attr = nil }
   hi.javaScriptBoolean = { fg = colors.red, bg = nil, attr = nil }
   hi.javaScriptBraces = { fg = colors.white_default, bg = nil, attr = nil }
-  hi.javaScriptLineComment = { fg = colors.grey, bg = nil, attr = colors.italic }
+  hi.javaScriptLineComment = { fg = colors.cello, bg = nil, attr = colors.italic }
   hi.javaScriptLineSpecial = { fg = colors.orange, bg = nil, attr = nil }
   hi.javaScriptFunction = { fg = colors.blue, bg = nil, attr = colors.italic }
   hi.javaScriptStatement = { fg = colors.pink, bg = nil, attr = nil }
@@ -217,14 +217,14 @@ local function setTheme(colors)
   hi.htmlH5 = { fg = colors.blue, bg = nil, attr = nil }
   hi.htmlBold = { fg = colors.cyan, bg = nil, attr = colors.bold }
 
-  hi.shComment = { fg = colors.grey, bg = nil, attr = colors.italic }
+  hi.shComment = { fg = colors.cello, bg = nil, attr = colors.italic }
 
   hi.Sneak = { fg = colors.blue_default, bg = colors.blue, attr = colors.bold }
   hi.SneakLabel = { fg = colors.blue_default, bg = colors.blue, attr = colors.bold }
 
-  hi.SignifySignAdd = { fg = colors.green_bright, bg = colors.blue_visual, attr = nil }
-  hi.SignifySignDelete = { fg = colors.red, bg = colors.blue_visual, attr = nil }
-  hi.SignifySignChange = { fg = colors.orange, bg = colors.blue_visual, attr = nil }
+  hi.SignifySignAdd = { fg = colors.green_bright, bg = nil, attr = nil }
+  hi.SignifySignDelete = { fg = colors.red, bg = nil, attr = nil }
+  hi.SignifySignChange = { fg = colors.orange, bg = nil, attr = nil }
 
   hi.illuminatedWord = { fg = nil, bg = colors.highligter, attr = nil }
 
@@ -234,7 +234,7 @@ local function setTheme(colors)
   hi.CocWarningSign = { fg = colors.yellow_dark, bg = nil, attr = nil }
   hi.CocInfoSign = { fg = colors.yellow_dark, bg = nil, attr = nil }
 
-  hi.IndentBlanklineChar = { fg = colors.grey_1, bg = nil, attr = 'nocombine' }
+  hi.IndentBlanklineChar = { fg = colors.cello, bg = nil, attr = 'nocombine' }
   hi.IndentBlanklineContextChar = { fg = colors.orange_light, bg = nil, attr = 'nocombine' }
 
   hi.LspDiagnosticsDefaultHint = { fg = colors.orange_light, bg = nil, attr = nil }
@@ -242,10 +242,10 @@ local function setTheme(colors)
   hi.LspDiagnosticsDefaultWarning = { fg = colors.yellow_dark, bg = nil, attr = nil }
   hi.LspDiagnosticsDefaultInformation = { fg = colors.white_light, bg = nil, attr = nil }
 
-  hi.LspDiagnosticsSignHint = { fg = colors.orange_light, bg = colors.blue_visual, attr = nil }
-  hi.LspDiagnosticsSignError = { fg = colors.red, bg = colors.blue_visual, attr = nil }
-  hi.LspDiagnosticsSignWarning = { fg = colors.yellow_dark, bg = colors.blue_default, attr = nil }
-  hi.LspDiagnosticsSignInformation = { fg = colors.white_light, bg = colors.blue_visual, attr = nil }
+  hi.LspDiagnosticsSignHint = { fg = colors.orange_light, bg = nil, attr = nil }
+  hi.LspDiagnosticsSignError = { fg = colors.red, bg = nil, attr = nil }
+  hi.LspDiagnosticsSignWarning = { fg = colors.yellow_dark, bg = nil, attr = nil }
+  hi.LspDiagnosticsSignInformation = { fg = colors.white_light, bg = nil, attr = nil }
 
   TSFunction = { fg = colors.blue, bg = nil, attr = nil }
   TSMethod = { fg = colors.blue, bg = nil, attr = nil }

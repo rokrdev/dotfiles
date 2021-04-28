@@ -1,10 +1,5 @@
 local config = {}
 
-function config.startify()
-  vim.g.startify_lists = {}
-  vim.g.startify_fortune_use_unicode = true
-end
-
 function config.indentBlankLine()
   vim.g.indent_blankline_filetype_exclude = { 'NvimTree' }
   vim.g.indent_blankline_char = '│'
@@ -33,6 +28,7 @@ function config.bufferline()
       show_close_icon = false,
       separator_style = "thick",
       mappings = false,
+      always_show_bufferline = false,
     },
     highlights = require('midnight-owl').getBufferlineTheme()
   }
@@ -94,12 +90,6 @@ function config.tree()
   require'nvim-tree.events'.on_nvim_tree_ready(function ()
     vim.cmd("NvimTreeRefresh")
   end)
-end
-
-function config.signify()
-  vim.g.signify_sign_add = '│'
-  vim.g.signify_sign_change = '│'
-  vim.g.signify_sign_delete = '│'
 end
 
 function config.illuminate()

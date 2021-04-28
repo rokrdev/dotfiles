@@ -8,7 +8,7 @@ editor['windwp/nvim-autopairs'] = {
 
 editor["junegunn/fzf.vim"] = {
   event = 'VimEnter',
-  config = conf.fzf,
+  setup = conf.fzf,
 }
 
 editor["mcchrish/nnn.vim"] = {
@@ -21,7 +21,7 @@ editor["justinmk/vim-sneak"] = {
 
 editor['wincent/scalpel'] = {
   event = {'BufReadPre','BufNewFile'},
-  config = conf.scalpel,
+  setup = conf.scalpel,
 }
 
 editor['machakann/vim-sandwich'] = {
@@ -35,7 +35,7 @@ editor['rhysd/accelerated-jk'] = {
 editor['andymass/vim-matchup'] = {
   event = {'BufReadPre','BufNewFile'},
   opt = true,
-  config = conf.matchup,
+  setup = conf.matchup,
 }
 
 return editor

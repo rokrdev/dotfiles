@@ -14,7 +14,7 @@ ui['lewis6991/gitsigns.nvim'] = {
 ui["lukas-reineke/indent-blankline.nvim"] = {
   branch = 'lua',
   event = 'BufRead',
-  config = conf.indentBlankLine,
+  setup = conf.indentBlankLine,
 }
 
 ui['~/.config/midnight-owl.nvim'] = {

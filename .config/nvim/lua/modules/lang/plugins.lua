@@ -2,7 +2,7 @@ local lang = {}
 local conf = require('modules.lang.config')
 
 lang['nvim-treesitter/nvim-treesitter'] = {
-  event = 'BufRead',
+  after = 'midnight-owl.nvim',
   run = ':TSUpdate',
   config = conf.treesitter
 }
@@ -12,7 +12,7 @@ lang['tpope/vim-commentary'] = {
 }
 
 lang['JoosepAlviste/nvim-ts-context-commentstring'] = {
-  after = 'nvim-treesitter',
+  after = {'nvim-treesitter', 'vim-commentary'},
 }
 
 lang['elixir-editors/vim-elixir'] = {

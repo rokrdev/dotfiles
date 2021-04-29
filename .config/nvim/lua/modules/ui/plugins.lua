@@ -6,7 +6,7 @@ ui['kyazdani42/nvim-web-devicons'] = {
 }
 
 ui['lewis6991/gitsigns.nvim'] = {
-  event = {'BufRead','BufNewFile'},
+  after = 'midnight-owl.nvim',
   requires = 'nvim-lua/plenary.nvim',
   config = conf.gitsigns,
 }
@@ -33,7 +33,7 @@ ui["hoob3rt/lualine.nvim"] = {
 }
 
 ui["norcalli/nvim-colorizer.lua"] = {
-  event = {'BufRead','BufNewFile'},
+  after = 'midnight-owl.nvim',
   config = conf.colorizer,
 }
 
@@ -43,7 +43,7 @@ ui['kyazdani42/nvim-tree.lua'] = {
 }
 
 ui["rrethy/vim-illuminate"] = {
-  event = {'BufRead','BufNewFile'},
+  after = 'midnight-owl.nvim',
   setup = conf.illuminate,
 }
 

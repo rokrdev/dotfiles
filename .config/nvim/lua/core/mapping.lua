@@ -42,8 +42,8 @@ local def_map = {
   -- ["v|<M-k>"]                = map_cmd(":m '<-2<CR>gv=gv"):with_noremap():with_nowait(),
   ["v|s#"]                   = map_cmd("\"sy:let @/=@s<CR>cgN"):with_noremap(),
   ["v|s*"]                   = map_cmd("\"sy:let @/=@s<CR>cgn"):with_noremap(),
-  ["v|*"]                    = map_cmd("lua require('utils').VSetSearch('/')<CR>/<C-R>=@/<CR>"):with_noremap():with_nowait(),
-  ["v|#"]                    = map_cmd("lua require('utils').VSetSearch('?')<CR>/<C-R>=@/<CR>"):with_noremap():with_nowait(),
+  ["v|*"]                    = map_lua("require('utils').VSetSearch('/')<CR>/<C-R>=@/<CR>"):with_noremap():with_nowait(),
+  ["v|#"]                    = map_lua("require('utils').VSetSearch('?')<CR>?<C-R>=@/<CR>"):with_noremap():with_nowait(),
 
   --- Copy/Paste
   -- paste from clipboard

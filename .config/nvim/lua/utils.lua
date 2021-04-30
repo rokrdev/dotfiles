@@ -96,7 +96,7 @@ function M.VSetSearch(cmdtype)
   local yanked_text = M.getVisualSelection()
   local escapeS = fn.escape(yanked_text, cmdtype .. '\\')
   local val = '\\V' .. fn.substitute(escapeS, '\\n', '\\\\n', 'g')
-  fn.setreg('/', val)
+  api.nvim_exec(cmdtype .. val, false)
 end
 
 function M.getSessionNameFromCwd()

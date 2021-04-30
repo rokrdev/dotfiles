@@ -258,6 +258,8 @@ bind status c !git commit
 bind status a !>git commit --amend --no-edit
 bind status A !>git commit --amend
 
+bind status z ?git checkout "%(prompt Checkout at branch: )" 
+
 # clean
 bind status X ?>git clean -f
 bind status - ?>git checkout .

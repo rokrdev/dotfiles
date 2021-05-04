@@ -22,6 +22,7 @@ local plug_map = {
   ["n|<Leader>ft"]            = map_cr("NvimTreeToggle"):with_noremap():with_nowait(),
   ["n|<Leader>fc"]            = map_cr("Scratch"):with_noremap():with_nowait(),
   ["n|<Leader>fr"]            = map_cmd("<Plug>(Scalpel)"):with_nowait(),
+  ["n|<Leader>fb"]            = map_lua("require'gitsigns'.blame_line()"):with_noremap():with_nowait(),
   -- sneak
   ["n|sh"]                    = map_cu("call sneak#wrap('', 1, 0, 1, 2)"):with_noremap():with_nowait(),
   ["n|sl"]                    = map_cu("call sneak#wrap('', 1, 1, 1, 2)"):with_noremap():with_nowait(),

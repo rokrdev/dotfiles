@@ -26,9 +26,6 @@ local theme = {
   cyan = "#7fdbca",
   yellow_light = "#fbec9f",
   yellow_dark = "#f4d554",
-  highligter = "#302f25",
-  black = "#000000",
-  black_1 = "#000e1a",
   blue_1 = "#283d6b",
   blue_2 = "#092236"
 }
@@ -226,7 +223,7 @@ local function setTheme(colors)
   hi.SignifySignDelete = { fg = colors.red, bg = nil, attr = nil }
   hi.SignifySignChange = { fg = colors.orange, bg = nil, attr = nil }
 
-  hi.illuminatedWord = { fg = nil, bg = colors.highligter, attr = nil }
+  hi.illuminatedWord = { fg = nil, bg = nil, attr = colors.underline }
 
   hi.NvimTreeIndentMarker = { fg = colors.blue_1, bg = nil, attr = nil }
 

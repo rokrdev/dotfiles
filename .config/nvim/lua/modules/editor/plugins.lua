@@ -29,6 +29,10 @@ editor['machakann/vim-sandwich'] = {
   event = {'BufReadPre','BufNewFile'},
 }
 
+editor['wellle/targets.vim'] = {
+  event = {'BufReadPre','BufNewFile'},
+}
+
 editor['rhysd/accelerated-jk'] = {
   opt = true,
 }

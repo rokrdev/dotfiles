@@ -38,7 +38,7 @@ local plug_map = {
   ["n|k"]                     = map_cmd('v:lua.enhance_jk_move("k")'):with_silent():with_expr(),
 
   -- visual
-  ["v|<Leader>fw"]            = map_lua("require('utils').rgVisualSelection()"):with_noremap():with_nowait(),
+  ["v|<Leader>fs"]            = map_lua("require('utils').rgVisualSelection()"):with_noremap():with_nowait(),
   ["v|<Leader>fr"]            = map_cmd("<Plug>(ScalpelVisual)"):with_nowait(),
 
   -- insert

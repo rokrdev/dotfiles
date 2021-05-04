@@ -11,12 +11,12 @@ require('keymap.config')
 local plug_map = {
   -- normal
   -- fzf/rg
-  ["n|<Leader>b"]             = map_cr("Buffers"):with_noremap():with_nowait(),
-  ["n|<Leader>ff"]            = map_cr("Files"):with_noremap():with_nowait(),
-  ["n|<Leader>fs"]            = map_cr("RG"):with_noremap():with_nowait(),
-  ["n|<Leader>fS"]            = map_wait("RGRaw "):with_noremap():with_nowait(),
-  ["n|<Leader>fg"]            = map_cr("GConflicts"):with_noremap():with_nowait(),
-  ["n|<Leader>fw"]            = map_lua("require('utils').rgWordUnderCursor()"):with_noremap():with_nowait(),
+  ["n|<Leader>b"]             = map_cr("Telescope buffers"):with_noremap():with_nowait(),
+  ["n|<Leader>ff"]            = map_cr("Telescope find_files find_command=rg,--hidden,--files"):with_noremap():with_nowait(),
+  ["n|<Leader>fs"]            = map_cr("Telescope live_grep"):with_noremap():with_nowait(),
+  -- ["n|<Leader>fS"]            = map_wait("RGRaw "):with_noremap():with_nowait(),
+  ["n|<Leader>fg"]            = map_cr("Telescope find_files find_command='git diff',--name-only,--diff-filter=U"):with_noremap():with_nowait(),
+  ["n|<Leader>fw"]            = map_cr("Telescope grep_string"):with_noremap():with_nowait(),
   -- nnn/scalpel/blame/nvimtree
   ["n|<Leader>fn"]            = map_lua("require('utils').nnnPicker()"):with_noremap():with_nowait(),
   ["n|<Leader>ft"]            = map_cr("NvimTreeToggle"):with_noremap():with_nowait(),
@@ -39,7 +39,7 @@ local plug_map = {
   ["n|k"]                     = map_cmd('v:lua.enhance_jk_move("k")'):with_silent():with_expr(),
 
   -- visual
-  ["v|<Leader>fs"]            = map_lua("require('utils').rgVisualSelection()"):with_noremap():with_nowait(),
+  ["v|<Leader>fs"]            = map_lua("require'telescope.builtin'.grep_string{ search = require('utils').getVisualSelection() }"):with_noremap():with_nowait(),
   ["v|<Leader>fr"]            = map_cmd("<Plug>(ScalpelVisual)"):with_nowait(),
 
   -- insert

@@ -7,7 +7,6 @@ ui['kyazdani42/nvim-web-devicons'] = {
 
 ui['lewis6991/gitsigns.nvim'] = {
   after = 'midnight-owl.nvim',
-  requires = 'nvim-lua/plenary.nvim',
   config = conf.gitsigns,
 }
 

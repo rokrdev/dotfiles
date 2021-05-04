@@ -26,7 +26,7 @@ local theme = {
   cyan = "#7fdbca",
   yellow_light = "#fbec9f",
   yellow_dark = "#f4d554",
-  highligter = "#263838",
+  highligter = "#302f25",
   black = "#000000",
   black_1 = "#000e1a",
   blue_1 = "#283d6b",
@@ -89,12 +89,12 @@ local function setTheme(colors)
   hi.SignColumn = { fg = nil, bg = nil, attr = nil }
   hi.IncSearch = { fg = colors.white_light, bg = nil, attr = colors.underline }
   hi.NonText = { fg = colors.blue_1, bg = nil, attr = nil }
-  hi.PMenu = { fg = colors.white_default, bg = colors.blue_visual, attr = nil }
+  hi.PMenu = { fg = colors.white_default, bg = colors.cello, attr = nil }
   hi.PMenuSel = { fg = colors.blue_default, bg = colors.blue, attr = colors.bold }
   hi.Search = { fg = colors.blue_default, bg = colors.white_light, attr = nil }
   hi.SpecialKey = { fg = colors.orange_light, bg = nil, attr = nil }
   hi.Title = { fg = colors.blue, bg = nil, attr = nil }
-  hi.Visual = { fg = nil, bg = colors.blue_visual, attr = nil }
+  hi.Visual = { fg = nil, bg = colors.cello, attr = nil }
   hi.EndOfBuffer = { fg = colors.blue_default, bg = nil, attr = nil }
 
   hi.Comment = { fg = colors.cello, bg = nil, attr = colors.italic }
@@ -288,7 +288,7 @@ local function getLualineTheme()
   }
 
   lualine.visual = {
-    a = { bg = theme.blue_2, fg = theme.white_default, gui = 'bold', },
+    a = { bg = theme.cello, fg = theme.white_default, gui = 'bold', },
     b = { bg = theme.blue_visual, fg = theme.white_default, },
     c = { bg = theme.blue_visual, fg = theme.white_default, }
   }

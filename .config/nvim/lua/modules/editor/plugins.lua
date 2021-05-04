@@ -6,10 +6,20 @@ editor['windwp/nvim-autopairs'] = {
   config = conf.autopairs,
 }
 
-editor["junegunn/fzf.vim"] = {
-  event = 'VimEnter',
-  setup = conf.fzf,
-  config = conf.fzf_after,
+-- editor["junegunn/fzf.vim"] = {
+--   event = 'VimEnter',
+--   setup = conf.fzf,
+--   config = conf.fzf_after,
+-- }
+
+editor['nvim-telescope/telescope.nvim'] = {
+  cmd = 'Telescope',
+  config = conf.telescope,
+  requires = {
+    {'nvim-lua/popup.nvim', opt = true},
+    {'nvim-lua/plenary.nvim',opt = true},
+    {'nvim-telescope/telescope-fzy-native.nvim',opt = true},
+  }
 }
 
 editor["mcchrish/nnn.vim"] = {

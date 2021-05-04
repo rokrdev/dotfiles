@@ -29,7 +29,7 @@ function autocmd.load_autocmds()
     ft = {
       {"FileChangedShellPost", "*", "echohl WarningMsg | echo 'File changed on disk. Buffer reloaded.' | echohl None"},
       {"FileType", "gitcommit,gitrebase,gitconfig", "set bufhidden=delete"},
-      {"FileType", "fzf", "tunmap <buffer> <Esc>"},
+      -- {"FileType", "fzf", "tunmap <buffer> <Esc>"},
       {"FileType", "fish", "syntax enable"},
     };
 

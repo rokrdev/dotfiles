@@ -100,6 +100,9 @@ function config.illuminate()
 end
 
 function config.gitsigns()
+  if not packer_plugins['plenary.nvim'].loaded then
+    vim.cmd [[packadd plenary.nvim]]
+  end
   require('gitsigns').setup {
     signs = {
       add          = {hl = 'SignifySignAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},

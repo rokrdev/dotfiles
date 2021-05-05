@@ -2,10 +2,7 @@ local config = {}
 
 function config.treesitter()
   require('nvim-treesitter.configs').setup {
-    ensure_installed = {
-      'bash', 'css', 'dart', 'go', 'graphql', 'html', 'java', 'javascript', 'json', 'kotlin',
-      'lua', 'php', 'python', 'ruby', 'rust', 'svelte', 'tsx', 'typescript', 'vue', 'yaml'
-    },
+    ensure_installed = "maintained",
     highlight = {
       enable = true
     },

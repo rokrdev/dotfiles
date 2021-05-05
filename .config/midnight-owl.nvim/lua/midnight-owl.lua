@@ -91,7 +91,7 @@ local function setTheme(colors)
   hi.Search = { fg = colors.blue_default, bg = colors.white_light, attr = nil }
   hi.SpecialKey = { fg = colors.orange_light, bg = nil, attr = nil }
   hi.Title = { fg = colors.blue, bg = nil, attr = nil }
-  hi.Visual = { fg = nil, bg = colors.cello, attr = nil }
+  hi.Visual = { fg = colors.white_light, bg = colors.cello, attr = nil }
   hi.EndOfBuffer = { fg = colors.blue_default, bg = nil, attr = nil }
 
   hi.Comment = { fg = colors.cello, bg = nil, attr = colors.italic }
@@ -244,18 +244,22 @@ local function setTheme(colors)
   hi.LspDiagnosticsSignWarning = { fg = colors.yellow_dark, bg = nil, attr = nil }
   hi.LspDiagnosticsSignInformation = { fg = colors.white_light, bg = nil, attr = nil }
 
-  TSFunction = { fg = colors.blue, bg = nil, attr = nil }
-  TSMethod = { fg = colors.blue, bg = nil, attr = nil }
-  TSVariable = { fg = colors.cyan, bg = nil, attr = nil }
+  hi.TSFunction = { fg = colors.blue, bg = nil, attr = nil }
+  hi.TSMethod = { fg = colors.blue, bg = nil, attr = nil }
+  hi.TSVariable = { fg = colors.cyan, bg = nil, attr = nil }
+  hi.TSKeywordFunction = { fg = colors.blue, bg = nil, attr = nil }
+  hi.TSProperty = { fg = colors.yellow, bg = nil, attr = nil }
+  hi.TSType = { fg = colors.green_bright, bg = nil, attr = nil }
+  hi.TSPunctBracket = { fg = colors.pink, bg = nil, attr = nil }
 
   return hi
 end
 
 local function setup()
-  -- vim.api.nvim_command('hi clear')
-  -- if vim.fn.exists('syntax_on') then
-  --   vim.api.nvim_command('syntax reset')
-  -- end
+  vim.api.nvim_command('hi clear')
+  if vim.fn.exists('syntax_on') then
+    vim.api.nvim_command('syntax reset')
+  end
   vim.api.nvim_command('set termguicolors')
   local hi = setTheme(theme)
   vim.o.background = 'dark'

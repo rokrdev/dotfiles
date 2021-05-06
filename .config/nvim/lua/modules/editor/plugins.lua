@@ -22,6 +22,10 @@ editor['nvim-telescope/telescope.nvim'] = {
   }
 }
 
+editor['editorconfig/editorconfig-vim'] = {
+  ft = { 'go','vim','rust' }
+}
+
 editor["mcchrish/nnn.vim"] = {
   cmd = 'NnnPicker',
 }

@@ -64,7 +64,7 @@ local function setTheme(colors)
   hi.italic = { fg = nil, bg = nil, attr = colors.italic }
   hi.Underline = { fg = nil, bg = nil, attr = colors.underline }
 
-  hi.StatusLine = { fg = colors.blue_visual, bg = colors.white_default, attr = nil }
+  hi.StatusLine = { fg = colors.white_default, bg = colors.blue_default, attr = nil }
   hi.Normal = { fg = colors.white_default, bg = colors.blue_default, attr = nil }
   hi.LineNr = { fg = colors.cello, bg = nil, attr = nil }
   hi.CursorLineNr = { fg = colors.white_light, bg = nil, attr = nil }

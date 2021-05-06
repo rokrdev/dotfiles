@@ -35,9 +35,9 @@ end
 --   vim.g.fzf_preview_window = 'right:50%'
 -- end
 
-function config.fzf_after()
-  vim.cmd([[packadd cfilter]])
-end
+-- function config.fzf_after()
+--   vim.cmd([[packadd cfilter]])
+-- end
 
 function config.scalpel()
   vim.g.ScalpelMap=0

@@ -223,7 +223,7 @@ local function setTheme(colors)
   hi.SignifySignDelete = { fg = colors.red, bg = nil, attr = nil }
   hi.SignifySignChange = { fg = colors.orange, bg = nil, attr = nil }
 
-  hi.illuminatedWord = { fg = nil, bg = nil, attr = colors.underline }
+  hi.illuminatedWord = { fg = nil, bg = colors.ash_grey, attr = nil }
 
   hi.NvimTreeIndentMarker = { fg = colors.blue_1, bg = nil, attr = nil }
 

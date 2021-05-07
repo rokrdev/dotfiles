@@ -10,7 +10,7 @@ local theme = {
   white_default = "#d6deeb",
   white_light = "#C5E4FD",
   blue_default = "#011627",
-  cello = "#324363",
+  cello = "#384866",
   grey_1 = "#1d3b53",
   blue_dark = "#00111F",
   blue = "#82aaff",
@@ -86,8 +86,8 @@ local function setTheme(colors)
   hi.FoldedColumn = { fg = colors.brown, bg = nil, attr = nil }
   hi.SignColumn = { fg = nil, bg = nil, attr = nil }
   hi.IncSearch = { fg = colors.white_light, bg = nil, attr = colors.underline }
-  hi.NonText = { fg = colors.blue_1, bg = nil, attr = nil }
-  hi.PMenu = { fg = colors.white_default, bg = colors.cello, attr = nil }
+  hi.NonText = { fg = colors.cello, bg = nil, attr = nil }
+  hi.PMenu = { fg = colors.white_default, bg = colors.blue_1, attr = nil }
   hi.PMenuSel = { fg = colors.blue_default, bg = colors.blue, attr = colors.bold }
   hi.Search = { fg = colors.blue_default, bg = colors.white_light, attr = nil }
   hi.SpecialKey = { fg = colors.orange_light, bg = nil, attr = nil }

@@ -60,6 +60,10 @@ function M.onTermOpen()
   )
 end
 
+function M.getWordUnderCursor()
+  return fn.expand('<cword>')
+end
+
 function M.rgWordUnderCursor()
   local val = 'RG ' .. fn.expand('<cword>')
   api.nvim_exec(val, false)

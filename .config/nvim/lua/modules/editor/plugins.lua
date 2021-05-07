@@ -13,7 +13,7 @@ editor['windwp/nvim-autopairs'] = {
 -- }
 
 editor['nvim-telescope/telescope.nvim'] = {
-  cmd = 'Telescope',
+  event = 'VimEnter',
   config = conf.telescope,
   requires = {
     {'nvim-lua/popup.nvim', opt = true},

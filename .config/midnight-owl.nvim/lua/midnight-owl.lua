@@ -18,7 +18,6 @@ local theme = {
   green_bright = "#addb67",
   pink = "#c792ea",
   red = "#ff5874",
-  brown = "#806e6f",
   orange_light = "#ecc48d",
   orange = "#f78c6c",
   blue_visual = "#1a2b4a",
@@ -82,8 +81,8 @@ local function setTheme(colors)
 
   hi.VertSplit = { fg = colors.blue_1, bg = nil, attr = nil }
   hi.MatchParen = { fg = colors.pink, bg = nil, attr = colors.bold..colors.underline }
-  hi.Folded = { fg = colors.brown, bg = nil, attr = nil }
-  hi.FoldedColumn = { fg = colors.brown, bg = nil, attr = nil }
+  hi.Folded = { fg = colors.light_purple, bg = nil, attr = nil }
+  hi.FoldedColumn = { fg = colors.light_purple, bg = nil, attr = nil }
   hi.SignColumn = { fg = nil, bg = nil, attr = nil }
   hi.IncSearch = { fg = colors.white_light, bg = nil, attr = colors.underline }
   hi.NonText = { fg = colors.cello, bg = nil, attr = nil }
@@ -308,9 +307,9 @@ local function getLualineTheme()
   }
 
   lualine.inactive = {
-    a = { bg = theme.blue_2, fg = theme.brown, gui = 'bold', },
-    b = { bg = theme.blue_2, fg = theme.brown, },
-    c = { bg = theme.blue_2, fg = theme.brown, },
+    a = { bg = theme.blue_visual, fg = theme.light_purple, gui = 'bold', },
+    b = { bg = theme.blue_visual, fg = theme.light_purple, },
+    c = { bg = theme.blue_visual, fg = theme.light_purple, },
   }
 
   return lualine

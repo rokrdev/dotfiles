@@ -14,6 +14,7 @@ editor['windwp/nvim-autopairs'] = {
 
 editor['nvim-telescope/telescope.nvim'] = {
   event = 'VimEnter',
+  setup = conf.fzf,
   config = conf.telescope,
   requires = {
     {'nvim-lua/popup.nvim', opt = true},

@@ -47,19 +47,19 @@ local def_map = {
 
   --- Copy/Paste
   -- paste from clipboard
-  ["n|<Leader>cp"]           = map_cmd("\"+p"):with_noremap():with_nowait(),
+  ["n|<Leader>ap"]           = map_cmd("\"+p"):with_noremap():with_nowait(),
   -- yank current file path to clipboard
-  ["n|<Leader>cf"]           = map_cr("let @+ = expand('%')"):with_noremap(),
+  ["n|<Leader>af"]           = map_cr("let @+ = expand('%')"):with_noremap(),
   -- paste from m register
-  ["n|<Leader>cm"]           = map_cmd("\"mp"):with_noremap():with_nowait(),
+  ["n|<Leader>am"]           = map_cmd("\"mp"):with_noremap():with_nowait(),
   -- copy visual selection to clipboard
-  ["v|<Leader>cy"]           = map_cmd("\"+y"):with_noremap():with_nowait(),
+  ["v|<Leader>ay"]           = map_cmd("\"+y"):with_noremap():with_nowait(),
   -- paste over visual selection from clipboard
-  ["v|<Leader>cp"]           = map_cmd("\"+p"):with_noremap():with_nowait(),
+  ["v|<Leader>ap"]           = map_cmd("\"+p"):with_noremap():with_nowait(),
   -- copy visual selection to register m
-  ["v|<Leader>cM"]           = map_cmd("\"my"):with_noremap():with_nowait(),
+  ["v|<Leader>aM"]           = map_cmd("\"my"):with_noremap():with_nowait(),
   -- paste over visual selection from register m
-  ["v|<Leader>cm"]           = map_cmd("\"mp"):with_noremap():with_nowait(),
+  ["v|<Leader>am"]           = map_cmd("\"mp"):with_noremap():with_nowait(),
 }
 
 bind.nvim_load_mapping(def_map)

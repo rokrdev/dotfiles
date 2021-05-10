@@ -15,14 +15,14 @@ local plug_map = {
   ["n|<Leader>ff"]            = map_lua("require'keymap.custom'.find_files{}"):with_noremap():with_nowait(),
   ["n|<Leader>fs"]            = map_cr("Telescope live_grep"):with_noremap():with_nowait(),
   -- ["n|<Leader>fS"]            = map_wait("RGRaw "):with_noremap():with_nowait(),
-  ["n|<Leader>fg"]            = map_lua("require'keymap.custom'.git_conflicts{}"):with_noremap():with_nowait(),
+  ["n|<Leader>gc"]            = map_lua("require'keymap.custom'.git_conflicts{}"):with_noremap():with_nowait(),
   ["n|<Leader>fw"]            = map_lua("require'keymap.custom'.grep_word_under_cursor{}"):with_noremap():with_nowait(),
   -- nnn/scalpel/blame/nvimtree
   ["n|<Leader>fn"]            = map_lua("require('utils').nnnPicker()"):with_noremap():with_nowait(),
   ["n|<Leader>ft"]            = map_cr("NvimTreeToggle"):with_noremap():with_nowait(),
   ["n|<Leader>fc"]            = map_cr("Scratch"):with_noremap():with_nowait(),
   ["n|<Leader>fr"]            = map_cmd("<Plug>(Scalpel)"):with_nowait(),
-  ["n|<Leader>fb"]            = map_lua("require'gitsigns'.blame_line()"):with_noremap():with_nowait(),
+  ["n|<Leader>gl"]            = map_lua("require'gitsigns'.blame_line()"):with_noremap():with_nowait(),
   -- sneak
   ["n|sh"]                    = map_cu("call sneak#wrap('', 1, 0, 1, 2)"):with_noremap():with_nowait(),
   ["n|sl"]                    = map_cu("call sneak#wrap('', 1, 1, 1, 2)"):with_noremap():with_nowait(),

@@ -40,6 +40,11 @@ editor['wincent/scalpel'] = {
   setup = conf.scalpel,
 }
 
+editor['haya14busa/vim-asterisk'] = {
+  event = {'BufReadPre','BufNewFile'},
+  setup = vim.cmd[[let g:asterisk#keeppos = 1]],
+}
+
 editor['machakann/vim-sandwich'] = {
   event = {'BufReadPre','BufNewFile'},
 }

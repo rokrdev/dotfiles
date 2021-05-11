@@ -96,12 +96,12 @@ function M.rgVisualSelection()
   api.nvim_exec(str, false)
 end
 
-function M.VSetSearch(cmdtype)
-  local yanked_text = M.getVisualSelection()
-  local escapeS = fn.escape(yanked_text, cmdtype .. '\\')
-  local val = '\\V' .. fn.substitute(escapeS, '\\n', '\\\\n', 'g')
-  api.nvim_exec(cmdtype .. val, false)
-end
+-- function M.VSetSearch(cmdtype)
+--   local yanked_text = M.getVisualSelection()
+--   local escapeS = fn.escape(yanked_text, cmdtype .. '\\')
+--   local val = '\\V' .. fn.substitute(escapeS, '\\n', '\\\\n', 'g')
+--   api.nvim_exec(cmdtype .. val, false)
+-- end
 
 function M.getSessionNameFromCwd()
   local pwd = api.nvim_exec("pwd", true)

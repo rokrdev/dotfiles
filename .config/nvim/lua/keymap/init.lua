@@ -23,6 +23,11 @@ local plug_map = {
   ["n|<Leader>fc"]            = map_cr("Scratch"):with_noremap():with_nowait(),
   ["n|<Leader>fr"]            = map_cmd("<Plug>(Scalpel)"):with_nowait(),
   ["n|<Leader>gl"]            = map_lua("require'gitsigns'.blame_line()"):with_noremap():with_nowait(),
+  -- asterisk
+  ["n|*"]                     = map_cmd("<Plug>(asterisk-z*)"):with_nowait(),
+  ["n|#"]                     = map_cmd("<Plug>(asterisk-z#)"):with_nowait(),
+  ["n|g*"]                    = map_cmd("<Plug>(asterisk-gz*)"):with_nowait(),
+  ["n|g#"]                    = map_cmd("<Plug>(asterisk-gz#)"):with_nowait(),
   -- sneak
   ["n|sh"]                    = map_cu("call sneak#wrap('', 1, 0, 1, 2)"):with_noremap():with_nowait(),
   ["n|sl"]                    = map_cu("call sneak#wrap('', 1, 1, 1, 2)"):with_noremap():with_nowait(),
@@ -39,6 +44,12 @@ local plug_map = {
   ["n|k"]                     = map_cmd('v:lua.enhance_jk_move("k")'):with_silent():with_expr(),
 
   -- visual
+  -- asterisk
+  ["v|*"]                     = map_cmd("<Plug>(asterisk-z*)"):with_nowait(),
+  ["v|#"]                     = map_cmd("<Plug>(asterisk-z#)"):with_nowait(),
+  ["v|g*"]                    = map_cmd("<Plug>(asterisk-gz*)"):with_nowait(),
+  ["v|g#"]                    = map_cmd("<Plug>(asterisk-gz#)"):with_nowait(),
+
   ["v|<Leader>fw"]            = map_lua("require'keymap.custom'.grep_visual_selection{}"):with_noremap():with_nowait(),
   ["v|<Leader>fr"]            = map_cmd("<Plug>(ScalpelVisual)"):with_nowait(),
 

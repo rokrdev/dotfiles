@@ -27,7 +27,8 @@ local theme = {
   yellow_dark = "#f4d554",
   blue_1 = "#283d6b",
   blue_2 = "#092236",
-  light_purple = "#625b70"
+  light_purple = "#625b70",
+  dark_cello = "#262b36",
 }
 
 g.terminal_color_foreground = theme.white_default
@@ -223,7 +224,7 @@ local function setTheme(colors)
   hi.SignifySignDelete = { fg = colors.red, bg = nil, attr = nil }
   hi.SignifySignChange = { fg = colors.orange, bg = nil, attr = nil }
 
-  hi.illuminatedWord = { fg = nil, bg = colors.light_purple, attr = nil }
+  hi.illuminatedWord = { fg = nil, bg = colors.dark_cello, attr = nil }
 
   hi.NvimTreeIndentMarker = { fg = colors.blue_1, bg = nil, attr = nil }
 

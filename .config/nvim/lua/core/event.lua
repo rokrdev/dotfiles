@@ -38,7 +38,7 @@ function autocmd.load_autocmds()
     };
 
     mode = {
-      {"InsertEnter", "*", "hi link EndOfLineSpace Normal"},
+      {"InsertEnter", "*", "hi link EndOfLineSpace None"},
       {"InsertLeave", "*", "hi link EndOfLineSpace C_WhiteSpace"},
     };
 

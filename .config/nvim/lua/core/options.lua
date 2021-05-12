@@ -115,7 +115,7 @@ local function load_options()
     laststatus     = 2;
     display        = "lastline";
     showbreak      = "↳  ";
-    listchars      = "tab:»·,nbsp:+,trail:·,extends:→,precedes:←";
+    listchars      = "tab:»·,nbsp:+,extends:→,precedes:←";
     -- pumblend       = 10;
     -- winblend       = 10;
     showmatch      = true;

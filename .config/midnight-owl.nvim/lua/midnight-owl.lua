@@ -63,6 +63,7 @@ local function setTheme(colors)
   hi.Bold = { fg = nil, bg = nil, attr = colors.bold }
   hi.italic = { fg = nil, bg = nil, attr = colors.italic }
   hi.Underline = { fg = nil, bg = nil, attr = colors.underline }
+  hi.None = { fg = nil, bg = nil, attr = nil }
 
   hi.StatusLine = { fg = colors.white_default, bg = colors.blue_default, attr = nil }
   hi.Normal = { fg = colors.white_default, bg = colors.blue_default, attr = nil }

@@ -144,13 +144,8 @@ function config.gitsigns()
 end
 
 function config.midnightOwl()
-  vim.api.nvim_exec(
-    [[
-      colorscheme midnight-owl
-      match EndOfLineSpace / \\+$/
-    ]],
-    false
-  )
+  vim.cmd[[colorscheme midnight-owl]]
+  vim.cmd[[match EndOfLineSpace /\s\+$/]]
 end
 
 return config

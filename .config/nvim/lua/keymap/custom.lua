@@ -14,6 +14,37 @@ local use_highlighter = false
 
 local custom = {}
 
+
+local custom_grep = function(word)
+  opts = opts or {}
+
+  local live_grepper = finders._new {
+    fn_command = function(_, prompt)
+      local rg_args = flatten { conf.vimgrep_arguments, "-w", word }
+      table.remove(rg_args, 1)
+
+      return {
+        writer = Job:new {
+          command = 'rg',
+          args = rg_args,
+        },
+
+        command = 'fzf',
+        args = {'--filter', prompt},
+      }
+    end,
+
+    entry_maker = make_entry.gen_from_vimgrep(opts),
+  }
+
+  pickers.new(opts, {
+    prompt_title = 'Fzf Writer: Grep',
+    finder = live_grepper,
+    previewer = conf.grep_previewer(opts),
+    sorter = use_highlighter and sorters.highlighter_only(opts) or nil,
+  }):find()
+end
+
 function custom.find_files()
   opts = opts or {}
 
@@ -47,19 +78,11 @@ function custom.find_files()
 end
 
 function custom.grep_word_under_cursor()
-  require('telescope.builtin').grep_string({
-    word_match = '-w',
-    only_sort_text = true,
-    search = require('utils').getWordUnderCursor(), 
-  })
+  custom_grep(require('utils').getWordUnderCursor())
 end
 
 function custom.grep_visual_selection()
-  require('telescope.builtin').grep_string({
-    word_match = '-w',
-    only_sort_text = true,
-    search = require('utils').getVisualSelection(), 
-  })
+  custom_grep(require('utils').getVisualSelection())
 end
 
 function custom.git_conflicts(opts)

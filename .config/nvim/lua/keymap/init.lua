@@ -13,7 +13,7 @@ local plug_map = {
   -- fzf/rg
   ["n|<Leader>b"]             = map_cr("Telescope buffers"):with_noremap():with_nowait(),
   ["n|<Leader>ff"]            = map_lua("require'keymap.custom'.find_files{}"):with_noremap():with_nowait(),
-  ["n|<Leader>fs"]            = map_cr("Telescope live_grep"):with_noremap():with_nowait(),
+  ["n|<Leader>fs"]            = map_lua("require('telescope').extensions.fzf_writer.staged_grep()"):with_noremap():with_nowait(),
   -- ["n|<Leader>fS"]            = map_wait("RGRaw "):with_noremap():with_nowait(),
   ["n|<Leader>gc"]            = map_lua("require'keymap.custom'.git_conflicts{}"):with_noremap():with_nowait(),
   ["n|<Leader>fw"]            = map_lua("require'keymap.custom'.grep_word_under_cursor{}"):with_noremap():with_nowait(),
@@ -35,7 +35,7 @@ local plug_map = {
   ["n|sL"]                    = map_cu("call sneak#wrap('', 1, 1, 0, 2)"):with_noremap():with_nowait(),
   ["n|sj"]                    = map_cmd("<Plug>SneakLabel_s"):with_nowait(),
   ["n|sk"]                    = map_cmd("<Plug>SneakLabel_S"):with_nowait(),
-  ["n|<C-t>"]            = map_cr("write | edit | TSBufEnable highlight"):with_nowait():with_silent(),
+  ["n|<C-t>"]                 = map_cr("write | edit | TSBufEnable highlight"):with_nowait():with_silent(),
   -- bufferline
   ["n|<C-h>"]                 = map_cr("BufferLineCyclePrev"):with_noremap():with_silent():with_nowait(),
   ["n|<C-l>"]                 = map_cr("BufferLineCycleNext"):with_noremap():with_silent():with_nowait(),

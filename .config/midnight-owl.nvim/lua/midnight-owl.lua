@@ -79,7 +79,7 @@ local function setTheme(colors)
   hi.diffAdded = { fg = colors.green_bright, bg = colors.blue_default, attr = nil }
   hi.diffChanged = { fg = colors.pink, bg = colors.blue_default, attr = nil }
   hi.diffRemoved = { fg = colors.red, bg = colors.blue_default, attr = nil }
-  hi.C_WhiteSpace = { fg = nil, bg = colors.red, attr = nil }
+  hi.C_WhiteSpace = { fg = nil, bg = colors.yellow_light, attr = nil }
 
   hi.VertSplit = { fg = colors.blue_1, bg = nil, attr = nil }
   hi.MatchParen = { fg = colors.pink, bg = nil, attr = colors.bold..colors.underline }

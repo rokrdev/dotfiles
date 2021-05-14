@@ -31,6 +31,7 @@ function autocmd.load_autocmds()
       {"FileType", "gitcommit,gitrebase,gitconfig", "set bufhidden=delete"},
       -- {"FileType", "fzf", "tunmap <buffer> <Esc>"},
       {"FileType", "fish", "syntax enable"},
+      {"FileType", "json", "set conceallevel=0"},
     };
 
     term = {

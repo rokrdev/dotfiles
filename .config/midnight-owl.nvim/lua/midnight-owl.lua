@@ -81,7 +81,7 @@ local function setTheme(colors)
   hi.diffRemoved = { fg = colors.red, bg = colors.blue_default, attr = nil }
   hi.C_WhiteSpace = { fg = nil, bg = colors.yellow_light, attr = nil }
 
-  hi.VertSplit = { fg = colors.blue_1, bg = nil, attr = nil }
+  hi.VertSplit = { fg = nil, bg = colors.blue_visual, attr = nil }
   hi.MatchParen = { fg = colors.pink, bg = nil, attr = colors.bold..colors.underline }
   hi.Folded = { fg = colors.light_purple, bg = nil, attr = nil }
   hi.FoldedColumn = { fg = colors.light_purple, bg = nil, attr = nil }

@@ -119,6 +119,7 @@ local function load_options()
     -- pumblend       = 10;
     -- winblend       = 10;
     showmatch      = true;
+    fillchars      = "vert: ,fold:-,foldopen:+,diff:-";
   }
 
   local bw_local  = {
@@ -161,7 +162,6 @@ local function load_options()
   local general_options = {
     "let $TERM = 'alacritty'",
     "let $GIT_EDITOR = 'nvr -cc split --remote-wait'",
-    "set fillchars=vert:\\ ,fold:-,diff:-",
   }
 
   local is_mac = vim.loop.os_uname().sysname == 'Darwin'

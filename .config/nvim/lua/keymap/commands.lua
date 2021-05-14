@@ -10,6 +10,7 @@ function commands.setup()
   -- git
   vim.cmd("command! GA execute ':silent !git add %'")
   vim.cmd("command! GR execute ':silent !git reset %'")
+  vim.cmd("command! GG lua require'gitsigns'.refresh()")
 
   -- fzf
   -- vim.cmd("command! -bang -nargs=* RG call fzf#vim#grep('rg --column --line-number --no-heading --hidden --color=always --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)")

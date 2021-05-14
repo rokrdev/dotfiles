@@ -161,6 +161,7 @@ local function load_options()
   local general_options = {
     "let $TERM = 'alacritty'",
     "let $GIT_EDITOR = 'nvr -cc split --remote-wait'",
+    "set fillchars+=vert:\\ ",
   }
 
   local is_mac = vim.loop.os_uname().sysname == 'Darwin'

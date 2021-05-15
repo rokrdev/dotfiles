@@ -119,7 +119,7 @@ local function load_options()
     -- pumblend       = 10;
     -- winblend       = 10;
     showmatch      = true;
-    fillchars      = "vert: ,fold:-,foldopen:+,diff:-";
+    fillchars      = "vert: ,fold:-,foldopen:+,diff:-,stl: ,stlnc: ";
   }
 
   local bw_local  = {

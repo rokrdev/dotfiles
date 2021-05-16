@@ -12,10 +12,9 @@ local minimum_files_characters = 0
 
 local use_highlighter = false
 
-local custom = {}
+local f = {}
 
-
-local custom_grep = function(word)
+function f.custom_grep(word)
   opts = opts or {}
 
   local live_grepper = finders._new {
@@ -45,7 +44,7 @@ local custom_grep = function(word)
   }):find()
 end
 
-function custom.find_files()
+function f.find_files()
   opts = opts or {}
 
   local _ = make_entry.gen_from_vimgrep(opts)
@@ -77,15 +76,15 @@ function custom.find_files()
   }):find()
 end
 
-function custom.grep_word_under_cursor()
-  custom_grep(require('utils').getWordUnderCursor())
+function f.grep_word_under_cursor()
+  f.custom_grep(require('utils').getWordUnderCursor())
 end
 
-function custom.grep_visual_selection()
-  custom_grep(require('utils').getVisualSelection())
+function f.grep_visual_selection()
+  f.custom.custom_grep(require('utils').getVisualSelection())
 end
 
-function custom.git_conflicts(opts)
+function f.git_conflicts(opts)
   opts.entry_maker = opts.entry_maker or make_entry.gen_from_file(opts)
 
   pickers.new(opts, {
@@ -99,4 +98,4 @@ function custom.git_conflicts(opts)
   }):find()
 end
 
-return custom
+return f

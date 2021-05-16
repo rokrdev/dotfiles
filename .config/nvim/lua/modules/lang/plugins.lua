@@ -25,11 +25,6 @@ lang['styled-components/vim-styled-components'] = {
   ft = {'javascript', 'typescript', 'javascriptreact'},
 }
 
-lang['dag/vim-fish'] = {
-  opt = true,
-  ft = {'fish'}
-}
-
 lang['jxnblk/vim-mdx-js'] = {
   opt = true,
   ft = {'mdx'}

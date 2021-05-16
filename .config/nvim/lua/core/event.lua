@@ -20,6 +20,7 @@ function autocmd.load_autocmds()
     },
     bufs = {
       {"BufRead,BufNewFile", "*", "setlocal formatoptions-=cro"},
+      {"BufRead,BufNewFile", "*.fish", "set filetype=fish"},
     };
 
     wins = {
@@ -30,7 +31,6 @@ function autocmd.load_autocmds()
       {"FileChangedShellPost", "*", "echohl WarningMsg | echo 'File changed on disk. Buffer reloaded.' | echohl None"},
       {"FileType", "gitcommit,gitrebase,gitconfig", "set bufhidden=delete"},
       -- {"FileType", "fzf", "tunmap <buffer> <Esc>"},
-      {"FileType", "fish", "syntax enable"},
       {"FileType", "json", "set conceallevel=0"},
     };
 

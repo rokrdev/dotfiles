@@ -12,11 +12,7 @@ function commands.setup()
   vim.cmd("command! GR execute ':silent !git reset %'")
   vim.cmd("command! GG lua require'gitsigns'.refresh()")
 
-  -- fzf
-  -- vim.cmd("command! -bang -nargs=* RG call fzf#vim#grep('rg --column --line-number --no-heading --hidden --color=always --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)")
   -- vim.cmd("command! -bang -nargs=* RGRaw call fzf#vim#grep('rg --column --line-number --no-heading --hidden --color=always --smart-case '.(<q-args>), 1, fzf#vim#with_preview(),  <bang>0)")
-  -- vim.cmd("command! -bang -nargs=* GConflicts call fzf#run(fzf#wrap({'source': 'git diff --name-only --diff-filter=U', 'options': ['--multi', '--prompt', 'Conflicts?> ']}, <bang>0))")
-  -- vim.cmd("command! -bang -nargs=* Buffers call fzf#vim#buffers(<q-args>,{'options':'--no-preview'}, <bang>0)")
 
   -- Term
   vim.cmd("command! -bang Term terminal<bang> /usr/local/bin/fish")

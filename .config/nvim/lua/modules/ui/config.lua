@@ -63,7 +63,6 @@ function config.lualine()
       lualine_y = {  },
       lualine_z = { 'location' }
     },
-    -- extensions = { 'fzf' }
   }
 end
 

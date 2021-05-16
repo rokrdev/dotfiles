@@ -12,8 +12,6 @@ function commands.setup()
   vim.cmd("command! GR execute ':silent !git reset %'")
   vim.cmd("command! GG lua require'gitsigns'.refresh()")
 
-  -- vim.cmd("command! -bang -nargs=* RGRaw call fzf#vim#grep('rg --column --line-number --no-heading --hidden --color=always --smart-case '.(<q-args>), 1, fzf#vim#with_preview(),  <bang>0)")
-
   -- Term
   vim.cmd("command! -bang Term terminal<bang> /usr/local/bin/fish")
   vim.cmd("command! -nargs=* T split | Term <args>")

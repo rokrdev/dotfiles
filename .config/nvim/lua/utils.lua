@@ -148,11 +148,5 @@ function M.nnnPicker()
   vim.cmd(cmd)
 end
 
-function M.sourceFzfVim()
-  local fzfPath = "/usr/local/opt/fzf/plugin/fzf.vim"
-  vim.cmd("source " .. fzfPath)
-end
-
-
 return M
 

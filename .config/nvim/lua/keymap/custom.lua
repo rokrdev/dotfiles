@@ -10,7 +10,7 @@ local flatten = vim.tbl_flatten
 local minimum_grep_characters = 2
 local minimum_files_characters = 0
 
-local use_highlighter = false
+local use_highlighter = true
 
 local f = {}
 

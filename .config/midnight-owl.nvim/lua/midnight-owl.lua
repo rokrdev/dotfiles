@@ -246,6 +246,9 @@ local function setTheme(colors)
   hi.LspDiagnosticsSignWarning = { fg = colors.yellow_dark, bg = nil, attr = nil }
   hi.LspDiagnosticsSignInformation = { fg = colors.white_light, bg = nil, attr = nil }
 
+  hi.TelescopeBorder = { fg = colors.blue, bg = nil, attr = nil }
+  hi.TelescopeMatching = { fg = colors.green_bright, bg = nil, attr = nil }
+
   hi.TSFunction = { fg = colors.blue, bg = nil, attr = nil }
   hi.TSMethod = { fg = colors.blue, bg = nil, attr = nil }
   hi.TSVariable = { fg = colors.cyan, bg = nil, attr = nil }

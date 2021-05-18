@@ -14,7 +14,6 @@ local theme = {
   grey_1 = "#1d3b53",
   blue_dark = "#00111F",
   blue = "#82aaff",
-  blue_light = "#C5E4FD",
   green_bright = "#addb67",
   pink = "#c792ea",
   red = "#ff5874",
@@ -322,15 +321,15 @@ local function getBufferlineTheme()
   bufferline = {
     buffer_selected = {
       guibg = theme.blue_default,
-      guifg = theme.blue_light,
+      guifg = theme.white_light,
     },
     fill = {
       guibg = theme.blue_visual,
-      guifg = theme.blue_light,
+      guifg = theme.white_light,
     },
     background = {
       guibg = theme.blue_visual,
-      guifg = theme.blue_light,
+      guifg = theme.white_light,
     },
     separator = {
       guibg = theme.blue_visual

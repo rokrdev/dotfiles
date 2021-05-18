@@ -14,11 +14,6 @@ lang['JoosepAlviste/nvim-ts-context-commentstring'] = {
   after = 'nvim-treesitter',
 }
 
-lang['elixir-editors/vim-elixir'] = {
-  opt = true,
-  ft = {'elixir', 'exs'},
-}
-
 lang['styled-components/vim-styled-components'] = {
   branch = 'main',
   opt = true,

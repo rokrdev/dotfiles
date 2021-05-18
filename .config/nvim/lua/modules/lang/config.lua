@@ -11,7 +11,6 @@ function config.treesitter()
     indent = {
       enable = false,
     },
-    disable = { "elixir" },
     context_commentstring = {
       enable = true,
     },

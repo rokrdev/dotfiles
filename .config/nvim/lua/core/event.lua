@@ -21,6 +21,8 @@ function autocmd.load_autocmds()
     bufs = {
       {"BufRead,BufNewFile", "*", "setlocal formatoptions-=cro"},
       {"BufRead,BufNewFile", "*.fish", "set filetype=fish"},
+      {"BufRead,BufNewFile", "*.ex", "set filetype=elixir"},
+      {"BufRead,BufNewFile", "*.exs", "set filetype=elixir"},
     };
 
     wins = {

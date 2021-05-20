@@ -13,7 +13,6 @@ editor['nvim-telescope/telescope.nvim'] = {
     {'nvim-lua/popup.nvim', opt = true},
     {'nvim-lua/plenary.nvim',opt = true},
     {'nvim-telescope/telescope-fzf-writer.nvim', opt = true},
-    {'kyazdani42/nvim-web-devicons', opt=true},
   }
 }
 

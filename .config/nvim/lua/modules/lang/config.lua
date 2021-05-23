@@ -17,10 +17,21 @@ function config.treesitter()
     incremental_selection = {
       enable = true,
       keymaps = {
-        init_selection = "<Leader>ti",
-        node_incremental = "<Leader>tj",
-        scope_incremental = "<Leader>ta",
-        node_decremental = "<Leader>tk",
+        init_selection = "gnn",
+        node_incremental = "grn",
+        scope_incremental = "grc",
+        node_decremental = "grm",
+      },
+    },
+    textobjects = {
+      select = {
+        enable = true,
+        keymaps = {
+          ["af"] = "@function.outer",
+          ["if"] = "@function.inner",
+          ["ac"] = "@class.outer",
+          ["ic"] = "@class.inner",
+        },
       },
     },
   }

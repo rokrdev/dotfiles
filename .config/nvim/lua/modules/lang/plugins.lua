@@ -14,6 +14,10 @@ lang['JoosepAlviste/nvim-ts-context-commentstring'] = {
   after = 'nvim-treesitter',
 }
 
+lang['nvim-treesitter/nvim-treesitter-textobjects'] = {
+  after = 'nvim-treesitter'
+}
+
 lang['styled-components/vim-styled-components'] = {
   branch = 'main',
   opt = true,

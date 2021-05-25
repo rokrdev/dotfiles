@@ -90,8 +90,8 @@ set diff-view	= line-number:no,interval=5 text:yes,commit-title-overflow=no
 # UI display settings
 set show-changes		= yes		# Show changes commits in the main view?
 set show-untracked		= yes		# Show also untracked changes?
-set wrap-lines			= no		# Wrap long lines in pager views?
-set tab-size			= 8		# Number of spaces to use when expanding tabs
+set wrap-lines			= yes		# Wrap long lines in pager views?
+set tab-size			= 2		# Number of spaces to use when expanding tabs
 set line-graphics		= default	# Enum: ascii, default, utf-8
 set truncation-delimiter	= ~		# Character drawn for truncations, or "utf-8"
 
@@ -115,7 +115,7 @@ set status-show-untracked-dirs	= yes		# Show files in untracked directories? (st
 set status-show-untracked-files	= yes		# Show untracked files?
 set ignore-space		= no		# Enum: no, all, some, at-eol (diff)
 set show-notes			= yes		# When non-bool passed as `--show-notes=...` (diff)
-#set diff-context		= 3		# Number of lines to show around diff changes (diff)
+set diff-context		= 3		# Number of lines to show around diff changes (diff)
 #set diff-options		= -C		# User-defined options for `tig show` (git-diff)
 #set diff-highlight		= true		# String (or bool): Path to diff-highlight script,
 						#                   defaults to `diff-highlight`.
@@ -135,7 +135,7 @@ set focus-child			= yes		# Move focus to child view when opened?
 set send-child-enter		= yes		# Propagate "enter" keypresses to child views?
 set horizontal-scroll		= 50%		# Number of columns to scroll as % of width
 set split-view-height		= 67%		# Height of the bottom view for horizontal splits
-set vertical-split		= auto		# Enum: horizontal, vertical, auto; Use auto to
+set vertical-split		= horizontal		# Enum: horizontal, vertical, auto; Use auto to
 						# switch to horizontal split when width allows it
 set split-view-width		= 50%		# Width of right-most view for vertical splits
 set editor-line-number		= yes		# Automatically pass line number to editor? Used

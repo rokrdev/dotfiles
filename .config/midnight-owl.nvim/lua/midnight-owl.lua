@@ -11,8 +11,6 @@ local theme = {
   white_light = "#C5E4FD",
   blue_default = "#011627",
   cello = "#384866",
-  grey_1 = "#1d3b53",
-  blue_dark = "#00111F",
   blue = "#82aaff",
   green_bright = "#addb67",
   pink = "#c792ea",
@@ -20,11 +18,9 @@ local theme = {
   orange_light = "#ecc48d",
   orange = "#f78c6c",
   blue_visual = "#1a2b4a",
-  ash_grey = "#637777",
   cyan = "#7fdbca",
-  yellow_light = "#fbec9f",
-  yellow_dark = "#f4d554",
-  blue_1 = "#283d6b",
+  yellow = "#f4d554",
+  blue_1 = "#505f7a",
   blue_2 = "#092236",
   light_purple = "#625b70",
   dark_cello = "#262b36",
@@ -33,7 +29,7 @@ local theme = {
 g.terminal_color_foreground = theme.white_default
 g.terminal_color_background = theme.blue_default
 g.terminal_color_0 = theme.blue_default
-g.terminal_color_8 = theme.ash_grey
+g.terminal_color_8 = theme.blue
 g.terminal_color_1 = theme.red
 g.terminal_color_2 = theme.green_bright
 g.terminal_color_10 = theme.green_bright
@@ -45,7 +41,7 @@ g.terminal_color_5 = theme.pink
 g.terminal_color_13 = theme.pink
 g.terminal_color_6 = theme.cyan
 g.terminal_color_14 = theme.cyan
-g.terminal_color_7 = theme.ash_grey
+g.terminal_color_7 = theme.cello
 g.terminal_color_15 = theme.white_light
 
 local function highlight(group, color)
@@ -79,7 +75,7 @@ local function setTheme(colors)
   hi.diffAdded = { fg = colors.green_bright, bg = colors.blue_default, attr = nil }
   hi.diffChanged = { fg = colors.pink, bg = colors.blue_default, attr = nil }
   hi.diffRemoved = { fg = colors.red, bg = colors.blue_default, attr = nil }
-  hi.CustomWhiteSpace = { fg = nil, bg = colors.yellow_light, attr = nil }
+  hi.CustomWhiteSpace = { fg = nil, bg = colors.yellow, attr = nil }
 
   hi.VertSplit = { fg = nil, bg = colors.blue_visual, attr = nil }
   hi.MatchParen = { fg = colors.pink, bg = nil, attr = colors.bold..colors.underline }
@@ -88,12 +84,12 @@ local function setTheme(colors)
   hi.SignColumn = { fg = nil, bg = nil, attr = nil }
   hi.IncSearch = { fg = colors.white_light, bg = nil, attr = colors.underline }
   hi.NonText = { fg = colors.cello, bg = nil, attr = nil }
-  hi.PMenu = { fg = colors.white_default, bg = colors.blue_1, attr = nil }
+  hi.PMenu = { fg = colors.white_default, bg = colors.cello, attr = nil }
   hi.PMenuSel = { fg = colors.blue_default, bg = colors.blue, attr = colors.bold }
   hi.Search = { fg = colors.blue_default, bg = colors.white_light, attr = nil }
   hi.SpecialKey = { fg = colors.orange_light, bg = nil, attr = nil }
   hi.Title = { fg = colors.blue, bg = nil, attr = nil }
-  hi.Visual = { fg = colors.white_light, bg = colors.cello, attr = nil }
+  hi.Visual = { fg = nil, bg = colors.blue_1, attr = nil }
   hi.EndOfBuffer = { fg = colors.blue_default, bg = nil, attr = nil }
 
   hi.Comment = { fg = colors.cello, bg = nil, attr = colors.italic }
@@ -132,9 +128,9 @@ local function setTheme(colors)
   hi.Error = { fg = colors.red, bg = nil, attr = colors.bold }
   hi.ErrorMsg = { fg = colors.red, bg = nil, attr = nil }
   hi.WarningMsg = { fg = colors.red, bg = nil, attr = nil }
-  hi.Todo = { fg = colors.yellow_dark, bg = nil, attr = colors.bold }
-  hi.htmlTag = { fg = colors.ash_grey, bg = nil, attr = nil }
-  hi.htmlEndTag= { fg = colors.ash_grey, bg = nil, attr = nil }
+  hi.Todo = { fg = colors.yellow, bg = nil, attr = colors.bold }
+  hi.htmlTag = { fg = colors.cello, bg = nil, attr = nil }
+  hi.htmlEndTag= { fg = colors.cello, bg = nil, attr = nil }
 
   hi.jsStorageClass = { fg = colors.blue, bg = nil, attr = nil }
   hi.jsOperator = { fg = colors.pink, bg = nil, attr = nil }
@@ -198,16 +194,16 @@ local function setTheme(colors)
   hi.cssPseudoClassId = { fg = colors.green_bright, bg = nil, attr = colors.italic }
   hi.cssBorderAttr = { fg = colors.red, bg = nil, attr = nil }
   hi.cssValueLength = { fg = colors.orange, bg = nil, attr = nil }
-  hi.cssUnitDecorators = { fg = colors.yellow_light, bg = nil, attr = nil }
-  hi.cssIdentifier = { fg = colors.yellow_dark, bg = nil, attr = colors.italic }
+  hi.cssUnitDecorators = { fg = colors.yellow, bg = nil, attr = nil }
+  hi.cssIdentifier = { fg = colors.yellow, bg = nil, attr = colors.italic }
 
-  hi.markdownHeadingDelimiter = { fg = colors.ash_grey, bg = nil, attr = nil }
+  hi.markdownHeadingDelimiter = { fg = colors.cello, bg = nil, attr = nil }
   hi.markdownCodeDelimiter = { fg = colors.orange_light, bg = nil, attr = nil }
   hi.markdownCode = { fg = colors.white_light, bg = nil, attr = nil }
   hi.mkdCodeStart = { fg = colors.white_light, bg = nil, attr = nil }
   hi.mkdCodeEnd = { fg = colors.white_light, bg = nil, attr = nil }
   hi.mkdLinkDef = { fg = colors.cyan, bg = nil, attr = nil }
-  hi.mkdCodeDelimiter = { fg = colors.ash_grey, bg = colors.blue_default, attr = nil }
+  hi.mkdCodeDelimiter = { fg = colors.cello, bg = colors.blue_default, attr = nil }
 
   hi.htmlH1 = { fg = colors.blue, bg = nil, attr = nil }
   hi.htmlH2 = { fg = colors.blue, bg = nil, attr = nil }
@@ -227,33 +223,34 @@ local function setTheme(colors)
 
   hi.illuminatedWord = { fg = nil, bg = colors.dark_cello, attr = nil }
 
-  hi.NvimTreeIndentMarker = { fg = colors.blue_1, bg = nil, attr = nil }
+  hi.NvimTreeIndentMarker = { fg = colors.cello, bg = nil, attr = nil }
 
   hi.CocErrorSign = { fg = colors.red, bg = nil, attr = nil }
-  hi.CocWarningSign = { fg = colors.yellow_dark, bg = nil, attr = nil }
-  hi.CocInfoSign = { fg = colors.yellow_dark, bg = nil, attr = nil }
+  hi.CocWarningSign = { fg = colors.yellow, bg = nil, attr = nil }
+  hi.CocInfoSign = { fg = colors.yellow, bg = nil, attr = nil }
 
   hi.IndentBlanklineChar = { fg = colors.cello, bg = nil, attr = 'nocombine' }
   hi.IndentBlanklineContextChar = { fg = colors.orange_light, bg = nil, attr = 'nocombine' }
 
   hi.LspDiagnosticsDefaultHint = { fg = colors.orange_light, bg = nil, attr = nil }
   hi.LspDiagnosticsDefaultError = { fg = colors.red, bg = nil, attr = nil }
-  hi.LspDiagnosticsDefaultWarning = { fg = colors.yellow_dark, bg = nil, attr = nil }
+  hi.LspDiagnosticsDefaultWarning = { fg = colors.yellow, bg = nil, attr = nil }
   hi.LspDiagnosticsDefaultInformation = { fg = colors.white_light, bg = nil, attr = nil }
 
   hi.LspDiagnosticsSignHint = { fg = colors.orange_light, bg = nil, attr = nil }
   hi.LspDiagnosticsSignError = { fg = colors.red, bg = nil, attr = nil }
-  hi.LspDiagnosticsSignWarning = { fg = colors.yellow_dark, bg = nil, attr = nil }
+  hi.LspDiagnosticsSignWarning = { fg = colors.yellow, bg = nil, attr = nil }
   hi.LspDiagnosticsSignInformation = { fg = colors.white_light, bg = nil, attr = nil }
 
+  hi.TelescopeSelection = { fg = nil , bg = colors.cello, attr = nil }
   hi.TelescopeBorder = { fg = colors.blue, bg = nil, attr = nil }
   hi.TelescopeMatching = { fg = colors.pink, bg = nil, attr = nil }
 
   hi.TSFunction = { fg = colors.blue, bg = nil, attr = nil }
   hi.TSMethod = { fg = colors.blue, bg = nil, attr = nil }
-  hi.TSVariable = { fg = colors.cyan, bg = nil, attr = nil }
+  hi.TSVariable = { fg = colors.white_default, bg = nil, attr = nil }
   hi.TSKeywordFunction = { fg = colors.blue, bg = nil, attr = nil }
-  hi.TSProperty = { fg = colors.yellow, bg = nil, attr = nil }
+  hi.TSProperty = { fg = colors.white_default, bg = nil, attr = nil }
   hi.TSType = { fg = colors.green_bright, bg = nil, attr = nil }
   hi.TSPunctBracket = { fg = colors.pink, bg = nil, attr = nil }
 
@@ -294,7 +291,7 @@ local function getLualineTheme()
   }
 
   lualine.visual = {
-    a = { bg = theme.cello, fg = theme.white_default, gui = 'bold', },
+    a = { bg = theme.blue_1, fg = theme.white_default, gui = 'bold', },
     b = { bg = theme.blue_visual, fg = theme.white_default, },
     c = { bg = theme.blue_visual, fg = theme.white_default, }
   }
@@ -339,11 +336,11 @@ local function getBufferlineTheme()
     },
     duplicate = {
       guibg = theme.blue_visual,
-      guifg = theme.ash_grey,
+      guifg = theme.cello,
     },
     duplicate_selected = {
       guibg = theme.blue_default,
-      guifg = theme.ash_grey,
+      guifg = theme.cello,
     },
     indicator_selected = {
       guibg = theme.blue_default,

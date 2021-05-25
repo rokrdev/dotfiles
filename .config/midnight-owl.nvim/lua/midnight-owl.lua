@@ -336,11 +336,11 @@ local function getBufferlineTheme()
     },
     duplicate = {
       guibg = theme.blue_visual,
-      guifg = theme.cello,
+      guifg = theme.blue_1,
     },
     duplicate_selected = {
       guibg = theme.blue_default,
-      guifg = theme.cello,
+      guifg = theme.blue_1,
     },
     indicator_selected = {
       guibg = theme.blue_default,

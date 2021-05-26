@@ -1,6 +1,6 @@
 export ALTERNATE_EDITOR="nvim"
-export VISUAL="nvim"
-export EDITOR="nvim"
+export VISUAL="nvr -cc split --remote-wait"
+export EDITOR="nvr -cc split --remote-wait"
 export TERM="alacritty"
 export FISH_CONFIG="$HOME/.config/fish/config.fish"
 set TERMINFO ~/.terminfo/

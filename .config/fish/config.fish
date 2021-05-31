@@ -10,6 +10,8 @@ ssh-add &> /dev/null
 
 source /usr/local/opt/asdf/asdf.fish
 
+zoxide init fish | source
+
 export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
 
 # setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`
@@ -33,59 +35,59 @@ set $fish_term24bit to "1"
 set fish_color_command blue
 set -U fish_greeting
 
-abbr -a -g br "broot --sizes -dp"
-abbr -a -g brup 'brew update && brew upgrade && brew upgrade --cask && brew cleanup && brew doctor'
-abbr -a -g cat bat
-abbr -a -g dc 'docker-compose'
-abbr -a -g dcu 'docker-compose up'
-abbr -a -g dcd 'docker-compose down'
-abbr -a -g dc 'docker-compose'
-abbr -a -g fm vifm
-abbr -a -g g git
-abbr -a -g ga 'git add'
-abbr -a -g gb 'git branch'
-abbr -a -g gc 'git checkout'
-abbr -a -g gca 'git commit --amend'
-abbr -a -g gco 'git commit -m'
-abbr -a -g gd 'git diff'
-abbr -a -g gds 'git diff --staged'
-abbr -a -g gfm 'git pull'
-abbr -a -g gfmc 'git pull origin (git branch --show-current)'
-abbr -a -g gmt "git mergetool"
-abbr -a -g gp 'git push'
-abbr -a -g gs 'git status'
-abbr -a -g gtr 'git log --oneline --graph --decorate --all'
-abbr -a -g h 'z dot'
-abbr -a -g k "/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
-abbr -a -g mk 'mkdir -p'
-abbr -a -g n npm
-abbr -a -g nb newsboat
-abbr -a -g ni 'npm install'
-abbr -a -g nn 'nnn -d -e -H'
-abbr -a -g nv "~/.npm-packages/bin/n"
-abbr -a -g rf trash
-abbr -a -g sar "brew services restart skhd"
-abbr -a -g sd "pushd ~/.dotfiles && rsync -r --exclude-from \"exclude_from_sync.txt\" . ~ && popd"
-abbr -a -g sf 'source $FISH_CONFIG'
-abbr -a -g st speedtest-cli
-abbr -a -g t tmux
-abbr -a -g ta 'tmux attach || tmux new'
-abbr -a -g tg tig
-abbr -a -g top btm
-abbr -a -g upa 'brew update && brew upgrade && brew upgrade --cask && brew cleanup && brew doctor; nvim +PackerSync +PackerCompile +qall > /dev/null'
-abbr -a -g v nvim
-abbr -a -g vim nvim
-abbr -a -g vimdiff 'nvim -d'
-abbr -a -g vimup 'nvim +PackerSync +PackerCompile +qall > /dev/null'
-abbr -a -g vst 'vim-startuptime -vimpath nvim'
-abbr -a -g y yarn
-abbr -a -g ya 'yarn add'
-abbr -a -g yar 'brew services restart yabai'
-abbr -a -g yas 'brew services stop yabai'
-abbr -a -g yast 'brew services start yabai'
-abbr -a -g yr 'yarn run'
-abbr -a -g ys 'yarn start'
-abbr -a -g yt 'yarn test'
+alias br="broot --sizes -dp"
+alias brup='brew update && brew upgrade && brew upgrade --cask && brew cleanup && brew doctor'
+alias cat=bat
+alias dc='docker-compose'
+alias dcu='docker-compose up'
+alias dcd='docker-compose down'
+alias dc='docker-compose'
+alias fm=vifm
+alias g=git
+alias ga='git add'
+alias gb='git branch'
+alias gc='git checkout'
+alias gca='git commit --amend'
+alias gco='git commit -m'
+alias gd='git diff'
+alias gds='git diff --staged'
+alias gfm='git pull'
+alias gfmc='git pull origin (git branch --show-current)'
+alias gmt="git mergetool"
+alias gp='git push'
+alias gs='git status'
+alias gtr='git log --oneline --graph --decorate --all'
+alias h='z dot'
+alias k="/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
+alias mk='mkdir -p'
+alias n=npm
+alias nb=newsboat
+alias ni='npm install'
+alias nn='nnn -d -e -H'
+alias nv="~/.npm-packages/bin/n"
+alias rf=trash
+alias sar="brew services restart skhd"
+alias sd="pushd ~/.dotfiles && rsync -r --exclude-from \"exclude_from_sync.txt\" . ~ && popd"
+alias sf='source $FISH_CONFIG'
+alias st=speedtest-cli
+alias t=tmux
+alias ta='tmux attach || tmux new'
+alias tg=tig
+alias top=btm
+alias upa='brew update && brew upgrade && brew upgrade --cask && brew cleanup && brew doctor; nvim +PackerSync +PackerCompile +qall > /dev/null'
+alias v=nvim
+alias vim=nvim
+alias vimdiff='nvim -d'
+alias vimup='nvim +PackerSync +PackerCompile +qall > /dev/null'
+alias vst='vim-startuptime -vimpath nvim'
+alias y=yarn
+alias ya='yarn add'
+alias yar='brew services restart yabai'
+alias yas='brew services stop yabai'
+alias yast='brew services start yabai'
+alias yr='yarn run'
+alias ys='yarn start'
+alias yt='yarn test'
 
 # Changing "ls" to "exa"
 alias ls='exa --color=always --group-directories-first'  # all files and dirs

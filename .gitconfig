@@ -15,14 +15,12 @@
 	ff = only
 [push]
 	default = current
-[includeIf "gitdir:~/**/.git"]
+[includeIf "gitdir:~/.dotfiles/.git"]
 	path = ~/projects/config.personal
 [includeIf "gitdir:~/projects/**/.git"]
 	path = ~/projects/config.personal
-[includeIf "gitdir:~/Workspace/**/.git"]
-	path = ~/Workspace/config.ib
-[includeIf "gitdir:~/Documents/**/.git"]
-	path = ~/Documents/config.ib
+[includeIf "gitdir:~/work/**/.git"]
+	path = ~/work/config.work
 [commit]
 	template = ~/.git_commit_msg.txt
 [init]

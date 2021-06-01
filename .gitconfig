@@ -21,7 +21,7 @@
 	path = ~/projects/config.personal
 [includeIf "gitdir:~/work/**/.git"]
 	path = ~/work/config.work
-[url "git@github-1bharat:1bharat"]
+[url "git@me.github.com:1bharat"]
   insteadOf = git@github.com:1bharat
 [commit]
 	template = ~/.gitmessage

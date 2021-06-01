@@ -1,6 +1,6 @@
 elixir 1.10.4
 erlang 23.2
-nodejs 12.16.2
+nodejs 14.17.0
 java adoptopenjdk-11.0.10+9
 python miniconda3-4.7.12
 ruby 2.7.0

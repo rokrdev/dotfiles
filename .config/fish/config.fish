@@ -88,6 +88,7 @@ alias yast='brew services start yabai'
 alias yr='yarn run'
 alias ys='yarn start'
 alias yt='yarn test'
+alias zz=zi
 
 # Changing "ls" to "exa"
 alias ls='exa --color=always --group-directories-first'  # all files and dirs

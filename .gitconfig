@@ -24,6 +24,6 @@
 [url "git@github-1bharat:1bharat"]
   insteadOf = git@github.com:1bharat
 [commit]
-	template = ~/.git_commit_msg.txt
+	template = ~/.gitmessage
 [init]
 	defaultBranch = main

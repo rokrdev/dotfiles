@@ -63,3 +63,7 @@ local def_map = {
 
 bind.nvim_load_mapping(def_map)
 
+vim.api.nvim_set_keymap("","f","<Plug>Sneak_f",{})
+vim.api.nvim_set_keymap("","F","<Plug>Sneak_F",{})
+vim.api.nvim_set_keymap("","t","<Plug>Sneak_t",{})
+vim.api.nvim_set_keymap("","T","<Plug>Sneak_T",{})

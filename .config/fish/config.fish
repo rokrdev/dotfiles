@@ -8,14 +8,14 @@ export LANG="en_US.UTF-8"
 
 ssh-add &> /dev/null
 
-source /usr/local/opt/asdf/asdf.fish
+source ~/.asdf/asdf.fish
 
 zoxide init fish | source
 
 export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
 
 # setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`
-export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$HOME/.asdf/shims:/usr/local/opt/asdf/shims:/usr/local/opt/asdf/bin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$HOME/.asdf/shims:$HOME/.asdf/bin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 source ~/.env
 

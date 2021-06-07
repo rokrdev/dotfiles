@@ -6,7 +6,7 @@ export FISH_CONFIG="$HOME/.config/fish/config.fish"
 set TERMINFO ~/.terminfo/
 export LANG="en_US.UTF-8"
 
-ssh-add &> /dev/null
+ssh-add -A &> /dev/null
 
 source ~/.asdf/asdf.fish
 

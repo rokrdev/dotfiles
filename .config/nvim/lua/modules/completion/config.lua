@@ -75,37 +75,40 @@ function config.lspconfig()
 
   local home = os.getenv("HOME")
 
-  require("lspconfig").elixirls.setup {
-      cmd = { home .. "/.local/bin/elixir-ls/language_server.sh" },
-      on_attach = on_attach,
-      capabilities = capabilities,
-      settings = {
-        dialyzerEnabled = true,
-        dialyzerWarnOpts = {
-          enum = {
-            "error_handling",
-            "no_behaviours",
-            "no_contracts",
-            "no_fail_call",
-            "no_fun_app",
-            "no_improper_lists",
-            "no_match",
-            "no_missing_calls",
-            "no_opaque",
-            "no_return",
-            "no_undefined_callbacks",
-            "no_unused",
-            "underspecs",
-            "unknown",
-            "unmatched_returns",
-            "overspecs",
-            "specdiffs"
-          },
-          type = "string"
-        }
-      }
+  require("lspconfig").java_language_server.setup{
+    cmd = { home .. "/.local/bin/java-language-server/dist/lang_server_mac.sh" },
   }
 
+  require("lspconfig").elixirls.setup {
+    cmd = { home .. "/.local/bin/elixir-ls/language_server.sh" },
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+      dialyzerEnabled = true,
+      dialyzerWarnOpts = {
+        enum = {
+          "error_handling",
+          "no_behaviours",
+          "no_contracts",
+          "no_fail_call",
+          "no_fun_app",
+          "no_improper_lists",
+          "no_match",
+          "no_missing_calls",
+          "no_opaque",
+          "no_return",
+          "no_undefined_callbacks",
+          "no_unused",
+          "underspecs",
+          "unknown",
+          "unmatched_returns",
+          "overspecs",
+          "specdiffs"
+        },
+        type = "string"
+      }
+    }
+  }
 
   require("lspconfig").diagnosticls.setup {
     filetypes = {

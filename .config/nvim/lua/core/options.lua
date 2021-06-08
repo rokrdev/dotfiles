@@ -31,6 +31,7 @@ end
 
 local function load_options()
   vim.opt.termguicolors = true;
+  vim.opt.guifont = "MonoLisa Nerd Font:h13"
   vim.opt.mouse = 'nv';
   vim.opt.errorbells = true;
   vim.opt.visualbell = true;

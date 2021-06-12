@@ -31,14 +31,15 @@ function config.bufferline()
       mappings = false,
       always_show_bufferline = false,
     },
-    highlights = require('midnight-owl').getBufferlineTheme()
+    -- highlights = require('midnight-owl').getBufferlineTheme()
   }
 end
 
 function config.lualine()
   require('lualine').setup{
     options = {
-      theme = require('midnight-owl').getLualineTheme(),
+      -- theme = require('midnight-owl').getLualineTheme(),
+      theme = 'tokyonight',
       icons_enabled = true,
       component_separators = '',
       section_separators = ''
@@ -142,9 +143,16 @@ function config.gitsigns()
   }
 end
 
-function config.midnightOwl()
-  vim.cmd[[colorscheme midnight-owl]]
-  vim.cmd[[match EndOfLineSpace /\s\+$/]]
+function config.theme()
+  -- vim.cmd[[colorscheme midnight-owl]]
+  -- vim.cmd[[match EndOfLineSpace /\s\+$/]]
+
+  vim.g.tokyonight_style = "night"
+  vim.g.tokyonight_italic_functions = true
+  vim.g.tokyonight_italic_comments = true
+  vim.g.tokyonight_dark_sidebar = true
+  vim.g.tokyonight_dark_float = true
+  vim.cmd[[colorscheme tokyonight]]
 end
 
 return config

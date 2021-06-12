@@ -5,35 +5,40 @@ ui['kyazdani42/nvim-web-devicons'] = {
   event = 'VimEnter',
 }
 
+ui['~/.config/midnight-owl.nvim'] = {
+  event = 'VimEnter',
+  -- config = conf.theme,
+}
+
+ui['folke/tokyonight.nvim'] = {
+  event = 'VimEnter',
+  config = conf.theme,
+}
+
+ui["lukas-reineke/indent-blankline.nvim"] = {
+  event = {'BufRead','BufNewFile'},
+  branch = 'lua',
+  config = conf.indentBlankLine,
+}
+
 ui['lewis6991/gitsigns.nvim'] = {
   event = {'BufRead','BufNewFile'},
   config = conf.gitsigns,
   requires = {'nvim-lua/plenary.nvim',opt=true}
 }
 
-ui["lukas-reineke/indent-blankline.nvim"] = {
-  branch = 'lua',
-  event = 'BufRead',
-  setup = conf.indentBlankLine,
-}
-
-ui['~/.config/midnight-owl.nvim'] = {
-  event = 'VimEnter',
-  config = conf.midnightOwl,
-}
-
 ui["akinsho/nvim-bufferline.lua"] = {
-  after = 'midnight-owl.nvim',
+  event = 'VimEnter',
   config = conf.bufferline,
 }
 
 ui["hoob3rt/lualine.nvim"] = {
-  after = 'midnight-owl.nvim',
+  event = 'VimEnter',
   config = conf.lualine,
 }
 
 ui["norcalli/nvim-colorizer.lua"] = {
-  after = 'midnight-owl.nvim',
+  event = 'VimEnter',
   config = conf.colorizer,
 }
 
@@ -43,7 +48,7 @@ ui['kyazdani42/nvim-tree.lua'] = {
 }
 
 ui["rrethy/vim-illuminate"] = {
-  after = 'midnight-owl.nvim',
+  event = 'VimEnter',
   setup = conf.illuminate,
 }
 

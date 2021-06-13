@@ -5,20 +5,9 @@ ui['kyazdani42/nvim-web-devicons'] = {
   event = 'VimEnter',
 }
 
-ui['~/.config/midnight-owl.nvim'] = {
-  event = 'VimEnter',
-  -- config = conf.theme,
-}
-
 ui['folke/tokyonight.nvim'] = {
   event = 'VimEnter',
   config = conf.theme,
-}
-
-ui["lukas-reineke/indent-blankline.nvim"] = {
-  event = {'BufRead','BufNewFile'},
-  branch = 'lua',
-  config = conf.indentBlankLine,
 }
 
 ui['lewis6991/gitsigns.nvim'] = {

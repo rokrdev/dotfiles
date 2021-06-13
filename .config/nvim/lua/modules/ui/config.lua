@@ -1,27 +1,5 @@
 local config = {}
 
-function config.indentBlankLine()
-  vim.g.indent_blankline_filetype_exclude = { 'NvimTree' }
-  vim.g.indent_blankline_char = '│'
-  vim.g.indent_blankline_use_treesitter = true
-  -- vim.g.indent_blankline_show_current_context = true
-  vim.g.indent_blankline_filetype_exclude = {
-    "", -- for all buffers without a file type
-    "NvimTree",
-    "git",
-    "gitcommit",
-    "help",
-    "json",
-    "log",
-    "markdown",
-    "packer",
-    "startify",
-    "txt",
-    "undotree",
-  }
-  vim.g.indent_blankline_buftype_exclude = {"terminal", "nofile"}
-end
-
 function config.bufferline()
   require('bufferline').setup{
     options = {
@@ -31,14 +9,12 @@ function config.bufferline()
       mappings = false,
       always_show_bufferline = false,
     },
-    -- highlights = require('midnight-owl').getBufferlineTheme()
   }
 end
 
 function config.lualine()
   require('lualine').setup{
     options = {
-      -- theme = require('midnight-owl').getLualineTheme(),
       theme = 'tokyonight',
       icons_enabled = true,
       component_separators = '',
@@ -104,13 +80,6 @@ function config.gitsigns()
     vim.cmd [[packadd plenary.nvim]]
   end
   require('gitsigns').setup {
-    signs = {
-      add          = {hl = 'SignifySignAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
-      change       = {hl = 'SignifySignChange', text = '│', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
-      delete       = {hl = 'SignifySignDelete', text = '_', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
-      topdelete    = {hl = 'SignifySignDelete', text = '‾', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
-      changedelete = {hl = 'SignifySignChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
-    },
     numhl = false,
     linehl = false,
     keymaps = {
@@ -144,7 +113,6 @@ function config.gitsigns()
 end
 
 function config.theme()
-  -- vim.cmd[[colorscheme midnight-owl]]
   -- vim.cmd[[match EndOfLineSpace /\s\+$/]]
 
   vim.g.tokyonight_style = "night"

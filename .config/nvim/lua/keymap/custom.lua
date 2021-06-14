@@ -36,6 +36,7 @@ local ripgrep_producer = function(request)
       '--line-number',
       '--column',
       '--smart-case',
+      '-w',
       request.filter
     },
     cwd = cwd

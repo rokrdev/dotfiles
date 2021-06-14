@@ -113,14 +113,20 @@ function config.gitsigns()
 end
 
 function config.theme()
-  -- vim.cmd[[match EndOfLineSpace /\s\+$/]]
 
   vim.g.tokyonight_style = "night"
   vim.g.tokyonight_italic_functions = true
   vim.g.tokyonight_italic_comments = true
   vim.g.tokyonight_dark_sidebar = true
   vim.g.tokyonight_dark_float = true
-  vim.cmd[[colorscheme tokyonight]]
+  vim.api.nvim_exec(
+    [[
+      colorscheme tokyonight
+      hi default link EndOfLineSpace Substitute
+      match EndOfLineSpace /\s\+$/
+    ]],
+    false
+  )
 end
 
 return config

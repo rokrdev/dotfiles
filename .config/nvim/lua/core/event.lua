@@ -42,7 +42,7 @@ function autocmd.load_autocmds()
 
     mode = {
       {"InsertEnter", "*", "hi link EndOfLineSpace None"},
-      {"InsertLeave", "*", "hi link EndOfLineSpace CustomWhiteSpace"},
+      {"InsertLeave", "*", "hi link EndOfLineSpace Substitute"},
     };
 
     yank = {

@@ -6,8 +6,12 @@ editor['windwp/nvim-autopairs'] = {
   config = conf.autopairs,
 }
 
-editor['nvim-telescope/telescope.nvim'] = {
+editor['camspiers/snap'] = {
   event = 'VimEnter',
+}
+
+editor['nvim-telescope/telescope.nvim'] = {
+  cmd = 'Telescope',
   config = conf.telescope,
   requires = {
     {'nvim-lua/popup.nvim', opt = true},

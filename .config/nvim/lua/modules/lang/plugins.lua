@@ -2,7 +2,7 @@ local lang = {}
 local conf = require('modules.lang.config')
 
 lang['nvim-treesitter/nvim-treesitter'] = {
-  after = 'telescope.nvim',
+  event = 'VimEnter',
   config = conf.treesitter
 }
 

@@ -11,9 +11,9 @@ require('keymap.config')
 local plug_map = {
   -- normal
   -- fzf/rg
-  ["n|<Leader>b"]             = map_cr("Telescope buffers"):with_noremap():with_nowait(),
+  ["n|<Leader>b"]             = map_lua("require'keymap.custom'.buffers()"):with_noremap():with_nowait(),
   ["n|<Leader>ff"]            = map_lua("require'keymap.custom'.find_files{}"):with_noremap():with_nowait(),
-  ["n|<Leader>fs"]            = map_lua("require('telescope').extensions.fzf_writer.staged_grep()"):with_noremap():with_nowait(),
+  ["n|<Leader>fs"]            = map_lua("require'keymap.custom'.live_grep()"):with_noremap():with_nowait(),
   -- ["n|<Leader>fS"]            = map_wait("RGRaw "):with_noremap():with_nowait(),
   ["n|<Leader>gc"]            = map_lua("require'keymap.custom'.git_conflicts{}"):with_noremap():with_nowait(),
   ["n|<Leader>fw"]            = map_lua("require'keymap.custom'.grep_word_under_cursor{}"):with_noremap():with_nowait(),

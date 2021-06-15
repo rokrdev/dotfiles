@@ -35,7 +35,7 @@ local plug_map = {
   ["n|sL"]                    = map_cu("call sneak#wrap('', 1, 1, 0, 2)"):with_noremap():with_nowait(),
   ["n|sj"]                    = map_cmd("<Plug>SneakLabel_s"):with_nowait(),
   ["n|sk"]                    = map_cmd("<Plug>SneakLabel_S"):with_nowait(),
-  ["n|<C-t>"]                 = map_cr("write | edit | TSBufEnable highlight"):with_nowait():with_silent(),
+  ["n|<M-u>"]                 = map_cr("write | edit | TSBufEnable highlight"):with_nowait():with_silent(),
   -- bufferline
   ["n|<C-h>"]                 = map_cr("BufferLineCyclePrev"):with_noremap():with_silent():with_nowait(),
   ["n|<C-l>"]                 = map_cr("BufferLineCycleNext"):with_noremap():with_silent():with_nowait(),

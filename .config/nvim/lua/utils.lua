@@ -42,10 +42,10 @@ function M.openTerm(cmd)
 end
 
 function M.toggleColorColumn()
-  if wo.colorcolumn == "100" then
+  if wo.colorcolumn == "120" then
     wo.colorcolumn = "0"
   else
-    wo.colorcolumn = "100"
+    wo.colorcolumn = "120"
   end
 end
 

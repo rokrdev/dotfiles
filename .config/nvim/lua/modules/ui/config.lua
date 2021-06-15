@@ -114,8 +114,8 @@ function config.theme()
   vim.g.tokyonight_style = "night"
   vim.g.tokyonight_italic_functions = true
   vim.g.tokyonight_italic_comments = true
-  vim.g.tokyonight_dark_sidebar = true
-  vim.g.tokyonight_dark_float = true
+  vim.g.tokyonight_dark_sidebar = false
+  vim.g.tokyonight_dark_float = false
   vim.api.nvim_exec(
     [[
       colorscheme tokyonight

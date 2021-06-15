@@ -35,7 +35,6 @@ local ripgrep_producer = function(request)
       '--with-filename',
       '--line-number',
       '--column',
-      '--smart-case',
       '-w',
       request.filter
     },
@@ -46,7 +45,7 @@ end
 function f.custom_grep(query)
   snap.run {
     prompt = 'Grep>',
-    producer = limit(10000, ripgrep_producer),
+    producer = limit(500, ripgrep_producer),
     select = select_vimgrep.select,
     multiselect = select_vimgrep.multiselect,
     initial_filter = query,
@@ -94,13 +93,13 @@ end
 function f.find_files()
   snap.run {
     prompt = 'Files>',
-    producer = snap.get 'consumer.fzf'(function(request)
+    producer = limit(500, snap.get 'consumer.fzf'(function(request)
       local cwd = snap.sync(vim.fn.getcwd)
       return general(request, {
         args = {"--hidden", "--line-buffered", "--files"},
         cwd = cwd
       })
-    end),
+    end)),
     select = file_select.select,
     multiselect = file_select.multiselect,
     views = {file_preview}
@@ -110,7 +109,7 @@ end
 function f.live_grep()
   snap.run {
     prompt = 'Live Grep>',
-    producer = limit(10000, ripgrep_producer),
+    producer = limit(500, ripgrep_producer),
     select = select_vimgrep.select,
     multiselect = select_vimgrep.multiselect,
     views = {preview_vimgrep}

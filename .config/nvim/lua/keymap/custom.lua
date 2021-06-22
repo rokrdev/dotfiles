@@ -44,6 +44,7 @@ end
 
 function f.custom_grep(query)
   snap.run {
+    reverse = true,
     prompt = 'Grep>',
     producer = limit(500, ripgrep_producer),
     select = select_vimgrep.select,
@@ -92,6 +93,7 @@ end
 
 function f.find_files()
   snap.run {
+    reverse = true,
     prompt = 'Files>',
     producer = limit(500, snap.get 'consumer.fzf'(function(request)
       local cwd = snap.sync(vim.fn.getcwd)
@@ -108,6 +110,7 @@ end
 
 function f.live_grep()
   snap.run {
+    reverse = true,
     prompt = 'Live Grep>',
     producer = limit(500, ripgrep_producer),
     select = select_vimgrep.select,
@@ -163,6 +166,7 @@ end
 
 function f.git_conflicts()
   snap.run {
+    reverse = true,
     prompt = 'Git Conflicts>',
     producer = snap.get'consumer.fzf'(git_conflict_producer),
     select = file_select.select,
@@ -187,6 +191,7 @@ end
 
 function f.buffers()
   snap.run({
+    reverse = true,
     prompt = 'Buffers>',
     producer = fzf(producer_buffer),
     select = file_select.select,

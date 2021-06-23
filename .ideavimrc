@@ -62,8 +62,8 @@ nnoremap <leader>R :source ~/.ideavimrc<CR>
 nmap <leader>x :action CloseEditor<CR>
 
 " tabs
-nmap <leader>h :action PreviousTab<CR>
-nmap <leader>l :action NextTab<CR>
+nmap <C-h> :action PreviousTab<CR>
+nmap <C-l> :action NextTab<CR>
 " nnoremap <leader>c :action CloseContent <CR>
 
 " extract

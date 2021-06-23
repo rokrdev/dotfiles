@@ -1,6 +1,8 @@
 """ Map leader to space ---------------------
 let mapleader=" "
 
+set easymotion
+
 """ Plugins  --------------------------------
 set surround
 set multiple-cursors
@@ -18,6 +20,8 @@ set showmode
 set so=5
 set incsearch
 set nu
+set ignorecase
+set smartcase
 
 """ Idea specific settings ------------------
 set ideajoin
@@ -55,11 +59,11 @@ nnoremap <leader>ff :action GotoFile <CR>
 vnoremap <leader>ff :action GotoFile <CR>
 
 nnoremap <leader>R :source ~/.ideavimrc<CR>
+nmap <leader>x :action CloseEditor<CR>
 
 " tabs
 nmap <leader>h :action PreviousTab<CR>
 nmap <leader>l :action NextTab<CR>
-nmap <leader>bd :action CloseEditor<CR>
 " nnoremap <leader>c :action CloseContent <CR>
 
 " extract

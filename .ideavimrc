@@ -1,0 +1,98 @@
+""" Map leader to space ---------------------
+let mapleader=" "
+
+""" Plugins  --------------------------------
+set surround
+set multiple-cursors
+set commentary
+set argtextobj
+set easymotion
+set textobj-entire
+set ReplaceWithRegister
+
+""" Plugin settings -------------------------
+let g:argtextobj_pairs="[:],(:),<:>"
+
+""" Common settings -------------------------
+set showmode
+set so=5
+set incsearch
+set nu
+
+""" Idea specific settings ------------------
+set ideajoin
+set ideastatusicon=gray
+set idearefactormode=keep
+
+""" Mappings --------------------------------
+
+" formatting
+nnoremap == :action ReformatCode <CR>
+vnoremap == :action ReformatCode <CR>
+nnoremap -- :action OptimizeImports <CR>
+vnoremap -- :action OptimizeImports <CR>
+
+nnoremap gcc :action CommentByLineComment <CR>
+vnoremap gcc :action CommentByLineComment <CR>
+
+nnoremap ,a :action GotoAction <CR>
+vnoremap ,a :action GotoAction <CR>
+
+" split window
+nnoremap <leader>sv :action SplitVertically <CR>
+nnoremap <leader>sc :action UnsplitAll <CR>
+nnoremap <leader>v :action NextSplitter <CR>
+
+" search
+nmap <leader>fw :action FindInPath<CR>
+vmap <leader>fw :action FindInPath<CR>
+nnoremap <leader>fu :action FindUsages <CR>
+vnoremap <leader>fu :action FindUsages <CR>
+nnoremap <leader>fe :action SearchEverywhere <CR>
+nnoremap <leader>fc :action GotoClass <CR>
+vnoremap <leader>fc :action GotoClass <CR>
+nnoremap <leader>ff :action GotoFile <CR>
+vnoremap <leader>ff :action GotoFile <CR>
+
+nnoremap <leader>R :source ~/.ideavimrc<CR>
+
+" tabs
+nmap <leader>h :action PreviousTab<CR>
+nmap <leader>l :action NextTab<CR>
+nmap <leader>bd :action CloseEditor<CR>
+" nnoremap <leader>c :action CloseContent <CR>
+
+" extract
+nnoremap <leader>iv :action IntroduceVariable <CR>
+nnoremap <leader>em :action ExtractMethod  <Cr>
+vnoremap <leader>em :action ExtractMethod  <Cr>
+nnoremap <leader>ic :action IntroduceConstant <CR>
+
+" file navigation
+nnoremap gh :action Back <CR>
+nnoremap gl :action Forward <CR>
+nnoremap gj :action MethodDown <CR>
+nnoremap gk :action MethodUp <CR>
+nnoremap gs :action GotoSuperMethod <CR>
+nnoremap gi :action GotoImplementation <CR>
+nnoremap g, :action JumpToLastChange <CR>
+nnoremap g. :action JumpToNextChange <CR>
+nnoremap gd :action GotoDeclaration <CR>
+nnoremap gr :action RecentFiles <CR>
+nnoremap <leader>ww :action HideAllWindows <CR>
+nnoremap gp :NERDTree <CR>
+nnoremap <leader>gt :action GotoTest <CR>
+nnoremap <leader>rc :action RunClass <CR>
+nnoremap ,rc :action ChooseRunConfiguration <CR>
+nnoremap <leader>gq :action QuickList.Git <CR>
+nnoremap <leader>ns :action NewScratchFile <CR>
+nnoremap <leader>nf :action NewElementSamePlace <CR>
+nnoremap <leader>ge :action Generate<CR>
+vnoremap <leader>re :action Replace<CR>
+nnoremap <leader>re :action Replace<CR>
+vnoremap / :action Find<CR>
+nnoremap / :action Find<CR>
+nnoremap <leader>ss :action SelectInProjectView<CR>
+
+" useful
+nnoremap <C-A> gg<S-v>G

@@ -11,6 +11,8 @@ set argtextobj
 set easymotion
 set textobj-entire
 set ReplaceWithRegister
+set multiple-cursors
+set clipboard+=unnamed
 
 """ Plugin settings -------------------------
 let g:argtextobj_pairs="[:],(:),<:>"
@@ -29,6 +31,14 @@ set ideastatusicon=gray
 set idearefactormode=keep
 
 """ Mappings --------------------------------
+
+nnoremap <leader>ap "+p
+nnoremap <leader>am "mp
+nnoremap <leader>ay "+y
+vnoremap <leader>ap "+p
+vnoremap <leader>am "mp
+vnoremap <leader>aM "my
+vnoremap <leader>ay "+y
 
 " formatting
 nnoremap == :action ReformatCode <CR>

@@ -12,7 +12,7 @@ set easymotion
 set textobj-entire
 set ReplaceWithRegister
 set multiple-cursors
-set clipboard+=unnamed
+set clipboard+=unnamedplus
 
 """ Plugin settings -------------------------
 let g:argtextobj_pairs="[:],(:),<:>"

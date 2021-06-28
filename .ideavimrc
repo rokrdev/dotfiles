@@ -104,8 +104,8 @@ nnoremap <leader>nf :action NewElementSamePlace <CR>
 nnoremap <leader>ge :action Generate<CR>
 vnoremap <leader>re :action Replace<CR>
 nnoremap <leader>re :action Replace<CR>
-vnoremap / :action Find<CR>
-nnoremap / :action Find<CR>
+" vnoremap / :action Find<CR>
+" nnoremap / :action Find<CR>
 nnoremap <leader>ss :action SelectInProjectView<CR>
 
 " useful

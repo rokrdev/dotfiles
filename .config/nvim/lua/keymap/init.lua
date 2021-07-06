@@ -33,7 +33,7 @@ local plug_map = {
   ["n|F"]                     = map_cmd("<Plug>(easymotion-F)"):with_nowait(),
   ["n|t"]                     = map_cmd("<Plug>(easymotion-t)"):with_nowait(),
   ["n|T"]                     = map_cmd("<Plug>(easymotion-T)"):with_nowait(),
-  ["n|<Leader>sa"]            = map_cmd("<Plug>(easymotion-s)"):with_nowait(),
+  ["n|<Leader>sh"]            = map_cmd("<Plug>(easymotion-s)"):with_nowait(),
   ["n|<Leader>fa"]            = map_cr("write | edit | TSBufEnable highlight"):with_nowait():with_silent(),
   -- bufferline
   ["n|<C-h>"]                 = map_cr("BufferLineCyclePrev"):with_noremap():with_silent():with_nowait(),

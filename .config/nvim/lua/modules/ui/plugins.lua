@@ -32,7 +32,7 @@ ui["norcalli/nvim-colorizer.lua"] = {
 }
 
 ui['kyazdani42/nvim-tree.lua'] = {
-  event = 'VimEnter',
+  cmd = {"NvimTreeToggle", "NvimTreeOpen"},
   config = conf.tree,
 }
 

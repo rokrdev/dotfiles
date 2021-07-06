@@ -30,6 +30,7 @@ editor["mcchrish/nnn.vim"] = {
 
 editor["easymotion/vim-easymotion"] = {
   event = {'BufReadPre','BufNewFile'},
+  setup = conf.easymotion
 }
 
 editor['wincent/scalpel'] = {

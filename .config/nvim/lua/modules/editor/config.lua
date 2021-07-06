@@ -66,4 +66,8 @@ function config.telescope()
   vim.cmd([[packadd cfilter]])
 end
 
+function config.easymotion()
+  vim.g.EasyMotion_smartcase = 1
+end
+
 return config

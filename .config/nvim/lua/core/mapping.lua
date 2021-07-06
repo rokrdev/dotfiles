@@ -10,17 +10,17 @@ vim.g["@z"] = "f cl<CR><ESC>l"
 
 local def_map = {
   -- normal mode
-  ["n|s"]                    = map_cmd("<Nop>"),
+  -- ["n|s"]                    = map_cmd("<Nop>"),
   -- ["n|<M-j>"]                = map_cmd(":m .+1<CR>=="):with_noremap():with_silent():with_nowait(),
   -- ["n|<M-k>"]                = map_cmd(":m .-2<CR>=="):with_noremap():with_silent():with_nowait(),
-  ["n|s-"]                   = map_cr("bd"):with_noremap():with_nowait(),
-  ["n|s_"]                   = map_cr("bd!"):with_noremap():with_nowait(),
-  ["n|s;"]                   = map_cr("b#"):with_noremap():with_nowait(),
-  ["n|sc"]                   = map_cr("nohl"):with_noremap():with_silent():with_nowait(),
-  ["n|s#"]                   = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgN"):with_noremap():with_silent(),
-  ["n|s*"]                   = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn"):with_noremap():with_silent(),
-  ["n|ss"]                   = map_args("ls<CR>:b"):with_noremap():with_nowait(),
-  ["n|sn"]                   = map_lua("require('utils').toggleNumbers()"):with_noremap():with_nowait(),
+  ["n|<Leader>s-"]           = map_cr("bd"):with_noremap():with_nowait(),
+  ["n|<Leader>s_"]           = map_cr("bd!"):with_noremap():with_nowait(),
+  ["n|<Leader>so"]           = map_cr("b#"):with_noremap():with_nowait(),
+  ["n|<Leader>sc"]           = map_cr("nohl"):with_noremap():with_silent():with_nowait(),
+  ["n|<Leader>s#"]           = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgN"):with_noremap():with_silent(),
+  ["n|<Leader>s*"]           = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn"):with_noremap():with_silent(),
+  -- ["n|<Leader>ss"]           = map_args("ls<CR>:b"):with_noremap():with_nowait(),
+  ["n|<Leader>sn"]           = map_lua("require('utils').toggleNumbers()"):with_noremap():with_nowait(),
   ["n|<M-q>"]                = map_cmd("q"):with_noremap():with_nowait(),
   ["n|q"]                    = map_cmd("<Nop>"):with_noremap(),
   ["n|<M-+>"]                = map_cr(":vertical resize +5"):with_noremap():with_silent(),
@@ -38,11 +38,11 @@ local def_map = {
   ["n|<Leader>sd"]           = map_wait("SD " .. require('utils').getSessionFilePath()):with_noremap(),
 
   -- visual mode
-  ["v|s"]                    = map_cmd("<Nop>"),
+  -- ["v|s"]                    = map_cmd("<Nop>"),
   -- ["v|<M-j>"]                = map_cmd(":m '>+1<CR>gv=gv"):with_noremap():with_nowait(),
   -- ["v|<M-k>"]                = map_cmd(":m '<-2<CR>gv=gv"):with_noremap():with_nowait(),
-  ["v|s#"]                   = map_cmd("\"sy:let @/=@s<CR>cgN"):with_noremap(),
-  ["v|s*"]                   = map_cmd("\"sy:let @/=@s<CR>cgn"):with_noremap(),
+  ["v|<Leader>s#"]           = map_cmd("\"sy:let @/=@s<CR>cgN"):with_noremap(),
+  ["v|<Leader>s*"]           = map_cmd("\"sy:let @/=@s<CR>cgn"):with_noremap(),
 
   --- Copy/Paste
   -- paste from clipboard
@@ -62,8 +62,3 @@ local def_map = {
 }
 
 bind.nvim_load_mapping(def_map)
-
-vim.api.nvim_set_keymap("","f","<Plug>Sneak_f",{})
-vim.api.nvim_set_keymap("","F","<Plug>Sneak_F",{})
-vim.api.nvim_set_keymap("","t","<Plug>Sneak_t",{})
-vim.api.nvim_set_keymap("","T","<Plug>Sneak_T",{})

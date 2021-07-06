@@ -15,9 +15,6 @@ local function global_options()
    ['<c-v>'] = 'vsplit'
   }
 
-  vim.g["sneak#use_ic_scs"] = 1
-  vim.g["sneak#target_labels"] = "asdfjkl;ghqweruioptyzxcvnmbASDFJKL:GHQWERTYUIOPZXCVNMB!@#$^&*"
-
   -- fix for slow movement in large php files
   vim.g.php_syntax_extensions_enabled = {}
   vim.g.php_var_selector_is_identifier = 1

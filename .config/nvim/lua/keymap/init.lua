@@ -28,13 +28,12 @@ local plug_map = {
   ["n|#"]                     = map_cmd("<Plug>(asterisk-z#)"):with_nowait(),
   ["n|g*"]                    = map_cmd("<Plug>(asterisk-gz*)"):with_nowait(),
   ["n|g#"]                    = map_cmd("<Plug>(asterisk-gz#)"):with_nowait(),
-  -- sneak
-  ["n|sh"]                    = map_cu("call sneak#wrap('', 1, 0, 1, 2)"):with_noremap():with_nowait(),
-  ["n|sl"]                    = map_cu("call sneak#wrap('', 1, 1, 1, 2)"):with_noremap():with_nowait(),
-  ["n|sH"]                    = map_cu("call sneak#wrap('', 1, 0, 0, 2)"):with_noremap():with_nowait(),
-  ["n|sL"]                    = map_cu("call sneak#wrap('', 1, 1, 0, 2)"):with_noremap():with_nowait(),
-  ["n|sj"]                    = map_cmd("<Plug>SneakLabel_s"):with_nowait(),
-  ["n|sk"]                    = map_cmd("<Plug>SneakLabel_S"):with_nowait(),
+  -- easymotion
+  ["n|f"]                     = map_cmd("<Plug>(easymotion-f)"):with_nowait(),
+  ["n|F"]                     = map_cmd("<Plug>(easymotion-F)"):with_nowait(),
+  ["n|t"]                     = map_cmd("<Plug>(easymotion-t)"):with_nowait(),
+  ["n|T"]                     = map_cmd("<Plug>(easymotion-T)"):with_nowait(),
+  ["n|<Leader>sa"]            = map_cmd("<Plug>(easymotion-s)"):with_nowait(),
   ["n|<Leader>fa"]            = map_cr("write | edit | TSBufEnable highlight"):with_nowait():with_silent(),
   -- bufferline
   ["n|<C-h>"]                 = map_cr("BufferLineCyclePrev"):with_noremap():with_silent():with_nowait(),

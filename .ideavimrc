@@ -1,8 +1,6 @@
 """ Map leader to space ---------------------
 let mapleader=" "
 
-set easymotion
-
 """ Plugins  --------------------------------
 set surround
 set multiple-cursors
@@ -110,3 +108,8 @@ nnoremap <leader>ss :action SelectInProjectView<CR>
 
 " useful
 nnoremap <C-A> gg<S-v>G
+nmap f <Plug>(easymotion-f)
+nmap F <Plug>(easymotion-F)
+nmap t <Plug>(easymotion-t)
+nmap T <Plug>(easymotion-T)
+nmap <Leader>sa <Plug>(easymotion-s)

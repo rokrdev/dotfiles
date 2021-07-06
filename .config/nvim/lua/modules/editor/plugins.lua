@@ -28,7 +28,7 @@ editor["mcchrish/nnn.vim"] = {
   cmd = 'NnnPicker',
 }
 
-editor["justinmk/vim-sneak"] = {
+editor["easymotion/vim-easymotion"] = {
   event = {'BufReadPre','BufNewFile'},
 }
 

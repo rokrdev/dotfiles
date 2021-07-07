@@ -64,6 +64,10 @@ function config.tree()
       untracked = "★",
     },
   }
+  local tree_cb = require'nvim-tree.config'.nvim_tree_callback
+  vim.g.nvim_tree_bindings = {
+    { key = {"<2-RightMouse>", "<C-]>", "C"},    cb = tree_cb("cd") },
+  }
   require("nvim-tree.events").on_nvim_tree_ready(function()
     vim.cmd("NvimTreeRefresh")
   end)

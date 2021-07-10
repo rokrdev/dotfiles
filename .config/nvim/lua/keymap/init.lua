@@ -10,13 +10,6 @@ require('keymap.config')
 
 local plug_map = {
   -- normal
-  -- fzf/rg
-  ["n|<Leader>b"]             = map_lua("require'keymap.custom'.buffers()"):with_noremap():with_nowait(),
-  ["n|<Leader>ff"]            = map_lua("require'keymap.custom'.find_files{}"):with_noremap():with_nowait(),
-  ["n|<Leader>fs"]            = map_lua("require'keymap.custom'.live_grep()"):with_noremap():with_nowait(),
-  -- ["n|<Leader>fS"]            = map_wait("RGRaw "):with_noremap():with_nowait(),
-  ["n|<Leader>gc"]            = map_lua("require'keymap.custom'.git_conflicts{}"):with_noremap():with_nowait(),
-  ["n|<Leader>fw"]            = map_lua("require'keymap.custom'.grep_word_under_cursor{}"):with_noremap():with_nowait(),
   -- nnn/scalpel/blame/nvimtree
   ["n|<Leader>fn"]            = map_lua("require('utils').nnnPicker()"):with_noremap():with_nowait(),
   ["n|<Leader>ft"]            = map_cr("NvimTreeToggle"):with_noremap():with_nowait(),
@@ -49,7 +42,6 @@ local plug_map = {
   ["v|g*"]                    = map_cmd("<Plug>(asterisk-gz*)"):with_nowait(),
   ["v|g#"]                    = map_cmd("<Plug>(asterisk-gz#)"):with_nowait(),
 
-  ["v|<Leader>fw"]            = map_lua("require'keymap.custom'.grep_visual_selection{}"):with_noremap():with_nowait(),
   ["v|<Leader>fr"]            = map_cmd("<Plug>(ScalpelVisual)"):with_nowait(),
 
   -- insert

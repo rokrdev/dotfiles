@@ -93,11 +93,14 @@ function config.snap()
     { "<Leader>fw", vimgrep { filter_with = "cword" }},
     { "<Leader>fw", vimgrep { filter_with = "selection" },  { modes = { "x" } }},
     { "<Leader>b", snap.config.file {producer = "vim.buffer"}},
-   -- { "<Leader>gc", snap.config.file {
-   --   producer = "git.file",
-   --   args = {"diff","--name-only","--diff-filter=U"}
-   --   reverse = true,
-   -- }},
+    { "<Leader>gc", snap.config.file {
+      try = {
+        snap.get('producer.git.file').args({"diff","--name-only","--diff-filter=U"}),
+        'ripgrep.file',
+      },
+      prompt = 'Conflicts',
+      reverse = true,
+    }},
   }
   vim.cmd([[packadd cfilter]])
 end

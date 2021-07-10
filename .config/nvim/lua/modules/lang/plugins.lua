@@ -10,7 +10,6 @@ lang['nvim-treesitter/playground'] = {
   cmd = 'TSPlaygroundToggle'
 }
 
-
 lang['elixir-editors/vim-elixir'] = {
   opt = true,
   ft = {'elixir', 'eelixir'},

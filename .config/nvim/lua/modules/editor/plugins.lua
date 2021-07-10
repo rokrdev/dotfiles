@@ -8,17 +8,18 @@ editor['windwp/nvim-autopairs'] = {
 
 editor['camspiers/snap'] = {
   event = 'VimEnter',
+  config = conf.snap,
 }
 
-editor['nvim-telescope/telescope.nvim'] = {
-  cmd = 'Telescope',
-  config = conf.telescope,
-  requires = {
-    {'nvim-lua/popup.nvim', opt = true},
-    {'nvim-lua/plenary.nvim',opt = true},
-    {'nvim-telescope/telescope-fzf-writer.nvim', opt = true},
-  }
-}
+-- editor['nvim-telescope/telescope.nvim'] = {
+--   cmd = 'Telescope',
+--   config = conf.telescope,
+--   requires = {
+--     {'nvim-lua/popup.nvim', opt = true},
+--     {'nvim-lua/plenary.nvim',opt = true},
+--     {'nvim-telescope/telescope-fzf-writer.nvim', opt = true},
+--   }
+-- }
 
 editor['editorconfig/editorconfig-vim'] = {
   ft = { 'go','vim','rust' }

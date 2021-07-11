@@ -6,7 +6,7 @@ ui['kyazdani42/nvim-web-devicons'] = {
 }
 
 ui['folke/tokyonight.nvim'] = {
-  event = 'VimEnter',
+  after = 'nvim-treesitter',
   config = conf.theme,
 }
 

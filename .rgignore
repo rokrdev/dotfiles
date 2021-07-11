@@ -1,7 +1,0 @@
-node_modules
-deps
-_build
-.elixir_ls
-.git
-package.lock
-yarn.lock

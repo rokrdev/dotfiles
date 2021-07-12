@@ -101,7 +101,6 @@ alias nn='nnn -d -e -H'
 alias nv="~/.npm-packages/bin/n"
 alias rf=trash
 alias sar="brew services restart skhd"
-alias sd="pushd ~/.dotfiles && rsync -r --exclude-from \"exclude_from_sync.txt\" . ~ && popd"
 alias sf='source $FISH_CONFIG'
 alias st=speedtest-cli
 alias t=tmux

@@ -2,3 +2,4 @@
 __backup__*
 .vim/*
 .rgignore
+.git

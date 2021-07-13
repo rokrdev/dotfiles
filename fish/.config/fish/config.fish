@@ -132,9 +132,9 @@ alias l.='exa -a | egrep "^\."'
 alias ..='cd ..'
 alias ...='cd ../../'
 alias ....='cd ../../../'
-alias .....='cd ../../../'
-alias ......='cd ../../../../'
-alias .......='cd ../../../../../'
+alias .....='cd ../../../../'
+alias ......='cd ../../../../../'
+alias .......='cd ../../../../../../'
 alias please=sudo
 
 alias python3=python

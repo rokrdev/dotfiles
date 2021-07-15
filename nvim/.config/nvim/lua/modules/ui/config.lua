@@ -132,7 +132,7 @@ function config.theme()
       colorscheme tokyonight
       hi default link EndOfLineSpace Substitute
       match EndOfLineSpace /\s\+$/
-      hi default link EndOfBuffer LineNr
+      hi EndOfBuffer ctermfg=11 guifg=#3b4261
     ]],
     false
   )

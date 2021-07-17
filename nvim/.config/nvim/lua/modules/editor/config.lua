@@ -89,7 +89,7 @@ function config.snap()
 
   snap.maps {
     { "<Leader>ff", file { producer = "ripgrep.file", prompt = "Files" }},
-    { "<Leader>fg", vimgrep {}},
+    { "<Leader>fs", vimgrep {}},
     { "<Leader>fw", vimgrep { filter_with = "cword" }},
     { "<Leader>fw", vimgrep { filter_with = "selection" },  { modes = { "x" } }},
     { "<Leader>b", snap.config.file {producer = "vim.buffer", reverse = true}},

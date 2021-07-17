@@ -8,9 +8,9 @@ function commands.setup()
   vim.cmd("command! Scratch lua require('utils').scratchGenerator()")
 
   -- git
-  vim.cmd("command! GA execute ':silent !git add %'")
-  vim.cmd("command! GR execute ':silent !git reset %'")
-  vim.cmd("command! GG lua require'gitsigns'.refresh()")
+  vim.cmd("command! Ga execute ':silent !git add %'")
+  vim.cmd("command! Gr execute ':silent !git reset %'")
+  vim.cmd("command! Gg lua require'gitsigns'.refresh()")
 
   -- Term
   vim.cmd("command! -bang Term terminal<bang> /usr/local/bin/fish")
@@ -27,10 +27,10 @@ function commands.setup()
   vim.cmd("command! EnableTrailingWhitespace hi link EndOfLineSpace ErrorMsg")
 
   -- Json format
-  vim.cmd("command! FJ %!jq")
+  vim.cmd("command! Fj %!jq")
 
-  vim.cmd("command! CD cd %:h")
-  vim.cmd("command! BD bufdo bd")
+  vim.cmd("command! Cd cd %:h")
+  vim.cmd("command! Bd bufdo bd")
 
   vim.cmd('command! -nargs=* W w')
 end

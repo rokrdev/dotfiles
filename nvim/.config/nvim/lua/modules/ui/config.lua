@@ -133,6 +133,7 @@ function config.theme()
       hi default link EndOfLineSpace Substitute
       match EndOfLineSpace /\s\+$/
       hi EndOfBuffer ctermfg=11 guifg=#3b4261
+      hi VertSplit ctermfg=11 guifg=#3b4261
     ]],
     false
   )

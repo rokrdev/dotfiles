@@ -97,7 +97,7 @@ local function load_options()
   vim.opt.showbreak = "↳  ";
   vim.opt.listchars = { tab = '»··', nbsp = '+', extends = '→', precedes = '←' };
   vim.opt.showmatch = true;
-  vim.opt.fillchars = { vert = ' ', fold = '-', foldopen = '+', diff = '-', stl = ' ', stlnc = ' ', eob = '~' };
+  vim.opt.fillchars = { vert = '┃', fold = '-', foldopen = '+', diff = '-', stl = ' ', stlnc = ' ', eob = '~' };
 
   -- buffer
   vim.opt.undofile = true;

@@ -13,6 +13,7 @@ local def_map = {
   -- ["n|s"]                    = map_cmd("<Nop>"),
   -- ["n|<M-j>"]                = map_cmd(":m .+1<CR>=="):with_noremap():with_silent():with_nowait(),
   -- ["n|<M-k>"]                = map_cmd(":m .-2<CR>=="):with_noremap():with_silent():with_nowait(),
+  ["n|<M-n>"]                = map_cmd("<C-w>w"):with_noremap():with_silent():with_nowait(),
   ["n|<Leader>s-"]           = map_cr("bd"):with_noremap():with_nowait(),
   ["n|<Leader>s_"]           = map_cr("bd!"):with_noremap():with_nowait(),
   ["n|<Leader>fo"]           = map_cr("b#"):with_noremap():with_nowait(),

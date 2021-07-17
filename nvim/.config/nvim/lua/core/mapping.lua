@@ -17,7 +17,7 @@ local def_map = {
   ["n|<Leader>s-"]           = map_cr("bd"):with_noremap():with_nowait(),
   ["n|<Leader>s_"]           = map_cr("bd!"):with_noremap():with_nowait(),
   ["n|<Leader>fo"]           = map_cr("b#"):with_noremap():with_nowait(),
-  ["n|<Leader>sc"]           = map_cr("nohl"):with_noremap():with_silent():with_nowait(),
+  ["n|<Leader>c"]            = map_cr("nohl"):with_noremap():with_silent():with_nowait(),
   ["n|<Leader>s#"]           = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgN"):with_noremap():with_silent(),
   ["n|<Leader>s*"]           = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn"):with_noremap():with_silent(),
   -- ["n|<Leader>ss"]           = map_args("ls<CR>:b"):with_noremap():with_nowait(),

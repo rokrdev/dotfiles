@@ -60,7 +60,7 @@ nmap <leader>fw :action FindInPath<CR>
 vmap <leader>fw :action FindInPath<CR>
 nnoremap <leader>fu :action FindUsages <CR>
 vnoremap <leader>fu :action FindUsages <CR>
-nnoremap <leader>fe :action SearchEverywhere <CR>
+nnoremap <leader>fs :action SearchEverywhere <CR>
 nnoremap <leader>fc :action GotoClass <CR>
 vnoremap <leader>fc :action GotoClass <CR>
 nnoremap <leader>ff :action GotoFile <CR>

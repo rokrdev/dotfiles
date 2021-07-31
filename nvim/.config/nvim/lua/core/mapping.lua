@@ -10,14 +10,11 @@ vim.g["@z"] = "f cl<CR><ESC>l"
 
 local def_map = {
   -- normal mode
-  -- ["n|s"]                    = map_cmd("<Nop>"),
-  -- ["n|<M-j>"]                = map_cmd(":m .+1<CR>=="):with_noremap():with_silent():with_nowait(),
-  -- ["n|<M-k>"]                = map_cmd(":m .-2<CR>=="):with_noremap():with_silent():with_nowait(),
   ["n|<M-n>"]                = map_cmd("<C-w>w"):with_noremap():with_silent():with_nowait(),
   ["n|<Leader>s-"]           = map_cr("bd"):with_noremap():with_nowait(),
   ["n|<Leader>s_"]           = map_cr("bd!"):with_noremap():with_nowait(),
   ["n|<Leader>fo"]           = map_cr("b#"):with_noremap():with_nowait(),
-  ["n|<Leader>c"]            = map_cr("nohl"):with_noremap():with_silent():with_nowait(),
+  ["n|<Leader>sc"]           = map_cr("nohl"):with_noremap():with_silent():with_nowait(),
   ["n|<Leader>s#"]           = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgN"):with_noremap():with_silent(),
   ["n|<Leader>s*"]           = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn"):with_noremap():with_silent(),
   -- ["n|<Leader>ss"]           = map_args("ls<CR>:b"):with_noremap():with_nowait(),
@@ -38,10 +35,19 @@ local def_map = {
   ["n|<Leader>sr"]           = map_wait("SR " .. require('utils').getSessionFilePath()):with_noremap(),
   ["n|<Leader>sd"]           = map_wait("SD " .. require('utils').getSessionFilePath()):with_noremap(),
 
+  ["n|Y"]                    = map_cmd("y$"):with_noremap():with_nowait(),
+  ["n|n"]                    = map_cmd("nzzzv"):with_noremap():with_nowait(),
+  ["n|N"]                    = map_cmd("Nzzzv"):with_noremap():with_nowait(),
+  ["n|J"]                    = map_cmd("mzJ`z"):with_noremap():with_nowait(),
+  ["n|<M-k>"]                = map_cmd(":m .-2<CR>=="):with_noremap():with_nowait(),
+  ["n|<M-j>"]                = map_cmd(":m .+1<CR>=="):with_noremap():with_nowait(),
+
+  ["i|<M-k>"]                = map_cmd("<esc> :m .-2<CR>==i"):with_noremap():with_nowait(),
+  ["i|<M-j>"]                = map_cmd("<esc> :m .+1<CR>==i"):with_noremap():with_nowait(),
+
   -- visual mode
-  -- ["v|s"]                    = map_cmd("<Nop>"),
-  -- ["v|<M-j>"]                = map_cmd(":m '>+1<CR>gv=gv"):with_noremap():with_nowait(),
-  -- ["v|<M-k>"]                = map_cmd(":m '<-2<CR>gv=gv"):with_noremap():with_nowait(),
+  ["v|<M-j>"]                = map_cmd(":m '>+1<CR>gv=gv"):with_noremap():with_nowait(),
+  ["v|<M-k>"]                = map_cmd(":m '<-2<CR>gv=gv"):with_noremap():with_nowait(),
   ["v|<Leader>s#"]           = map_cmd("\"sy:let @/=@s<CR>cgN"):with_noremap(),
   ["v|<Leader>s*"]           = map_cmd("\"sy:let @/=@s<CR>cgn"):with_noremap(),
 

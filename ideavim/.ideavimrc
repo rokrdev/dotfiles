@@ -6,7 +6,8 @@ set surround
 set multiple-cursors
 set commentary
 set argtextobj
-set easymotion
+" set easymotion
+set sneak
 set textobj-entire
 set ReplaceWithRegister
 set multiple-cursors
@@ -108,8 +109,8 @@ nnoremap <leader>ss :action SelectInProjectView<CR>
 
 " useful
 nnoremap <C-A> gg<S-v>G
-nmap f <Plug>(easymotion-f)
-nmap F <Plug>(easymotion-F)
-nmap t <Plug>(easymotion-t)
-nmap T <Plug>(easymotion-T)
-nmap <Leader>sh <Plug>(easymotion-s)
+" nmap f <Plug>(easymotion-f)
+" nmap F <Plug>(easymotion-F)
+" nmap t <Plug>(easymotion-t)
+" nmap T <Plug>(easymotion-T)
+" nmap <Leader>sh <Plug>(easymotion-s)

@@ -29,9 +29,14 @@ editor["mcchrish/nnn.vim"] = {
   cmd = 'NnnPicker',
 }
 
-editor["easymotion/vim-easymotion"] = {
+-- editor["easymotion/vim-easymotion"] = {
+--   event = {'BufReadPre','BufNewFile'},
+--   setup = conf.easymotion
+-- }
+
+editor["justinmk/vim-sneak"] = {
   event = {'BufReadPre','BufNewFile'},
-  setup = conf.easymotion
+  setup = conf.sneak
 }
 
 editor['wincent/scalpel'] = {

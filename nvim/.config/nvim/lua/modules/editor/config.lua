@@ -66,8 +66,12 @@ end
 --   vim.cmd([[packadd cfilter]])
 -- end
 
-function config.easymotion()
-  vim.g.EasyMotion_smartcase = 1
+-- function config.easymotion()
+--   vim.g.EasyMotion_smartcase = 1
+-- end
+
+function config.sneak()
+  vim.g["sneak#use_ic_scs"] = 1
 end
 
 function config.snap()

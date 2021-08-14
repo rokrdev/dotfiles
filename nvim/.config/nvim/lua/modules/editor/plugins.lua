@@ -53,6 +53,11 @@ editor['machakann/vim-sandwich'] = {
   event = {'BufReadPre','BufNewFile'},
 }
 
+editor['1bharat/vim-multiple-cursors'] = {
+  event = {'BufReadPre','BufNewFile'},
+  setup = conf.multi,
+}
+
 editor['wellle/targets.vim'] = {
   event = {'BufReadPre','BufNewFile'},
 }

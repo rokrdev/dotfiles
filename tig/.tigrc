@@ -255,10 +255,10 @@ bind status ts ?>git stash -p
 
 # quick commit
 bind status c !git commit
-bind status a !>git commit --amend --no-edit
-bind status A !>git commit --amend
+bind status A !>git commit --amend --no-edit
+bind status E !>git commit --amend
 
-bind status z ?git checkout "%(prompt Checkout at branch: )" 
+bind status z ?git checkout "%(prompt Checkout at branch: )"
 
 # clean
 bind status X ?>git clean -f

@@ -39,15 +39,15 @@ local def_map = {
   ["n|n"]                    = map_cmd("nzzzv"):with_noremap():with_nowait(),
   ["n|N"]                    = map_cmd("Nzzzv"):with_noremap():with_nowait(),
   ["n|J"]                    = map_cmd("mzJ`z"):with_noremap():with_nowait(),
-  ["n|<M-k>"]                = map_cmd(":m .-2<CR>=="):with_noremap():with_nowait(),
-  ["n|<M-j>"]                = map_cmd(":m .+1<CR>=="):with_noremap():with_nowait(),
+  ["n|<C-k>"]                = map_cmd(":m .-2<CR>=="):with_noremap():with_nowait(),
+  ["n|<C-j>"]                = map_cmd(":m .+1<CR>=="):with_noremap():with_nowait(),
 
-  ["i|<M-k>"]                = map_cmd("<esc> :m .-2<CR>==i"):with_noremap():with_nowait(),
-  ["i|<M-j>"]                = map_cmd("<esc> :m .+1<CR>==i"):with_noremap():with_nowait(),
+  ["i|<C-k>"]                = map_cmd("<esc> :m .-2<CR>==i"):with_noremap():with_nowait(),
+  ["i|<C-j>"]                = map_cmd("<esc> :m .+1<CR>==i"):with_noremap():with_nowait(),
 
   -- visual mode
-  ["v|<M-j>"]                = map_cmd(":m '>+1<CR>gv=gv"):with_noremap():with_nowait(),
-  ["v|<M-k>"]                = map_cmd(":m '<-2<CR>gv=gv"):with_noremap():with_nowait(),
+  ["v|<C-j>"]                = map_cmd(":m '>+1<CR>gv=gv"):with_noremap():with_nowait(),
+  ["v|<C-k>"]                = map_cmd(":m '<-2<CR>gv=gv"):with_noremap():with_nowait(),
   ["v|<Leader>s#"]           = map_cmd("\"sy:let @/=@s<CR>cgN"):with_noremap(),
   ["v|<Leader>s*"]           = map_cmd("\"sy:let @/=@s<CR>cgn"):with_noremap(),
 

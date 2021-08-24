@@ -72,10 +72,11 @@ set -U fish_greeting
 alias br="broot --sizes -dp"
 alias brup='brew update && brew upgrade && brew upgrade --cask && brew cleanup && brew doctor'
 alias cat=bat
-alias dc='docker-compose'
-alias dcu='docker-compose up'
-alias dcd='docker-compose down'
-alias dc='docker-compose'
+alias dc='docker compose'
+alias dcu='docker compose up'
+alias dcd='docker compose down'
+alias dcs='docker compose start'
+alias dcx='docker compose stop'
 alias fm=vifm
 alias g=git
 alias ga='git add'

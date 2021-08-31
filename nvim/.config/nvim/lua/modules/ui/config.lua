@@ -6,7 +6,6 @@ function config.bufferline()
       show_buffer_close_icons = false,
       show_close_icon = false,
       separator_style = "thick",
-      mappings = false,
       always_show_bufferline = false,
     },
   }

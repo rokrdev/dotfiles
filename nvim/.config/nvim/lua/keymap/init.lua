@@ -21,13 +21,6 @@ local plug_map = {
   ["n|#"]                     = map_cmd("<Plug>(asterisk-z#)"):with_nowait(),
   ["n|g*"]                    = map_cmd("<Plug>(asterisk-gz*)"):with_nowait(),
   ["n|g#"]                    = map_cmd("<Plug>(asterisk-gz#)"):with_nowait(),
-  -- -- easymotion
-  -- ["n|f"]                     = map_cmd("<Plug>(easymotion-f)"):with_nowait(),
-  -- ["n|F"]                     = map_cmd("<Plug>(easymotion-F)"):with_nowait(),
-  -- ["n|t"]                     = map_cmd("<Plug>(easymotion-t)"):with_nowait(),
-  -- ["n|T"]                     = map_cmd("<Plug>(easymotion-T)"):with_nowait(),
-  -- ["n|<Leader>sh"]            = map_cmd("<Plug>(easymotion-s)"):with_nowait(),
-  -- ["n|<Leader>sh"]            = map_cmd("<Plug>(SneakLabel_s)"):with_nowait(),
   ["n|<Leader>fa"]            = map_cr("write | edit | TSBufEnable highlight"):with_nowait():with_silent(),
   -- bufferline
   ["n|<C-h>"]                 = map_cr("BufferLineCyclePrev"):with_noremap():with_silent():with_nowait(),
@@ -60,10 +53,10 @@ bind.nvim_load_mapping(plug_map)
 
 -- -- sneak
 vim.cmd([[
-  map f <Plug>Sneak_f
-  map F <Plug>Sneak_F
-  map t <Plug>Sneak_t
-  map T <Plug>Sneak_T
-  nmap s <Plug>SneakLabel_s
-  nmap S <Plug>SneakLabel_S
+  map <nowait> f <Plug>Sneak_f
+  map <nowait> F <Plug>Sneak_F
+  map <nowait> t <Plug>Sneak_t
+  map <nowait> T <Plug>Sneak_T
+  nmap <nowait> gj <Plug>SneakLabel_s
+  nmap <nowait> gk <Plug>SneakLabel_S
 ]])

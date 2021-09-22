@@ -23,17 +23,17 @@ function config.treesitter()
         node_decremental = "grm",
       },
     },
-    textobjects = {
-      select = {
-        enable = true,
-        keymaps = {
-          ["af"] = "@function.outer",
-          ["if"] = "@function.inner",
-          ["ac"] = "@class.outer",
-          ["ic"] = "@class.inner",
-        },
-      },
-    },
+    -- textobjects = {
+    --   select = {
+    --     enable = true,
+    --     keymaps = {
+    --       ["af"] = "@function.outer",
+    --       ["if"] = "@function.inner",
+    --       ["ac"] = "@class.outer",
+    --       ["ic"] = "@class.inner",
+    --     },
+    --   },
+    -- },
   }
 end
 

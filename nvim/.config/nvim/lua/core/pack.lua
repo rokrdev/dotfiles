@@ -1,7 +1,7 @@
 local fn,uv,api = vim.fn,vim.loop,vim.api
 local vim_path =  vim.fn.stdpath('config')
 local data_dir = string.format('%s/site/',vim.fn.stdpath('data'))
-local modules_dir = vim_path .. '/lua/modules'
+local modules_dir = vim_path .. '/lua/plugins'
 local packer_compiled = data_dir..'packer_compiled.vim'
 local compile_to_lua = data_dir..'lua/_compiled.lua'
 local packer = nil
@@ -14,7 +14,7 @@ function Packer:load_plugins()
 
   local get_plugins_list = function ()
     local list = {}
-    local tmp = vim.split(fn.globpath(modules_dir,'*/plugins.lua'),'\n')
+    local tmp = vim.split(fn.globpath(modules_dir,'/setup.lua'),'\n')
     for _,f in ipairs(tmp) do
       list[#list+1] = f:sub(#modules_dir - 6,-1)
     end

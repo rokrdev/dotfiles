@@ -20,17 +20,6 @@ setup["hrsh7th/vim-vsnip-integ"] = {
   event = 'InsertCharPre',
 }
 
-
-setup['windwp/nvim-autopairs'] = {
-  event = 'VimEnter',
-  config = conf.autopairs,
-}
-
-setup['camspiers/snap'] = {
-  event = 'VimEnter',
-  config = conf.snap,
-}
-
 -- setup['nvim-telescope/telescope.nvim'] = {
 --   cmd = 'Telescope',
 --   config = conf.telescope,
@@ -91,12 +80,6 @@ setup['andymass/vim-matchup'] = {
   setup = conf.matchup,
 }
 
-
-setup['nvim-treesitter/nvim-treesitter'] = {
-  event = 'VimEnter',
-  config = conf.treesitter
-}
-
 setup['nvim-treesitter/playground'] = {
   cmd = 'TSPlaygroundToggle'
 }
@@ -104,10 +87,6 @@ setup['nvim-treesitter/playground'] = {
 setup['elixir-editors/vim-elixir'] = {
   opt = true,
   ft = {'elixir', 'eelixir'},
-}
-
-setup['tpope/vim-commentary'] = {
-  event = 'VimEnter',
 }
 
 setup['JoosepAlviste/nvim-ts-context-commentstring'] = {
@@ -136,46 +115,10 @@ setup['iamcco/markdown-preview.nvim'] = {
   cmd = 'MarkdownPreview'
 }
 
-setup['kyazdani42/nvim-web-devicons'] = {
-  event = 'VimEnter',
-}
-
-setup['folke/tokyonight.nvim'] = {
-  event = 'VimEnter',
-  config = conf.theme,
-}
-
 setup['lewis6991/gitsigns.nvim'] = {
   event = {'BufRead','BufNewFile'},
   config = conf.gitsigns,
   requires = {'nvim-lua/plenary.nvim',opt=true}
-}
-
-setup["akinsho/nvim-bufferline.lua"] = {
-  event = 'VimEnter',
-  config = conf.bufferline,
-}
-
-setup["hoob3rt/lualine.nvim"] = {
-  event = 'VimEnter',
-  config = conf.lualine,
-}
-
-setup["norcalli/nvim-colorizer.lua"] = {
-  event = 'VimEnter',
-  config = conf.colorizer,
-}
-
-setup['kyazdani42/nvim-tree.lua'] = {
-  -- cmd = {"NvimTreeToggle", "NvimTreeOpen"},
-  event = 'VimEnter',
-  requires = {'kyazdani42/nvim-web-devicons', opt=true},
-  config = conf.tree,
-}
-
-setup["rrethy/vim-illuminate"] = {
-  event = 'VimEnter',
-  setup = conf.illuminate,
 }
 
 return setup

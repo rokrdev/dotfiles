@@ -27,6 +27,7 @@ local def_map = {
   ["n|<M-_>"]                = map_cr(":resize +5"):with_noremap():with_silent(),
   ["n|!"]                    = map_cmd(vim.g["@z"]):with_noremap():with_nowait(),
   ["n|<M-y>"]                = map_cr("wincmd w"):with_noremap():with_nowait(),
+  ["n|<M-b>"]                = map_cr("wincmd ="):with_noremap():with_nowait(),
   ["n|<Leader>gG"]           = map_lua("require('utils').openTerm('gitui')"):with_noremap():with_nowait(),
   ["n|<Leader>gg"]           = map_lua("require('utils').openTerm('tig status')"):with_noremap():with_nowait(),
   ["n|<Leader>gb"]           = map_lua("require('utils').openTerm('tig ' .. vim.fn.expand('%'))"):with_noremap():with_nowait(),

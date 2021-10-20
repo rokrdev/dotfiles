@@ -6,9 +6,19 @@ setup['windwp/nvim-autopairs'] = {
   config = conf.autopairs,
 }
 
-setup['camspiers/snap'] = {
+-- setup['camspiers/snap'] = {
+--   event = 'VimEnter',
+--   config = conf.snap,
+-- }
+
+setup['nvim-telescope/telescope.nvim'] = {
   event = 'VimEnter',
-  config = conf.snap,
+  config = conf.telescope,
+  requires = {
+    {'nvim-lua/popup.nvim', opt = true},
+    {'nvim-lua/plenary.nvim',opt = true},
+    {'nvim-telescope/telescope-fzf-writer.nvim', opt = true},
+  }
 }
 
 setup['nvim-treesitter/nvim-treesitter'] = {

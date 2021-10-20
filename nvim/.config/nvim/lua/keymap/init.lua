@@ -16,6 +16,13 @@ local plug_map = {
   ["n|<Leader>fc"]            = map_cr("Scratch"):with_noremap():with_nowait(),
   ["n|<Leader>fr"]            = map_cmd("<Plug>(Scalpel)"):with_nowait(),
   ["n|<Leader>gl"]            = map_lua("require'gitsigns'.blame_line()"):with_noremap():with_nowait(),
+  -- telescope
+  ["n|<Leader>ff"]            = map_lua("require('telescope.builtin').find_files({hidden=true})"):with_noremap():with_nowait(),
+  ["n|<Leader>fs"]            = map_lua("require('telescope.builtin').live_grep()"):with_noremap():with_nowait(),
+  ["n|<Leader>fw"]            = map_lua("require('telescope.builtin').grep_string()"):with_noremap():with_nowait(),
+  ["x|<Leader>fw"]            = map_lua("require('telescope.builtin').grep_string({search = require('utils').getVisualSelection()})"):with_noremap():with_nowait(),
+  ["n|<Leader>b"]             = map_lua("require('telescope.builtin').buffers()"):with_noremap():with_nowait(),
+  ["n|<Leader>gc"]            = map_lua("require('keyman.custom').git_conflicts()"):with_noremap():with_nowait(),
   -- asterisk
   ["n|*"]                     = map_cmd("<Plug>(asterisk-z*)"):with_nowait(),
   ["n|#"]                     = map_cmd("<Plug>(asterisk-z#)"):with_nowait(),

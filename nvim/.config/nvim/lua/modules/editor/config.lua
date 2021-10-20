@@ -19,8 +19,12 @@ function config.matchup()
   vim.g.matchup_matchparen_offscreen = {}
 end
 
-function config.sneak()
-  vim.g["sneak#use_ic_scs"] = 1
+-- function config.sneak()
+--   vim.g["sneak#use_ic_scs"] = 1
+-- end
+
+function config.hop()
+  require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
 end
 
 function config.multi()

@@ -16,6 +16,10 @@ local plug_map = {
   ["n|<Leader>fc"]            = map_cr("Scratch"):with_noremap():with_nowait(),
   ["n|<Leader>fr"]            = map_cmd("<Plug>(Scalpel)"):with_nowait(),
   ["n|<Leader>gl"]            = map_lua("require'gitsigns'.blame_line()"):with_noremap():with_nowait(),
+  ["n|<Leader>hc"]            = map_lua("require'hop'.hint_char1()"):with_noremap():with_nowait(),
+  ["n|<Leader>hw"]            = map_lua("require'hop'.hint_words()"):with_noremap():with_nowait(),
+  ["n|<Leader>hl"]            = map_lua("require'hop'.hint_lines_skip_whitespace()"):with_noremap():with_nowait(),
+
   -- telescope
   ["n|<Leader>ff"]            = map_lua("require('telescope.builtin').find_files({hidden=true})"):with_noremap():with_nowait(),
   ["n|<Leader>fs"]            = map_lua("require('telescope.builtin').live_grep()"):with_noremap():with_nowait(),
@@ -58,12 +62,12 @@ local plug_map = {
 
 bind.nvim_load_mapping(plug_map)
 
--- -- sneak
-vim.cmd([[
-  map <nowait> f <Plug>Sneak_f
-  map <nowait> F <Plug>Sneak_F
-  map <nowait> t <Plug>Sneak_t
-  map <nowait> T <Plug>Sneak_T
-  nmap <nowait> gj <Plug>SneakLabel_s
-  nmap <nowait> gk <Plug>SneakLabel_S
-]])
+-- -- -- sneak
+-- vim.cmd([[
+--   map <nowait> f <Plug>Sneak_f
+--   map <nowait> F <Plug>Sneak_F
+--   map <nowait> t <Plug>Sneak_t
+--   map <nowait> T <Plug>Sneak_T
+--   nmap <nowait> gj <Plug>SneakLabel_s
+--   nmap <nowait> gk <Plug>SneakLabel_S
+-- ]])

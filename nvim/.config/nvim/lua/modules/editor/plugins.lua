@@ -24,9 +24,15 @@ plugins['editorconfig/editorconfig-vim'] = {
   ft = { 'go','vim','rust' }
 }
 
-plugins["justinmk/vim-sneak"] = {
+-- plugins["justinmk/vim-sneak"] = {
+--   event = {'BufReadPre','BufNewFile'},
+--   setup = conf.sneak
+-- }
+
+plugins["phaazon/hop.nvim"] = {
   event = {'BufReadPre','BufNewFile'},
-  setup = conf.sneak
+  as = 'hop',
+  config = conf.hop
 }
 
 plugins['wincent/scalpel'] = {

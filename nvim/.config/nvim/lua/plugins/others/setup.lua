@@ -20,16 +20,6 @@ setup["hrsh7th/vim-vsnip-integ"] = {
   event = 'InsertCharPre',
 }
 
--- setup['nvim-telescope/telescope.nvim'] = {
---   cmd = 'Telescope',
---   config = conf.telescope,
---   requires = {
---     {'nvim-lua/popup.nvim', opt = true},
---     {'nvim-lua/plenary.nvim',opt = true},
---     {'nvim-telescope/telescope-fzf-writer.nvim', opt = true},
---   }
--- }
-
 setup['editorconfig/editorconfig-vim'] = {
   ft = { 'go','vim','rust' }
 }

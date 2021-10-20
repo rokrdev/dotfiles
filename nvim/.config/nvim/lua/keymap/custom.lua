@@ -3,6 +3,7 @@ local finders = require('telescope.finders')
 local make_entry = require('telescope.make_entry')
 local conf = require('telescope.config').values
 
+local f = {}
 
 function f.git_conflicts(opts)
   opts.entry_maker = opts.entry_maker or make_entry.gen_from_file(opts)
@@ -18,3 +19,4 @@ function f.git_conflicts(opts)
   }):find()
 end
 
+return f

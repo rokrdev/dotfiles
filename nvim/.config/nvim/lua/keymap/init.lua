@@ -22,7 +22,7 @@ local plug_map = {
   ["n|<Leader>fw"]            = map_lua("require('telescope.builtin').grep_string()"):with_noremap():with_nowait(),
   ["x|<Leader>fw"]            = map_lua("require('telescope.builtin').grep_string({search = require('utils').getVisualSelection()})"):with_noremap():with_nowait(),
   ["n|<Leader>b"]             = map_lua("require('telescope.builtin').buffers()"):with_noremap():with_nowait(),
-  ["n|<Leader>gc"]            = map_lua("require('keyman.custom').git_conflicts()"):with_noremap():with_nowait(),
+  ["n|<Leader>gc"]            = map_lua("require('keymap.custom').git_conflicts({})"):with_noremap():with_nowait(),
   -- asterisk
   ["n|*"]                     = map_cmd("<Plug>(asterisk-z*)"):with_nowait(),
   ["n|#"]                     = map_cmd("<Plug>(asterisk-z#)"):with_nowait(),

@@ -20,6 +20,8 @@ local plug_map = {
   ["n|<Leader>hw"]            = map_lua("require'hop'.hint_words()"):with_noremap():with_nowait(),
   ["n|<Leader>hl"]            = map_lua("require'hop'.hint_lines_skip_whitespace()"):with_noremap():with_nowait(),
 
+  -- Neogit
+  ["n|<Leader>n"]             = map_cr("Neogit"):with_noremap():with_nowait(),
   -- telescope
   ["n|<Leader>ff"]            = map_lua("require('telescope.builtin').find_files({hidden=true})"):with_noremap():with_nowait(),
   ["n|<Leader>fs"]            = map_lua("require('telescope.builtin').live_grep()"):with_noremap():with_nowait(),

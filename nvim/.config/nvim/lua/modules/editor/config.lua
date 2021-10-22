@@ -48,6 +48,9 @@ function config.colorizer()
 end
 
 function config.neogit()
+  if packer_plugins['diffview.nvim'] and not packer_plugins['diffview.nvim'].loaded then
+    vim.cmd [[packadd diffview.nvim]]
+  end
   require'neogit'.setup {
     disable_signs = false,
     disable_hint = false,
@@ -68,7 +71,7 @@ function config.neogit()
       hunk = { "", "" },
     },
     integrations = {
-      diffview = false
+      diffview = true,
     },
     -- override/add mappings
     mappings = {

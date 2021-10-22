@@ -70,6 +70,10 @@ plugins['andymass/vim-matchup'] = {
 plugins['TimUntersberger/neogit'] = {
   cmd = 'Neogit',
   config = conf.neogit,
+  requires = {
+    {'nvim-lua/plenary.nvim', opt = true},
+    {'sindrets/diffview.nvim', opt = true},
+  }
 }
 
 return plugins

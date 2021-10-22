@@ -67,4 +67,9 @@ plugins['andymass/vim-matchup'] = {
   setup = conf.matchup,
 }
 
+plugins['TimUntersberger/neogit'] = {
+  cmd = 'Neogit',
+  config = conf.neogit,
+}
+
 return plugins

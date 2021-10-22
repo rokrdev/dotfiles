@@ -47,9 +47,11 @@ source ~/.asdf/asdf.fish
 zoxide init fish | source
 
 export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export ANDROID_SDK_ROOT="$ANDROID_HOME/sdk"
 
 # setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`
-export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$HOME/.asdf/shims:$HOME/.asdf/bin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="$ANDROID_SDK_ROOT:/usr/local/opt/gnu-sed/libexec/gnubin:$HOME/.asdf/shims:$HOME/.asdf/bin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 source ~/.env
 

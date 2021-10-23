@@ -13,7 +13,7 @@ local plug_map = {
   -- nnn/scalpel/blame/nvimtree
   ["n|<Leader>fn"]            = map_lua("require('utils').nnnPicker()"):with_noremap():with_nowait(),
   ["n|<Leader>ft"]            = map_cr("NvimTreeToggle"):with_noremap():with_nowait(),
-  ["n|<Leader>fc"]            = map_cr("Scratch"):with_noremap():with_nowait(),
+  ["n|<Leader>S"]             = map_cr("Scratch"):with_noremap():with_nowait(),
   ["n|<Leader>fr"]            = map_cmd("<Plug>(Scalpel)"):with_nowait(),
   ["n|<Leader>gl"]            = map_lua("require'gitsigns'.blame_line()"):with_noremap():with_nowait(),
   ["n|<Leader>hc"]            = map_lua("require'hop'.hint_char1()"):with_noremap():with_nowait(),
@@ -27,6 +27,7 @@ local plug_map = {
   ["n|<Leader>fs"]            = map_lua("require('telescope.builtin').live_grep()"):with_noremap():with_nowait(),
   ["n|<Leader>fw"]            = map_lua("require('telescope.builtin').grep_string()"):with_noremap():with_nowait(),
   ["x|<Leader>fw"]            = map_lua("require('telescope.builtin').grep_string({search = require('utils').getVisualSelection()})"):with_noremap():with_nowait(),
+  ["n|<Leader>fc"]            = map_lua("require('telescope.builtin').current_buffer_fuzzy_find()"):with_noremap():with_nowait(),
   ["n|<Leader>b"]             = map_lua("require('telescope.builtin').buffers()"):with_noremap():with_nowait(),
   ["n|<Leader>gc"]            = map_lua("require('keymap.custom').git_conflicts({})"):with_noremap():with_nowait(),
   -- asterisk

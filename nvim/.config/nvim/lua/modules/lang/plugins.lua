@@ -2,7 +2,6 @@ local plugins = {}
 local conf = require('modules.lang.config')
 
 plugins['nvim-treesitter/nvim-treesitter'] = {
-  event = 'BufRead',
   after = 'telescope.nvim',
   config = conf.treesitter
 }
@@ -17,7 +16,7 @@ plugins['elixir-editors/vim-elixir'] = {
 }
 
 plugins['JoosepAlviste/nvim-ts-context-commentstring'] = {
-  after = 'nvim-treesitter',
+  requires = {'nvim-treesitter', 'tpope/vim-commentary'},
 }
 
 -- plugins['nvim-treesitter/nvim-treesitter-textobjects'] = {

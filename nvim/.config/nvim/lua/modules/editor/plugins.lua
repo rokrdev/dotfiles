@@ -16,9 +16,9 @@ plugins['windwp/nvim-autopairs'] = {
   config = conf.autopairs,
 }
 
-plugins['tpope/vim-commentary'] = {
-  event = 'VimEnter',
-}
+-- plugins['tpope/vim-commentary'] = {
+--   event = 'VimEnter',
+-- }
 
 plugins['editorconfig/editorconfig-vim'] = {
   ft = { 'go','vim','rust' }

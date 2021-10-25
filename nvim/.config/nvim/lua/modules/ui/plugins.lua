@@ -6,12 +6,11 @@ plugins["mcchrish/nnn.vim"] = {
 }
 
 plugins['nvim-telescope/telescope.nvim'] = {
-  event = 'VimEnter',
   config = conf.telescope,
   requires = {
-    {'nvim-lua/popup.nvim', opt = true},
-    {'nvim-lua/plenary.nvim',opt = true},
-    {'nvim-telescope/telescope-fzf-writer.nvim', opt = true},
+    {'nvim-lua/popup.nvim'},
+    {'nvim-lua/plenary.nvim'},
+    {'nvim-telescope/telescope-fzf-writer.nvim'},
   }
 }
 

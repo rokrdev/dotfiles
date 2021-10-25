@@ -51,7 +51,8 @@ function config.neogit()
   if packer_plugins['diffview.nvim'] and not packer_plugins['diffview.nvim'].loaded then
     vim.cmd [[packadd diffview.nvim]]
   end
-  require'neogit'.setup {
+  local neogit = require'neogit'
+  neogit.setup {
     disable_signs = false,
     disable_hint = false,
     disable_context_highlighting = false,
@@ -82,6 +83,7 @@ function config.neogit()
       }
     }
   }
+  neogit.config.use_magit_keybindings()
 end
 
 return config

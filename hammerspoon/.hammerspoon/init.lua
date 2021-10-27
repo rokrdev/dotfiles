@@ -32,5 +32,6 @@ enableHotkeyForWindowsMatchingFilter = function(windowFilter, hotkey)
 end
 
 require('windows')
+require('border')
 
 hs.notify.new({title='Hammerspoon', informativeText='Ready to rock 🤘'}):send()

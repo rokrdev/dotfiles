@@ -29,6 +29,11 @@ plugins['editorconfig/editorconfig-vim'] = {
 --   setup = conf.sneak
 -- }
 
+plugins["lukas-reineke/indent-blankline.nvim"] = {
+  after = 'tokyonight.nvim',
+  config = conf.indentline
+}
+
 plugins["phaazon/hop.nvim"] = {
   event = {'BufReadPre','BufNewFile'},
   as = 'hop',

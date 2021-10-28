@@ -15,6 +15,12 @@ function config.scalpel()
   vim.g.ScalpelMap=0
 end
 
+function config.indentline()
+  require("indent_blankline").setup {
+    buftype_exclude = {"terminal"},
+  }
+end
+
 function config.matchup()
   vim.g.matchup_matchparen_offscreen = {}
 end

@@ -24,7 +24,7 @@
 [url "git@work.github.com"]
   insteadOf = git@github.com:AfterpayTouch
 [url "git@me.github.com"]
-  insteadOf = git@github.com:1bharat
+  insteadOf = git@github.com:zenobharat
 [commit]
 	template = ~/.gitmessage
 [init]

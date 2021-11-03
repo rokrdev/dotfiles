@@ -16,8 +16,9 @@ function config.scalpel()
 end
 
 function config.indentline()
-  require("indent_blankline").setup {
-    buftype_exclude = {"terminal"},
+  require('indent_blankline').setup {
+    buftype_exclude = {'terminal'},
+    filetype_exclude = {'help', 'packer', 'NvimTree'},
   }
 end
 

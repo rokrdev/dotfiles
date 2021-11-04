@@ -110,7 +110,7 @@ local function load_options()
   vim.opt.shiftwidth = 2;
   vim.opt.softtabstop = -1;
   vim.opt.breakindentopt = { shift = 2, min = 20 };
-  vim.opt.wrap = false;
+  vim.opt.wrap = true;
   vim.opt.linebreak = true;
   vim.opt.number = true;
   vim.opt.foldenable = true;
@@ -131,7 +131,7 @@ local function load_options()
   vim.opt.list = true;
   vim.opt.number = true;
   vim.opt.signcolumn = "yes";
-  vim.opt.wrap = false;
+  vim.opt.wrap = true;
 
   vim.cmd("let $TERM = 'alacritty'")
   vim.cmd("let $GIT_EDITOR = 'nvr -cc split --remote-wait'")

@@ -1,5 +1,7 @@
 hs.window.animationDuration = 0
 window = hs.getObjectMetatable("hs.window")
+spaces = require("hs._asm.undocumented.spaces")
+
 
 -- +-----------------+
 -- |        |        |
@@ -216,6 +218,27 @@ function window.nextScreen(win)
   else
     win:moveToScreen(allScreens[1])
   end
+end
+
+function window.columnLayout(win)
+  local currentSpaceId = spaces.windowOnSpaces(win:id())[1]
+  local windows = spaces.allWindowsForSpace(currentSpaceId)
+  windows = hs.fnutils.filter(windows, function(w) return w:isVisible() end)
+  local windowCount = #windows
+  local counter = 0
+  hs.fnutils.each(windows, function(w)
+      local f = w:frame()
+      local screen = w:screen()
+      local max = screen:frame()
+      local width = max.w/windowCount
+
+      f.x = max.x + (counter * width)
+      f.w = width
+      f.y = max.y
+      f.h = max.h
+      w:setFrame(f)
+      counter = counter + 1
+  end)
 end
 
 windowLayoutMode = hs.hotkey.modal.new({}, 'F16')

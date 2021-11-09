@@ -258,17 +258,18 @@ function window.swap(win)
   end
 end
 
--- function window.switchFocus()
---   local windows = getWindowsInSpace(win)
---   local windowCount = #windows
---   local indexOfFocusedWindow = hs.fnutils.indexOf(windows, win) - 1
---   print(hs.inspect(windows))
---   print(windowCount)
---   print(indexOfFocusedWindow)
---   local nextWindowIndex = ((indexOfFocusedWindow + 1) % windowCount) + 1
---   print(nextWindowIndex)
---   windows[nextWindowIndex]:focus()
--- end
+function window.switchFocus()
+  local win = hs.window.focusedWindow()
+  if win ~= nil then
+    local windows = getWindowsInSpace(win)
+    local windowCount = #windows
+    local indexOfFocusedWindow = hs.fnutils.indexOf(windows, win) - 1
+    local nextWindowIndex = ((indexOfFocusedWindow + 1) % windowCount) + 1
+    windows[nextWindowIndex]:focus()
+  end
+end
+
+hs.hotkey.bind({'alt'}, 'f', window.switchFocus)
 
 windowLayoutMode = hs.hotkey.modal.new({}, 'F16')
 

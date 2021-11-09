@@ -207,6 +207,12 @@ function window.focus_south(w)
   hs.window.focusedWindow():focusWindowSouth()
 end
 
+function getWindowsInSpace(win)
+  local currentSpaceId = spaces.windowOnSpaces(win:id())[1]
+  local windows = spaces.allWindowsForSpace(currentSpaceId)
+  return hs.fnutils.filter(windows, function(w) return w:isVisible() end)
+end
+
 function window.nextScreen(win)
   local currentScreen = win:screen()
   local allScreens = hs.screen.allScreens()
@@ -221,9 +227,7 @@ function window.nextScreen(win)
 end
 
 function window.columnLayout(win)
-  local currentSpaceId = spaces.windowOnSpaces(win:id())[1]
-  local windows = spaces.allWindowsForSpace(currentSpaceId)
-  windows = hs.fnutils.filter(windows, function(w) return w:isVisible() end)
+  local windows = getWindowsInSpace(win)
   local windowCount = #windows
   local counter = 0
   hs.fnutils.each(windows, function(w)
@@ -240,6 +244,31 @@ function window.columnLayout(win)
       counter = counter + 1
   end)
 end
+
+function window.swap(win)
+  local windows = getWindowsInSpace(win)
+  local windowCount = #windows
+  if windowCount == 2 then
+    local win1 = windows[1]
+    local win2 = windows[2]
+    local frame1 = win1:frame()
+    local frame2 = win2:frame()
+    win1:setFrame(frame2)
+    win2:setFrame(frame1)
+  end
+end
+
+-- function window.switchFocus()
+--   local windows = getWindowsInSpace(win)
+--   local windowCount = #windows
+--   local indexOfFocusedWindow = hs.fnutils.indexOf(windows, win) - 1
+--   print(hs.inspect(windows))
+--   print(windowCount)
+--   print(indexOfFocusedWindow)
+--   local nextWindowIndex = ((indexOfFocusedWindow + 1) % windowCount) + 1
+--   print(nextWindowIndex)
+--   windows[nextWindowIndex]:focus()
+-- end
 
 windowLayoutMode = hs.hotkey.modal.new({}, 'F16')
 

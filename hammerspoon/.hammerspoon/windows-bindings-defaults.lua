@@ -49,5 +49,6 @@ return {
     { {},         'h',      'focus_left' },
     { {},         'l',      'focus_right' },
     { {},         'c',      'columnLayout' },
+    { {},         's',      'swap' },
   }
 }

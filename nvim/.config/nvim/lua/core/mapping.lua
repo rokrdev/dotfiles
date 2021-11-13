@@ -36,9 +36,6 @@ local def_map = {
   ["n|<Leader>sd"]           = map_wait("SD " .. require('utils').getSessionFilePath()):with_noremap(),
 
   ["n|Y"]                    = map_cmd("y$"):with_noremap():with_nowait(),
-  ["n|n"]                    = map_cmd("nzzzv"):with_noremap():with_nowait(),
-  ["n|N"]                    = map_cmd("Nzzzv"):with_noremap():with_nowait(),
-  ["n|J"]                    = map_cmd("mzJ`z"):with_noremap():with_nowait(),
   ["n|<C-k>"]                = map_cmd(":m .-2<CR>=="):with_noremap():with_nowait(),
   ["n|<C-j>"]                = map_cmd(":m .+1<CR>=="):with_noremap():with_nowait(),
 

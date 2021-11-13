@@ -77,7 +77,7 @@ local function load_options()
   vim.opt.jumpoptions = "stack";
   vim.opt.showmode = false;
   vim.opt.shortmess = "aoOTIcF";
-  vim.opt.scrolloff = 999;
+  vim.opt.scrolloff = 4;
   vim.opt.sidescrolloff = 5;
   vim.opt.foldlevelstart = 99;
   vim.opt.ruler = false;

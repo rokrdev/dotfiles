@@ -26,13 +26,18 @@ function config.matchup()
   vim.g.matchup_matchparen_offscreen = {}
 end
 
+function config.lightspeed()
+  vim.cmd[[
+    unmap f
+    unmap F
+    unmap t
+    unmap T
+  ]]
+end
+
 -- function config.sneak()
 --   vim.g["sneak#use_ic_scs"] = 1
 -- end
-
-function config.hop()
-  require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
-end
 
 function config.multi()
   vim.g.multi_cursor_use_default_mapping = 0

@@ -34,10 +34,9 @@ plugins["lukas-reineke/indent-blankline.nvim"] = {
   config = conf.indentline
 }
 
-plugins["phaazon/hop.nvim"] = {
+plugins["ggandor/lightspeed.nvim"] = {
   event = {'BufReadPre','BufNewFile'},
-  as = 'hop',
-  config = conf.hop
+  config = conf.lightspeed
 }
 
 plugins['wincent/scalpel'] = {

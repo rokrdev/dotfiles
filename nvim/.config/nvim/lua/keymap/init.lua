@@ -16,12 +16,6 @@ local plug_map = {
   ["n|<Leader>S"]             = map_cr("Scratch"):with_noremap():with_nowait(),
   ["n|<Leader>fr"]            = map_cmd("<Plug>(Scalpel)"):with_nowait(),
   ["n|<Leader>gl"]            = map_lua("require'gitsigns'.blame_line()"):with_noremap():with_nowait(),
-  ["n|<Leader>gj"]            = map_lua("require'gitsigns.actions'.next_hunk()"):with_noremap():with_nowait(),
-  ["n|<Leader>gk"]            = map_lua("require'gitsigns.actions'.prev_hunk()"):with_noremap():with_nowait(),
-  ["n|<Leader>hc"]            = map_lua("require'hop'.hint_char1()"):with_noremap():with_nowait(),
-  ["n|<Leader>hw"]            = map_lua("require'hop'.hint_words()"):with_noremap():with_nowait(),
-  ["n|<Leader>hl"]            = map_lua("require'hop'.hint_lines_skip_whitespace()"):with_noremap():with_nowait(),
-
   -- Neogit
   ["n|<Leader>gg"]            = map_cr("Neogit"):with_noremap():with_nowait(),
   -- telescope

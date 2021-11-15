@@ -51,12 +51,7 @@ local plug_map = {
 
 bind.nvim_load_mapping(plug_map)
 
--- -- -- sneak
--- vim.cmd([[
---   map <nowait> f <Plug>Sneak_f
---   map <nowait> F <Plug>Sneak_F
---   map <nowait> t <Plug>Sneak_t
---   map <nowait> T <Plug>Sneak_T
---   nmap <nowait> gj <Plug>SneakLabel_s
---   nmap <nowait> gk <Plug>SneakLabel_S
--- ]])
+vim.cmd([[
+  imap <expr> <M-h>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<M-h>'
+  smap <expr> <M-h>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<M-h>'
+]])

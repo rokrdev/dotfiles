@@ -52,7 +52,7 @@ local function load_options()
   vim.opt.shiftround = true;
   vim.opt.timeout = true;
   vim.opt.ttimeout = true;
-  vim.opt.timeoutlen = 1000;
+  vim.opt.timeoutlen = 300;
   vim.opt.ttimeoutlen = 50;
   vim.opt.updatetime = 100;
   vim.opt.redrawtime = 5000;

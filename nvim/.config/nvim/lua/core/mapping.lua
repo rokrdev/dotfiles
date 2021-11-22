@@ -60,7 +60,7 @@ local def_map = {
   -- paste over visual selection from clipboard
   ["v|<Leader>ap"]           = map_cmd("\"+p"):with_noremap():with_nowait(),
   -- copy visual selection to register m
-  ["v|<Leader>aM"]           = map_cmd("\"my"):with_noremap():with_nowait(),
+  ["v|<Leader>ac"]           = map_cmd("\"my"):with_noremap():with_nowait(),
   -- paste over visual selection from register m
   ["v|<Leader>am"]           = map_cmd("\"mp"):with_noremap():with_nowait(),
 }

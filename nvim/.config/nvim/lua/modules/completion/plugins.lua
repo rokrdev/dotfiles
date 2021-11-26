@@ -23,12 +23,12 @@ plugins["hrsh7th/cmp-vsnip"] = {
 }
 
 plugins["hrsh7th/vim-vsnip"] = {
-  event = 'InsertCharPre',
+  event = 'VimEnter',
   config = conf.vsnip,
 }
 
 plugins["hrsh7th/vim-vsnip-integ"] = {
-  event = 'InsertCharPre',
+  event = 'VimEnter',
 }
 
 return plugins

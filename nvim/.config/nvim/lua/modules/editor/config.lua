@@ -35,10 +35,6 @@ function config.lightspeed()
   ]]
 end
 
--- function config.sneak()
---   vim.g["sneak#use_ic_scs"] = 1
--- end
-
 function config.multi()
   vim.g.multi_cursor_use_default_mapping = 0
   vim.g.multi_cursor_start_word_key      = '<M-n>'

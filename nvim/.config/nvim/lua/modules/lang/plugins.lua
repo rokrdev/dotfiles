@@ -19,9 +19,9 @@ plugins['JoosepAlviste/nvim-ts-context-commentstring'] = {
   requires = {'nvim-treesitter', 'tpope/vim-commentary'},
 }
 
--- plugins['nvim-treesitter/nvim-treesitter-textobjects'] = {
---   after = 'nvim-treesitter'
--- }
+plugins['nvim-treesitter/nvim-treesitter-textobjects'] = {
+  requires = 'nvim-treesitter',
+}
 
 plugins['styled-components/vim-styled-components'] = {
   branch = 'main',

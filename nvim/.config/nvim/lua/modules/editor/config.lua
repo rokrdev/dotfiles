@@ -18,7 +18,7 @@ end
 function config.indentline()
   require('indent_blankline').setup {
     buftype_exclude = {'terminal'},
-    filetype_exclude = {'help', 'packer', 'NvimTree'},
+    filetype_exclude = {'alpha', 'help', 'packer', 'NvimTree'},
   }
 end
 

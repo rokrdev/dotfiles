@@ -53,7 +53,7 @@ plugins['machakann/vim-sandwich'] = {
   event = {'BufReadPre','BufNewFile'},
 }
 
-plugins['zenobharat/vim-multiple-cursors'] = {
+plugins['zenobht/vim-multiple-cursors'] = {
   event = {'BufReadPre','BufNewFile'},
   setup = conf.multi,
 }
@@ -75,7 +75,7 @@ plugins['TimUntersberger/neogit'] = {
   cmd = 'Neogit',
   config = conf.neogit,
   requires = {
-    {'nvim-lua/plenary.nvim', opt = true},
+    {'nvim-lua/plenary.nvim'},
     {'sindrets/diffview.nvim', opt = true},
   }
 }

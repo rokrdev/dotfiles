@@ -10,7 +10,6 @@ vim.g["@z"] = "f cl<CR><ESC>l"
 
 local def_map = {
   -- normal mode
-  ["n|<M-n>"]                = map_cmd("<C-w>w"):with_noremap():with_silent():with_nowait(),
   ["n|<Leader>s-"]           = map_cr("bd"):with_noremap():with_nowait(),
   ["n|<Leader>s_"]           = map_cr("bd!"):with_noremap():with_nowait(),
   ["n|<Leader>so"]           = map_cr("b#"):with_noremap():with_nowait(),
@@ -26,9 +25,9 @@ local def_map = {
   ["n|!"]                    = map_cmd(vim.g["@z"]):with_noremap():with_nowait(),
   ["n|<M-o>"]                = map_cr("wincmd w"):with_noremap():with_nowait(),
   ["n|<M-b>"]                = map_cr("wincmd ="):with_noremap():with_nowait(),
-  ["n|<Leader>gG"]           = map_lua("require('utils').openTerm('tig status')"):with_noremap():with_nowait(),
+  ["n|<Leader>gt"]           = map_lua("require('utils').openTerm('tig status')"):with_noremap():with_nowait(),
   ["n|<Leader>gf"]           = map_lua("require('utils').openTerm('tig ' .. vim.fn.expand('%'))"):with_noremap():with_nowait(),
-  ["n|<Leader>gL"]           = map_lua("require('utils').openTerm('tig')"):with_noremap():with_nowait(),
+  ["n|<Leader>gl"]           = map_lua("require('utils').openTerm('tig')"):with_noremap():with_nowait(),
   ["n|<Leader>ss"]           = map_args("SS"):with_noremap(),
   ["n|<Leader>sr"]           = map_wait("SR " .. require('utils').getSessionFilePath()):with_noremap(),
   ["n|<Leader>sd"]           = map_wait("SD " .. require('utils').getSessionFilePath()):with_noremap(),
@@ -36,9 +35,6 @@ local def_map = {
   ["n|Y"]                    = map_cmd("y$"):with_noremap():with_nowait(),
   ["n|<C-k>"]                = map_cmd(":m .-2<CR>=="):with_noremap():with_nowait(),
   ["n|<C-j>"]                = map_cmd(":m .+1<CR>=="):with_noremap():with_nowait(),
-
-  ["i|<C-k>"]                = map_cmd("<esc> :m .-2<CR>==i"):with_noremap():with_nowait(),
-  ["i|<C-j>"]                = map_cmd("<esc> :m .+1<CR>==i"):with_noremap():with_nowait(),
 
   -- visual mode
   ["v|<C-j>"]                = map_cmd(":m '>+1<CR>gv=gv"):with_noremap():with_nowait(),

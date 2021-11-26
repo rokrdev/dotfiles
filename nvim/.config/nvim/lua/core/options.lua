@@ -1,137 +1,139 @@
 local getopt = vim.api.nvim_get_option
+local opt = vim.opt
+local g = vim.g
 
 local function global_options()
-  vim.g["nnn#set_default_mappings"] = 0
-  vim.g["nnn#layout"] = {
+  g["nnn#set_default_mappings"] = 0
+  g["nnn#layout"] = {
    ["window"] = {
      ["width"] = 0.9,
      ["height"] = 0.9,
      ["highlight"] = "Directory"
    }
   }
-  vim.g["nnn#command"] = 'nnn -d -H'
-  vim.g["nnn#action"] = {
+  g["nnn#command"] = 'nnn -d -H'
+  g["nnn#action"] = {
    ['<c-x>'] = 'split',
    ['<c-v>'] = 'vsplit'
   }
 
   -- fix for slow movement in large php files
-  vim.g.php_syntax_extensions_enabled = {}
-  vim.g.php_var_selector_is_identifier = 1
-  vim.g.php_sql_query = 0
-  vim.g.php_sql_heredoc = 0
-  vim.g.php_sql_nowdoc = 0
-  vim.g.php_html_load = 0
-  vim.g.php_html_in_heredoc = 0
-  vim.g.php_html_in_nowdoc = 0
+  g.php_syntax_extensions_enabled = {}
+  g.php_var_selector_is_identifier = 1
+  g.php_sql_query = 0
+  g.php_sql_heredoc = 0
+  g.php_sql_nowdoc = 0
+  g.php_html_load = 0
+  g.php_html_in_heredoc = 0
+  g.php_html_in_nowdoc = 0
 end
 
 local function load_options()
-  vim.opt.termguicolors = true;
-  vim.opt.guifont = "MonoLisa Nerd Font:h13"
-  vim.opt.mouse = 'nv';
-  vim.opt.errorbells = true;
-  vim.opt.visualbell = true;
-  vim.opt.hidden = true;
-  vim.opt.fileformats = { 'unix', 'mac', 'dos' };
-  vim.opt.magic = true;
-  vim.opt.virtualedit = "block";
-  vim.opt.encoding = "utf-8";
-  vim.opt.viewoptions = { 'folds', 'cursor', 'curdir', 'slash', 'unix' };
-  vim.opt.sessionoptions = { 'curdir', 'help', 'tabpages', 'winsize' };
-  vim.opt.clipboard = "unnamedplus";
-  vim.opt.wildignorecase = true;
-  vim.opt.wildignore = { '.git', '.hg', '.svn', '*.pyc', '*.o', '*.out', '*.jpg', '*.jpeg', '*.png', '*.gif', '*.zip', '**/tmp/**', '*.DS_Store', '**/node_modules/**', '**/bower_modules/**' };
-  vim.opt.backup = false;
-  vim.opt.writebackup = false;
-  vim.opt.swapfile = false;
-  vim.opt.history = 2000;
-  vim.opt.shada = { "!","'300", "<50", "@100", "s10", "h" };
-  vim.opt.backupskip = { '/tmp/*', '$TMPDIR/*', '$TMP/*', '$TEMP/*', '*/shm/*', '/private/var/*', '.vault.vim' };
-  vim.opt.smarttab = true;
-  vim.opt.shiftround = true;
-  vim.opt.timeout = true;
-  vim.opt.ttimeout = true;
-  vim.opt.timeoutlen = 300;
-  vim.opt.ttimeoutlen = 50;
-  vim.opt.updatetime = 100;
-  vim.opt.redrawtime = 5000;
-  vim.opt.ignorecase = true;
-  vim.opt.smartcase = true;
-  vim.opt.infercase = true;
-  vim.opt.incsearch = true;
-  vim.opt.wrapscan = true;
-  vim.opt.complete = ".,w,b,k";
-  vim.opt.inccommand = "nosplit";
-  vim.opt.grepformat = "%f:%l:%c:%m";
-  vim.opt.grepprg = 'rg --hidden --vimgrep --smart-case --';
-  vim.opt.breakat = [[\ \	;:,!?]];
-  vim.opt.startofline = false;
-  vim.opt.whichwrap = "h,l,<,>,[,],~";
-  vim.opt.splitbelow = true;
-  vim.opt.splitright = true;
-  vim.opt.switchbuf = "useopen";
-  vim.opt.backspace = { 'indent', 'eol', 'start' };
-  vim.opt.diffopt = { 'filler', 'iwhite', 'internal', 'algorithm:patience' };
-  vim.opt.completeopt = { 'menuone', 'noselect' };
-  vim.opt.jumpoptions = "stack";
-  vim.opt.showmode = false;
-  vim.opt.shortmess = "aoOTIcF";
-  vim.opt.scrolloff = 4;
-  vim.opt.sidescrolloff = 5;
-  vim.opt.foldlevelstart = 99;
-  vim.opt.ruler = false;
-  vim.opt.list = true;
-  vim.opt.showtabline = 2;
-  vim.opt.winwidth = 30;
-  vim.opt.winminwidth = 10;
-  vim.opt.pumheight = 15;
-  vim.opt.helpheight = 12;
-  vim.opt.previewheight = 12;
-  vim.opt.showcmd = false;
-  vim.opt.cmdheight = 1;
-  vim.opt.cmdwinheight = 5;
-  vim.opt.equalalways = false;
-  vim.opt.laststatus = 2;
-  vim.opt.display = "lastline";
-  vim.opt.showbreak = "↳  ";
-  vim.opt.listchars = { tab = '»··', nbsp = '+', extends = '→', precedes = '←' };
-  vim.opt.showmatch = true;
-  vim.opt.fillchars = { vert = '┃', fold = '-', foldopen = '+', diff = '-', stl = ' ', stlnc = ' ', eob = '~' };
+  opt.termguicolors = true;
+  opt.guifont = "MonoLisa Nerd Font:h13"
+  opt.mouse = 'nv';
+  opt.errorbells = true;
+  opt.visualbell = true;
+  opt.hidden = true;
+  opt.fileformats = { 'unix', 'mac', 'dos' };
+  opt.magic = true;
+  opt.virtualedit = "block";
+  opt.encoding = "utf-8";
+  opt.viewoptions = { 'folds', 'cursor', 'curdir', 'slash', 'unix' };
+  opt.sessionoptions = { 'curdir', 'help', 'tabpages', 'winsize' };
+  opt.clipboard = "unnamedplus";
+  opt.wildignorecase = true;
+  opt.wildignore = { '.git', '.hg', '.svn', '*.pyc', '*.o', '*.out', '*.jpg', '*.jpeg', '*.png', '*.gif', '*.zip', '**/tmp/**', '*.DS_Store', '**/node_modules/**', '**/bower_modules/**' };
+  opt.backup = false;
+  opt.writebackup = false;
+  opt.swapfile = false;
+  opt.history = 2000;
+  opt.shada = { "!","'300", "<50", "@100", "s10", "h" };
+  opt.backupskip = { '/tmp/*', '$TMPDIR/*', '$TMP/*', '$TEMP/*', '*/shm/*', '/private/var/*', '.vault.vim' };
+  opt.smarttab = true;
+  opt.shiftround = true;
+  opt.timeout = true;
+  opt.ttimeout = true;
+  opt.timeoutlen = 300;
+  opt.ttimeoutlen = 50;
+  opt.updatetime = 100;
+  opt.redrawtime = 5000;
+  opt.ignorecase = true;
+  opt.smartcase = true;
+  opt.infercase = true;
+  opt.incsearch = true;
+  opt.wrapscan = true;
+  opt.complete = ".,w,b,k";
+  opt.inccommand = "nosplit";
+  opt.grepformat = "%f:%l:%c:%m";
+  opt.grepprg = 'rg --hidden --vimgrep --smart-case --';
+  opt.breakat = [[\ \	;:,!?]];
+  opt.startofline = false;
+  opt.whichwrap = "h,l,<,>,[,],~";
+  opt.splitbelow = true;
+  opt.splitright = true;
+  opt.switchbuf = "useopen";
+  opt.backspace = { 'indent', 'eol', 'start' };
+  opt.diffopt = { 'filler', 'iwhite', 'internal', 'algorithm:patience' };
+  opt.completeopt = { 'menuone', 'noselect' };
+  opt.jumpoptions = "stack";
+  opt.showmode = false;
+  opt.shortmess = "aoOTIcF";
+  opt.scrolloff = 4;
+  opt.sidescrolloff = 5;
+  opt.foldlevelstart = 99;
+  opt.ruler = false;
+  opt.list = true;
+  opt.showtabline = 2;
+  opt.winwidth = 30;
+  opt.winminwidth = 10;
+  opt.pumheight = 15;
+  opt.helpheight = 12;
+  opt.previewheight = 12;
+  opt.showcmd = false;
+  opt.cmdheight = 1;
+  opt.cmdwinheight = 5;
+  opt.equalalways = false;
+  opt.laststatus = 2;
+  opt.display = "lastline";
+  opt.showbreak = "↳  ";
+  opt.listchars = { tab = '»··', nbsp = '+', extends = '→', precedes = '←' };
+  opt.showmatch = true;
+  opt.fillchars = { vert = '┃', fold = '-', foldopen = '+', diff = '-', stl = ' ', stlnc = ' ', eob = '~' };
 
   -- buffer
-  vim.opt.undofile = true;
-  vim.opt.synmaxcol = 2500;
-  vim.opt.formatoptions = "1jcroql";
-  vim.opt.textwidth = 80;
-  vim.opt.expandtab = true;
-  vim.opt.autoindent = true;
-  vim.opt.tabstop = 2;
-  vim.opt.shiftwidth = 2;
-  vim.opt.softtabstop = -1;
-  vim.opt.breakindentopt = { shift = 2, min = 20 };
-  vim.opt.wrap = true;
-  vim.opt.linebreak = true;
-  vim.opt.number = true;
-  vim.opt.foldenable = true;
-  vim.opt.signcolumn = "yes";
-  vim.opt.conceallevel = 2;
-  vim.opt.concealcursor = "niv";
-  vim.opt.fileencoding = "utf-8";
-  vim.opt.fixeol = false;
-  vim.opt.smartindent = true;
-  vim.opt.swapfile = false;
+  opt.undofile = true;
+  opt.synmaxcol = 2500;
+  opt.formatoptions = "1jcroql";
+  opt.textwidth = 80;
+  opt.expandtab = true;
+  opt.autoindent = true;
+  opt.tabstop = 2;
+  opt.shiftwidth = 2;
+  opt.softtabstop = -1;
+  opt.breakindentopt = { shift = 2, min = 20 };
+  opt.wrap = true;
+  opt.linebreak = true;
+  opt.number = true;
+  opt.foldenable = true;
+  opt.signcolumn = "yes";
+  opt.conceallevel = 2;
+  opt.concealcursor = "niv";
+  opt.fileencoding = "utf-8";
+  opt.fixeol = false;
+  opt.smartindent = true;
+  opt.swapfile = false;
 
   -- window
-  vim.opt.cursorline = true;
-  vim.opt.colorcolumn = "0";
-  vim.opt.foldlevel = 2;
-  vim.opt.foldmethod = "manual";
-  vim.opt.foldnestmax = 10;
-  vim.opt.list = true;
-  vim.opt.number = true;
-  vim.opt.signcolumn = "yes";
-  vim.opt.wrap = true;
+  opt.cursorline = true;
+  opt.colorcolumn = "0";
+  opt.foldlevel = 2;
+  opt.foldmethod = "manual";
+  opt.foldnestmax = 10;
+  opt.list = true;
+  opt.number = true;
+  opt.signcolumn = "yes";
+  opt.wrap = true;
 
   vim.cmd("let $TERM = 'alacritty'")
   vim.cmd("let $GIT_EDITOR = 'nvr -cc split --remote-wait'")
@@ -139,7 +141,7 @@ local function load_options()
   local is_mac = vim.loop.os_uname().sysname == 'Darwin'
 
   if is_mac then
-    vim.g.clipboard = {
+    g.clipboard = {
       name = "macOS-clipboard",
       copy = {
         ["+"] = "pbcopy",

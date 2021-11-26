@@ -35,7 +35,7 @@ plugins["lukas-reineke/indent-blankline.nvim"] = {
 }
 
 plugins["ggandor/lightspeed.nvim"] = {
-  event = {'BufReadPre','BufNewFile'},
+  event = 'VimEnter',
   config = conf.lightspeed
 }
 

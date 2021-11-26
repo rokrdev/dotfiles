@@ -42,8 +42,8 @@ function autocmd.load_autocmds()
     };
 
     mode = {
-      {"InsertEnter", "*", "hi link EndOfLineSpace None"},
-      {"InsertLeave", "*", "hi link EndOfLineSpace Substitute"},
+      {"InsertEnter", "*", "lua require('utils').onEnterInsertMode()"},
+      {"InsertLeave", "*", "lua require('utils').onLeaveInsertMode()"},
     };
 
     yank = {

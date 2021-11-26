@@ -52,7 +52,7 @@ end
 function config.illuminate()
   vim.g.Illuminate_delay = 500
   vim.g.Illuminate_highlightUnderCursor = 1
-  vim.g.Illuminate_ftblacklist = {'NvimTree'}
+  vim.g.Illuminate_ftblacklist = {'NvimTree', 'alpha'}
 end
 
 function config.colorizer()

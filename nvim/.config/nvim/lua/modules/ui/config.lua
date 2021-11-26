@@ -65,9 +65,9 @@ function config.telescope()
         },
       },
       sorting_strategy = 'descending',
-      file_previewer = require'telescope.previewers'.vim_buffer_cat.new,
-      grep_previewer = require'telescope.previewers'.vim_buffer_vimgrep.new,
-      qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
+      file_previewer = require'telescope.previewers'.cat.new,
+      grep_previewer = require'telescope.previewers'.vimgrep.new,
+      qflist_previewer = require'telescope.previewers'.qflist.new,
     },
     extensions = {
       fzf = {
@@ -78,15 +78,7 @@ function config.telescope()
         -- the default case_mode is "smart_case"
       }
     }
-    -- extensions = {
-    --   extensions = {
-    --     fzf_writer = {
-    --       use_highlighter = true,
-    --     }
-    --   }
-    -- }
   }
-  -- require('telescope').load_extension('fzf')
   vim.cmd([[packadd cfilter]])
 end
 

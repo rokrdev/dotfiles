@@ -17,12 +17,10 @@ plugins['nvim-telescope/telescope.nvim'] = {
 plugins['lewis6991/gitsigns.nvim'] = {
   event = {'BufRead','BufNewFile'},
   config = conf.gitsigns,
-  requires = {'nvim-lua/plenary.nvim',opt=true}
+  requires = {'nvim-lua/plenary.nvim'}
 }
 
-plugins['kyazdani42/nvim-web-devicons'] = {
-  event = 'VimEnter',
-}
+plugins['kyazdani42/nvim-web-devicons'] = {}
 
 plugins['folke/tokyonight.nvim'] = {
   event = 'VimEnter',
@@ -41,8 +39,19 @@ plugins["hoob3rt/lualine.nvim"] = {
 
 plugins['kyazdani42/nvim-tree.lua'] = {
   cmd = {"NvimTreeToggle", "NvimTreeOpen"},
-  requires = {'kyazdani42/nvim-web-devicons', opt=true},
   config = conf.tree,
+}
+
+plugins['kyazdani42/nvim-tree.lua'] = {
+  cmd = {"NvimTreeToggle", "NvimTreeOpen"},
+  config = conf.tree,
+}
+
+plugins['goolord/alpha-nvim'] = {
+  requires = { 'kyazdani42/nvim-web-devicons' },
+  config = function ()
+    require'alpha'.setup(require'alpha.themes.dashboard'.opts)
+  end
 }
 
 return plugins

@@ -42,11 +42,6 @@ plugins['kyazdani42/nvim-tree.lua'] = {
   config = conf.tree,
 }
 
-plugins['kyazdani42/nvim-tree.lua'] = {
-  cmd = {"NvimTreeToggle", "NvimTreeOpen"},
-  config = conf.tree,
-}
-
 plugins['goolord/alpha-nvim'] = {
   requires = { 'kyazdani42/nvim-web-devicons' },
   config = conf.alpha,

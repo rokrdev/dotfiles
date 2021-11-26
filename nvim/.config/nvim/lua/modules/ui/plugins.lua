@@ -10,7 +10,7 @@ plugins['nvim-telescope/telescope.nvim'] = {
   requires = {
     {'nvim-lua/popup.nvim'},
     {'nvim-lua/plenary.nvim'},
-    {'nvim-telescope/telescope-fzf-writer.nvim'},
+    {'nvim-telescope/telescope-fzf-native.nvim', run = 'make'},
   }
 }
 
@@ -47,11 +47,11 @@ plugins['kyazdani42/nvim-tree.lua'] = {
   config = conf.tree,
 }
 
-plugins['goolord/alpha-nvim'] = {
-  requires = { 'kyazdani42/nvim-web-devicons' },
-  config = function ()
-    require'alpha'.setup(require'alpha.themes.dashboard'.opts)
-  end
-}
+-- plugins['goolord/alpha-nvim'] = {
+--   requires = { 'kyazdani42/nvim-web-devicons' },
+--   config = function ()
+--     require'alpha'.setup(require'alpha.themes.dashboard'.opts)
+--   end
+-- }
 
 return plugins

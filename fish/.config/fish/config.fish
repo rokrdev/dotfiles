@@ -1,4 +1,6 @@
- # TokyoNight Color Palette
+export BAT_THEME="tokyonight"
+
+# TokyoNight Color Palette
 set -l foreground c0caf5
 set -l selection 33467C
 set -l comment 565f89
@@ -71,9 +73,9 @@ set $fish_term24bit to "1"
 set fish_color_command blue
 set -U fish_greeting
 
-alias br="broot --sizes -dp"
 alias brup='brew update && brew upgrade && brew upgrade --cask && brew cleanup && brew doctor'
 alias cat=bat
+alias bcb='bat cache --build'
 alias dc='docker compose'
 alias dcu='docker compose up'
 alias dcd='docker compose down'

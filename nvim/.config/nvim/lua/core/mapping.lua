@@ -19,8 +19,6 @@ local def_map = {
   ["n|<Leader>s*"]           = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn"):with_noremap():with_silent(),
   -- ["n|<Leader>ss"]           = map_args("ls<CR>:b"):with_noremap():with_nowait(),
   ["n|<Leader>sn"]           = map_lua("require('utils').toggleNumbers()"):with_noremap():with_nowait(),
-  ["n|<M-q>"]                = map_cmd("q"):with_noremap():with_nowait(),
-  ["n|q"]                    = map_cmd("<Nop>"):with_noremap(),
   ["n|<M-+>"]                = map_cr(":vertical resize +5"):with_noremap():with_silent(),
   ["n|<M-=>"]                = map_cr(":vertical resize -5"):with_noremap():with_silent(),
   ["n|<M-->"]                = map_cr(":resize -5"):with_noremap():with_silent(),

@@ -16,18 +16,9 @@ plugins['windwp/nvim-autopairs'] = {
   config = conf.autopairs,
 }
 
--- plugins['tpope/vim-commentary'] = {
---   event = 'VimEnter',
--- }
-
 plugins['editorconfig/editorconfig-vim'] = {
   ft = { 'go','vim','rust' }
 }
-
--- plugins["justinmk/vim-sneak"] = {
---   event = {'BufReadPre','BufNewFile'},
---   setup = conf.sneak
--- }
 
 plugins["lukas-reineke/indent-blankline.nvim"] = {
   after = 'tokyonight.nvim',
@@ -40,26 +31,26 @@ plugins["ggandor/lightspeed.nvim"] = {
 }
 
 plugins['wincent/scalpel'] = {
-  event = {'BufReadPre','BufNewFile'},
+  event = 'VimEnter',
   setup = conf.scalpel,
 }
 
 plugins['haya14busa/vim-asterisk'] = {
-  event = {'BufReadPre','BufNewFile'},
+  event = 'VimEnter',
   setup = vim.cmd[[let g:asterisk#keeppos = 1]],
 }
 
 plugins['machakann/vim-sandwich'] = {
-  event = {'BufReadPre','BufNewFile'},
+  event = 'VimEnter',
 }
 
 plugins['zenobht/vim-multiple-cursors'] = {
-  event = {'BufReadPre','BufNewFile'},
+  event = 'VimEnter',
   setup = conf.multi,
 }
 
 plugins['wellle/targets.vim'] = {
-  event = {'BufReadPre','BufNewFile'},
+  event = 'VimEnter',
 }
 
 plugins['rhysd/accelerated-jk'] = {
@@ -67,7 +58,7 @@ plugins['rhysd/accelerated-jk'] = {
 }
 
 plugins['andymass/vim-matchup'] = {
-  event = {'BufReadPre','BufNewFile'},
+  event = 'VimEnter',
   setup = conf.matchup,
 }
 

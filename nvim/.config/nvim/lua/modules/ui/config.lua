@@ -43,7 +43,6 @@ function config.telescope()
   if not packer_plugins['plenary.nvim'].loaded then
     vim.cmd [[packadd plenary.nvim]]
     vim.cmd [[packadd popup.nvim]]
-    vim.cmd [[packadd telescope-fzf-writer.nvim]]
   end
 
   local actions = require('telescope.actions')
@@ -71,12 +70,21 @@ function config.telescope()
       qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
     },
     extensions = {
-      extensions = {
-        fzf_writer = {
-          use_highlighter = true,
-        }
+      fzf = {
+        fuzzy = true,                    -- false will only do exact matching
+        override_generic_sorter = true,  -- override the generic sorter
+        override_file_sorter = true,     -- override the file sorter
+        case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+        -- the default case_mode is "smart_case"
       }
     }
+    -- extensions = {
+    --   extensions = {
+    --     fzf_writer = {
+    --       use_highlighter = true,
+    --     }
+    --   }
+    -- }
   }
   -- require('telescope').load_extension('fzf')
   vim.cmd([[packadd cfilter]])

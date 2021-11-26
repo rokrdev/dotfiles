@@ -47,11 +47,9 @@ plugins['kyazdani42/nvim-tree.lua'] = {
   config = conf.tree,
 }
 
--- plugins['goolord/alpha-nvim'] = {
---   requires = { 'kyazdani42/nvim-web-devicons' },
---   config = function ()
---     require'alpha'.setup(require'alpha.themes.dashboard'.opts)
---   end
--- }
+plugins['goolord/alpha-nvim'] = {
+  requires = { 'kyazdani42/nvim-web-devicons' },
+  config = conf.alpha,
+}
 
 return plugins

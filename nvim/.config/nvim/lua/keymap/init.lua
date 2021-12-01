@@ -26,6 +26,11 @@ local plug_map = {
   ["n|<Leader>fc"]            = map_lua("require('telescope.builtin').current_buffer_fuzzy_find()"):with_noremap():with_nowait(),
   ["n|<Leader>b"]             = map_lua("require('telescope.builtin').buffers()"):with_noremap():with_nowait(),
   ["n|<Leader>gc"]            = map_lua("require('keymap.custom').git_conflicts({})"):with_noremap():with_nowait(),
+  -- LSP
+  ["n|<Leader>ls"]            = map_cr("LspStart"):with_noremap():with_nowait(),
+  ["n|<Leader>le"]            = map_cr("LspStop"):with_noremap():with_nowait(),
+  ["n|<Leader>lr"]            = map_cr("LspRestart"):with_noremap():with_nowait(),
+  ["n|<Leader>li"]            = map_cr("LspInfo"):with_noremap():with_nowait(),
   -- asterisk
   ["n|*"]                     = map_cmd("<Plug>(asterisk-z*)"):with_nowait(),
   ["n|#"]                     = map_cmd("<Plug>(asterisk-z#)"):with_nowait(),

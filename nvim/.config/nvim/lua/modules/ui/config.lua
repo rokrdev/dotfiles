@@ -106,7 +106,7 @@ function config.lualine()
       lualine_b = { 'branch' },
       lualine_c = {
         'filename',
-        {'diagnostics', sources = {'nvim_lsp'}, sections = {'error', 'warn'}},
+        {'diagnostics', sources = {'nvim_diagnostic'}, sections = {'error', 'warn'}},
         'diff',
       },
       lualine_x = { 'encoding', 'fileformat', 'filetype' },

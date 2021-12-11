@@ -40,8 +40,9 @@ plugins['haya14busa/vim-asterisk'] = {
   setup = vim.cmd[[let g:asterisk#keeppos = 1]],
 }
 
-plugins['machakann/vim-sandwich'] = {
+plugins['blackCauldron7/surround.nvim'] = {
   event = 'VimEnter',
+  config = conf.surround,
 }
 
 plugins['zenobht/vim-multiple-cursors'] = {

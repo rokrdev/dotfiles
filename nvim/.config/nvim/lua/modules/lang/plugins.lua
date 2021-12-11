@@ -2,7 +2,6 @@ local plugins = {}
 local conf = require('modules.lang.config')
 
 plugins['nvim-treesitter/nvim-treesitter'] = {
-  after = 'telescope.nvim',
   config = conf.treesitter
 }
 

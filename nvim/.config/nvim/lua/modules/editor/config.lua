@@ -96,5 +96,9 @@ function config.neogit()
   neogit.config.use_magit_keybindings()
 end
 
+function config.surround()
+  require'surround'.setup { mappings_style = "surround"}
+end
+
 return config
 

@@ -41,6 +41,7 @@ export TERM="alacritty"
 export FISH_CONFIG="$HOME/.config/fish/config.fish"
 set TERMINFO ~/.terminfo/
 export LANG="en_US.UTF-8"
+export NNN_OPTS="d"
 
 ssh-add -A &> /dev/null
 

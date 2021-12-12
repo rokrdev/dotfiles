@@ -237,4 +237,8 @@ function config.alpha()
   ]])
 end
 
+function config.nnn()
+  require("nnn").setup()
+end
+
 return config

@@ -6,10 +6,15 @@ plugins["norcalli/nvim-colorizer.lua"] = {
   config = conf.colorizer,
 }
 
-plugins["rrethy/vim-illuminate"] = {
+-- plugins["rrethy/vim-illuminate"] = {
+--   event = 'VimEnter',
+--   setup = conf.illuminate,
+-- }
+
+plugins["xiyaowong/nvim-cursorword"] = {
   event = 'VimEnter',
-  setup = conf.illuminate,
 }
+
 
 plugins['windwp/nvim-autopairs'] = {
   event = 'VimEnter',

@@ -35,9 +35,8 @@ plugins['wincent/scalpel'] = {
   setup = conf.scalpel,
 }
 
-plugins['haya14busa/vim-asterisk'] = {
+plugins['kevinhwang91/nvim-hlslens'] = {
   event = 'VimEnter',
-  setup = vim.cmd[[let g:asterisk#keeppos = 1]],
 }
 
 plugins['blackCauldron7/surround.nvim'] = {

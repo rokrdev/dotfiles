@@ -29,12 +29,13 @@ function config.matchup()
 end
 
 function config.lightspeed()
-  vim.cmd[[
-    unmap f
-    unmap F
-    unmap t
-    unmap T
-  ]]
+  require'lightspeed'.setup {
+    exit_after_idle_msecs = { labeled = 500, unlabeled = 1000 },
+    grey_out_search_area = true,
+    highlight_unique_chars = true,
+    match_only_the_start_of_same_char_seqs = true,
+    jump_on_partial_input_safety_timeout = 400,
+  }
 end
 
 function config.multi()

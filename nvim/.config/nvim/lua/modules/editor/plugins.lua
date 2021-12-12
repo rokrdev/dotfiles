@@ -11,8 +11,9 @@ plugins["norcalli/nvim-colorizer.lua"] = {
 --   setup = conf.illuminate,
 -- }
 
-plugins["xiyaowong/nvim-cursorword"] = {
+plugins["zenobht/cursorword.nvim"] = {
   event = 'VimEnter',
+  config = conf.cursorword,
 }
 
 

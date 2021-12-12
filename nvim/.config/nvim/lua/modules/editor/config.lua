@@ -47,10 +47,17 @@ function config.multi()
   vim.g.multi_cursor_quit_key            = '<Esc>'
 end
 
-function config.illuminate()
-  vim.g.Illuminate_delay = 500
-  vim.g.Illuminate_highlightUnderCursor = 1
-  vim.g.Illuminate_ftblacklist = {'NvimTree', 'alpha'}
+function config.cursorword()
+  vim.g.cursorword_blacklist_filetype = {
+    'NvimTree',
+    'alpha',
+    'term',
+    'NeogitCommitMessage',
+    'NeogitStatus'
+  }
+  require('cursorword').setup({
+    delay = 250,
+  })
 end
 
 function config.colorizer()

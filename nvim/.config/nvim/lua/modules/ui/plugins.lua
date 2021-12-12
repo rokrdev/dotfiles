@@ -1,8 +1,9 @@
 local plugins = {}
 local conf = require('modules.ui.config')
 
-plugins["mcchrish/nnn.vim"] = {
+plugins["luukvbaal/nnn.nvim"] = {
   cmd = 'NnnPicker',
+  config = conf.nnn,
 }
 
 plugins['nvim-telescope/telescope.nvim'] = {

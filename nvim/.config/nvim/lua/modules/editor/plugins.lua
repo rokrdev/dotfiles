@@ -60,8 +60,9 @@ plugins['wellle/targets.vim'] = {
   event = 'VimEnter',
 }
 
-plugins['rhysd/accelerated-jk'] = {
-  opt = true,
+plugins['karb94/neoscroll.nvim'] = {
+  event = 'VimEnter',
+  config = conf.neoscroll,
 }
 
 plugins['andymass/vim-matchup'] = {

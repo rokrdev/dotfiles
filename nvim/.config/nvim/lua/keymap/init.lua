@@ -31,23 +31,13 @@ local plug_map = {
   ["n|<Leader>le"]            = map_cr("LspStop"):with_noremap():with_nowait(),
   ["n|<Leader>lr"]            = map_cr("LspRestart"):with_noremap():with_nowait(),
   ["n|<Leader>li"]            = map_cr("LspInfo"):with_noremap():with_nowait(),
-  -- asterisk
-  ["n|*"]                     = map_cmd("<Plug>(asterisk-z*)"):with_nowait(),
-  ["n|#"]                     = map_cmd("<Plug>(asterisk-z#)"):with_nowait(),
-  ["n|g*"]                    = map_cmd("<Plug>(asterisk-gz*)"):with_nowait(),
-  ["n|g#"]                    = map_cmd("<Plug>(asterisk-gz#)"):with_nowait(),
+
   ["n|<Leader>fa"]            = map_cr("write | edit | TSBufEnable highlight"):with_nowait():with_silent(),
   -- bufferline
   ["n|<C-h>"]                 = map_cr("BufferLineCyclePrev"):with_noremap():with_silent():with_nowait(),
   ["n|<C-l>"]                 = map_cr("BufferLineCycleNext"):with_noremap():with_silent():with_nowait(),
 
   -- visual
-  -- asterisk
-  ["v|*"]                     = map_cmd("<Plug>(asterisk-z*)"):with_nowait(),
-  ["v|#"]                     = map_cmd("<Plug>(asterisk-z#)"):with_nowait(),
-  ["v|g*"]                    = map_cmd("<Plug>(asterisk-gz*)"):with_nowait(),
-  ["v|g#"]                    = map_cmd("<Plug>(asterisk-gz#)"):with_nowait(),
-
   ["v|<Leader>fr"]            = map_cmd("<Plug>(ScalpelVisual)"):with_nowait(),
 }
 
@@ -56,4 +46,15 @@ bind.nvim_load_mapping(plug_map)
 vim.cmd([[
   imap <expr> <M-h>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<M-h>'
   smap <expr> <M-h>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<M-h>'
+
+  noremap <silent> n <Cmd>execute('normal! ' . v:count1 . 'n')<CR>
+            \<Cmd>lua require('hlslens').start()<CR>
+
+  noremap <silent> N <Cmd>execute('normal! ' . v:count1 . 'N')<CR>
+              \<Cmd>lua require('hlslens').start()<CR>
+
+  noremap * *<Cmd>lua require('hlslens').start()<CR>
+  noremap # #<Cmd>lua require('hlslens').start()<CR>
+  noremap g* g*<Cmd>lua require('hlslens').start()<CR>
+  noremap g# g#<Cmd>lua require('hlslens').start()<CR>
 ]])

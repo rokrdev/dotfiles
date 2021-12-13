@@ -30,7 +30,7 @@ end
 
 function config.lightspeed()
   require'lightspeed'.setup {
-    exit_after_idle_msecs = { labeled = 500, unlabeled = 1000 },
+    exit_after_idle_msecs = { labeled = nil, unlabeled = 1000 },
     grey_out_search_area = true,
     highlight_unique_chars = true,
     match_only_the_start_of_same_char_seqs = true,

@@ -174,8 +174,6 @@ function config.theme()
   vim.api.nvim_exec(
     [[
       colorscheme tokyonight
-      hi default link EndOfLineSpace Substitute
-      match EndOfLineSpace /\s\+$/
       hi EndOfBuffer ctermfg=11 guifg=#3b4261
       hi VertSplit ctermfg=11 guifg=#3b4261
     ]],

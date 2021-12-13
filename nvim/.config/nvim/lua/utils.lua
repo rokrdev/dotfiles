@@ -148,15 +148,5 @@ function M.nnnPicker()
   vim.cmd(cmd)
 end
 
-function M.onEnterInsertMode()
-  vim.cmd[[ hi link EndOfLineSpace None ]]
-end
-
-function M.onLeaveInsertMode()
-  if (vim.bo.filetype ~= 'alpha') then
-    vim.cmd[[ hi link EndOfLineSpace Substitute ]]
-  end
-end
-
 return M
 

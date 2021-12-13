@@ -11,6 +11,11 @@ plugins["zenobht/cursorword.nvim"] = {
   config = conf.cursorword,
 }
 
+plugins["zenobht/trailspace.nvim"] = {
+  event = 'VimEnter',
+  config = conf.trailspace,
+}
+
 plugins['windwp/nvim-autopairs'] = {
   event = 'VimEnter',
   config = conf.autopairs,

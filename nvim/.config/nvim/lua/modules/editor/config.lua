@@ -61,6 +61,12 @@ function config.cursorword()
   })
 end
 
+function config.trailspace()
+  require('trailspace').setup({
+    only_in_normal_buffers = true,
+  })
+end
+
 function config.colorizer()
   require('colorizer').setup()
 end

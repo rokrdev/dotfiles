@@ -22,10 +22,6 @@ function commands.setup()
   vim.cmd("command! -nargs=* -complete=file SR lua require('utils').restoreSession(vim.fn.expand('<args>'))")
   vim.cmd("command! -nargs=* -complete=file SD lua require('utils').deleteSession(vim.fn.expand('<args>'))")
 
-  -- whitepace
-  vim.cmd("command! DisableTrailingWhitespace hi link EndOfLineSpace Normal")
-  vim.cmd("command! EnableTrailingWhitespace hi link EndOfLineSpace ErrorMsg")
-
   -- Json format
   vim.cmd("command! Fj %!jq")
 

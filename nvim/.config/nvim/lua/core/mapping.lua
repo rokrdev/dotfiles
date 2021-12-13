@@ -10,14 +10,14 @@ vim.g["@z"] = "f cl<CR><ESC>l"
 
 local def_map = {
   -- normal mode
-  ["n|<Leader>s-"]           = map_cr("bd"):with_noremap():with_nowait(),
-  ["n|<Leader>s_"]           = map_cr("bd!"):with_noremap():with_nowait(),
-  ["n|<Leader>so"]           = map_cr("b#"):with_noremap():with_nowait(),
-  ["n|<Leader>sc"]           = map_cr("nohl"):with_noremap():with_silent():with_nowait(),
-  ["n|<Leader>s#"]           = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgN"):with_noremap():with_silent(),
-  ["n|<Leader>s*"]           = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn"):with_noremap():with_silent(),
+  ["n|<Leader>d-"]           = map_cr("bd"):with_noremap():with_nowait(),
+  ["n|<Leader>d_"]           = map_cr("bd!"):with_noremap():with_nowait(),
+  ["n|<M-h>"]                = map_cr("b#"):with_noremap():with_nowait(),
+  ["n|<M-l>"]                = map_cr("nohl"):with_noremap():with_silent():with_nowait(),
+  ["n|<Leader>d#"]           = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgN"):with_noremap():with_silent(),
+  ["n|<Leader>d*"]           = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn"):with_noremap():with_silent(),
   -- ["n|<Leader>ss"]           = map_args("ls<CR>:b"):with_noremap():with_nowait(),
-  ["n|<Leader>sn"]           = map_lua("require('utils').toggleNumbers()"):with_noremap():with_nowait(),
+  ["n|<Leader>dn"]           = map_lua("require('utils').toggleNumbers()"):with_noremap():with_nowait(),
   ["n|<M-+>"]                = map_cr(":vertical resize +5"):with_noremap():with_silent(),
   ["n|<M-=>"]                = map_cr(":vertical resize -5"):with_noremap():with_silent(),
   ["n|<M-->"]                = map_cr(":resize -5"):with_noremap():with_silent(),
@@ -28,9 +28,9 @@ local def_map = {
   ["n|<Leader>gt"]           = map_lua("require('utils').openTerm('tig status')"):with_noremap():with_nowait(),
   ["n|<Leader>gf"]           = map_lua("require('utils').openTerm('tig ' .. vim.fn.expand('%'))"):with_noremap():with_nowait(),
   ["n|<Leader>gl"]           = map_lua("require('utils').openTerm('tig')"):with_noremap():with_nowait(),
-  ["n|<Leader>ss"]           = map_args("SS"):with_noremap(),
-  ["n|<Leader>sr"]           = map_wait("SR " .. require('utils').getSessionFilePath()):with_noremap(),
-  ["n|<Leader>sd"]           = map_wait("SD " .. require('utils').getSessionFilePath()):with_noremap(),
+  ["n|<Leader>ds"]           = map_args("SS"):with_noremap(),
+  ["n|<Leader>dr"]           = map_wait("SR " .. require('utils').getSessionFilePath()):with_noremap(),
+  ["n|<Leader>dd"]           = map_wait("SD " .. require('utils').getSessionFilePath()):with_noremap(),
 
   ["n|Y"]                    = map_cmd("y$"):with_noremap():with_nowait(),
   ["n|<C-k>"]                = map_cmd(":m .-2<CR>=="):with_noremap():with_nowait(),
@@ -39,8 +39,8 @@ local def_map = {
   -- visual mode
   ["v|<C-j>"]                = map_cmd(":m '>+1<CR>gv=gv"):with_noremap():with_nowait(),
   ["v|<C-k>"]                = map_cmd(":m '<-2<CR>gv=gv"):with_noremap():with_nowait(),
-  ["v|<Leader>s#"]           = map_cmd("\"sy:let @/=@s<CR>cgN"):with_noremap(),
-  ["v|<Leader>s*"]           = map_cmd("\"sy:let @/=@s<CR>cgn"):with_noremap(),
+  ["v|<Leader>d#"]           = map_cmd("\"sy:let @/=@s<CR>cgN"):with_noremap(),
+  ["v|<Leader>d*"]           = map_cmd("\"sy:let @/=@s<CR>cgn"):with_noremap(),
 
   --- Copy/Paste
   -- paste from clipboard

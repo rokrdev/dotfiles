@@ -62,6 +62,13 @@ function config.cursorword()
 end
 
 function config.trailspace()
+  vim.g.trailspace_blacklist_filetype = {
+    'NvimTree',
+    'alpha',
+    'term',
+    'NeogitCommitMessage',
+    'NeogitStatus'
+  }
   require('trailspace').setup({
     only_in_normal_buffers = true,
   })

@@ -6,7 +6,7 @@ local wo = vim.wo
 local api = vim.api
 local fn = vim.fn
 
-local SESSIONS_DIR = '~/.vim/sessions/'
+local SESSIONS_DIR = "~/.vim/sessions/"
 
 M.getopt = api.nvim_get_option
 
@@ -60,15 +60,6 @@ function M.onTermOpen()
   )
 end
 
-function M.getWordUnderCursor()
-  return fn.expand('<cword>')
-end
-
-function M.rgWordUnderCursor()
-  local val = 'RG ' .. fn.expand('<cword>')
-  api.nvim_exec(val, false)
-end
-
 local function getRandom()
   return math.ceil(math.random() * 10000)
 end
@@ -79,29 +70,17 @@ function M.scratchGenerator()
 end
 
 function M.getVisualSelection()
-  local temp = fn.getreg('s')
-  vim.cmd('noau normal! "sy')
-  local val = fn.getreg('s')
-  fn.setreg('s', temp)
+  local temp = fn.getreg("v")
+  api.nvim_exec(
+    [[
+      noau normal! "vy
+    ]],
+    false
+  )
+  local val = fn.getreg("v")
+  fn.setreg("v", temp)
   return val
 end
-
-function M.escape(str)
-  return fn.escape(str, '\\/.*$^~[]()<>')
-end
-
-function M.rgVisualSelection()
-  local val = M.getVisualSelection()
-  local str = "RG " .. M.escape(val)
-  api.nvim_exec(str, false)
-end
-
--- function M.VSetSearch(cmdtype)
---   local yanked_text = M.getVisualSelection()
---   local escapeS = fn.escape(yanked_text, cmdtype .. '\\')
---   local val = '\\V' .. fn.substitute(escapeS, '\\n', '\\\\n', 'g')
---   api.nvim_exec(cmdtype .. val, false)
--- end
 
 function M.getSessionNameFromCwd()
   local pwd = api.nvim_exec("pwd", true)
@@ -143,8 +122,8 @@ function M.saveSession(name)
 end
 
 function M.nnnPicker()
-  local currentPath = fn.expand('%:p:h')
-  local cmd = 'NnnPicker '..currentPath
+  local currentPath = fn.expand("%:p:h")
+  local cmd = "NnnPicker "..currentPath
   vim.cmd(cmd)
 end
 

@@ -16,7 +16,7 @@ local def_map = {
   ["n|<M-l>"]                = map_cr("nohl"):with_noremap():with_silent():with_nowait(),
   ["n|<Leader>d#"]           = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgN"):with_noremap():with_silent(),
   ["n|<Leader>d*"]           = map_cmd(":let @/='\\<'.expand('<cword>').'\\>'<CR>cgn"):with_noremap():with_silent(),
-  -- ["n|<Leader>ss"]           = map_args("ls<CR>:b"):with_noremap():with_nowait(),
+  ["n|<M-Space>"]            = map_args("ls<CR>:b"):with_noremap():with_nowait(),
   ["n|<Leader>dn"]           = map_lua("require('utils').toggleNumbers()"):with_noremap():with_nowait(),
   ["n|<M-+>"]                = map_cr(":vertical resize +5"):with_noremap():with_silent(),
   ["n|<M-=>"]                = map_cr(":vertical resize -5"):with_noremap():with_silent(),

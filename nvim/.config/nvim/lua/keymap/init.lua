@@ -44,8 +44,8 @@ local plug_map = {
 bind.nvim_load_mapping(plug_map)
 
 vim.cmd([[
-  imap <expr> <M-h>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<M-h>'
-  smap <expr> <M-h>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<M-h>'
+  imap <expr> <M-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<M-l>'
+  smap <expr> <M-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<M-l>'
 
   noremap <silent> n <Cmd>execute('normal! ' . v:count1 . 'n')<CR>
             \<Cmd>lua require('hlslens').start()<CR>

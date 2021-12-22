@@ -54,7 +54,7 @@ local function load_options()
   opt.shiftround = true;
   opt.timeout = true;
   opt.ttimeout = true;
-  opt.timeoutlen = 300;
+  opt.timeoutlen = 500;
   opt.ttimeoutlen = 50;
   opt.updatetime = 100;
   opt.redrawtime = 5000;

@@ -27,7 +27,7 @@ local def_map = {
   ["n|<M-b>"]                = map_cr("wincmd ="):with_noremap():with_nowait(),
   ["n|<Leader>gt"]           = map_lua("require('utils').openTerm('tig status')"):with_noremap():with_nowait(),
   ["n|<Leader>gf"]           = map_lua("require('utils').openTerm('tig ' .. vim.fn.expand('%'))"):with_noremap():with_nowait(),
-  ["n|<Leader>gl"]           = map_lua("require('utils').openTerm('tig')"):with_noremap():with_nowait(),
+  ["n|<Leader>gL"]           = map_lua("require('utils').openTerm('tig')"):with_noremap():with_nowait(),
   ["n|<Leader>ds"]           = map_args("SS"):with_noremap(),
   ["n|<Leader>dr"]           = map_wait("SR " .. require('utils').getSessionFilePath()):with_noremap(),
   ["n|<Leader>dd"]           = map_wait("SD " .. require('utils').getSessionFilePath()):with_noremap(),

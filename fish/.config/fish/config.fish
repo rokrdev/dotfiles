@@ -37,9 +37,9 @@ set -g fish_pager_color_description $comment
 export ALTERNATE_EDITOR="nvim"
 export VISUAL="nvr -cc split --remote-wait"
 export EDITOR="nvr -cc split --remote-wait"
-export TERM="alacritty"
+export TERM="xterm-kitty"
 export FISH_CONFIG="$HOME/.config/fish/config.fish"
-set TERMINFO ~/.terminfo/
+export TERMINFO="/Applications/kitty.app/Contents/Resources/terminfo"
 export LANG="en_US.UTF-8"
 export NNN_OPTS="d"
 

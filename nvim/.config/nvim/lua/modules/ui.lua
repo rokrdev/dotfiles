@@ -83,6 +83,8 @@ plugins['lewis6991/gitsigns.nvim'] = {
         -- Default keymap options
         noremap = true,
         buffer = true,
+        ['n ]c'] = { expr = true, "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'"},
+        ['n [c'] = { expr = true, "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'"},
 
         -- ['n <leader>hs'] = '<cmd>lua require"gitsigns".stage_hunk()<CR>',
         -- ['n <leader>hu'] = '<cmd>lua requiregitsigns".undo_stage_hunk()<CR>',
@@ -90,9 +92,9 @@ plugins['lewis6991/gitsigns.nvim'] = {
         -- ['n <leader>hR'] = '<cmd>lua require"gitsigns".reset_buffer()<CR>',
         -- ['n <leader>hp'] = '<cmd>lua require"gitsigns".preview_hunk()<CR>',
 
-        -- -- Text objects
-        -- ['o ih'] = ':<C-U>lua require"gitsigns".select_hunk()<CR>',
-        -- ['x ih'] = ':<C-U>lua require"gitsigns".select_hunk()<CR>'
+        -- Text objects
+        ['o ih'] = ':<C-U>lua require"gitsigns".select_hunk()<CR>',
+        ['x ih'] = ':<C-U>lua require"gitsigns".select_hunk()<CR>'
       },
       watch_index = {
         interval = 1000

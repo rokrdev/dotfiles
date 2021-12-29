@@ -19,8 +19,10 @@ local plug_map = {
 
   -- Vimwiki
   ["n|<Leader>wc"]            = map_cr("bufdo if expand('%:p') =~ '/vimwiki/' | bd | endif"):with_nowait():with_silent(),
-  ["n|<Leader>wf"]            = map_cr("Telescope vw i=1"):with_nowait():with_silent(),
-  ["n|<Leader>wg"]            = map_cr("Telescope vw live_grep i=1"):with_nowait():with_silent(),
+  ["n|<Leader>ww"]            = map_cr("VimwikiIndex"):with_nowait():with_silent(),
+  ["n|<Leader>wf"]            = map_lua("require('keymap.custom').wiki_find({})"):with_nowait():with_silent(),
+  ["n|<Leader>wl"]            = map_lua("require('keymap.custom').wiki_search({})"):with_nowait():with_silent(),
+  ["n|<Leader>wg"]            = map_lua("require('keymap.custom').wiki_grep({})"):with_nowait():with_silent(),
 
   -- Neogit
   ["n|<Leader>gg"]            = map_cr("Neogit"):with_noremap():with_nowait(),

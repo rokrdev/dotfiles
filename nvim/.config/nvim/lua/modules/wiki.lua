@@ -20,12 +20,4 @@ plugins["mattn/calendar-vim"] = {
   event = 'VimEnter',
 }
 
-plugins["ElPiloto/telescope-vimwiki.nvim"] = {
-  event = 'VimEnter',
-  config = function ()
-    vim.cmd [[packadd telescope.nvim]]
-    require('telescope').load_extension('vimwiki')
-  end
-}
-
 return plugins

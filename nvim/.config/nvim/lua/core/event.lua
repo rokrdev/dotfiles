@@ -24,6 +24,7 @@ function autocmd.load_autocmds()
       {"BufRead,BufNewFile", "*.ex,*.exs", "set filetype=elixir"},
       {"BufRead,BufNewFile", "mix.lock", "set filetype=elixir"},
       {"BufRead,BufNewFile", "*.eex,*.leex", "set filetype=eelixir"},
+      {"BufDelete", "Telescope", "lua nvim_feedkeys('<esc>', 'i', v:true)"},
     };
 
     wins = {

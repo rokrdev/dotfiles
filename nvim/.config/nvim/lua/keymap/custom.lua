@@ -1,5 +1,6 @@
 local pickers = require('telescope.pickers')
 local finders = require('telescope.finders')
+local builtin = require('telescope.builtin')
 local make_entry = require('telescope.make_entry')
 local conf = require('telescope.config').values
 
@@ -17,6 +18,27 @@ function f.git_conflicts(opts)
     previewer = conf.file_previewer(opts),
     sorter = conf.file_sorter(opts),
   }):find()
+end
+
+function f.wiki_find(opts)
+  builtin.find_files({
+    prompt_title = "Wiki",
+    cwd = "~/vimwiki/",
+  })
+end
+
+function f.wiki_search(opts)
+  builtin.live_grep({
+    prompt_title = "Wiki Search",
+    cwd = "~/vimwiki/",
+  })
+end
+
+function f.wiki_grep(opts)
+  builtin.grep_string({
+    prompt_title = "Wiki Grep",
+    search_dirs = {"~/vimwiki/"},
+  })
 end
 
 return f

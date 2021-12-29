@@ -39,7 +39,7 @@ export VISUAL="nvr -cc split --remote-wait"
 export EDITOR="nvr -cc split --remote-wait"
 export TERM="xterm-kitty"
 export FISH_CONFIG="$HOME/.config/fish/config.fish"
-export TERMINFO="/Applications/kitty.app/Contents/Resources/terminfo"
+export TERMINFO="~/.terminfo"
 export LANG="en_US.UTF-8"
 export NNN_OPTS="d"
 

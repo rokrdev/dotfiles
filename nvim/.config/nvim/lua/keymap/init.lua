@@ -16,6 +16,12 @@ local plug_map = {
   ["n|<Leader>dt"]            = map_cr("Scratch"):with_noremap():with_nowait(),
   ["n|<Leader>fr"]            = map_cmd("<Plug>(Scalpel)"):with_nowait(),
   ["n|<Leader>gl"]            = map_lua("require'gitsigns'.blame_line()"):with_noremap():with_nowait(),
+
+  -- Vimwiki
+  ["n|<Leader>wc"]            = map_cr("bufdo if expand('%:p') =~ '/vimwiki/' | bd | endif"):with_nowait():with_silent(),
+  ["n|<Leader>wf"]            = map_cr("Telescope vw i=1"):with_nowait():with_silent(),
+  ["n|<Leader>wg"]            = map_cr("Telescope vw live_grep i=1"):with_nowait():with_silent(),
+
   -- Neogit
   ["n|<Leader>gg"]            = map_cr("Neogit"):with_noremap():with_nowait(),
   -- telescope

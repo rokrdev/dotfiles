@@ -41,8 +41,9 @@ export TERM="xterm-kitty"
 export FISH_CONFIG="$HOME/.config/fish/config.fish"
 export TERMINFO="~/.terminfo"
 export LANG="en_US.UTF-8"
-export NNN_OPTS="d"
-
+export NNN_OPTS="da"
+export NNN_FIFO="/tmp/nnn.fifo"
+export NNN_PLUG='t:preview-tui;'
 ssh-add -A &> /dev/null
 
 source ~/.asdf/asdf.fish

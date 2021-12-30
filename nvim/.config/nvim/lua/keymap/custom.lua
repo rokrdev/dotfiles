@@ -23,21 +23,21 @@ end
 function f.wiki_find(opts)
   builtin.find_files({
     prompt_title = "Wiki",
-    cwd = "~/vimwiki/",
+    cwd = vim.g.custom_wiki_loc,
   })
 end
 
 function f.wiki_search(opts)
   builtin.live_grep({
     prompt_title = "Wiki Search",
-    cwd = "~/vimwiki/",
+    cwd = vim.g.custom_wiki_loc,
   })
 end
 
 function f.wiki_grep(opts)
   builtin.grep_string({
     prompt_title = "Wiki Grep",
-    search_dirs = {"~/vimwiki/"},
+    search_dirs = {vim.g.custom_wiki_loc},
   })
 end
 

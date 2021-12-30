@@ -17,6 +17,18 @@ local function global_options()
    ['<c-v>'] = 'vsplit'
   }
 
+  ------ vimwiki -------
+  g.custom_wiki_loc = '~/vimwiki/'
+  g.vimwiki_list = {{
+    path = '~/vimwiki/',
+    ext = '.wiki',
+  }}
+
+  g.vimwiki_dir_link = 'index'
+  g.vimwiki_global_ext = 0
+  vim.cmd([[ let g:vimwiki_ext2syntax = {} ]])
+  ------ vimwiki -------
+
   -- fix for slow movement in large php files
   g.php_syntax_extensions_enabled = {}
   g.php_var_selector_is_identifier = 1

@@ -126,7 +126,7 @@ alias yt='yarn test'
 alias zz=zi
 
 # Changing "ls" to "exa"
-alias ls='exa --color=always --group-directories-first'  # all files and dirs
+# alias ls='exa --color=always --group-directories-first'  # all files and dirs
 alias la='exa -a --color=always --group-directories-first'  # all files and dirs
 alias ll='exa -lah --color=always --group-directories-first'  # long format
 alias lt='exa -aT --git-ignore --color=always --group-directories-first' # tree listing

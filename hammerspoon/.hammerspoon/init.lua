@@ -33,5 +33,6 @@ end
 
 require('windows')
 require('border')
+require('mappings')
 
 hs.notify.new({title='Hammerspoon', informativeText='Ready to rock 🤘'}):send()

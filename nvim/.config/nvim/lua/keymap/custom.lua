@@ -20,24 +20,25 @@ function f.git_conflicts(opts)
   }):find()
 end
 
-function f.wiki_find(opts)
+function f.custom_find(opts)
   builtin.find_files({
-    prompt_title = "Wiki",
-    cwd = vim.g.custom_wiki_loc,
+    prompt_title = opts.title,
+    cwd = opts.loc,
+    hidden = true,
   })
 end
 
-function f.wiki_search(opts)
+function f.custom_search(opts)
   builtin.live_grep({
-    prompt_title = "Wiki Search",
-    cwd = vim.g.custom_wiki_loc,
+    prompt_title = opts.title,
+    cwd = opts.loc,
   })
 end
 
-function f.wiki_grep(opts)
+function f.custom_grep(opts)
   builtin.grep_string({
-    prompt_title = "Wiki Grep",
-    search_dirs = {vim.g.custom_wiki_loc},
+    prompt_title = opts.title,
+    search_dirs = {opts.loc},
   })
 end
 

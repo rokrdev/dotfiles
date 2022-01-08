@@ -18,7 +18,8 @@ local function global_options()
   }
 
   ------ vimwiki -------
-  g.custom_wiki_loc = '~/vimwiki/'
+  g.wiki_loc = '~/vimwiki/'
+  g.dotfiles_loc = '~/.dotfiles/'
   g.vimwiki_list = {{
     path = '~/vimwiki/',
     ext = '.wiki',
@@ -167,10 +168,6 @@ local function load_options()
     }
   end
   global_options()
-  vim.cmd([[
-    let g:did_load_filetypes = 0
-    let g:do_filetype_lua = 1
-  ]])
 end
 
 load_options()

@@ -79,6 +79,8 @@ plugins["ggandor/lightspeed.nvim"] = {
       highlight_unique_chars = false,
       match_only_the_start_of_same_char_seqs = false,
       jump_on_partial_input_safety_timeout = 400,
+      cycle_group_fwd_key = '<space>',
+      cycle_group_bwd_key = '<tab>',
     }
   end
 }

@@ -265,7 +265,7 @@ plugins['goolord/alpha-nvim'] = {
       dashboard.button( "SPC f n", "> Directory", ":NnnPicker<CR>"),
       dashboard.button( "SPC f o", "> Recent", ":Telescope oldfiles<CR>"),
       dashboard.button( "SPC f t", "> Tree", ":NvimTreeToggle<CR>"),
-      dashboard.button( "SPC f v", "> Settings", ":e $MYVIMRC | :cd %:p:h | split . | wincmd k | pwd<CR>"),
+      dashboard.button( "SPC h f", "> Dotfiles", ":Dotfiles<CR>"),
       dashboard.button( "SPC w w", "> Wiki", ":VimwikiIndex<CR>"),
       dashboard.button( "q", "> Quit NVIM", ":qa<CR>"),
     }

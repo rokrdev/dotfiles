@@ -6,6 +6,7 @@ function commands.setup()
   vim.cmd("command! Reload :so $MYVIMRC")
   vim.cmd("command! Tcc lua require('utils').toggleColorColumn()")
   vim.cmd("command! Scratch lua require('utils').scratchGenerator()")
+  vim.cmd("command! Dotfiles lua require('keymap.custom').custom_find({title = 'Dotfiles Find', loc = vim.g.dotfiles_loc})")
 
   -- git
   vim.cmd("command! Ga execute ':silent !git add %'")

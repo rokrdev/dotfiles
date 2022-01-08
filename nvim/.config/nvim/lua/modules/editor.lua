@@ -164,6 +164,7 @@ plugins['TimUntersberger/neogit'] = {
       disable_commit_confirmation = false,
       auto_refresh = true,
       disable_builtin_notifications = false,
+      use_magit_keybindings = true,
       commit_popup = {
         kind = "split",
       },
@@ -186,9 +187,8 @@ plugins['TimUntersberger/neogit'] = {
           -- Adds a mapping with "B" as key that does the "BranchPopup" command
           ["B"] = "BranchPopup",
         }
-      }
+      },
     }
-    neogit.config.use_magit_keybindings()
   end
 }
 

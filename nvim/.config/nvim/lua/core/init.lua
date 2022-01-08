@@ -27,10 +27,16 @@ local leader_map = function()
   vim.api.nvim_set_keymap('x', ' ', '' ,{noremap = true})
 end
 
+local disable_vim_filetype = function()
+  vim.g.did_load_filetypes = 0
+  vim.g.do_filetype_lua = 1
+end
+
 local load_core =function()
   local pack = require('core.pack')
   -- createdir()
   disable_distribution_plugins()
+  disable_vim_filetype()
   leader_map()
 
   pack.ensure_plugins()

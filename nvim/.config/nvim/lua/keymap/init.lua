@@ -20,9 +20,15 @@ local plug_map = {
   -- Vimwiki
   ["n|<Leader>wc"]            = map_cr("bufdo if expand('%:p') =~ '/vimwiki/' | bd | endif"):with_nowait():with_silent(),
   ["n|<Leader>ww"]            = map_cr("VimwikiIndex"):with_nowait():with_silent(),
-  ["n|<Leader>wf"]            = map_lua("require('keymap.custom').wiki_find({})"):with_nowait():with_silent(),
-  ["n|<Leader>wl"]            = map_lua("require('keymap.custom').wiki_search({})"):with_nowait():with_silent(),
-  ["n|<Leader>wg"]            = map_lua("require('keymap.custom').wiki_grep({})"):with_nowait():with_silent(),
+  ["n|<Leader>wf"]            = map_lua("require('keymap.custom').custom_find({title = 'Wiki Find', loc = vim.g.wiki_loc})"):with_nowait():with_silent(),
+  ["n|<Leader>wl"]            = map_lua("require('keymap.custom').custom_search({title = 'Wiki Search', loc = vim.g.wiki_loc})"):with_nowait():with_silent(),
+  ["n|<Leader>wg"]            = map_lua("require('keymap.custom').custom_grep({title = 'Wiki Grep', loc = vim.g.wiki_loc})"):with_nowait():with_silent(),
+
+  -- dotfiles search
+  ["n|<Leader>hf"]            = map_lua("require('keymap.custom').custom_find({title = 'Dotfiles Find', loc = vim.g.dotfiles_loc})"):with_nowait():with_silent(),
+  ["n|<Leader>hl"]            = map_lua("require('keymap.custom').custom_search({title = 'Dotfiles Search', loc = vim.g.dotfiles_loc})"):with_nowait():with_silent(),
+  ["n|<Leader>hg"]            = map_lua("require('keymap.custom').custom_grep({title = 'Dotfiles Grep', loc = vim.g.dotfiles_loc})"):with_nowait():with_silent(),
+  ["n|<Leader>hr"]            = map_cr("so $MYVIMRC"):with_nowait():with_silent(),
 
   -- Neogit
   ["n|<Leader>gg"]            = map_cr("Neogit"):with_noremap():with_nowait(),

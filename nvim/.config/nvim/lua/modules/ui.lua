@@ -114,7 +114,9 @@ plugins['lewis6991/gitsigns.nvim'] = {
   end
 }
 
-plugins['kyazdani42/nvim-web-devicons'] = {}
+plugins['kyazdani42/nvim-web-devicons'] = {
+  event = 'VimEnter',
+}
 
 plugins['folke/tokyonight.nvim'] = {
   event = 'VimEnter',
@@ -227,7 +229,6 @@ plugins['kyazdani42/nvim-tree.lua'] = {
 }
 
 plugins['goolord/alpha-nvim'] = {
-  requires = { 'kyazdani42/nvim-web-devicons' },
   config = function ()
     local alpha = require("alpha")
     local dashboard = require("alpha.themes.dashboard")

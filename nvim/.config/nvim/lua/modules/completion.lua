@@ -253,6 +253,7 @@ plugins["hrsh7th/nvim-cmp"] = {
 }
 
 plugins["hrsh7th/cmp-buffer"] = {
+  event = 'VimEnter',
   requires = 'hrsh7th/nvim-cmp',
 }
 
@@ -261,6 +262,7 @@ plugins["hrsh7th/cmp-nvim-lsp"] = {
 }
 
 plugins["hrsh7th/cmp-vsnip"] = {
+  event = 'VimEnter',
   requires = 'hrsh7th/nvim-cmp',
 }
 

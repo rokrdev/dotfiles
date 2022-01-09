@@ -6,7 +6,12 @@ function commands.setup()
   vim.cmd("command! Reload :so $MYVIMRC")
   vim.cmd("command! Tcc lua require('utils').toggleColorColumn()")
   vim.cmd("command! Scratch lua require('utils').scratchGenerator()")
-  vim.cmd("command! Dotfiles lua require('keymap.custom').custom_find({title = 'Dotfiles Find', loc = vim.g.dotfiles_loc})")
+  vim.cmd("command! Dff lua require('keymap.custom').custom_find({title = 'Dotfiles Find', loc = vim.g.dotfiles_loc})")
+  vim.cmd("command! Dfs lua require('keymap.custom').custom_search({title = 'Dotfiles Search', loc = vim.g.dotfiles_loc})")
+  vim.cmd("command! Dfg lua require('keymap.custom').custom_grep({title = 'Dotfiles Grep', loc = vim.g.dotfiles_loc})")
+  vim.cmd("command! Vwf lua require('keymap.custom').custom_find({title = 'Wiki Find', loc = vim.g.wiki_loc})")
+  vim.cmd("command! Vws lua require('keymap.custom').custom_search({title = 'Wiki Search', loc = vim.g.wiki_loc})")
+  vim.cmd("command! Vwg lua require('keymap.custom').custom_grep({title = 'Wiki Grep', loc = vim.g.wiki_loc})")
 
   -- git
   vim.cmd("command! Ga execute ':silent !git add %'")

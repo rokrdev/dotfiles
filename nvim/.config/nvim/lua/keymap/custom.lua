@@ -1,8 +1,4 @@
-local pickers = require('telescope.pickers')
-local finders = require('telescope.finders')
 local builtin = require('telescope.builtin')
-local make_entry = require('telescope.make_entry')
-local conf = require('telescope.config').values
 
 local f = {}
 

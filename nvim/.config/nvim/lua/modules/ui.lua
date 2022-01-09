@@ -55,6 +55,13 @@ plugins['nvim-telescope/telescope.nvim'] = {
         grep_previewer = require'telescope.previewers'.vim_buffer_vimgrep.new,
         qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
       },
+      pickers = {
+        find_files = { theme = 'ivy' },
+        live_grep = { theme = 'ivy' },
+        grep_string = { theme = 'ivy' },
+        current_buffer_fuzzy_find = { theme = 'ivy' },
+        buffers = { theme = 'ivy' },
+      },
       extensions = {
         fzf = {
           fuzzy = true,                    -- false will only do exact matching

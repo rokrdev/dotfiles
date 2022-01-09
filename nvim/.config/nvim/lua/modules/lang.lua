@@ -44,13 +44,23 @@ plugins['nvim-treesitter/playground'] = {
   cmd = 'TSPlaygroundToggle'
 }
 
+plugins['numToStr/Comment.nvim'] = {
+  config = function()
+    require("Comment").setup({
+      ignore = '^$'
+    })
+    local ft = require('Comment.ft')
+    ft.set('fish', '# %s')
+  end
+}
+
 plugins['elixir-editors/vim-elixir'] = {
   opt = true,
   ft = {'elixir', 'eelixir'},
 }
 
 plugins['JoosepAlviste/nvim-ts-context-commentstring'] = {
-  requires = {'nvim-treesitter', 'tpope/vim-commentary'},
+  requires = {'nvim-treesitter', 'Comment.nvim'},
 }
 
 plugins['nvim-treesitter/nvim-treesitter-textobjects'] = {

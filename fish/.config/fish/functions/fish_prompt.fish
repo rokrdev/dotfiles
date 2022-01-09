@@ -49,8 +49,7 @@ set -U fish_prompt_pwd_dir_length 0
 function fish_prompt --description 'Write out the prompt'
     set -l git (fish_git_prompt)
 
-    set -l prompt 'λ '
-
+    set -l prompt '➜ '
     set -l prompt_color green
 
     if test $status -ne 0

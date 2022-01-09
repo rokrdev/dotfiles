@@ -45,6 +45,7 @@ plugins['nvim-treesitter/playground'] = {
 }
 
 plugins['numToStr/Comment.nvim'] = {
+  event = 'VimEnter',
   config = function()
     require("Comment").setup({
       ignore = '^$'
@@ -60,6 +61,7 @@ plugins['elixir-editors/vim-elixir'] = {
 }
 
 plugins['JoosepAlviste/nvim-ts-context-commentstring'] = {
+  event = 'VimEnter',
   requires = {'nvim-treesitter', 'Comment.nvim'},
 }
 

@@ -103,19 +103,6 @@ plugins['blackCauldron7/surround.nvim'] = {
   end
 }
 
-plugins['zenobht/vim-multiple-cursors'] = {
-  event = 'VimEnter',
-  setup = function ()
-    vim.g.multi_cursor_use_default_mapping = 0
-    vim.g.multi_cursor_start_word_key      = '<M-n>'
-    vim.g.multi_cursor_start_key           = 'g<M-n>'
-    vim.g.multi_cursor_next_key            = '<M-n>'
-    vim.g.multi_cursor_prev_key            = '<M-p>'
-    vim.g.multi_cursor_skip_key            = '<M-x>'
-    vim.g.multi_cursor_quit_key            = '<Esc>'
-  end
-}
-
 plugins['wellle/targets.vim'] = {
   event = 'VimEnter',
 }

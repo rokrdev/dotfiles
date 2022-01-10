@@ -76,7 +76,7 @@ plugins['nvim-telescope/telescope.nvim'] = {
         qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
       },
       pickers = {
-        find_files = { theme = 'ivy' },
+        find_files = { theme = 'ivy', no_ignore = false },
         live_grep = { theme = 'ivy' },
         grep_string = { theme = 'ivy' },
         current_buffer_fuzzy_find = { theme = 'ivy' },

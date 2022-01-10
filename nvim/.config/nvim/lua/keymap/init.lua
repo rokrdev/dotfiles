@@ -138,15 +138,15 @@ set({'n'}, '<leader>lr', map_cr("LspRestart"), sil)
 set({'n'}, '<leader>li', map_cr("LspInfo"), sil)
 
 -- bufferline
-set({'n'}, '<C-h>', map_cr("BufferLineCyclePrev"), sil)
-set({'n'}, '<C-l>', map_cr("BufferLineCycleNext"), sil)
+set({'n'}, '<C-k>', map_cr("BufferLineCyclePrev"), sil)
+set({'n'}, '<C-j>', map_cr("BufferLineCycleNext"), sil)
 
-set({'v'}, '<C-l>', map_lua("require('telescope.builtin').grep_string({search = require('utils').getVisualSelection()})"), sil)
+set({'v'}, '<leader>fw', map_lua("require('telescope.builtin').grep_string({search = require('utils').getVisualSelection()})"), sil)
 set({'v'}, '<leader>fr', "<Plug>(ScalpelVisual)")
 
 vim.cmd([[
-  imap <expr> <M-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<M-l>'
-  smap <expr> <M-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<M-l>'
+  imap <expr> <C-y>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-y>'
+  smap <expr> <C-y>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-y>'
 
   noremap <silent> n <Cmd>execute('normal! ' . v:count1 . 'n')<CR>
             \<Cmd>lua require('hlslens').start()<CR>

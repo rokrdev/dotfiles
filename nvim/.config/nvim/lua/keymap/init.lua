@@ -58,9 +58,6 @@ _G.completion_confirm = function()
     return npairs.check_break_line_char()
   end
 end
--- vim.cmd([[
---   let @z = "f cl<CR><ESC>l"
--- ]])
 
 set({'n'}, '<leader>d-', map_cr("bd"), sil)
 set({'n'}, '<leader>d_', map_cr("bd!"), sil)
@@ -72,7 +69,7 @@ set({'n'}, '<M-+>', map_cr(":vertical resize +5"), sil)
 set({'n'}, '<M-=>', map_cr(":vertical resize -5"), sil)
 set({'n'}, '<M-->', map_cr(":resize +5"), sil)
 set({'n'}, '<M-_>', map_cr(":resize -5"), sil)
--- set({'n'}, '!', map_cmd("@z"), sil)
+set({'n'}, '!', map_cmd("f cl<CR><ESC>l"), sil)
 set({'n'}, '<M-y>', map_cr("wincmd w"), sil)
 set({'n'}, '<M-b>', map_cr("wincmd ="), sil)
 

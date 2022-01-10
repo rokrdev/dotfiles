@@ -59,87 +59,82 @@ _G.completion_confirm = function()
   end
 end
 
+------------- general ------------------
 set({'n'}, '<leader>d-', map_cr("bd"), sil)
 set({'n'}, '<leader>d_', map_cr("bd!"), sil)
-set({'n'}, '<M-h>', map_cr("b#"), sil)
-set({'n'}, '<M-l>', map_cr("nohl"), sil)
-set({'n'}, '<M-Space>', map_args1("ls<CR>:b"))
 set({'n'}, '<leader>dn', map_lua("require('utils').toggleNumbers()"), sil)
-set({'n'}, '<M-+>', map_cr(":vertical resize +5"), sil)
-set({'n'}, '<M-=>', map_cr(":vertical resize -5"), sil)
-set({'n'}, '<M-->', map_cr(":resize +5"), sil)
-set({'n'}, '<M-_>', map_cr(":resize -5"), sil)
+set({'n'}, '<leader>dt', map_cr("Scratch"), sil)
 set({'n'}, '!', map_cmd("f cl<CR><ESC>l"), sil)
-set({'n'}, '<M-y>', map_cr("wincmd w"), sil)
-set({'n'}, '<M-b>', map_cr("wincmd ="), sil)
 
-set({'n'}, '<leader>gt', map_lua("require('utils').openTerm('tig status')"), sil)
-set({'n'}, '<leader>gf', map_lua("require('utils').openTerm('tig ' .. vim.fn.expand('%'))"), sil)
-set({'n'}, '<leader>gL', map_lua("require('utils').openTerm('tig')"), sil)
-
+------------- session ------------------
 set({'n'}, '<leader>ds', map_args1("SS"))
 set({'n'}, '<leader>dr', map_wait("SR " .. require('utils').getSessionFilePath()))
 set({'n'}, '<leader>dd', map_wait("SD " .. require('utils').getSessionFilePath()))
 
-set({'n'}, 'Y', map_cmd("y$"))
--- paste from clipboard
-set({'n', 'v'}, '<leader>ap', map_cmd("\"+p"))
--- copy visual selection to clipboard
-set({'v'}, '<leader>ay', map_cmd("\"+y"))
--- yank current file path
-set({'n'}, '<leader>af', map_cr("let @+ = expand('%')"))
--- paste from m register
-set({'n', 'v'}, '<leader>am', map_cmd("\"mp"))
--- copy visual selection to register m
-set({'v'}, '<leader>ac', map_cmd("\"my"))
+------------- Meta ------------------
+set({'n'}, '<M-h>', map_cr("b#"), sil)
+set({'n'}, '<M-l>', map_cr("nohl"), sil)
+set({'n'}, '<M-Space>', map_args1("ls<CR>:b"))
+set({'n'}, '<M-+>', map_cr(":vertical resize +5"), sil)
+set({'n'}, '<M-=>', map_cr(":vertical resize -5"), sil)
+set({'n'}, '<M-->', map_cr(":resize +5"), sil)
+set({'n'}, '<M-_>', map_cr(":resize -5"), sil)
+set({'n'}, '<M-y>', map_cr("wincmd w"), sil)
+set({'n'}, '<M-b>', map_cr("wincmd ="), sil)
 
-
-set({'n'}, '<leader>fn', map_lua("require('utils').nnnPicker()"))
-set({'n'}, '<leader>ft', map_cr("NvimTreeToggle"), sil)
-set({'n'}, '<leader>dt', map_cr("Scratch"), sil)
-set({'n'}, '<leader>fr', "<Plug>(Scalpel)")
+------------- git ------------------
+set({'n'}, '<leader>gt', map_lua("require('utils').openTerm('tig status')"), sil)
+set({'n'}, '<leader>gf', map_lua("require('utils').openTerm('tig ' .. vim.fn.expand('%'))"), sil)
+set({'n'}, '<leader>gL', map_lua("require('utils').openTerm('tig')"), sil)
 set({'n'}, '<leader>gl', map_lua("require('gitsigns').blame_line()"))
+set({'n'}, '<leader>gg', map_cr("Neogit"), sil)
+set({'n'}, '<leader>gc', map_lua("require('keymap.custom').git_conflicts({})"))
 
+------------- copy/paste ------------------
+set({'n'}, '<leader>gt', map_lua("require('utils').openTerm('tig status')"), sil)
+set({'n'}, 'Y', map_cmd("y$"))
+set({'n', 'v'}, '<leader>ap', map_cmd("\"+p")) -- paste from clipboard
+set({'v'}, '<leader>ay', map_cmd("\"+y")) -- copy visual selection to clipboard
+set({'n'}, '<leader>af', map_cr("let @+ = expand('%')")) -- yank current file path
+set({'n', 'v'}, '<leader>am', map_cmd("\"mp")) -- paste from m register
+set({'v'}, '<leader>ac', map_cmd("\"my")) -- copy visual selection to register m
 
--- Vimwiki
+------------- Vimwiki ------------------
 set({'n'}, '<leader>wc', map_cr("bufdo if expand('%:p') =~ '/vimwiki/' | bd | endif"), sil)
 set({'n'}, '<leader>ww', map_cr("VimwikiIndex"), sil)
 set({'n'}, '<leader>wf', map_cr("Vwf"), sil)
 set({'n'}, '<leader>wl', map_cr("Vws"), sil)
 set({'n'}, '<leader>wg', map_cr("Vwg"), sil)
 
--- dotfiles
+------------- Dotfiles ------------------
 set({'n'}, '<leader>hf', map_cr("Dff"), sil)
 set({'n'}, '<leader>hs', map_cr("Dfs"), sil)
 set({'n'}, '<leader>hw', map_cr("Dfg"), sil)
 set({'n'}, '<leader>hr', map_cr("so $MYVIMRC"), sil)
 
--- neogit
-set({'n'}, '<leader>gg', map_cr("Neogit"), sil)
-
--- telescope
-set({'n'}, '<leader>gg', map_cr("Neogit"), sil)
-
--- telescope
+------------- telescope ------------------
 set({'n'}, '<leader>ff', map_lua("require('telescope.builtin').find_files({hidden=true})"))
 set({'n'}, '<leader>fs', map_lua("require('telescope.builtin').live_grep()"))
 set({'n'}, '<leader>fw', map_lua("require('telescope.builtin').grep_string()"))
 set({'n'}, '<leader>fc', map_lua("require('telescope.builtin').current_buffer_fuzzy_find()"))
 set({'n'}, '<leader>b', map_lua("require('telescope.builtin').buffers()"))
-set({'n'}, '<leader>gc', map_lua("require('keymap.custom').git_conflicts({})"))
+set({'n'}, '<leader>fn', map_lua("require('utils').nnnPicker()"))
+set({'n'}, '<leader>ft', map_cr("NvimTreeToggle"), sil)
+set({'n'}, '<leader>fr', "<Plug>(Scalpel)")
 
--- LSP
+set({'v'}, '<leader>fw', map_lua("require('telescope.builtin').grep_string({search = require('utils').getVisualSelection()})"), sil)
+set({'v'}, '<leader>fr', "<Plug>(ScalpelVisual)")
+
+------------- LSP ------------------
 set({'n'}, '<leader>ls', map_cr("LspStart"), sil)
 set({'n'}, '<leader>le', map_cr("LspStop"), sil)
 set({'n'}, '<leader>lr', map_cr("LspRestart"), sil)
 set({'n'}, '<leader>li', map_cr("LspInfo"), sil)
 
--- bufferline
+------------- bufferline ------------------
 set({'n'}, '<C-k>', map_cr("BufferLineCyclePrev"), sil)
 set({'n'}, '<C-j>', map_cr("BufferLineCycleNext"), sil)
 
-set({'v'}, '<leader>fw', map_lua("require('telescope.builtin').grep_string({search = require('utils').getVisualSelection()})"), sil)
-set({'v'}, '<leader>fr', "<Plug>(ScalpelVisual)")
 
 vim.cmd([[
   imap <expr> <C-y>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-y>'

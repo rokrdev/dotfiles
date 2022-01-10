@@ -1,61 +1,148 @@
-local bind = require('keymap.bind')
-local map_cr = bind.map_cr
-local map_cu = bind.map_cu
-local map_cmd = bind.map_cmd
-local map_lua= bind.map_lua
-local map_args = bind.map_args
-local map_wait = bind.map_wait
 require('keymap.commands').setup()
-require('keymap.config')
 
-local plug_map = {
-  -- normal
-  -- nnn/scalpel/blame/nvimtree
-  ["n|<Leader>fn"]            = map_lua("require('utils').nnnPicker()"):with_noremap():with_nowait(),
-  ["n|<Leader>ft"]            = map_cr("NvimTreeToggle"):with_noremap():with_nowait(),
-  ["n|<Leader>dt"]            = map_cr("Scratch"):with_noremap():with_nowait(),
-  ["n|<Leader>fr"]            = map_cmd("<Plug>(Scalpel)"):with_nowait(),
-  ["n|<Leader>gl"]            = map_lua("require'gitsigns'.blame_line()"):with_noremap():with_nowait(),
+local set = vim.keymap.set
 
-  -- Vimwiki
-  ["n|<Leader>wc"]            = map_cr("bufdo if expand('%:p') =~ '/vimwiki/' | bd | endif"):with_nowait():with_silent(),
-  ["n|<Leader>ww"]            = map_cr("VimwikiIndex"):with_nowait():with_silent(),
-  ["n|<Leader>wf"]            = map_cr("Vwf"):with_nowait():with_silent(),
-  ["n|<Leader>wl"]            = map_cr("Vws"):with_nowait():with_silent(),
-  ["n|<Leader>wg"]            = map_cr("Vwg"):with_nowait():with_silent(),
+local map_cmd = function(cmd_string)
+  return cmd_string
+end
 
-  -- dotfiles search
-  ["n|<Leader>hf"]            = map_cr("Dff"):with_nowait():with_silent(),
-  ["n|<Leader>hl"]            = map_cr("Dfs"):with_nowait():with_silent(),
-  ["n|<Leader>hg"]            = map_cr("Dfg"):with_nowait():with_silent(),
-  ["n|<Leader>hr"]            = map_cr("so $MYVIMRC"):with_nowait():with_silent(),
+local map_cr = function(cmd_string)
+  return (":%s<CR>"):format(cmd_string)
+end
 
-  -- Neogit
-  ["n|<Leader>gg"]            = map_cr("Neogit"):with_noremap():with_nowait(),
-  -- telescope
-  ["n|<Leader>ff"]            = map_lua("require('telescope.builtin').find_files({hidden=true})"):with_noremap():with_nowait(),
-  ["n|<Leader>fs"]            = map_lua("require('telescope.builtin').live_grep()"):with_noremap():with_nowait(),
-  ["n|<Leader>fw"]            = map_lua("require('telescope.builtin').grep_string()"):with_noremap():with_nowait(),
-  ["n|<Leader>fc"]            = map_lua("require('telescope.builtin').current_buffer_fuzzy_find()"):with_noremap():with_nowait(),
-  ["n|<Leader>b"]             = map_lua("require('telescope.builtin').buffers()"):with_noremap():with_nowait(),
-  ["n|<Leader>gc"]            = map_lua("require('keymap.custom').git_conflicts({})"):with_noremap():with_nowait(),
-  -- LSP
-  ["n|<Leader>ls"]            = map_cr("LspStart"):with_noremap():with_nowait(),
-  ["n|<Leader>le"]            = map_cr("LspStop"):with_noremap():with_nowait(),
-  ["n|<Leader>lr"]            = map_cr("LspRestart"):with_noremap():with_nowait(),
-  ["n|<Leader>li"]            = map_cr("LspInfo"):with_noremap():with_nowait(),
+local map_args1 = function(cmd_string)
+  return (":%s<Space>"):format(cmd_string)
+end
 
-  ["n|<Leader>fa"]            = map_cr("write | edit | TSBufEnable highlight"):with_nowait():with_silent(),
-  -- bufferline
-  ["n|<C-h>"]                 = map_cr("BufferLineCyclePrev"):with_noremap():with_silent():with_nowait(),
-  ["n|<C-l>"]                 = map_cr("BufferLineCycleNext"):with_noremap():with_silent():with_nowait(),
+local map_lua = function(cmd_string)
+  return ("<cmd>lua %s<CR>"):format(cmd_string)
+end
 
-  -- visual
-  ["v|<Leader>fw"]            = map_lua("require('telescope.builtin').grep_string({search = require('utils').getVisualSelection()})"):with_noremap():with_nowait(),
-  ["v|<Leader>fr"]            = map_cmd("<Plug>(ScalpelVisual)"):with_nowait(),
-}
+local map_wait = function(cmd_string)
+  return (":%s"):format(cmd_string)
+end
 
-bind.nvim_load_mapping(plug_map)
+local map_cu = function(cmd_string)
+  return (":<C-u>%s<CR>"):format(cmd_string)
+end
+
+local sil = { silent = true }
+
+local t = function(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
+local check_back_space = function()
+    local col = vim.fn.col('.') - 1
+    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+        return true
+    else
+        return false
+    end
+end
+
+_G.completion_confirm = function()
+  local npairs = require('nvim-autopairs')
+
+  if vim.fn.pumvisible() ~= 0  then
+    if vim.fn.complete_info()["selected"] ~= -1 then
+      vim.fn["compe#confirm"]()
+      return npairs.esc("<c-y>")
+    else
+      vim.defer_fn(function()
+        vim.fn["compe#confirm"]("<cr>")
+      end, 20)
+      return npairs.esc("<c-n>")
+    end
+  else
+    return npairs.check_break_line_char()
+  end
+end
+-- vim.cmd([[
+--   let @z = "f cl<CR><ESC>l"
+-- ]])
+
+set({'n'}, '<leader>d-', map_cr("bd"), sil)
+set({'n'}, '<leader>d_', map_cr("bd!"), sil)
+set({'n'}, '<M-h>', map_cr("b#"), sil)
+set({'n'}, '<M-l>', map_cr("nohl"), sil)
+set({'n'}, '<M-Space>', map_args1("ls<CR>:b"), sil)
+set({'n'}, '<leader>dn', map_lua("require('utils').toggleNumbers()"), sil)
+set({'n'}, '<M-+>', map_cr(":vertical resize +5"), sil)
+set({'n'}, '<M-=>', map_cr(":vertical resize -5"), sil)
+set({'n'}, '<M-->', map_cr(":resize +5"), sil)
+set({'n'}, '<M-_>', map_cr(":resize -5"), sil)
+-- set({'n'}, '!', map_cmd("@z"), sil)
+set({'n'}, '<M-y>', map_cr("wincmd w"), sil)
+set({'n'}, '<M-b>', map_cr("wincmd ="), sil)
+
+set({'n'}, '<leader>gt', map_lua("require('utils').openTerm('tig status')"), sil)
+set({'n'}, '<leader>gf', map_lua("require('utils').openTerm('tig ' .. vim.fn.expand('%'))"), sil)
+set({'n'}, '<leader>gL', map_lua("require('utils').openTerm('tig')"), sil)
+
+set({'n'}, '<leader>ds', map_args1("SS"))
+set({'n'}, '<leader>dr', map_wait("SR " .. require('utils').getSessionFilePath()))
+set({'n'}, '<leader>dd', map_wait("SD " .. require('utils').getSessionFilePath()))
+
+set({'n'}, 'Y', map_cmd("y$"))
+-- paste from clipboard
+set({'n', 'v'}, '<leader>ap', map_cmd("\"+p"))
+-- copy visual selection to clipboard
+set({'v'}, '<leader>ay', map_cmd("\"+y"))
+-- yank current file path
+set({'n'}, '<leader>af', map_cr("let @+ = expand('%')"))
+-- paste from m register
+set({'n', 'v'}, '<leader>am', map_cmd("\"mp"))
+-- copy visual selection to register m
+set({'v'}, '<leader>ac', map_cmd("\"my"))
+
+
+set({'n'}, '<leader>fn', map_lua("require('utils').nnnPicker()"))
+set({'n'}, '<leader>ft', map_cr("NvimTreeToggle"), sil)
+set({'n'}, '<leader>dt', map_cr("Scratch"), sil)
+set({'n'}, '<leader>fr', "<Plug>(Scalpel)")
+set({'n'}, '<leader>gl', map_lua("require('gitsigns').blame_line()"))
+
+
+-- Vimwiki
+set({'n'}, '<leader>wc', map_cr("bufdo if expand('%:p') =~ '/vimwiki/' | bd | endif"), sil)
+set({'n'}, '<leader>ww', map_cr("VimwikiIndex"), sil)
+set({'n'}, '<leader>wf', map_cr("Vwf"), sil)
+set({'n'}, '<leader>wl', map_cr("Vws"), sil)
+set({'n'}, '<leader>wg', map_cr("Vwg"), sil)
+
+-- dotfiles
+set({'n'}, '<leader>hf', map_cr("Dff"), sil)
+set({'n'}, '<leader>hs', map_cr("Dfs"), sil)
+set({'n'}, '<leader>hw', map_cr("Dfg"), sil)
+set({'n'}, '<leader>hr', map_cr("so $MYVIMRC"), sil)
+
+-- neogit
+set({'n'}, '<leader>gg', map_cr("Neogit"), sil)
+
+-- telescope
+set({'n'}, '<leader>gg', map_cr("Neogit"), sil)
+
+-- telescope
+set({'n'}, '<leader>ff', map_lua("require('telescope.builtin').find_files({hidden=true})"))
+set({'n'}, '<leader>fs', map_lua("require('telescope.builtin').live_grep()"))
+set({'n'}, '<leader>fw', map_lua("require('telescope.builtin').grep_string()"))
+set({'n'}, '<leader>fc', map_lua("require('telescope.builtin').current_buffer_fuzzy_find()"))
+set({'n'}, '<leader>b', map_lua("require('telescope.builtin').buffers()"))
+set({'n'}, '<leader>gc', map_lua("require('keymap.custom').git_conflicts({})"))
+
+-- LSP
+set({'n'}, '<leader>ls', map_cr("LspStart"), sil)
+set({'n'}, '<leader>le', map_cr("LspStop"), sil)
+set({'n'}, '<leader>lr', map_cr("LspRestart"), sil)
+set({'n'}, '<leader>li', map_cr("LspInfo"), sil)
+
+-- bufferline
+set({'n'}, '<C-h>', map_cr("BufferLineCyclePrev"), sil)
+set({'n'}, '<C-l>', map_cr("BufferLineCycleNext"), sil)
+
+set({'v'}, '<C-l>', map_lua("require('telescope.builtin').grep_string({search = require('utils').getVisualSelection()})"), sil)
+set({'v'}, '<leader>fr', "<Plug>(ScalpelVisual)")
 
 vim.cmd([[
   imap <expr> <M-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<M-l>'
@@ -72,3 +159,4 @@ vim.cmd([[
   noremap g* g*<Cmd>lua require('hlslens').start()<CR>
   noremap g# g#<Cmd>lua require('hlslens').start()<CR>
 ]])
+

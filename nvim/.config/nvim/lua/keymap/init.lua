@@ -10,7 +10,7 @@ local map_cr = function(cmd_string)
   return (":%s<CR>"):format(cmd_string)
 end
 
-local map_args1 = function(cmd_string)
+local map_args = function(cmd_string)
   return (":%s<Space>"):format(cmd_string)
 end
 
@@ -63,18 +63,21 @@ end
 set({'n'}, '<leader>d-', map_cr("bd"), sil)
 set({'n'}, '<leader>d_', map_cr("bd!"), sil)
 set({'n'}, '<leader>dn', map_lua("require('utils').toggleNumbers()"), sil)
-set({'n'}, '<leader>dt', map_cr("Scratch"), sil)
+set({'n'}, '<leader>ds', map_cr("Scratch"), sil)
+set({'n'}, '<leader>dv', map_cr("vs"), sil)
+set({'n'}, '<leader>dh', map_cr("sp"), sil)
+set({'n'}, '<leader>du', map_cr("on"), sil)
 set({'n'}, '!', map_cmd("f cl<CR><ESC>l"), sil)
 
 ------------- session ------------------
-set({'n'}, '<leader>ds', map_args1("SS"))
-set({'n'}, '<leader>dr', map_wait("SR " .. require('utils').getSessionFilePath()))
-set({'n'}, '<leader>dd', map_wait("SD " .. require('utils').getSessionFilePath()))
+set({'n'}, '<leader>ss', map_args("SS"))
+set({'n'}, '<leader>sr', map_wait("SR " .. require('utils').getSessionFilePath()))
+set({'n'}, '<leader>sd', map_wait("SD " .. require('utils').getSessionFilePath()))
 
 ------------- Meta ------------------
 set({'n'}, '<M-h>', map_cr("b#"), sil)
 set({'n'}, '<M-l>', map_cr("nohl"), sil)
-set({'n'}, '<M-Space>', map_args1("ls<CR>:b"))
+set({'n'}, '<M-Space>', map_args("ls<CR>:b"))
 set({'n'}, '<M-+>', map_cr(":vertical resize +5"), sil)
 set({'n'}, '<M-=>', map_cr(":vertical resize -5"), sil)
 set({'n'}, '<M-->', map_cr(":resize +5"), sil)
@@ -141,6 +144,7 @@ set({'n'}, '<C-k>', map_cr("m .-2<CR>==k"), sil)
 set({'v'}, '<C-j>', map_cr("m '>+1<CR>gv=gvk"), sil)
 set({'v'}, '<C-k>', map_cr("m '<-2<CR>gv=gvk"), sil)
 
+------------- vsnip/lightspeed ------------------
 vim.cmd([[
   imap <expr> <C-y>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-y>'
   smap <expr> <C-y>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-y>'

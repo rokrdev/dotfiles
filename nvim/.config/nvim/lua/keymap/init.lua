@@ -114,7 +114,7 @@ set({'n'}, '<leader>hc', map_cr("Dfc"), sil)
 set({'n'}, '<leader>hf', map_cr("Dff"), sil)
 set({'n'}, '<leader>hs', map_cr("Dfs"), sil)
 set({'n'}, '<leader>hw', map_cr("Dfg"), sil)
-set({'n'}, '<leader>hr', map_cr("so $MYVIMRC"), sil)
+set({'n'}, '<leader>hr', map_cr("Reload"), sil)
 
 ------------- telescope ------------------
 set({'n'}, '<leader>ff', map_lua("require('telescope.builtin').find_files({hidden=true})"))

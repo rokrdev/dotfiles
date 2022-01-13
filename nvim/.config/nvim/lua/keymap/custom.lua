@@ -32,4 +32,9 @@ function f.custom_grep(opts)
   })
 end
 
+function f.clear_buffers_from_path(opts)
+  local cmd = "bufdo if expand('%:p') =~ '" .. opts.loc .. "' | bd | endif"
+  vim.api.nvim_command(cmd)
+end
+
 return f

@@ -103,13 +103,14 @@ set({'n', 'v'}, '<leader>am', map_cmd("\"mp")) -- paste from m register
 set({'v'}, '<leader>ac', map_cmd("\"my")) -- copy visual selection to register m
 
 ------------- Vimwiki ------------------
-set({'n'}, '<leader>wc', map_cr("bufdo if expand('%:p') =~ '/vimwiki/' | bd | endif"), sil)
+set({'n'}, '<leader>wc', map_cr("Vwc"), sil)
 set({'n'}, '<leader>ww', map_cr("VimwikiIndex"), sil)
 set({'n'}, '<leader>wf', map_cr("Vwf"), sil)
 set({'n'}, '<leader>wl', map_cr("Vws"), sil)
 set({'n'}, '<leader>wg', map_cr("Vwg"), sil)
 
 ------------- Dotfiles ------------------
+set({'n'}, '<leader>hc', map_cr("Dfc"), sil)
 set({'n'}, '<leader>hf', map_cr("Dff"), sil)
 set({'n'}, '<leader>hs', map_cr("Dfs"), sil)
 set({'n'}, '<leader>hw', map_cr("Dfg"), sil)

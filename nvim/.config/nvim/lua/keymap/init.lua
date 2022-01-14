@@ -140,10 +140,10 @@ set({'n'}, '<C-h>', map_cr("BufferLineCyclePrev"), sil)
 set({'n'}, '<C-l>', map_cr("BufferLineCycleNext"), sil)
 
 ------------- move lines ------------------
-set({'n'}, '<C-j>', map_cr("m .+1<CR>==k"), sil)
-set({'n'}, '<C-k>', map_cr("m .-2<CR>==k"), sil)
-set({'v'}, '<C-j>', map_cr("m '>+1<CR>gv=gvk"), sil)
-set({'v'}, '<C-k>', map_cr("m '<-2<CR>gv=gvk"), sil)
+set({'n'}, '<C-j>', ":m .+1<CR>==", sil)
+set({'n'}, '<C-k>', ":m .-2<CR>==", sil)
+set({'v'}, '<C-j>', ":m '>+1<CR>gv=gv", sil)
+set({'v'}, '<C-k>', ":m '<-2<CR>gv=gv", sil)
 
 ------------- vsnip/lightspeed ------------------
 vim.cmd([[

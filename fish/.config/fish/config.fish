@@ -64,6 +64,7 @@ alias gmt="git mergetool"
 alias gp='git push'
 alias gs='git status'
 alias gtr='git log --oneline --graph --decorate --all'
+alias gx='git clean -fxd'
 alias h='cd ~/.dotfiles'
 alias icat="kitty +kitten icat"
 alias k="/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "

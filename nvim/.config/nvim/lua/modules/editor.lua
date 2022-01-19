@@ -69,21 +69,33 @@ plugins["lukas-reineke/indent-blankline.nvim"] = {
   end
 }
 
-plugins["ggandor/lightspeed.nvim"] = {
+
+plugins['rlane/pounce.nvim'] = {
   event = 'VimEnter',
   config = function ()
-    require'lightspeed'.setup {
-      ignore_case = true,
-      exit_after_idle_msecs = { labeled = nil, unlabeled = 1000 },
-      jump_to_unique_chars = { safety_timeout = 400 },
-      match_only_the_start_of_same_char_seqs = false,
-      special_keys = {
-        next_match_group = '<space>',
-        prev_match_group = '<tab>',
-      },
+    require'pounce'.setup{
+      accept_keys = "jfkdlsahgnuvrbytmiceoxwpqz",
+      multi_window = true,
+      debug = false,
     }
   end
 }
+
+-- plugins["ggandor/lightspeed.nvim"] = {
+--   event = 'VimEnter',
+--   config = function ()
+--     require'lightspeed'.setup {
+--       ignore_case = true,
+--       exit_after_idle_msecs = { labeled = nil, unlabeled = 1000 },
+--       jump_to_unique_chars = { safety_timeout = 400 },
+--       match_only_the_start_of_same_char_seqs = false,
+--       special_keys = {
+--         next_match_group = '<space>',
+--         prev_match_group = '<tab>',
+--       },
+--     }
+--   end
+-- }
 
 plugins['zenobht/vim-multiple-cursors'] = {
   event = 'VimEnter',

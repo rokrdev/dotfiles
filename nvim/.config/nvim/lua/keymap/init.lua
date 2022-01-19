@@ -160,5 +160,9 @@ vim.cmd([[
   noremap # #<Cmd>lua require('hlslens').start()<CR>
   noremap g* g*<Cmd>lua require('hlslens').start()<CR>
   noremap g# g#<Cmd>lua require('hlslens').start()<CR>
+
+  nmap s <cmd>Pounce<CR>
+  vmap s <cmd>Pounce<CR>
+  omap gs <cmd>Pounce<CR>
 ]])
 

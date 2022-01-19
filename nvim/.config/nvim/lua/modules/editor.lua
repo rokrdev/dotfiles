@@ -74,7 +74,7 @@ plugins['rlane/pounce.nvim'] = {
   event = 'VimEnter',
   config = function ()
     require'pounce'.setup{
-      accept_keys = "jfkdlsahgnuvrbytmiceoxwpqz",
+      accept_keys = "JFKDLSAHGNUVRBYTMICEOXWPQZ",
       multi_window = true,
       debug = false,
     }

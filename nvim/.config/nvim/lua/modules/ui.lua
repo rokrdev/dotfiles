@@ -219,7 +219,8 @@ plugins["hoob3rt/lualine.nvim"] = {
 }
 
 plugins['kyazdani42/nvim-tree.lua'] = {
-  cmd = {"NvimTreeToggle", "NvimTreeOpen"},
+  -- cmd = {"NvimTreeToggle", "NvimTreeOpen"},
+  event = 'VimEnter',
   config = function ()
     vim.g["nvim_tree_indent_markers"] = 1
     vim.g.nvim_tree_icons = {
@@ -250,9 +251,9 @@ plugins['kyazdani42/nvim-tree.lua'] = {
       }
     }
     -- require("nvim-tree.events").on_nvim_tree_ready(function()
-      --   vim.cmd("NvimTreeRefresh")
-      -- end)
-    end
+    --   vim.cmd("NvimTreeRefresh")
+    -- end)
+  end
 }
 
 plugins['goolord/alpha-nvim'] = {

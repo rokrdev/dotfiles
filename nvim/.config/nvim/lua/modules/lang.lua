@@ -25,17 +25,6 @@ plugins['nvim-treesitter/nvim-treesitter'] = {
           node_decremental = "grm",
         },
       },
-      textobjects = {
-        select = {
-          enable = true,
-          keymaps = {
-            ["af"] = "@function.outer",
-            ["if"] = "@function.inner",
-            ["ac"] = "@class.outer",
-            ["ic"] = "@class.inner",
-          },
-        },
-      },
     }
   end
 }
@@ -85,6 +74,21 @@ plugins['elixir-editors/vim-elixir'] = {
 plugins['JoosepAlviste/nvim-ts-context-commentstring'] = {
   event = 'VimEnter',
   requires = {'nvim-treesitter', 'Comment.nvim'},
+  config = function()
+    require'nvim-treesitter.configs'.setup {
+      textobjects = {
+        select = {
+          enable = true,
+          keymaps = {
+            ["af"] = "@function.outer",
+            ["if"] = "@function.inner",
+            ["ac"] = "@class.outer",
+            ["ic"] = "@class.inner",
+          },
+        },
+      },
+    }
+  end
 }
 
 plugins['nvim-treesitter/nvim-treesitter-textobjects'] = {

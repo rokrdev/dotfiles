@@ -7,6 +7,7 @@ plugins['nvim-treesitter/nvim-treesitter'] = {
     require('nvim-treesitter.configs').setup {
       ensure_installed = "maintained",
       sync_install = true,
+      ignore_install = { "norg" },
       highlight = {
         enable = true
       },

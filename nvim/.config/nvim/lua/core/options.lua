@@ -148,7 +148,7 @@ local function load_options()
   opt.signcolumn = "yes";
   opt.wrap = true;
 
-  vim.cmd("let $TERM = 'alacritty'")
+  vim.cmd("let $TERM = 'xterm-kitty'")
   vim.cmd("let $GIT_EDITOR = 'nvr -cc split --remote-wait'")
 
   local is_mac = vim.loop.os_uname().sysname == 'Darwin'

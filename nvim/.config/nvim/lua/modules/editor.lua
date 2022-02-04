@@ -69,7 +69,6 @@ plugins["lukas-reineke/indent-blankline.nvim"] = {
   end
 }
 
-
 plugins['rlane/pounce.nvim'] = {
   event = 'VimEnter',
   config = function ()
@@ -79,35 +78,6 @@ plugins['rlane/pounce.nvim'] = {
       multi_window = true,
       debug = false,
     }
-  end
-}
-
--- plugins["ggandor/lightspeed.nvim"] = {
---   event = 'VimEnter',
---   config = function ()
---     require'lightspeed'.setup {
---       ignore_case = true,
---       exit_after_idle_msecs = { labeled = nil, unlabeled = 1000 },
---       jump_to_unique_chars = { safety_timeout = 400 },
---       match_only_the_start_of_same_char_seqs = false,
---       special_keys = {
---         next_match_group = '<space>',
---         prev_match_group = '<tab>',
---       },
---     }
---   end
--- }
-
-plugins['zenobht/vim-multiple-cursors'] = {
-  event = 'VimEnter',
-  setup = function ()
-    vim.g.multi_cursor_use_default_mapping = 0
-    vim.g.multi_cursor_start_word_key      = '<M-n>'
-    vim.g.multi_cursor_start_key           = 'g<M-n>'
-    vim.g.multi_cursor_next_key            = '<M-n>'
-    vim.g.multi_cursor_prev_key            = '<M-p>'
-    vim.g.multi_cursor_skip_key            = '<M-x>'
-    vim.g.multi_cursor_quit_key            = '<Esc>'
   end
 }
 

@@ -148,13 +148,13 @@ plugins['kyazdani42/nvim-web-devicons'] = {
 plugins['folke/tokyonight.nvim'] = {
   event = 'VimEnter',
   config = function ()
-    vim.g.tokyonight_transparent = true
-    vim.g.tokyonight_transparent_sidebar = true
+    vim.g.tokyonight_transparent = false
+    vim.g.tokyonight_transparent_sidebar = false
     vim.g.tokyonight_style = "night"
     vim.g.tokyonight_italic_functions = true
     vim.g.tokyonight_italic_comments = true
-    vim.g.tokyonight_dark_sidebar = false
-    vim.g.tokyonight_dark_float = false
+    vim.g.tokyonight_dark_sidebar = true
+    vim.g.tokyonight_dark_float = true
     vim.api.nvim_exec(
     [[
     colorscheme tokyonight

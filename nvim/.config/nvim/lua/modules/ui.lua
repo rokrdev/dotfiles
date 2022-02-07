@@ -156,12 +156,12 @@ plugins['folke/tokyonight.nvim'] = {
     vim.g.tokyonight_dark_sidebar = true
     vim.g.tokyonight_dark_float = true
     vim.api.nvim_exec(
-    [[
-    colorscheme tokyonight
-    hi EndOfBuffer ctermfg=11 guifg=#3b4261
-    hi VertSplit ctermfg=11 guifg=#3b4261
-    ]],
-    false
+      [[
+        colorscheme tokyonight
+        hi EndOfBuffer ctermfg=11 guifg=#3b4261
+        hi VertSplit ctermfg=11 guifg=#3b4261
+      ]],
+      false
     )
   end
 }
@@ -218,43 +218,43 @@ plugins["hoob3rt/lualine.nvim"] = {
   end
 }
 
-plugins['kyazdani42/nvim-tree.lua'] = {
-  -- cmd = {"NvimTreeToggle", "NvimTreeOpen"},
-  event = 'VimEnter',
-  config = function ()
-    vim.g["nvim_tree_indent_markers"] = 1
-    vim.g.nvim_tree_icons = {
-      default =  '',
-      symlink =  '',
-      git = {
-        unstaged = "✚",
-        staged =  "✚",
-        unmerged =  "≠",
-        renamed =  "≫",
-        untracked = "★",
-      },
-    }
-    require('nvim-tree').setup {
-      disable_netrw       = true,
-      hijack_netrw        = true,
-      auto_close          = true,
-      update_cwd          = true,
-      update_focused_file = {
-        enable      = true,
-        update_cwd  = false,
-        ignore_list = {}
-      },
-      view = {
-        width = 30,
-        side = 'left',
-        auto_resize = true,
-      }
-    }
-    -- require("nvim-tree.events").on_nvim_tree_ready(function()
-    --   vim.cmd("NvimTreeRefresh")
-    -- end)
-  end
-}
+-- plugins['kyazdani42/nvim-tree.lua'] = {
+--   -- cmd = {"NvimTreeToggle", "NvimTreeOpen"},
+--   event = 'VimEnter',
+--   config = function ()
+--     vim.g["nvim_tree_indent_markers"] = 1
+--     vim.g.nvim_tree_icons = {
+--       default =  '',
+--       symlink =  '',
+--       git = {
+--         unstaged = "✚",
+--         staged =  "✚",
+--         unmerged =  "≠",
+--         renamed =  "≫",
+--         untracked = "★",
+--       },
+--     }
+--     require('nvim-tree').setup {
+--       disable_netrw       = true,
+--       hijack_netrw        = true,
+--       auto_close          = true,
+--       update_cwd          = true,
+--       update_focused_file = {
+--         enable      = true,
+--         update_cwd  = false,
+--         ignore_list = {}
+--       },
+--       view = {
+--         width = 30,
+--         side = 'left',
+--         auto_resize = true,
+--       }
+--     }
+--     -- require("nvim-tree.events").on_nvim_tree_ready(function()
+--     --   vim.cmd("NvimTreeRefresh")
+--     -- end)
+--   end
+-- }
 
 plugins['goolord/alpha-nvim'] = {
   config = function ()
@@ -301,11 +301,6 @@ plugins['goolord/alpha-nvim'] = {
     }
 
     alpha.setup(dashboard.opts)
-
-    -- Disable folding on alpha buffer
-    vim.cmd([[
-    autocmd FileType alpha setlocal nofoldenable
-    ]])
   end
 }
 

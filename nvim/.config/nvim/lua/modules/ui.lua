@@ -81,6 +81,7 @@ plugins['nvim-telescope/telescope.nvim'] = {
         grep_string = { theme = 'ivy' },
         current_buffer_fuzzy_find = { theme = 'ivy' },
         buffers = { theme = 'ivy' },
+        registers = { theme = 'ivy' },
       },
       extensions = {
         fzf = {

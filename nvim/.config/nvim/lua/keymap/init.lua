@@ -94,13 +94,12 @@ set({'n'}, '<leader>gg', map_cr("Neogit"), sil)
 set({'n'}, '<leader>gc', map_lua("require('keymap.custom').git_conflicts({})"))
 
 ------------- copy/paste ------------------
-set({'n'}, '<leader>gt', map_lua("require('utils').openTerm('tig status')"), sil)
-set({'n'}, 'Y', map_cmd("y$"))
-set({'n', 'v'}, '<leader>ap', map_cmd("\"+p")) -- paste from clipboard
-set({'v'}, '<leader>ay', map_cmd("\"+y")) -- copy visual selection to clipboard
-set({'n'}, '<leader>af', map_cr("let @+ = expand('%')")) -- yank current file path
-set({'n', 'v'}, '<leader>am', map_cmd("\"mp")) -- paste from m register
-set({'v'}, '<leader>ac', map_cmd("\"my")) -- copy visual selection to register m
+-- set({'n'}, 'Y', map_cmd("y$"))
+-- set({'n', 'v'}, '<leader>ap', map_cmd("\"+p")) -- paste from clipboard
+-- set({'v'}, '<leader>ay', map_cmd("\"+y")) -- copy visual selection to clipboard
+set({'n'}, '<leader>fp', map_cr("let @+ = expand('%')")) -- yank current file path
+-- set({'n', 'v'}, '<leader>am', map_cmd("\"mp")) -- paste from m register
+-- set({'v'}, '<leader>ac', map_cmd("\"my")) -- copy visual selection to register m
 
 ------------- Vimwiki ------------------
 set({'n'}, '<leader>wc', map_cr("Vwc"), sil)
@@ -125,6 +124,7 @@ set({'n'}, '<leader>b', map_lua("require('telescope.builtin').buffers()"))
 set({'n'}, '<leader>fn', map_lua("require('utils').nnnPicker()"))
 set({'n'}, '<leader>ft', map_cr("NvimTreeToggle"), sil)
 set({'n'}, '<leader>fr', "<Plug>(Scalpel)")
+set({'n'}, '<leader>r', map_cr("Telescope registers"), sil)
 
 set({'v'}, '<leader>fw', map_lua("require('telescope.builtin').grep_string({search = require('utils').getVisualSelection()})"), sil)
 set({'v'}, '<leader>fr', "<Plug>(ScalpelVisual)")

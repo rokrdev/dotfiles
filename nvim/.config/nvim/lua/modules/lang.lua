@@ -30,10 +30,6 @@ plugins['nvim-treesitter/nvim-treesitter'] = {
   end
 }
 
-plugins['nvim-treesitter/playground'] = {
-  cmd = 'TSPlaygroundToggle'
-}
-
 plugins['numToStr/Comment.nvim'] = {
   event = 'VimEnter',
   config = function()
@@ -67,11 +63,6 @@ plugins['numToStr/Comment.nvim'] = {
   end
 }
 
-plugins['elixir-editors/vim-elixir'] = {
-  opt = true,
-  ft = {'elixir', 'eelixir'},
-}
-
 plugins['JoosepAlviste/nvim-ts-context-commentstring'] = {
   event = 'VimEnter',
   requires = {'nvim-treesitter', 'Comment.nvim'},
@@ -94,24 +85,6 @@ plugins['JoosepAlviste/nvim-ts-context-commentstring'] = {
 
 plugins['nvim-treesitter/nvim-treesitter-textobjects'] = {
   requires = 'nvim-treesitter',
-}
-
-plugins['styled-components/vim-styled-components'] = {
-  branch = 'main',
-  opt = true,
-  ft = {'javascript', 'typescript', 'javascriptreact'},
-}
-
-plugins['jxnblk/vim-mdx-js'] = {
-  opt = true,
-  ft = {'mdx'}
-}
-
-plugins['iamcco/markdown-preview.nvim'] = {
-  opt = true,
-  ft = {'markdown'},
-  run = 'cd app && yarn install',
-  cmd = 'MarkdownPreview'
 }
 
 return plugins

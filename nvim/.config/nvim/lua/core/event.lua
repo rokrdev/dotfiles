@@ -35,6 +35,7 @@ function autocmd.load_autocmds()
       {"FileChangedShellPost", "*", "echohl WarningMsg | echo 'File changed on disk. Buffer reloaded.' | echohl None"},
       {"FileType", "gitcommit,gitrebase,gitconfig", "set bufhidden=delete"},
       {"FileType", "json", "set conceallevel=0"},
+      {"FileType", "alpha", "setlocal nofoldenable"},
     };
 
     term = {

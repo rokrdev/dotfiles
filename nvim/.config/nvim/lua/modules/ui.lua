@@ -26,11 +26,6 @@ plugins['nvim-telescope/telescope.nvim'] = {
     {'nvim-telescope/telescope-fzf-native.nvim', run = 'make'},
   },
   config = function ()
-    if not packer_plugins['plenary.nvim'].loaded then
-      vim.cmd [[packadd plenary.nvim]]
-      vim.cmd [[packadd popup.nvim]]
-    end
-
     local actions = require('telescope.actions')
     local action_state = require('telescope.actions.state')
     local telescope_custom_actions = {}
@@ -96,9 +91,6 @@ plugins['lewis6991/gitsigns.nvim'] = {
   event = 'VimEnter',
   requires = {'nvim-lua/plenary.nvim'},
   config = function ()
-    if not packer_plugins['plenary.nvim'].loaded then
-      vim.cmd [[packadd plenary.nvim]]
-    end
     require('gitsigns').setup {
       numhl = false,
       linehl = false,

@@ -4,9 +4,6 @@ plugins["neovim/nvim-lspconfig"] = {
   requires = 'hrsh7th/cmp-nvim-lsp',
   config = function ()
     local nvim_lsp = require('lspconfig')
-    if packer_plugins['cmp_nvim_lsp'] and not packer_plugins['cmp_nvim_lsp'].loaded then
-      vim.cmd [[packadd cmp_nvim_lsp]]
-    end
 
     local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
     capabilities.textDocument.completion.completionItem.snippetSupport = true

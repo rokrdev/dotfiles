@@ -161,8 +161,13 @@ vim.cmd([[
   noremap g* g*<Cmd>lua require('hlslens').start()<CR>
   noremap g# g#<Cmd>lua require('hlslens').start()<CR>
 
-  nmap s <cmd>Pounce<CR>
-  vmap s <cmd>Pounce<CR>
-  omap gs <cmd>Pounce<CR>
+  " nmap s <cmd>Pounce<CR>
+  " vmap s <cmd>Pounce<CR>
+  " omap gs <cmd>Pounce<CR>
+  nmap s <Plug>Lightspeed_omni_s
+  nmap <expr> f reg_recording() . reg_executing() == "" ? "<Plug>Lightspeed_f" : "f"
+  nmap <expr> F reg_recording() . reg_executing() == "" ? "<Plug>Lightspeed_F" : "F"
+  nmap <expr> t reg_recording() . reg_executing() == "" ? "<Plug>Lightspeed_t" : "t"
+  nmap <expr> T reg_recording() . reg_executing() == "" ? "<Plug>Lightspeed_T" : "T"
 ]])
 

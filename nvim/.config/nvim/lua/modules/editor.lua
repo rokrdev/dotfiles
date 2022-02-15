@@ -69,14 +69,37 @@ plugins["lukas-reineke/indent-blankline.nvim"] = {
   end
 }
 
-plugins['rlane/pounce.nvim'] = {
+-- plugins['rlane/pounce.nvim'] = {
+--   event = 'VimEnter',
+--   config = function ()
+--     require'pounce'.setup{
+--       accept_keys = "JFKDLSAHGNUVRBYTMICEOXWPQZ",
+--       accept_best_key = "<enter>",
+--       multi_window = true,
+--       debug = false,
+--     }
+--   end
+-- }
+plugins['ggandor/lightspeed.nvim'] = {
   event = 'VimEnter',
   config = function ()
-    require'pounce'.setup{
-      accept_keys = "JFKDLSAHGNUVRBYTMICEOXWPQZ",
-      accept_best_key = "<enter>",
-      multi_window = true,
-      debug = false,
+    require'lightspeed'.setup {
+      ignore_case = false,
+      exit_after_idle_msecs = { unlabeled = 1000, labeled = nil },
+      --- s/x ---
+      jump_to_unique_chars = false,
+      match_only_the_start_of_same_char_seqs = true,
+      force_beacons_into_match_width = false,
+      -- Display characters in a custom way in the highlighted matches.
+      substitute_chars = { ['\r'] = '¬', },
+      -- These keys are captured directly by the plugin at runtime.
+      special_keys = {
+        next_match_group = '<space>',
+        prev_match_group = '<tab>',
+      },
+      --- f/t ---
+      limit_ft_matches = 4,
+      repeat_ft_with_target_char = false,
     }
   end
 }
@@ -92,7 +115,7 @@ plugins['kevinhwang91/nvim-hlslens'] = {
   event = 'VimEnter',
 }
 
-plugins['blackCauldron7/surround.nvim'] = {
+plugins['ur4ltz/surround.nvim'] = {
   event = 'VimEnter',
   config = function ()
     require'surround'.setup { mappings_style = "surround"}

@@ -84,7 +84,7 @@ plugins['ggandor/lightspeed.nvim'] = {
   event = 'VimEnter',
   config = function ()
     require'lightspeed'.setup {
-      ignore_case = false,
+      ignore_case = true,
       exit_after_idle_msecs = { unlabeled = 1000, labeled = nil },
       --- s/x ---
       jump_to_unique_chars = false,

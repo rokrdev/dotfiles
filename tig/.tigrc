@@ -211,6 +211,7 @@ bind generic	b	none
 bind generic	c	none
 bind generic	f	none
 bind generic	g	none
+bind generic	G	none
 bind generic	h	none
 bind generic	l	none
 bind generic	p	none
@@ -284,6 +285,8 @@ bind stage r status-revert
 #====================
 bind log <C-J> :/^commit
 bind log <C-K> :?^commit
+bind log gg move-first-line
+bind log G move-last-line
 
 #====================
 # diff view
@@ -333,6 +336,7 @@ bind main uu ?git reset --soft HEAD~1
 bind main uh ?git reset --hard HEAD~1
 bind main B !?git rebase -i %(commit)
 bind main ! ?git revert %(commit)
+bind main G move-last-line
 
 # search in history
 bind main S >sh -c 'git log -S "%(prompt Search: )" --pretty=raw | tig --pretty=raw'

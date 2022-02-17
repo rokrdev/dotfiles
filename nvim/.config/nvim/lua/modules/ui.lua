@@ -19,7 +19,7 @@ plugins["luukvbaal/nnn.nvim"] = {
 }
 
 plugins['nvim-telescope/telescope.nvim'] = {
-  event = 'VimEnter',
+  -- event = 'VimEnter',
   requires = {
     {'nvim-lua/popup.nvim'},
     {'nvim-lua/plenary.nvim'},
@@ -129,11 +129,11 @@ plugins['lewis6991/gitsigns.nvim'] = {
 }
 
 plugins['kyazdani42/nvim-web-devicons'] = {
-  event = 'VimEnter',
+  -- event = 'VimEnter',
 }
 
 plugins['folke/tokyonight.nvim'] = {
-  event = 'VimEnter',
+  -- event = 'VimEnter',
   config = function ()
     vim.g.tokyonight_transparent = false
     vim.g.tokyonight_transparent_sidebar = false
@@ -154,7 +154,7 @@ plugins['folke/tokyonight.nvim'] = {
 }
 
 plugins["akinsho/nvim-bufferline.lua"] = {
-  event = 'VimEnter',
+  -- event = 'VimEnter',
   config = function ()
     require('bufferline').setup{
       options = {
@@ -168,7 +168,7 @@ plugins["akinsho/nvim-bufferline.lua"] = {
 }
 
 plugins["hoob3rt/lualine.nvim"] = {
-  event = 'VimEnter',
+  -- event = 'VimEnter',
   config = function ()
     require('lualine').setup{
       options = {

@@ -3,6 +3,7 @@ local opt = vim.opt
 local g = vim.g
 
 local function global_options()
+  g.python3_host_prog = '~/.asdf/shims/python'
   g["nnn#set_default_mappings"] = 0
   g["nnn#layout"] = {
    ["window"] = {

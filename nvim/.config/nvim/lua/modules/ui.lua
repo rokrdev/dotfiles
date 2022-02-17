@@ -147,6 +147,9 @@ plugins['folke/tokyonight.nvim'] = {
         colorscheme tokyonight
         hi EndOfBuffer ctermfg=11 guifg=#3b4261
         hi VertSplit ctermfg=11 guifg=#3b4261
+        hi SpecialKey    guifg=#61AFEF
+        hi SpecialKeyWin guifg=#3B4048
+        set winhighlight=SpecialKey:SpecialKeyWin
       ]],
       false
     )

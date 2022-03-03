@@ -19,8 +19,8 @@
 	path = ~/projects/config.personal
 [includeIf "gitdir:~/projects/**/.git"]
 	path = ~/projects/config.personal
-[includeIf "gitdir:~/work/**/.git"]
-	path = ~/work/config.work
+[includeIf "gitdir:~/afterpay/**/.git"]
+	path = ~/afterpay/config.work
 [commit]
 	template = ~/.gitmessage
 [init]

@@ -13,10 +13,6 @@ export NNN_FIFO="/tmp/nnn.fifo"
 export NNN_PLUG='t:preview-tui;'
 ssh-add -A &> /dev/null
 
-source ~/.asdf/asdf.fish
-
-zoxide init fish | source
-
 export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
 export ANDROID_HOME="$HOME/Library/Android/sdk"
 export ANDROID_SDK_ROOT="$ANDROID_HOME/sdk"
@@ -26,12 +22,8 @@ export PATH="$ANDROID_SDK_ROOT:/usr/local/opt/gnu-sed/libexec/gnubin:$HOME/.asdf
 
 source ~/.env
 
-if test -z (pgrep ssh-agent)
-  eval (ssh-agent -c)
-  set -Ux SSH_AUTH_SOCK $SSH_AUTH_SOCK
-  set -Ux SSH_AGENT_PID $SSH_AGENT_PID
-  set -Ux SSH_AUTH_SOCK $SSH_AUTH_SOCK
-end
+source ~/.asdf/asdf.fish
+zoxide init fish | source
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -S'
 export FZF_CTRL_R_OPTS='--sort --exact'

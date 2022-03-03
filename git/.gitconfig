@@ -16,11 +16,11 @@
 [push]
 	default = current
 [includeIf "gitdir:~/.dotfiles/.git"]
-	path = ~/projects/config.personal
+	path = ~/projects/config
 [includeIf "gitdir:~/projects/**/.git"]
-	path = ~/projects/config.personal
+	path = ~/projects/config
 [includeIf "gitdir:~/afterpay/**/.git"]
-	path = ~/afterpay/config.work
+	path = ~/afterpay/config
 [commit]
 	template = ~/.gitmessage
 [init]

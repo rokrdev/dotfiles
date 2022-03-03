@@ -13,4 +13,4 @@ SETUVAR fish_color_valid_path:\x2d\x2dunderline
 SETUVAR fish_greeting:\x1d
 SETUVAR fish_key_bindings:fish_default_key_bindings
 SETUVAR fish_prompt_pwd_dir_length:0
-SETUVAR fish_user_paths:/usr/local/opt/fzf/bin
+SETUVAR fish_user_paths:/usr/local/opt/fzf/bin\x1e/opt/homebrew/opt/fzf/bin

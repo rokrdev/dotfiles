@@ -157,55 +157,21 @@ function window.centerWithFullHeight(win)
   win:setFrame(f)
 end
 
--- +-----------------+
--- |      |          |
--- | HERE |          |
--- |      |          |
--- +-----------------+
-function window.left40(win)
-  local f = win:frame()
-  local screen = win:screen()
-  local max = screen:frame()
+-- function window.focus_left(w)
+--   hs.window.focusedWindow():focusWindowWest()
+-- end
 
-  f.x = max.x
-  f.y = max.y
-  f.w = max.w * 0.4
-  f.h = max.h
-  win:setFrame(f)
-end
+-- function window.focus_right(w)
+--   hs.window.focusedWindow():focusWindowEast()
+-- end
 
--- +-----------------+
--- |      |          |
--- |      |   HERE   |
--- |      |          |
--- +-----------------+
-function window.right60(win)
-  local f = win:frame()
-  local screen = win:screen()
-  local max = screen:frame()
+-- function window.focus_north(w)
+--   hs.window.focusedWindow():focusWindowNorth()
+-- end
 
-  f.x = max.x + (max.w * 0.4)
-  f.y = max.y
-  f.w = max.w * 0.6
-  f.h = max.h
-  win:setFrame(f)
-end
-
-function window.focus_left(w)
-  hs.window.focusedWindow():focusWindowWest()
-end
-
-function window.focus_right(w)
-  hs.window.focusedWindow():focusWindowEast()
-end
-
-function window.focus_north(w)
-  hs.window.focusedWindow():focusWindowNorth()
-end
-
-function window.focus_south(w)
-  hs.window.focusedWindow():focusWindowSouth()
-end
+-- function window.focus_south(w)
+--   hs.window.focusedWindow():focusWindowSouth()
+-- end
 
 function has_value (tab, val)
     for index, value in ipairs(tab) do
@@ -271,18 +237,66 @@ function window.swap(win)
   end
 end
 
-switcher_space = hs.window.switcher.new(wf.new():setOverrideFilter{visible=true, currentSpace=true})
+function window.cycleWidth()
+  local win = hs.window.focusedWindow()
+  if win ~= nil then
+    local f = win:frame()
+    local screen = win:screen()
+    local max = screen:frame()
 
-switcher_space.ui.highlightColor = {0.4,0.4,0.5,0.8}
-switcher_space.ui.thumbnailSize = 112
-switcher_space.ui.selectedThumbnailSize = 284
-switcher_space.ui.backgroundColor = {0.3, 0.3, 0.3, 0.5}
-switcher_space.ui.fontName = 'Menlo'
-switcher_space.ui.textSize = 14
-switcher_space.ui.showSelectedTitle = false
-switcher_space.ui.titleBackgroundColor = {0.3, 0.3, 0.3, 0.5}
+    if f.x == max.x then -- if window is starting from the left most position of the screen
+      if f.w == max.w * 0.3 then
+        f.w = max.w * 0.5 -- if width of window is 30%, set it to 50%
+      elseif f.w == max.w * 0.5 then
+        f.w = max.w * 0.7 -- if width of window is 50%, set it to 70%
+      else
+        f.w = max.w * 0.3 -- if width of window is 70%, set it to 30%
+      end
+      f.x = max.x
+      f.y = max.y
+      f.h = max.h
+      win:setFrame(f)
+    elseif f.x > max.x then -- if window is not starting from the left most position of the screen
+      if f.w == max.w * 0.3 then
+        f.w = max.w * 0.5 -- if width of window is 30%, set it to 50%
+        f.x = max.x + (max.w * 0.5)
+      elseif f.w == max.w * 0.5 then
+        f.w = max.w * 0.7 -- if width of window is 50%, set it to 70%
+        f.x = max.x + (max.w * 0.3)
+      else
+        f.w = max.w * 0.3 -- if width of window is 70%, set it to 30%
+        f.x = max.x + (max.w * 0.7)
+      end
+      f.y = max.y
+      f.h = max.h
+      win:setFrame(f)
+    end
+  end
+end
 
-hs.hotkey.bind({'alt'}, 'f', function()switcher_space:next()end)
+hs.hotkey.bind({'alt'}, 'v', window.cycleWidth)
+
+-- custom focus switcher that switches focus between windows of the current screen
+function window.cycleFocus()
+  local win = hs.window.focusedWindow()
+  if win ~= nil then
+    local windows = hs.window.filter
+    .new()
+    :setCurrentSpace(true)
+    :setScreens(hs.screen.mainScreen():id())
+    :setSortOrder(hs.window.filter.sortByCreatedLast)
+    :getWindows()
+
+    if next(windows) ~= nil then
+      local windowCount = #windows
+      local indexOfFocusedWindow = hs.fnutils.indexOf(windows, win)
+      local nextWindowIndex = ((indexOfFocusedWindow + 1) % windowCount) + 1
+      windows[nextWindowIndex]:focus()
+    end
+  end
+end
+
+hs.hotkey.bind({'alt'}, 'f', window.cycleFocus)
 
 windowLayoutMode = hs.hotkey.modal.new({}, 'F16')
 

@@ -48,7 +48,7 @@ return {
     -- { {},         'j',      'focus_south' },
     -- { {},         'h',      'focus_left' },
     -- { {},         'l',      'focus_right' },
-    -- { {},         'c',      'columnLayout' },
+    { {},         'c',      'columnLayout' },
     { {},         's',      'swap' },
   }
 }

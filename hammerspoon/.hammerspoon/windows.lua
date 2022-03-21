@@ -1,7 +1,7 @@
 hs.window.animationDuration = 0
 window = hs.getObjectMetatable("hs.window")
-spaces = require("hs._asm.undocumented.spaces")
-
+spaces = require("hs.spaces")
+wf=hs.window.filter
 
 -- +-----------------+
 -- |        |        |
@@ -207,10 +207,23 @@ function window.focus_south(w)
   hs.window.focusedWindow():focusWindowSouth()
 end
 
+function has_value (tab, val)
+    for index, value in ipairs(tab) do
+        if value == val then
+            return true
+        end
+    end
+
+    return false
+end
+
 function getWindowsInSpace(win)
-  local currentSpaceId = spaces.windowOnSpaces(win:id())[1]
-  local windows = spaces.allWindowsForSpace(currentSpaceId)
-  return hs.fnutils.filter(windows, function(w) return w:isVisible() end)
+  local currentSpaceId = spaces.windowSpaces(win:id())[1]
+  local windows = spaces.windowsForSpace(currentSpaceId)
+  local filteredWindows = wf.new(function(w)
+    return has_value(windows, w:id()) and w:isVisible() and w:isStandard()
+  end):getWindows()
+  return filteredWindows
 end
 
 function window.nextScreen(win)
@@ -258,18 +271,18 @@ function window.swap(win)
   end
 end
 
-function window.switchFocus()
-  local win = hs.window.focusedWindow()
-  if win ~= nil then
-    local windows = getWindowsInSpace(win)
-    local windowCount = #windows
-    local indexOfFocusedWindow = hs.fnutils.indexOf(windows, win) - 1
-    local nextWindowIndex = ((indexOfFocusedWindow + 1) % windowCount) + 1
-    windows[nextWindowIndex]:focus()
-  end
-end
+switcher_space = hs.window.switcher.new(wf.new():setOverrideFilter{visible=true, currentSpace=true})
 
-hs.hotkey.bind({'alt'}, 'f', window.switchFocus)
+switcher_space.ui.highlightColor = {0.4,0.4,0.5,0.8}
+switcher_space.ui.thumbnailSize = 112
+switcher_space.ui.selectedThumbnailSize = 284
+switcher_space.ui.backgroundColor = {0.3, 0.3, 0.3, 0.5}
+switcher_space.ui.fontName = 'Menlo'
+switcher_space.ui.textSize = 14
+switcher_space.ui.showSelectedTitle = false
+switcher_space.ui.titleBackgroundColor = {0.3, 0.3, 0.3, 0.5}
+
+hs.hotkey.bind({'alt'}, 'f', function()switcher_space:next()end)
 
 windowLayoutMode = hs.hotkey.modal.new({}, 'F16')
 

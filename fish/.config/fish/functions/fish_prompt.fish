@@ -45,6 +45,9 @@ set __fish_git_prompt_color_upstream cyan
 set __fish_git_prompt_color_branch magenta
 set -U fish_prompt_pwd_dir_length 0
 
+set -U fish_color_cwd blue
+set -U fish_color_cwd_root red
+
 function fish_prompt --description 'Write out the prompt'
     set -l git (fish_git_prompt)
 

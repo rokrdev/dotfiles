@@ -35,8 +35,6 @@ return {
     { {},         'j',      'down' },
     { {},         'k',      'up' },
     { {},         'l',      'right' },
-    -- { {'shift'},  'h',      'left40' },
-    -- { {'shift'},  'l',      'right60' },
     { {},         'i',      'upLeft' },
     { {},         'o',      'upRight' },
     { {},         ',',      'downLeft' },

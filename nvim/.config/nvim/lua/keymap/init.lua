@@ -75,8 +75,8 @@ set({'n'}, '<leader>sr', map_wait("SR " .. require('utils').getSessionFilePath()
 set({'n'}, '<leader>sd', map_wait("SD " .. require('utils').getSessionFilePath()))
 
 ------------- Meta ------------------
-set({'n'}, '<M-h>', map_cr("b#"), sil)
-set({'n'}, '<M-l>', map_cr("nohl"), sil)
+set({'n'}, '<M-l>', map_cr("b#"), sil)
+set({'n'}, '<M-c>', map_cr("nohl"), sil)
 set({'n'}, '<M-Space>', map_args("ls<CR>:b"))
 set({'n'}, '<M-+>', map_cr(":vertical resize +5"), sil)
 set({'n'}, '<M-=>', map_cr(":vertical resize -5"), sil)

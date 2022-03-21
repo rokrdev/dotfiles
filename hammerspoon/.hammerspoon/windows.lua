@@ -1,4 +1,4 @@
-hs.window.animationDuration = 0
+hs.window.animationDuration = 0.2
 window = hs.getObjectMetatable("hs.window")
 spaces = require("hs.spaces")
 wf=hs.window.filter

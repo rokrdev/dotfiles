@@ -170,6 +170,17 @@ plugins["akinsho/nvim-bufferline.lua"] = {
   end
 }
 
+plugins["beauwilliams/focus.nvim"] = {
+  event = 'VimEnter',
+  config = function ()
+    require("focus").setup({
+      cursorline = false,
+      cursorcolumn = false,
+      signcolumn = false,
+    })
+  end
+}
+
 plugins["hoob3rt/lualine.nvim"] = {
   -- event = 'VimEnter',
   config = function ()
@@ -178,7 +189,8 @@ plugins["hoob3rt/lualine.nvim"] = {
         theme = 'tokyonight',
         icons_enabled = true,
         component_separators = '',
-        section_separators = ''
+        section_separators = '',
+        globalstatus = true
       },
       sections = {
         lualine_a = { 'mode' },

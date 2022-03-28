@@ -1,14 +1,14 @@
 # TokyoNight Color Palette
-set -l foreground c0caf5
-set -l selection 33467C
-set -l comment 565f89
-set -l red f7768e
-set -l orange ff9e64
-set -l yellow e0af68
-set -l green 9ece6a
-set -l purple 9d7cd8
-set -l cyan 7dcfff
-set -l pink bb9af7
+set -g foreground c0caf5
+set -g selection 33467C
+set -g comment 565f89
+set -g red f7768e
+set -g orange ff9e64
+set -g yellow e0af68
+set -g green 9ece6a
+set -g purple 9d7cd8
+set -g cyan 7dcfff
+set -g pink bb9af7
 
 # Syntax Highlighting Colors
 set -g fish_color_normal $foreground
@@ -52,13 +52,13 @@ function fish_prompt --description 'Write out the prompt'
     set -l git (fish_git_prompt)
 
     set -l prompt '➜ '
-    set -l prompt_color green
+    set -l prompt_color $green
 
     if test $status -ne 0
-        set -l prompt_color red
+        set -l prompt_color $red
     end
 
     set -l pwd (prompt_pwd)
 
-    echo -n -s -e (set_color $fish_color_cwd) $pwd $git (set_color $prompt_color) '\n' $prompt
+    echo -n -s -e (set_color $fish_color_cwd) $pwd $git (set_color $purple) ' ' (date +%H:%M:%S) '\n' (set_color $prompt_color)  $prompt
 end

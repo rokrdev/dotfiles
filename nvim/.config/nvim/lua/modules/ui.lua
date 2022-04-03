@@ -177,6 +177,7 @@ plugins["beauwilliams/focus.nvim"] = {
       cursorline = false,
       cursorcolumn = false,
       signcolumn = false,
+      excluded_filetypes = {"nnn"}
     })
   end
 }

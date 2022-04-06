@@ -296,6 +296,7 @@ plugins['goolord/alpha-nvim'] = {
       dashboard.button( "SPC h f", "> Dotfiles", ":Dff<CR>"),
       dashboard.button( "SPC h s", "> Dotfiles Search", ":Dfs<CR>"),
       dashboard.button( "SPC w w", "> Wiki", ":VimwikiIndex<CR>"),
+      dashboard.button( "SPC w s", "> Wiki Files", ":Vwf<CR>"),
       dashboard.button( "q", "> Quit NVIM", ":qa<CR>"),
     }
 

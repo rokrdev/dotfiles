@@ -61,6 +61,7 @@ alias gfm='git pull'
 alias gfmc='git pull origin (git branch --show-current)'
 alias gmt="git mergetool"
 alias gp='git push'
+alias groot='cd $(git rev-parse --show-cdup)'
 alias gs='git status'
 alias gtr='git log --oneline --graph --decorate --all'
 alias gx='git clean -fxd'

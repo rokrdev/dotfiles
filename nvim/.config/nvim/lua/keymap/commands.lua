@@ -13,12 +13,6 @@ function commands.setup()
   cmd("command! Dfs lua require('keymap.custom').custom_search({title = 'Dotfiles Search', loc = vim.g.dotfiles_loc})")
   cmd("command! Dfg lua require('keymap.custom').custom_grep({title = 'Dotfiles Grep', loc = vim.g.dotfiles_loc})")
 
-  -- Vimwiki
-  cmd("command! Vwc lua require('keymap.custom').clear_buffers_from_path({loc = '/vimwiki/'})")
-  cmd("command! Vwf lua require('keymap.custom').custom_find({title = 'Wiki Find', loc = vim.g.wiki_loc})")
-  cmd("command! Vws lua require('keymap.custom').custom_search({title = 'Wiki Search', loc = vim.g.wiki_loc})")
-  cmd("command! Vwg lua require('keymap.custom').custom_grep({title = 'Wiki Grep', loc = vim.g.wiki_loc})")
-
   -- git
   cmd("command! Ga execute ':silent !git add %'")
   cmd("command! Gr execute ':silent !git reset %'")

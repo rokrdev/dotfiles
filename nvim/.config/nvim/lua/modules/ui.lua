@@ -310,8 +310,7 @@ plugins['goolord/alpha-nvim'] = {
       dashboard.button( "SPC f t", "> Tree", ":NvimTreeToggle<CR>"),
       dashboard.button( "SPC h f", "> Dotfiles", ":Dff<CR>"),
       dashboard.button( "SPC h s", "> Dotfiles Search", ":Dfs<CR>"),
-      dashboard.button( "SPC w w", "> Wiki", ":VimwikiIndex<CR>"),
-      dashboard.button( "SPC w s", "> Wiki Files", ":Vwf<CR>"),
+      dashboard.button( "SPC z f", "> Zettelkastan", ":lua require('telekasten').find_notes()<CR>"),
       dashboard.button( "q", "> Quit NVIM", ":qa<CR>"),
     }
 

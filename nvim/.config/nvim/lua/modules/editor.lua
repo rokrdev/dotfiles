@@ -69,17 +69,10 @@ plugins["lukas-reineke/indent-blankline.nvim"] = {
   end
 }
 
--- plugins['rlane/pounce.nvim'] = {
---   event = 'VimEnter',
---   config = function ()
---     require'pounce'.setup{
---       accept_keys = "JFKDLSAHGNUVRBYTMICEOXWPQZ",
---       accept_best_key = "<enter>",
---       multi_window = true,
---       debug = false,
---     }
---   end
--- }
+plugins["tpope/vim-repeat"] = {
+  event = 'VimEnter'
+}
+
 plugins['ggandor/leap.nvim'] = {
   event = 'VimEnter',
   config = function ()

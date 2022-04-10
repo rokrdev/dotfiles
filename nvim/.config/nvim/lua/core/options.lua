@@ -45,7 +45,7 @@ end
 local function load_options()
   opt.termguicolors = true;
   opt.guifont = "MonoLisa Nerd Font:h13"
-  opt.mouse = 'nv';
+  -- opt.mouse = 'nv';
   opt.errorbells = true;
   opt.visualbell = true;
   opt.hidden = true;

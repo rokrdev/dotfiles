@@ -182,6 +182,21 @@ plugins["beauwilliams/focus.nvim"] = {
   end
 }
 
+plugins["petertriho/nvim-scrollbar"] = {
+  event = 'VimEnter',
+  config = function ()
+    require("scrollbar").setup({
+      show = true,
+      set_highlights = true,
+      handlers = {
+        diagnostic = true,
+        search = false, -- Requires hlslens to be loaded, will run require("scrollbar.handlers.search").setup() for you
+      },
+    })
+    require("scrollbar.handlers.search").setup()
+  end
+}
+
 plugins["hoob3rt/lualine.nvim"] = {
   -- event = 'VimEnter',
   config = function ()

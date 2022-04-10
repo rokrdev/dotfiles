@@ -101,13 +101,6 @@ set({'n'}, '<leader>fp', map_cr("let @+ = expand('%')")) -- yank current file pa
 -- set({'n', 'v'}, '<leader>am', map_cmd("\"mp")) -- paste from m register
 -- set({'v'}, '<leader>ac', map_cmd("\"my")) -- copy visual selection to register m
 
-------------- Vimwiki ------------------
-set({'n'}, '<leader>wc', map_cr("Vwc"), sil)
-set({'n'}, '<leader>ww', map_cr("VimwikiIndex"), sil)
-set({'n'}, '<leader>wf', map_cr("Vwf"), sil)
-set({'n'}, '<leader>wl', map_cr("Vws"), sil)
-set({'n'}, '<leader>wg', map_cr("Vwg"), sil)
-
 ------------- Dotfiles ------------------
 set({'n'}, '<leader>hc', map_cr("Dfc"), sil)
 set({'n'}, '<leader>hf', map_cr("Dff"), sil)
@@ -148,6 +141,31 @@ set({'v'}, '<C-k>', ":m '<-2<CR>gv=gv", sil)
 ------------- leap ------------------
 set({'n'}, 's', "<Plug>(leap-omni)")
 
+------------- zettelkasten ------------------
+set({'n'}, '<leader>zf', map_lua("require('telekasten').find_notes()"), sil)
+set({'n'}, '<leader>zd', map_lua("require('telekasten').find_daily_notes()"), sil)
+set({'n'}, '<leader>zg', map_lua("require('telekasten').search_notes()"), sil)
+set({'n'}, '<leader>zz', map_lua("require('telekasten').follow_link()"), sil)
+set({'n'}, '<leader>zT', map_lua("require('telekasten').goto_today()"), sil)
+set({'n'}, '<leader>zW', map_lua("require('telekasten').goto_thisweek()"), sil)
+set({'n'}, '<leader>zw', map_lua("require('telekasten').find_weekly_notes()"), sil)
+set({'n'}, '<leader>zn', map_lua("require('telekasten').new_note()"), sil)
+set({'n'}, '<leader>zN', map_lua("require('telekasten').new_templated_note()"), sil)
+set({'n'}, '<leader>zy', map_lua("require('telekasten').yank_notelink()"), sil)
+set({'n'}, '<leader>zc', map_lua("require('telekasten').show_calendar()"), sil)
+set({'n'}, '<leader>zC', ":CalendarT", sil)
+set({'n'}, '<leader>zi', map_lua("require('telekasten').paste_img_and_link()"), sil)
+set({'n'}, '<leader>zt', map_lua("require('telekasten').toggle_todo()"), sil)
+set({'n'}, '<leader>zb', map_lua("require('telekasten').show_backlinks()"), sil)
+set({'n'}, '<leader>zF', map_lua("require('telekasten').find_friends()"), sil)
+set({'n'}, '<leader>zI', map_lua("require('telekasten').insert_img_link({ i=true })"), sil)
+set({'n'}, '<leader>zp', map_lua("require('telekasten').preview_img()"), sil)
+set({'n'}, '<leader>zm', map_lua("require('telekasten').browse_media()"), sil)
+set({'n'}, '<leader>za', map_lua("require('telekasten').show_tags()"), sil)
+set({'n'}, '<leader>#', map_lua("require('telekasten').show_tags()"), sil)
+set({'n'}, '<leader>zr', map_lua("require('telekasten').rename_note()"), sil)
+
+
 ------------- vsnip/hlslens ------------------
 vim.cmd([[
   imap <expr> <C-y>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-y>'
@@ -165,38 +183,28 @@ vim.cmd([[
   noremap g# g#<Cmd>lua require('hlslens').start()<CR>
 
 
-  nnoremap <leader>zf :lua require('telekasten').find_notes()<CR>
-  nnoremap <leader>zd :lua require('telekasten').find_daily_notes()<CR>
-  nnoremap <leader>zg :lua require('telekasten').search_notes()<CR>
-  nnoremap <leader>zz :lua require('telekasten').follow_link()<CR>
-  nnoremap <leader>zT :lua require('telekasten').goto_today()<CR>
-  nnoremap <leader>zW :lua require('telekasten').goto_thisweek()<CR>
-  nnoremap <leader>zw :lua require('telekasten').find_weekly_notes()<CR>
-  nnoremap <leader>zn :lua require('telekasten').new_note()<CR>
-  nnoremap <leader>zN :lua require('telekasten').new_templated_note()<CR>
-  nnoremap <leader>zy :lua require('telekasten').yank_notelink()<CR>
-  nnoremap <leader>zc :lua require('telekasten').show_calendar()<CR>
-  nnoremap <leader>zC :CalendarT<CR>
-  nnoremap <leader>zi :lua require('telekasten').paste_img_and_link()<CR>
-  nnoremap <leader>zt :lua require('telekasten').toggle_todo()<CR>
-  nnoremap <leader>zb :lua require('telekasten').show_backlinks()<CR>
-  nnoremap <leader>zF :lua require('telekasten').find_friends()<CR>
-  nnoremap <leader>zI :lua require('telekasten').insert_img_link({ i=true })<CR>
-  nnoremap <leader>zp :lua require('telekasten').preview_img()<CR>
-  nnoremap <leader>zm :lua require('telekasten').browse_media()<CR>
-  nnoremap <leader>za :lua require('telekasten').show_tags()<CR>
-  nnoremap <leader># :lua require('telekasten').show_tags()<CR>
-  nnoremap <leader>zr :lua require('telekasten').rename_note()<CR>
-
   " on hesitation, bring up the panel
   nnoremap <leader>z :lua require('telekasten').panel()<CR>
 
-  " we could define [[ in **insert mode** to call insert link
-  " inoremap [[ <cmd>:lua require('telekasten').insert_link()<CR>
-  " alternatively: leader [
   inoremap <leader>zl <cmd>:lua require('telekasten').insert_link({ i=true })<CR>
   inoremap <leader>zt <cmd>:lua require('telekasten').toggle_todo({ i=true })<CR>
   inoremap <leader># <cmd>lua require('telekasten').show_tags({i = true})<cr>
+
+
+  vnoremap <leader>z<enter> :call Get_visual_selection()<cr>
+
+
+  function! Get_visual_selection()
+    " Why is this not a built-in Vim script function?!
+    let [lnum1, col1] = getpos("'<")[1:2]
+    let [lnum2, col2] = getpos("'>")[1:2]
+    let lines = getline(lnum1, lnum2)
+    let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
+    let lines[0] = lines[0][col1 - 1:]
+    let selection = join(lines,'\n')
+    let change = "\[\[".selection."\]\]"
+    execute ":s/".selection."/".change
+  endfunction
 
 ]])
 

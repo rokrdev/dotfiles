@@ -186,13 +186,12 @@ vim.cmd([[
   " on hesitation, bring up the panel
   nnoremap <leader>z :lua require('telekasten').panel()<CR>
 
-  inoremap <leader>zl <cmd>:lua require('telekasten').insert_link({ i=true })<CR>
-  inoremap <leader>zt <cmd>:lua require('telekasten').toggle_todo({ i=true })<CR>
-  inoremap <leader># <cmd>lua require('telekasten').show_tags({i = true})<cr>
+  " inoremap <leader>zl <cmd>:lua require('telekasten').insert_link({ i=true })<CR>
+  " inoremap <leader>zt <cmd>:lua require('telekasten').toggle_todo({ i=true })<CR>
+  " inoremap <leader># <cmd>lua require('telekasten').show_tags({i = true})<cr>
 
 
   vnoremap <leader>z<enter> :call Get_visual_selection()<cr>
-
 
   function! Get_visual_selection()
     " Why is this not a built-in Vim script function?!

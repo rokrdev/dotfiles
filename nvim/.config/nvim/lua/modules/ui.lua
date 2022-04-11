@@ -239,7 +239,6 @@ plugins["hoob3rt/lualine.nvim"] = {
 plugins['kyazdani42/nvim-tree.lua'] = {
   event = 'VimEnter',
   config = function ()
-    vim.g["nvim_tree_indent_markers"] = 1
     vim.g.nvim_tree_icons = {
       default =  '',
       symlink =  '',
@@ -265,7 +264,17 @@ plugins['kyazdani42/nvim-tree.lua'] = {
         width = 30,
         side = 'left',
         auto_resize = true,
-      }
+      },
+      renderer = {
+        indent_markers = {
+          enable = true,
+          icons = {
+            corner = "└ ",
+            edge = "│ ",
+            none = "  ",
+          },
+        },
+      },
     }
   end
 }

@@ -165,4 +165,10 @@ plugins['TimUntersberger/neogit'] = {
   end
 }
 
+plugins['akinsho/git-conflict.nvim'] = {
+  config = function()
+    require('git-conflict').setup()
+  end
+}
+
 return plugins

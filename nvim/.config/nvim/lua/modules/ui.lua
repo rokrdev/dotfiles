@@ -263,7 +263,6 @@ plugins['kyazdani42/nvim-tree.lua'] = {
       view = {
         width = 30,
         side = 'left',
-        auto_resize = true,
       },
       renderer = {
         indent_markers = {

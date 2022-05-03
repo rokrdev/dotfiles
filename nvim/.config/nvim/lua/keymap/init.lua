@@ -77,12 +77,12 @@ set({'n'}, '<leader>sd', map_wait("SD " .. require('utils').getSessionFilePath()
 ------------- Meta ------------------
 set({'n'}, '<M-l>', map_cr("b#"), sil)
 set({'n'}, '<M-c>', map_cr("nohl"), sil)
-set({'n'}, '<M-Space>', map_args("ls<CR>:b"))
+-- set({'n'}, '<M-Space>', map_args("ls<CR>:b"))
 set({'n'}, '<M-+>', map_cr(":vertical resize +5"), sil)
 set({'n'}, '<M-=>', map_cr(":vertical resize -5"), sil)
 set({'n'}, '<M-->', map_cr(":resize +5"), sil)
 set({'n'}, '<M-_>', map_cr(":resize -5"), sil)
-set({'n'}, '<M-o>', map_cr("wincmd w"), sil)
+set({'n'}, '<M-Space>', map_cr("wincmd w"), sil)
 set({'n'}, '<M-b>', map_cr("wincmd ="), sil)
 
 ------------- git ------------------
@@ -92,6 +92,8 @@ set({'n'}, '<leader>gL', map_lua("require('utils').openTerm('tig')"), sil)
 set({'n'}, '<leader>gl', map_lua("require('gitsigns').blame_line()"))
 set({'n'}, '<leader>gg', map_cr("Neogit"), sil)
 set({'n'}, '<leader>gc', map_lua("require('keymap.custom').git_conflicts({})"))
+set({'n'}, '<leader>gB', map_lua("require('telescope.builtin').git_branches()"))
+set({'n'}, '<leader>gC', map_lua("require('telescope.builtin').bcommits()"))
 
 ------------- copy/paste ------------------
 -- set({'n'}, 'Y', map_cmd("y$"))

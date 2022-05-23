@@ -18,19 +18,6 @@ local function global_options()
    ['<c-v>'] = 'vsplit'
   }
 
-  ------ vimwiki -------
-  g.wiki_loc = '~/vimwiki/'
-  g.dotfiles_loc = '~/.dotfiles/'
-  g.vimwiki_list = {{
-    path = '~/vimwiki/',
-    ext = '.wiki',
-  }}
-
-  g.vimwiki_dir_link = 'index'
-  g.vimwiki_global_ext = 0
-  vim.cmd([[ let g:vimwiki_ext2syntax = {} ]])
-  ------ vimwiki -------
-
   -- fix for slow movement in large php files
   g.php_syntax_extensions_enabled = {}
   g.php_var_selector_is_identifier = 1
@@ -45,7 +32,7 @@ end
 local function load_options()
   opt.termguicolors = true;
   opt.guifont = "MonoLisa Nerd Font:h13"
-  -- opt.mouse = 'nv';
+  opt.mouse = 'nv';
   opt.errorbells = true;
   opt.visualbell = true;
   opt.hidden = true;

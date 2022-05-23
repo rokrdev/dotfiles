@@ -75,7 +75,7 @@ set({'n'}, '<leader>sr', map_wait("SR " .. require('utils').getSessionFilePath()
 set({'n'}, '<leader>sd', map_wait("SD " .. require('utils').getSessionFilePath()))
 
 ------------- Meta ------------------
-set({'n'}, '<M-l>', map_cr("b#"), sil)
+set({'n'}, '<M-;>', map_cr("b#"), sil)
 set({'n'}, '<M-c>', map_cr("nohl"), sil)
 -- set({'n'}, '<M-Space>', map_args("ls<CR>:b"))
 set({'n'}, '<M-+>', map_cr(":vertical resize +5"), sil)
@@ -131,8 +131,8 @@ set({'n'}, '<leader>lr', map_cr("LspRestart"), sil)
 set({'n'}, '<leader>li', map_cr("LspInfo"), sil)
 
 ------------- bufferline ------------------
-set({'n'}, '<S-h>', map_cr("BufferLineCyclePrev"), sil)
-set({'n'}, '<S-l>', map_cr("BufferLineCycleNext"), sil)
+set({'n'}, '<M-h>', map_cr("BufferLineCyclePrev"), sil)
+set({'n'}, '<M-l>', map_cr("BufferLineCycleNext"), sil)
 
 ------------- move lines ------------------
 set({'n'}, '<C-j>', ":m .+1<CR>==", sil)

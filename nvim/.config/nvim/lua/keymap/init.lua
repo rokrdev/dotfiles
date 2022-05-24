@@ -141,7 +141,7 @@ set({'v'}, '<C-j>', ":m '>+1<CR>gv=gv", sil)
 set({'v'}, '<C-k>', ":m '<-2<CR>gv=gv", sil)
 
 ------------- leap ------------------
-set({'n'}, 's', map_lua("require'leap'.leap { ['target-windows'] = { vim.fn.getwininfo(vim.fn.win_getid())[1] } }"))
+set({'n'}, 's', map_lua("require'leap'.leap { ['target-windows'] = { vim.api.nvim_get_current_win() } }"))
 
 ------------- zettelkasten ------------------
 set({'n'}, '<leader>zf', map_lua("require('telekasten').find_notes()"), sil)

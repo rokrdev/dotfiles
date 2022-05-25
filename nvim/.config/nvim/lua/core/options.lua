@@ -85,7 +85,8 @@ local function load_options()
   opt.foldlevelstart = 99;
   opt.ruler = false;
   opt.list = true;
-  opt.showtabline = 2;
+  opt.showtabline = 0;
+  opt.winbar = "%=%m%f"
   opt.winwidth = 30;
   opt.winminwidth = 10;
   opt.pumheight = 15;

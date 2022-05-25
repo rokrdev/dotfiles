@@ -131,8 +131,8 @@ set({'n'}, '<leader>lr', map_cr("LspRestart"), sil)
 set({'n'}, '<leader>li', map_cr("LspInfo"), sil)
 
 ------------- bufferline ------------------
-set({'n'}, '<M-h>', map_cr("BufferLineCyclePrev"), sil)
-set({'n'}, '<M-l>', map_cr("BufferLineCycleNext"), sil)
+set({'n'}, '<M-h>', map_cr("bprev"), sil)
+set({'n'}, '<M-l>', map_cr("bnext"), sil)
 
 ------------- move lines ------------------
 set({'n'}, '<C-j>', ":m .+1<CR>==", sil)

@@ -156,19 +156,19 @@ plugins['folke/tokyonight.nvim'] = {
   end
 }
 
-plugins["akinsho/nvim-bufferline.lua"] = {
-  -- event = 'VimEnter',
-  config = function ()
-    require('bufferline').setup{
-      options = {
-        show_buffer_close_icons = false,
-        show_close_icon = false,
-        separator_style = "thick",
-        always_show_bufferline = false,
-      },
-    }
-  end
-}
+-- plugins["akinsho/nvim-bufferline.lua"] = {
+--   -- event = 'VimEnter',
+--   config = function ()
+--     require('bufferline').setup{
+--       options = {
+--         show_buffer_close_icons = false,
+--         show_close_icon = false,
+--         separator_style = "thick",
+--         always_show_bufferline = false,
+--       },
+--     }
+--   end
+-- }
 
 plugins["beauwilliams/focus.nvim"] = {
   event = 'VimEnter',
@@ -190,7 +190,7 @@ plugins["petertriho/nvim-scrollbar"] = {
       set_highlights = true,
       handlers = {
         diagnostic = true,
-        search = false, -- Requires hlslens to be loaded, will run require("scrollbar.handlers.search").setup() for you
+        search = true, -- Requires hlslens to be loaded, will run require("scrollbar.handlers.search").setup() for you
       },
     })
     require("scrollbar.handlers.search").setup()

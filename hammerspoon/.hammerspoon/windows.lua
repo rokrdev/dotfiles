@@ -274,8 +274,6 @@ function window.cycleWidth()
   end
 end
 
-hs.hotkey.bind({'alt'}, 'v', window.cycleWidth)
-
 -- custom focus switcher that switches focus between windows of the current screen
 function window.cycleFocus()
   local win = hs.window.focusedWindow()
@@ -297,6 +295,7 @@ function window.cycleFocus()
 end
 
 hs.hotkey.bind({'alt'}, 'f', window.cycleFocus)
+hs.hotkey.bind({'alt'}, 'v', window.cycleWidth)
 
 windowLayoutMode = hs.hotkey.modal.new({}, 'F16')
 

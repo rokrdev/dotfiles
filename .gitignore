@@ -1,4 +1,5 @@
 fish/.config/fish/functions/fzf_key_bindings.fish
 fish/.config/fish/fish_variables
 hammerspoon/.hammerspoon/hs
+terminfo/.terminfo/78/xterm-kitty
 

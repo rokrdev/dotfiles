@@ -76,8 +76,8 @@ alias nn='nnn -d -e -H'
 alias rf=trash
 alias sf='source $FISH_CONFIG'
 alias st=speedtest-cli
-alias t=tmux
-alias ta='tmux attach || tmux new'
+alias t=zellij
+alias ta='zellij attach || zellij --layout custom'
 alias tg=tig
 alias top=btm
 alias upa='brew update && brew upgrade && brew upgrade --cask && brew cleanup && brew doctor; nvim +PackerSync +PackerCompile +qall > /dev/null'
@@ -92,6 +92,7 @@ alias yr='yarn run'
 alias ys='yarn start'
 alias yt='yarn test'
 alias zz=zi
+alias zellij="zellij --layout custom"
 
 # Changing "ls" to "exa"
 # alias ls='exa --color=always --group-directories-first'  # all files and dirs

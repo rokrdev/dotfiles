@@ -136,10 +136,9 @@ set({'n'}, '<M-l>', map_cr("bnext"), sil)
 
 ------------- move lines ------------------
 set({'n'}, '<C-S-j>', ":m .+1<CR>==", sil)
--- set({'n'}, '<C-j>', ":m .+1<CR>==", sil)
--- set({'n'}, '<C-k>', ":m .-2<CR>==", sil)
--- set({'v'}, '<C-j>', ":m '>+1<CR>gv=gv", sil)
--- set({'v'}, '<C-k>', ":m '<-2<CR>gv=gv", sil)
+set({'n'}, '<C-S-k>', ":m .-2<CR>==", sil)
+set({'v'}, '<C-S-j>', ":m '>+1<CR>gv=gv", sil)
+set({'v'}, '<C-S-k>', ":m '<-2<CR>gv=gv", sil)
 
 ------------- leap ------------------
 set({'n'}, 's', map_lua("require'leap'.leap { ['target-windows'] = { vim.api.nvim_get_current_win() } }"))

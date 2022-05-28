@@ -37,14 +37,8 @@ keybinds:
           key: [Char: 'd',]
         - action: [HalfPageScrollUp,]
           key: [Char: 'u',]
-        - action: [MoveFocusOrTab: Left,]
-          key: [ Alt: 'h', Alt: Left]  # The Alt: Left etc. variants are temporary hacks and will be removed in the future - please do not rely on them!
-        - action: [MoveFocusOrTab: Right,]
-          key: [ Alt: 'l', Alt: Right]
-        - action: [MoveFocus: Down,]
-          key: [ Alt: 'j', Alt: Down]
-        - action: [MoveFocus: Up,]
-          key: [ Alt: 'k', Alt: Up]
+        # - action: [Copy: ]
+        #   key: [ Char: 'y']
     renametab:
         - action: [SwitchToMode: Normal,]
           key: [Char: "\n", Ctrl: 'c', Esc]
@@ -196,7 +190,7 @@ pane_frames: false
 # Examples:
 #copy_command: "xclip -selection clipboard" # x11
 #copy_command: "wl-copy"                    # wayland
-#copy_command: "pbcopy"                     # osx
+copy_command: "pbcopy"                     # osx
 
 # Choose the destination for copied text
 # Allows using the primary selection buffer (on x11/wayland) instead of the system clipboard.

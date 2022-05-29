@@ -213,7 +213,7 @@ plugins["hoob3rt/lualine.nvim"] = {
         lualine_b = { 'branch' },
         lualine_c = {
           'filename',
-          {'diagnostics', sources = {'nvim_diagnostic'}, sections = {'error', 'warn'}},
+          {'diagnostics', sources = {'nvim_diagnostic', "nvim_lsp"}, sections = {'error', 'warn'}},
           'diff',
         },
         lualine_x = { 'encoding', 'fileformat', 'filetype' },
@@ -239,17 +239,6 @@ plugins["hoob3rt/lualine.nvim"] = {
 plugins['kyazdani42/nvim-tree.lua'] = {
   event = 'VimEnter',
   config = function ()
-    vim.g.nvim_tree_icons = {
-      default =  '',
-      symlink =  '',
-      git = {
-        unstaged = "✚",
-        staged =  "✚",
-        unmerged =  "≠",
-        renamed =  "≫",
-        untracked = "★",
-      },
-    }
     require('nvim-tree').setup {
       git = { enable = false },
       disable_netrw       = true,
@@ -273,6 +262,20 @@ plugins['kyazdani42/nvim-tree.lua'] = {
             none = "  ",
           },
         },
+        icons = {
+          glyphs = {
+            default =  '',
+            symlink =  '',
+            git = {
+              unstaged = "✚",
+              staged =  "✚",
+              unmerged =  "≠",
+              renamed =  "≫",
+              untracked = "★",
+            },
+
+          }
+        }
       },
     }
   end

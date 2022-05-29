@@ -15,8 +15,8 @@ plugins["neovim/nvim-lspconfig"] = {
   end
 }
 
-
 plugins["williamboman/nvim-lsp-installer"] = {
+  event = "VimEnter",
   requires = {'neovim/nvim-lspconfig', 'hrsh7th/nvim-cmp'},
   config = function ()
 
@@ -199,6 +199,7 @@ plugins["williamboman/nvim-lsp-installer"] = {
 }
 
 plugins["hrsh7th/cmp-buffer"] = {
+  event = "VimEnter",
   requires = 'hrsh7th/nvim-cmp',
 }
 
@@ -207,31 +208,35 @@ plugins["hrsh7th/cmp-nvim-lsp"] = {
 }
 
 plugins["hrsh7th/cmp-vsnip"] = {
+  event = "VimEnter",
   requires = 'hrsh7th/nvim-cmp',
 }
 
 plugins["hrsh7th/cmp-nvim-lsp-signature-help"] = {
+  event = "VimEnter",
   requires = 'hrsh7th/nvim-cmp',
 }
 
 plugins["hrsh7th/vim-vsnip"] = {
+  event = "VimEnter",
   config = function ()
     vim.g.vsnip_snippet_dir = '~/.config/nvim/vsnip'
   end
 }
 
 plugins["hrsh7th/cmp-cmdline"] = {
+  event = "VimEnter",
   requires = 'hrsh7th/nvim-cmp',
 }
 
 plugins["hrsh7th/cmp-path"] = {
+  event = "VimEnter",
   requires = 'hrsh7th/nvim-cmp',
 }
 
 plugins["hrsh7th/nvim-cmp"] = {
   config = function ()
     local cmp = require'cmp'
-
 
     local has_words_before = function()
       local line, col = unpack(vim.api.nvim_win_get_cursor(0))

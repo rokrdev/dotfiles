@@ -65,25 +65,25 @@ plugins["neovim/nvim-lspconfig"] = {
 
       setupSign()
     end
+  end
+}
 
-    -- Use a loop to conveniently both setup defined servers
-    -- and map buffer local keybindings when the language server attaches
-    local servers = { "tsserver", "kotlin_language_server" }
+
+plugins["williamboman/nvim-lsp-installer"] = {
+  requires = 'neovim/nvim-lspconfig',
+  config = function ()
+    local servers = { "dockerls", "html", "jdtls", "jsonls", "kotlin_language_server", "pyright", "sqls", "tsserver", "sumneko_lua", "yamlls", "jsonls" }
+    require("nvim-lsp-installer").setup {
+       automatic_installation = true,
+    }
+    local lspconfig = require("lspconfig")
     for _, lsp in ipairs(servers) do
-      nvim_lsp[lsp].setup {
+      lspconfig[lsp].setup {
         on_attach = on_attach,
         capabilities = capabilities,
       }
     end
-
-    local home = os.getenv("HOME")
-
-    require("lspconfig").java_language_server.setup{
-      cmd = { home .. "/.local/bin/java-language-server/dist/lang_server_mac.sh" },
-    }
-
-    require("lspconfig").elixirls.setup {
-      cmd = { home .. "/.local/bin/elixir-ls/language_server.sh" },
+    lspconfig.elixirls.setup {
       on_attach = on_attach,
       capabilities = capabilities,
       settings = {
@@ -112,8 +112,7 @@ plugins["neovim/nvim-lspconfig"] = {
         }
       }
     }
-
-    require("lspconfig").diagnosticls.setup {
+    lspconfig.diagnosticls.setup {
       filetypes = {
         "javascript",
         "javascript.jsx",

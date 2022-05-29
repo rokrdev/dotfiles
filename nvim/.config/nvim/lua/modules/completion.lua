@@ -5,15 +5,20 @@ plugins["neovim/nvim-lspconfig"] = {
   config = function ()
     local nvim_lsp = require('lspconfig')
 
-    local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-    capabilities.textDocument.completion.completionItem.snippetSupport = true
-
     vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics, {
-      -- delay update diagnostics
-      update_in_insert = false,
-    }
+      vim.lsp.diagnostic.on_publish_diagnostics, {
+        -- delay update diagnostics
+        update_in_insert = false,
+      }
     )
+
+  end
+}
+
+
+plugins["williamboman/nvim-lsp-installer"] = {
+  requires = {'neovim/nvim-lspconfig', 'hrsh7th/nvim-cmp'},
+  config = function ()
 
     local on_attach = function(client, bufnr)
       local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
@@ -28,16 +33,16 @@ plugins["neovim/nvim-lspconfig"] = {
       buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
       buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
       buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-      buf_set_keymap('n', '<Leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-      buf_set_keymap('n', '<Leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-      buf_set_keymap('n', '<Leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-      buf_set_keymap('n', '<Leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-      buf_set_keymap('n', '<Leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+      buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+      buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+      buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+      buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+      buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
       buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-      buf_set_keymap('n', '<Leader>cd', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-      buf_set_keymap('n', '<Leader>ck', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-      buf_set_keymap('n', '<Leader>cj', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-      buf_set_keymap('n', '<Leader>cl', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+      buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.open_float()<CR>', opts)
+      buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+      buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+      buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.setlocList()<CR>', opts)
 
       -- Set some keybinds conditional on server capabilities
       if client.resolved_capabilities.document_formatting then
@@ -65,14 +70,11 @@ plugins["neovim/nvim-lspconfig"] = {
 
       setupSign()
     end
-  end
-}
 
+    local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+    capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-plugins["williamboman/nvim-lsp-installer"] = {
-  requires = 'neovim/nvim-lspconfig',
-  config = function ()
-    local servers = { "dockerls", "html", "jdtls", "jsonls", "kotlin_language_server", "pyright", "sqls", "tsserver", "sumneko_lua", "yamlls", "jsonls" }
+    local servers = { "dockerls", "html", "jdtls", "jsonls", "kotlin_language_server", "pyright", "sqls", "tsserver", "yamlls", "jsonls" }
     require("nvim-lsp-installer").setup {
        automatic_installation = true,
     }
@@ -83,6 +85,15 @@ plugins["williamboman/nvim-lsp-installer"] = {
         capabilities = capabilities,
       }
     end
+    lspconfig.sumneko_lua.setup {
+      settings = {
+        Lua = {
+          diagnostics = {
+            globals = { 'vim' }
+          }
+        }
+      }
+    }
     lspconfig.elixirls.setup {
       on_attach = on_attach,
       capabilities = capabilities,
@@ -187,9 +198,40 @@ plugins["williamboman/nvim-lsp-installer"] = {
   end
 }
 
+plugins["hrsh7th/cmp-buffer"] = {
+  requires = 'hrsh7th/nvim-cmp',
+}
+
+plugins["hrsh7th/cmp-nvim-lsp"] = {
+  requires = 'hrsh7th/nvim-cmp',
+}
+
+plugins["hrsh7th/cmp-vsnip"] = {
+  requires = 'hrsh7th/nvim-cmp',
+}
+
+plugins["hrsh7th/cmp-nvim-lsp-signature-help"] = {
+  requires = 'hrsh7th/nvim-cmp',
+}
+
+plugins["hrsh7th/vim-vsnip"] = {
+  config = function ()
+    vim.g.vsnip_snippet_dir = '~/.config/nvim/vsnip'
+  end
+}
+
+plugins["hrsh7th/cmp-cmdline"] = {
+  requires = 'hrsh7th/nvim-cmp',
+}
+
+plugins["hrsh7th/cmp-path"] = {
+  requires = 'hrsh7th/nvim-cmp',
+}
+
 plugins["hrsh7th/nvim-cmp"] = {
   config = function ()
     local cmp = require'cmp'
+
 
     local has_words_before = function()
       local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -205,6 +247,10 @@ plugins["hrsh7th/nvim-cmp"] = {
         expand = function(args)
           vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
         end,
+      },
+      window = {
+        completion = cmp.config.window.bordered(),
+        documentation = cmp.config.window.bordered(),
       },
       mapping = {
         ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
@@ -240,37 +286,46 @@ plugins["hrsh7th/nvim-cmp"] = {
       },
       sources = cmp.config.sources({
         { name = 'nvim_lsp' },
+        { name = 'nvim_lsp_signature_help' },
         { name = 'vsnip' }, -- For vsnip users.
       }, {
         { name = 'buffer' },
       })
     })
+
+    -- Set configuration for specific filetype.
+    cmp.setup.filetype('gitcommit', {
+      sources = cmp.config.sources({
+        { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+      }, {
+        { name = 'buffer' },
+      })
+    })
+
+    -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+    cmp.setup.cmdline('/', {
+      mapping = cmp.mapping.preset.cmdline(),
+      sources = {
+        { name = 'buffer' }
+      }
+    })
+
+    -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+    cmp.setup.cmdline(':', {
+      mapping = cmp.mapping.preset.cmdline(),
+      sources = cmp.config.sources({
+        { name = 'path' }
+      }, {
+        { name = 'cmdline' }
+      })
+    })
+
   end
 }
 
-plugins["hrsh7th/cmp-buffer"] = {
-  event = 'VimEnter',
-  requires = 'hrsh7th/nvim-cmp',
-}
 
-plugins["hrsh7th/cmp-nvim-lsp"] = {
-  requires = 'hrsh7th/nvim-cmp',
-}
-
-plugins["hrsh7th/cmp-vsnip"] = {
-  event = 'VimEnter',
-  requires = 'hrsh7th/nvim-cmp',
-}
-
-plugins["hrsh7th/vim-vsnip"] = {
-  event = 'VimEnter',
-  config = function ()
-    vim.g.vsnip_snippet_dir = '~/.config/nvim/vsnip'
-  end
-}
-
-plugins["hrsh7th/vim-vsnip-integ"] = {
-  event = 'VimEnter',
-}
+-- plugins["hrsh7th/vim-vsnip-integ"] = {
+--   event = 'VimEnter',
+-- }
 
 return plugins

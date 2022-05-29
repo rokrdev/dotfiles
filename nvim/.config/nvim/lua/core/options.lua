@@ -76,7 +76,7 @@ local function load_options()
   opt.switchbuf = "useopen";
   opt.backspace = { 'indent', 'eol', 'start' };
   opt.diffopt = { 'filler', 'iwhite', 'internal', 'algorithm:patience' };
-  opt.completeopt = { 'menuone', 'noselect' };
+  opt.completeopt = { 'menu', 'menuone', 'noselect' };
   opt.jumpoptions = "stack";
   opt.showmode = false;
   opt.shortmess = "aoOTIcF";

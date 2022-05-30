@@ -44,12 +44,11 @@ plugins["williamboman/nvim-lsp-installer"] = {
       buf_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setlocList()<CR>', opts)
 
       -- Set some keybinds conditional on server capabilities
-      if client.resolved_capabilities.document_formatting then
-        buf_set_keymap("n", "<space>cf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-      elseif client.resolved_capabilities.document_range_formatting then
-        buf_set_keymap("n", "<space>cf", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
-      end
-
+      -- if client.server_capabilities.documentFormattingProvider then
+      --   buf_set_keymap("n", "<space>cf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+      -- elseif client.resolved_capabilities.document_range_formatting then
+      --   buf_set_keymap("n", "<space>cf", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+      -- end
 
       local function setupSign()
         local signs = {

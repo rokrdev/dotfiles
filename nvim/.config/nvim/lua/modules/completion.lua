@@ -41,7 +41,7 @@ plugins["williamboman/nvim-lsp-installer"] = {
       buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
       buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
       buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-      buf_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setlocList()<CR>', opts)
+      buf_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
 
       -- Set some keybinds conditional on server capabilities
       -- if client.server_capabilities.documentFormattingProvider then

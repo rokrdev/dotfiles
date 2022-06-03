@@ -82,7 +82,7 @@ set({'n'}, '<M-+>', map_cr(":vertical resize +5"), sil)
 set({'n'}, '<M-=>', map_cr(":vertical resize -5"), sil)
 set({'n'}, '<M-->', map_cr(":resize +5"), sil)
 set({'n'}, '<M-_>', map_cr(":resize -5"), sil)
-set({'n'}, '<M-Space>', map_cr("wincmd w"), sil)
+set({'n'}, '<M-o>', map_cr("wincmd w"), sil)
 set({'n'}, '<M-b>', map_cr("wincmd ="), sil)
 
 ------------- git ------------------

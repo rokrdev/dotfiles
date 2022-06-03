@@ -815,8 +815,11 @@ plugins["beauwilliams/focus.nvim"] = {
 }
 
 plugins["petertriho/nvim-scrollbar"] = {
-  event = 'VimEnter',
-  requires = "kevinhwang91/nvim-hlslens",
+  opt = true,
+  after = {
+    "nvim-hlslens",
+    "tokyonight.nvim"
+  },
   config = function ()
     require("scrollbar").setup({
       show = true,

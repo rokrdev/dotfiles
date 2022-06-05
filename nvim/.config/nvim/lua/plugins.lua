@@ -836,39 +836,40 @@ plugins["petertriho/nvim-scrollbar"] = {
 plugins["hoob3rt/lualine.nvim"] = {
   after = "tokyonight.nvim",
   config = function ()
-    require('lualine').setup{
-      options = {
-        theme = 'tokyonight',
-        icons_enabled = true,
-        component_separators = '',
-        section_separators = '',
-        globalstatus = true
-      },
-      sections = {
-        lualine_a = { 'mode' },
-        lualine_b = { 'branch' },
-        lualine_c = {
-          'filename',
-          {'diagnostics', sources = {'nvim_diagnostic', "nvim_lsp"}, sections = {'error', 'warn'}},
-          'diff',
-        },
-        lualine_x = { 'encoding', 'fileformat', 'filetype' },
-        lualine_y = { 'progress' },
-        lualine_z = { 'location' },
-      },
-      inactive_sections = {
-        lualine_a = {  },
-        lualine_b = { 'branch' },
-        lualine_c = { 'filename' },
-        lualine_x = {  },
-        lualine_y = {  },
-        lualine_z = { 'location' }
-      },
-      extensions = {
-        'nvim-tree',
-        'quickfix',
-      }
-    }
+    require'statusline'
+    -- require('lualine').setup{
+    --   options = {
+    --     theme = 'tokyonight',
+    --     icons_enabled = true,
+    --     component_separators = '',
+    --     section_separators = '',
+    --     globalstatus = true
+    --   },
+    --   sections = {
+    --     lualine_a = { 'mode' },
+    --     lualine_b = { 'branch' },
+    --     lualine_c = {
+    --       'filename',
+    --       {'diagnostics', sources = {'nvim_diagnostic', "nvim_lsp"}, sections = {'error', 'warn'}},
+    --       'diff',
+    --     },
+    --     lualine_x = { 'encoding', 'fileformat', 'filetype' },
+    --     lualine_y = { 'location' },
+    --     lualine_z = { 'progress' },
+    --   },
+    --   inactive_sections = {
+    --     lualine_a = {  },
+    --     lualine_b = { 'branch' },
+    --     lualine_c = { 'filename' },
+    --     lualine_x = {  },
+    --     lualine_y = {  },
+    --     lualine_z = { 'location' }
+    --   },
+    --   extensions = {
+    --     'nvim-tree',
+    --     'quickfix',
+    --   }
+    -- }
   end
 }
 

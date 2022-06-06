@@ -20,6 +20,10 @@ keybinds:
           key: [ Alt: 'j', Alt: Down]
         - action: [MoveFocus: Up,]
           key: [ Alt: 'k', Alt: Up, ]
+        - action: [GoToNextTab,]
+          key: [ Ctrl: 'w']
+        - action: [GoToPreviousTab,]
+          key: [ Ctrl: 's']
     scroll:
         - action: [SwitchToMode: Normal,]
           key: [Ctrl: 's', Char: ' ', Char: "\n", Esc]

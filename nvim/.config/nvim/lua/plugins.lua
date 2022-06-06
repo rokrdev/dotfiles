@@ -394,6 +394,7 @@ plugins['editorconfig/editorconfig-vim'] = {
 plugins["lukas-reineke/indent-blankline.nvim"] = {
   after = 'tokyonight.nvim',
   config = function ()
+    vim.g.indent_blankline_use_treesitter = true
     require('indent_blankline').setup {
       show_current_context = true,
       -- show_current_context_start = true,

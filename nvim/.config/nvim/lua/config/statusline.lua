@@ -5,6 +5,41 @@ local lualine = require('lualine')
 local tokyonight_config = require("tokyonight.config")
 local col = require("tokyonight.colors").setup(tokyonight_config)
 
+-- require('lualine').setup{
+--   options = {
+--     theme = 'tokyonight',
+--     icons_enabled = true,
+--     component_separators = '',
+--     section_separators = '',
+--     globalstatus = true
+--   },
+--   sections = {
+--     lualine_a = { 'mode' },
+--     lualine_b = { 'branch' },
+--     lualine_c = {
+--       'filename',
+--       {'diagnostics', sources = {'nvim_diagnostic', "nvim_lsp"}, sections = {'error', 'warn'}},
+--       'diff',
+--     },
+--     lualine_x = { 'encoding', 'fileformat', 'filetype' },
+--     lualine_y = { 'location' },
+--     lualine_z = { 'progress' },
+--   },
+--   inactive_sections = {
+--     lualine_a = {  },
+--     lualine_b = { 'branch' },
+--     lualine_c = { 'filename' },
+--     lualine_x = {  },
+--     lualine_y = {  },
+--     lualine_z = { 'location' }
+--   },
+--   extensions = {
+--     'nvim-tree',
+--     'quickfix',
+--   }
+-- }
+
+
 -- Color table for highlights
 -- stylua: ignore
 local colors = {

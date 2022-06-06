@@ -21,9 +21,9 @@ keybinds:
         - action: [MoveFocus: Up,]
           key: [ Alt: 'k', Alt: Up, ]
         - action: [GoToNextTab,]
-          key: [ Ctrl: 'w']
-        - action: [GoToPreviousTab,]
           key: [ Ctrl: 's']
+        - action: [GoToPreviousTab,]
+          key: [ Ctrl: 'w']
     scroll:
         - action: [SwitchToMode: Normal,]
           key: [Ctrl: 's', Char: ' ', Char: "\n", Esc]

@@ -34,7 +34,10 @@ function commands.setup()
   cmd("command! Cd cd %:h")
   cmd("command! Bd bufdo bd")
 
+  cmd('command! -nargs=* WQ wq')
+  cmd('command! -nargs=* Wq wq')
   cmd('command! -nargs=* W w')
+  cmd('command! -nargs=* Q q')
 end
 
 return commands

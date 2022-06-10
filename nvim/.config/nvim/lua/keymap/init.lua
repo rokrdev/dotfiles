@@ -103,6 +103,9 @@ set({'n'}, '<leader>fp', map_cr("let @+ = expand('%')")) -- yank current file pa
 -- set({'n', 'v'}, '<leader>am', map_cmd("\"mp")) -- paste from m register
 -- set({'v'}, '<leader>ac', map_cmd("\"my")) -- copy visual selection to register m
 
+
+set({'n'}, '<leader>t', map_lua("require('Trailspace').trim()"), sil)
+
 ------------- Dotfiles ------------------
 set({'n'}, '<leader>hc', map_cr("Dfc"), sil)
 set({'n'}, '<leader>hf', map_cr("Dff"), sil)

@@ -77,12 +77,12 @@ set({'n'}, '<leader>sd', map_wait("SD " .. require('utils').getSessionFilePath()
 ------------- Meta ------------------
 set({'n'}, '<M-;>', map_cr("b#"), sil)
 set({'n'}, '<leader>c', map_cr("nohl"), sil)
-set({'n'}, '<leader>l', map_args("ls<CR>:b"))
+set({'n'}, '<leader>;', map_args("ls<CR>:b"))
 set({'n'}, '<M-+>', map_cr(":vertical resize +5"), sil)
 set({'n'}, '<M-=>', map_cr(":vertical resize -5"), sil)
 set({'n'}, '<M-->', map_cr(":resize +5"), sil)
 set({'n'}, '<M-_>', map_cr(":resize -5"), sil)
-set({'n'}, '<M-Space>', map_cr("wincmd w"), sil)
+set({'n'}, '<M-o>', map_cr("wincmd w"), sil)
 set({'n'}, '<M-b>', map_cr("wincmd ="), sil)
 
 ------------- git ------------------
@@ -102,6 +102,9 @@ set({'n'}, '<leader>gC', map_lua("require('telescope.builtin').bcommits()"))
 set({'n'}, '<leader>fp', map_cr("let @+ = expand('%')")) -- yank current file path
 -- set({'n', 'v'}, '<leader>am', map_cmd("\"mp")) -- paste from m register
 -- set({'v'}, '<leader>ac', map_cmd("\"my")) -- copy visual selection to register m
+
+
+set({'n'}, '<leader>t', map_lua("require('Trailspace').trim()"), sil)
 
 ------------- Dotfiles ------------------
 set({'n'}, '<leader>hc', map_cr("Dfc"), sil)

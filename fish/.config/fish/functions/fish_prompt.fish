@@ -51,7 +51,7 @@ set -U fish_color_cwd_root red
 function fish_prompt --description 'Write out the prompt'
     set -l git (fish_git_prompt)
 
-    set -l prompt '➜ '
+    set -l prompt ' '
     set -l prompt_color $green
 
     if test $status -ne 0

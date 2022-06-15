@@ -112,6 +112,7 @@ lspconfig.diagnosticls.setup {
     'scss',
     'markdown',
     'pandoc',
+    'telekasten',
   },
   init_options = {
     filetypes = {
@@ -120,7 +121,8 @@ lspconfig.diagnosticls.setup {
       javascriptreact = "eslint",
       typescriptreact = "eslint",
       markdown = 'markdownlint',
-      pandoc = 'markdownlint'
+      pandoc = 'markdownlint',
+      telekasten = 'markdownlint'
     },
     linters = {
       eslint = {
@@ -149,7 +151,7 @@ lspconfig.diagnosticls.setup {
           [1] = "warning"
         }
       },
-      markdownlint = {
+      markdownlint = { -- yarn global add markdownlint-cli
         command = 'markdownlint',
         rootPatterns = { '.git' },
         isStderr = true,

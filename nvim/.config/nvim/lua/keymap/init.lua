@@ -172,22 +172,18 @@ set({'n'}, '<leader>#', map_lua("require('telekasten').show_tags()"), sil)
 set({'n'}, '<leader>zr', map_lua("require('telekasten').rename_note()"), sil)
 
 
-------------- vsnip/hlslens ------------------
+------------- hlslens ------------------
+set({'n'}, 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], sil)
+set({'n'}, 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], sil)
+set({'n'}, '*', [[*<Cmd>lua require('hlslens').start()<CR>]], sil)
+set({'n'}, '#', [[#<Cmd>lua require('hlslens').start()<CR>]], sil)
+set({'n'}, 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], sil)
+set({'n'}, 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], sil)
+
+------------- vsnip ------------------
 vim.cmd([[
   imap <expr> <C-y>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-y>'
   smap <expr> <C-y>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-y>'
-
-  noremap <silent> n <Cmd>execute('normal! ' . v:count1 . 'n')<CR>
-            \<Cmd>lua require('hlslens').start()<CR>
-
-  noremap <silent> N <Cmd>execute('normal! ' . v:count1 . 'N')<CR>
-              \<Cmd>lua require('hlslens').start()<CR>
-
-  noremap * *<Cmd>lua require('hlslens').start()<CR>
-  noremap # #<Cmd>lua require('hlslens').start()<CR>
-  noremap g* g*<Cmd>lua require('hlslens').start()<CR>
-  noremap g# g#<Cmd>lua require('hlslens').start()<CR>
-
 
   " on hesitation, bring up the panel
   nnoremap <leader>z :lua require('telekasten').panel()<CR>

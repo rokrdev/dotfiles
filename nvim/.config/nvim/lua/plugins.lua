@@ -412,4 +412,12 @@ plugins["mattn/calendar-vim"] = {
   event = 'VimEnter',
 }
 
+plugins["ellisonleao/glow.nvim"] = {
+  cmd = 'Glow',
+  setup = function ()
+    vim.g.glow_border = "rounded"
+    vim.g.glow_use_pager = true
+  end
+}
+
 return plugins

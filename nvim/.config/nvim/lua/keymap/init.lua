@@ -171,7 +171,6 @@ set({'n'}, '<leader>za', map_lua("require('telekasten').show_tags()"), sil)
 set({'n'}, '<leader>#', map_lua("require('telekasten').show_tags()"), sil)
 set({'n'}, '<leader>zr', map_lua("require('telekasten').rename_note()"), sil)
 
-
 ------------- hlslens ------------------
 set({'n'}, 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], sil)
 set({'n'}, 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], sil)
@@ -179,6 +178,9 @@ set({'n'}, '*', [[*<Cmd>lua require('hlslens').start()<CR>]], sil)
 set({'n'}, '#', [[#<Cmd>lua require('hlslens').start()<CR>]], sil)
 set({'n'}, 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], sil)
 set({'n'}, 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], sil)
+
+------------- glow ------------------
+set({'n'}, '<leader>p', map_cr("Glow"), sil)
 
 ------------- vsnip ------------------
 vim.cmd([[

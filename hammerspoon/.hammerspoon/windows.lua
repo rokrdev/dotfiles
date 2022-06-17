@@ -205,6 +205,38 @@ function window.nextScreen(win)
   end
 end
 
+function window.moveToPrevSpace(win)
+  local currentScreen = win:screen()
+  local currentSpaceId = spaces.windowSpaces(win:id())[1]
+  local allSpaces = spaces.spacesForScreen(currentScreen:id())
+
+  for i=#allSpaces, 1, -1 do
+    if allSpaces[i] == currentSpaceId then
+      local prevSpace = ((i - 1) % 3) + ((i == 1 and 1 or 0) * #allSpaces)
+      spaces.moveWindowToSpace(win:id(), allSpaces[prevSpace])
+      spaces.gotoSpace(allSpaces[prevSpace])
+      break
+    end
+  end
+end
+
+function window.moveToNextSpace(win)
+  local currentScreen = win:screen()
+  local currentSpaceId = spaces.windowSpaces(win:id())[1]
+  local allSpaces = spaces.spacesForScreen(currentScreen:id())
+
+  for i, v in pairs(allSpaces) do
+    if v == currentSpaceId then
+      local nextSpace = (i % #allSpaces) + 1
+      print(i)
+      print(nextSpace)
+      spaces.moveWindowToSpace(win:id(), allSpaces[nextSpace])
+      spaces.gotoSpace(allSpaces[nextSpace])
+      break;
+    end
+  end
+end
+
 function window.columnLayout(win)
   local windows = getWindowsInSpace(win)
   local windowCount = #windows

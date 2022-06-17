@@ -40,6 +40,8 @@ return {
     { {},         ',',      'downLeft' },
     { {},         '.',      'downRight' },
     { {},         'n',      'nextScreen' },
+    { {},         'a',      'moveToPrevSpace' },
+    { {},         'd',      'moveToNextSpace' },
     { {},         'right',  'moveOneScreenEast' },
     { {},         'left',   'moveOneScreenWest' },
     -- { {},         'k',      'focus_north' },

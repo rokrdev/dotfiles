@@ -340,7 +340,7 @@ end
 -- Bind the given key to call the given function and exit WindowLayout mode
 function windowLayoutMode.bindWithAutomaticExit(mode, modifiers, key, fn)
   mode:bind(modifiers, key, function()
-    mode:exit()
+    -- mode:exit()
     fn()
   end)
 end

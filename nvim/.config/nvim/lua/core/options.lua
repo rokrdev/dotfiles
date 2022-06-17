@@ -106,8 +106,8 @@ local function load_options()
   -- buffer
   opt.undofile = true;
   opt.synmaxcol = 2500;
-  opt.formatoptions = "1jcroql";
-  opt.textwidth = 80;
+  opt.formatoptions = "1jcroqla";
+  opt.textwidth = 120;
   opt.expandtab = true;
   opt.autoindent = true;
   opt.tabstop = 2;

@@ -210,9 +210,10 @@ function window.moveToPrevSpace(win)
   local currentSpaceId = spaces.windowSpaces(win:id())[1]
   local allSpaces = spaces.spacesForScreen(currentScreen:id())
 
-  for i=#allSpaces, 1, -1 do
+  local length = #allSpaces
+  for i=length, 1, -1 do
     if allSpaces[i] == currentSpaceId then
-      local prevSpace = ((i - 1) % 3) + ((i == 1 and 1 or 0) * #allSpaces)
+      local prevSpace = ((i - 1) % length) + ((i == 1 and 1 or 0) * length)
       spaces.moveWindowToSpace(win:id(), allSpaces[prevSpace])
       spaces.gotoSpace(allSpaces[prevSpace])
       break
@@ -228,8 +229,6 @@ function window.moveToNextSpace(win)
   for i, v in pairs(allSpaces) do
     if v == currentSpaceId then
       local nextSpace = (i % #allSpaces) + 1
-      print(i)
-      print(nextSpace)
       spaces.moveWindowToSpace(win:id(), allSpaces[nextSpace])
       spaces.gotoSpace(allSpaces[nextSpace])
       break;

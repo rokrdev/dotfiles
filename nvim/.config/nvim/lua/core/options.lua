@@ -101,12 +101,12 @@ local function load_options()
   opt.showbreak = "↳  ";
   opt.listchars = { tab = '»··', nbsp = '+', extends = '→', precedes = '←' };
   opt.showmatch = true;
-  opt.fillchars = { vert = '┃', fold = '-', foldopen = '+', diff = '-', stl = ' ', stlnc = ' ', eob = '~' };
+  opt.fillchars = { vert = '┃', fold = '-', foldopen = '+', diff = '-', stl = ' ', stlnc = ' ', eob = ' ' };
 
   -- buffer
   opt.undofile = true;
   opt.synmaxcol = 2500;
-  opt.formatoptions = "1jcroqla";
+  opt.formatoptions = "1jcroql";
   opt.textwidth = 120;
   opt.expandtab = true;
   opt.autoindent = true;

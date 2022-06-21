@@ -319,7 +319,8 @@ function window.cycleFocus()
     if next(windows) ~= nil then
       local windowCount = #windows
       local indexOfFocusedWindow = hs.fnutils.indexOf(windows, win)
-      local nextWindowIndex = ((indexOfFocusedWindow + 1) % windowCount) + 1
+
+      local nextWindowIndex = (indexOfFocusedWindow % windowCount) + 1
       windows[nextWindowIndex]:focus()
     end
   end

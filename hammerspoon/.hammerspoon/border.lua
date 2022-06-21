@@ -13,9 +13,10 @@ function w.drawBorder()
     end
 
     w.border = hs.drawing.rectangle(hs.geometry.rect(top_left['x'], top_left['y'], size['w'], size['h']))
-    w.border:setStrokeColor({["red"]=0.4,["blue"]=0.9,["green"]=0.3,["alpha"]=0.6})
+    w.border:setStrokeColor({["hex"]="#42f5c2",["alpha"]=0.6})
     w.border:setFill(false)
     w.border:setStrokeWidth(6)
+    w.border:setRoundedRectRadii(4, 4)
     w.border:show()
   end
 end
@@ -29,7 +30,7 @@ end
 
 function w.manageBorder()
   w.drawBorder()
-  hs.timer.doAfter(0.25, w.deleteBorder)
+  hs.timer.doAfter(0.3, w.deleteBorder)
 end
 
 

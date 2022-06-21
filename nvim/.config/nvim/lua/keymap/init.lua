@@ -64,9 +64,6 @@ set({'n'}, '<leader>d-', map_cr("bd"), sil)
 set({'n'}, '<leader>d_', map_cr("bd!"), sil)
 set({'n'}, '<leader>dn', map_lua("require('utils').toggleNumbers()"), sil)
 set({'n'}, '<leader>ds', map_cr("Scratch"), sil)
-set({'n'}, '<leader>dv', map_cr("FocusSplitRight"), sil)
-set({'n'}, '<leader>dh', map_cr("FocusSplitDown"), sil)
-set({'n'}, '<leader>du', map_cr("on"), sil)
 set({'n'}, '!', map_cmd("f cl<CR><ESC>l"), sil)
 
 ------------- session ------------------
@@ -78,12 +75,7 @@ set({'n'}, '<leader>sd', map_wait("SD " .. require('utils').getSessionFilePath()
 set({'n'}, '<M-;>', map_cr("b#"), sil)
 set({'n'}, '<leader>c', map_cr("nohl"), sil)
 set({'n'}, '<leader>;', map_args("ls<CR>:b"))
-set({'n'}, '<M-+>', map_cr(":vertical resize +5"), sil)
-set({'n'}, '<M-=>', map_cr(":vertical resize -5"), sil)
-set({'n'}, '<M-->', map_cr(":resize +5"), sil)
-set({'n'}, '<M-_>', map_cr(":resize -5"), sil)
 set({'n'}, '<M-o>', map_cr("wincmd w"), sil)
-set({'n'}, '<M-b>', map_cr("wincmd ="), sil)
 
 ------------- git ------------------
 set({'n'}, '<leader>gt', map_lua("require('utils').openTerm('tig status')"), sil)

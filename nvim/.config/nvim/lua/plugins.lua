@@ -420,4 +420,11 @@ plugins["ellisonleao/glow.nvim"] = {
   end
 }
 
+plugins["anuvyklack/hydra.nvim"] = {
+  event = 'VimEnter',
+  config = function ()
+    require'config.hydra'
+  end
+}
+
 return plugins

@@ -420,10 +420,16 @@ plugins["ellisonleao/glow.nvim"] = {
   end
 }
 
-plugins["anuvyklack/hydra.nvim"] = {
-  event = 'VimEnter',
-  config = function ()
-    require'config.hydra'
+-- plugins["anuvyklack/hydra.nvim"] = {
+--   event = 'VimEnter',
+--   config = function ()
+--     require'config.hydra'
+--   end
+-- }
+
+plugins["folke/which-key.nvim"] = {
+  config = function()
+    require("which-key").setup {}
   end
 }
 

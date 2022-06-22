@@ -5,41 +5,6 @@ local lualine = require('lualine')
 local tokyonight_config = require("tokyonight.config")
 local col = require("tokyonight.colors").setup(tokyonight_config)
 
--- require('lualine').setup{
---   options = {
---     theme = 'tokyonight',
---     icons_enabled = true,
---     component_separators = '',
---     section_separators = '',
---     globalstatus = true
---   },
---   sections = {
---     lualine_a = { 'mode' },
---     lualine_b = { 'branch' },
---     lualine_c = {
---       'filename',
---       {'diagnostics', sources = {'nvim_diagnostic', "nvim_lsp"}, sections = {'error', 'warn'}},
---       'diff',
---     },
---     lualine_x = { 'encoding', 'fileformat', 'filetype' },
---     lualine_y = { 'location' },
---     lualine_z = { 'progress' },
---   },
---   inactive_sections = {
---     lualine_a = {  },
---     lualine_b = { 'branch' },
---     lualine_c = { 'filename' },
---     lualine_x = {  },
---     lualine_y = {  },
---     lualine_z = { 'location' }
---   },
---   extensions = {
---     'nvim-tree',
---     'quickfix',
---   }
--- }
-
-
 -- Color table for highlights
 -- stylua: ignore
 local colors = {
@@ -215,7 +180,7 @@ ins_left {
 ins_right {
   'diff',
   -- Is it me or the symbol for modified us really weird
-  symbols = { added = ' ', modified = '柳 ', removed = ' ' },
+  symbols = { added = ' ', modified = '柳', removed = ' ' },
   diff_color = {
     added = { fg = colors.green },
     modified = { fg = colors.orange },
@@ -224,7 +189,6 @@ ins_right {
   cond = conditions.hide_in_width,
 }
 
--- Add components to right sections
 ins_right {
   'o:encoding', -- option component same as &encoding in viml
   fmt = string.upper, -- I'm not sure why it's upper case either ;)
@@ -235,18 +199,16 @@ ins_right {
 ins_right {
   'fileformat',
   fmt = string.upper,
-  icons_enabled = false, -- I think icons are cool but Eviline doesn't have them. sigh
+  icons_enabled = true,
   color = { fg = colors.green, gui = 'bold' },
 }
-
 ins_right {
   'branch',
-  icon = '',
+  icon = '',
   color = { fg = colors.violet, gui = 'bold' },
 }
 
 ins_right {
-  -- mode component
   function()
     return ' '
   end,
@@ -255,7 +217,6 @@ ins_right {
   end,
   padding = { left = 1, right = 1 },
 }
-
 
 -- Now don't forget to initialize lualine
 lualine.setup(config)

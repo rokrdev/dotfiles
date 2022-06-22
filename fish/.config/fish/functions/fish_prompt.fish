@@ -49,13 +49,16 @@ set -U fish_color_cwd blue
 set -U fish_color_cwd_root red
 
 function fish_prompt --description 'Write out the prompt'
+    set -l _display_status $status
+
     set -l git (fish_git_prompt)
 
-    set -l prompt ' '
-    set -l prompt_color $green
+    set -l prompt '  '
 
-    if test $status -ne 0
-        set -l prompt_color $red
+    set -l prompt_color $red
+
+    if test $_display_status -eq 0
+      set prompt_color $green
     end
 
     set -l pwd (prompt_pwd)

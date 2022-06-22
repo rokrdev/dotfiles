@@ -1,9 +1,14 @@
 local Hydra = require'hydra'
-print('hydra setup')
 
 Hydra({
   name = 'Window',
   mode = 'n',
+  hint = [[
+  _h_: increase width   _j_: increase height   _v_: Split right   _b_: balance window
+  _l_: decrease width   _k_: decrease height   _s_: Split down    _<Esc>_: quit
+  ^
+  ^
+  ]],
   body = "<leader>w",
   config = {
     invoke_on_body = true,
@@ -12,14 +17,13 @@ Hydra({
     }
   },
   heads = {
-    { 'h', ":vertical resize +5<CR>", { desc = "increase width" } },
-    { 'l', ":vertical resize -5<CR>", { desc = "decrease width" } },
-    { 'j', ":resize +5<CR>", { desc = "increase height" } },
-    { 'k', ":resize -5<CR>", { desc = "decrease height" } },
-    { 'b', ":wincmd =<CR>", { desc = "balance all splits" } },
-    { 'x', ":on<CR>", { desc = "unsplit" } },
-    { 'v', ":FocusSplitRight<CR>", { exit = true, desc = "split vertically" } },
-    { 's', ":FocusSplitDown<CR>", { exit = true, desc = "split horizontally" } },
+    { 'h', ":vertical resize +5<CR>" },
+    { 'l', ":vertical resize -5<CR>" },
+    { 'j', ":resize +5<CR>" },
+    { 'k', ":resize -5<CR>" },
+    { 'b', ":wincmd =<CR>" },
+    { 'v', ":FocusSplitRight<CR>", { exit = true } },
+    { 's', ":FocusSplitDown<CR>", { exit = true } },
     { '<Esc>', nil,  { exit = true }},
   }
 })

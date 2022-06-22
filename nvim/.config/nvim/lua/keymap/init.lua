@@ -59,133 +59,155 @@ _G.completion_confirm = function()
   end
 end
 
-------------- general ------------------
-set({'n'}, '<leader>d-', map_cr("bd"), sil)
-set({'n'}, '<leader>d_', map_cr("bd!"), sil)
-set({'n'}, '<leader>dn', map_lua("require('utils').toggleNumbers()"), sil)
-set({'n'}, '<leader>ds', map_cr("Scratch"), sil)
-set({'n'}, '!', map_cmd("f cl<CR><ESC>l"), sil)
+_G.vsnip_expand = function()
+  if vim.fn.call("vsnip#available", {1}) == 1 then
+    return t "<Plug>(vsnip-expand-or-jump)"
+  else
+    return t "<C-y>"
+  end
+end
 
-------------- session ------------------
-set({'n'}, '<leader>ss', map_args("SS"))
-set({'n'}, '<leader>sr', map_wait("SR " .. require('utils').getSessionFilePath()))
-set({'n'}, '<leader>sd', map_wait("SD " .. require('utils').getSessionFilePath()))
-
-------------- Meta ------------------
-set({'n'}, '<M-;>', map_cr("b#"), sil)
-set({'n'}, '<leader>c', map_cr("nohl"), sil)
-set({'n'}, '<leader>;', map_args("ls<CR>:b"))
-set({'n'}, '<M-o>', map_cr("wincmd w"), sil)
-
-------------- git ------------------
-set({'n'}, '<leader>gt', map_lua("require('utils').openTerm('tig status')"), sil)
-set({'n'}, '<leader>gf', map_lua("require('utils').openTerm('tig ' .. vim.fn.expand('%'))"), sil)
-set({'n'}, '<leader>gL', map_lua("require('utils').openTerm('tig')"), sil)
-set({'n'}, '<leader>gl', map_lua("require('gitsigns').blame_line()"))
-set({'n'}, '<leader>gg', map_cr("Neogit"), sil)
-set({'n'}, '<leader>gc', map_lua("require('keymap.custom').git_conflicts({})"))
-set({'n'}, '<leader>gB', map_lua("require('telescope.builtin').git_branches()"))
-set({'n'}, '<leader>gC', map_lua("require('telescope.builtin').bcommits()"))
+_G.markdown_binding = function()
+  print("setting up")
+  local wk = require("which-key")
+  wk.register({
+    f = {
+      p = { map_cr("Glow"), "Preview" }
+    }
+  }, { prefix = "<leader>" })
+end
 
 ------------- copy/paste ------------------
 -- set({'n'}, 'Y', map_cmd("y$"))
 -- set({'n', 'v'}, '<leader>ap', map_cmd("\"+p")) -- paste from clipboard
 -- set({'v'}, '<leader>ay', map_cmd("\"+y")) -- copy visual selection to clipboard
-set({'n'}, '<leader>fp', map_cr("let @+ = expand('%')")) -- yank current file path
 -- set({'n', 'v'}, '<leader>am', map_cmd("\"mp")) -- paste from m register
 -- set({'v'}, '<leader>ac', map_cmd("\"my")) -- copy visual selection to register m
 
+set({'i','s'}, "<C-y>", "v:lua.vsnip_expand()", { expr = true })
 
-set({'n'}, '<leader>t', map_lua("require('Trailspace').trim()"), sil)
+local wk = require("which-key")
 
-------------- Dotfiles ------------------
-set({'n'}, '<leader>hc', map_cr("Dfc"), sil)
-set({'n'}, '<leader>hf', map_cr("Dff"), sil)
-set({'n'}, '<leader>hs', map_cr("Dfs"), sil)
-set({'n'}, '<leader>hw', map_cr("Dfg"), sil)
-set({'n'}, '<leader>hr', map_cr("Reload"), sil)
+wk.register({
+  f = {
+    name = "file",
+    f = { map_lua("require('telescope.builtin').find_files({hidden=true})"), "Find file"},
+    s = { map_lua("require('telescope.builtin').live_grep()"), "Search in file"},
+    w = { map_lua("require('telescope.builtin').grep_string()"), "Search string"},
+    n = { map_lua("require('utils').nnnPicker()"), "Open file picker"},
+    t = { map_cr("NvimTreeToggle"), "Open file tree"},
+    r = { "<Plug>(Scalpel)", "Replace in file"},
+    y = { map_cr("let @+ = expand('%')"), "Yank current file path" } -- yank current file path
+  },
+  b = {
+    name = "buffer",
+    b = { map_lua("require('telescope.builtin').buffers()"), "list buffers"},
+    c = { map_cr("nohl"), "Clear search" },
+    l = { map_args("ls<CR>:b"), "list buffers"},
+    s = { map_lua("require('telescope.builtin').current_buffer_fuzzy_find()"), "Search in buffer"},
+    k = { map_cr("bd"), "kill buffer" },
+    x = { map_cr("bd!"), "Force kill buffer" },
+    o = { map_cr("b#"), "alternate buffer"},
+  },
+  d = {
+    name = "dotfiles",
+    f = { map_cr("Dff"), "Find file in dotfiles" },
+    s = { map_cr("Dfs"), "Search in dotfiles" },
+    w = { map_cr("Dfg"), "Search word in dotfiles" },
+    k = { map_cr("Dfc"), "close dotfile buffers" },
+    r = { map_cr("Reload"), "Reload nvim" },
+  },
+  g = {
+    name = "git",
+    t = { map_lua("require('utils').openTerm('tig status')"), "Tig status" },
+    f = { map_lua("require('utils').openTerm('tig ' .. vim.fn.expand('%'))"), "Tig file history" },
+    L = { map_lua("require('utils').openTerm('tig')"), "Tig log" },
+    l = { map_lua("require('gitsigns').blame_line()"), "Blame line" },
+    g = { map_cr("Neogit"), "Neogit" },
+    C = { map_lua("require('keymap.custom').git_conflicts({})"), "Conflict files" },
+    b = { map_lua("require('telescope.builtin').git_branches()"), "Branches" },
+    c = { map_lua("require('telescope.builtin').git_commits()"), "Commits" },
+  },
+  l = {
+    name = "Lsp",
+    s = { map_cr("LspStart"), "Start lsp"},
+    k = { map_cr("LspStop"), "Kill lsp"},
+    r = { map_cr("LspRestart"), "Restart lsp"},
+    i = { map_cr("LspInfo"), "Lsp info"},
+  },
+  s = {
+    name = "session",
+    s = { map_args("SS"), "Save session" },
+    r = { map_wait("SR " .. require('utils').getSessionFilePath()), "Reload session" },
+    d = { map_wait("SD " .. require('utils').getSessionFilePath()), "Delete session" },
+  },
+  o = {
+    name = "others",
+    n = { map_lua("require('utils').toggleNumbers()"), "Cycle number" },
+    s = { map_cr("Scratch"), "Scratch buffer" },
+    t = { map_lua("require('Trailspace').trim()"), "Trim trailing whitespace" }
+  },
+  z = {
+    name = "zettelkasten",
+    f = { map_lua("require('telekasten').find_notes()"), "Find notes"},
+    D = { map_lua("require('telekasten').find_daily_notes()"), "Find daily notes"},
+    s = { map_lua("require('telekasten').search_notes()"), "Search notes"},
+    z = { map_lua("require('telekasten').follow_link()"), "Follow link"},
+    ["gt"] = { map_lua("require('telekasten').goto_today()"), "Go to today"},
+    ["gw"] = { map_lua("require('telekasten').goto_thisweek()"), "Go to this week"},
+    W = { map_lua("require('telekasten').find_weekly_notes()"), "Find weekly notes"},
+    n = { map_lua("require('telekasten').new_note()"), "New note"},
+    N = { map_lua("require('telekasten').new_templated_note()"), "New templated note"},
+    y = { map_lua("require('telekasten').yank_notelink()"), "Yank note link"},
+    c = { map_lua("require('telekasten').show_calendar()"), "Show Calendar"},
+    -- set({'n'}, '<leader>zC', ":CalendarT", sil)
+    i = { map_lua("require('telekasten').paste_img_and_link()"), "Paste image link"},
+    t = { map_lua("require('telekasten').toggle_todo()"), "Toggle todo"},
+    b = { map_lua("require('telekasten').show_backlinks()"), "Show backlinks"},
+    F = { map_lua("require('telekasten').find_friends()"), "Find friends"},
+    I = { map_lua("require('telekasten').insert_img_link({i=true})"), "Insert image link"},
+    p = { map_lua("require('telekasten').preview_img()"), "Preview image"},
+    m = { map_lua("require('telekasten').browse_media()"), "Browse media"},
+    a = { map_lua("require('telekasten').show_tags()"), "Show tags"},
+    r = { map_lua("require('telekasten').rename_note()"), "Rename note"},
+  }
+}, { prefix = "<leader>" })
 
-------------- telescope ------------------
-set({'n'}, '<leader>ff', map_lua("require('telescope.builtin').find_files({hidden=true})"))
-set({'n'}, '<leader>fs', map_lua("require('telescope.builtin').live_grep()"))
-set({'n'}, '<leader>fw', map_lua("require('telescope.builtin').grep_string()"))
-set({'n'}, '<leader>fc', map_lua("require('telescope.builtin').current_buffer_fuzzy_find()"))
-set({'n'}, '<leader>b', map_lua("require('telescope.builtin').buffers()"))
-set({'n'}, '<leader>fn', map_lua("require('utils').nnnPicker()"))
-set({'n'}, '<leader>ft', map_cr("NvimTreeToggle"), sil)
-set({'n'}, '<leader>fr', "<Plug>(Scalpel)")
-set({'n'}, '<leader>r', map_cr("Telescope registers"), sil)
+wk.register({
+  f = {
+    name = "file",
+    w = { map_lua("require('telescope.builtin').grep_string({search = require('utils').getVisualSelection()})"), "Search visual selection"},
+    r = { "<Plug>(ScalpelVisual)", "Replace in file"},
+  }
+}, { mode = "v", prefix = "<leader>" })
 
-set({'v'}, '<leader>fw', map_lua("require('telescope.builtin').grep_string({search = require('utils').getVisualSelection()})"), sil)
-set({'v'}, '<leader>fr', "<Plug>(ScalpelVisual)")
+wk.register({
+  ["<M-o>"] = { map_cr("wincmd w"), "Other window" },
+  ["<M-.>"] = { map_cr("bprev"), "Previous buffer" },
+  ["<M-,>"] = { map_cr("bnext"), "Next buffer" },
+  ["!"] = { map_cmd("f cl<CR><ESC>l"), "Split lines" },
+  ["<C-S-j>"] = { ":m .+1<CR>==", "Move down line" },
+  ["<C-S-k>"] = { ":m .-2<CR>==", "Move up line" },
+  s = { map_lua("require'leap'.leap { ['target-windows'] = { vim.api.nvim_get_current_win() } }"), "Leap" },
+  n = { [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], "Next" },
+  N = { [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], "Previous" },
+  ["*"] = { [[*<Cmd>lua require('hlslens').start()<CR>]], "Search word under cursor" },
+  ["#"] = { [[#<Cmd>lua require('hlslens').start()<CR>]], "Search word under cursor" },
+  ["g*"] = { [[g*<Cmd>lua require('hlslens').start()<CR>]], "Search word under cursor" },
+  ["g#"] = { [[g#<Cmd>lua require('hlslens').start()<CR>]], "Search word under cursor" },
+}, { mode = "n" })
 
-------------- LSP ------------------
-set({'n'}, '<leader>ls', map_cr("LspStart"), sil)
-set({'n'}, '<leader>le', map_cr("LspStop"), sil)
-set({'n'}, '<leader>lr', map_cr("LspRestart"), sil)
-set({'n'}, '<leader>li', map_cr("LspInfo"), sil)
+wk.register({
+  ["<C-S-j>"] = { ":m '>+1<CR>gv=gv", "Move down selection" },
+  ["<C-S-k>"] = { ":m '<-2<CR>gv=gv", "Move up selection" },
+  z = { map_lua("require'leap'.leap { ['target-windows'] = { vim.api.nvim_get_current_win() } }"), "Leap Visual" }
+}, { mode = "v" })
 
-------------- bufferline ------------------
-set({'n'}, '<M-.>', map_cr("bprev"), sil)
-set({'n'}, '<M-,>', map_cr("bnext"), sil)
-
-------------- move lines ------------------
-set({'n'}, '<C-S-j>', ":m .+1<CR>==", sil)
-set({'n'}, '<C-S-k>', ":m .-2<CR>==", sil)
-set({'v'}, '<C-S-j>', ":m '>+1<CR>gv=gv", sil)
-set({'v'}, '<C-S-k>', ":m '<-2<CR>gv=gv", sil)
-
-------------- leap ------------------
-set({'n'}, 's', map_lua("require'leap'.leap { ['target-windows'] = { vim.api.nvim_get_current_win() } }"))
-set({'v'}, 'z', map_lua("require'leap'.leap { ['target-windows'] = { vim.api.nvim_get_current_win() } }"))
-
-------------- zettelkasten ------------------
-set({'n'}, '<leader>zf', map_lua("require('telekasten').find_notes()"), sil)
-set({'n'}, '<leader>zd', map_lua("require('telekasten').find_daily_notes()"), sil)
-set({'n'}, '<leader>zg', map_lua("require('telekasten').search_notes()"), sil)
-set({'n'}, '<leader>zz', map_lua("require('telekasten').follow_link()"), sil)
-set({'n'}, '<leader>zT', map_lua("require('telekasten').goto_today()"), sil)
-set({'n'}, '<leader>zW', map_lua("require('telekasten').goto_thisweek()"), sil)
-set({'n'}, '<leader>zw', map_lua("require('telekasten').find_weekly_notes()"), sil)
-set({'n'}, '<leader>zn', map_lua("require('telekasten').new_note()"), sil)
-set({'n'}, '<leader>zN', map_lua("require('telekasten').new_templated_note()"), sil)
-set({'n'}, '<leader>zy', map_lua("require('telekasten').yank_notelink()"), sil)
-set({'n'}, '<leader>zc', map_lua("require('telekasten').show_calendar()"), sil)
-set({'n'}, '<leader>zC', ":CalendarT", sil)
-set({'n'}, '<leader>zi', map_lua("require('telekasten').paste_img_and_link()"), sil)
-set({'n'}, '<leader>zt', map_lua("require('telekasten').toggle_todo()"), sil)
-set({'n'}, '<leader>zb', map_lua("require('telekasten').show_backlinks()"), sil)
-set({'n'}, '<leader>zF', map_lua("require('telekasten').find_friends()"), sil)
-set({'n'}, '<leader>zI', map_lua("require('telekasten').insert_img_link({ i=true })"), sil)
-set({'n'}, '<leader>zp', map_lua("require('telekasten').preview_img()"), sil)
-set({'n'}, '<leader>zm', map_lua("require('telekasten').browse_media()"), sil)
-set({'n'}, '<leader>za', map_lua("require('telekasten').show_tags()"), sil)
-set({'n'}, '<leader>#', map_lua("require('telekasten').show_tags()"), sil)
-set({'n'}, '<leader>zr', map_lua("require('telekasten').rename_note()"), sil)
-
-------------- hlslens ------------------
-set({'n'}, 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], sil)
-set({'n'}, 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], sil)
-set({'n'}, '*', [[*<Cmd>lua require('hlslens').start()<CR>]], sil)
-set({'n'}, '#', [[#<Cmd>lua require('hlslens').start()<CR>]], sil)
-set({'n'}, 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], sil)
-set({'n'}, 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], sil)
-
-------------- glow ------------------
-set({'n'}, '<leader>p', map_cr("Glow"), sil)
 
 ------------- vsnip ------------------
 vim.cmd([[
-  imap <expr> <C-y>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-y>'
-  smap <expr> <C-y>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-y>'
-
   " on hesitation, bring up the panel
   nnoremap <leader>z :lua require('telekasten').panel()<CR>
-
-  " inoremap <leader>zl <cmd>:lua require('telekasten').insert_link({ i=true })<CR>
-  " inoremap <leader>zt <cmd>:lua require('telekasten').toggle_todo({ i=true })<CR>
-  " inoremap <leader># <cmd>lua require('telekasten').show_tags({i = true})<cr>
-
 
   vnoremap <leader>z<enter> :call Get_visual_selection()<cr>
 

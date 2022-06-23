@@ -40,6 +40,7 @@ function autocmd.load_autocmds()
       {"FileType", "gitcommit,gitrebase,gitconfig", "set bufhidden=delete"},
       {"FileType", "json", "set conceallevel=0"},
       {"FileType", "alpha", "setlocal nofoldenable"},
+      {"FileType", "markdown", "set conceallevel=0"},
     };
 
     term = {

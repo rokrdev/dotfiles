@@ -23,7 +23,7 @@ require('nvim-treesitter.configs').setup {
     "kotlin",
     "lua",
     "make",
-    -- "markdown", -- markdown is buggy as it hides ```
+    "markdown",
     "php",
     "python",
     "regex",

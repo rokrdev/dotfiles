@@ -113,9 +113,14 @@ plugins["zenobht/trailspace.nvim"] = {
 plugins['windwp/nvim-autopairs'] = {
   event = 'BufWinEnter',
   config = function ()
-    require('nvim-autopairs').setup()
+    local npairs = require('nvim-autopairs')
+    npairs.setup()
+    local Rule = require('nvim-autopairs.rule')
 
-    local remap = vim.api.nvim_set_keymap
+    npairs.add_rules({
+        Rule("```", "```", { 'telekasten' }),
+        Rule("```.*$", "```", { 'telekasten' })
+    })
 
     vim.g.completion_confirm_key = ""
   end

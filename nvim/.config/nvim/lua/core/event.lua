@@ -43,6 +43,11 @@ function autocmd.load_autocmds()
       {"FileType", "markdown", "set conceallevel=0"},
     };
 
+    cursor = {
+      {"InsertEnter,WinLeave", "*", "set nocursorline"},
+      {"InsertLeave,WinEnter", "*", "set cursorline"},
+    };
+
     term = {
       {"TermOpen", "*", "lua require('utils').onTermOpen()"},
     };

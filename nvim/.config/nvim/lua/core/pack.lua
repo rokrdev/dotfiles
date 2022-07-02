@@ -116,13 +116,15 @@ function plugins.load_compile()
   else
     assert('Missing packer compile file Run PackerCompile Or PackerInstall to fix')
   end
-  vim.cmd [[command! PackerCompile lua require('core.pack').magic_compile()]]
-  vim.cmd [[command! PackerInstall lua require('core.pack').install()]]
-  vim.cmd [[command! PackerUpdate lua require('core.pack').update()]]
-  vim.cmd [[command! PackerSync lua require('core.pack').sync()]]
-  vim.cmd [[command! PackerClean lua require('core.pack').clean()]]
-  vim.cmd [[autocmd User PackerComplete lua require('core.pack').magic_compile()]]
-  vim.cmd [[command! PackerStatus  lua require('packer').status()]]
+  vim.cmd [[
+    command! PackerCompile lua require('core.pack').magic_compile()
+    command! PackerInstall lua require('core.pack').install()
+    command! PackerUpdate lua require('core.pack').update()
+    command! PackerSync lua require('core.pack').sync()
+    command! PackerClean lua require('core.pack').clean()
+    autocmd User PackerComplete lua require('core.pack').magic_compile()
+    command! PackerStatus  lua require('packer').status()
+  ]]
 end
 
 return plugins

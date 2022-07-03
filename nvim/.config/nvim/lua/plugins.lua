@@ -1,12 +1,14 @@
-local plugins = {}
+local plugin = require('core.pack').register_plugin
 
-plugins["lewis6991/impatient.nvim"] = {
+plugin {
+  "lewis6991/impatient.nvim",
   config = function ()
     require'impatient'
   end
 }
 
-plugins["neovim/nvim-lspconfig"] = {
+plugin {
+  "neovim/nvim-lspconfig",
   event = "BufReadPost",
   requires = 'hrsh7th/cmp-nvim-lsp',
   config = function ()
@@ -19,7 +21,8 @@ plugins["neovim/nvim-lspconfig"] = {
   end
 }
 
-plugins["williamboman/nvim-lsp-installer"] = {
+plugin {
+  "williamboman/nvim-lsp-installer",
   event = "BufReadPost",
   requires = {'neovim/nvim-lspconfig'},
   config = function ()
@@ -27,58 +30,68 @@ plugins["williamboman/nvim-lsp-installer"] = {
   end
 }
 
-plugins["hrsh7th/cmp-buffer"] = {
+plugin {
+  "hrsh7th/cmp-buffer",
   event = "BufReadPost",
   requires = 'hrsh7th/nvim-cmp',
 }
 
-plugins["hrsh7th/cmp-nvim-lsp"] = {
+plugin {
+  "hrsh7th/cmp-nvim-lsp",
   event = "BufReadPost",
   requires = 'hrsh7th/nvim-cmp',
 }
 
-plugins["hrsh7th/cmp-vsnip"] = {
+plugin {
+  "hrsh7th/cmp-vsnip",
   event = "BufReadPost",
   requires = 'hrsh7th/nvim-cmp',
 }
 
-plugins["hrsh7th/cmp-nvim-lsp-signature-help"] = {
+plugin {
+  "hrsh7th/cmp-nvim-lsp-signature-help",
   event = "BufReadPost",
   requires = 'hrsh7th/nvim-cmp',
 }
 
-plugins["hrsh7th/vim-vsnip"] = {
+plugin {
+  "hrsh7th/vim-vsnip",
   event = "BufReadPost",
   config = function ()
     vim.g.vsnip_snippet_dir = '~/.config/nvim/vsnip'
   end
 }
 
-plugins["hrsh7th/cmp-cmdline"] = {
+plugin {
+  "hrsh7th/cmp-cmdline",
   event = "BufReadPost",
   requires = 'hrsh7th/nvim-cmp',
 }
 
-plugins["hrsh7th/cmp-path"] = {
+plugin {
+  "hrsh7th/cmp-path",
   event = "BufReadPost",
   requires = 'hrsh7th/nvim-cmp',
 }
 
-plugins["hrsh7th/nvim-cmp"] = {
+plugin {
+  "hrsh7th/nvim-cmp",
   event = "BufReadPost",
   config = function ()
     require'config.cmp'
   end
 }
 
-plugins["norcalli/nvim-colorizer.lua"] = {
+plugin {
+  "norcalli/nvim-colorizer.lua",
   event = 'VimEnter',
   config = function ()
     require('colorizer').setup()
   end
 }
 
-plugins["zenobht/cursorword.nvim"] = {
+plugin {
+  "zenobht/cursorword.nvim",
   event = 'VimEnter',
   config = function ()
     vim.g.cursorword_blacklist_filetype = {
@@ -94,7 +107,8 @@ plugins["zenobht/cursorword.nvim"] = {
   end
 }
 
-plugins["zenobht/trailspace.nvim"] = {
+plugin {
+  "zenobht/trailspace.nvim",
   event = 'VimEnter',
   config = function ()
     vim.g.trailspace_blacklist_filetype = {
@@ -110,7 +124,8 @@ plugins["zenobht/trailspace.nvim"] = {
   end
 }
 
-plugins['windwp/nvim-autopairs'] = {
+plugin {
+  'windwp/nvim-autopairs',
   event = 'BufWinEnter',
   config = function ()
     local npairs = require('nvim-autopairs')
@@ -126,11 +141,13 @@ plugins['windwp/nvim-autopairs'] = {
   end
 }
 
-plugins['editorconfig/editorconfig-vim'] = {
+plugin {
+  'editorconfig/editorconfig-vim',
   ft = { 'go','vim','rust', 'kotlin', 'java' }
 }
 
-plugins["lukas-reineke/indent-blankline.nvim"] = {
+plugin {
+  "lukas-reineke/indent-blankline.nvim",
   after = 'tokyonight.nvim',
   config = function ()
     vim.g.indent_blankline_use_treesitter = true
@@ -143,11 +160,13 @@ plugins["lukas-reineke/indent-blankline.nvim"] = {
   end
 }
 
-plugins["tpope/vim-repeat"] = {
+plugin {
+  "tpope/vim-repeat",
   event = 'VimEnter'
 }
 
-plugins['ggandor/leap.nvim'] = {
+plugin {
+  'ggandor/leap.nvim',
   event = 'VimEnter',
   config = function ()
     require'leap'.setup {
@@ -164,36 +183,42 @@ plugins['ggandor/leap.nvim'] = {
   end
 }
 
-plugins['wincent/scalpel'] = {
+plugin {
+  'wincent/scalpel',
   event = 'VimEnter',
   setup = function ()
     vim.g.ScalpelMap=0
   end
 }
 
-plugins['kevinhwang91/nvim-hlslens'] = {
+plugin {
+  'kevinhwang91/nvim-hlslens',
   event = 'VimEnter',
 }
 
-plugins['ur4ltz/surround.nvim'] = {
+plugin {
+  'ur4ltz/surround.nvim',
   event = 'VimEnter',
   config = function ()
     require'surround'.setup { mappings_style = "surround"}
   end
 }
 
-plugins['wellle/targets.vim'] = {
+plugin {
+  'wellle/targets.vim',
   event = 'VimEnter',
 }
 
-plugins['andymass/vim-matchup'] = {
+plugin {
+  'andymass/vim-matchup',
   event = 'VimEnter',
   setup = function ()
     vim.g.matchup_matchparen_offscreen = {}
   end
 }
 
-plugins['TimUntersberger/neogit'] = {
+plugin {
+  'TimUntersberger/neogit',
   cmd = 'Neogit',
   requires = {
     {'nvim-lua/plenary.nvim'},
@@ -204,20 +229,23 @@ plugins['TimUntersberger/neogit'] = {
   end
 }
 
-plugins['akinsho/git-conflict.nvim'] = {
+plugin {
+  'akinsho/git-conflict.nvim',
   config = function()
     require('git-conflict').setup()
   end
 }
 
-plugins['nvim-treesitter/nvim-treesitter'] = {
+plugin {
+  'nvim-treesitter/nvim-treesitter',
   after = "tokyonight.nvim",
   config = function ()
     require'config.treesitter'
   end
 }
 
-plugins['numToStr/Comment.nvim'] = {
+plugin {
+  'numToStr/Comment.nvim',
   event = 'VimEnter',
   config = function()
     require("Comment").setup({
@@ -250,12 +278,14 @@ plugins['numToStr/Comment.nvim'] = {
   end
 }
 
-plugins['JoosepAlviste/nvim-ts-context-commentstring'] = {
+plugin {
+  'JoosepAlviste/nvim-ts-context-commentstring',
   event = 'VimEnter',
   requires = {'nvim-treesitter', 'Comment.nvim'},
 }
 
-plugins['nvim-treesitter/nvim-treesitter-textobjects'] = {
+plugin {
+  'nvim-treesitter/nvim-treesitter-textobjects',
   event = 'VimEnter',
   requires = 'nvim-treesitter',
   config = function()
@@ -275,7 +305,8 @@ plugins['nvim-treesitter/nvim-treesitter-textobjects'] = {
   end
 }
 
-plugins["luukvbaal/nnn.nvim"] = {
+plugin {
+  "luukvbaal/nnn.nvim",
   cmd = 'NnnPicker',
   config = function ()
     local builtin = require("nnn").builtin
@@ -293,7 +324,8 @@ plugins["luukvbaal/nnn.nvim"] = {
   end
 }
 
-plugins['nvim-telescope/telescope.nvim'] = {
+plugin {
+  'nvim-telescope/telescope.nvim',
   -- event = 'VimEnter',
   requires = {
     {'nvim-lua/popup.nvim'},
@@ -305,7 +337,8 @@ plugins['nvim-telescope/telescope.nvim'] = {
   end
 }
 
-plugins['lewis6991/gitsigns.nvim'] = {
+plugin {
+  'lewis6991/gitsigns.nvim',
   event = 'VimEnter',
   requires = {'nvim-lua/plenary.nvim'},
   config = function ()
@@ -313,11 +346,13 @@ plugins['lewis6991/gitsigns.nvim'] = {
   end
 }
 
-plugins['kyazdani42/nvim-web-devicons'] = {
+plugin {
+  'kyazdani42/nvim-web-devicons',
   -- event = 'VimEnter',
 }
 
-plugins['folke/tokyonight.nvim'] = {
+plugin {
+  'folke/tokyonight.nvim',
   event = "BufReadPost",
   config = function ()
     vim.g.tokyonight_transparent = false
@@ -355,7 +390,8 @@ plugins['folke/tokyonight.nvim'] = {
 --   end
 -- }
 
-plugins["beauwilliams/focus.nvim"] = {
+plugin {
+  "beauwilliams/focus.nvim",
   event = 'VimEnter',
   config = function ()
     require("focus").setup({
@@ -367,7 +403,8 @@ plugins["beauwilliams/focus.nvim"] = {
   end
 }
 
-plugins["petertriho/nvim-scrollbar"] = {
+plugin {
+  "petertriho/nvim-scrollbar",
   opt = true,
   after = {
     "nvim-hlslens",
@@ -386,38 +423,44 @@ plugins["petertriho/nvim-scrollbar"] = {
   end
 }
 
-plugins["hoob3rt/lualine.nvim"] = {
+plugin {
+  "hoob3rt/lualine.nvim",
   after = "tokyonight.nvim",
   config = function ()
     require'config.statusline'
   end
 }
 
-plugins['kyazdani42/nvim-tree.lua'] = {
+plugin {
+  'kyazdani42/nvim-tree.lua',
   event = 'VimEnter',
   config = function ()
     require'config.nvim_tree'
   end
 }
 
-plugins['goolord/alpha-nvim'] = {
+plugin {
+  'goolord/alpha-nvim',
   config = function ()
     require'config.alpha'
   end
 }
 
-plugins["renerocksai/telekasten.nvim"] = {
+plugin {
+  "renerocksai/telekasten.nvim",
   event = 'VimEnter',
   config = function ()
     require'config.telekasten'
   end
 }
 
-plugins["mattn/calendar-vim"] = {
+plugin {
+  "mattn/calendar-vim",
   event = 'VimEnter',
 }
 
-plugins["ellisonleao/glow.nvim"] = {
+plugin {
+  "ellisonleao/glow.nvim",
   cmd = 'Glow',
   setup = function ()
     vim.g.glow_border = "rounded"
@@ -425,23 +468,25 @@ plugins["ellisonleao/glow.nvim"] = {
   end
 }
 
--- plugins["anuvyklack/hydra.nvim"] = {
+-- plugin {
+  -- "anuvyklack/hydra.nvim",
 --   event = 'VimEnter',
 --   config = function ()
 --     require'config.hydra'
 --   end
 -- }
 
-plugins["folke/which-key.nvim"] = {
+plugin {
+  "folke/which-key.nvim",
   config = function()
     require("which-key").setup {}
   end
 }
 
-plugins["karb94/neoscroll.nvim"] = {
+plugin {
+  "karb94/neoscroll.nvim",
   config = function()
     require'neoscroll'.setup()
   end
 }
 
-return plugins

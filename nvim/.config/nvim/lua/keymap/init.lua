@@ -41,6 +41,8 @@ local check_back_space = function()
     end
 end
 
+vim.g.mapleader = " "
+
 _G.completion_confirm = function()
   local npairs = require('nvim-autopairs')
 

@@ -376,20 +376,6 @@ plugin {
   end
 }
 
--- plugins["akinsho/nvim-bufferline.lua"] = {
---   -- event = 'VimEnter',
---   config = function ()
---     require('bufferline').setup{
---       options = {
---         show_buffer_close_icons = false,
---         show_close_icon = false,
---         separator_style = "thick",
---         always_show_bufferline = false,
---       },
---     }
---   end
--- }
-
 plugin {
   "beauwilliams/focus.nvim",
   event = 'VimEnter',
@@ -428,6 +414,22 @@ plugin {
   after = "tokyonight.nvim",
   config = function ()
     require'config.statusline'
+  end
+}
+
+plugin {
+  "akinsho/nvim-bufferline.lua",
+  tag = "v2.*",
+  after = "lualine.nvim",
+  config = function ()
+    require('bufferline').setup{
+      options = {
+        show_buffer_close_icons = false,
+        show_close_icon = false,
+        separator_style = "thick",
+        always_show_bufferline = false,
+      },
+    }
   end
 }
 

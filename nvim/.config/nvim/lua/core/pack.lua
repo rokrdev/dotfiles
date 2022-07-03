@@ -11,10 +11,6 @@ Packer.__index = Packer
 function Packer:load_plugins()
   self.repos = {}
   require("plugins")
---  local repos = require("plugins")
---  for repo,conf in pairs(repos) do
---    self.repos[#self.repos+1] = vim.tbl_extend('force',{repo},conf)
---  end
 end
 
 function Packer:load_packer()

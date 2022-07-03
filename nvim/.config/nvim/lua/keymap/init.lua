@@ -185,8 +185,8 @@ wk.register({
 
 wk.register({
   ["<M-o>"] = { map_cr("wincmd w"), "Other window" },
-  ["<M-.>"] = { map_cr("bprev"), "Previous buffer" },
-  ["<M-,>"] = { map_cr("bnext"), "Next buffer" },
+  ["<C-h>"] = { map_cr("BufferLineCyclePrev"), "Previous buffer" },
+  ["<C-l>"] = { map_cr("BufferLineCycleNext"), "Next buffer" },
   ["!"] = { map_cmd("f cl<CR><ESC>l"), "Split lines" },
   ["<C-S-j>"] = { ":m .+1<CR>==", "Move down line" },
   ["<C-S-k>"] = { ":m .-2<CR>==", "Move up line" },

@@ -111,7 +111,7 @@ end
 ins_left {
   -- mode component
   function()
-    return '  '
+    return ' '
   end,
   color = function()
     return { fg = mode_color[vim.fn.mode()]}
@@ -210,7 +210,7 @@ ins_right {
 
 ins_right {
   function()
-    return '  '
+    return ' '
   end,
   color = function()
     return { fg = mode_color[vim.fn.mode()]}

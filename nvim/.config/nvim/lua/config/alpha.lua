@@ -154,7 +154,6 @@ local headers = {
 }
 
 local function get_header()
-  math.randomseed(os.time())
   return headers[math.random(1, #headers)]
 end
 
@@ -172,5 +171,17 @@ dashboard.section.buttons.val = {
   dashboard.button("SPC z f", " Zettelkastan", ":lua require('telekasten').find_notes()<CR>"),
   dashboard.button("q", " Quit NVIM", ":qa<CR>"),
 }
+
+local function get_footer()
+  local plugins = #vim.tbl_keys(packer_plugins)
+  local v = vim.version()
+  local datetime = os.date " %d-%m-%Y   %H:%M:%S"
+  local platform = vim.fn.has "win32" == 1 and "" or ""
+  return string.format(" %d   v%d.%d.%d %s  %s", plugins, v.major, v.minor, v.patch, platform, datetime)
+end
+
+-- footer
+dashboard.section.footer.val = get_footer()
+dashboard.section.footer.opts.hl = dashboard.section.header.opts.hl
 
 alpha.setup(dashboard.opts)

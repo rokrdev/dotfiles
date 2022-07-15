@@ -151,6 +151,7 @@ plugin {
   after = 'tokyonight.nvim',
   config = function ()
     vim.g.indent_blankline_use_treesitter = true
+    vim.g.indent_blankline_space_char_blankline = "⋅"
     require('indent_blankline').setup {
       show_current_context = true,
       -- show_current_context_start = true,

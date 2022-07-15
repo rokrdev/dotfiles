@@ -2,6 +2,8 @@ local vim = vim
 local home    = os.getenv("HOME")
 local cache_dir  = home .. '/.cache/nvim/'
 
+math.randomseed(os.time())
+
 -- Create cache dir and subs dir
 local createdir = function ()
   local data_dir = {

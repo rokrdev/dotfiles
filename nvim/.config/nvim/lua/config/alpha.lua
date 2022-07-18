@@ -164,7 +164,7 @@ local header = {
   val = get_header(),
   opts = {
     position = "center",
-    hl = "Function",
+    hl = "Directory",
   },
 }
 
@@ -230,7 +230,7 @@ local footer = {
   val = get_footer(),
   opts = {
     position = "center",
-    hl = "Function",
+    hl = "Directory",
   },
 }
 

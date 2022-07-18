@@ -1,16 +1,18 @@
 local alpha = require("alpha")
-local dashboard = require("alpha.themes.dashboard")
+local if_nil = vim.F.if_nil
 
-local headers = {
+local leader = "SPC"
+
+local header_art = {
   {
-     [[                                                     ]],
-     [[  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ]],
-     [[  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ]],
-     [[  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ]],
-     [[  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ]],
-     [[  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ]],
-     [[  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ]],
-     [[                                                     ]],
+    [[                                                     ]],
+    [[  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ]],
+    [[  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ]],
+    [[  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ]],
+    [[  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ]],
+    [[  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ]],
+    [[  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ]],
+    [[                                                     ]],
   },
   {
     [[   ⣴⣶⣤⡤⠦⣤⣀⣤⠆     ⣈⣭⣿⣶⣿⣦⣼⣆          ]],
@@ -97,25 +99,25 @@ local headers = {
     [[⠀⠀⠀⠀⠀⠈⠉⠛⠛⠛⠛⠉⠀⠀⠀⠀⠀⠈⠉⠛⠛⠛⠛⠋⠁⠀⠀⠀⠀⠀]],
   },
   {
-     [[=================     ===============     ===============   ========  ========]],
-     [[\\ . . . . . . .\\   //. . . . . . .\\   //. . . . . . .\\  \\. . .\\// . . //]],
-     [[||. . ._____. . .|| ||. . ._____. . .|| ||. . ._____. . .|| || . . .\/ . . .||]],
-     [[|| . .||   ||. . || || . .||   ||. . || || . .||   ||. . || ||. . . . . . . ||]],
-     [[||. . ||   || . .|| ||. . ||   || . .|| ||. . ||   || . .|| || . | . . . . .||]],
-     [[|| . .||   ||. _-|| ||-_ .||   ||. . || || . .||   ||. _-|| ||-_.|\ . . . . ||]],
-     [[||. . ||   ||-'  || ||  `-||   || . .|| ||. . ||   ||-'  || ||  `|\_ . .|. .||]],
-     [[|| . _||   ||    || ||    ||   ||_ . || || . _||   ||    || ||   |\ `-_/| . ||]],
-     [[||_-' ||  .|/    || ||    \|.  || `-_|| ||_-' ||  .|/    || ||   | \  / |-_.||]],
-     [[||    ||_-'      || ||      `-_||    || ||    ||_-'      || ||   | \  / |  `||]],
-     [[||    `'         || ||         `'    || ||    `'         || ||   | \  / |   ||]],
-     [[||            .===' `===.         .==='.`===.         .===' /==. |  \/  |   ||]],
-     [[||         .=='   \_|-_ `===. .==='   _|_   `===. .===' _-|/   `==  \/  |   ||]],
-     [[||      .=='    _-'    `-_  `='    _-'   `-_    `='  _-'   `-_  /|  \/  |   ||]],
-     [[||   .=='    _-'          '-__\._-'         '-_./__-'         `' |. /|  |   ||]],
-     [[||.=='    _-'                                                     `' |  /==.||]],
-     [[=='    _-'                        N E O V I M                         \/   `==]],
-     [[\   _-'                                                                `-_   /]],
-     [[ `''                                                                      ``' ]],
+    [[=================     ===============     ===============   ========  ========]],
+    [[\\ . . . . . . .\\   //. . . . . . .\\   //. . . . . . .\\  \\. . .\\// . . //]],
+    [[||. . ._____. . .|| ||. . ._____. . .|| ||. . ._____. . .|| || . . .\/ . . .||]],
+    [[|| . .||   ||. . || || . .||   ||. . || || . .||   ||. . || ||. . . . . . . ||]],
+    [[||. . ||   || . .|| ||. . ||   || . .|| ||. . ||   || . .|| || . | . . . . .||]],
+    [[|| . .||   ||. _-|| ||-_ .||   ||. . || || . .||   ||. _-|| ||-_.|\ . . . . ||]],
+    [[||. . ||   ||-'  || ||  `-||   || . .|| ||. . ||   ||-'  || ||  `|\_ . .|. .||]],
+    [[|| . _||   ||    || ||    ||   ||_ . || || . _||   ||    || ||   |\ `-_/| . ||]],
+    [[||_-' ||  .|/    || ||    \|.  || `-_|| ||_-' ||  .|/    || ||   | \  / |-_.||]],
+    [[||    ||_-'      || ||      `-_||    || ||    ||_-'      || ||   | \  / |  `||]],
+    [[||    `'         || ||         `'    || ||    `'         || ||   | \  / |   ||]],
+    [[||            .===' `===.         .==='.`===.         .===' /==. |  \/  |   ||]],
+    [[||         .=='   \_|-_ `===. .==='   _|_   `===. .===' _-|/   `==  \/  |   ||]],
+    [[||      .=='    _-'    `-_  `='    _-'   `-_    `='  _-'   `-_  /|  \/  |   ||]],
+    [[||   .=='    _-'          '-__\._-'         '-_./__-'         `' |. /|  |   ||]],
+    [[||.=='    _-'                                                     `' |  /==.||]],
+    [[=='    _-'                        N E O V I M                         \/   `==]],
+    [[\   _-'                                                                `-_   /]],
+    [[ `''                                                                      ``' ]],
   },
   {
     [[           ,               ,           ]],
@@ -154,34 +156,95 @@ local headers = {
 }
 
 local function get_header()
-  return headers[math.random(1, #headers)]
+  return header_art[math.random(1, #header_art)]
 end
 
-dashboard.section.header.val = get_header()
+local header = {
+  type = "text",
+  val = get_header(),
+  opts = {
+    position = "center",
+    hl = "Function",
+  },
+}
 
--- Set menu
-dashboard.section.buttons.val = {
-  dashboard.button("e", " New file", ":ene<CR>"),
-  dashboard.button("SPC f f", " Find file", ":Telescope find_files hidden=true<CR>"),
-  dashboard.button("SPC f s", " Search word", ":Telescope live_grep<CR>"),
-  dashboard.button("SPC f n", " Directory", ":Dired<CR>"),
-  dashboard.button("SPC f t", " Tree", ":NvimTreeToggle<CR>"),
-  dashboard.button("SPC h f", " Dotfiles", ":Dff<CR>"),
-  dashboard.button("SPC h s", " Dotfiles Search", ":Dfs<CR>"),
-  dashboard.button("SPC z f", " Zettelkastan", ":lua require('telekasten').find_notes()<CR>"),
-  dashboard.button("q", " Quit NVIM", ":qa<CR>"),
+local function button(sc, txt, keybind, keybind_opts)
+  local sc_ = sc:gsub("%s", ""):gsub(leader, "<leader>")
+
+  local opts = {
+    position = "center",
+    shortcut = sc,
+    cursor = 5,
+    width = 50,
+    align_shortcut = "right",
+    hl_shortcut = "Label",
+  }
+
+  if keybind then
+    keybind_opts = if_nil(keybind_opts, { noremap = true, silent = true, nowait = true })
+    opts.keymap = { "n", sc_, keybind, keybind_opts }
+  end
+
+  local function on_press()
+    -- local key = vim.api.nvim_replace_termcodes(keybind .. "<Ignore>", true, false, true)
+    local key = vim.api.nvim_replace_termcodes(sc_ .. "<Ignore>", true, false, true)
+    vim.api.nvim_feedkeys(key, "t", false)
+  end
+
+  return {
+    type = "button",
+    val = txt,
+    on_press = on_press,
+    opts = opts,
+  }
+end
+
+local buttons = {
+  type = "group",
+  val = {
+    button("e", " New file", ":ene<CR>", nil),
+    button("SPC f f", " Find file", ":Telescope find_files hidden=true<CR>", nil),
+    button("SPC f s", " Search word", ":Telescope live_grep<CR>", nil),
+    button("SPC f n", " Directory", ":Dired<CR>", nil),
+    button("SPC f t", " Tree", ":NvimTreeToggle<CR>", nil),
+    button("SPC h f", " Dotfiles", ":Dff<CR>", nil),
+    button("SPC h s", " Dotfiles Search", ":Dfs<CR>", nil),
+    button("SPC z f", " Zettelkastan", ":lua require('telekasten').find_notes()<CR>", nil),
+    button("q", " Quit NVIM", ":qa<CR>", nil),
+  },
+  opts = {
+    spacing = 1,
+  }
 }
 
 local function get_footer()
   local plugins = #vim.tbl_keys(packer_plugins)
   local v = vim.version()
-  local datetime = os.date " %d-%m-%Y   %H:%M:%S"
-  local platform = vim.fn.has "win32" == 1 and "" or ""
-  return string.format(" %d   v%d.%d.%d %s  %s", plugins, v.major, v.minor, v.patch, platform, datetime)
+  return string.format(" %d   v%d.%d.%d",  plugins, v.major, v.minor, v.patch)
 end
 
--- footer
-dashboard.section.footer.val = get_footer()
-dashboard.section.footer.opts.hl = dashboard.section.header.opts.hl
+local footer = {
+  type = "text",
+  val = get_footer(),
+  opts = {
+    position = "center",
+    hl = "Function",
+  },
+}
 
-alpha.setup(dashboard.opts)
+local config = {
+  layout = {
+    { type = "padding", val = 5 },
+    header,
+    { type = "padding", val = 2 },
+    buttons,
+    { type = "padding", val = 2 },
+    footer,
+  },
+  opts = {
+    margin = 5,
+  },
+}
+
+alpha.setup(config)
+

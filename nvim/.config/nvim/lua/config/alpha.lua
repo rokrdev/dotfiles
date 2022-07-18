@@ -220,7 +220,9 @@ local buttons = {
 local function get_footer()
   local plugins = #vim.tbl_keys(packer_plugins)
   local v = vim.version()
-  return string.format(" %d   v%d.%d.%d",  plugins, v.major, v.minor, v.patch)
+  local datetime = os.date " %d-%m-%Y   %H:%M:%S"
+  local platform = vim.fn.has "win32" == 1 and "" or ""
+  return string.format(" %d   v%d.%d.%d %s  %s", plugins, v.major, v.minor, v.patch, platform, datetime)
 end
 
 local footer = {

@@ -166,21 +166,12 @@ plugin {
   event = 'VimEnter'
 }
 
+
 plugin {
-  'ggandor/leap.nvim',
-  event = 'VimEnter',
-  config = function ()
-    require'leap'.setup {
-      case_insensitive = true,
-      special_keys = {
-        repeat_search = '<enter>',
-        next_match    = '<enter>',
-        prev_match    = '<tab>',
-        next_group    = '<space>',
-        prev_group    = '<tab>',
-        eol           = '<space>',
-      },
-    }
+  'phaazon/hop.nvim',
+  branch = 'v2',
+  config = function()
+    require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
   end
 }
 

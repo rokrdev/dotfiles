@@ -70,7 +70,6 @@ _G.vsnip_expand = function()
 end
 
 _G.markdown_binding = function()
-  print("setting up")
   local wk = require("which-key")
   wk.register({
     f = {
@@ -180,7 +179,7 @@ wk.register({
     name = "file",
     w = { map_lua("require('telescope.builtin').grep_string({search = require('utils').getVisualSelection()})"), "Search visual selection"},
     r = { "<Plug>(ScalpelVisual)", "Replace in file"},
-  }
+  },
 }, { mode = "v", prefix = "<leader>" })
 
 wk.register({
@@ -190,7 +189,11 @@ wk.register({
   ["!"] = { map_cmd("f cl<CR><ESC>l"), "Split lines" },
   ["<C-S-j>"] = { ":m .+1<CR>==", "Move down line" },
   ["<C-S-k>"] = { ":m .-2<CR>==", "Move up line" },
-  s = { map_lua("require'leap'.leap { ['target-windows'] = { vim.api.nvim_get_current_win() } }"), "Leap" },
+  ["f"] = { "<cmd>lua require('utils').custom_f()<CR>", "f"},
+  ["F"] = { "<cmd>lua require('utils').custom_F()<CR>", "F"},
+  ["t"] = { "<cmd>lua require('utils').custom_t()<CR>", "t"},
+  ["T"] = { "<cmd>lua require('utils').custom_T()<CR>", "T"},
+  ["s"] = { "<cmd>HopWord<CR>", "Hop Word"},
   n = { [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], "Next" },
   N = { [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], "Previous" },
   ["*"] = { [[*<Cmd>lua require('hlslens').start()<CR>]], "Search word under cursor" },
@@ -202,7 +205,11 @@ wk.register({
 wk.register({
   ["<C-S-j>"] = { ":m '>+1<CR>gv=gv", "Move down selection" },
   ["<C-S-k>"] = { ":m '<-2<CR>gv=gv", "Move up selection" },
-  z = { map_lua("require'leap'.leap { ['target-windows'] = { vim.api.nvim_get_current_win() } }"), "Leap Visual" }
+  ["f"] = { "<cmd>lua require('utils').custom_f()<CR>", "f"},
+  ["F"] = { "<cmd>lua require('utils').custom_F()<CR>", "F"},
+  ["t"] = { "<cmd>lua require('utils').custom_t()<CR>", "t"},
+  ["T"] = { "<cmd>lua require('utils').custom_T()<CR>", "T"},
+  ["S"] = { "<cmd>HopWord<CR>", "Hop Word"},
 }, { mode = "v" })
 
 

@@ -127,5 +127,35 @@ function M.nnnPicker()
   vim.cmd(cmd)
 end
 
+function M.custom_f()
+  require'hop'.hint_char1({
+    direction = require'hop.hint'.HintDirection.AFTER_CURSOR,
+    current_line_only = true
+  })
+end
+
+function M.custom_F()
+  require'hop'.hint_char1({
+    direction = require'hop.hint'.HintDirection.BEFORE_CURSOR,
+    current_line_only = true
+  })
+end
+
+function M.custom_t()
+  require'hop'.hint_char1({
+    direction = require'hop.hint'.HintDirection.AFTER_CURSOR,
+    current_line_only = true,
+    hint_offset = -1,
+  })
+end
+
+function M.custom_T()
+  require'hop'.hint_char1({
+    direction = require'hop.hint'.HintDirection.BEFORE_CURSOR,
+    current_line_only = true,
+    hint_offset = -1,
+  })
+end
+
 return M
 

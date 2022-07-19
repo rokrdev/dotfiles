@@ -456,9 +456,12 @@ plugin {
 plugin {
   "ellisonleao/glow.nvim",
   cmd = 'Glow',
-  setup = function ()
-    vim.g.glow_border = "rounded"
-    vim.g.glow_use_pager = true
+  config = function ()
+    require('glow').setup({
+      style = "dark",
+      width = 120,
+      pager = true,
+    })
   end
 }
 

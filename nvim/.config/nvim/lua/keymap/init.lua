@@ -69,15 +69,6 @@ _G.vsnip_expand = function()
   end
 end
 
-_G.markdown_binding = function()
-  local wk = require("which-key")
-  wk.register({
-    f = {
-      p = { map_cr("Glow"), "Preview" }
-    }
-  }, { prefix = "<leader>" })
-end
-
 ------------- copy/paste ------------------
 -- set({'n'}, 'Y', map_cmd("y$"))
 -- set({'n', 'v'}, '<leader>ap', map_cmd("\"+p")) -- paste from clipboard
@@ -98,7 +89,8 @@ wk.register({
     n = { map_lua("require('utils').nnnPicker()"), "Open file picker"},
     t = { map_cr("NvimTreeToggle"), "Open file tree"},
     r = { "<Plug>(Scalpel)", "Replace in file"},
-    y = { map_cr("let @+ = expand('%')"), "Yank current file path" } -- yank current file path
+    y = { map_cr("let @+ = expand('%')"), "Yank current file path" }, -- yank current file path
+    p = { map_cr("Glow"), "Preview" }
   },
   b = {
     name = "buffer",

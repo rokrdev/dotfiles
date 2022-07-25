@@ -148,7 +148,7 @@ plugin {
 
 plugin {
   "lukas-reineke/indent-blankline.nvim",
-  after = 'tokyonight.nvim',
+  after = 'catppuccin',
   config = function ()
     vim.g.indent_blankline_use_treesitter = true
     vim.g.indent_blankline_space_char_blankline = "⋅"
@@ -230,7 +230,7 @@ plugin {
 
 plugin {
   'nvim-treesitter/nvim-treesitter',
-  after = "tokyonight.nvim",
+  after = "catppuccin",
   config = function ()
     require'config.treesitter'
   end
@@ -344,24 +344,25 @@ plugin {
 }
 
 plugin {
-  'folke/tokyonight.nvim',
-  event = "BufReadPost",
+  "catppuccin/nvim",
+  as = "catppuccin",
   config = function ()
-    vim.g.tokyonight_transparent = false
-    vim.g.tokyonight_transparent_sidebar = false
-    vim.g.tokyonight_style = "night"
-    vim.g.tokyonight_italic_functions = true
-    vim.g.tokyonight_italic_comments = true
-    vim.g.tokyonight_dark_sidebar = true
-    vim.g.tokyonight_dark_float = true
+    require("catppuccin").setup {
+      dim_inactive = {
+        enabled = false,
+        shade = "dark",
+        percentage = 0.15,
+      },
+      compile = {
+        enabled = false,
+        path = vim.fn.stdpath "cache" .. "/catppuccin",
+      }
+    }
+    vim.g.catppuccin_flavour = "mocha"
     vim.api.nvim_exec(
       [[
-        colorscheme tokyonight
-        hi EndOfBuffer ctermfg=11 guifg=#3b4261
-        hi VertSplit ctermfg=11 guifg=#3b4261
-        hi SpecialKey    guifg=#61AFEF
-        hi SpecialKeyWin guifg=#3B4048
-        set winhighlight=SpecialKey:SpecialKeyWin
+        colorscheme catppuccin
+        hi link Trailspace TSDanger
       ]],
       false
     )
@@ -386,7 +387,7 @@ plugin {
   opt = true,
   after = {
     "nvim-hlslens",
-    "tokyonight.nvim"
+    "catppuccin"
   },
   config = function ()
     require("scrollbar").setup({
@@ -403,7 +404,7 @@ plugin {
 
 plugin {
   "hoob3rt/lualine.nvim",
-  after = "tokyonight.nvim",
+  after = "catppuccin",
   config = function ()
     require'config.statusline'
   end

@@ -55,9 +55,9 @@ require('nvim-treesitter.configs').setup {
     enable = true,
     keymaps = {
       init_selection = "<space>s",
-      node_incremental = "<space>sj",
-      scope_incremental = "<space>sl",
-      node_decremental = "<space>sk",
+      node_incremental = "+",
+      scope_incremental = ",",
+      node_decremental = "-",
     }
   },
 }

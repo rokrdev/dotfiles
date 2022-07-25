@@ -2,23 +2,22 @@
 -- Author: shadmansaleh
 -- Credit: glepnir
 local lualine = require('lualine')
-local tokyonight_config = require("tokyonight.config")
-local col = require("tokyonight.colors").setup(tokyonight_config)
+local cp = require("catppuccin.palettes.init").get_palette()
 
 -- Color table for highlights
 -- stylua: ignore
 local colors = {
-  bg       = col.bg_dark,
-  fg       = col.fg_fg,
-  yellow   = col.yellow,
-  cyan     = col.cyan,
-  darkblue = col.blue2,
-  green    = col.green,
-  orange   = col.orange,
-  violet   = col.purple,
-  magenta  = col.teal,
-  blue     = col.blue,
-  red      = col.red,
+  bg       = cp.mantle,
+  fg       = cp.text,
+  yellow   = cp.yellow,
+  cyan     = cp.teal,
+  darkblue = cp.blue,
+  green    = cp.green,
+  orange   = cp.peach,
+  violet   = cp.mauve,
+  magenta  = cp.mauve,
+  blue     = cp.lavendar,
+  red      = cp.red,
 }
 
 local conditions = {

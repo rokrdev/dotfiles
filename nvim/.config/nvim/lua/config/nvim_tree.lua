@@ -5,12 +5,15 @@ require('nvim-tree').setup {
   update_cwd          = true,
   update_focused_file = {
     enable      = true,
-    update_cwd  = false,
+    update_cwd  = true,
     ignore_list = {}
   },
   view                = {
     width = 30,
     side = 'left',
+    hide_root_folder = true,
+    adaptive_size = true,
+
   },
   renderer            = {
     indent_markers = {

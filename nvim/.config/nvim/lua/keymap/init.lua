@@ -94,14 +94,13 @@ wk.register({
   },
   b = {
     name = "buffer",
-    b = { map_lua("require('telescope.builtin').buffers()"), "list buffers"},
-    c = { map_cr("nohl"), "Clear search" },
     l = { map_args("ls<CR>:b"), "list buffers"},
     s = { map_lua("require('telescope.builtin').current_buffer_fuzzy_find()"), "Search in buffer"},
     k = { map_cr("bd"), "kill buffer" },
     x = { map_cr("bd!"), "Force kill buffer" },
     o = { map_cr("b#"), "alternate buffer"},
   },
+  c = { map_cr("nohl"), "Clear search" },
   d = {
     name = "dotfiles",
     f = { map_cr("Dff"), "Find file in dotfiles" },
@@ -163,7 +162,8 @@ wk.register({
     m = { map_lua("require('telekasten').browse_media()"), "Browse media"},
     a = { map_lua("require('telekasten').show_tags()"), "Show tags"},
     r = { map_lua("require('telekasten').rename_note()"), "Rename note"},
-  }
+  },
+  ["<space>"] = { map_lua("require('telescope.builtin').buffers()"), "list buffers" },
 }, { prefix = "<leader>" })
 
 wk.register({

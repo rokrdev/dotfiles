@@ -1,8 +1,8 @@
 require('nvim-tree').setup {
-  git                 = { enable = false },
   disable_netrw       = true,
   hijack_netrw        = true,
   update_cwd          = true,
+  sync_root_with_cwd  = true,
   update_focused_file = {
     enable      = true,
     update_cwd  = true,
@@ -13,15 +13,20 @@ require('nvim-tree').setup {
     side = 'left',
     hide_root_folder = true,
     adaptive_size = true,
-
+  },
+  git = {
+    enable = true,
+    ignore = true,
+    show_on_dirs = true,
+    timeout = 400,
   },
   renderer            = {
     indent_markers = {
-      enable = true,
+      enable = false,
       icons = {
-        corner = "└ ",
-        edge = "│ ",
-        none = "  ",
+        corner = "│",
+        edge = "│",
+        none = " ",
       },
     },
     icons = {
@@ -35,7 +40,12 @@ require('nvim-tree').setup {
           renamed = "≫",
           untracked = "★",
         },
-
+      },
+      show = {
+        file = true,
+        folder = true,
+        folder_arrow = false,
+        git = true,
       }
     }
   },

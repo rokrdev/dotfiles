@@ -1,7 +1,7 @@
 hs.window.animationDuration = 0.2
-window = hs.getObjectMetatable("hs.window")
-spaces = require("hs.spaces")
-wf=hs.window.filter
+local window = hs.getObjectMetatable("hs.window")
+local spaces = require("hs.spaces")
+local wf=hs.window.filter
 
 -- +-----------------+
 -- |        |        |
@@ -341,7 +341,7 @@ end
 -- Bind the given key to call the given function and exit WindowLayout mode
 function windowLayoutMode.bindWithAutomaticExit(mode, modifiers, key, fn)
   mode:bind(modifiers, key, function()
-    -- mode:exit()
+    mode:exit()
     fn()
   end)
 end

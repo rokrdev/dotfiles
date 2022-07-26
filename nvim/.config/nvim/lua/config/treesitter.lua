@@ -13,6 +13,7 @@ require('nvim-treesitter.configs').setup {
     "fish",
     "go",
     "graphql",
+    "hcl",
     "html",
     "http",
     "java",

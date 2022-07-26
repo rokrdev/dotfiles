@@ -177,7 +177,7 @@ local function button(sc, txt, keybind, keybind_opts)
     cursor = 5,
     width = 50,
     align_shortcut = "right",
-    hl_shortcut = "Label",
+    hl_shortcut = "Character",
   }
 
   if keybind then
@@ -230,7 +230,7 @@ local footer = {
   val = get_footer(),
   opts = {
     position = "center",
-    hl = "Directory",
+    hl = "Statement",
   },
 }
 

@@ -406,7 +406,7 @@ plugin {
   "hoob3rt/lualine.nvim",
   after = "catppuccin",
   config = function ()
-    require'config.statusline'
+    require'config.status_line'
   end
 }
 

@@ -355,15 +355,20 @@ plugin {
   "catppuccin/nvim",
   as = "catppuccin",
   config = function ()
+    local colors = require("catppuccin.palettes.mocha").get_palette()
     require("catppuccin").setup {
+      transparent_background = false,
       dim_inactive = {
-        enabled = false,
+        enabled = true,
         shade = "dark",
         percentage = 0.15,
       },
       compile = {
-        enabled = false,
+        enabled = true,
         path = vim.fn.stdpath "cache" .. "/catppuccin",
+      },
+      custom_highlights = {
+        DiffDelete = { bg = colors.red, fg = colors.base },
       }
     }
     vim.g.catppuccin_flavour = "mocha"

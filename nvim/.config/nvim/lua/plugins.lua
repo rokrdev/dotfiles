@@ -22,9 +22,17 @@ plugin {
 }
 
 plugin {
-  "williamboman/nvim-lsp-installer",
+  "williamboman/mason.nvim",
   event = "BufReadPost",
-  requires = {'neovim/nvim-lspconfig'},
+  config = function ()
+    require("mason").setup()
+  end
+}
+
+plugin {
+  "williamboman/mason-lspconfig.nvim",
+  event = "BufReadPost",
+  requires = {'neovim/nvim-lspconfig', 'williamboman/mason.nvim'},
   config = function ()
     require'config.lsp'
   end

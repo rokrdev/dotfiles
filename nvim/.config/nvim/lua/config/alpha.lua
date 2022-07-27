@@ -205,7 +205,7 @@ local buttons = {
     button("e", " New file", ":ene<CR>", nil),
     button("SPC f f", " Find file", ":Telescope find_files hidden=true<CR>", nil),
     button("SPC f s", " Search word", ":Telescope live_grep<CR>", nil),
-    button("SPC f n", " Directory", ":Dired<CR>", nil),
+    button("SPC f n", " Directory", ":NnnPicker<CR>", nil),
     button("SPC f t", " Tree", ":NvimTreeToggle<CR>", nil),
     button("SPC h f", " Dotfiles", ":Dff<CR>", nil),
     button("SPC h s", " Dotfiles Search", ":Dfs<CR>", nil),

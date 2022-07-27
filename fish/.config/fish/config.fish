@@ -117,3 +117,4 @@ alias p=python
 # asdf erlang fails without this in fish
 set CFLAGS "-O2 -g" $CFLAGS
 
+alias x86="env /usr/bin/arch -x86_64 /bin/zsh --login"

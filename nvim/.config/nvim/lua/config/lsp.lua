@@ -49,10 +49,32 @@ end
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-local servers = { "dockerls", "html", "jdtls", "jsonls", "kotlin_language_server", "pyright", "sqls", "tsserver", "yamlls", "solargraph" }
-require("nvim-lsp-installer").setup {
+local servers = {
+  "angularls",
+  "ansiblels",
+  "bashls",
+  "diagnosticls",
+  "dockerls",
+  "elixirls",
+  "graphql",
+  "html",
+  "jdtls",
+  "jsonls",
+  "kotlin_language_server",
+  "pyright",
+  "solargraph",
+  "sqls",
+  "sumneko_lua",
+  "terraformls",
+  "tsserver",
+  "vimls",
+  "yamlls",
+}
+
+require("mason-lspconfig").setup {
   automatic_installation = true,
 }
+
 local lspconfig = require("lspconfig")
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
@@ -61,8 +83,6 @@ for _, lsp in ipairs(servers) do
   }
 end
 lspconfig.sumneko_lua.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
   settings = {
     Lua = {
       diagnostics = {
@@ -72,8 +92,6 @@ lspconfig.sumneko_lua.setup {
   }
 }
 lspconfig.elixirls.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
   settings = {
     dialyzerEnabled = true,
     dialyzerWarnOpts = {
@@ -101,8 +119,6 @@ lspconfig.elixirls.setup {
   }
 }
 lspconfig.diagnosticls.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
   filetypes = {
     "javascript",
     "javascript.jsx",
@@ -176,3 +192,4 @@ lspconfig.diagnosticls.setup {
     }
   }
 }
+

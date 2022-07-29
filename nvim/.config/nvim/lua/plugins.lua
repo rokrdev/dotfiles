@@ -150,7 +150,7 @@ plugin {
 }
 
 plugin {
-  'editorconfig/editorconfig-vim',
+  'gpanders/editorconfig.nvim',
   ft = { 'go','vim','rust', 'kotlin', 'java' }
 }
 

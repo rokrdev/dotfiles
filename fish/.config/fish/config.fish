@@ -1,3 +1,8 @@
+function sync_history --on-event fish_preexec
+    history --save
+    history --merge
+end
+
 export BAT_THEME="tokyonight"
 
 export ALTERNATE_EDITOR="nvim"

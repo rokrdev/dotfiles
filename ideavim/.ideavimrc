@@ -92,7 +92,7 @@ nnoremap gi :action GotoImplementation <CR>
 nnoremap g, :action JumpToLastChange <CR>
 nnoremap g. :action JumpToNextChange <CR>
 nnoremap gd :action GotoDeclaration <CR>
-nnoremap gr :action RecentFiles <CR>
+nnoremap <leader>gr :action RenameElement <CR>
 nnoremap <leader>ww :action HideAllWindows <CR>
 nnoremap gp :NERDTree <CR>
 nnoremap <leader>gt :action GotoTest <CR>

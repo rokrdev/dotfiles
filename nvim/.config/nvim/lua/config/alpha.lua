@@ -202,7 +202,7 @@ end
 local buttons = {
   type = "group",
   val = {
-    button("e", " New file", ":ene<CR>", nil),
+    button("e", " New file", ":Scratch<CR>", nil),
     button("SPC f f", " Find file", ":Telescope find_files hidden=true<CR>", nil),
     button("SPC f s", " Search word", ":Telescope live_grep<CR>", nil),
     button("SPC f n", " Directory", ":NnnPicker<CR>", nil),

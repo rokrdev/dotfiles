@@ -65,7 +65,7 @@ local function getRandom()
 end
 
 function M.scratchGenerator()
-  local str = "e! __Scratchy__" .. getRandom()
+  local str = "e! __Scratchy__" .. getRandom() .. "|setl ft=markdown"
   api.nvim_exec(str, false)
 end
 

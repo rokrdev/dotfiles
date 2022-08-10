@@ -13,17 +13,17 @@ local on_attach = function(client, bufnr)
   set_keymap('n', 'K', vim.lsp.buf.hover, bufopts)
   set_keymap('n', 'gi', vim.lsp.buf.implementation, bufopts)
   set_keymap('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-  -- set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', bufopts)
-  -- set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', bufopts)
-  -- set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', bufopts)
-  set_keymap('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
-  set_keymap('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+  -- set_keymap('n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', bufopts)
+  -- set_keymap('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', bufopts)
+  -- set_keymap('n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', bufopts)
+  set_keymap('n', '<leader>D', vim.lsp.buf.type_definition, bufopts)
+  set_keymap('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
   set_keymap('n', 'gr', vim.lsp.buf.references, bufopts)
-  set_keymap('n', '<space>e', vim.diagnostic.open_float, bufopts)
+  set_keymap('n', '<leader>e', vim.diagnostic.open_float, bufopts)
   set_keymap('n', '[d', vim.diagnostic.goto_prev, bufopts)
   set_keymap('n', ']d', vim.diagnostic.goto_next, bufopts)
-  set_keymap('n', '<space>q', vim.diagnostic.setloclist, bufopts)
-  set_keymap('n', '<space>lf', function()
+  set_keymap('n', '<leader>q', vim.diagnostic.setloclist, bufopts)
+  set_keymap('n', '<leader>lf', function()
     vim.lsp.buf.format({ async = true })
   end, bufopts)
 
@@ -83,6 +83,8 @@ for _, lsp in ipairs(servers) do
   }
 end
 lspconfig.sumneko_lua.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
   settings = {
     Lua = {
       diagnostics = {
@@ -92,6 +94,8 @@ lspconfig.sumneko_lua.setup {
   }
 }
 lspconfig.elixirls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
   settings = {
     dialyzerEnabled = true,
     dialyzerWarnOpts = {
@@ -119,6 +123,8 @@ lspconfig.elixirls.setup {
   }
 }
 lspconfig.diagnosticls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
   filetypes = {
     "javascript",
     "javascript.jsx",

@@ -132,28 +132,13 @@ ins_left {
   color = { fg = colors.magenta, gui = 'bold' },
 }
 
-ins_left { 'location' }
-
-ins_left { 'progress', color = { fg = colors.fg } }
-
-ins_left {
-  'diagnostics',
-  sources = { 'nvim_diagnostic' },
-  symbols = { error = ' ', warn = ' ', info = ' ' },
-  diagnostics_color = {
-    color_error = { fg = colors.red },
-    color_warn = { fg = colors.yellow },
-    color_info = { fg = colors.cyan },
-  },
-}
-
--- Insert mid section. You can make any number of sections in neovim :)
--- for lualine it's any number greater then 2
-ins_left {
-  function()
-    return '%='
-  end,
-}
+-- -- Insert mid section. You can make any number of sections in neovim :)
+-- -- for lualine it's any number greater then 2
+-- ins_left {
+--   function()
+--     return '%='
+--   end,
+-- }
 
 ins_left {
   -- Lsp server name .
@@ -167,13 +152,25 @@ ins_left {
     for _, client in ipairs(clients) do
       local filetypes = client.config.filetypes
       if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-        return ' LSP: '..client.name
+        return '  '..client.name
       end
     end
     return msg
   end,
   -- icon = ' LSP:',
   color = { fg = colors.darkblue, gui = 'bold' },
+}
+
+
+ins_left {
+  'diagnostics',
+  sources = { 'nvim_diagnostic' },
+  symbols = { error = ' ', warn = ' ', info = ' ' },
+  diagnostics_color = {
+    color_error = { fg = colors.red },
+    color_warn = { fg = colors.yellow },
+    color_info = { fg = colors.cyan },
+  },
 }
 
 ins_right {
@@ -187,6 +184,10 @@ ins_right {
   },
   cond = conditions.hide_in_width,
 }
+
+ins_right { 'location' }
+
+ins_right { 'progress', color = { fg = colors.fg } }
 
 ins_right {
   'o:encoding', -- option component same as &encoding in viml

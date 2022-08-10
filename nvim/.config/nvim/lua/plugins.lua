@@ -40,31 +40,31 @@ plugin {
 
 plugin {
   "hrsh7th/cmp-buffer",
-  event = "BufReadPost",
+  event = "VimEnter",
   requires = 'hrsh7th/nvim-cmp',
 }
 
 plugin {
   "hrsh7th/cmp-nvim-lsp",
-  event = "BufReadPost",
+  event = "BufRead",
   requires = 'hrsh7th/nvim-cmp',
 }
 
 plugin {
   "hrsh7th/cmp-vsnip",
-  event = "BufReadPost",
+  event = "BufRead",
   requires = 'hrsh7th/nvim-cmp',
 }
 
 plugin {
   "hrsh7th/cmp-nvim-lsp-signature-help",
-  event = "BufReadPost",
+  event = "BufRead",
   requires = 'hrsh7th/nvim-cmp',
 }
 
 plugin {
   "hrsh7th/vim-vsnip",
-  event = "BufReadPost",
+  event = "BufRead",
   config = function ()
     vim.g.vsnip_snippet_dir = '~/.config/nvim/vsnip'
   end
@@ -72,19 +72,19 @@ plugin {
 
 plugin {
   "hrsh7th/cmp-cmdline",
-  event = "BufReadPost",
+  event = "VimEnter",
   requires = 'hrsh7th/nvim-cmp',
 }
 
 plugin {
   "hrsh7th/cmp-path",
-  event = "BufReadPost",
+  event = "VimEnter",
   requires = 'hrsh7th/nvim-cmp',
 }
 
 plugin {
   "hrsh7th/nvim-cmp",
-  event = "BufReadPost",
+  event = "VimEnter",
   config = function ()
     require'config.cmp'
   end
@@ -92,7 +92,7 @@ plugin {
 
 plugin {
   "norcalli/nvim-colorizer.lua",
-  event = 'VimEnter',
+  event = 'BufReadPost',
   config = function ()
     require('colorizer').setup()
   end
@@ -100,7 +100,7 @@ plugin {
 
 plugin {
   "zenobht/cursorword.nvim",
-  event = 'VimEnter',
+  event = 'BufReadPost',
   config = function ()
     vim.g.cursorword_blacklist_filetype = {
       'NvimTree',
@@ -117,7 +117,7 @@ plugin {
 
 plugin {
   "zenobht/trailspace.nvim",
-  event = 'VimEnter',
+  event = 'BufReadPost',
   config = function ()
     vim.g.trailspace_blacklist_filetype = {
       'NvimTree',
@@ -171,7 +171,7 @@ plugin {
 
 plugin {
   "tpope/vim-repeat",
-  event = 'VimEnter'
+  event = 'BufReadPost'
 }
 
 
@@ -185,7 +185,7 @@ plugin {
 
 plugin {
   'wincent/scalpel',
-  event = 'VimEnter',
+  event = 'BufReadPost',
   setup = function ()
     vim.g.ScalpelMap=0
   end
@@ -193,12 +193,12 @@ plugin {
 
 plugin {
   'kevinhwang91/nvim-hlslens',
-  event = 'VimEnter',
+  event = 'BufReadPost',
 }
 
 plugin {
   'ur4ltz/surround.nvim',
-  event = 'VimEnter',
+  event = 'BufReadPost',
   config = function ()
     require'surround'.setup { mappings_style = "surround"}
   end
@@ -206,12 +206,12 @@ plugin {
 
 plugin {
   'wellle/targets.vim',
-  event = 'VimEnter',
+  event = 'BufReadPost',
 }
 
 plugin {
   'andymass/vim-matchup',
-  event = 'VimEnter',
+  event = 'BufReadPost',
   setup = function ()
     vim.g.matchup_matchparen_offscreen = {}
   end
@@ -246,7 +246,7 @@ plugin {
 
 plugin {
   'numToStr/Comment.nvim',
-  event = 'VimEnter',
+  event = 'BufReadPost',
   config = function()
     require("Comment").setup({
       ignore = '^$',
@@ -280,13 +280,13 @@ plugin {
 
 plugin {
   'JoosepAlviste/nvim-ts-context-commentstring',
-  event = 'VimEnter',
+  event = 'BufReadPost',
   requires = {'nvim-treesitter', 'Comment.nvim'},
 }
 
 plugin {
   'nvim-treesitter/nvim-treesitter-textobjects',
-  event = 'VimEnter',
+  event = 'BufReadPost',
   requires = 'nvim-treesitter',
   config = function()
     require'nvim-treesitter.configs'.setup {
@@ -339,7 +339,7 @@ plugin {
 
 plugin {
   'lewis6991/gitsigns.nvim',
-  event = 'VimEnter',
+  event = 'BufReadPost',
   requires = {'nvim-lua/plenary.nvim'},
   config = function ()
     require'config.gitsigns'
@@ -381,7 +381,7 @@ plugin {
 
 plugin {
   "beauwilliams/focus.nvim",
-  event = 'VimEnter',
+  event = 'BufReadPost',
   config = function ()
     require("focus").setup({
       cursorline = false,
@@ -438,7 +438,7 @@ plugin {
 
 plugin {
   'kyazdani42/nvim-tree.lua',
-  event = 'VimEnter',
+  event = 'BufReadPost',
   config = function ()
     require'config.nvim_tree'
   end
@@ -453,7 +453,7 @@ plugin {
 
 plugin {
   "renerocksai/telekasten.nvim",
-  event = 'VimEnter',
+  event = 'BufReadPost',
   config = function ()
     require'config.telekasten'
   end
@@ -461,7 +461,7 @@ plugin {
 
 plugin {
   "mattn/calendar-vim",
-  event = 'VimEnter',
+  event = 'BufReadPost',
 }
 
 plugin {

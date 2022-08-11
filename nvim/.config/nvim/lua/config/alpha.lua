@@ -217,12 +217,26 @@ local buttons = {
   }
 }
 
+local function get_os()
+  local sysname = vim.loop.os_uname().sysname
+
+  if sysname == "Darwin" then
+    return ""
+  end
+
+  if sysname == "Windows" then
+    return ""
+  end
+
+  return ""
+end
+
 local function get_footer()
   local plugins = #vim.tbl_keys(packer_plugins)
   local v = vim.version()
   local datetime = os.date " %d-%m-%Y   %H:%M:%S"
-  local platform = vim.fn.has "win32" == 1 and "" or ""
-  return string.format(" %d   v%d.%d.%d %s  %s", plugins, v.major, v.minor, v.patch, platform, datetime)
+  local platform = get_os()
+  return string.format(" %d   v%d.%d.%d  %s  %s", plugins, v.major, v.minor, v.patch, datetime, platform)
 end
 
 local footer = {

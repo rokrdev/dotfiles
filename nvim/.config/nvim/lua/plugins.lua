@@ -134,7 +134,7 @@ plugin {
 
 plugin {
   'windwp/nvim-autopairs',
-  event = 'BufWinEnter',
+  event = 'BufReadPost',
   config = function ()
     local npairs = require('nvim-autopairs')
     npairs.setup()
@@ -178,6 +178,7 @@ plugin {
 plugin {
   'phaazon/hop.nvim',
   branch = 'v2',
+  event = 'BufReadPost',
   config = function()
     require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
   end
@@ -231,6 +232,8 @@ plugin {
 
 plugin {
   'akinsho/git-conflict.nvim',
+  tag = "*",
+  event = 'VimEnter',
   config = function()
     require('git-conflict').setup()
   end
@@ -326,7 +329,7 @@ plugin {
 
 plugin {
   'nvim-telescope/telescope.nvim',
-  -- event = 'VimEnter',
+  event = 'VimEnter',
   requires = {
     {'nvim-lua/popup.nvim'},
     {'nvim-lua/plenary.nvim'},
@@ -348,11 +351,12 @@ plugin {
 
 plugin {
   'kyazdani42/nvim-web-devicons',
-  -- event = 'VimEnter',
+  event = 'VimEnter',
 }
 
 plugin {
   "catppuccin/nvim",
+  event = 'VimEnter',
   as = "catppuccin",
   config = function ()
     local colors = require("catppuccin.palettes").get_palette()
@@ -493,6 +497,7 @@ plugin {
 
 plugin {
   "karb94/neoscroll.nvim",
+  event = 'BufReadPost',
   config = function()
     require'neoscroll'.setup()
   end

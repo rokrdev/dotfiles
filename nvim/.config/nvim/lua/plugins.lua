@@ -356,10 +356,8 @@ plugin {
 
 plugin {
   "catppuccin/nvim",
-  event = 'VimEnter',
   as = "catppuccin",
   config = function ()
-    local colors = require("catppuccin.palettes").get_palette()
     require("catppuccin").setup {
       transparent_background = false,
       dim_inactive = {
@@ -398,7 +396,7 @@ plugin {
 
 plugin {
   "petertriho/nvim-scrollbar",
-  opt = true,
+  event = 'BufReadPost',
   after = {
     "nvim-hlslens",
     "catppuccin"

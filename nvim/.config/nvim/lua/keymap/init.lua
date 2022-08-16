@@ -120,6 +120,11 @@ wk.register({
     b = { map_lua("require('telescope.builtin').git_branches()"), "Branches" },
     c = { map_lua("require('telescope.builtin').git_commits()"), "Commits" },
   },
+  h = {
+    name = "dotfiles",
+    f = { map_cr("Dff"), "Dotfiles" },
+    s = { map_cr("Dfs"), "Dotfiles Search" },
+  },
   l = {
     name = "Lsp",
     s = { map_cr("LspStart"), "Start lsp"},

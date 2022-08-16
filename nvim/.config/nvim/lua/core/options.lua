@@ -3,6 +3,8 @@ local g = vim.g
 
 local cache_dir  = os.getenv("HOME") .. '/.cache/nvim/'
 
+g.dotfiles_loc = "~/.dotfiles"
+
 -- global --
 g.python3_host_prog = '~/.asdf/shims/python'
 g["nnn#set_default_mappings"] = 0

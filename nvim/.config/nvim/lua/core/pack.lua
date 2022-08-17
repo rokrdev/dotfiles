@@ -9,7 +9,7 @@ Packer.__index = Packer
 
 function Packer:load_plugins()
   self.repos = {}
-  require("plugins")
+  require("core.plugins")
 end
 
 function Packer:load_packer()
@@ -78,6 +78,17 @@ function plugins.auto_compile()
   end
   plugins.compile()
   require('packer_compiled')
+end
+
+function plugins.reload_config()
+  for name,_ in pairs(package.loaded) do
+    if name:match('^core') or name:match('^config') or name:match('^keymap') then
+      package.loaded[name] = nil
+    end
+  end
+
+  dofile(vim.env.MYVIMRC)
+  vim.notify("Nvim configuration reloaded!", vim.log.levels.INFO)
 end
 
 function plugins.load_compile()

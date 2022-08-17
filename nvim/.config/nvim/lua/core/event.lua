@@ -48,7 +48,7 @@ function autocmd.load_autocmds()
     -- };
 
     term = {
-      {"TermOpen", "*", "lua require('utils').onTermOpen()"},
+      {"TermOpen", "*", "lua require('keymap.utils').onTermOpen()"},
       {"TermClose", "*", "execute 'bdelete! ' . expand('<abuf>')"},
     };
 

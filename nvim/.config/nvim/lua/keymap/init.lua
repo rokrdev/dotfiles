@@ -86,7 +86,7 @@ wk.register({
     f = { map_lua("require('telescope.builtin').find_files({hidden=true})"), "Find file"},
     s = { map_lua("require('telescope.builtin').live_grep()"), "Search in file"},
     w = { map_lua("require('telescope.builtin').grep_string()"), "Search string"},
-    n = { map_lua("require('utils').nnnPicker()"), "Open file picker"},
+    n = { map_lua("require('keymap.utils').nnnPicker()"), "Open file picker"},
     t = { map_cr("NvimTreeToggle"), "Open file tree"},
     r = { "<Plug>(Scalpel)", "Replace in file"},
     y = { map_cr("let @+ = expand('%')"), "Yank current file path" }, -- yank current file path
@@ -111,9 +111,9 @@ wk.register({
   },
   g = {
     name = "git",
-    t = { map_lua("require('utils').openTerm('tig status')"), "Tig status" },
-    f = { map_lua("require('utils').openTerm('tig ' .. vim.fn.expand('%'))"), "Tig file history" },
-    L = { map_lua("require('utils').openTerm('tig')"), "Tig log" },
+    t = { map_lua("require('keymap.utils').openTerm('tig status')"), "Tig status" },
+    f = { map_lua("require('keymap.utils').openTerm('tig ' .. vim.fn.expand('%'))"), "Tig file history" },
+    L = { map_lua("require('keymap.utils').openTerm('tig')"), "Tig log" },
     l = { map_lua("require('gitsigns').blame_line()"), "Blame line" },
     g = { map_cr("Neogit"), "Neogit" },
     C = { map_lua("require('keymap.custom').git_conflicts({})"), "Conflict files" },
@@ -135,12 +135,12 @@ wk.register({
   s = {
     name = "session",
     s = { map_args("SS"), "Save session" },
-    r = { map_wait("SR " .. require('utils').getSessionFilePath()), "Reload session" },
-    d = { map_wait("SD " .. require('utils').getSessionFilePath()), "Delete session" },
+    r = { map_wait("SR " .. require('keymap.utils').getSessionFilePath()), "Reload session" },
+    d = { map_wait("SD " .. require('keymap.utils').getSessionFilePath()), "Delete session" },
   },
   o = {
     name = "others",
-    n = { map_lua("require('utils').toggleNumbers()"), "Cycle number" },
+    n = { map_lua("require('keymap.utils').toggleNumbers()"), "Cycle number" },
     s = { map_cr("Scratch"), "Scratch buffer" },
     t = { map_lua("require('Trailspace').trim()"), "Trim trailing whitespace" }
   },
@@ -174,7 +174,7 @@ wk.register({
 wk.register({
   f = {
     name = "file",
-    w = { map_lua("require('telescope.builtin').grep_string({search = require('utils').getVisualSelection()})"), "Search visual selection"},
+    w = { map_lua("require('telescope.builtin').grep_string({search = require('keymap.utils').getVisualSelection()})"), "Search visual selection"},
     r = { "<Plug>(ScalpelVisual)", "Replace in file"},
   },
 }, { mode = "v", prefix = "<leader>" })
@@ -186,10 +186,10 @@ wk.register({
   ["!"] = { map_cmd("f cl<CR><ESC>l"), "Split lines" },
   ["<C-S-j>"] = { ":m .+1<CR>==", "Move down line" },
   ["<C-S-k>"] = { ":m .-2<CR>==", "Move up line" },
-  ["f"] = { "<cmd>lua require('utils').custom_f()<CR>", "f"},
-  ["F"] = { "<cmd>lua require('utils').custom_F()<CR>", "F"},
-  ["t"] = { "<cmd>lua require('utils').custom_t()<CR>", "t"},
-  ["T"] = { "<cmd>lua require('utils').custom_T()<CR>", "T"},
+  ["f"] = { "<cmd>lua require('keymap.utils').custom_f()<CR>", "f"},
+  ["F"] = { "<cmd>lua require('keymap.utils').custom_F()<CR>", "F"},
+  ["t"] = { "<cmd>lua require('keymap.utils').custom_t()<CR>", "t"},
+  ["T"] = { "<cmd>lua require('keymap.utils').custom_T()<CR>", "T"},
   ["s"] = { "<cmd>HopWord<CR>", "Hop Word"},
   n = { [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], "Next" },
   N = { [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], "Previous" },
@@ -202,10 +202,10 @@ wk.register({
 wk.register({
   ["<C-S-j>"] = { ":m '>+1<CR>gv=gv", "Move down selection" },
   ["<C-S-k>"] = { ":m '<-2<CR>gv=gv", "Move up selection" },
-  ["f"] = { "<cmd>lua require('utils').custom_f()<CR>", "f"},
-  ["F"] = { "<cmd>lua require('utils').custom_F()<CR>", "F"},
-  ["t"] = { "<cmd>lua require('utils').custom_t()<CR>", "t"},
-  ["T"] = { "<cmd>lua require('utils').custom_T()<CR>", "T"},
+  ["f"] = { "<cmd>lua require('keymap.utils').custom_f()<CR>", "f"},
+  ["F"] = { "<cmd>lua require('keymap.utils').custom_F()<CR>", "F"},
+  ["t"] = { "<cmd>lua require('keymap.utils').custom_t()<CR>", "t"},
+  ["T"] = { "<cmd>lua require('keymap.utils').custom_T()<CR>", "T"},
   ["S"] = { "<cmd>HopWord<CR>", "Hop Word"},
 }, { mode = "v" })
 

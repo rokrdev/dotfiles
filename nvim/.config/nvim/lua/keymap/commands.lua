@@ -2,10 +2,9 @@ local cmd = vim.cmd
 local commands = {}
 
 function commands.setup()
-  cmd("command! Gcd lua require('utils').goToRoot()")
-  cmd("command! Reload :so $MYVIMRC | echo 'Config Reloaded'")
-  cmd("command! Tcc lua require('utils').toggleColorColumn()")
-  cmd("command! Scratch lua require('utils').scratchGenerator()")
+  cmd("command! Gcd lua require('keymap.utils').goToRoot()")
+  cmd("command! Tcc lua require('keymap.utils').toggleColorColumn()")
+  cmd("command! Scratch lua require('keymap.utils').scratchGenerator()")
 
   -- dotfiles
   cmd("command! Dfc lua require('keymap.custom').clear_buffers_from_path({loc = '/.dotfiles/'})")
@@ -24,9 +23,9 @@ function commands.setup()
   cmd("command! -nargs=* VT vsplit | Term <args>")
 
   -- Session
-  cmd("command! -nargs=* SS lua require('utils').saveSession(vim.fn.expand('<args>'))")
-  cmd("command! -nargs=* -complete=file SR lua require('utils').restoreSession(vim.fn.expand('<args>'))")
-  cmd("command! -nargs=* -complete=file SD lua require('utils').deleteSession(vim.fn.expand('<args>'))")
+  cmd("command! -nargs=* SS lua require('keymap.utils').saveSession(vim.fn.expand('<args>'))")
+  cmd("command! -nargs=* -complete=file SR lua require('keymap.utils').restoreSession(vim.fn.expand('<args>'))")
+  cmd("command! -nargs=* -complete=file SD lua require('keymap.utils').deleteSession(vim.fn.expand('<args>'))")
 
   -- Json format
   cmd("command! Fj %!jq")
@@ -38,6 +37,8 @@ function commands.setup()
   cmd('command! -nargs=* Wq wq')
   cmd('command! -nargs=* W w')
   cmd('command! -nargs=* Q q')
+
+  cmd("command! Reload lua require('core.pack').reload_config()")
 end
 
 return commands

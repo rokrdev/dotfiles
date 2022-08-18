@@ -467,15 +467,12 @@ plugin {
 }
 
 plugin {
-  "ellisonleao/glow.nvim",
-  cmd = 'Glow',
-  config = function ()
-    require('glow').setup({
-      style = "dark",
-      width = 120,
-      pager = true,
-    })
-  end
+  "iamcco/markdown-preview.nvim",
+  run = "cd app && npm install",
+  setup = function()
+    vim.g.mkdp_filetypes = { "markdown" }
+  end,
+  ft = { "markdown", "telekasten" },
 }
 
 -- plugin {

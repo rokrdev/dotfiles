@@ -90,7 +90,7 @@ wk.register({
     t = { map_cr("NvimTreeToggle"), "Open file tree"},
     r = { "<Plug>(Scalpel)", "Replace in file"},
     y = { map_cr("let @+ = expand('%')"), "Yank current file path" }, -- yank current file path
-    p = { map_cr("Glow"), "Preview" }
+    p = { map_cr("MarkdownPreviewToggle"), "Preview" }
   },
   b = {
     name = "buffer",

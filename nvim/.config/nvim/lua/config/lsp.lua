@@ -58,7 +58,7 @@ local servers = {
   "elixirls",
   "graphql",
   "html",
-  "jdtls",
+  -- "jdtls", disable java
   "jsonls",
   "kotlin_language_server",
   "pyright",

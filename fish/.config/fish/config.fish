@@ -76,6 +76,7 @@ alias mk='mkdir -p'
 alias n=npm
 alias ni='npm install'
 alias nn='nnn -d -e -H'
+alias nup='brew uninstall neovim && brew install neovim --HEAD'
 alias rf=trash
 alias sf='source $FISH_CONFIG'
 alias st=speedtest-cli

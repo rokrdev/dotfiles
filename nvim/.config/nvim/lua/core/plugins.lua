@@ -140,10 +140,10 @@ plugin {
     npairs.setup()
     local Rule = require('nvim-autopairs.rule')
 
-    npairs.add_rules({
-        Rule("```", "```", { 'telekasten' }),
-        Rule("```.*$", "```", { 'telekasten' })
-    })
+    -- npairs.add_rules({
+    --     Rule("```", "```", { 'telekasten' }),
+    --     Rule("```.*$", "```", { 'telekasten' })
+    -- })
 
     vim.g.completion_confirm_key = ""
   end
@@ -450,14 +450,6 @@ plugin {
   'goolord/alpha-nvim',
   config = function ()
     require'config.alpha'
-  end
-}
-
-plugin {
-  "renerocksai/telekasten.nvim",
-  event = 'BufReadPost',
-  config = function ()
-    require'config.telekasten'
   end
 }
 

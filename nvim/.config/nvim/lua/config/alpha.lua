@@ -209,7 +209,6 @@ local buttons = {
     button("SPC f t", " Tree", ":NvimTreeToggle<CR>", nil),
     button("SPC h f", " Dotfiles", ":Dff<CR>", nil),
     button("SPC h s", " Dotfiles Search", ":Dfs<CR>", nil),
-    button("SPC z f", " Zettelkastan", ":lua require('telekasten').find_notes()<CR>", nil),
     button("x", " Quit NVIM", ":qa<CR>", nil),
   },
   opts = {

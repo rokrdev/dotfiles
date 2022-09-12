@@ -18,7 +18,7 @@ end
 function autocmd.load_autocmds()
   local definitions = {
     packer = {
-      {"BufWritePost","*.lua","lua require('core.pack').auto_compile()"};
+      {"BufWritePost","*.lua",[[lua require('core.pack').auto_compile()]]};
     },
 
     bufs = {
@@ -28,11 +28,11 @@ function autocmd.load_autocmds()
       {"BufRead,BufNewFile", "mix.lock", "set filetype=elixir"},
       {"BufRead,BufNewFile", "*.eex,*.leex", "set filetype=eelixir"},
       {"BufDelete", "Telescope", "lua nvim_feedkeys('<esc>', 'i', v:true)"},
-    };
+    },
 
     wins = {
       {"FocusGained,BufEnter,CursorHold,CursorHoldI", "*", "if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif"},
-    };
+    },
 
     ft = {
       {"FileChangedShellPost", "*", "echohl WarningMsg | echo 'File changed on disk. Buffer reloaded.' | echohl None"},
@@ -40,7 +40,7 @@ function autocmd.load_autocmds()
       {"FileType", "json", "set conceallevel=0"},
       {"FileType", "alpha", "setlocal nofoldenable"},
       {"FileType", "markdown", "set conceallevel=0"},
-    };
+    },
 
     -- cursor = {
     --   {"InsertEnter,WinLeave", "*", "set nocursorline"},
@@ -48,13 +48,13 @@ function autocmd.load_autocmds()
     -- };
 
     term = {
-      {"TermOpen", "*", "lua require('keymap.utils').onTermOpen()"},
-      {"TermClose", "*", "execute 'bdelete! ' . expand('<abuf>')"},
-    };
+      {"TermOpen", "*", [[lua require('keymap.utils').onTermOpen()]]},
+      {"TermClose", "*", [[execute 'bdelete! ' . expand('<abuf>')]]},
+    },
 
     yank = {
-      {"TextYankPost", "*", "silent! lua vim.highlight.on_yank({higroup='IncSearch', timeout=400})"};
-    };
+      {"TextYankPost", "*", [[lua vim.highlight.on_yank({higroup='IncSearch', timeout=100})]]};
+    },
   }
 
   autocmd.nvim_create_augroups(definitions)

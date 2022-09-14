@@ -44,7 +44,13 @@ require('telescope').setup {
     qflist_previewer = require 'telescope.previewers'.vim_buffer_qflist.new,
   },
   pickers = {
-    find_files = { no_ignore = false },
+    buffers = { theme = 'ivy' },
+    current_buffer_fuzzy_find = { theme = 'ivy' },
+    find_files = { no_ignore = false, theme = 'ivy' },
+    git_branches = { theme = 'ivy' },
+    git_commits = { theme = 'ivy' },
+    grep_string = { theme = 'ivy' },
+    live_grep = { theme = 'ivy' },
   },
   extensions = {
     fzf = {

@@ -83,6 +83,7 @@ local wk = require("which-key")
 wk.register({
   b = {
     name = "buffer",
+    c = { map_cr("nohl"), "Clear search" },
     k = { map_cr("bd"), "kill buffer" },
     l = { map_args("ls<CR>:b"), "list buffers"},
     o = { map_cr("b#"), "alternate buffer"},
@@ -92,7 +93,6 @@ wk.register({
     t = { map_lua("require('Trailspace').trim()"), "Trim trailing whitespace" },
     ['-'] = { map_cr("Scratch"), "Scratch buffer" },
   },
-  c = { map_cr("nohl"), "Clear search" },
   d = {
     name = "dotfiles",
     f = { map_cr("Dff"), "Find file in dotfiles" },

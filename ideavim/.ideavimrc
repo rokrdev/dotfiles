@@ -27,6 +27,7 @@ set smartcase
 set ideajoin
 set ideastatusicon=gray
 set idearefactormode=keep
+let g:EasyMotion_do_mapping = 0
 
 """ Mappings --------------------------------
 
@@ -55,7 +56,7 @@ nnoremap <leader>sv :action SplitVertically <CR>
 nnoremap <leader>sc :action UnsplitAll <CR>
 nnoremap <leader>v :action NextSplitter <CR>
 
-nmap <leader><space> :action RecentFiles<CR>
+nnoremap <leader><space> :action RecentFiles<CR>
 " search
 nmap <leader>fw :action FindInPath<CR>
 vmap <leader>fw :action FindInPath<CR>

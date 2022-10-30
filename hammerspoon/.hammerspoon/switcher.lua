@@ -227,14 +227,14 @@ hs.hotkey.bind({"alt"}, "b", function()
 end)
 
 -- -- select any window for the same application
--- hs.hotkey.bind({"alt", "shift"}, "b", function()
---       obj:selectWindow(true)
--- end)
+hs.hotkey.bind({"alt", "shift"}, "8", function()
+      obj:switchWindow(true)
+end)
 
 -- cycles through all widows of the frontmost app.
-function switcherfunc()
-    return obj:switchWindow(true)
-end
+-- function switcherfunc()
+--     return obj:switchWindow(true)
+-- end
 
 -- Alt-tab replacement to go to last window
 -- hs.hotkey.bind({"alt"}, "t", function()

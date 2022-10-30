@@ -106,7 +106,7 @@ opt.laststatus = 2;
 opt.display = "lastline";
 opt.showbreak = "↳  ";
 -- opt.listchars = { tab = '»··', nbsp = '+', extends = '→', precedes = '←', space = "·" };
-opt.listchars = { tab = '»··', nbsp = '+', extends = '→', precedes = '←' };
+opt.listchars = { tab = '»··', nbsp = '+', extends = '→', precedes = '←', eol = '¬' };
 opt.showmatch = true;
 opt.fillchars = { vert = '┃', fold = '-', foldopen = '+', diff = '-', stl = ' ', stlnc = ' ', eob = ' ' };
 

@@ -198,10 +198,11 @@ plugin {
 }
 
 plugin {
-  'ur4ltz/surround.nvim',
+  'kylechui/nvim-surround',
+  tag = "*",
   event = 'BufReadPost',
   config = function ()
-    require'surround'.setup { mappings_style = "surround"}
+    require'nvim-surround'.setup {}
   end
 }
 

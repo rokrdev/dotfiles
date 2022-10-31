@@ -9,16 +9,66 @@ local feedkey = function(key, mode)
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
 
+local cmp_kinds = {
+  Text = '  ',
+  Method = '  ',
+  Function = '  ',
+  Constructor = '  ',
+  Field = '  ',
+  Variable = '  ',
+  Class = '  ',
+  Interface = '  ',
+  Module = '  ',
+  Property = '  ',
+  Unit = '  ',
+  Value = '  ',
+  Enum = '  ',
+  Keyword = '  ',
+  Snippet = '  ',
+  Color = '  ',
+  File = '  ',
+  Reference = '  ',
+  Folder = '  ',
+  EnumMember = '  ',
+  Constant = '  ',
+  Struct = '  ',
+  Event = '  ',
+  Operator = '  ',
+  TypeParameter = '  ',
+}
+
 cmp.setup({
+  formatting = {
+    format = function(entry, vim_item)
+      local prsnt, lspkind = pcall(require, "lspkind")
+      if not prsnt then
+        -- From kind_icons array
+        vim_item.kind = (cmp_kinds[vim_item.kind] or '') .. vim_item.kind
+      else
+        -- From lspkind
+        return lspkind.cmp_format()
+      end
+      -- Source
+      vim_item.menu = ({
+        buffer = "[Buffer]",
+        nvim_lsp = "[LSP]",
+        luasnip = "[LuaSnip]",
+        nvim_lua = "[Lua]",
+        latex_symbols = "[LaTeX]",
+      })[entry.source.name]
+
+      return vim_item
+    end
+  },
   snippet = {
     expand = function(args)
       vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
     end,
   },
-  window = {
-    documentation = cmp.config.window.bordered(),
-    completion = cmp.config.window.bordered(),
-  },
+  -- window = {
+  --   documentation = cmp.config.window.bordered(),
+  --   completion = cmp.config.window.bordered(),
+  -- },
   mapping = {
     ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
     ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),

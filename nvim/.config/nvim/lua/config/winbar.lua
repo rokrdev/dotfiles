@@ -27,7 +27,7 @@ function M.get_winbar()
   if excludes() then
     return ""
   end
-  return "%=%m%f"
+  return "%{%v:lua.require'nvim-navic'.get_location()%}"
 end
 
 return M

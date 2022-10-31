@@ -1,8 +1,11 @@
 local set_option = vim.api.nvim_buf_set_option
 local set_keymap = vim.keymap.set
+local navic = require("nvim-navic")
 
 local on_attach = function(client, bufnr)
-
+  if client.server_capabilities.documentSymbolProvider then
+    navic.attach(client, bufnr)
+  end
   set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   local bufopts = { noremap = true, silent = true, buffer = bufnr }

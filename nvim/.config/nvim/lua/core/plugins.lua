@@ -22,6 +22,15 @@ plugin {
 }
 
 plugin {
+  "SmiteshP/nvim-navic",
+  event = "BufReadPost",
+  requires = 'neovim/nvim-lspconfig',
+  config = function ()
+    require'config.navic'
+  end
+}
+
+plugin {
   "williamboman/mason.nvim",
   event = "BufReadPost",
   config = function ()
@@ -373,6 +382,25 @@ plugin {
         enabled = true,
         path = vim.fn.stdpath "cache" .. "/catppuccin",
       },
+      integrations = {
+        which_key = true,
+        gitsigns = true,
+        hop = true,
+        native_lsp = {
+          enabled = true,
+        },
+        cmp = true,
+        nvimtree = true,
+        telescope = true,
+        treesitter = true,
+        indent_blankline = {
+          enabled = true,
+          colored_indent_levels = false,
+        },
+        navic = {
+          enabled = true,
+        }
+      }
     }
     vim.g.catppuccin_flavour = "mocha"
     vim.api.nvim_exec(
@@ -438,6 +466,7 @@ plugin {
         separator_style = "thick",
         always_show_bufferline = false,
       },
+      highlights = require("catppuccin.groups.integrations.bufferline").get()
     }
   end
 }

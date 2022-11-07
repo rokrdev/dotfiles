@@ -26,6 +26,29 @@ neogit.setup {
   integrations = {
     diffview = true,
   },
+  sections = {
+    untracked = {
+      folded = false
+    },
+    unstaged = {
+      folded = false
+    },
+    staged = {
+      folded = false
+    },
+    stashes = {
+      folded = false
+    },
+    unpulled = {
+      folded = true
+    },
+    unmerged = {
+      folded = false
+    },
+    recent = {
+      folded = true
+    },
+  },
   -- override/add mappings
   mappings = {
     -- modify status buffer mappings

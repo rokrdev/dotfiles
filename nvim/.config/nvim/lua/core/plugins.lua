@@ -384,6 +384,7 @@ plugin {
       },
       integrations = {
         which_key = true,
+        neogit = true,
         gitsigns = true,
         hop = true,
         native_lsp = {

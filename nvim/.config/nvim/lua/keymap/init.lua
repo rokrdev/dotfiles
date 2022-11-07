@@ -118,7 +118,7 @@ wk.register({
     c = { map_lua("require('telescope.builtin').git_commits()"), "Commits" },
     C = { map_lua("require('keymap.custom').git_conflicts({})"), "Conflict files" },
     f = { map_lua("require('keymap.utils').openTerm('tig ' .. vim.fn.expand('%'))"), "Tig file history" },
-    g = { map_lua("require('neogit').open()"), "Neogit" },
+    g = { map_cr("Neogit"), "Neogit" },
     l = { map_lua("require('gitsigns').blame_line()"), "Blame line" },
     L = { map_lua("require('keymap.utils').openTerm('tig')"), "Tig log" },
     t = { map_lua("require('keymap.utils').openTerm('tig status')"), "Tig status" },

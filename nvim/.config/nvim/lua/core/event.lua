@@ -47,10 +47,10 @@ function autocmd.load_autocmds()
     --   {"InsertLeave,WinEnter", "*", "set cursorline"},
     -- };
 
-    term = {
-      {"TermOpen", "*", [[lua require('keymap.utils').onTermOpen()]]},
-      {"TermClose", "*", [[execute 'bdelete! ' . expand('<abuf>')]]},
-    },
+    -- term = {
+    --   {"TermOpen", "*", [[lua require('keymap.utils').onTermOpen()]]},
+    --   {"TermClose", "*", [[execute 'bdelete! ' . expand('<abuf>')]]},
+    -- },
 
     yank = {
       {"TextYankPost", "*", [[lua vim.highlight.on_yank({higroup='IncSearch', timeout=100})]]};

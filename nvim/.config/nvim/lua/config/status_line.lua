@@ -110,12 +110,12 @@ end
 ins_left {
   -- mode component
   function()
-    return ' '
+    return '▌'
   end,
   color = function()
     return { fg = mode_color[vim.fn.mode()]}
   end,
-  padding = { left = 0, right = 1 },
+  padding = { left = 0, right = 0 },
 }
 
 ins_left {
@@ -210,12 +210,12 @@ ins_right {
 
 ins_right {
   function()
-    return ' '
+    return '▐'
   end,
   color = function()
     return { fg = mode_color[vim.fn.mode()]}
   end,
-  padding = { left = 1, right = 0 },
+  padding = { left = 0, right = 0 },
 }
 
 -- Now don't forget to initialize lualine

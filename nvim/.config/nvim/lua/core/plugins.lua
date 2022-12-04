@@ -519,11 +519,11 @@ plugin {
   end
 }
 
-plugin {
-  "karb94/neoscroll.nvim",
-  event = 'BufReadPost',
-  config = function()
-    require'neoscroll'.setup()
-  end
-}
+-- plugin {
+--   "karb94/neoscroll.nvim",
+--   event = 'BufReadPost',
+--   config = function()
+--     require'neoscroll'.setup()
+--   end
+-- }
 

@@ -158,7 +158,7 @@ require("lazy").setup({
 
   {
     "lukas-reineke/indent-blankline.nvim",
-    after = 'catppuccin',
+    dependencies = 'catppuccin',
     config = function ()
       vim.g.indent_blankline_use_treesitter = true
       -- vim.g.indent_blankline_space_char_blankline = "⋅"
@@ -196,6 +196,9 @@ require("lazy").setup({
   {
     'kevinhwang91/nvim-hlslens',
     event = 'BufReadPost',
+    config = function ()
+      require('hlslens').setup()
+    end
   },
 
   {
@@ -241,7 +244,7 @@ require("lazy").setup({
 
   {
     'nvim-treesitter/nvim-treesitter',
-    after = "catppuccin",
+    dependencies = "catppuccin",
     config = function ()
       require'config.treesitter'
     end
@@ -364,7 +367,7 @@ require("lazy").setup({
 
   {
     "catppuccin/nvim",
-    as = "catppuccin",
+    name = "catppuccin",
     config = function ()
       require("catppuccin").setup {
         transparent_background = false,
@@ -402,7 +405,7 @@ require("lazy").setup({
       vim.api.nvim_exec(
       [[
       colorscheme catppuccin
-      hi link Trailspace TSDanger
+      hi link Trailspace CurSearch
       ]],
       false
       )
@@ -425,7 +428,7 @@ require("lazy").setup({
   {
     "petertriho/nvim-scrollbar",
     event = 'BufReadPost',
-    after = {
+    dependencies = {
       "nvim-hlslens",
       "catppuccin"
     },
@@ -447,7 +450,7 @@ require("lazy").setup({
 
   {
     "hoob3rt/lualine.nvim",
-    after = "catppuccin",
+    dependencies = "catppuccin",
     config = function ()
       require'config.status_line'
     end
@@ -455,7 +458,7 @@ require("lazy").setup({
 
   {
     "akinsho/nvim-bufferline.lua",
-    after = "lualine.nvim",
+    dependencies = "lualine.nvim",
     config = function ()
       require('bufferline').setup{
         options = {

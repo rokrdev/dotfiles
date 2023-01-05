@@ -159,6 +159,7 @@ require("lazy").setup({
   {
     "lukas-reineke/indent-blankline.nvim",
     dependencies = 'catppuccin',
+    event = "BufReadPost",
     config = function ()
       vim.g.indent_blankline_use_treesitter = true
       -- vim.g.indent_blankline_space_char_blankline = "⋅"
@@ -368,6 +369,7 @@ require("lazy").setup({
   {
     "catppuccin/nvim",
     name = "catppuccin",
+    lazy = false,
     config = function ()
       require("catppuccin").setup {
         transparent_background = false,
@@ -450,6 +452,7 @@ require("lazy").setup({
 
   {
     "hoob3rt/lualine.nvim",
+    lazy = false,
     dependencies = "catppuccin",
     config = function ()
       require'config.status_line'
@@ -459,6 +462,7 @@ require("lazy").setup({
   {
     "akinsho/nvim-bufferline.lua",
     dependencies = "lualine.nvim",
+    event = "VimEnter",
     config = function ()
       require('bufferline').setup{
         options = {
@@ -483,6 +487,7 @@ require("lazy").setup({
 
   {
     'goolord/alpha-nvim',
+    lazy = false,
     config = function ()
       require'config.alpha'
     end
@@ -510,5 +515,8 @@ require("lazy").setup({
     end
   }
 },
-{ lockfile = vim.fn.stdpath("data") .. "/lazy/lazy-lock.json" }
+{
+  lockfile = vim.fn.stdpath("data") .. "/lazy/lazy-lock.json",
+  defaults = { lazy = true }
+}
 )

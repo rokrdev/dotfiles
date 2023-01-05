@@ -6,10 +6,10 @@ require("lazy").setup({
     dependencies = 'hrsh7th/cmp-nvim-lsp',
     config = function ()
       vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-      vim.lsp.diagnostic.on_publish_diagnostics, {
-        -- delay update diagnostics
-        update_in_insert = false,
-      }
+        vim.lsp.diagnostic.on_publish_diagnostics, {
+          -- delay update diagnostics
+          update_in_insert = false,
+        }
       )
     end
   },
@@ -140,8 +140,7 @@ require("lazy").setup({
     config = function ()
       local npairs = require('nvim-autopairs')
       npairs.setup()
-      local Rule = require('nvim-autopairs.rule')
-
+      -- local Rule = require('nvim-autopairs.rule')
       -- npairs.add_rules({
         --     Rule("```", "```", { 'telekasten' }),
         --     Rule("```.*$", "```", { 'telekasten' })
@@ -344,7 +343,7 @@ require("lazy").setup({
   },
 
   {
-    'nvim-telescope/telescope-fzf-native.nvim', 
+    'nvim-telescope/telescope-fzf-native.nvim',
     build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
     dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
     config = function ()
@@ -424,29 +423,6 @@ require("lazy").setup({
         signcolumn = false,
         excluded_filetypes = {"nnn"}
       })
-    end
-  },
-
-  {
-    "petertriho/nvim-scrollbar",
-    event = 'BufReadPost',
-    dependencies = {
-      "nvim-hlslens",
-      "catppuccin"
-    },
-    config = function ()
-      require("scrollbar").setup({
-        show = true,
-        set_highlights = true,
-        handlers = {
-          cursor = true,
-          diagnostic = true,
-          gitsigns = false, -- dependencies gitsigns
-          handle = true,
-          search = false, -- dependencies hlslens,
-        }
-      })
-      require("scrollbar.handlers.search").setup()
     end
   },
 

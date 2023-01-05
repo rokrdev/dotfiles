@@ -49,11 +49,8 @@ vim.g.loaded_netrwFileHandlers = 1
 -- vim.g.did_load_filetypes = 0
 -- vim.g.do_filetype_lua = 0
 
-local pack = require('core.pack')
-
-pack.ensure_plugins()
+require('core.lazy')
 require('core.options')
-pack.load_compile()
 require('keymap')
 require('core.event')
 

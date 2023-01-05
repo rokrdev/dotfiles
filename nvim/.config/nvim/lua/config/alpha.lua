@@ -231,11 +231,11 @@ local function get_os()
 end
 
 local function get_footer()
-  local plugins = #vim.tbl_keys(packer_plugins)
+  -- local plugins = require("lazy").stats().loaded
   local v = vim.version()
   local datetime = os.date " %d-%m-%Y   %H:%M:%S"
   local platform = get_os()
-  return string.format(" %d   v%d.%d.%d  %s  %s", plugins, v.major, v.minor, v.patch, datetime, platform)
+  return string.format(" v%d.%d.%d  %s  %s", v.major, v.minor, v.patch, datetime, platform)
 end
 
 local footer = {

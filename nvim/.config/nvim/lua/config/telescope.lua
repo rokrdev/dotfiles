@@ -57,6 +57,4 @@ require('telescope').setup {
   }
 }
 
-require('telescope').load_extension('fzf')
-
 vim.cmd([[packadd cfilter]])

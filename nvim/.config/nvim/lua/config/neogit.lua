@@ -1,7 +1,3 @@
-if packer_plugins['diffview.nvim'] and not packer_plugins['diffview.nvim'].loaded then
-  vim.cmd [[packadd diffview.nvim]]
-end
-
 local neogit = require'neogit'
 neogit.setup {
   disable_signs = false,

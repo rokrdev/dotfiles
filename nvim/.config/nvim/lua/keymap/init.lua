@@ -162,7 +162,7 @@ wk.register({
   ["F"] = { "<cmd>lua require('keymap.utils').custom_F()<CR>", "F"},
   ["t"] = { "<cmd>lua require('keymap.utils').custom_t()<CR>", "t"},
   ["T"] = { "<cmd>lua require('keymap.utils').custom_T()<CR>", "T"},
-  ["s"] = { "<cmd>HopWord<CR>", "Hop Word"},
+  ["s"] = { "<cmd>lua require('hop').hint_words()<CR>", "Hop Word"},
   n = { [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], "Next" },
   N = { [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], "Previous" },
   ["*"] = { [[*<Cmd>lua require('hlslens').start()<CR>]], "Search word under cursor" },
@@ -178,7 +178,7 @@ wk.register({
   ["F"] = { "<cmd>lua require('keymap.utils').custom_F()<CR>", "F"},
   ["t"] = { "<cmd>lua require('keymap.utils').custom_t()<CR>", "t"},
   ["T"] = { "<cmd>lua require('keymap.utils').custom_T()<CR>", "T"},
-  ["S"] = { "<cmd>HopWord<CR>", "Hop Word"},
+  ["s"] = { "<cmd>lua require('hop').hint_words()<CR>", "Hop Word"},
 }, { mode = "v" })
 
 vim.keymap.set("n", "<C-d>", "<C-d>zz")

@@ -120,4 +120,6 @@ set CFLAGS "-O2 -g" $CFLAGS
 
 alias x86="env /usr/bin/arch -x86_64 /bin/zsh --login"
 
-source /Users/bjoshi/.docker/init-fish.sh || true # Added by Docker Desktop
+if test -e ~/.docker/init-fish.sh
+  source $HOME/.docker/init-fish.sh || true # Added by Docker Desktop
+end

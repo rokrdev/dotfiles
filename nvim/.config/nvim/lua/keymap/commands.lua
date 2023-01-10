@@ -28,7 +28,7 @@ function commands.setup()
   cmd("command! -nargs=* -complete=file SD lua require('keymap.utils').deleteSession(vim.fn.expand('<args>'))")
 
   -- Json format
-  cmd("command! Fj %!jq")
+  cmd("command! Jq %!jq")
 
   cmd("command! Cd cd %:h")
   cmd("command! Bd bufdo bd")

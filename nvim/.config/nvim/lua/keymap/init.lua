@@ -83,6 +83,7 @@ local wk = require("which-key")
 wk.register({
   b = {
     name = "buffer",
+    b = { map_lua("require('telescope.builtin').buffers()"), "list buffers" },
     c = { map_cr("nohl"), "Clear search" },
     d = { map_cr("bd"), "delete buffer" },
     D = { map_cr("bd!"), "Force delete buffer" },
@@ -140,7 +141,6 @@ wk.register({
     name = "others",
     n = { map_lua("require('keymap.utils').toggleNumbers()"), "Cycle number" },
   },
-  ["<space>"] = { map_lua("require('telescope.builtin').buffers()"), "list buffers" },
 }, { prefix = "<leader>" })
 
 wk.register({

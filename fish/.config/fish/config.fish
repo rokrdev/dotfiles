@@ -96,7 +96,7 @@ alias yr='yarn run'
 alias ys='yarn start'
 alias yt='yarn test'
 alias zz=zi
-alias zellij="zellij --layout custom"
+alias zj="zellij --layout custom"
 
 # Changing "ls" to "exa"
 # alias ls='exa --color=always --group-directories-first'  # all files and dirs
@@ -123,3 +123,4 @@ alias x86="env /usr/bin/arch -x86_64 /bin/zsh --login"
 if test -e ~/.docker/init-fish.sh
   source $HOME/.docker/init-fish.sh || true # Added by Docker Desktop
 end
+

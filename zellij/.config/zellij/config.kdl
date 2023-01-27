@@ -8,6 +8,7 @@ keybinds clear-defaults=true {
         bind "Alt k" "Alt Up" { MoveFocus "Up"; }
         bind "Alt d" { GoToNextTab; }
         bind "Alt a" { GoToPreviousTab; }
+        bind "Alt c" { NewTab; }
     }
     scroll {
         bind "Ctrl s" "Space" "Enter" "Esc" { SwitchToMode "normal"; }
@@ -31,7 +32,6 @@ keybinds clear-defaults=true {
         bind "-" { NewPane "Down"; SwitchToMode "normal"; }
         bind r"\" { NewPane "Right"; SwitchToMode "normal"; }
         bind "z" { ToggleFocusFullscreen; SwitchToMode "normal"; }
-        bind "c" { NewTab; SwitchToMode "normal"; }
         bind "," { SwitchToMode "RenameTab"; TabNameInput 0; }
         bind "p" { GoToPreviousTab; }
         bind "n" { GoToNextTab; }
@@ -72,7 +72,7 @@ keybinds clear-defaults=true {
 //   - true
 //   - false (Default)
 //
-// simplified_ui true
+simplified_ui true
 
 // Choose the path to the default shell that zellij will use for opening new panes
 // Default: $SHELL
@@ -89,7 +89,7 @@ pane_frames false
 // Choose the theme that is specified in the themes section.
 // Default: default
 //
-theme "catppuccin" 
+theme "catppuccin"
 
 // The name of the default layout to load on startup
 // Default: "default"

@@ -119,7 +119,7 @@ wk.register({
     c = { map_lua("require('telescope.builtin').git_commits()"), "Commits" },
     C = { map_lua("require('keymap.custom').git_conflicts({})"), "Conflict files" },
     f = { map_lua("require('keymap.utils').openTerm('tig ' .. vim.fn.expand('%'))"), "Tig file history" },
-    g = { map_cr("Neogit"), "Neogit" },
+    g = { map_lua("require('neogit').open()"), "Neogit" },
     l = { map_lua("require('gitsigns').blame_line()"), "Blame line" },
     L = { map_lua("require('keymap.utils').openTerm('tig')"), "Tig log" },
     t = { map_lua("require('keymap.utils').openTerm('tig status')"), "Tig status" },
@@ -131,16 +131,23 @@ wk.register({
     r = { map_cr("LspRestart"), "Restart lsp"},
     s = { map_cr("LspStart"), "Start lsp"},
   },
+  o = {
+    name = "others",
+    n = { map_lua("require('keymap.utils').toggleNumbers()"), "Cycle number" },
+  },
   s = {
     name = "session",
     d = { map_wait("SD " .. require('keymap.utils').getSessionFilePath()), "Delete session" },
     r = { map_wait("SR " .. require('keymap.utils').getSessionFilePath()), "Reload session" },
     s = { map_args("SS"), "Save session" },
   },
-  o = {
-    name = "others",
-    n = { map_lua("require('keymap.utils').toggleNumbers()"), "Cycle number" },
-  },
+  z = {
+    name = "lazy",
+    c = { map_lua("require('lazy').health()"), "Check health" },
+    h = { map_lua("require('lazy').home()"), "Home" },
+    p = { map_lua("require('lazy').profile()"), "Profile" },
+    s = { map_lua("require('lazy').sync()"), "Sync" },
+  }
 }, { prefix = "<leader>" })
 
 wk.register({

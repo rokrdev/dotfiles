@@ -186,14 +186,6 @@ require("lazy").setup({
   },
 
   {
-    'wincent/scalpel',
-    event = 'BufReadPost',
-    setup = function ()
-      vim.g.ScalpelMap=0
-    end
-  },
-
-  {
     'kevinhwang91/nvim-hlslens',
     event = 'BufReadPost',
     config = function ()
@@ -467,11 +459,6 @@ require("lazy").setup({
     config = function ()
       require'config.alpha'
     end
-  },
-
-  {
-    "mattn/calendar-vim",
-    event = 'BufReadPost',
   },
 
   {

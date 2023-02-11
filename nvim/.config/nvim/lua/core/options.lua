@@ -102,7 +102,7 @@ opt.showcmd = false;
 opt.cmdheight = 1;
 opt.cmdwinheight = 5;
 opt.equalalways = false;
-opt.laststatus = 2;
+opt.laststatus = 3;
 opt.display = "lastline";
 -- opt.listchars = { tab = '»··', nbsp = '+', extends = '→', precedes = '←', space = "·" };
 opt.listchars = { tab = '»··', nbsp = '+', extends = '→', precedes = '←', eol = '¬' };

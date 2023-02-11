@@ -90,7 +90,6 @@ wk.register({
     -- l = { map_args("ls<CR>:b"), "list buffers"},
     l = { "<cmd>HopLine<CR>", "Hop Line"},
     o = { map_cr("b#"), "alternate buffer"},
-    r = { "<Plug>(Scalpel)", "Replace in file"},
     s = { map_lua("require('telescope.builtin').current_buffer_fuzzy_find()"), "Search in buffer"},
     t = { map_lua("require('Trailspace').trim()"), "Trim trailing whitespace" },
     ['-'] = { map_cr("Scratch"), "Scratch buffer" },
@@ -153,7 +152,6 @@ wk.register({
 wk.register({
   f = {
     name = "file",
-    r = { "<Plug>(ScalpelVisual)", "Replace in file"},
     w = { map_lua("require('telescope.builtin').grep_string({search = require('keymap.utils').getVisualSelection()})"), "Search visual selection"},
   },
 }, { mode = "v", prefix = "<leader>" })

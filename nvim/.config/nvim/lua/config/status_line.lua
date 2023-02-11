@@ -38,6 +38,11 @@ local conditions = {
 local config = {
   options = {
     globalstatus = true,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    },
     -- Disable sections and component separators
     component_separators = '',
     section_separators = '',
@@ -68,6 +73,9 @@ local config = {
     lualine_c = {},
     lualine_x = {},
   },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
   extensions = {
     'nvim-tree',
     'quickfix',

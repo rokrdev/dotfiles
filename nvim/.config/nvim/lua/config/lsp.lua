@@ -67,7 +67,7 @@ local servers = {
   "pyright",
   "solargraph",
   "sqls",
-  "sumneko_lua",
+  "lua",
   "terraformls",
   "tsserver",
   "vimls",

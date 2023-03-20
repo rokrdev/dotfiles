@@ -14,6 +14,7 @@ local reload = function (_, key)
 end
 
 local singleapps = {
+  {'a', 'Arc', appLaunchFunction},
   {'b', 'Brave Browser', appLaunchFunction},
   {'c', 'Google Chrome', appLaunchFunction},
   {'e', 'Evernote', appLaunchFunction},

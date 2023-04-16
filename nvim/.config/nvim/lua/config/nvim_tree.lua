@@ -11,7 +11,6 @@ require('nvim-tree').setup {
   view                = {
     width = 30,
     side = 'left',
-    hide_root_folder = true,
     adaptive_size = true,
   },
   git = {
@@ -21,6 +20,7 @@ require('nvim-tree').setup {
     timeout = 400,
   },
   renderer            = {
+    root_folder_label = false,
     indent_markers = {
       enable = false,
       icons = {

@@ -66,7 +66,7 @@ local servers = {
   "kotlin_language_server",
   "pyright",
   "solargraph",
-  "sqls",
+  "sqlls",
   "lua_ls",
   "terraformls",
   "tsserver",

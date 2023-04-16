@@ -8,7 +8,7 @@ neogit.setup {
   disable_builtin_notifications = false,
   use_magit_keybindings = true,
   commit_popup = {
-    kind = "replace",
+    kind = "split",
   },
   -- Change the default way of opening neogit
   kind = "tab",

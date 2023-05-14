@@ -146,6 +146,7 @@ wk.register({
     h = { map_lua("require('lazy').home()"), "Home" },
     p = { map_lua("require('lazy').profile()"), "Profile" },
     s = { map_lua("require('lazy').sync()"), "Sync" },
+    z = { map_lua("require('lazy').sync()"), "Sync" },
   }
 }, { prefix = "<leader>" })
 

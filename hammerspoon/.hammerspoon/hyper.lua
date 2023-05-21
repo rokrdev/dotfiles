@@ -20,6 +20,7 @@ local singleapps = {
   {'e', 'Evernote', appLaunchFunction},
   {'k', 'Kitty', appLaunchFunction},
   {'i', 'Intellij IDEA', appLaunchFunction},
+  {'l', 'Logseq', appLaunchFunction},
   {'m', 'Slack', appLaunchFunction},
   {'o', 'Obsidian', appLaunchFunction},
   {'s', 'Spotify', appLaunchFunction},

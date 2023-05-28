@@ -1,5 +1,5 @@
 -- Sequential keybindings, e.g. Hyper-a,f for Finder
-local k = hs.hotkey.modal.new({}, "F18")
+local k = hs.hotkey.modal.new({"alt"}, "`")
 
 local appLaunchFunction = function (appname, key)
   hs.application.launchOrFocus(appname)
@@ -22,7 +22,6 @@ local singleapps = {
   {'i', 'Intellij IDEA', appLaunchFunction},
   {'l', 'Logseq', appLaunchFunction},
   {'m', 'Slack', appLaunchFunction},
-  {'o', 'Obsidian', appLaunchFunction},
   {'s', 'Spotify', appLaunchFunction},
   {'t', 'Todoist', appLaunchFunction},
   {'-', 'Chrysalis', appLaunchFunction},

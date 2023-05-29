@@ -72,6 +72,7 @@ alias icat="kitty +kitten icat"
 alias k=kubectl
 alias kgp="kubectl get pods"
 alias kl="kubectl logs"
+alias klf="kubectl logs -f"
 alias mk='mkdir -p'
 alias n=npm
 alias ni='npm install'

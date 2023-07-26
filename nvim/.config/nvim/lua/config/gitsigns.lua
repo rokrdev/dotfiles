@@ -1,23 +1,29 @@
+
 require('gitsigns').setup {
   numhl = false,
   linehl = false,
-  keymaps = {
-    -- Default keymap options
-    noremap = true,
-    buffer = true,
-    ['n ]c'] = { expr = true, "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'" },
-    ['n [c'] = { expr = true, "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'" },
+  on_attach = function(bufnr)
+    local gs = package.loaded.gitsigns
 
-    -- ['n <leader>hs'] = '<cmd>lua require"gitsigns".stage_hunk()<CR>',
-    -- ['n <leader>hu'] = '<cmd>lua requiregitsigns".undo_stage_hunk()<CR>',
-    -- ['n <leader>hr'] = '<cmd>lua require"gitsigns".reset_hunk()<CR>',
-    -- ['n <leader>hR'] = '<cmd>lua require"gitsigns".reset_buffer()<CR>',
-    -- ['n <leader>hp'] = '<cmd>lua require"gitsigns".preview_hunk()<CR>',
+    local function map(mode, l, r, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, l, r, opts)
+    end
 
-    -- Text objects
-    ['o ih'] = ':<C-U>lua require"gitsigns".select_hunk()<CR>',
-    ['x ih'] = ':<C-U>lua require"gitsigns".select_hunk()<CR>'
-  },
+    -- Navigation
+    map('n', ']c', function()
+      if vim.wo.diff then return ']c' end
+      vim.schedule(function() gs.next_hunk() end)
+      return '<Ignore>'
+    end, {expr=true})
+
+    map('n', '[c', function()
+      if vim.wo.diff then return '[c' end
+      vim.schedule(function() gs.prev_hunk() end)
+      return '<Ignore>'
+    end, {expr=true})
+  end,
   watch_gitdir = {
     interval = 1000,
     follow_files = true,

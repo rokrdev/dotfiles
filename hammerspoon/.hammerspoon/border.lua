@@ -34,10 +34,10 @@ function w.manageBorder()
 end
 
 
-allwindows = hs.window.filter.new(nil)
-allwindows:subscribe(hs.window.filter.windowCreated, function () w.manageBorder() end)
-allwindows:subscribe(hs.window.filter.windowFocused, function () w.manageBorder() end)
-allwindows:subscribe(hs.window.filter.windowMoved, function () w.manageBorder() end)
-allwindows:subscribe(hs.window.filter.windowUnfocused, function () w.manageBorder() end)
+-- allwindows = hs.window.filter.new(nil)
+-- allwindows:subscribe(hs.window.filter.windowCreated, function () w.manageBorder() end)
+-- allwindows:subscribe(hs.window.filter.windowFocused, function () w.manageBorder() end)
+-- allwindows:subscribe(hs.window.filter.windowMoved, function () w.manageBorder() end)
+-- allwindows:subscribe(hs.window.filter.windowUnfocused, function () w.manageBorder() end)
 
 

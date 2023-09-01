@@ -24,24 +24,31 @@ neogit.setup {
   },
   sections = {
     untracked = {
+      hidden = false,
       folded = false
     },
     unstaged = {
+      hidden = false,
       folded = false
     },
     staged = {
+      hidden = false,
       folded = false
     },
     stashes = {
+      hidden = false,
       folded = false
     },
     unpulled = {
+      hidden = false,
       folded = true
     },
     unmerged = {
+      hidden = false,
       folded = false
     },
     recent = {
+      hidden = false,
       folded = true
     },
   },

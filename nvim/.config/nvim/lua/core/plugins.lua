@@ -405,18 +405,18 @@ require("lazy").setup({
     end
   },
 
-  {
-    "beauwilliams/focus.nvim",
-    event = 'BufReadPost',
-    config = function ()
-      require("focus").setup({
-        cursorline = false,
-        cursorcolumn = false,
-        signcolumn = false,
-        excluded_filetypes = {"nnn"}
-      })
-    end
-  },
+  -- {
+  --   "beauwilliams/focus.nvim",
+  --   event = 'BufReadPost',
+  --   config = function ()
+  --     require("focus").setup({
+  --       cursorline = false,
+  --       cursorcolumn = false,
+  --       signcolumn = false,
+  --       excluded_filetypes = {"nnn"}
+  --     })
+  --   end
+  -- },
 
   {
     "hoob3rt/lualine.nvim",

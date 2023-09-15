@@ -99,12 +99,12 @@ alias yt='yarn test'
 alias zz=zi
 alias zj="zellij --layout custom"
 
-# Changing "ls" to "exa"
-# alias ls='exa --color=always --group-directories-first'  # all files and dirs
-alias la='exa -a --color=always --group-directories-first'  # all files and dirs
-alias ll='exa -lah --color=always --group-directories-first'  # long format
-alias lt='exa -aT --git-ignore --color=always --group-directories-first' # tree listing
-alias l.='exa -a | egrep "^\."'
+# Changing "ls" to "eza"
+# alias ls='eza --color=always --group-directories-first'  # all files and dirs
+alias la='eza -a --color=always --group-directories-first'  # all files and dirs
+alias ll='eza -lah --color=always --group-directories-first'  # long format
+alias lt='eza -aT --git-ignore --color=always --group-directories-first' # tree listing
+alias l.='eza -a | egrep "^\."'
 alias ..='cd ..'
 alias ...='cd ../../'
 alias ....='cd ../../../'

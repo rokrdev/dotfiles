@@ -326,7 +326,7 @@ function window.cycleFocus()
   end
 end
 
-hs.hotkey.bind({'alt'}, 'f', window.cycleFocus)
+hs.hotkey.bind({'cmd', 'shift', 'alt'}, 'f', window.cycleFocus)
 hs.hotkey.bind({'alt'}, 'v', window.cycleWidth)
 
 windowLayoutMode = hs.hotkey.modal.new({}, 'F16')

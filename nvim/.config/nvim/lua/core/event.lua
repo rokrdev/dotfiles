@@ -18,16 +18,16 @@ end
 function autocmd.load_autocmds()
   local definitions = {
     bufs = {
-      {"BufRead,BufNewFile", "*", "setlocal formatoptions-=cro"},
-      {"BufRead,BufNewFile", "*.fish", "set filetype=fish"},
-      {"BufRead,BufNewFile", "*.ex,*.exs", "set filetype=elixir"},
-      {"BufRead,BufNewFile", "mix.lock", "set filetype=elixir"},
-      {"BufRead,BufNewFile", "*.eex,*.leex", "set filetype=eelixir"},
-      {"BufDelete", "Telescope", "lua nvim_feedkeys('<esc>', 'i', v:true)"},
+      {{"BufRead","BufNewFile"}, "*", "setlocal formatoptions-=cro"},
+      {{"BufRead","BufNewFile"}, "*.fish", "set filetype=fish"},
+      {{"BufRead","BufNewFile"}, "*.ex,*.exs", "set filetype=elixir"},
+      {{"BufRead","BufNewFile"}, "mix.lock", "set filetype=elixir"},
+      {{"BufRead","BufNewFile"}, "*.eex,*.leex", "set filetype=eelixir"},
+      -- {"BufDelete", "*", "lua nvim_feedkeys('<esc>', 'i', v:true)"},
     },
 
     wins = {
-      {"FocusGained,BufEnter,CursorHold,CursorHoldI", "*", "if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif"},
+      {{"FocusGained","BufEnter","CursorHold","CursorHoldI"}, "*", "if mode() !~ '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif"},
     },
 
     ft = {
@@ -37,16 +37,6 @@ function autocmd.load_autocmds()
       {"FileType", "alpha", "setlocal nofoldenable"},
       {"FileType", "markdown", "set conceallevel=0"},
     },
-
-    -- cursor = {
-    --   {"InsertEnter,WinLeave", "*", "set nocursorline"},
-    --   {"InsertLeave,WinEnter", "*", "set cursorline"},
-    -- };
-
-    -- term = {
-    --   {"TermOpen", "*", [[lua require('keymap.utils').onTermOpen()]]},
-    --   {"TermClose", "*", [[execute 'bdelete! ' . expand('<abuf>')]]},
-    -- },
 
     yank = {
       {"TextYankPost", "*", [[lua vim.highlight.on_yank({higroup='IncSearch', timeout=100})]]};

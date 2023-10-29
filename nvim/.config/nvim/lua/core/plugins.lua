@@ -158,17 +158,17 @@ require("lazy").setup({
   {
     "lukas-reineke/indent-blankline.nvim",
     dependencies = 'catppuccin',
+    main = "ibl",
+    opts = {
+      exclude = {
+        buftypes = {'terminal'},
+        filetypes = {'alpha', 'help', 'packer', 'NvimTree'},
+      },
+      scope = {
+        enabled = false,
+      },
+    },
     event = "BufReadPost",
-    config = function ()
-      vim.g.indent_blankline_use_treesitter = true
-      -- vim.g.indent_blankline_space_char_blankline = "⋅"
-      require('indent_blankline').setup {
-        show_current_context = false,
-        -- show_current_context_start = true,
-        buftype_exclude = {'terminal'},
-        filetype_exclude = {'alpha', 'help', 'packer', 'NvimTree'},
-      }
-    end
   },
 
   {

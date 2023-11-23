@@ -60,6 +60,7 @@ nnoremap <leader>bb :action RecentFiles<CR>
 " search
 nmap <leader>fw :action FindInPath<CR>
 vmap <leader>fw :action FindInPath<CR>
+nnoremap <leader>c :action CallHierarchy <CR>
 nnoremap <leader>fu :action FindUsages <CR>
 vnoremap <leader>fu :action FindUsages <CR>
 nnoremap <leader>fs :action SearchEverywhere <CR>

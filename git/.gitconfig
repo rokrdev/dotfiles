@@ -21,9 +21,12 @@
 	path = ~/projects/config
 [includeIf "gitdir:~/afterpay/**/.git"]
 	path = ~/afterpay/config
+[includeIf "gitdir:~/square/**/.git"]
+	path = ~/square/config
 [commit]
 	template = ~/.gitmessage
 [init]
 	defaultBranch = main
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+

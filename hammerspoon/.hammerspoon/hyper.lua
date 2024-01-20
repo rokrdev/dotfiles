@@ -7,6 +7,12 @@ local appLaunchFunction = function (appname, key)
   key:exit();
 end
 
+local thingsLaunchFunction = function (appname, key)
+  hs.application.launchOrFocusByBundleID("com.culturedcode.ThingsMac")
+  key.triggered = true
+  key:exit();
+end
+
 local reload = function (_, key)
   hs.reload();
   key.triggered = true
@@ -15,15 +21,15 @@ end
 
 local singleapps = {
   {'a', 'Arc', appLaunchFunction},
-  {'b', 'Brave Browser', appLaunchFunction},
+  {'b', 'Bear', appLaunchFunction},
   {'c', 'Google Chrome', appLaunchFunction},
   {'k', 'Kitty', appLaunchFunction},
   {'i', 'Intellij IDEA', appLaunchFunction},
-  {'l', 'Logseq', appLaunchFunction},
   {'m', 'Spotify', appLaunchFunction},
   {'n', 'Notes', appLaunchFunction},
   {'s', 'Slack', appLaunchFunction},
-  {'t', 'Todoist', appLaunchFunction},
+  {'t', 'Things', thingsLaunchFunction},
+  {'z', 'Safari', appLaunchFunction},
   {'-', 'Chrysalis', appLaunchFunction},
   {'`', 'Reload', reload},
 }
@@ -33,3 +39,4 @@ for _, app in ipairs(singleapps) do
   k:bind({}, app[1], function() fun(app[2], k) end)
 end
 
+hs.inspect(hs.application.runningApplications())

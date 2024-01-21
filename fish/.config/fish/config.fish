@@ -1,8 +1,8 @@
 export BAT_THEME="tokyonight"
 
 export ALTERNATE_EDITOR="nvim"
-export VISUAL="nvr -cc split --remote-wait"
-export EDITOR="nvr -cc split --remote-wait"
+export EDITOR="nvim"
+export VISUAL="nvim"
 export TERM="xterm-kitty"
 export KITTY_CACHE_DIRECTORY="/tmp/"
 export FISH_CONFIG="$HOME/.config/fish/config.fish"

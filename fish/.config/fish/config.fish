@@ -31,9 +31,6 @@ export FZF_CTRL_R_OPTS='--sort --exact'
 export FZF_TMUX=1
 export FZF_DEFAULT_OPTS='--bind=ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all'
 
-export LDFLAGS="-L/usr/local/opt/zlib/lib"
-export CPPFLAGS="-I/usr/local/opt/zlib/include"
-
 defaults write -g ApplePressAndHoldEnabled -bool false
 # defaults write -g InitialKeyRepeat -int 15
 # defaults write -g KeyRepeat -int 2

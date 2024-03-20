@@ -4,3 +4,4 @@ layout {
         plugin location="zellij:tab-bar"
     }
 }
+

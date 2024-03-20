@@ -2,13 +2,13 @@ keybinds clear-defaults=true {
     normal {
         bind "Alt t" { SwitchToMode "tmux"; }
         bind "Ctrl q" { Quit; }
-        bind "Alt h" "Alt Left" { MoveFocus "Left"; }
-        bind "Alt l" "Alt Right" { MoveFocus "Right"; }
-        bind "Alt j" "Alt Down" { MoveFocus "Down"; }
-        bind "Alt k" "Alt Up" { MoveFocus "Up"; }
+        bind "Alt Left" { MoveFocus "Left"; }
+        bind "Alt Right" { MoveFocus "Right"; }
+        bind "Alt Down" { MoveFocus "Down"; }
+        bind "Alt Up" { MoveFocus "Up"; }
         bind "Alt d" { GoToNextTab; }
         bind "Alt a" { GoToPreviousTab; }
-        bind "Alt c" { NewTab; }
+        bind "Alt c" { FocusNextPane; }
     }
     scroll {
         bind "Ctrl s" "Space" "Enter" "Esc" { SwitchToMode "normal"; }
@@ -30,11 +30,10 @@ keybinds clear-defaults=true {
         bind "Ctrl q" { Quit; }
         bind "Ctrl b" { Write 2; SwitchToMode "normal"; }
         bind "-" { NewPane "Down"; SwitchToMode "normal"; }
-        bind r"\" { NewPane "Right"; SwitchToMode "normal"; }
+        bind "/" { NewPane "Right"; SwitchToMode "normal"; }
+        bind "n" { NewTab; SwitchToMode "normal";}
         bind "z" { ToggleFocusFullscreen; SwitchToMode "normal"; }
         bind "," { SwitchToMode "RenameTab"; TabNameInput 0; }
-        bind "p" { GoToPreviousTab; }
-        bind "n" { GoToNextTab; }
         bind "Alt h" "Alt Left" { MoveFocusOrTab "Left"; }
         bind "Alt l" "Alt Right" { MoveFocusOrTab "Right"; }
         bind "Alt j" "Alt Down" { MoveFocus "Down"; }
@@ -166,6 +165,7 @@ copy_on_select true
 ui {
     pane_frames {
         rounded_corners true
+        hide_session_name true
     }
 }
 themes {

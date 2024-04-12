@@ -193,6 +193,8 @@ ins_right {
   cond = conditions.hide_in_width,
 }
 
+ins_right { 'selectioncount', color = { fg = colors.orange } }
+
 ins_right { 'location' }
 
 ins_right { 'progress', color = { fg = colors.fg } }

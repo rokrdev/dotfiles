@@ -3,3 +3,4 @@ __backup__*
 .vim/*
 .rgignore
 .git
+kls_database.db

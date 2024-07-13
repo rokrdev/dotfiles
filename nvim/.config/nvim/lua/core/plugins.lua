@@ -339,23 +339,19 @@ require("lazy").setup({
   },
 
   {
-    'nvim-telescope/telescope.nvim',
+    "ibhagwan/fzf-lua",
     event = 'VimEnter',
-    dependencies = {
-      'nvim-lua/popup.nvim',
-      'nvim-lua/plenary.nvim',
-    },
-    config = function ()
-      require'config.telescope'
-    end
-  },
-
-  {
-    'nvim-telescope/telescope-fzf-native.nvim',
-    build = "make",
-    dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
-    config = function ()
-      require('telescope').load_extension('fzf')
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      -- calling `setup` is optional for customization
+      require('fzf-lua').setup({
+        'fzf-native',
+        grep = {
+          rg_opts = "--sort-files --hidden --column --line-number --no-heading " ..
+          "--color=always --smart-case -g '!{.git,node_modules}/*'",
+        },
+        fzf_opts = {['--layout'] = 'default'}
+      })
     end
   },
 
@@ -399,7 +395,7 @@ require("lazy").setup({
           },
           cmp = true,
           nvimtree = true,
-          telescope = true,
+          telescope = false,
           treesitter = true,
           indent_blankline = {
             enabled = true,

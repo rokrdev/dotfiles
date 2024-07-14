@@ -453,6 +453,11 @@ require("lazy").setup({
     config = function()
       require("which-key").setup {}
     end
+  },
+
+  {
+    "Pocco81/auto-save.nvim",
+    event = 'VeryLazy',
   }
 },
 {

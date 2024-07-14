@@ -99,7 +99,6 @@ wk.add({
   -- { "<leader>dw", ":Dfg<CR>", desc = "Search word in dotfiles" },
   { "<leader>f", group = "file" },
   { "<leader>ff", "<cmd>lua require('fzf-lua').files()<CR>", desc = "Find file" },
-  { "<leader>fn", "<cmd>lua require('keymap.utils').nnnPicker()<CR>", desc = "Open file picker" },
   { "<leader>fp", ":MarkdownPreviewToggle<CR>", desc = "Preview" },
   { "<leader>fs", "<cmd>lua require('fzf-lua').grep({search = ''})<CR>", desc = "Search in file" },
   { "<leader>ft", ":NvimTreeToggle<CR>", desc = "Open file tree" },

@@ -1,7 +1,7 @@
 require("lazy").setup({
   {
     "neovim/nvim-lspconfig",
-    event = "BufReadPost",
+    event = 'VeryLazy',
     dependencies = 'hrsh7th/cmp-nvim-lsp',
     config = function ()
       vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -60,7 +60,7 @@ require("lazy").setup({
 
   {
     "SmiteshP/nvim-navic",
-    event = "BufReadPost",
+    event = "VeryLazy",
     dependencies = 'neovim/nvim-lspconfig',
     config = function ()
       require'config.navic'
@@ -69,7 +69,7 @@ require("lazy").setup({
 
   {
     "williamboman/mason.nvim",
-    event = "BufReadPost",
+    event = "VeryLazy",
     config = function ()
       require("mason").setup()
     end
@@ -77,7 +77,7 @@ require("lazy").setup({
 
   {
     "williamboman/mason-lspconfig.nvim",
-    event = "BufReadPost",
+    event = "VeryLazy",
     dependencies = {'neovim/nvim-lspconfig', 'williamboman/mason.nvim'},
     config = function ()
       require'config.lsp'
@@ -86,31 +86,31 @@ require("lazy").setup({
 
   {
     "hrsh7th/cmp-buffer",
-    event = "VimEnter",
+    event = "VeryLazy",
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/cmp-nvim-lsp",
-    event = "BufRead",
+    event = "VeryLazy",
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/cmp-vsnip",
-    event = "BufRead",
+    event = "VeryLazy",
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/cmp-nvim-lsp-signature-help",
-    event = "BufRead",
+    event = "VeryLazy",
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/vim-vsnip",
-    event = "BufRead",
+    event = "VeryLazy",
     config = function ()
       vim.g.vsnip_snippet_dir = '~/.config/nvim/vsnip'
     end
@@ -118,19 +118,19 @@ require("lazy").setup({
 
   {
     "hrsh7th/cmp-cmdline",
-    event = "VimEnter",
+    event = "VeryLazy",
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/cmp-path",
-    event = "VimEnter",
+    event = "VeryLazy",
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/nvim-cmp",
-    event = "VimEnter",
+    event = "VeryLazy",
     config = function ()
       require'config.cmp'
     end
@@ -138,7 +138,7 @@ require("lazy").setup({
 
   {
     "norcalli/nvim-colorizer.lua",
-    event = 'BufReadPost',
+    event = "VeryLazy",
     config = function ()
       require('colorizer').setup()
     end
@@ -146,7 +146,7 @@ require("lazy").setup({
 
   {
     "zenobht/cursorword.nvim",
-    event = 'BufReadPost',
+    event = "VeryLazy",
     config = function ()
       vim.g.cursorword_blacklist_filetype = {
         'NvimTree',
@@ -163,7 +163,7 @@ require("lazy").setup({
 
   {
     "zenobht/trailspace.nvim",
-    event = 'BufReadPost',
+    event = "VeryLazy",
     config = function ()
       vim.g.trailspace_blacklist_filetype = {
         'NvimTree',
@@ -180,7 +180,7 @@ require("lazy").setup({
 
   {
     'windwp/nvim-autopairs',
-    event = 'BufReadPost',
+    event = "VeryLazy",
     config = function ()
       local npairs = require('nvim-autopairs')
       npairs.setup()
@@ -216,13 +216,13 @@ require("lazy").setup({
 
   {
     "tpope/vim-repeat",
-    event = 'BufReadPost'
+    event = "VeryLazy",
   },
 
   {
     'phaazon/hop.nvim',
     branch = 'v2',
-    event = 'BufReadPost',
+    event = "VeryLazy",
     config = function()
       require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
     end
@@ -230,7 +230,7 @@ require("lazy").setup({
 
   {
     'kevinhwang91/nvim-hlslens',
-    event = 'BufReadPost',
+    event = "VeryLazy",
     config = function ()
       require('hlslens').setup()
     end
@@ -238,20 +238,15 @@ require("lazy").setup({
 
   {
     'kylechui/nvim-surround',
-    event = 'BufReadPost',
+    event = "VeryLazy",
     config = function ()
       require'nvim-surround'.setup {}
     end
   },
 
   {
-    'wellle/targets.vim',
-    event = 'BufReadPost',
-  },
-
-  {
     'andymass/vim-matchup',
-    event = 'BufReadPost',
+    event = "VeryLazy",
     setup = function ()
       vim.g.matchup_matchparen_offscreen = {}
     end
@@ -271,7 +266,7 @@ require("lazy").setup({
 
   {
     'akinsho/git-conflict.nvim',
-    event = 'VimEnter',
+    event = "VeryLazy",
     config = function()
       require('git-conflict').setup()
     end
@@ -286,7 +281,7 @@ require("lazy").setup({
 
   {
     'numToStr/Comment.nvim',
-    event = 'BufReadPost',
+    event = "VeryLazy",
     config = function()
       require("Comment").setup({
         ignore = '^$',
@@ -320,13 +315,13 @@ require("lazy").setup({
 
   {
     'JoosepAlviste/nvim-ts-context-commentstring',
-    event = 'BufReadPost',
+    event = "VeryLazy",
     dependencies = {'nvim-treesitter', 'Comment.nvim'},
   },
 
   {
     'nvim-treesitter/nvim-treesitter-textobjects',
-    event = 'BufReadPost',
+    event = "VeryLazy",
     dependencies = 'nvim-treesitter',
     config = function()
       require'nvim-treesitter.configs'.setup {
@@ -346,27 +341,8 @@ require("lazy").setup({
   },
 
   {
-    "luukvbaal/nnn.nvim",
-    cmd = 'NnnPicker',
-    config = function ()
-      local builtin = require("nnn").builtin
-      require("nnn").setup({
-        mappings = {
-          { "<C-t>", builtin.open_in_tab },       -- open file(s) in tab
-          { "<C-s>", builtin.open_in_split },     -- open file(s) in split
-          { "<C-v>", builtin.open_in_vsplit },    -- open file(s) in vertical split
-          { "<C-p>", builtin.open_in_preview },   -- open file in preview split keeping nnn focused
-          { "<C-y>", builtin.copy_to_clipboard }, -- copy file(s) to clipboard
-          { "<C-w>", builtin.cd_to_path },        -- cd to file directory
-          { "<C-e>", builtin.populate_cmdline },  -- populate cmdline (:) with file(s)
-        }
-      })
-    end
-  },
-
-  {
     "ibhagwan/fzf-lua",
-    event = 'VimEnter',
+    event = 'VeryLazy',
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       -- calling `setup` is optional for customization
@@ -388,7 +364,7 @@ require("lazy").setup({
 
   {
     'lewis6991/gitsigns.nvim',
-    event = 'BufReadPost',
+    event = 'VeryLazy',
     dependencies = {'nvim-lua/plenary.nvim'},
     config = function ()
       require'config.gitsigns'
@@ -397,7 +373,7 @@ require("lazy").setup({
 
   {
     'kyazdani42/nvim-web-devicons',
-    event = 'VimEnter',
+    event = 'VeryLazy',
   },
 
   {
@@ -431,7 +407,7 @@ require("lazy").setup({
     "akinsho/bufferline.nvim",
     version = "*",
     dependencies = 'nvim-tree/nvim-web-devicons',
-    event = 'VimEnter',
+    event = 'VeryLazy',
     config = function ()
       require('bufferline').setup{
         options = {
@@ -447,7 +423,7 @@ require("lazy").setup({
 
   {
     'kyazdani42/nvim-tree.lua',
-    event = 'BufReadPost',
+    event = 'VeryLazy',
     cmd = 'NvimTreeToggle',
     config = function ()
       require'config.nvim_tree'

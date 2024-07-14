@@ -121,12 +121,6 @@ function M.saveSession(name)
   api.nvim_exec("cd "..currentFolder, false)
 end
 
-function M.nnnPicker()
-  local currentPath = fn.expand("%:p:h")
-  local cmd = "NnnPicker "..currentPath
-  vim.cmd(cmd)
-end
-
 function M.custom_f()
   require'hop'.hint_char1({
     direction = require'hop.hint'.HintDirection.AFTER_CURSOR,

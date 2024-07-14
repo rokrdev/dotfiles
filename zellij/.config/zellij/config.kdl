@@ -1,14 +1,7 @@
 keybinds clear-defaults=true {
     normal {
-        bind "Alt t" { SwitchToMode "tmux"; }
+        bind "Ctrl b" { SwitchToMode "tmux"; }
         bind "Ctrl q" { Quit; }
-        bind "Alt Left" { MoveFocus "Left"; }
-        bind "Alt Right" { MoveFocus "Right"; }
-        bind "Alt Down" { MoveFocus "Down"; }
-        bind "Alt Up" { MoveFocus "Up"; }
-        bind "Alt d" { GoToNextTab; }
-        bind "Alt a" { GoToPreviousTab; }
-        bind "Alt c" { FocusNextPane; }
     }
     scroll {
         bind "Ctrl s" "Space" "Enter" "Esc" { SwitchToMode "normal"; }
@@ -24,20 +17,17 @@ keybinds clear-defaults=true {
         bind "Enter" "Ctrl c" "Esc" { SwitchToMode "normal"; }
     }
     tmux {
-        bind "Ctrl o" "Enter" "Space" "Esc" { SwitchToMode "normal"; }
-        bind "Ctrl s" { SwitchToMode "scroll"; }
-        bind "[" { SwitchToMode "scroll"; }
-        bind "Ctrl q" { Quit; }
-        bind "Ctrl b" { Write 2; SwitchToMode "normal"; }
+        bind "Ctrl b" "Enter" "Space" "Esc" { SwitchToMode "normal"; }
+        bind "s" "[" { SwitchToMode "scroll"; }
         bind "-" { NewPane "Down"; SwitchToMode "normal"; }
         bind "/" { NewPane "Right"; SwitchToMode "normal"; }
         bind "n" { NewTab; SwitchToMode "normal";}
         bind "z" { ToggleFocusFullscreen; SwitchToMode "normal"; }
         bind "," { SwitchToMode "RenameTab"; TabNameInput 0; }
-        bind "Alt h" "Alt Left" { MoveFocusOrTab "Left"; }
-        bind "Alt l" "Alt Right" { MoveFocusOrTab "Right"; }
-        bind "Alt j" "Alt Down" { MoveFocus "Down"; }
-        bind "Alt k" "Alt Up" { MoveFocus "Up"; }
+        bind "Left" { MoveFocusOrTab "Left"; }
+        bind "Right" { MoveFocusOrTab "Right"; }
+        bind "Down" { MoveFocus "Down"; }
+        bind "Up" { MoveFocus "Up"; }
         bind "o" { FocusNextPane; }
         bind "J" { Resize "Down"; }
         bind "K" { Resize "Up"; }
@@ -45,7 +35,7 @@ keybinds clear-defaults=true {
         bind "L" { Resize "Right"; }
         bind "d" { Detach; }
         bind "x" { CloseFocus; SwitchToMode "normal"; }
-        bind "X" { CloseTab; SwitchToMode "normal"; }
+        bind "w" { CloseTab; SwitchToMode "normal"; }
         bind "1" { GoToTab 1; SwitchToMode "normal"; }
         bind "2" { GoToTab 2; SwitchToMode "normal"; }
         bind "3" { GoToTab 3; SwitchToMode "normal"; }

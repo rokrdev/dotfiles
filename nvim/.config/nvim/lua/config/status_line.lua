@@ -1,22 +1,53 @@
--- Eviline config for lualine
--- Author: shadmansaleh
--- Credit: glepnir
 local lualine = require('lualine')
-local cp = require("catppuccin.palettes.init").get_palette()
+local cp = require("tokyonight.colors").setup({style = 'night'})
 
+-- bg = "#24283b",
+--   bg_dark = "#1f2335",
+--   bg_highlight = "#292e42",
+--   blue = "#7aa2f7",
+--   blue0 = "#3d59a1",
+--   blue1 = "#2ac3de",
+--   blue2 = "#0db9d7",
+--   blue5 = "#89ddff",
+--   blue6 = "#b4f9f8",
+--   blue7 = "#394b70",
+--   comment = "#565f89",
+--   cyan = "#7dcfff",
+--   dark3 = "#545c7e",
+--   dark5 = "#737aa2",
+--   fg = "#c0caf5",
+--   fg_dark = "#a9b1d6",
+--   fg_gutter = "#3b4261",
+--   green = "#9ece6a",
+--   green1 = "#73daca",
+--   green2 = "#41a6b5",
+--   magenta = "#bb9af7",
+--   magenta2 = "#ff007c",
+--   orange = "#ff9e64",
+--   purple = "#9d7cd8",
+--   red = "#f7768e",
+--   red1 = "#db4b4b",
+--   teal = "#1abc9c",
+--   terminal_black = "#414868",
+--   yellow = "#e0af68",
+--   git = {
+--     add = "#449dab",
+--     change = "#6183bb",
+--     delete = "#914c54",
+--   },
 -- Color table for highlights
 -- stylua: ignore
 local colors = {
-  bg       = cp.mantle,
-  fg       = cp.text,
+  bg       = cp.bg_dark,
+  fg       = cp.fg,
   yellow   = cp.yellow,
   cyan     = cp.teal,
-  darkblue = cp.blue,
+  darkblue = cp.blue0,
   green    = cp.green,
-  orange   = cp.peach,
-  violet   = cp.mauve,
-  magenta  = cp.mauve,
-  blue     = cp.lavendar,
+  orange   = cp.orange,
+  violet   = cp.purple,
+  magenta  = cp.magenta,
+  blue     = cp.blue,
   red      = cp.red,
 }
 
@@ -85,9 +116,9 @@ local config = {
 local mode_color = {
   n = colors.darkblue,
   i = colors.green,
-  v = colors.blue,
-  [''] = colors.blue,
-  V = colors.blue,
+  v = colors.violet,
+  [''] = colors.violet,
+  V = colors.violet,
   c = colors.magenta,
   no = colors.red,
   s = colors.orange,
@@ -184,7 +215,7 @@ ins_left {
 ins_right {
   'diff',
   -- Is it me or the symbol for modified us really weird
-  symbols = { added = ' ', modified = '柳', removed = ' ' },
+  symbols = { added = ' ', modified = '󰣘 ', removed = ' ' },
   diff_color = {
     added = { fg = colors.green },
     modified = { fg = colors.orange },

@@ -142,6 +142,8 @@ opt.number = true;
 opt.signcolumn = "yes";
 opt.wrap = true;
 
+opt.confirm = false
+
 vim.cmd("let $TERM = 'xterm-kitty'")
 vim.cmd("let $GIT_EDITOR = 'nvr -cc split --remote-wait'")
 

@@ -345,6 +345,11 @@ require("lazy").setup({
       -- calling `setup` is optional for customization
       require('fzf-lua').setup({
         'fzf-native',
+        files = {
+          actions = {
+            ["ctrl-g"] = false
+          }
+        },
         grep = {
           rg_opts = "--sort-files --hidden --column --line-number --no-heading " ..
           "--color=always --smart-case -g '!{.git,node_modules}/*'",
@@ -406,7 +411,7 @@ require("lazy").setup({
           exclude_ft = {'alpha'},
           show_buffer_close_icons = false,
           show_close_icon = false,
-          separator_style = "thin",
+          separator_style = "thick",
           always_show_bufferline = false,
         },
       }

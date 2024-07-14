@@ -1,5 +1,4 @@
 require("lazy").setup({
-
   {
     "neovim/nvim-lspconfig",
     event = "BufReadPost",
@@ -13,6 +12,7 @@ require("lazy").setup({
       )
     end
   },
+
   {
     "smoka7/multicursors.nvim",
     event = "BufReadPost",
@@ -30,6 +30,7 @@ require("lazy").setup({
       },
     },
   },
+
   {
     "SmiteshP/nvim-navic",
     event = "BufReadPost",

@@ -17,6 +17,9 @@ export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod
 export ANDROID_HOME="$HOME/Library/Android/sdk"
 export ANDROID_SDK_ROOT="$ANDROID_HOME/sdk"
 export GOPATH="$HOME/go"
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -S'
+export FZF_CTRL_R_OPTS='--sort --exact'
+export FZF_DEFAULT_OPTS='--layout=default --bind=ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all'
 
 # setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`
 export PATH="$GOPATH/bin:$ANDROID_SDK_ROOT:/usr/local/opt/gnu-sed/libexec/gnubin:$HOME/.asdf/shims:$HOME/.asdf/bin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
@@ -26,10 +29,6 @@ source ~/.env
 source ~/.asdf/asdf.fish
 zoxide init fish | source
 
-export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -S'
-export FZF_CTRL_R_OPTS='--sort --exact'
-export FZF_TMUX=1
-export FZF_DEFAULT_OPTS='--bind=ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all'
 
 defaults write -g ApplePressAndHoldEnabled -bool false
 # defaults write -g InitialKeyRepeat -int 15
@@ -121,4 +120,6 @@ alias x86="env /usr/bin/arch -x86_64 /bin/zsh --login"
 if test -e ~/.docker/init-fish.sh
   source $HOME/.docker/init-fish.sh || true # Added by Docker Desktop
 end
+
+setscheme tokyonight_night
 

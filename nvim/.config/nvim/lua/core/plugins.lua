@@ -395,15 +395,17 @@ require("lazy").setup({
   },
 
   {
-    "akinsho/nvim-bufferline.lua",
-    dependencies = "lualine.nvim",
-    event = "VimEnter",
+    "akinsho/bufferline.nvim",
+    version = "*",
+    dependencies = 'nvim-tree/nvim-web-devicons',
+    event = 'VimEnter',
     config = function ()
       require('bufferline').setup{
         options = {
+          exclude_ft = {'alpha'},
           show_buffer_close_icons = false,
           show_close_icon = false,
-          separator_style = "thick",
+          separator_style = "thin",
           always_show_bufferline = false,
         },
       }

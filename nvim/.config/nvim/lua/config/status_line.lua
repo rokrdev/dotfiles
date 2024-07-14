@@ -75,6 +75,7 @@ local config = {
       winbar = 1000,
     },
     -- Disable sections and component separators
+    disabled_filetypes = {'alpha'},
     component_separators = '',
     section_separators = '',
     theme = {

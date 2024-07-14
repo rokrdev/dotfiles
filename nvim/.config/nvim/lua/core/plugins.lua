@@ -173,7 +173,6 @@ require("lazy").setup({
 
   {
     "lukas-reineke/indent-blankline.nvim",
-    dependencies = 'catppuccin',
     main = "ibl",
     opts = {
       exclude = {
@@ -252,7 +251,6 @@ require("lazy").setup({
 
   {
     'nvim-treesitter/nvim-treesitter',
-    dependencies = "catppuccin",
     config = function ()
       require'config.treesitter'
     end
@@ -370,46 +368,17 @@ require("lazy").setup({
   },
 
   {
-    "catppuccin/nvim",
-    name = "catppuccin",
+    "folke/tokyonight.nvim",
     lazy = false,
-    config = function ()
-      require("catppuccin").setup {
-        transparent_background = false,
-        dim_inactive = {
-          enabled = true,
-          shade = "dark",
-          percentage = 0.15,
-        },
-        compile = {
-          enabled = true,
-          path = vim.fn.stdpath "cache" .. "/catppuccin",
-        },
-        integrations = {
-          which_key = true,
-          neogit = true,
-          gitsigns = true,
-          hop = true,
-          native_lsp = {
-            enabled = true,
-          },
-          cmp = true,
-          nvimtree = true,
-          telescope = false,
-          treesitter = true,
-          indent_blankline = {
-            enabled = true,
-            colored_indent_levels = false,
-          },
-          navic = {
-            enabled = true,
-          }
-        }
-      }
-      vim.g.catppuccin_flavour = "mocha"
+    priority = 1000,
+    opts = {},
+    config = function()
+      require'tokyonight'.setup({
+        style = "night"
+      })
       vim.api.nvim_exec(
       [[
-      colorscheme catppuccin
+      colorscheme tokyonight
       hi link Trailspace CurSearch
       ]],
       false
@@ -417,23 +386,9 @@ require("lazy").setup({
     end
   },
 
-  -- {
-  --   "beauwilliams/focus.nvim",
-  --   event = 'BufReadPost',
-  --   config = function ()
-  --     require("focus").setup({
-  --       cursorline = false,
-  --       cursorcolumn = false,
-  --       signcolumn = false,
-  --       excluded_filetypes = {"nnn"}
-  --     })
-  --   end
-  -- },
-
   {
     "hoob3rt/lualine.nvim",
     lazy = false,
-    dependencies = "catppuccin",
     config = function ()
       require'config.status_line'
     end
@@ -451,7 +406,6 @@ require("lazy").setup({
           separator_style = "thick",
           always_show_bufferline = false,
         },
-        highlights = require("catppuccin.groups.integrations.bufferline").get()
       }
     end
   },

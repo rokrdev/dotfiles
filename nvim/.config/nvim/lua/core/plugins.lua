@@ -403,23 +403,23 @@ require("lazy").setup({
     end
   },
 
-  {
-    "akinsho/bufferline.nvim",
-    version = "*",
-    dependencies = 'nvim-tree/nvim-web-devicons',
-    event = 'VeryLazy',
-    config = function ()
-      require('bufferline').setup{
-        options = {
-          exclude_ft = {'alpha'},
-          show_buffer_close_icons = false,
-          show_close_icon = false,
-          separator_style = "thick",
-          always_show_bufferline = false,
-        },
-      }
-    end
-  },
+  -- {
+  --   "akinsho/bufferline.nvim",
+  --   version = "*",
+  --   dependencies = 'nvim-tree/nvim-web-devicons',
+  --   event = 'VeryLazy',
+  --   config = function ()
+  --     require('bufferline').setup{
+  --       options = {
+  --         exclude_ft = {'alpha'},
+  --         show_buffer_close_icons = false,
+  --         show_close_icon = false,
+  --         separator_style = "thick",
+  --         always_show_bufferline = false,
+  --       },
+  --     }
+  --   end
+  -- },
 
   {
     'kyazdani42/nvim-tree.lua',

@@ -82,6 +82,7 @@ local wk = require("which-key")
 
 wk.add({
   { "<leader>b", group = "buffer" },
+  { "<C-l>", "<cmd>lua require('fzf-lua').buffers()<CR>", desc = "list buffers" },
   { "<leader>b-", ":Scratch<CR>", desc = "Scratch buffer" },
   { "<leader>bD", ":bd!<CR>", desc = "Force delete buffer" },
   { "<leader>bb", "<cmd>lua require('fzf-lua').buffers()<CR>", desc = "list buffers" },
@@ -144,8 +145,8 @@ wk.add({
   { "*", "*<Cmd>lua require('hlslens').start()<CR>", desc = "Search word under cursor" },
   { "<C-S-j>", ":m .+1<CR>==", desc = "Move down line" },
   { "<C-S-k>", ":m .-2<CR>==", desc = "Move up line" },
-  { "<C-h>", ":BufferLineCyclePrev<CR>", desc = "Previous buffer" },
-  { "<C-l>", ":BufferLineCycleNext<CR>", desc = "Next buffer" },
+  -- { "<C-h>", ":BufferLineCyclePrev<CR>", desc = "Previous buffer" },
+  -- { "<C-l>", ":BufferLineCycleNext<CR>", desc = "Next buffer" },
   { "<M-o>", ":wincmd w<CR>", desc = "Other window" },
   { "F", "<cmd>lua require('keymap.utils').custom_F()<CR>", desc = "F" },
   { "N", "<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>", desc = "Previous" },

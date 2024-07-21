@@ -112,11 +112,14 @@ require("lazy").setup({
     event = "VeryLazy",
     build = "make install_jsregexp",
     config = function ()
-      require'luasnip'.config.set_config {
+      local ls = require'luasnip'
+      ls.config.set_config {
         enable_autosnippets = true,
       }
 
       require("luasnip.loaders.from_lua").load({paths = "~/.config/snippets/luasnippets"})
+      ls.filetype_extend("javascript", { "javascriptreact" })
+      ls.filetype_extend("javascript", { "html" })
     end
   },
 

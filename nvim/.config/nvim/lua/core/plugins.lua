@@ -85,6 +85,16 @@ require("lazy").setup({
   },
 
   {
+    'VonHeikemen/lsp-zero.nvim', branch = 'v3.x',
+  },
+
+  {
+    "hrsh7th/cmp-nvim-lsp",
+    event = "VeryLazy",
+    dependencies = 'hrsh7th/nvim-cmp',
+  },
+
+  {
     "hrsh7th/cmp-buffer",
     event = "VeryLazy",
     dependencies = 'hrsh7th/nvim-cmp',
@@ -97,7 +107,14 @@ require("lazy").setup({
   },
 
   {
-    "hrsh7th/cmp-vsnip",
+    "L3MON4D3/LuaSnip",
+    version = "v2.*",
+    event = "VeryLazy",
+    build = "make install_jsregexp"
+  },
+
+  {
+    "saadparwaiz1/cmp_luasnip",
     event = "VeryLazy",
     dependencies = 'hrsh7th/nvim-cmp',
   },

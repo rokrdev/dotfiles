@@ -110,7 +110,14 @@ require("lazy").setup({
     "L3MON4D3/LuaSnip",
     version = "v2.*",
     event = "VeryLazy",
-    build = "make install_jsregexp"
+    build = "make install_jsregexp",
+    config = function ()
+      require'luasnip'.config.set_config {
+        enable_autosnippets = true,
+      }
+
+      require("luasnip.loaders.from_lua").load({paths = "~/.config/snippets/luasnippets"})
+    end
   },
 
   {

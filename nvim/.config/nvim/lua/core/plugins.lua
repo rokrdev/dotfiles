@@ -265,7 +265,7 @@ require("lazy").setup({
 
   {
     'kylechui/nvim-surround',
-    tag = "*",
+    version = "*",
     event = "BufReadPost",
     config = function ()
       require'nvim-surround'.setup {}

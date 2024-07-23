@@ -78,14 +78,19 @@ require("lazy").setup({
     "williamboman/mason-lspconfig.nvim",
     event = "BufReadPost",
     dependencies = {'neovim/nvim-lspconfig', 'williamboman/mason.nvim'},
-    config = function ()
-      require'config.lsp'
-    end
   },
 
   {
     'VonHeikemen/lsp-zero.nvim', branch = 'v3.x',
+    dependencies = {
+      'neovim/nvim-lspconfig',
+      'williamboman/mason.nvim',
+      'williamboman/mason-lspconfig.nvim'
+    },
     event = 'BufReadPost',
+    config = function ()
+      require'config.lsp'
+    end
   },
 
   {

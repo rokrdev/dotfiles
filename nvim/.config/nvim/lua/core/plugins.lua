@@ -366,7 +366,7 @@ require("lazy").setup({
 
   {
     "ibhagwan/fzf-lua",
-    event = "BufReadPost",
+    event = "VeryLazy",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       -- calling `setup` is optional for customization

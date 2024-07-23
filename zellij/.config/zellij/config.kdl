@@ -24,10 +24,10 @@ keybinds clear-defaults=true {
         bind "n" { NewTab; SwitchToMode "normal";}
         bind "z" { ToggleFocusFullscreen; SwitchToMode "normal"; }
         bind "," { SwitchToMode "RenameTab"; TabNameInput 0; }
-        bind "Left" { MoveFocusOrTab "Left"; }
-        bind "Right" { MoveFocusOrTab "Right"; }
-        bind "Down" { MoveFocus "Down"; }
-        bind "Up" { MoveFocus "Up"; }
+        bind "Left" { MoveFocusOrTab "Left"; SwitchToMode "normal"; }
+        bind "Right" { MoveFocusOrTab "Right"; SwitchToMode "normal"; }
+        bind "Down" { MoveFocus "Down"; SwitchToMode "normal"; }
+        bind "Up" { MoveFocus "Up"; SwitchToMode "normal"; }
         bind "o" { FocusNextPane; }
         bind "J" { Resize "Down"; }
         bind "K" { Resize "Up"; }

@@ -1,7 +1,7 @@
 require("lazy").setup({
   {
     "neovim/nvim-lspconfig",
-    event = 'VeryLazy',
+    event = 'BufReadPost',
     dependencies = 'hrsh7th/cmp-nvim-lsp',
     config = function ()
       vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -15,7 +15,7 @@ require("lazy").setup({
 
   {
     "mikavilpas/yazi.nvim",
-    event = "VeryLazy",
+    event = 'BufReadPost',
     keys = {
       -- 👇 in this section, choose your own keymappings!
       {
@@ -42,7 +42,6 @@ require("lazy").setup({
 
   {
     "smoka7/multicursors.nvim",
-    event = "VeryLazy",
     dependencies = {
       'smoka7/hydra.nvim',
     },
@@ -60,7 +59,7 @@ require("lazy").setup({
 
   {
     "SmiteshP/nvim-navic",
-    event = "VeryLazy",
+    event = 'BufReadPost',
     dependencies = 'neovim/nvim-lspconfig',
     config = function ()
       require'config.navic'
@@ -69,7 +68,7 @@ require("lazy").setup({
 
   {
     "williamboman/mason.nvim",
-    event = "VeryLazy",
+    event = "BufReadPost",
     config = function ()
       require("mason").setup()
     end
@@ -77,7 +76,7 @@ require("lazy").setup({
 
   {
     "williamboman/mason-lspconfig.nvim",
-    event = "VeryLazy",
+    event = "BufReadPost",
     dependencies = {'neovim/nvim-lspconfig', 'williamboman/mason.nvim'},
     config = function ()
       require'config.lsp'
@@ -86,30 +85,31 @@ require("lazy").setup({
 
   {
     'VonHeikemen/lsp-zero.nvim', branch = 'v3.x',
+    event = 'BufReadPost',
   },
 
   {
     "hrsh7th/cmp-nvim-lsp",
-    event = "VeryLazy",
+    event = 'BufReadPost',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/cmp-buffer",
-    event = "VeryLazy",
+    event = 'BufReadPost',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/cmp-nvim-lsp",
-    event = "VeryLazy",
+    event = 'BufReadPost',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "L3MON4D3/LuaSnip",
     version = "v2.*",
-    event = "VeryLazy",
+    event = 'BufReadPost',
     build = "make install_jsregexp",
     config = function ()
       local ls = require'luasnip'
@@ -125,19 +125,19 @@ require("lazy").setup({
 
   {
     "saadparwaiz1/cmp_luasnip",
-    event = "VeryLazy",
+    event = 'BufReadPost',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/cmp-nvim-lsp-signature-help",
-    event = "VeryLazy",
+    event = 'BufReadPost',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/vim-vsnip",
-    event = "VeryLazy",
+    event = 'BufReadPost',
     config = function ()
       vim.g.vsnip_snippet_dir = '~/.config/nvim/vsnip'
     end
@@ -145,19 +145,19 @@ require("lazy").setup({
 
   {
     "hrsh7th/cmp-cmdline",
-    event = "VeryLazy",
+    event = 'BufReadPost',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/cmp-path",
-    event = "VeryLazy",
+    event = 'BufReadPost',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/nvim-cmp",
-    event = "VeryLazy",
+    event = 'BufReadPost',
     config = function ()
       require'config.cmp'
     end
@@ -165,7 +165,7 @@ require("lazy").setup({
 
   {
     "norcalli/nvim-colorizer.lua",
-    event = "VeryLazy",
+    event = 'BufReadPost',
     config = function ()
       require('colorizer').setup()
     end
@@ -173,7 +173,7 @@ require("lazy").setup({
 
   {
     "zenobht/cursorword.nvim",
-    event = "VeryLazy",
+    event = 'BufReadPost',
     config = function ()
       vim.g.cursorword_blacklist_filetype = {
         'NvimTree',
@@ -190,7 +190,7 @@ require("lazy").setup({
 
   {
     "zenobht/trailspace.nvim",
-    event = "VeryLazy",
+    event = 'BufReadPost',
     config = function ()
       vim.g.trailspace_blacklist_filetype = {
         'NvimTree',
@@ -207,7 +207,7 @@ require("lazy").setup({
 
   {
     'windwp/nvim-autopairs',
-    event = "VeryLazy",
+    event = 'BufReadPost',
     config = function ()
       local npairs = require('nvim-autopairs')
       npairs.setup()
@@ -242,14 +242,9 @@ require("lazy").setup({
   },
 
   {
-    "tpope/vim-repeat",
-    event = "VeryLazy",
-  },
-
-  {
     'phaazon/hop.nvim',
     branch = 'v2',
-    event = "VeryLazy",
+    event = "BufReadPost",
     config = function()
       require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
     end
@@ -257,7 +252,7 @@ require("lazy").setup({
 
   {
     'kevinhwang91/nvim-hlslens',
-    event = "VeryLazy",
+    event = "BufReadPost",
     config = function ()
       require('hlslens').setup()
     end
@@ -265,7 +260,8 @@ require("lazy").setup({
 
   {
     'kylechui/nvim-surround',
-    event = "VeryLazy",
+    tag = "*",
+    event = "BufReadPost",
     config = function ()
       require'nvim-surround'.setup {}
     end
@@ -273,7 +269,7 @@ require("lazy").setup({
 
   {
     'andymass/vim-matchup',
-    event = "VeryLazy",
+    event = "BufReadPost",
     setup = function ()
       vim.g.matchup_matchparen_offscreen = {}
     end
@@ -293,7 +289,7 @@ require("lazy").setup({
 
   {
     'akinsho/git-conflict.nvim',
-    event = "VeryLazy",
+    event = "BufReadPost",
     config = function()
       require('git-conflict').setup()
     end
@@ -301,6 +297,7 @@ require("lazy").setup({
 
   {
     'nvim-treesitter/nvim-treesitter',
+    event = "BufReadPost",
     config = function ()
       require'config.treesitter'
     end
@@ -308,7 +305,7 @@ require("lazy").setup({
 
   {
     'numToStr/Comment.nvim',
-    event = "VeryLazy",
+    event = "BufReadPost",
     config = function()
       require("Comment").setup({
         ignore = '^$',
@@ -342,13 +339,13 @@ require("lazy").setup({
 
   {
     'JoosepAlviste/nvim-ts-context-commentstring',
-    event = "VeryLazy",
+    event = "BufReadPost",
     dependencies = {'nvim-treesitter', 'Comment.nvim'},
   },
 
   {
     'nvim-treesitter/nvim-treesitter-textobjects',
-    event = "VeryLazy",
+    event = "BufReadPost",
     dependencies = 'nvim-treesitter',
     config = function()
       require'nvim-treesitter.configs'.setup {
@@ -369,7 +366,7 @@ require("lazy").setup({
 
   {
     "ibhagwan/fzf-lua",
-    event = 'VeryLazy',
+    event = "BufReadPost",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       -- calling `setup` is optional for customization
@@ -391,7 +388,7 @@ require("lazy").setup({
 
   {
     'lewis6991/gitsigns.nvim',
-    event = 'VeryLazy',
+    event = "BufReadPost",
     dependencies = {'nvim-lua/plenary.nvim'},
     config = function ()
       require'config.gitsigns'
@@ -400,7 +397,7 @@ require("lazy").setup({
 
   {
     'kyazdani42/nvim-web-devicons',
-    event = 'VeryLazy',
+    event = "BufReadPost",
   },
 
   {
@@ -450,7 +447,6 @@ require("lazy").setup({
 
   {
     'kyazdani42/nvim-tree.lua',
-    event = 'VeryLazy',
     cmd = 'NvimTreeToggle',
     config = function ()
       require'config.nvim_tree'

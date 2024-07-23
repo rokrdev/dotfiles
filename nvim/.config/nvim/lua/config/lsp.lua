@@ -39,9 +39,6 @@ require('mason-lspconfig').setup({
     end,
     lua_ls = function()
       require('lspconfig').lua_ls.setup({
-        ---
-        -- in here you can add your own
-        -- custom configuration
         settings = {
           Lua = {
             diagnostics = {

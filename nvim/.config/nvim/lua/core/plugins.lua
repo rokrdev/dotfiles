@@ -95,20 +95,26 @@ require("lazy").setup({
 
   {
     "hrsh7th/cmp-nvim-lsp",
-    event = 'BufReadPost',
+    event = 'VeryLazy',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/cmp-buffer",
-    event = 'BufReadPost',
+    event = 'VeryLazy',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/cmp-nvim-lsp",
-    event = 'BufReadPost',
+    event = 'VeryLazy',
     dependencies = 'hrsh7th/nvim-cmp',
+  },
+
+  {
+    "petertriho/cmp-git",
+    event = 'VeryLazy',
+    dependencies = { 'hrsh7th/nvim-cmp' },
   },
 
   {
@@ -130,39 +136,31 @@ require("lazy").setup({
 
   {
     "saadparwaiz1/cmp_luasnip",
-    event = 'BufReadPost',
+    event = 'VeryLazy',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/cmp-nvim-lsp-signature-help",
-    event = 'BufReadPost',
+    event = 'VeryLazy',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
-    "hrsh7th/vim-vsnip",
-    event = 'BufReadPost',
-    config = function ()
-      vim.g.vsnip_snippet_dir = '~/.config/nvim/vsnip'
-    end
-  },
-
-  {
     "hrsh7th/cmp-cmdline",
-    event = 'BufReadPost',
+    event = 'VeryLazy',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/cmp-path",
-    event = 'BufReadPost',
+    event = 'VeryLazy',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/nvim-cmp",
-    event = 'BufReadPost',
+    event = 'VeryLazy',
     config = function ()
       require'config.cmp'
     end

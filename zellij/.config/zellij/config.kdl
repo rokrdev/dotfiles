@@ -19,8 +19,8 @@ keybinds clear-defaults=true {
     tmux {
         bind "Ctrl b" "Enter" "Space" "Esc" { SwitchToMode "normal"; }
         bind "s" "[" { SwitchToMode "scroll"; }
-        bind "-" { NewPane "Down"; SwitchToMode "normal"; }
-        bind "/" { NewPane "Right"; SwitchToMode "normal"; }
+        bind "h" { NewPane "Down"; SwitchToMode "normal"; }
+        bind "v" { NewPane "Right"; SwitchToMode "normal"; }
         bind "n" { NewTab; SwitchToMode "normal";}
         bind "z" { ToggleFocusFullscreen; SwitchToMode "normal"; }
         bind "," { SwitchToMode "RenameTab"; TabNameInput 0; }

@@ -2,6 +2,10 @@ theme = "tokyonight"
 
 [editor]
 completion-timeout = 5
+mouse = true
+auto-save = true
+cursorline = true
+bufferline = "always"
 
 [editor.cursor-shape]
 insert = "bar"
@@ -11,22 +15,23 @@ select = "underline"
 [editor.file-picker]
 hidden = false
 
-# [editor.whitespace.render]
-# space = "all"
-# tab = "all"
-# nbsp = "none"
-# nnbsp = "none"
-# newline = "none"
-
-# [editor.whitespace.characters]
-# space = "·"
-# nbsp = "⍽"
-# nnbsp = "␣"
-# tab = "→"
-# newline = "⏎"
-# tabpad = "·"
-
 [editor.indent-guides]
 render = true
 character = "▏" # Some characters that work well: "▏", "┆", "┊", "⸽"
 skip-levels = 1
+
+[editor.lsp]
+display-inlay-hints = true
+
+[editor.soft-wrap]
+enable = true
+#wrap-at-text-width = true
+wrap-indicator = "↩ "
+
+[editor.statusline]
+left = [ "mode", "spinner", "file-name", "read-only-indicator", "file-modification-indicator", "version-control", "diagnostics" ]
+right = [ "selections", "register", "position", "position-percentage", "total-line-numbers", "file-encoding" ]
+separator = "│"
+mode.normal = "N"
+mode.insert = "I"
+mode.select = "S"

@@ -1,119 +1,338 @@
-""" Map leader to space ---------------------
+" """ Map leader to space ---------------------
+" let mapleader=" "
+
+" """ Plugins  --------------------------------
+" set surround
+" set multiple-cursors
+" set commentary
+" set argtextobj
+" set easymotion
+" set textobj-entire
+" set ReplaceWithRegister
+" set multiple-cursors
+" set clipboard+=unnamedplus
+
+" """ Plugin settings -------------------------
+" let g:argtextobj_pairs="[:],(:),<:>"
+
+" """ Common settings -------------------------
+" set showmode
+" set so=5
+" set incsearch
+" set nu
+" set ignorecase
+" set smartcase
+
+" """ Idea specific settings ------------------
+" set ideajoin
+" set ideastatusicon=gray
+" set idearefactormode=keep
+" let g:EasyMotion_do_mapping = 0
+
+" """ Mappings --------------------------------
+
+" nnoremap <leader>ap "+p
+" nnoremap <leader>am "mp
+" nnoremap <leader>ay "+y
+" vnoremap <leader>ap "+p
+" vnoremap <leader>am "mp
+" vnoremap <leader>aM "my
+" vnoremap <leader>ay "+y
+
+" " formatting
+" nnoremap == :action ReformatCode <CR>
+" vnoremap == :action ReformatCode <CR>
+" nnoremap -- :action OptimizeImports <CR>
+" vnoremap -- :action OptimizeImports <CR>
+
+" nnoremap gcc :action CommentByLineComment <CR>
+" vnoremap gcc :action CommentByLineComment <CR>
+
+" nnoremap ,a :action GotoAction <CR>
+" vnoremap ,a :action GotoAction <CR>
+
+" " split window
+" nnoremap <leader>sv :action SplitVertically <CR>
+" nnoremap <leader>sc :action UnsplitAll <CR>
+" nnoremap <leader>v :action NextSplitter <CR>
+
+" nnoremap <leader>bb :action RecentFiles<CR>
+" " search
+" nmap <leader>fw :action FindInPath<CR>
+" vmap <leader>fw :action FindInPath<CR>
+" nnoremap <leader>c :action CallHierarchy <CR>
+" nnoremap <leader>fu :action FindUsages <CR>
+" vnoremap <leader>fu :action FindUsages <CR>
+" nnoremap <leader>fs :action SearchEverywhere <CR>
+" nnoremap <leader>fc :action GotoClass <CR>
+" vnoremap <leader>fc :action GotoClass <CR>
+" nnoremap <leader>ff :action GotoFile <CR>
+" vnoremap <leader>ff :action GotoFile <CR>
+
+" nnoremap <leader>R :source ~/.ideavimrc<CR>
+" nmap <leader>x :action CloseEditor<CR>
+
+" " tabs
+" nmap <C-h> :action PreviousTab<CR>
+" nmap <C-l> :action NextTab<CR>
+" " nnoremap <leader>c :action CloseContent <CR>
+
+" " extract
+" nnoremap <leader>iv :action IntroduceVariable <CR>
+" nnoremap <leader>em :action ExtractMethod  <Cr>
+" vnoremap <leader>em :action ExtractMethod  <Cr>
+" nnoremap <leader>ic :action IntroduceConstant <CR>
+
+" " file navigation
+" nnoremap gh :action Back <CR>
+" nnoremap gl :action Forward <CR>
+" nnoremap gj :action MethodDown <CR>
+" nnoremap gk :action MethodUp <CR>
+" nnoremap gs :action GotoSuperMethod <CR>
+" nnoremap gi :action GotoImplementation <CR>
+" nnoremap g, :action JumpToLastChange <CR>
+" nnoremap g. :action JumpToNextChange <CR>
+" nnoremap gd :action GotoDeclaration <CR>
+" nnoremap <leader>gr :action RenameElement <CR>
+" nnoremap <leader>ww :action HideAllWindows <CR>
+" nnoremap gp :NERDTree <CR>
+" nnoremap <leader>gt :action GotoTest <CR>
+" nnoremap <leader>rc :action RunClass <CR>
+" nnoremap ,rc :action ChooseRunConfiguration <CR>
+" nnoremap <leader>gq :action QuickList.Git <CR>
+" nnoremap <leader>ns :action NewScratchFile <CR>
+" nnoremap <leader>nf :action NewElementSamePlace <CR>
+" nnoremap <leader>ge :action Generate<CR>
+" vnoremap <leader>re :action Replace<CR>
+" nnoremap <leader>re :action Replace<CR>
+" " vnoremap / :action Find<CR>
+" " nnoremap / :action Find<CR>
+" nnoremap <leader>ss :action SelectInProjectView<CR>
+
+" " useful
+" nnoremap <C-A> gg<S-v>G
+" nmap f <Plug>(easymotion-fl)
+" nmap F <Plug>(easymotion-Fl)
+" nmap t <Plug>(easymotion-tl)
+" nmap T <Plug>(easymotion-Tl)
+" nmap s <Plug>(easymotion-bd-w)
+
+
+
+
+" -------------------------HELIX MODE-----------------------------------
+" Based on comment by mchlstckl
+" https://www.reddit.com/r/HelixEditor/comments/14aqztf/comment/jocslxs/
+" Check the history of this gist for a changelist
+
+" Read NOTE lower
+
+" Must be done first to tell other plugins that this is the leader key
 let mapleader=" "
 
-""" Plugins  --------------------------------
-set surround
-set multiple-cursors
-set commentary
-set argtextobj
-set easymotion
-set textobj-entire
-set ReplaceWithRegister
-set multiple-cursors
-set clipboard+=unnamedplus
-
-""" Plugin settings -------------------------
-let g:argtextobj_pairs="[:],(:),<:>"
-
-""" Common settings -------------------------
-set showmode
-set so=5
-set incsearch
-set nu
-set ignorecase
-set smartcase
-
-""" Idea specific settings ------------------
+" https://github.com/JetBrains/ideavim/wiki/IdeaVim-Plugins
+set clipboard+=unnamed
+set clipboard+=ideaput
 set ideajoin
-set ideastatusicon=gray
 set idearefactormode=keep
-let g:EasyMotion_do_mapping = 0
+set incsearch
+set relativenumber
+set showmode
+set hlsearch
+set surround
+set visualbell
+set commentary
+set highlightedyank
+set argtextobj
+set matchit
 
-""" Mappings --------------------------------
+" Plug 'terryma/vim-multiple-cursors'
+" or install manually and set
+" set multiple-cursors
 
-nnoremap <leader>ap "+p
-nnoremap <leader>am "mp
-nnoremap <leader>ay "+y
-vnoremap <leader>ap "+p
-vnoremap <leader>am "mp
-vnoremap <leader>aM "my
-vnoremap <leader>ay "+y
+" requires which-key plugin
+" set which-key
+" set timeoutlen=10000
+" requires sneak plugin
+set sneak
+" requires easymotion and ace-jump plugins
+" set easymotion
+" requires quickscope plugin
+" set quickscope
+" requires multicursor plugin (not recommended, honestly)
+" set multicursor
 
-" formatting
-nnoremap == :action ReformatCode <CR>
-vnoremap == :action ReformatCode <CR>
-nnoremap -- :action OptimizeImports <CR>
-vnoremap -- :action OptimizeImports <CR>
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
-nnoremap gcc :action CommentByLineComment <CR>
-vnoremap gcc :action CommentByLineComment <CR>
+" for miw and similar motion
+nnoremap m v
+nnoremap mm %
+nnoremap % ggVG
+" a mapping for mim, but it is broken
+" vnoremap im %v%
 
-nnoremap ,a :action GotoAction <CR>
-vnoremap ,a :action GotoAction <CR>
+" make x a line selection (READ note below)
+" nnoremap x V
+" vnoremap x j
 
-" split window
-nnoremap <leader>sv :action SplitVertically <CR>
-nnoremap <leader>sc :action UnsplitAll <CR>
-nnoremap <leader>v :action NextSplitter <CR>
+" NOTE:
+" Remapping x to V and j makes it impossible to delete single character.
+" You can use this to enable deleting with d, but then you cannot execute d<motion>
+" nnoremap d x
 
-nnoremap <leader>bb :action RecentFiles<CR>
-" search
-nmap <leader>fw :action FindInPath<CR>
-vmap <leader>fw :action FindInPath<CR>
-nnoremap <leader>c :action CallHierarchy <CR>
-nnoremap <leader>fu :action FindUsages <CR>
-vnoremap <leader>fu :action FindUsages <CR>
-nnoremap <leader>fs :action SearchEverywhere <CR>
-nnoremap <leader>fc :action GotoClass <CR>
-vnoremap <leader>fc :action GotoClass <CR>
-nnoremap <leader>ff :action GotoFile <CR>
-vnoremap <leader>ff :action GotoFile <CR>
+map <A-c> <Action>(EditorCloneCaretBelow)
+" inoremap <A-BS> <Action>(EditorDeleteToWordStart)
 
-nnoremap <leader>R :source ~/.ideavimrc<CR>
-nmap <leader>x :action CloseEditor<CR>
+nmap \e :e ~/.ideavimrc<CR>
+nmap \r <Action>(IdeaVim.ReloadVimRc.reload)
+" quick plugin access
+nmap \p <Action>(WelcomeScreen.Plugins)
 
-" tabs
-nmap <C-h> :action PreviousTab<CR>
-nmap <C-l> :action NextTab<CR>
-" nnoremap <leader>c :action CloseContent <CR>
+nmap <s-u> <Action>($Redo)
+" OR: noremap U <C-r>
+nmap <c-z> <Action>(ToggleDistractionFreeMode)
+nmap <c-c> <Action>(CommentByLineComment)
+xmap <c-c> <Action>(CommentByLineComment)
 
-" extract
-nnoremap <leader>iv :action IntroduceVariable <CR>
-nnoremap <leader>em :action ExtractMethod  <Cr>
-vnoremap <leader>em :action ExtractMethod  <Cr>
-nnoremap <leader>ic :action IntroduceConstant <CR>
+nmap <c-t> <Action>(ActivateTerminalToolWindow)
+nmap <leader>t <Action>(Terminal.OpenInTerminal)
 
-" file navigation
-nnoremap gh :action Back <CR>
-nnoremap gl :action Forward <CR>
-nnoremap gj :action MethodDown <CR>
-nnoremap gk :action MethodUp <CR>
-nnoremap gs :action GotoSuperMethod <CR>
-nnoremap gi :action GotoImplementation <CR>
-nnoremap g, :action JumpToLastChange <CR>
-nnoremap g. :action JumpToNextChange <CR>
-nnoremap gd :action GotoDeclaration <CR>
-nnoremap <leader>gr :action RenameElement <CR>
-nnoremap <leader>ww :action HideAllWindows <CR>
-nnoremap gp :NERDTree <CR>
-nnoremap <leader>gt :action GotoTest <CR>
-nnoremap <leader>rc :action RunClass <CR>
-nnoremap ,rc :action ChooseRunConfiguration <CR>
-nnoremap <leader>gq :action QuickList.Git <CR>
-nnoremap <leader>ns :action NewScratchFile <CR>
-nnoremap <leader>nf :action NewElementSamePlace <CR>
-nnoremap <leader>ge :action Generate<CR>
-vnoremap <leader>re :action Replace<CR>
-nnoremap <leader>re :action Replace<CR>
-" vnoremap / :action Find<CR>
-" nnoremap / :action Find<CR>
-nnoremap <leader>ss :action SelectInProjectView<CR>
+nmap <c-w>v <Action>(SplitVertically)
+nmap <c-w>s <Action>(SplitHorizontally)
+nmap <c-w>W <Action>(MoveEditorToOppositeTabGroup)
+nmap <leader>T <Action>(EditorTabPopupMenu)
 
-" useful
-nnoremap <C-A> gg<S-v>G
-nmap f <Plug>(easymotion-fl)
-nmap F <Plug>(easymotion-Fl)
-nmap t <Plug>(easymotion-tl)
-nmap T <Plug>(easymotion-Tl)
-nmap s <Plug>(easymotion-bd-w)
+nmap <c-w>w <Action>(NextWindow)
+nmap <leader>q <Action>(CloseContent)
+nmap <leader>Q <Action>(CloseAllEditors)
+nmap <leader>x <Action>(HideAllWindows)
 
+nmap ]d <Action>(GotoNextError)
+nmap [d <Action>(GotoPreviousError)
+nmap ]g <Action>(VcsShowNextChangeMarker)
+nmap [g <Action>(VcsShowPrevChangeMarker)
+nmap ]m <Action>(MethodDown)
+nmap [m <Action>(MethodUp)
+
+nmap <leader>r <Action>(Refactorings.QuickListPopupAction)
+nmap <leader>= <Action>(ReformatCode)
+nmap <leader>j <Action>(RecentLocations)
+
+nmap gR <Action>(FindUsages)
+" show usages is a popup so it is 'default'
+nmap gr <Action>(ShowUsages)
+nmap gi <Action>(GotoImplementation)
+nmap gd <Action>(GotoDeclaration)
+nmap gT <Action>(GotoTest)
+nmap gy <Action>(GotoTypeDeclaration)
+" original binding
+" nmap gp <Action>(GotoSuperMethod)
+" previous/next tab
+nmap gp <Action>(PreviousTab)
+nmap gn <Action>(NextTab)
+
+nmap gh 0
+nmap gs ^
+nmap gl $
+nmap ge G
+
+xmap gh 0
+xmap gs ^
+xmap gl $
+xmap ge G
+
+" intelliJ search popup
+nmap <leader>S <Action>(GotoSymbol)
+nmap <leader>s <Action>(FileStructurePopup)
+" OR alternatively
+" :nmap <leader>s <Action>(GotoSymbol)
+nmap <leader>F <Action>(FindInPath)
+nmap <leader>f <Action>(GotoFile)
+nmap <c-f> <Action>(ActivateFindToolWindow)
+
+nmap <leader>a <Action>(ShowIntentionActions)
+nmap <leader>p <Action>(PasteMultiple)
+nmap <leader>z <Action>(ChangeIdeScale)
+
+nmap <leader>g <Action>(Vcs.QuickListPopupAction)
+nmap <leader>b <Action>(RecentFiles)
+
+" other jump
+nmap <leader>n <Action>(Switcher)
+nmap <leader>B <Action>(RecentChangedFiles)
+" RecentChangedFiles displays list of edited files. To show all, press C-e
+" or you can simply show a list of all files
+" :nmap <leader>B <Action>(GotoFile)
+
+" Ctrl+Enter = noh
+nmap <leader><cr> :nohlsearch<CR>
+
+" Mimics helix fuzzy-find command
+nmap <leader>? <Action>(GotoAction)
+" You can substitute this for <leader>? to search everything not only actions
+nmap <leader>e <Action>(SearchEverywhere)
+nmap <leader>o <Action>(ActivateProjectToolWindow)
+nmap <leader>E <Action>(EditorActions)
+
+nmap <c-o> <Action>(Back)
+nmap <c-i> <Action>(Forward)
+nmap <s-k> <Action>(ExpressionTypeInfo)
+nmap <leader>k <Action>(ShowErrorDescription)
+nmap <leader>K <Action>(QuickJavaDoc)
+
+nmap <leader>uh <Action>(ToggleInlayHintsGloballyAction)
+nmap <leader>uw <Action>(EditorToggleShowWhitespaces)
+nmap <leader>y <Action>(CopyReferencePopupGroup)
+
+" REQUIRES HarpoonIJ
+
+" nmap <leader><C-h> :action SetHarpoon1<cr>
+" nmap <leader><C-j> :action SetHarpoon2<cr>
+" nmap <leader><C-k> :action SetHarpoon3<cr>
+" nmap <leader><C-l> :action SetHarpoon4<cr>
+
+" nmap <C-h> :action GotoHarpoon1<cr>
+" nmap <C-j> :action GotoHarpoon2<cr>
+" nmap <C-k> :action GotoHarpoon3<cr>
+" nmap <C-l> :action GotoHarpoon4<cr>
+
+" nmap <C-e> :action ShowHarpoon<cr>
+" nmap <C-a> :action AddToHarpoon<cr>
+
+" END REQUIRES HarpoonIJ
+
+" REQUIRES multiple-cursors
+
+" " Remap multiple-cursors shortcuts to match terryma/vim-multiple-cursors
+" nmap <C-n> <Plug>NextWholeOccurrence
+" " Does not work on column selection mode
+" xmap <C-n> <Plug>NextWholeOccurrence
+" nmap g<C-n> <Plug>NextOccurrence
+" xmap g<C-n> <Plug>NextOccurrence
+" nmap <C-x> <Plug>SkipOccurrence
+" xmap <C-x> <Plug>SkipOccurrence
+" nmap <C-p> <Plug>RemoveOccurrence
+" xmap <C-p> <Plug>RemoveOccurrence
+"
+" " Note that the default <A-n> and g<A-n> shortcuts don't work on Mac due to dead keys.
+" " <A-n> is used to enter accented text e.g. ñ
+" " Alternatively use the Unicode hex keyboard in macOS
+" nmap <S-C-n> <Plug>AllWholeOccurrences
+" xmap <S-C-n> <Plug>AllWholeOccurrences
+" nmap g<S-C-n> <Plug>AllOccurrences
+" xmap g<S-C-n> <Plug>AllOccurrences
+
+" END REQUIRES multiple-cursors
+
+
+""" Running and Debugging
+nmap ,r <Action>(ContextRun)
+nmap ,c <Action>(RunClass)
+nmap ,f <Action>(ChooseRunConfiguration)
+nmap ,t <Action>(ActivateRunToolWindow)
+nmap ,u <Action>(Rerun)
+nmap ,f <Action>(RerunFailedTests)
+nmap ,b <Action>(ToggleLineBreakpoint)
+nmap ,d <Action>(ContextDebug)
+nmap ,n <Action>(ActivateDebugToolWindow)
+nmap ,p <Action>(XDebugger.AttachToProcess)

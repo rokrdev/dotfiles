@@ -35,3 +35,7 @@ separator = "│"
 mode.normal = "N"
 mode.insert = "I"
 mode.select = "S"
+
+[keys.normal.space.g]
+g = ":sh zellij run -fc --height 100% --width 100% --x 1 --y 1 -- lazygit"
+

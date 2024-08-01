@@ -1,0 +1,32 @@
+theme = "tokyonight"
+
+[editor]
+completion-timeout = 5
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.file-picker]
+hidden = false
+
+# [editor.whitespace.render]
+# space = "all"
+# tab = "all"
+# nbsp = "none"
+# nnbsp = "none"
+# newline = "none"
+
+# [editor.whitespace.characters]
+# space = "·"
+# nbsp = "⍽"
+# nnbsp = "␣"
+# tab = "→"
+# newline = "⏎"
+# tabpad = "·"
+
+[editor.indent-guides]
+render = true
+character = "▏" # Some characters that work well: "▏", "┆", "┊", "⸽"
+skip-levels = 1

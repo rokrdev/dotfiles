@@ -136,7 +136,6 @@ set clipboard+=ideaput
 set ideajoin
 set idearefactormode=keep
 set incsearch
-set relativenumber
 set showmode
 set hlsearch
 set surround
@@ -154,9 +153,9 @@ set matchit
 " set which-key
 " set timeoutlen=10000
 " requires sneak plugin
-set sneak
+" set sneak
 " requires easymotion and ace-jump plugins
-" set easymotion
+set easymotion
 " requires quickscope plugin
 " set quickscope
 " requires multicursor plugin (not recommended, honestly)
@@ -340,3 +339,6 @@ nmap ,b <Action>(ToggleLineBreakpoint)
 nmap ,d <Action>(ContextDebug)
 nmap ,n <Action>(ActivateDebugToolWindow)
 nmap ,p <Action>(XDebugger.AttachToProcess)
+
+let g:EasyMotion_do_mapping = 0
+nmap s <Plug>(easymotion-bd-w)

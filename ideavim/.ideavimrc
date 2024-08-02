@@ -219,6 +219,7 @@ nmap <leader>= <Action>(ReformatCode)
 nmap <leader>j <Action>(RecentLocations)
 
 nmap gR <Action>(FindUsages)
+vmap gR <Action>(FindUsages)
 " show usages is a popup so it is 'default'
 nmap gr <Action>(ShowUsages)
 nmap gi <Action>(GotoImplementation)
@@ -284,6 +285,9 @@ nmap <leader>uh <Action>(ToggleInlayHintsGloballyAction)
 nmap <leader>uw <Action>(EditorToggleShowWhitespaces)
 nmap <leader>y <Action>(CopyReferencePopupGroup)
 
+nmap <leader>gw :action FindInPath<CR>
+vmap <leader>gw :action FindInPath<CR>
+nnoremap <leader>gh :action CallHierarchy <CR>
 " REQUIRES HarpoonIJ
 
 " nmap <leader><C-h> :action SetHarpoon1<cr>

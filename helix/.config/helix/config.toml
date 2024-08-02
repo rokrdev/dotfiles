@@ -4,7 +4,7 @@ theme = "tokyonight"
 completion-timeout = 5
 mouse = true
 auto-save = true
-cursorline = true
+cursorline = false
 bufferline = "always"
 
 [editor.cursor-shape]
@@ -36,6 +36,18 @@ mode.normal = "N"
 mode.insert = "I"
 mode.select = "S"
 
+[keys.normal]
+# C-e = "scroll_down"
+# C-y = "scroll_up"
+C-e = ["scroll_down", "move_line_down"]
+C-y = ["scroll_up", "move_line_up"]
+S-down = ["extend_to_line_bounds", "delete_selection", "paste_after"]
+S-up = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+
 [keys.normal.space.g]
 g = ":sh zellij run -fc --height 100% --width 100% --x 1 --y 1 -- lazygit"
+
+[keys.select]
+S-down = ["delete_selection", "paste_after"]
+S-up = ["delete_selection", "move_line_up", "paste_before"]
 

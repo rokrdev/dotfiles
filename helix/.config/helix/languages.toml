@@ -1,7 +1,6 @@
 [[language]]
 name = "toml"
 auto-format = true
-# https://github.com/bd82/toml-tools/tree/master/packages/prettier-plugin-toml
 formatter = { command = "prettier", args = ["--parser", "toml"] }
 
 [[language]]
@@ -36,5 +35,10 @@ auto-format = true
 # indent = { tab-width = 2, unit = "  " }
 formatter = { command = "prettier", args = ["--parser", "yaml"] }
  
-[language-server.lua-language-server.config.Lua.diagnostics]
-globals = [ "vim", "hs" ]
+[[language]]
+name = "lua"
+auto-format = true
+formatter = { command = "stylua", args = ["-"] }
+
+[language-server.lua-language-server.config.Lua]
+diagnostics = { globals = [ "vim", "hs" ] }

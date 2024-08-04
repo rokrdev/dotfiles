@@ -1,8 +1,8 @@
 export BAT_THEME="tokyonight"
 
-export ALTERNATE_EDITOR="nvim"
-export EDITOR="nvim"
-export VISUAL="nvim"
+export ALTERNATE_EDITOR="hx"
+export EDITOR="hx"
+export VISUAL="hx"
 export TERM="xterm-kitty"
 export KITTY_CACHE_DIRECTORY="/tmp/"
 export FISH_CONFIG="$HOME/.config/fish/config.fish"
@@ -11,7 +11,7 @@ export LANG="en_US.UTF-8"
 export NNN_OPTS="da"
 export NNN_FIFO="/tmp/nnn.fifo"
 export NNN_PLUG='t:preview-tui;'
-ssh-add -A &> /dev/null
+ssh-add -A &>/dev/null
 
 export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
 export ANDROID_HOME="$HOME/Library/Android/sdk"
@@ -34,7 +34,7 @@ defaults write -g ApplePressAndHoldEnabled -bool false
 # defaults write -g InitialKeyRepeat -int 15
 # defaults write -g KeyRepeat -int 2
 
-set $fish_term24bit to "1"
+set $fish_term24bit to 1
 set fish_color_command blue
 set -U fish_greeting
 
@@ -97,8 +97,8 @@ alias zj="zellij --layout custom"
 
 # Changing "ls" to "eza"
 # alias ls='eza --color=always --group-directories-first'  # all files and dirs
-alias la='eza -a --color=always --group-directories-first'  # all files and dirs
-alias ll='eza -lah --color=always --group-directories-first'  # long format
+alias la='eza -a --color=always --group-directories-first' # all files and dirs
+alias ll='eza -lah --color=always --group-directories-first' # long format
 alias lt='eza -aT --git-ignore --color=always --group-directories-first' # tree listing
 alias l.='eza -a | egrep "^\."'
 alias ..='cd ..'
@@ -118,8 +118,7 @@ set CFLAGS "-O2 -g" $CFLAGS
 alias x86="env /usr/bin/arch -x86_64 /bin/zsh --login"
 
 if test -e ~/.docker/init-fish.sh
-  source $HOME/.docker/init-fish.sh || true # Added by Docker Desktop
+    source $HOME/.docker/init-fish.sh || true # Added by Docker Desktop
 end
 
 setscheme tokyonight_night
-

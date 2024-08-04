@@ -1,6 +1,6 @@
 function ff --description 'Fuzzy find text and open in vim'
     set -l rgCommand "rg -i -l --hidden"
-    set file (echo (eval "FZF_DEFAULT_COMMAND='rg --files' fzf \
+    set file (echo (eval "FZF_DEFAULT_COMMAND='rg --files --hidden' fzf \
       -m \
       -e \
       --ansi \
@@ -8,6 +8,6 @@ function ff --description 'Fuzzy find text and open in vim'
       --bind 'change:reload:$rgCommand {q} || true' \
       --preview 'rg -i --pretty --context 2 {q} {}' | cut -d':' -f1,2"))
     if test -n $file
-      nvim (echo $file)
+        $EDITOR (echo $file)
     end
 end

@@ -1,6 +1,6 @@
 [core]
 	excludesfile = ~/.gitignore_global
-	editor = nvr --remote-wait-silent
+	editor = hx
 [difftool]
 	prompt = true
 [diff]

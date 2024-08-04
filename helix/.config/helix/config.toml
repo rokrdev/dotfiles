@@ -42,6 +42,8 @@ mode.select = "S"
 C-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
 C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
 "@" = ["move_prev_word_start", "move_next_word_end", "search_selection", "global_search"]
+H = ["ensure_selections_forward", "extend_to_line_start"]
+L = ["ensure_selections_forward", "extend_to_line_end"]
 
 [keys.normal.space.g]
 g = ":sh zellij run -fc --height 100% --width 100% --x 0 --y 0 -- gitui"

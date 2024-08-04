@@ -46,6 +46,15 @@ C-y = ["scroll_up", "move_line_up"]
 S-down = ["extend_to_line_bounds", "delete_selection", "paste_after"]
 S-up = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
 "@" = ["move_prev_word_start", "move_next_word_end", "search_selection", "global_search"]
+J = ["select_line_below"]
+K = ["select_line_above"]
+"H" = ["select_mode", "goto_line_start", "exit_select_mode"]
+"L" = ["select_mode", "goto_line_end", "exit_select_mode"]
+"A-j" = "join_selections"
+"A-J" = "join_selections_space"
+X = "remove_primary_selection"
+x = "keep_selections"
+"A-x" = "remove_selections"
 
 [keys.normal.space.space]
 #g = [":new", ":insert-output lazygit", ":buffer-close!", ":redraw"]
@@ -55,4 +64,12 @@ n = [":new", ":sh zellij run -f -x 10% -y 10% --width 80% --height 80% -- bash ~
 [keys.select]
 S-down = ["delete_selection", "paste_after"]
 S-up = ["delete_selection", "move_line_up", "paste_before"]
-
+X = ["extend_line_up", "extend_to_line_bounds"]
+x = "keep_selections"
+A-x = "extend_to_line_bounds"
+J = ["select_line_below"]
+K = ["select_line_above"]
+"H" = ["goto_line_start"]
+"L" = ["goto_line_end"]
+"A-j" = "join_selections"
+"A-J" = "join_selections_space"

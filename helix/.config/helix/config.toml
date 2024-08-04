@@ -39,38 +39,17 @@ mode.insert = "I"
 mode.select = "S"
 
 [keys.normal]
-# C-e = "scroll_down"
-# C-y = "scroll_up"
-C-e = ["scroll_down", "move_line_down"]
-C-y = ["scroll_up", "move_line_up"]
-S-down = ["extend_to_line_bounds", "delete_selection", "paste_after"]
-S-up = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+C-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
+C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
 "@" = ["move_prev_word_start", "move_next_word_end", "search_selection", "global_search"]
-J = ["select_line_below"]
-K = ["select_line_above"]
-"H" = ["select_mode", "goto_line_start", "exit_select_mode"]
-"L" = ["select_mode", "goto_line_end", "exit_select_mode"]
-"A-j" = "join_selections"
-"A-J" = "join_selections_space"
-X = "remove_primary_selection"
-x = "keep_selections"
-"A-x" = "remove_selections"
 
 [keys.normal.space.g]
-#g = [":new", ":insert-output lazygit", ":buffer-close!", ":redraw"]
 g = ":sh zellij run -fc --height 100% --width 100% --x 0 --y 0 -- gitui"
 c = "changed_file_picker"
 n = [":new", ":sh zellij run -f -x 0 -y 0 --width 100% --height 100% -- bash ~/.config/helix/yazi-picker.sh", ":buffer-close!", ":redraw"]
 
 [keys.select]
-S-down = ["delete_selection", "paste_after"]
-S-up = ["delete_selection", "move_line_up", "paste_before"]
-X = ["extend_line_up", "extend_to_line_bounds"]
-x = "keep_selections"
-A-x = "extend_to_line_bounds"
-J = ["select_line_below"]
-K = ["select_line_above"]
-"H" = ["goto_line_start"]
-"L" = ["goto_line_end"]
-"A-j" = "join_selections"
-"A-J" = "join_selections_space"
+C-j = ["delete_selection", "paste_after"]
+C-k = ["delete_selection", "move_line_up", "paste_before"]
+"A-[" = "search_next"
+"A-]" = "search_prev"

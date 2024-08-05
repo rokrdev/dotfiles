@@ -44,6 +44,9 @@ C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_befor
 "@" = ["move_prev_word_start", "move_next_word_end", "search_selection", "global_search"]
 H = ["ensure_selections_forward", "extend_to_line_start"]
 L = ["ensure_selections_forward", "extend_to_line_end"]
+# Search for word under cursor
+"*" = ["move_char_right", "move_prev_word_start", "move_next_word_end", "search_selection", "search_next"]
+"#" = ["move_char_right", "move_prev_word_start", "move_next_word_end", "search_selection", "search_prev"]
 
 [keys.normal.space.g]
 c = "changed_file_picker"

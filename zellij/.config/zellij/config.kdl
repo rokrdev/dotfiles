@@ -1,7 +1,6 @@
 keybinds clear-defaults=true {
     normal {
         bind "Ctrl b" { SwitchToMode "tmux"; }
-        bind "Ctrl q" { Quit; }
     }
     scroll {
         bind "Ctrl s" "Space" "Enter" "Esc" { SwitchToMode "normal"; }
@@ -45,6 +44,7 @@ keybinds clear-defaults=true {
         bind "7" { GoToTab 7; SwitchToMode "normal"; }
         bind "8" { GoToTab 8; SwitchToMode "normal"; }
         bind "9" { GoToTab 9; SwitchToMode "normal"; }
+        bind "Ctrl q" { Quit; }
     }
 }
 

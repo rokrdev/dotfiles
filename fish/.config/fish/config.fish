@@ -41,6 +41,7 @@ set -U fish_greeting
 alias brup='brew update && brew upgrade && brew upgrade --cask && brew cleanup && brew doctor'
 alias cat=bat
 alias bcb='bat cache --build'
+alias d='cd ~/.dotfiles'
 alias dc='docker compose'
 alias dcu='docker compose up'
 alias dcd='docker compose down'
@@ -62,7 +63,7 @@ alias groot='cd $(git rev-parse --show-cdup)'
 alias gs='git status'
 alias gtr='git log --oneline --graph --decorate --all'
 alias gx='git clean -fxd'
-alias d='cd ~/.dotfiles'
+alias h=hx
 alias icat="kitty +kitten icat"
 # alias k="/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
 alias k=kubectl

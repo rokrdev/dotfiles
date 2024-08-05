@@ -7,7 +7,7 @@ auto-save = true
 cursorline = false
 bufferline = "always"
 color-modes	= true
-rulers = [120]
+# rulers = [120]
 
 [editor.cursor-shape]
 insert = "bar"
@@ -46,9 +46,9 @@ H = ["ensure_selections_forward", "extend_to_line_start"]
 L = ["ensure_selections_forward", "extend_to_line_end"]
 
 [keys.normal.space.g]
-g = ":sh zellij run -fc --height 100% --width 100% --x 0 --y 0 -- gitui"
 c = "changed_file_picker"
-n = [":new", ":sh zellij run -f -x 0 -y 0 --width 100% --height 100% -- bash ~/.config/helix/yazi-picker.sh", ":buffer-close!", ":redraw"]
+g = [":new", ":sh zellij run -fc -x 0 -y 0 --height 100% --width 100% -- gitui", ":buffer-close!", ":redraw"]
+n = [":new", ":sh zellij run -fc -x 0 -y 0 --height 100% --width 100% -- bash ~/.config/helix/yazi-picker.sh", ":buffer-close!", ":redraw"]
 
 [keys.select]
 C-j = ["delete_selection", "paste_after"]

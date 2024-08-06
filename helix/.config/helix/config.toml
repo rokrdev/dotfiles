@@ -51,6 +51,7 @@ L = ["ensure_selections_forward", "extend_to_line_end"]
 [keys.normal.space.g]
 c = "changed_file_picker"
 g = [":new", ":sh zellij run -fc -x 0 -y 0 --height 100% --width 100% -- gitui", ":buffer-close!", ":redraw"]
+l = [":new", ":sh zellij run -fc -x 0 -y 0 --height 100% --width 100% -- lazygit", ":buffer-close!", ":redraw"]
 n = [":new", ":sh zellij run -fc -x 0 -y 0 --height 100% --width 100% -- bash ~/.config/helix/yazi-picker.sh", ":buffer-close!", ":redraw"]
 
 [keys.select]

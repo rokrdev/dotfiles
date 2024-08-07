@@ -46,16 +46,12 @@ H = ["ensure_selections_forward", "extend_to_line_start"]
 L = ["ensure_selections_forward", "extend_to_line_end"]
 # Search for word under cursor
 "*" = ["move_char_right", "move_prev_word_start", "move_next_word_end", "search_selection", "search_next"]
-"," = "repeat_last_motion"
+"^" = "repeat_last_motion"
 J = ["select_line_below"]
 K = ["select_line_above"]
 
 "A-j" = "join_selections"
 "A-J" = "join_selections_space"
-
-X = "remove_primary_selection"
-x = "keep_selections"
-"A-x" = "remove_selections"
 
 [keys.normal.space.g]
 c = "changed_file_picker"
@@ -76,7 +72,7 @@ K = ["select_line_above"]
 "A-j" = "join_selections"
 "A-J" = "join_selections_space"
 
-X = "remove_primary_selection"
-x = "keep_selections"
-"A-x" = "remove_selections"
+# X = "remove_primary_selection"
+# x = "keep_selections"
+# "A-x" = "remove_selections"
 

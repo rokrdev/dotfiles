@@ -8,7 +8,9 @@ config.font = wezterm.font_with_fallback({
   { family = "MonoLisa Nerd Font",       scale = 1.1, weight = "Regular" },
   { family = "FantasqueSansM Nerd Font", scale = 1.1 },
 })
-config.font_size = 14
+config.font_size = 13
+config.freetype_load_flags = "NO_HINTING"
+-- config.cell_width = 0.9
 config.window_decorations = "RESIZE"
 
 config.front_end = "WebGpu"

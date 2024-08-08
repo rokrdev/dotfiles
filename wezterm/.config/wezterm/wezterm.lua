@@ -15,6 +15,7 @@ config.front_end = "WebGpu"
 config.max_fps = 144
 config.scrollback_lines = 3000
 config.default_workspace = "main"
+-- config.enable_tab_bar = false
 
 -- Dim inactive panes
 config.inactive_pane_hsb = {
@@ -63,6 +64,7 @@ config.keys = {
     }),
   },
   { key = "m", mods = "LEADER", action = act.ActivateKeyTable({ name = "move_tab", one_shot = false }) },
+  { key = "t", mods = "LEADER", action = act.SpawnTab 'CurrentPaneDomain' },
 }
 
 for i = 1, 9 do

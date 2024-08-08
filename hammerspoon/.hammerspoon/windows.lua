@@ -1,7 +1,7 @@
 hs.window.animationDuration = 0.2
 local window = hs.getObjectMetatable("hs.window")
 local spaces = require("hs.spaces")
-local wf=hs.window.filter
+local wf = hs.window.filter
 
 -- +-----------------+
 -- |        |        |
@@ -83,8 +83,8 @@ function window.upLeft(win)
 
   f.x = max.x
   f.y = max.y
-  f.w = max.w/2
-  f.h = max.h/2
+  f.w = max.w / 2
+  f.h = max.h / 2
   win:setFrame(f)
 end
 
@@ -100,8 +100,8 @@ function window.downLeft(win)
 
   f.x = max.x
   f.y = max.y + (max.h / 2)
-  f.w = max.w/2
-  f.h = max.h/2
+  f.w = max.w / 2
+  f.h = max.h / 2
   win:setFrame(f)
 end
 
@@ -117,8 +117,8 @@ function window.downRight(win)
 
   f.x = max.x + (max.w / 2)
   f.y = max.y + (max.h / 2)
-  f.w = max.w/2
-  f.h = max.h/2
+  f.w = max.w / 2
+  f.h = max.h / 2
 
   win:setFrame(f)
 end
@@ -135,8 +135,8 @@ function window.upRight(win)
 
   f.x = max.x + (max.w / 2)
   f.y = max.y
-  f.w = max.w/2
-  f.h = max.h/2
+  f.w = max.w / 2
+  f.h = max.h / 2
   win:setFrame(f)
 end
 
@@ -151,7 +151,7 @@ function window.centerWithFullHeight(win)
   local max = screen:fullFrame()
 
   f.x = max.x + (max.w / 5)
-  f.w = max.w * 3/5
+  f.w = max.w * 3 / 5
   f.y = max.y
   f.h = max.h
   win:setFrame(f)
@@ -173,7 +173,7 @@ end
 --   hs.window.focusedWindow():focusWindowSouth()
 -- end
 
-function has_value (tab, val)
+function has_value(tab, val)
   for index, value in ipairs(tab) do
     if value == val then
       return true
@@ -211,7 +211,7 @@ function window.moveToPrevSpace(win)
   local allSpaces = spaces.spacesForScreen(currentScreen:id())
 
   local length = #allSpaces
-  for i=length, 1, -1 do
+  for i = length, 1, -1 do
     if allSpaces[i] == currentSpaceId then
       local prevSpace = ((i - 1) % length) + ((i == 1 and 1 or 0) * length)
       spaces.moveWindowToSpace(win:id(), allSpaces[prevSpace])
@@ -241,17 +241,17 @@ function window.columnLayout(win)
   local windowCount = #windows
   local counter = 0
   hs.fnutils.each(windows, function(w)
-      local f = w:frame()
-      local screen = w:screen()
-      local max = screen:frame()
-      local width = max.w/windowCount
+    local f = w:frame()
+    local screen = w:screen()
+    local max = screen:frame()
+    local width = max.w / windowCount
 
-      f.x = max.x + (counter * width)
-      f.w = width
-      f.y = max.y
-      f.h = max.h
-      w:setFrame(f)
-      counter = counter + 1
+    f.x = max.x + (counter * width)
+    f.w = width
+    f.y = max.y
+    f.h = max.h
+    w:setFrame(f)
+    counter = counter + 1
   end)
 end
 
@@ -326,4 +326,3 @@ end)
 windowLayoutMode:bind(modifiers, trigger, function()
   windowLayoutMode:exit()
 end)
-

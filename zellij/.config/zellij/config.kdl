@@ -20,7 +20,7 @@ keybinds clear-defaults=true {
         bind "s" "[" { SwitchToMode "scroll"; }
         bind "h" { NewPane "Down"; SwitchToMode "normal"; }
         bind "v" { NewPane "Right"; SwitchToMode "normal"; }
-        bind "n" { NewTab; SwitchToMode "normal";}
+        bind "t" { NewTab; SwitchToMode "normal";}
         bind "z" { ToggleFocusFullscreen; SwitchToMode "normal"; }
         bind "," { SwitchToMode "RenameTab"; TabNameInput 0; }
         bind "Left" { MoveFocusOrTab "Left"; SwitchToMode "normal"; }

@@ -45,10 +45,12 @@ C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_befor
 H = ["ensure_selections_forward", "extend_to_line_start"]
 L = ["ensure_selections_forward", "extend_to_line_end"]
 # Search for word under cursor
-"*" = ["move_char_right", "move_prev_word_start", "move_next_word_end", "search_selection", "search_next"]
+"*" = "@miws<C-r>.<ret>"
 "^" = "repeat_last_motion"
 J = ["select_line_below"]
 K = ["select_line_above"]
+D = "@t<ret>d"
+W = "@miw"
 
 "A-j" = "join_selections"
 "A-J" = "join_selections_space"

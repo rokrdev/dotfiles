@@ -78,7 +78,7 @@ pane_frames false
 // Choose the theme that is specified in the themes section.
 // Default: default
 //
-theme "tokyonight_night"
+theme "catppuccin-mocha"
 
 // The name of the default layout to load on startup
 // Default: "default"
@@ -156,35 +156,5 @@ ui {
     pane_frames {
         rounded_corners true
         hide_session_name true
-    }
-}
-themes {
-    catppuccin {
-        fg 217 224 238
-        bg 48 45 65
-        black 22 19 32
-        red 242 143 173
-        green 171 233 179
-        yellow 250 227 176
-        blue 150 205 251
-        magenta 245 194 231
-        cyan 26 24 38
-        white 217 224 238
-        orange 248 189 150
-    }
-    tokyonight_night {
-        fg "#c0caf5"
-        bg "#292e42"
-        // Black should match the terminal background color
-        // This ensures the top and bottom bars are transparent
-        black "#1a1b26"
-        red "#f7768e"
-        green "#9ece6a"
-        yellow "#e0af68"
-        blue "#7aa2f7"
-        magenta "#bb9af7"
-        cyan "#7dcfff"
-        white "#a9b1d6"
-        orange "#ff9e64"
     }
 }

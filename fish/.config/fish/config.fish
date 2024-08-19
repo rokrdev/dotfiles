@@ -124,3 +124,4 @@ if test -e ~/.docker/init-fish.sh
 end
 
 setscheme tokyonight_night
+export XDG_CONFIG_HOME="$HOME/.config"

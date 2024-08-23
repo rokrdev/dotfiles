@@ -18,8 +18,8 @@ auto-format = true
 
 [[language]]
 name = "markdown"
-# https://github.com/executablebooks/mdformat
-formatter = { command = "mdformat", args = ["-"] }
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "markdown"] }
 
 # [[language]]
 # name = "rust"

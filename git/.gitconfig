@@ -15,18 +15,18 @@
 	ff = only
 [push]
 	default = current
-[includeIf "gitdir:~/.dotfiles/.git"]
-	path = ~/projects/config
-[includeIf "gitdir:~/projects/**/.git"]
-	path = ~/projects/config
-[includeIf "gitdir:~/afterpay/**/.git"]
-	path = ~/afterpay/config
-[includeIf "gitdir:~/square/**/.git"]
-	path = ~/square/config
 [commit]
 	template = ~/.gitmessage
 [init]
 	defaultBranch = main
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+[includeIf "gitdir:~/.dotfiles"]
+	path = ~/projects/config
+[includeIf "gitdir:~/projects/"]
+	path = ~/projects/config
+[includeIf "gitdir:~/afterpay/"]
+	path = ~/afterpay/config
+[includeIf "gitdir:~/square/"]
+	path = ~/square/config
 

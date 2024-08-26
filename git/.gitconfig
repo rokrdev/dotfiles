@@ -19,6 +19,9 @@
 	template = ~/.gitmessage
 [init]
 	defaultBranch = main
+[user]
+  email = bjoshi@idontknow.com
+  name = bharat
 [url "git@github.com:"]
 	insteadOf = https://github.com/
 [includeIf "gitdir:~/.dotfiles/"]

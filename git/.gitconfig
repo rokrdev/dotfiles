@@ -21,12 +21,11 @@
 	defaultBranch = main
 [url "git@github.com:"]
 	insteadOf = https://github.com/
-[includeIf "gitdir:~/.dotfiles"]
+[includeIf "gitdir:~/.dotfiles/"]
 	path = ~/projects/config
 [includeIf "gitdir:~/projects/"]
-	path = ~/projects/config
+	path = ~/gitconfig_me
 [includeIf "gitdir:~/afterpay/"]
-	path = ~/afterpay/config
+	path = ~/gitconfig_afterpay
 [includeIf "gitdir:~/square/"]
-	path = ~/square/config
-
+	path = ~/gitconfig_square

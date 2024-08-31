@@ -127,17 +127,3 @@ setscheme tokyonight_night
 export XDG_CONFIG_HOME="$HOME/.config"
 
 fzf --fish | source
-
-
-function trackpad_pair
-    set -l id (blueutil --paired | grep 'Zeno Office Trackpad' | grep -Eo '[a-z0-9]{2}(-[a-z0-9]{2}){5}')
-    echo "unpairing trackpad"
-    blueutil --unpair $id
-    echo "unpaired, waiting a few seconds for trackpad to go to pairable state"
-    sleep 3
-    echo "pairing with trackpad"
-    blueutil --pair $id
-    echo paired
-    blueutil --connect $id
-    echo connected
-end

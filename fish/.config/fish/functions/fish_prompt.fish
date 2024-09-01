@@ -33,9 +33,9 @@ set -g fish_pager_color_completion $foreground
 set -g fish_pager_color_description $comment
 
 set __fish_git_prompt_show_informative_status true
-set __fish_git_prompt_showcolorhints 'yes'
-set __fish_git_prompt_showupstream 'informative'
-set __fish_git_prompt_showdirtystate 'yes'
+set __fish_git_prompt_showcolorhints yes
+set __fish_git_prompt_showupstream informative
+set __fish_git_prompt_showdirtystate yes
 set __fish_git_prompt_char_cleanstate '✔'
 set __fish_git_prompt_char_dirtystate '◆'
 set __fish_git_prompt_char_upstream_ahead '↑'
@@ -53,15 +53,15 @@ function fish_prompt --description 'Write out the prompt'
 
     set -l git (fish_git_prompt)
 
-    set -l prompt '=> '
+    set -l prompt '⟫ '
 
     set -l prompt_color $red
 
     if test $_display_status -eq 0
-      set prompt_color $green
+        set prompt_color $green
     end
 
     set -l pwd (prompt_pwd)
 
-    echo -n -s -e (set_color $fish_color_cwd) $pwd $git (set_color $purple) ' ' (date +%H:%M:%S) '\n' (set_color $prompt_color)  $prompt
+    echo -n -s -e (set_color $fish_color_cwd) $pwd $git (set_color $purple) ' ' (date +%H:%M:%S) '\n' (set_color $prompt_color) $prompt
 end

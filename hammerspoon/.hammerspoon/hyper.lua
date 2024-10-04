@@ -23,6 +23,7 @@ local singleapps = {
   { "a", "Arc", appLaunchFunction },
   { "b", "Bear", appLaunchFunction },
   { "c", "Google Chrome", appLaunchFunction },
+  { "f", "Finder", appLaunchFunction },
   { "k", "Kitty", appLaunchFunction },
   { "i", "Intellij IDEA", appLaunchFunction },
   { "m", "Spotify", appLaunchFunction },

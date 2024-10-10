@@ -19,21 +19,27 @@ local reload = function(_, key)
   key:exit()
 end
 
+local finder = function(_, key)
+  hs.execute("open $HOME")
+  key.triggered = true
+  key:exit()
+end
+
 local singleapps = {
-  { "a", "Arc", appLaunchFunction },
-  { "b", "Bear", appLaunchFunction },
+  { "a", "Arc",           appLaunchFunction },
+  { "b", "Bear",          appLaunchFunction },
   { "c", "Google Chrome", appLaunchFunction },
-  { "f", "Finder", appLaunchFunction },
-  { "k", "Kitty", appLaunchFunction },
+  { "f", "Finder",        finder },
+  { "k", "Kitty",         appLaunchFunction },
   { "i", "Intellij IDEA", appLaunchFunction },
-  { "m", "Spotify", appLaunchFunction },
-  { "n", "Notes", appLaunchFunction },
-  { "s", "Slack", appLaunchFunction },
-  { "t", "Things", thingsLaunchFunction },
-  { "w", "WezTerm", appLaunchFunction },
-  { "z", "Safari", appLaunchFunction },
-  { "-", "Chrysalis", appLaunchFunction },
-  { "`", "Reload", reload },
+  { "m", "Spotify",       appLaunchFunction },
+  { "n", "Notes",         appLaunchFunction },
+  { "s", "Slack",         appLaunchFunction },
+  { "t", "Things",        thingsLaunchFunction },
+  { "w", "WezTerm",       appLaunchFunction },
+  { "z", "Safari",        appLaunchFunction },
+  { "-", "Chrysalis",     appLaunchFunction },
+  { "`", "Reload",        reload },
 }
 
 for _, app in ipairs(singleapps) do

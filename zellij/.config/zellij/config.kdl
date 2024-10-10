@@ -1,6 +1,8 @@
 keybinds clear-defaults=true {
     normal {
         bind "Ctrl b" { SwitchToMode "tmux"; }
+        bind "Ctrl h" { MoveFocusOrTab "Left"; }
+        bind "Ctrl l" { MoveFocusOrTab "Right"; }
     }
     scroll {
         bind "Ctrl s" "Space" "Enter" "Esc" { SwitchToMode "normal"; }
@@ -22,7 +24,7 @@ keybinds clear-defaults=true {
         bind "v" { NewPane "Right"; SwitchToMode "normal"; }
         bind "t" { NewTab; SwitchToMode "normal";}
         bind "z" { ToggleFocusFullscreen; SwitchToMode "normal"; }
-        bind "," { SwitchToMode "RenameTab"; TabNameInput 0; }
+        bind "r" { SwitchToMode "RenameTab"; TabNameInput 0; }
         bind "Left" { MoveFocusOrTab "Left"; SwitchToMode "normal"; }
         bind "Right" { MoveFocusOrTab "Right"; SwitchToMode "normal"; }
         bind "Down" { MoveFocus "Down"; SwitchToMode "normal"; }

@@ -1,4 +1,4 @@
-theme = "tokyonight_moon"
+theme = "tokyonight"
 
 [editor]
 completion-timeout = 5

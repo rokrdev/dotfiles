@@ -217,12 +217,12 @@ function obj:previousWindow(onlyCurrentApp)
 end
 
 -- select any other window
-hs.hotkey.bind({ "alt" }, "b", function()
+hs.hotkey.bind({ "alt", "ctrl", "shift" }, "b", function()
   obj:selectWindow(false)
 end)
 
 -- -- select any window for the same application
-hs.hotkey.bind({ "alt", "shift" }, "b", function()
+hs.hotkey.bind({ "alt", "ctrl" }, "b", function()
   obj:switchWindow(true)
 end)
 

@@ -26,20 +26,20 @@ local finder = function(_, key)
 end
 
 local singleapps = {
-  { "a", "Arc",           appLaunchFunction },
-  { "b", "Bear",          appLaunchFunction },
+  { "a", "Safari", appLaunchFunction },
+  { "b", "Bear", appLaunchFunction },
   { "c", "Google Chrome", appLaunchFunction },
-  { "f", "Finder",        finder },
-  { "k", "Kitty",         appLaunchFunction },
+  { "f", "Finder", finder },
+  { "k", "Kitty", appLaunchFunction },
   { "i", "Intellij IDEA", appLaunchFunction },
-  { "m", "Spotify",       appLaunchFunction },
-  { "n", "Notes",         appLaunchFunction },
-  { "s", "Slack",         appLaunchFunction },
-  { "t", "Things",        thingsLaunchFunction },
-  { "w", "WezTerm",       appLaunchFunction },
-  { "z", "Safari",        appLaunchFunction },
-  { "-", "Chrysalis",     appLaunchFunction },
-  { "`", "Reload",        reload },
+  { "m", "Spotify", appLaunchFunction },
+  { "n", "Notes", appLaunchFunction },
+  { "s", "Slack", appLaunchFunction },
+  { "t", "Things", thingsLaunchFunction },
+  { "w", "WezTerm", appLaunchFunction },
+  { "z", "Safari", appLaunchFunction },
+  { "-", "Chrysalis", appLaunchFunction },
+  { "`", "Reload", reload },
 }
 
 for _, app in ipairs(singleapps) do

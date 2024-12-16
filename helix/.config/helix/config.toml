@@ -39,21 +39,13 @@ mode.insert = "I"
 mode.select = "S"
 
 [keys.normal]
-C-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
-C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
-"@" = ["move_prev_word_start", "move_next_word_end", "search_selection", "global_search"]
-H = ["ensure_selections_forward", "extend_to_line_start"]
-L = ["ensure_selections_forward", "extend_to_line_end"]
-# Search for word under cursor
-"*" = "@miws<C-r>.<ret>"
-"^" = "repeat_last_motion"
 J = ["select_line_below"]
 K = ["select_line_above"]
-D = "@t<ret>d"
-W = "@miw"
-
 "A-j" = "join_selections"
 "A-J" = "join_selections_space"
+X = "remove_primary_selection"
+x = "keep_selections"
+"A-x" = "remove_selections"
 
 [keys.normal.space.g]
 c = "changed_file_picker"
@@ -62,19 +54,10 @@ G = [":new", ":sh zellij run -fc -x 0 -y 0 --height 100% --width 100% -- gitui",
 n = [":new", ":sh zellij run -fc -x 0 -y 0 --height 100% --width 100% -- bash ~/.config/helix/yazi-picker.sh", ":buffer-close!", ":redraw"]
 
 [keys.select]
-C-j = ["delete_selection", "paste_after"]
-C-k = ["delete_selection", "move_line_up", "paste_before"]
-"A-[" = "search_next"
-"A-]" = "search_prev"
 J = ["select_line_below"]
 K = ["select_line_above"]
-"H" = ["goto_line_start"]
-"L" = ["goto_line_end"]
-
 "A-j" = "join_selections"
 "A-J" = "join_selections_space"
-
-# X = "remove_primary_selection"
-# x = "keep_selections"
-# "A-x" = "remove_selections"
-
+X = "remove_primary_selection"
+x = "keep_selections"
+"A-x" = "remove_selections"

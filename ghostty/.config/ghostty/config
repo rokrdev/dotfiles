@@ -1,0 +1,13 @@
+shell-integration = fish
+
+theme = detuned
+
+macos-titlebar-style = tabs
+
+copy-on-select = true
+
+font-family = "MonoLisa Nerd Font"
+
+font-size = 14
+
+window-padding-x = 2

@@ -1,6 +1,6 @@
 shell-integration = fish
 
-theme = detuned
+theme = tokyonight
 
 macos-titlebar-style = tabs
 
@@ -11,3 +11,5 @@ font-family = "MonoLisa Nerd Font"
 font-size = 14
 
 window-padding-x = 2
+
+adjust-cursor-thickness = 75%

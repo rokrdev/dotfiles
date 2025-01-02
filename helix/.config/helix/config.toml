@@ -1,4 +1,4 @@
-theme = "jetbrains_dark"
+theme = "tokyonight"
 
 [editor]
 completion-timeout = 5

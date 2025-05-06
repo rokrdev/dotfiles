@@ -3,10 +3,7 @@ export BAT_THEME="tokyonight"
 export ALTERNATE_EDITOR="hx"
 export EDITOR="hx"
 export VISUAL="hx"
-export TERM="xterm-kitty"
-export KITTY_CACHE_DIRECTORY="/tmp/"
 export FISH_CONFIG="$HOME/.config/fish/config.fish"
-export TERMINFO="~/.terminfo"
 export LANG="en_US.UTF-8"
 export NNN_OPTS="da"
 export NNN_FIFO="/tmp/nnn.fifo"
@@ -28,7 +25,6 @@ source ~/.env
 
 source ~/.asdf/asdf.fish
 zoxide init fish | source
-
 
 defaults write -g ApplePressAndHoldEnabled -bool false
 # defaults write -g InitialKeyRepeat -int 15

@@ -35,6 +35,6 @@ end
 -- require('border')
 -- require('mappings')
 require("switcher")
-require("hyper")
+-- require("hyper")
 
 hs.notify.new({ title = "Hammerspoon", informativeText = "Ready to rock 🤘" }):send()

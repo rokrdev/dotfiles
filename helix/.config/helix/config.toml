@@ -39,25 +39,15 @@ mode.insert = "I"
 mode.select = "S"
 
 [keys.normal]
-J = ["select_line_below"]
-K = ["select_line_above"]
-"A-j" = "join_selections"
-"A-J" = "join_selections_space"
-X = "remove_primary_selection"
-x = "keep_selections"
-"A-x" = "remove_selections"
+# J = ["select_line_below"]
+# K = ["select_line_above"]
+X = ["extend_line_above"]
 
 [keys.normal.space.g]
 c = "changed_file_picker"
-g = [":new", ":sh zellij run -fc -x 0 -y 0 --height 100% --width 100% -- lazygit", ":buffer-close!", ":redraw"]
-G = [":new", ":sh zellij run -fc -x 0 -y 0 --height 100% --width 100% -- gitui", ":buffer-close!", ":redraw"]
-n = [":new", ":sh zellij run -fc -x 0 -y 0 --height 100% --width 100% -- bash ~/.config/helix/yazi-picker.sh", ":buffer-close!", ":redraw"]
+g = [":write-all", ":new", ":insert-output lazygit", ":buffer-close!", ":redraw", ":reload-all"]
+# G = [":new", ":sh zellij run -fc -x 0 -y 0 --height 100%% --width 100%% -- gitui", ":buffer-close!", ":redraw"]
+# n = [":new", ":sh zellij run -fc -x 0 -y 0 --height 100%% --width 100%% -- bash ~/.config/helix/yazi-picker.sh", ":buffer-close!", ":redraw"]
 
 [keys.select]
-J = ["select_line_below"]
-K = ["select_line_above"]
-"A-j" = "join_selections"
-"A-J" = "join_selections_space"
-X = "remove_primary_selection"
-x = "keep_selections"
-"A-x" = "remove_selections"
+X = ["extend_line_above"]

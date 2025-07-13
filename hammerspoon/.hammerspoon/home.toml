@@ -23,11 +23,11 @@ b = ["raycast://extensions/raycast/browser-bookmarks/index", "Bookmarks"]
 h = ["raycast://extensions/crisboarna/browser-history/search-history", "History"]
 t = ["raycast://extensions/koinzhang/browser-tabs/index", "Tabs"]
 
-[m]
-label = "Music"
-n = ["raycast://extensions/fedevitaledev/music/next-track", "Next Track"]
-p = ["raycast://extensions/fedevitaledev/music/previous-track", "Previous Track"]
-t = ["raycast://extensions/fedevitaledev/music/toggle-play-pause", "Toggle Play Pause"]
+# [m]
+# label = "Music"
+# n = ["raycast://extensions/fedevitaledev/music/next-track", "Next Track"]
+# p = ["raycast://extensions/fedevitaledev/music/previous-track", "Previous Track"]
+# t = ["raycast://extensions/fedevitaledev/music/toggle-play-pause", "Toggle Play Pause"]
 
 [n]
 label = "Bear Notes"

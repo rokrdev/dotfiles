@@ -10,6 +10,6 @@ font-family = "MonoLisa Nerd Font"
 
 font-size = 14
 
-window-padding-x = 2
+window-padding-x = 5
 
 adjust-cursor-thickness = 75%

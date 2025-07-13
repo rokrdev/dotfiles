@@ -8,6 +8,8 @@ cursorline = false
 bufferline = "always"
 color-modes	= true
 # rulers = [120]
+# Minimum severity to show a diagnostic after the end of a line:
+end-of-line-diagnostics = "hint"
 
 [editor.cursor-shape]
 insert = "bar"
@@ -30,6 +32,11 @@ enable = true
 #wrap-at-text-width = true
 wrap-indicator = "↩ "
 
+[editor.inline-diagnostics]
+# Minimum severity to show a diagnostic on the primary cursor's line.
+# Note that `cursor-line` diagnostics are hidden in insert mode.
+cursor-line = "error"
+
 [editor.statusline]
 left = [ "mode", "spinner", "file-name", "read-only-indicator", "file-modification-indicator", "version-control", "diagnostics" ]
 right = [ "primary-selection-length", "register", "position", "position-percentage", "total-line-numbers", "file-encoding" ]
@@ -51,3 +58,4 @@ g = [":write-all", ":new", ":insert-output lazygit", ":buffer-close!", ":redraw"
 
 [keys.select]
 X = ["extend_line_above"]
+

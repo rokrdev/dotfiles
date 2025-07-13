@@ -124,3 +124,5 @@ setscheme tokyonight_night
 export XDG_CONFIG_HOME="$HOME/.config"
 
 fzf --fish | source
+
+export CARGO_TARGET_DIR=~/.cargo-target

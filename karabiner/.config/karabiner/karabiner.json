@@ -4,14 +4,14 @@
             "complex_modifications": {
                 "rules": [
                     {
-                        "description": "Change right_options f13",
+                        "description": "Change right_command to f18",
                         "manipulators": [
                             {
                                 "from": {
-                                    "key_code": "right_option",
+                                    "key_code": "right_command",
                                     "modifiers": { "optional": ["any"] }
                                 },
-                                "to": [{ "key_code": "f13" }],
+                                "to": [{ "key_code": "f18" }],
                                 "type": "basic"
                             }
                         ]

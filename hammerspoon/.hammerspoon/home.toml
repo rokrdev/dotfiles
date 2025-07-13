@@ -3,88 +3,75 @@ leader_key = "f18"        # required, the leader key that starts the sequence
 leader_key_mods = ""      # optional, default "", not recommended - a dedicated leader key is better
                              # supports cmd ctrl alt shift
 auto_reload = true        # optional, default true, reload when any file in this directory is saved
-toast_on_reload = true    # optional, default false, show a toast when the config is reloaded
+toast_on_reload = false    # optional, default false, show a toast when the config is reloaded
 show_ui = true            # optional, default true, show the ui with your key maps
 
+[a]
+label = "Applications"
+b = ["/Applications/Bear.app", "Bear"]
+c = ["/Applications/Google Chrome.app", "Bear"]
+f = ["/System/Library/CoreServices/Finder.app", "Bear"]
+g = ["/Applications/Ghostty.app", "Terminal"]
+i = ["/Applications/IntelliJ IDEA CE.app", "Terminal"]
+z = ["/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app", "Safari"]
+- = ["/Applications/Chrysalis.app", "Terminal"]
+# T = ["/Applications/TradingView.app", "TradingView"]
 
-# # set a key to open an app
-# t = "Terminal"
+[b]
+label = "Browser"
+b = ["raycast://extensions/raycast/browser-bookmarks/index", "Bookmarks"]
+h = ["raycast://extensions/crisboarna/browser-history/search-history", "History"]
+t = ["raycast://extensions/koinzhang/browser-tabs/index", "Tabs"]
 
+[m]
+label = "Music"
+n = ["raycast://extensions/fedevitaledev/music/next-track", "Next Track"]
+p = ["raycast://extensions/fedevitaledev/music/previous-track", "Previous Track"]
+t = ["raycast://extensions/fedevitaledev/music/toggle-play-pause", "Toggle Play Pause"]
 
-# # or a url
-# g = "https://google.com"
+[n]
+label = "Bear Notes"
+h = ["cmd:shortcuts run '✱ Home'", "✱ Home"]
+m = ["cmd:shortcuts run 'This Month Note'", "Month Note"]
+q = ["cmd:shortcuts run QN", "Quick Note"]
+s = ["raycast://extensions/hmarr/bear/index", "Search"]
+return = ["cmd:shortcuts run 'Today Note'", "Today Note"]
 
+[r]
+label = "Raycast"
+c = ["raycast://extensions/raycast/clipboard-history/clipboard-history", "Clipboard"]
+e = ["raycast://extensions/raycast/emoji-symbols/search-emoji-symbols", "Emoji"]
+n = ["raycast://extensions/raycast/apple-notes/index", "Notes"]
+s = ["raycast://extensions/raycast/snippets/search-snippets", "Snippets"]
+w = ["raycast://extensions/raycast/dictionary/define-word", "Word"]
+C = ["raycast://extensions/raycast/raycast/confetti", "Confetti"]
+K = ["raycast://extensions/rolandleth/kill-process/index", "Kill Process"]
+S = ["raycast://extensions/raycast/navigation/switch-windows", "Switch Windows"]
+W = ["raycast://extensions/tonka3000/weather/index", "Weather"]
 
-# # use an array to change the label in the popup
-# v = ["Visual Studio Code", "VS Code"]
-
-
-# # create groups to nest actions
-# [l]
-# label = "[links]" # the "label" key is reserved to change the label of the group
-# g = "https://github.com"
-# b = "https://bsky.app"
-# t = "https://twitter.com"
-
-
-# # groups can be nested too!
-# [l.m]
-# label = "[me]"
-# g = ["https://github.com/saml-dev", "my github"]
-# b = ["https://bsky.app/profile/saml.dev", "my bluesky"]
-# t = ["https://twitter.com/saml_dev", "my twitter"]
-
-
-# # raycast deep links are supported
-# [r]
-# label = "[raycast]"
-# c = ["raycast://extensions/raycast/raycast/confetti", "confetti"]
-# e = ["raycast://extensions/raycast/emoji-symbols/search-emoji-symbols", "emoji"]
-
-
-# # use prefixes for special actions
-# [p]
-# label = "[prefixes]"
-# t = "text:sam@saml.dev"       # types "sam@saml.dev"
-# z = "cmd:code ~/.zshrc"       # run any terminal command
-# x = "code: ~/.zshrc"          # open a file or directory in VS Code
-# s = "shortcut:cmd shift 4"    # trigger a keyboard shortcut
-# r = "reload"                  # reserved for reloading your hammerspoon config (helpful when auto_reload is false)
-# i = "input:https://google.com/search?q={input}" # capture input and insert it into any other action
-
-
-# # we have window management too!
-# [w]
-# label = "[window]"
-# h = "window:left-half"                    # use presets listed in the README
-# c = "window:center-half"                  # use presets listed in the README
-# s = ["window:.4,.3,.2,.4","small center"] # or use 4 percentages for x,y,width,height for custom placement - more details in README
+[t]
+label = "Things"
+a = ["cmd:shortcuts run 'Things Anytime'", "Anytime"]
+i = ["cmd:shortcuts run 'Things Inbox'", "Inbox"]
+q = ["cmd:shortcuts run 'QT'", "Quick Todo"]
+t = ["cmd:shortcuts run 'Things Today'", "Today"]
+u = ["cmd:shortcuts run 'Things Upcoming'", "Upcoming"]
 
 
-# # or use raycast for window management if you prefer
-# [w.r]
-# label = "[raycast-window]"
-# h = ["raycast://extensions/raycast/window-management/left-half", "left half"]
-# l = ["raycast://extensions/raycast/window-management/right-half", "right half"]
-# c = ["raycast://extensions/raycast/window-management/center-half", "center half"]
+[w]
+label = "Window"
+f = ["window:fullscreen", "Fullscreen"]
+h = ["raycast://extensions/raycast/window-management/left-half", "Left Half"]
+l = ["raycast://extensions/raycast/window-management/right-half", "Right Half"]
+n = ["raycast://extensions/raycast/window-management/next-display", "Move to next display"]
+return = ["raycast://extensions/raycast/window-management/maximize", "Maximize"]
 
-
-# # this group is handy to copy over
-# # for quick access to your config
-# [h]
-# label = "[hammerspoon]"
-# c = "code: ~/.hammerspoon"
-# r = "reload" # reserved for reloading your hammerspoon config (helpful when auto_reload is false)
-
-
-# # glhf :) share your cool ideas with me on
-# # twitter @saml_dev - <leader> l m t
-# # bluesky @saml.dev - <leader> l m b
-# # github saml-dev   - <leader> l m g
-
-
-# # for advanced hammerspoon users, you can use
-# # the hs: prefix as an escape hatch to run any
-# # hammerspoon command you want.
-# [z]
-# z = "hs:hs.alert('Hello, world!')"
+# {
+#     {
+#       "actions" : [
+#         {
+#           "key" : ",",
+#           "type" : "application",
+#           "value" : "/Applications/Matter 2.app"
+#         },
+#     },

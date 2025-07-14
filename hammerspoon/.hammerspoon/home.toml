@@ -9,12 +9,12 @@ show_ui = true            # optional, default true, show the ui with your key ma
 [a]
 label = "Applications"
 b = ["/Applications/Bear.app", "Bear"]
-c = ["/Applications/Google Chrome.app", "Bear"]
-f = ["/System/Library/CoreServices/Finder.app", "Bear"]
-g = ["/Applications/Ghostty.app", "Terminal"]
-i = ["/Applications/IntelliJ IDEA CE.app", "Terminal"]
+c = ["/Applications/Google Chrome.app", "Chrome"]
+f = ["/System/Library/CoreServices/Finder.app", "iwear"]
+g = ["/Applications/Ghostty.app", "Ghostty"]
+i = ["/Applications/IntelliJ IDEA.app", "Idea"]
 z = ["/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app", "Safari"]
-- = ["/Applications/Chrysalis.app", "Terminal"]
+- = ["/Applications/Chrysalis.app", "Chrysalis"]
 # T = ["/Applications/TradingView.app", "TradingView"]
 
 [b]
@@ -35,7 +35,7 @@ h = ["cmd:shortcuts run '✱ Home'", "✱ Home"]
 m = ["cmd:shortcuts run 'This Month Note'", "Month Note"]
 q = ["cmd:shortcuts run QN", "Quick Note"]
 s = ["raycast://extensions/hmarr/bear/index", "Search"]
-return = ["cmd:shortcuts run 'Today Note'", "Today Note"]
+space = ["cmd:shortcuts run 'Today Note'", "Today Note"]
 
 [r]
 label = "Raycast"
@@ -64,7 +64,7 @@ f = ["window:fullscreen", "Fullscreen"]
 h = ["raycast://extensions/raycast/window-management/left-half", "Left Half"]
 l = ["raycast://extensions/raycast/window-management/right-half", "Right Half"]
 n = ["raycast://extensions/raycast/window-management/next-display", "Move to next display"]
-return = ["raycast://extensions/raycast/window-management/maximize", "Maximize"]
+space = ["raycast://extensions/raycast/window-management/maximize", "Maximize"]
 
 # {
 #     {

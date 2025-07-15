@@ -4,25 +4,6 @@
             "complex_modifications": {
                 "rules": [
                     {
-                        "description": "Trigger f18+0 on pressing ctrl+opt+0 for quick app switching",
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "0",
-                                    "modifiers": { "mandatory": ["control", "option"] }
-                                },
-                                "to": [
-                                    {
-                                        "hold_down_milliseconds": 100,
-                                        "key_code": "f18"
-                                    },
-                                    { "key_code": "0" }
-                                ],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
                         "description": "Change right_command to f18",
                         "manipulators": [
                             {
@@ -95,6 +76,22 @@
                                     }
                                 ],
                                 "to_if_alone": [{ "key_code": "out" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Map fn+a as F17. Switch to specific app",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "a",
+                                    "modifiers": {
+                                        "mandatory": ["fn"],
+                                        "optional": ["any"]
+                                    }
+                                },
+                                "to": [{ "key_code": "f17" }],
                                 "type": "basic"
                             }
                         ]

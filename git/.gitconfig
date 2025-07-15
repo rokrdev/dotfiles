@@ -1,6 +1,6 @@
 [core]
 	excludesfile = ~/.gitignore_global
-	editor = nvr --remote-wait-silent
+	editor = hx
 [difftool]
 	prompt = true
 [diff]
@@ -15,18 +15,20 @@
 	ff = only
 [push]
 	default = current
-[includeIf "gitdir:~/.dotfiles/.git"]
-	path = ~/projects/config
-[includeIf "gitdir:~/projects/**/.git"]
-	path = ~/projects/config
-[includeIf "gitdir:~/afterpay/**/.git"]
-	path = ~/afterpay/config
-[includeIf "gitdir:~/square/**/.git"]
-	path = ~/square/config
 [commit]
 	template = ~/.gitmessage
 [init]
 	defaultBranch = main
+[user]
+  email = bjoshi@idontknow.com
+  name = bharat
 [url "git@github.com:"]
 	insteadOf = https://github.com/
-
+[includeIf "gitdir:~/.dotfiles/"]
+	path = ~/projects/config
+[includeIf "gitdir:~/projects/"]
+	path = ~/gitconfig_me
+[includeIf "gitdir:~/afterpay/"]
+	path = ~/gitconfig_afterpay
+[includeIf "gitdir:~/square/"]
+	path = ~/gitconfig_square

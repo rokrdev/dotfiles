@@ -1,0 +1,15 @@
+shell-integration = fish
+
+theme = tokyonight
+
+macos-titlebar-style = tabs
+
+copy-on-select = true
+
+font-family = "MonoLisa Nerd Font"
+
+font-size = 14
+
+window-padding-x = 5
+
+adjust-cursor-thickness = 75%

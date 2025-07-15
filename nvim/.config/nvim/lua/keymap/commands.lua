@@ -8,9 +8,8 @@ function commands.setup()
 
   -- dotfiles
   cmd("command! Dfc lua require('keymap.custom').clear_buffers_from_path({loc = '/.dotfiles/'})")
-  cmd("command! Dff lua require('keymap.custom').custom_find({title = 'Dotfiles Find', loc = vim.g.dotfiles_loc})")
-  cmd("command! Dfs lua require('keymap.custom').custom_search({title = 'Dotfiles Search', loc = vim.g.dotfiles_loc})")
-  cmd("command! Dfg lua require('keymap.custom').custom_grep({title = 'Dotfiles Grep', loc = vim.g.dotfiles_loc})")
+  cmd("command! Dff lua require('fzf-lua').files({title = 'Dotfiles Find', cwd = vim.g.dotfiles_loc})")
+  cmd("command! Dfs lua require('fzf-lua').grep({title = 'Dotfiles Search', cwd = vim.g.dotfiles_loc})")
 
   -- git
   cmd("command! Ga execute ':silent !git add %'")

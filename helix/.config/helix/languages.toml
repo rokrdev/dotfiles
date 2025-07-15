@@ -1,0 +1,54 @@
+[[language]]
+name = "toml"
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "toml"] }
+
+[[language]]
+auto-format = true
+name = "json"
+formatter = { command = "prettier", args = ["--parser", "json"] }
+
+[[language]]
+name = "javascript"
+auto-format = true
+
+[[language]]
+name = "typescript"
+auto-format = true
+
+[[language]]
+name = "markdown"
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "markdown"] }
+
+# [[language]]
+# name = "rust"
+# config.check.command = "clippy"
+
+# [[language]]
+# name = "go"
+# config = { "formatting.gofumpt" = true }
+
+[[language]]
+name = "yaml"
+auto-format = true
+# indent = { tab-width = 2, unit = "  " }
+formatter = { command = "prettier", args = ["--parser", "yaml"] }
+ 
+[[language]]
+name = "lua"
+auto-format = true
+formatter = { command = "stylua", args = ["-"] }
+
+[language-server.lua-language-server.config.Lua]
+diagnostics = { globals = [ "vim", "hs" ] }
+
+[[language]]
+name = "csv"
+file-types = ["csv"]
+scope = "source.csv"
+
+[[grammar]]
+name = "csv"
+source.git = "https://github.com/weartist/rainbow-csv-tree-sitter"
+source.rev = "896e6d09b23a1b0d87e45bf97ca34a249f41495c"

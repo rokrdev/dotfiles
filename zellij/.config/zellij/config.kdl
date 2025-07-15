@@ -1,14 +1,8 @@
 keybinds clear-defaults=true {
     normal {
-        bind "Alt t" { SwitchToMode "tmux"; }
-        bind "Ctrl q" { Quit; }
-        bind "Alt Left" { MoveFocus "Left"; }
-        bind "Alt Right" { MoveFocus "Right"; }
-        bind "Alt Down" { MoveFocus "Down"; }
-        bind "Alt Up" { MoveFocus "Up"; }
-        bind "Alt d" { GoToNextTab; }
-        bind "Alt a" { GoToPreviousTab; }
-        bind "Alt c" { FocusNextPane; }
+        bind "Ctrl b" { SwitchToMode "tmux"; }
+        bind "Ctrl h" { MoveFocusOrTab "Left"; }
+        bind "Ctrl l" { MoveFocusOrTab "Right"; }
     }
     scroll {
         bind "Ctrl s" "Space" "Enter" "Esc" { SwitchToMode "normal"; }
@@ -24,20 +18,17 @@ keybinds clear-defaults=true {
         bind "Enter" "Ctrl c" "Esc" { SwitchToMode "normal"; }
     }
     tmux {
-        bind "Ctrl o" "Enter" "Space" "Esc" { SwitchToMode "normal"; }
-        bind "Ctrl s" { SwitchToMode "scroll"; }
-        bind "[" { SwitchToMode "scroll"; }
-        bind "Ctrl q" { Quit; }
-        bind "Ctrl b" { Write 2; SwitchToMode "normal"; }
-        bind "-" { NewPane "Down"; SwitchToMode "normal"; }
-        bind "/" { NewPane "Right"; SwitchToMode "normal"; }
-        bind "n" { NewTab; SwitchToMode "normal";}
+        bind "Ctrl b" "Enter" "Space" "Esc" { SwitchToMode "normal"; }
+        bind "s" "[" { SwitchToMode "scroll"; }
+        bind "h" { NewPane "Down"; SwitchToMode "normal"; }
+        bind "v" { NewPane "Right"; SwitchToMode "normal"; }
+        bind "t" { NewTab; SwitchToMode "normal";}
         bind "z" { ToggleFocusFullscreen; SwitchToMode "normal"; }
-        bind "," { SwitchToMode "RenameTab"; TabNameInput 0; }
-        bind "Alt h" "Alt Left" { MoveFocusOrTab "Left"; }
-        bind "Alt l" "Alt Right" { MoveFocusOrTab "Right"; }
-        bind "Alt j" "Alt Down" { MoveFocus "Down"; }
-        bind "Alt k" "Alt Up" { MoveFocus "Up"; }
+        bind "r" { SwitchToMode "RenameTab"; TabNameInput 0; }
+        bind "Left" { MoveFocusOrTab "Left"; SwitchToMode "normal"; }
+        bind "Right" { MoveFocusOrTab "Right"; SwitchToMode "normal"; }
+        bind "Down" { MoveFocus "Down"; SwitchToMode "normal"; }
+        bind "Up" { MoveFocus "Up"; SwitchToMode "normal"; }
         bind "o" { FocusNextPane; }
         bind "J" { Resize "Down"; }
         bind "K" { Resize "Up"; }
@@ -45,7 +36,7 @@ keybinds clear-defaults=true {
         bind "L" { Resize "Right"; }
         bind "d" { Detach; }
         bind "x" { CloseFocus; SwitchToMode "normal"; }
-        bind "X" { CloseTab; SwitchToMode "normal"; }
+        bind "w" { CloseTab; SwitchToMode "normal"; }
         bind "1" { GoToTab 1; SwitchToMode "normal"; }
         bind "2" { GoToTab 2; SwitchToMode "normal"; }
         bind "3" { GoToTab 3; SwitchToMode "normal"; }
@@ -55,6 +46,7 @@ keybinds clear-defaults=true {
         bind "7" { GoToTab 7; SwitchToMode "normal"; }
         bind "8" { GoToTab 8; SwitchToMode "normal"; }
         bind "9" { GoToTab 9; SwitchToMode "normal"; }
+        bind "Ctrl q" { Quit; }
     }
 }
 
@@ -88,7 +80,7 @@ pane_frames false
 // Choose the theme that is specified in the themes section.
 // Default: default
 //
-theme "catppuccin"
+theme "catppuccin-mocha"
 
 // The name of the default layout to load on startup
 // Default: "default"
@@ -166,20 +158,5 @@ ui {
     pane_frames {
         rounded_corners true
         hide_session_name true
-    }
-}
-themes {
-    catppuccin {
-        fg 217 224 238
-        bg 48 45 65
-        black 22 19 32
-        red 242 143 173
-        green 171 233 179
-        yellow 250 227 176
-        blue 150 205 251
-        magenta 245 194 231
-        cyan 26 24 38
-        white 217 224 238
-        orange 248 189 150
     }
 }

@@ -22,7 +22,7 @@ require('nvim-tree').setup {
   renderer            = {
     root_folder_label = false,
     indent_markers = {
-      enable = false,
+      enable = true,
       icons = {
         corner = "│",
         edge = "│",

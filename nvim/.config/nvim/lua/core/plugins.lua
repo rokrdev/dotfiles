@@ -1,8 +1,7 @@
 require("lazy").setup({
-
   {
     "neovim/nvim-lspconfig",
-    event = "BufReadPost",
+    event = 'BufReadPost',
     dependencies = 'hrsh7th/cmp-nvim-lsp',
     config = function ()
       vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -13,9 +12,36 @@ require("lazy").setup({
       )
     end
   },
+
+  {
+    "mikavilpas/yazi.nvim",
+    event = 'BufReadPost',
+    keys = {
+      -- 👇 in this section, choose your own keymappings!
+      {
+        "<leader>fn",
+        function()
+          require("yazi").yazi()
+        end,
+        desc = "Open the file manager",
+      },
+      {
+        -- Open in the current working directory
+        "<leader>cw",
+        function()
+          require("yazi").yazi(nil, vim.fn.getcwd())
+        end,
+        desc = "Open the file manager in nvim's working directory" ,
+      },
+    },
+    opts = {
+      -- if you want to open yazi instead of netrw, see below for more info
+      open_for_directories = false,
+    },
+  },
+
   {
     "smoka7/multicursors.nvim",
-    event = "BufReadPost",
     dependencies = {
       'smoka7/hydra.nvim',
     },
@@ -30,9 +56,10 @@ require("lazy").setup({
       },
     },
   },
+
   {
     "SmiteshP/nvim-navic",
-    event = "BufReadPost",
+    event = 'BufReadPost',
     dependencies = 'neovim/nvim-lspconfig',
     config = function ()
       require'config.navic'
@@ -51,58 +78,89 @@ require("lazy").setup({
     "williamboman/mason-lspconfig.nvim",
     event = "BufReadPost",
     dependencies = {'neovim/nvim-lspconfig', 'williamboman/mason.nvim'},
+  },
+
+  {
+    'VonHeikemen/lsp-zero.nvim', branch = 'v3.x',
+    dependencies = {
+      'neovim/nvim-lspconfig',
+      'williamboman/mason.nvim',
+      'williamboman/mason-lspconfig.nvim'
+    },
+    event = 'BufReadPost',
     config = function ()
       require'config.lsp'
     end
   },
 
   {
+    "hrsh7th/cmp-nvim-lsp",
+    event = 'VeryLazy',
+    dependencies = 'hrsh7th/nvim-cmp',
+  },
+
+  {
     "hrsh7th/cmp-buffer",
-    event = "VimEnter",
+    event = 'VeryLazy',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/cmp-nvim-lsp",
-    event = "BufRead",
+    event = 'VeryLazy',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
-    "hrsh7th/cmp-vsnip",
-    event = "BufRead",
+    "petertriho/cmp-git",
+    event = 'VeryLazy',
+    dependencies = { 'hrsh7th/nvim-cmp' },
+  },
+
+  {
+    "L3MON4D3/LuaSnip",
+    version = "v2.*",
+    event = 'BufReadPost',
+    build = "make install_jsregexp",
+    config = function ()
+      local ls = require'luasnip'
+      ls.config.set_config {
+        enable_autosnippets = true,
+      }
+
+      require("luasnip.loaders.from_lua").load({paths = "~/.config/snippets/luasnippets"})
+      ls.filetype_extend("javascript", { "javascriptreact" })
+      ls.filetype_extend("javascript", { "html" })
+    end
+  },
+
+  {
+    "saadparwaiz1/cmp_luasnip",
+    event = 'VeryLazy',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/cmp-nvim-lsp-signature-help",
-    event = "BufRead",
+    event = 'VeryLazy',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
-    "hrsh7th/vim-vsnip",
-    event = "BufRead",
-    config = function ()
-      vim.g.vsnip_snippet_dir = '~/.config/nvim/vsnip'
-    end
-  },
-
-  {
     "hrsh7th/cmp-cmdline",
-    event = "VimEnter",
+    event = 'VeryLazy',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/cmp-path",
-    event = "VimEnter",
+    event = 'VeryLazy',
     dependencies = 'hrsh7th/nvim-cmp',
   },
 
   {
     "hrsh7th/nvim-cmp",
-    event = "VimEnter",
+    event = 'VeryLazy',
     config = function ()
       require'config.cmp'
     end
@@ -173,7 +231,6 @@ require("lazy").setup({
 
   {
     "lukas-reineke/indent-blankline.nvim",
-    dependencies = 'catppuccin',
     main = "ibl",
     opts = {
       exclude = {
@@ -188,14 +245,9 @@ require("lazy").setup({
   },
 
   {
-    "tpope/vim-repeat",
-    event = 'BufReadPost'
-  },
-
-  {
     'phaazon/hop.nvim',
     branch = 'v2',
-    event = 'BufReadPost',
+    event = "BufReadPost",
     config = function()
       require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
     end
@@ -203,7 +255,7 @@ require("lazy").setup({
 
   {
     'kevinhwang91/nvim-hlslens',
-    event = 'BufReadPost',
+    event = "BufReadPost",
     config = function ()
       require('hlslens').setup()
     end
@@ -211,20 +263,16 @@ require("lazy").setup({
 
   {
     'kylechui/nvim-surround',
-    event = 'BufReadPost',
+    version = "*",
+    event = "BufReadPost",
     config = function ()
       require'nvim-surround'.setup {}
     end
   },
 
   {
-    'wellle/targets.vim',
-    event = 'BufReadPost',
-  },
-
-  {
     'andymass/vim-matchup',
-    event = 'BufReadPost',
+    event = "BufReadPost",
     setup = function ()
       vim.g.matchup_matchparen_offscreen = {}
     end
@@ -244,7 +292,7 @@ require("lazy").setup({
 
   {
     'akinsho/git-conflict.nvim',
-    event = 'VimEnter',
+    event = "BufReadPost",
     config = function()
       require('git-conflict').setup()
     end
@@ -252,7 +300,7 @@ require("lazy").setup({
 
   {
     'nvim-treesitter/nvim-treesitter',
-    dependencies = "catppuccin",
+    event = "BufReadPost",
     config = function ()
       require'config.treesitter'
     end
@@ -260,7 +308,7 @@ require("lazy").setup({
 
   {
     'numToStr/Comment.nvim',
-    event = 'BufReadPost',
+    event = "BufReadPost",
     config = function()
       require("Comment").setup({
         ignore = '^$',
@@ -294,13 +342,13 @@ require("lazy").setup({
 
   {
     'JoosepAlviste/nvim-ts-context-commentstring',
-    event = 'BufReadPost',
+    event = "BufReadPost",
     dependencies = {'nvim-treesitter', 'Comment.nvim'},
   },
 
   {
     'nvim-treesitter/nvim-treesitter-textobjects',
-    event = 'BufReadPost',
+    event = "BufReadPost",
     dependencies = 'nvim-treesitter',
     config = function()
       require'nvim-treesitter.configs'.setup {
@@ -320,48 +368,30 @@ require("lazy").setup({
   },
 
   {
-    "luukvbaal/nnn.nvim",
-    cmd = 'NnnPicker',
-    config = function ()
-      local builtin = require("nnn").builtin
-      require("nnn").setup({
-        mappings = {
-          { "<C-t>", builtin.open_in_tab },       -- open file(s) in tab
-          { "<C-s>", builtin.open_in_split },     -- open file(s) in split
-          { "<C-v>", builtin.open_in_vsplit },    -- open file(s) in vertical split
-          { "<C-p>", builtin.open_in_preview },   -- open file in preview split keeping nnn focused
-          { "<C-y>", builtin.copy_to_clipboard }, -- copy file(s) to clipboard
-          { "<C-w>", builtin.cd_to_path },        -- cd to file directory
-          { "<C-e>", builtin.populate_cmdline },  -- populate cmdline (:) with file(s)
-        }
+    "ibhagwan/fzf-lua",
+    event = "VeryLazy",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      -- calling `setup` is optional for customization
+      require('fzf-lua').setup({
+        'fzf-native',
+        files = {
+          actions = {
+            ["ctrl-g"] = false
+          }
+        },
+        grep = {
+          rg_opts = "--sort-files --hidden --column --line-number --no-heading " ..
+          "--color=always --smart-case -g '!{.git,node_modules}/*'",
+        },
+        fzf_opts = {['--layout'] = 'default'}
       })
     end
   },
 
   {
-    'nvim-telescope/telescope.nvim',
-    event = 'VimEnter',
-    dependencies = {
-      'nvim-lua/popup.nvim',
-      'nvim-lua/plenary.nvim',
-    },
-    config = function ()
-      require'config.telescope'
-    end
-  },
-
-  {
-    'nvim-telescope/telescope-fzf-native.nvim',
-    build = "make",
-    dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
-    config = function ()
-      require('telescope').load_extension('fzf')
-    end
-  },
-
-  {
     'lewis6991/gitsigns.nvim',
-    event = 'BufReadPost',
+    event = "BufReadPost",
     dependencies = {'nvim-lua/plenary.nvim'},
     config = function ()
       require'config.gitsigns'
@@ -370,50 +400,21 @@ require("lazy").setup({
 
   {
     'kyazdani42/nvim-web-devicons',
-    event = 'VimEnter',
+    event = "BufReadPost",
   },
 
   {
-    "catppuccin/nvim",
-    name = "catppuccin",
+    "folke/tokyonight.nvim",
     lazy = false,
-    config = function ()
-      require("catppuccin").setup {
-        transparent_background = false,
-        dim_inactive = {
-          enabled = true,
-          shade = "dark",
-          percentage = 0.15,
-        },
-        compile = {
-          enabled = true,
-          path = vim.fn.stdpath "cache" .. "/catppuccin",
-        },
-        integrations = {
-          which_key = true,
-          neogit = true,
-          gitsigns = true,
-          hop = true,
-          native_lsp = {
-            enabled = true,
-          },
-          cmp = true,
-          nvimtree = true,
-          telescope = true,
-          treesitter = true,
-          indent_blankline = {
-            enabled = true,
-            colored_indent_levels = false,
-          },
-          navic = {
-            enabled = true,
-          }
-        }
-      }
-      vim.g.catppuccin_flavour = "mocha"
+    priority = 1000,
+    opts = {},
+    config = function()
+      require'tokyonight'.setup({
+        style = "night"
+      })
       vim.api.nvim_exec(
       [[
-      colorscheme catppuccin
+      colorscheme tokyonight
       hi link Trailspace CurSearch
       ]],
       false
@@ -421,48 +422,34 @@ require("lazy").setup({
     end
   },
 
-  -- {
-  --   "beauwilliams/focus.nvim",
-  --   event = 'BufReadPost',
-  --   config = function ()
-  --     require("focus").setup({
-  --       cursorline = false,
-  --       cursorcolumn = false,
-  --       signcolumn = false,
-  --       excluded_filetypes = {"nnn"}
-  --     })
-  --   end
-  -- },
-
   {
     "hoob3rt/lualine.nvim",
     lazy = false,
-    dependencies = "catppuccin",
     config = function ()
       require'config.status_line'
     end
   },
 
-  {
-    "akinsho/nvim-bufferline.lua",
-    dependencies = "lualine.nvim",
-    event = "VimEnter",
-    config = function ()
-      require('bufferline').setup{
-        options = {
-          show_buffer_close_icons = false,
-          show_close_icon = false,
-          separator_style = "thick",
-          always_show_bufferline = false,
-        },
-        highlights = require("catppuccin.groups.integrations.bufferline").get()
-      }
-    end
-  },
+  -- {
+  --   "akinsho/bufferline.nvim",
+  --   version = "*",
+  --   dependencies = 'nvim-tree/nvim-web-devicons',
+  --   event = 'VeryLazy',
+  --   config = function ()
+  --     require('bufferline').setup{
+  --       options = {
+  --         exclude_ft = {'alpha'},
+  --         show_buffer_close_icons = false,
+  --         show_close_icon = false,
+  --         separator_style = "thick",
+  --         always_show_bufferline = false,
+  --       },
+  --     }
+  --   end
+  -- },
 
   {
     'kyazdani42/nvim-tree.lua',
-    event = 'BufReadPost',
     cmd = 'NvimTreeToggle',
     config = function ()
       require'config.nvim_tree'
@@ -490,8 +477,15 @@ require("lazy").setup({
   {
     "folke/which-key.nvim",
     config = function()
-      require("which-key").setup {}
+      require("which-key").setup {
+        preset = "modern"
+      }
     end
+  },
+
+  {
+    "Pocco81/auto-save.nvim",
+    event = 'VeryLazy',
   }
 },
 {

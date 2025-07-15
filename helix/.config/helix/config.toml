@@ -1,0 +1,61 @@
+theme = "tokyonight"
+
+[editor]
+completion-timeout = 5
+mouse = true
+auto-save = true
+cursorline = false
+bufferline = "always"
+color-modes	= true
+# rulers = [120]
+# Minimum severity to show a diagnostic after the end of a line:
+end-of-line-diagnostics = "hint"
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.file-picker]
+hidden = false
+
+[editor.indent-guides]
+render = true
+character = "▏" # Some characters that work well: "▏", "┆", "┊", "⸽"
+skip-levels = 1
+
+[editor.lsp]
+display-inlay-hints = true
+
+[editor.soft-wrap]
+enable = true
+#wrap-at-text-width = true
+wrap-indicator = "↩ "
+
+[editor.inline-diagnostics]
+# Minimum severity to show a diagnostic on the primary cursor's line.
+# Note that `cursor-line` diagnostics are hidden in insert mode.
+cursor-line = "error"
+
+[editor.statusline]
+left = [ "mode", "spinner", "file-name", "read-only-indicator", "file-modification-indicator", "version-control", "diagnostics" ]
+right = [ "primary-selection-length", "register", "position", "position-percentage", "total-line-numbers", "file-encoding" ]
+separator = "│"
+mode.normal = "N"
+mode.insert = "I"
+mode.select = "S"
+
+[keys.normal]
+# J = ["select_line_below"]
+# K = ["select_line_above"]
+X = ["extend_line_above"]
+
+[keys.normal.space.g]
+c = "changed_file_picker"
+g = [":write-all", ":new", ":insert-output lazygit", ":buffer-close!", ":redraw", ":reload-all"]
+# G = [":new", ":sh zellij run -fc -x 0 -y 0 --height 100%% --width 100%% -- gitui", ":buffer-close!", ":redraw"]
+# n = [":new", ":sh zellij run -fc -x 0 -y 0 --height 100%% --width 100%% -- bash ~/.config/helix/yazi-picker.sh", ":buffer-close!", ":redraw"]
+
+[keys.select]
+X = ["extend_line_above"]
+

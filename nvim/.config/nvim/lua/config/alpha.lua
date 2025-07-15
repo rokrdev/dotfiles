@@ -152,7 +152,7 @@ local header_art = {
     [[          ';              ,;'          ]],
     [[            "'           '"            ]],
     [[              '         '              ]],
-  }
+  },
 }
 
 local function get_header()
@@ -203,11 +203,11 @@ local buttons = {
   type = "group",
   val = {
     button("e", " New file", ":Scratch<CR>", nil),
-    button("SPC f f", " Find file", ":Telescope find_files hidden=true<CR>", nil),
-    button("SPC f s", " Search word", ":Telescope live_grep<CR>", nil),
-    button("SPC f n", " Directory", ":NnnPicker<CR>", nil),
-    button("SPC f t", " Tree", ":NvimTreeToggle<CR>", nil),
-    button("SPC h f", " Dotfiles", ":Dff<CR>", nil),
+    button("SPC f f", " Find file", ":FzfLua files<CR>", nil),
+    button("SPC f s", " Search word", ":FzfLua grep search=''<CR>", nil),
+    button("SPC f n", " Directory", "<cmd>lua require('yazi').yazi()<CR>", nil),
+    button("SPC f t", "󰙅 Tree", ":NvimTreeToggle<CR>", nil),
+    button("SPC h f", " Dotfiles", ":Dff<CR>", nil),
     button("SPC h s", " Dotfiles Search", ":Dfs<CR>", nil),
     button("x", " Quit NVIM", ":qa<CR>", nil),
   },

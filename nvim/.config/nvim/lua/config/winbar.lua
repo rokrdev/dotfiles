@@ -1,5 +1,7 @@
 local M = {}
 
+local navic = require "nvim-navic"
+
 M.winbar_filetype_exclude = {
   "help",
   "startify",
@@ -23,11 +25,23 @@ local excludes = function()
   return false
 end
 
+local disable_winbar = function()
+  vim.cmd[[highlight link WinBar EndOfBuffer]]
+end
+
 function M.get_winbar()
   if excludes() then
+    disable_winbar()
     return ""
   end
-  return "%{%v:lua.require'nvim-navic'.get_location()%}"
+
+  if navic.is_available() then
+    vim.cmd[[highlight link WinBar StatusLine]]
+    return "%{%v:lua.require'nvim-navic'.get_location()%}"
+  else
+    disable_winbar()
+    return ""
+  end
 end
 
 return M

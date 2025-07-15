@@ -6,13 +6,14 @@ auto_reload = true        # optional, default true, reload when any file in this
 toast_on_reload = false    # optional, default false, show a toast when the config is reloaded
 show_ui = true            # optional, default true, show the ui with your key maps
 
-[a]
+[0]
 label = "Applications"
 b = ["/Applications/Bear.app", "Bear"]
 c = ["/Applications/Google Chrome.app", "Chrome"]
-f = ["/System/Library/CoreServices/Finder.app", "iwear"]
+f = ["/System/Library/CoreServices/Finder.app", "Finder"]
 g = ["/Applications/Ghostty.app", "Ghostty"]
 i = ["/Applications/IntelliJ IDEA.app", "Idea"]
+s = ["/Applications/Slack.app", "Slack"]
 z = ["/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app", "Safari"]
 - = ["/Applications/Chrysalis.app", "Chrysalis"]
 # T = ["/Applications/TradingView.app", "TradingView"]

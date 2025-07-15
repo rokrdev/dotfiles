@@ -54,6 +54,7 @@ alias gds='git diff --staged'
 alias gfm='git pull'
 alias gfmc='git pull origin (git branch --show-current)'
 alias gmt="git mergetool"
+alias gg="gitui"
 alias gp='git push'
 alias groot='cd $(git rev-parse --show-cdup)'
 alias gs='git status'

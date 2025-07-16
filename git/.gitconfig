@@ -25,7 +25,7 @@
 [url "git@github.com:"]
 	insteadOf = https://github.com/
 [includeIf "gitdir:~/.dotfiles/"]
-	path = ~/projects/config
+	path = ~/gitconfig_me
 [includeIf "gitdir:~/projects/"]
 	path = ~/gitconfig_me
 [includeIf "gitdir:~/afterpay/"]

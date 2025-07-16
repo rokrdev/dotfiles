@@ -1,7 +1,16 @@
 hs.loadSpoon("Hammerflow")
-spoon.Hammerflow.loadFirstValidTomlFile({
-  "home.toml",
-})
+
+local workLaptop = string.find(os.getenv("USER"), "bjoshi")
+
+if workLaptop ~= nil then
+  spoon.Hammerflow.loadFirstValidTomlFile({
+    "work.toml",
+  })
+else
+  spoon.Hammerflow.loadFirstValidTomlFile({
+    "home.toml",
+  })
+end
 -- optionally respect auto_reload setting in the toml config.
 if spoon.Hammerflow.auto_reload then
   hs.loadSpoon("ReloadConfiguration")

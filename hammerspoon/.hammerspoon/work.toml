@@ -1,0 +1,62 @@
+# settings
+leader_key = "f18"        # required, the leader key that starts the sequence
+leader_key_mods = ""      # optional, default "", not recommended - a dedicated leader key is better
+                             # supports cmd ctrl alt shift
+auto_reload = true        # optional, default true, reload when any file in this directory is saved
+toast_on_reload = false    # optional, default false, show a toast when the config is reloaded
+show_ui = true            # optional, default true, show the ui with your key maps
+
+[0]
+label = "Applications"
+b = ["/Applications/Bear.app", "Bear"]
+c = ["/Applications/Google Chrome.app", "Chrome"]
+f = ["/System/Library/CoreServices/Finder.app", "Finder"]
+g = ["/Applications/Ghostty.app", "Ghostty"]
+i = ["/Applications/IntelliJ IDEA.app", "Idea"]
+s = ["/Applications/Slack.app", "Slack"]
+z = ["/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app", "Safari"]
+- = ["/Applications/Chrysalis.app", "Chrysalis"]
+
+[b]
+label = "Browser"
+b = ["raycast://extensions/raycast/browser-bookmarks/index", "Bookmarks"]
+h = ["raycast://extensions/crisboarna/browser-history/search-history", "History"]
+t = ["raycast://extensions/koinzhang/browser-tabs/index", "Tabs"]
+
+[n]
+label = "Bear Notes"
+h = ["cmd:shortcuts run '✱ Home'", "✱ Home"]
+m = ["cmd:shortcuts run 'This Month Note'", "Month Note"]
+q = ["cmd:shortcuts run QN", "Quick Note"]
+s = ["raycast://extensions/hmarr/bear/index", "Search"]
+space = ["cmd:shortcuts run 'Today Note'", "Today Note"]
+
+[r]
+label = "Raycast"
+c = ["raycast://extensions/raycast/clipboard-history/clipboard-history", "Clipboard"]
+e = ["raycast://extensions/raycast/emoji-symbols/search-emoji-symbols", "Emoji"]
+n = ["raycast://extensions/raycast/apple-notes/index", "Notes"]
+s = ["raycast://extensions/raycast/snippets/search-snippets", "Snippets"]
+w = ["raycast://extensions/raycast/dictionary/define-word", "Word"]
+C = ["raycast://extensions/raycast/raycast/confetti", "Confetti"]
+K = ["raycast://extensions/rolandleth/kill-process/index", "Kill Process"]
+S = ["raycast://extensions/raycast/navigation/switch-windows", "Switch Windows"]
+W = ["raycast://extensions/tonka3000/weather/index", "Weather"]
+
+[t]
+label = "Things"
+a = ["cmd:shortcuts run 'Things Anytime'", "Anytime"]
+i = ["cmd:shortcuts run 'Things Inbox'", "Inbox"]
+q = ["cmd:shortcuts run 'QT'", "Quick Todo"]
+t = ["cmd:shortcuts run 'Things Today'", "Today"]
+u = ["cmd:shortcuts run 'Things Upcoming'", "Upcoming"]
+
+
+[w]
+label = "Window"
+f = ["window:fullscreen", "Fullscreen"]
+h = ["raycast://extensions/raycast/window-management/left-half", "Left Half"]
+l = ["raycast://extensions/raycast/window-management/right-half", "Right Half"]
+n = ["raycast://extensions/raycast/window-management/next-display", "Move to next display"]
+space = ["raycast://extensions/raycast/window-management/maximize", "Maximize"]
+

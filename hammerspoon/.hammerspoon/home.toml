@@ -12,11 +12,11 @@ b = ["/Applications/Bear.app", "Bear"]
 c = ["/Applications/Google Chrome.app", "Chrome"]
 f = ["/System/Library/CoreServices/Finder.app", "Finder"]
 g = ["/Applications/Ghostty.app", "Ghostty"]
-i = ["/Applications/IntelliJ IDEA.app", "Idea"]
+i = ["/Applications/IntelliJ IDEA CE.app", "Idea"]
 s = ["/Applications/Slack.app", "Slack"]
+t = ["/Applications/TradingView.app", "TradingView"]
 z = ["/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app", "Safari"]
 - = ["/Applications/Chrysalis.app", "Chrysalis"]
-# T = ["/Applications/TradingView.app", "TradingView"]
 
 [b]
 label = "Browser"

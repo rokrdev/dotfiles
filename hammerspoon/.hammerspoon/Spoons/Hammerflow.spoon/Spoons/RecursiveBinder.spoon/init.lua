@@ -265,6 +265,7 @@ end
 --- 2. A table. Then pressing the key bring to another layer of keybindings.
 ---    And the table have the same format of top table: keys to keys, value to table or function
 
+local modalActive = false
 -- the actual binding function
 function obj.recursiveBind(keymap, modals)
   if not modals then
@@ -275,6 +276,19 @@ function obj.recursiveBind(keymap, modals)
     return keymap
   end
   local modal = hs.hotkey.modal.new()
+
+  -- print("------------------------")
+  -- print(hs.inspect(keymap))
+  -- function modal:entered()
+  --   print("active --------------")
+  --   modalActive = true
+  -- end
+
+  -- function modal:exited()
+  --   print("not active -----------------")
+  --   modalActive = false
+  -- end
+
   table.insert(modals, modal)
   local keyFuncNameTable = {}
   for key, map in pairs(keymap) do

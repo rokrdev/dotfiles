@@ -36,7 +36,7 @@ h = ["cmd:shortcuts run '✱ Home'", "✱ Home"]
 m = ["cmd:shortcuts run 'This Month Note'", "Month Note"]
 q = ["cmd:shortcuts run QN", "Quick Note"]
 s = ["raycast://extensions/hmarr/bear/index", "Search"]
-space = ["cmd:shortcuts run 'Today Note'", "Today Note"]
+t = ["cmd:shortcuts run 'Today Note'", "Today Note"]
 
 [r]
 label = "Raycast"
@@ -47,6 +47,7 @@ s = ["raycast://extensions/raycast/snippets/search-snippets", "Snippets"]
 w = ["raycast://extensions/raycast/dictionary/define-word", "Word"]
 C = ["raycast://extensions/raycast/raycast/confetti", "Confetti"]
 K = ["raycast://extensions/rolandleth/kill-process/index", "Kill Process"]
+R = "reload"
 S = ["raycast://extensions/raycast/navigation/switch-windows", "Switch Windows"]
 W = ["raycast://extensions/tonka3000/weather/index", "Weather"]
 

@@ -11,9 +11,10 @@ label = "Applications"
 b = ["/Applications/Bear.app", "Bear"]
 c = ["/Applications/Google Chrome.app", "Chrome"]
 f = ["/System/Library/CoreServices/Finder.app", "Finder"]
-g = ["/Applications/Ghostty.app", "Ghostty"]
+g = ["/Applications/Goose.app", "Goose"]
 i = ["/Applications/IntelliJ IDEA.app", "Idea"]
 s = ["/Applications/Slack.app", "Slack"]
+t = ["/Applications/Ghostty.app", "Ghostty"]
 z = ["/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app", "Safari"]
 - = ["/Applications/Chrysalis.app", "Chrysalis"]
 

@@ -19,11 +19,25 @@ export FZF_CTRL_R_OPTS='--sort --exact'
 export FZF_DEFAULT_OPTS='--layout=default --bind=ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all'
 
 # setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`
-export PATH="$GOPATH/bin:$ANDROID_SDK_ROOT:/usr/local/opt/gnu-sed/libexec/gnubin:$HOME/.asdf/shims:$HOME/.asdf/bin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="$HOME/bin;$GOPATH/bin:$ANDROID_SDK_ROOT:/usr/local/opt/gnu-sed/libexec/gnubin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 source ~/.env
 
-source ~/.asdf/asdf.fish
+# ASDF configuration code
+if test -z $ASDF_DATA_DIR
+    set _asdf_shims "$HOME/.asdf/shims"
+else
+    set _asdf_shims "$ASDF_DATA_DIR/shims"
+end
+
+# Do not use fish_add_path (added in Fish 3.2) because it
+# potentially changes the order of items in PATH
+if not contains $_asdf_shims $PATH
+    set -gx --prepend PATH $_asdf_shims
+end
+
+set --erase _asdf_shims
+
 zoxide init fish | source
 
 defaults write -g ApplePressAndHoldEnabled -bool false

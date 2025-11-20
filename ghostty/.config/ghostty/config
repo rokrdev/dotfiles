@@ -1,3 +1,5 @@
+command = "/opt/homebrew/bin/fish"
+
 shell-integration = fish
 
 theme = tokyonight
@@ -10,6 +12,7 @@ font-family = "MonoLisa Nerd Font"
 
 font-size = 14
 
-window-padding-x = 5
+window-padding-x = 10
+window-padding-y = 3
 
 adjust-cursor-thickness = 75%

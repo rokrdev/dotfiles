@@ -351,4 +351,4 @@ noremap X 0V
 xnoremap X k
 
 nmap gh <Action>(CallHierarchy)
-
+nmap gs <Action>(FileStructurePopup)

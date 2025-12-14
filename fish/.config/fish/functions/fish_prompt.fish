@@ -63,5 +63,10 @@ function fish_prompt --description 'Write out the prompt'
 
     set -l pwd (prompt_pwd)
 
-    echo -n -s -e (set_color $fish_color_cwd) $pwd $git (set_color $purple) ' ' (date +%H:%M:%S) '\n' (set_color $prompt_color) $prompt
+    set -l hermit ''
+    if test -n "$HERMIT_ENV"
+        set hermit '🐚 '
+    end
+
+    echo -n -s -e (set_color $fish_color_cwd) $pwd $git $hermit(set_color $purple) ' ' (date +%H:%M:%S) '\n' (set_color $prompt_color) $prompt
 end

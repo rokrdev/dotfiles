@@ -17,6 +17,7 @@ g = ["/Applications/Ghostty.app", "Ghostty"]
 i = ["/Applications/IntelliJ IDEA CE.app", "Idea"]
 s = ["/Applications/Slack.app", "Slack"]
 t = ["/Applications/TradingView.app", "TradingView"]
+y = ["/Applications/Things3.app", "Things"]
 z = ["/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app", "Safari"]
 - = ["/Applications/Chrysalis.app", "Chrysalis"]
 

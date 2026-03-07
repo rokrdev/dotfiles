@@ -16,3 +16,4 @@ window-padding-x = 10
 window-padding-y = 3
 
 adjust-cursor-thickness = 75%
+keybind = shift+enter=text:\x1b\r

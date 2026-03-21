@@ -1,3 +1,4 @@
+set --global fish_key_bindings fish_default_key_bindings
 export BAT_THEME="tokyonight"
 
 export ALTERNATE_EDITOR="hx"
@@ -136,3 +137,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 fzf --fish | source
 
 export CARGO_TARGET_DIR=~/.cargo-target
+
+alias qclaude="claude --model claude-haiku-4-5 --effort low"
+alias bclaude="claude --model claude-sonnet-4-6 --effort medium"
+alias dclaude="claude --model claude-opus-4-6 --effort high"

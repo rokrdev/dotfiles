@@ -44,6 +44,18 @@ formatter = { command = "stylua", args = ["-"] }
 diagnostics = { globals = [ "vim", "hs" ] }
 
 [[language]]
+name = "python"
+auto-format = true
+language-servers = ["pylsp"]
+
+[language-server.pylsp.config.pylsp.plugins]
+pycodestyle = { enabled = false }
+mccabe = { enabled = false }
+pyflakes = { enabled = false }
+pylsp_mypy = { enabled = true }
+ruff = { enabled = true, formatEnabled = true }
+
+[[language]]
 name = "csv"
 file-types = ["csv"]
 scope = "source.csv"

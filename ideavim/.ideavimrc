@@ -1,5 +1,5 @@
 # " """ Map leader to space ---------------------
-# " let mapleader=" "
+let mapleader=" "
 
 # " """ Plugins  --------------------------------
 # " set surround
@@ -343,6 +343,7 @@
 # let g:EasyMotion_do_mapping = 0
 # nmap s <Plug>(easymotion-bd-w)
 
+# clone git@github.com:chtenb/helix.vim.git
 source ~/helix.vim/helix.idea.vim
 
 #noremap <F4> <Esc><Esc>:mapclear<CR>:source ~/.vimrc<CR>:echo "reloaded!"<CR>
@@ -352,3 +353,8 @@ xnoremap X k
 
 nmap gh <Action>(CallHierarchy)
 nmap gs <Action>(FileStructurePopup)
+nmap <leader>rc :action RunClass<CR>
+nmap <leader>rr :action Rerun<CR>
+
+nmap gz <action>(IdeaVim.ReloadVimRc.reload)
+nmap gr <Action>(Refactorings.QuickListPopupAction)

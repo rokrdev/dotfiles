@@ -27,6 +27,25 @@
     }
   },
   "effortLevel": "high",
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Bash(git:*)",
+      "Bash(npm:*)",
+      "Bash(npx:*)",
+      "Bash(node:*)",
+      "Bash(brew:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(cp:*)",
+      "Bash(stow:*)",
+      "Bash(which:*)",
+      "Bash(rtk:*)",
+      "Bash(jq:*)",
+      "Bash(uvx:*)"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {

@@ -1,5 +1,55 @@
 #!/bin/zsh
 
+set -e
+
+if ! command -v stow &>/dev/null; then
+  echo "ERROR: GNU Stow not found. Install with: brew install stow"
+  exit 1
+fi
+
 for d in */ ; do
-  stow "$d"
+  stow --adopt "$d"
 done
+
+# ─────────────────────────────────────────────
+# Claude Code — Manual setup required
+# ─────────────────────────────────────────────
+# After stowing, the following must be installed
+# for all MCP servers and plugins to work:
+#
+# 1. Claude Code CLI
+#    npm install -g @anthropic-ai/claude-code
+#
+# 2. uv / uvx  (required by things-mcp)
+#    brew install uv
+#
+# 3. things-mcp  (MCP server for Things 3 integration)
+#    Configured in ~/.claude/mcp.json to run via:
+#    uvx things-mcp
+#
+# 4. rtk  (token-saving CLI proxy used by hooks)
+#    See: https://github.com/reachingforthejack/rtk
+#    Verify with: rtk --version
+#
+# 5. jq  (required by rtk-rewrite hook)
+#    brew install jq
+#
+# 6. Bear app  (macOS note storage, required by store-in-bear skill)
+#    Install from Mac App Store
+#
+# 7. Things 3 app  (macOS task manager, required by capture-to-things skill)
+#    Install from Mac App Store
+#
+# 8. ccstatusline  (status bar integration, auto-runs via settings.json statusLine)
+#    npx -y ccstatusline@latest
+#
+# 9. Claude Code plugins (auto-installed on first Claude Code run from settings.json):
+#    - superpowers@claude-plugins-official
+#    - code-simplifier@claude-plugins-official
+#    - context7@claude-plugins-official
+#    - frontend-design@claude-plugins-official
+#    - context-mode@context-mode
+#
+# NOTE: Do NOT stow ~/.claude/settings.local.json — it contains personal
+#       paths, email, and API references specific to this machine.
+# ─────────────────────────────────────────────

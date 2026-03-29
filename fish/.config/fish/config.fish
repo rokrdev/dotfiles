@@ -139,6 +139,6 @@ fzf --fish | source
 
 export CARGO_TARGET_DIR=~/.cargo-target
 
-alias qclaude="claude --model claude-haiku-4-5 --effort low"
-alias bclaude="claude --model claude-sonnet-4-6 --effort medium"
-alias dclaude="claude --model claude-opus-4-6 --effort high"
+alias clq="claude --model claude-haiku-4-5 --effort low"
+alias clb="claude --model claude-sonnet-4-6 --effort medium"
+alias cld="claude --model claude-opus-4-6 --effort high"

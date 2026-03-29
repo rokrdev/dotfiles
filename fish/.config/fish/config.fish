@@ -15,12 +15,13 @@ export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod
 export ANDROID_HOME="$HOME/Library/Android/sdk"
 export ANDROID_SDK_ROOT="$ANDROID_HOME/sdk"
 export GOPATH="$HOME/go"
+export GOBIN="$GOPATH/bin"
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -S'
 export FZF_CTRL_R_OPTS='--sort --exact'
 export FZF_DEFAULT_OPTS='--layout=default --bind=ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all'
 
 # setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`
-export PATH="$HOME/.docker/bin;$HOME/bin;$GOPATH/bin:$ANDROID_SDK_ROOT:/usr/local/opt/gnu-sed/libexec/gnubin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="$HOME/.docker/bin:$HOME/bin:$GOPATH/bin:$ANDROID_SDK_ROOT:/usr/local/opt/gnu-sed/libexec/gnubin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 source ~/.env
 
@@ -36,7 +37,6 @@ end
 if not contains $_asdf_shims $PATH
     set -gx --prepend PATH $_asdf_shims
 end
-
 set --erase _asdf_shims
 
 zoxide init fish | source
@@ -59,6 +59,7 @@ alias dcd='docker compose down'
 alias dcs='docker compose start'
 alias dcx='docker compose stop'
 alias g=git
+alias gst='git status'
 alias gd='git diff'
 alias gds='git diff --staged'
 alias gfm='git pull'

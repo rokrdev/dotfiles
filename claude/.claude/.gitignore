@@ -1,0 +1,26 @@
+# Machine-specific — never commit
+settings.local.json
+
+# Runtime / session data
+projects/
+sessions/
+history.jsonl
+paste-cache/
+
+# Cache / temp
+cache/
+backups/
+debug/
+shell-snapshots/
+file-history/
+context-mode/
+plugins/
+todos/
+
+# Telemetry
+telemetry/
+telemetry.jsonl
+statsig/
+
+# IDE state
+ide/

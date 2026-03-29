@@ -28,6 +28,7 @@ skip-levels = 1
 
 [editor.lsp]
 display-inlay-hints = true
+display-progress-messages = true
 
 [editor.soft-wrap]
 enable = true

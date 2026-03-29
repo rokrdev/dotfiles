@@ -1,0 +1,5 @@
+[[snippets]]
+prefix = "cl"
+scope = ["javascript", "typescript"]
+body = "console.log('$1')"
+description = "Log output to console with variable name"

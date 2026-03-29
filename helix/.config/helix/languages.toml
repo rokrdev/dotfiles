@@ -11,10 +11,12 @@ formatter = { command = "prettier", args = ["--parser", "json"] }
 [[language]]
 name = "javascript"
 auto-format = true
+language-servers = ["typescript-language-server", "scls"]
 
 [[language]]
 name = "typescript"
 auto-format = true
+language-servers = ["typescript-language-server", "scls"]
 
 [[language]]
 name = "markdown"
@@ -64,3 +66,13 @@ scope = "source.csv"
 name = "csv"
 source.git = "https://github.com/weartist/rainbow-csv-tree-sitter"
 source.rev = "896e6d09b23a1b0d87e45bf97ca34a249f41495c"
+
+[language-server.scls]
+command = "simple-completion-language-server"
+
+[language-server.scls.config]
+feature_words = false
+feature_snippets = true
+snippets_first = true
+
+

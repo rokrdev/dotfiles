@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "things": {
+      "command": "uvx",
+      "args": ["things-mcp"]
+    }
+  }
+}

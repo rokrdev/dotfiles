@@ -52,8 +52,23 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '{\"hookSpecificOutput\": {\"hookEventName\": \"SessionStart\", \"additionalContext\": \"MANDATORY: Before doing ANY work this session, invoke the main-agent-is-orchestrator skill using the Skill tool. You are an orchestrator only — delegate all work to subagents.\"}}'",
+            "command": "SKILL=$(cat /Users/bharat/.claude/skills/main-agent-is-orchestrator/SKILL.md 2>/dev/null) && printf '{\"hookSpecificOutput\": {\"hookEventName\": \"SessionStart\", \"additionalContext\": %s}}' \"$(echo \"$SKILL\" | jq -Rs .)\"",
             "statusMessage": "Loading orchestrator mode..."
+          },
+          {
+            "type": "command",
+            "command": "rtk --version 2>/dev/null && echo \"RTK active: $(rtk --version 2>/dev/null)\" || echo \"WARNING: RTK not found — token savings inactive. Install: cargo install rtk\"",
+            "statusMessage": "Checking RTK status..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "mkdir -p ~/.claude/logs && echo \"$(date '+%Y-%m-%d %H:%M'): Session ended\" >> ~/.claude/logs/sessions.log"
           }
         ]
       }

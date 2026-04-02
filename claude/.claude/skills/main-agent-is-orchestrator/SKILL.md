@@ -1,6 +1,12 @@
 ---
 name: main-agent-is-orchestrator
 description: Use when starting any task, before any research, analysis, planning, coding, debugging, or implementation work — the main agent is an orchestrator only and must delegate all actual work to subagents
+hooks:
+  PreToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "echo 'ORCHESTRATOR GUARD: You are about to run Bash directly. This violates the Iron Law. Dispatch a subagent instead unless this is git/mkdir/rm/mv/ls.'"
 ---
 
 # Main Agent Is Orchestrator
@@ -89,6 +95,28 @@ digraph orchestrator {
 - **Plan** — designing implementation strategy, architecture decisions
 - **general-purpose** — implementation, debugging, research, any actual work
 - **code-reviewer** — reviewing completed work
+
+## Worktree Isolation (MANDATORY for coding agents)
+
+**ALWAYS pass `isolation: "worktree"` when dispatching agents that write code.**
+
+- Any agent doing implementation, bug fixes, refactoring, or file edits → `isolation: "worktree"`
+- Research-only agents (Explore, Plan, read-only) → no isolation needed
+- The worktree is created automatically — no manual setup required
+- If the repo has no git history yet, skip isolation and note it to the user
+
+## The Architect Brief (Mandatory for Build Tasks)
+
+Before dispatching any coding subagent, the orchestrator MUST write an ARCHITECT-BRIEF.md file at the project root containing:
+- **Goal**: one-sentence description of what is being built
+- **Decisions**: key design/tech choices already made
+- **Constraints**: what must NOT change (APIs, interfaces, file locations)
+- **Build order**: ordered list of subtasks for the subagent
+- **Out of scope**: explicit list of what the subagent must NOT touch
+
+The coding subagent prompt must include: "Read ARCHITECT-BRIEF.md first. Confirm you understand the brief before writing any code. Do not touch anything listed as out of scope."
+
+Skip the brief only for trivial one-file fixes where scope is unambiguous.
 
 ## Crafting Good Subagent Prompts
 

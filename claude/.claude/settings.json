@@ -27,6 +27,13 @@
     }
   },
   "effortLevel": "high",
+  "worktree": {
+    "symlinkDirectories": ["node_modules", ".cache", ".venv", "__pycache__", ".next", "dist", "build"]
+  },
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-haiku-4-5-20251001"
+  },
   "permissions": {
     "defaultMode": "acceptEdits",
     "allow": [
@@ -61,6 +68,16 @@
             "statusMessage": "Checking RTK status..."
           }
         ]
+      },
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '=== POST-COMPACTION CONTEXT RESTORE ===' && echo 'IRON LAW: You are an orchestrator. Never do work directly. Always dispatch subagents.' && echo 'Recent commits:' && git -C \"$PWD\" log --oneline -5 2>/dev/null || echo 'No git repo' && echo 'Date:' && date",
+            "statusMessage": "Restoring post-compaction context..."
+          }
+        ]
       }
     ],
     "Stop": [
@@ -69,6 +86,16 @@
           {
             "type": "command",
             "command": "mkdir -p ~/.claude/logs && echo \"$(date '+%Y-%m-%d %H:%M'): Session ended\" >> ~/.claude/logs/sessions.log"
+          }
+        ]
+      },
+      {
+        "matcher": "rate_limit_error|server_error|overloaded_error",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "mkdir -p ~/.claude && echo \"$(date): StopFailure - $CLAUDE_STOP_REASON\" >> ~/.claude/stop-failures.log && sleep 15 && echo \"Agent stopped due to $CLAUDE_STOP_REASON. Waiting 15s before you retry. Re-dispatch the same subagent with identical prompt.\"",
+            "statusMessage": "Handling stop failure..."
           }
         ]
       }
@@ -88,8 +115,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/bear-redirect.sh",
-            "statusMessage": "Checking for markdown redirect to Bear..."
+            "command": "$HOME/.claude/hooks/superpowers-redirect.sh",
+            "statusMessage": "Checking superpowers doc routing..."
           }
         ]
       }

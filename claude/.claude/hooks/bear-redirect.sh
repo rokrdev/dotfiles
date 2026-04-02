@@ -1,6 +1,9 @@
 #!/bin/bash
-# PreToolUse hook: Block writing .md files and redirect to Bear
-# Allows: .claude/*, CLAUDE.md, MEMORY.md
+# PreToolUse hook: Redirect .md files to appropriate storage
+# - .md files under /Users/bharat/projects/*: ALLOW (project context)
+# - Superpowers docs outside projects: redirect to Obsidian vault (sacredyak/Resources/)
+# - All other .md: ALLOW
+# Always allows: .claude/*, CLAUDE.md, MEMORY.md
 
 INPUT=$(cat)
 FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
@@ -17,7 +20,12 @@ if [[ "$FILE_PATH" == */.claude/* ]] || \
   exit 0
 fi
 
-# Detect superpowers content for specific tagging guidance
+# Allow all .md writes within any project under /Users/bharat/projects/
+if [[ "$FILE_PATH" == /Users/bharat/projects/* ]]; then
+  exit 0
+fi
+
+# Outside projects: detect superpowers content → redirect to Obsidian vault
 if [[ "$FILE_PATH" == *superpowers* ]] || \
    [[ "$FILE_PATH" == *-design.md ]] || \
    [[ "$FILE_PATH" == *-plan.md ]] || \
@@ -29,20 +37,9 @@ if [[ "$FILE_PATH" == *superpowers* ]] || \
   "hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "permissionDecision": "deny",
-    "permissionDecisionReason": "Do NOT write superpowers docs to disk. Use the store-in-bear skill to save to Bear instead. Use the appropriate superpowers tag: #3resource/superpowers/spec for design specs, #3resource/superpowers/plan for implementation plans, #3resource/superpowers/brainstorm for brainstorms, #3resource/superpowers/review for code reviews. Always pair with a project tag."
+    "permissionDecisionReason": "No active project context. Save superpowers docs to the Obsidian vault instead: /Users/bharat/projects/sacredyak/Resources/ (use appropriate subfolder: specs/, plans/, reviews/, etc.). This is the PKM home for docs without a project."
   }
 }
 EOF
   exit 0
 fi
-
-# Block all other .md writes and redirect to Bear
-cat <<'EOF'
-{
-  "hookSpecificOutput": {
-    "hookEventName": "PreToolUse",
-    "permissionDecision": "deny",
-    "permissionDecisionReason": "Do NOT write markdown files to disk. Use the store-in-bear skill to save this content to Bear instead. Bear is the default storage for all notes and documents."
-  }
-}
-EOF

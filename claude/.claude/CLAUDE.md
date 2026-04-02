@@ -1,28 +1,29 @@
 # Global Claude Instructions
 
 ## IDE / Project Structure
-- Projects are typically opened in IntelliJ IDEA
-- Always check for a project-level CLAUDE.md for structure details
-- Default IntelliJ layout (no Maven/Gradle unless stated):
-  - `src/` → production sources root
-  - `test/` → test sources root
-- Never place test files under `src/`
-
-@RTK.md
+- Default layout: `src/` (prod), `test/` (tests) — never under `src/`
+- Check project-level CLAUDE.md for overrides
+- IntelliJ IDEA is standard
 
 ## Model Selection
-Default model is sonnet. To use opus for heavy sessions:
-```
-export CLAUDE_MODEL=opus  # then restart Claude Code
-```
+- Default: sonnet
+- Heavy sessions: `export CLAUDE_MODEL=opus && restart`
 
-## Per-Project Linting
-Consider adding a PostEdit hook in each project's settings.json for linting (e.g., eslint, ruff, ktlint). Avoid adding linter hooks to global settings — project linters vary too much.
+## Linting
+- Add PostEdit hooks in **project** settings.json (eslint, ruff, ktlint, etc.)
+- Never add to global — linters vary by project
 
 ## MCP Servers
+- **Things**: Task management
+- **Bear**: Note taking
+- **GitHub**: `export GITHUB_TOKEN=<PAT>` (repo + read:org scopes)
+- **context7**: Library docs
+- **context-mode**: Context protection
 
-- **Things** — Task management (fully configured)
-- **Bear** — Note taking (fully configured)
-- **GitHub** — PR/issue management. Requires: `export GITHUB_TOKEN=<your-PAT>` in shell profile. Create PAT at github.com/settings/tokens with repo + read:org scopes.
-- **context7** — Library documentation lookup (via plugin)
-- **context-mode** — Context window management (via plugin)
+## Documentation
+- Project specs → `docs/` at repo root
+- Cross-project docs → `~/projects/docs/`
+- Bear is capture-only; finalized docs live in repos
+
+## Compaction
+When compacting, always preserve: file paths, test results, error messages, key decisions, and any explicit user instructions given during the session.

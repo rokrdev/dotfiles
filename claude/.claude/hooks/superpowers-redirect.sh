@@ -1,7 +1,7 @@
 #!/bin/bash
 # PreToolUse hook: Redirect .md files to appropriate storage
 # - .md files under /Users/bharat/projects/*: ALLOW (project context)
-# - Superpowers docs outside projects: redirect to Obsidian vault (sacredyak/docs/)
+# - Superpowers docs outside projects: redirect to Obsidian vault (sacredyak/superpowers/)
 # - All other .md: ALLOW
 # Always allows: .claude/*, CLAUDE.md, MEMORY.md
 
@@ -37,7 +37,7 @@ if [[ "$FILE_PATH" == *superpowers* ]] || \
   "hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "permissionDecision": "deny",
-    "permissionDecisionReason": "No active project context. Save superpowers docs to the Obsidian vault docs folder instead: /Users/bharat/projects/sacredyak/docs/ (use appropriate subfolder: specs/, plans/, reviews/, etc.). When working inside a project, save to the project's docs/ folder instead."
+    "permissionDecisionReason": "No active project context. Save superpowers docs to the Obsidian vault instead: /Users/bharat/projects/sacredyak/superpowers/ (use appropriate subfolder: specs/, plans/, reviews/, etc.). When working inside a project, save to the project's docs/ folder instead."
   }
 }
 EOF

@@ -60,6 +60,14 @@
             "statusMessage": "Restoring post-compaction context..."
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx buddy-reroll --apply-hook"
+          }
+        ]
       }
     ],
     "Stop": [

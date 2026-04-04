@@ -19,7 +19,8 @@
       "Bash(which:*)",
       "Bash(rtk:*)",
       "Bash(jq:*)",
-      "Bash(uvx:*)"
+      "Bash(uvx:*)",
+      "Bash(obsidian:*)"
     ],
     "defaultMode": "acceptEdits",
     "deny": [
@@ -96,6 +97,15 @@
         "hooks": [
           {
             "type": "command",
+            "command": "raw=$(cat 2>/dev/null); cmd=$(echo \"$raw\" | jq -r '.tool_input.command // \"\"' 2>/dev/null); if echo \"$cmd\" | grep -qE \"^obsidian\\b\" && echo \"$cmd\" | grep -qiE \"delete|trash|remove|destroy|purge|wipe\"; then flag=\"$HOME/.claude/obsidian-delete-confirmed\"; if [ -f \"$flag\" ]; then rm -f \"$flag\"; echo \"{}\"; else echo 'BLOCKED: Obsidian deletion requires explicit user permission. Run: touch ~/.claude/obsidian-delete-confirmed — then retry.' >&2; exit 2; fi; exit 0; fi; patterns=\"DROP TABLE|TRUNCATE TABLE|DELETE FROM [a-zA-Z]+|git push.*--force.*main|git push.*--force.*master|rm -rf /|rm -rf ~\"; if echo \"$cmd\" | grep -qiE \"$patterns\"; then matched=$(echo \"$cmd\" | grep -oiE \"$patterns\" | head -1); echo \"{\\\"systemMessage\\\": \\\"WARNING: Destructive operation detected: '$matched'. Confirm this is intentional.\\\"}\"; else echo \"{}\"; fi"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
             "command": "$HOME/.claude/hooks/rtk-rewrite.sh"
           }
         ]
@@ -107,15 +117,6 @@
             "type": "command",
             "command": "$HOME/.claude/hooks/superpowers-redirect.sh",
             "statusMessage": "Checking superpowers doc routing..."
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cmd=$(jq -r '.tool_input.command // \"\"' 2>/dev/null); patterns=\"DROP TABLE|TRUNCATE TABLE|DELETE FROM [a-zA-Z]+ *;|git push.*--force.*main|git push.*--force.*master|rm -rf /\"; if echo \"$cmd\" | grep -qiE \"$patterns\"; then matched=$(echo \"$cmd\" | grep -oiE \"$patterns\" | head -1); echo \"{\\\"systemMessage\\\": \\\"WARNING: Destructive operation detected: '$matched'. Confirm this is intentional.\\\"}\"; else echo \"{}\"; fi"
           }
         ]
       }

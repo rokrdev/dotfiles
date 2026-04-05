@@ -83,6 +83,14 @@ Stow target is `$HOME` by default when running from the repo root. No `--target`
 - Do NOT delete the `.dotfiles` directory without first running `stow -D <pkg>` for each package, or you will leave broken symlinks across `$HOME`.
 - Do NOT commit machine-specific secrets, tokens, or large binaries.
 
+## Skills Reference
+
+| Skill | Trigger | Purpose |
+|-------|---------|---------|
+| `main-agent-is-orchestrator` | Auto-loaded at SessionStart | Enforces delegation pattern — main agent never does work directly, dispatches subagents for everything |
+| `capture-to-things` | Invoke explicitly when tasks/action items identified | Adds todos to Things 3 with correct project/area assignment |
+| `dotfiles` | Auto when working in this repo | Enforces stow conventions — never edit symlink targets, always dry-run before stowing |
+
 # context-mode — MANDATORY routing rules
 
 You have context-mode MCP tools available. These rules are NOT optional — they protect your context window from flooding. A single unrouted command can dump 56 KB into context and waste the entire session.

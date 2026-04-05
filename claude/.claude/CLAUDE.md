@@ -40,3 +40,5 @@
 
 ## Compaction
 When compacting, always preserve: file paths, test results, error messages, key decisions, and any explicit user instructions given during the session.
+
+@RTK.md

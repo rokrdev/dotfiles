@@ -2,7 +2,9 @@
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "CLAUDE_CODE_SUBAGENT_MODEL": "claude-haiku-4-5-20251001",
-    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "200000"
+    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "200000",
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "60",
+    "MAX_THINKING_TOKENS": "10000"
   },
   "permissions": {
     "allow": [
@@ -20,7 +22,8 @@
       "Bash(rtk:*)",
       "Bash(jq:*)",
       "Bash(uvx:*)",
-      "Bash(obsidian:*)"
+      "Bash(obsidian:*)",
+      "Bash(things:*)"
     ],
     "defaultMode": "acceptEdits",
     "deny": [
@@ -44,7 +47,11 @@
             "type": "command",
             "command": "SKILL=$(cat /Users/bharat/.claude/skills/main-agent-is-orchestrator/SKILL.md 2>/dev/null) && printf '{\"hookSpecificOutput\": {\"hookEventName\": \"SessionStart\", \"additionalContext\": %s}}' \"$(echo \"$SKILL\" | jq -Rs .)\"",
             "statusMessage": "Loading orchestrator mode..."
-          },
+          }
+        ]
+      },
+      {
+        "hooks": [
           {
             "type": "command",
             "command": "rtk --version 2>/dev/null && echo \"RTK active: $(rtk --version 2>/dev/null)\" || echo \"WARNING: RTK not found — token savings inactive. Install: cargo install rtk\"",
@@ -66,7 +73,15 @@
         "hooks": [
           {
             "type": "command",
-            "command": "npx buddy-reroll --apply-hook"
+            "command": "npx buddy-reroll --apply-hook 2>/dev/null || true"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=~/.claude/stop-failures.log; [ -f \"$f\" ] && tail -100 \"$f\" > \"$f.tmp\" && mv \"$f.tmp\" \"$f\" || true"
           }
         ]
       }
@@ -85,7 +100,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "mkdir -p ~/.claude && echo \"$(date): StopFailure - $CLAUDE_STOP_REASON\" >> ~/.claude/stop-failures.log && sleep 15 && echo \"Agent stopped due to $CLAUDE_STOP_REASON. Waiting 15s before you retry. Re-dispatch the same subagent with identical prompt.\"",
+            "command": "mkdir -p ~/.claude && echo \"$(date): StopFailure - $CLAUDE_STOP_REASON\" >> ~/.claude/stop-failures.log",
             "statusMessage": "Handling stop failure..."
           }
         ]
@@ -97,7 +112,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "raw=$(cat 2>/dev/null); cmd=$(echo \"$raw\" | jq -r '.tool_input.command // \"\"' 2>/dev/null); if echo \"$cmd\" | grep -qE \"^obsidian\\b\" && echo \"$cmd\" | grep -qiE \"delete|trash|remove|destroy|purge|wipe\"; then flag=\"$HOME/.claude/obsidian-delete-confirmed\"; if [ -f \"$flag\" ]; then rm -f \"$flag\"; echo \"{}\"; else echo 'BLOCKED: Obsidian deletion requires explicit user permission. Run: touch ~/.claude/obsidian-delete-confirmed — then retry.' >&2; exit 2; fi; exit 0; fi; patterns=\"DROP TABLE|TRUNCATE TABLE|DELETE FROM [a-zA-Z]+|git push.*--force.*main|git push.*--force.*master|rm -rf /|rm -rf ~\"; if echo \"$cmd\" | grep -qiE \"$patterns\"; then matched=$(echo \"$cmd\" | grep -oiE \"$patterns\" | head -1); echo \"{\\\"systemMessage\\\": \\\"WARNING: Destructive operation detected: '$matched'. Confirm this is intentional.\\\"}\"; else echo \"{}\"; fi"
+            "command": "raw=$(cat 2>/dev/null); cmd=$(echo \"$raw\" | jq -r '.tool_input.command // \"\"' 2>/dev/null); if echo \"$cmd\" | grep -qE \"^obsidian\\b\" && echo \"$cmd\" | grep -qiE \"delete|trash|remove|destroy|purge|wipe\"; then flag=\"$HOME/.claude/obsidian-delete-confirmed\"; if [ -f \"$flag\" ]; then rm -f \"$flag\"; echo \"{}\"; else echo 'BLOCKED: Obsidian deletion requires explicit user permission. Run: touch ~/.claude/obsidian-delete-confirmed — then retry.' >&2; exit 2; fi; exit 0; fi; patterns=\"DROP TABLE|TRUNCATE TABLE|DELETE FROM [a-zA-Z]+|git push.*--force.*main|git push.*--force.*master|rm -rf /|rm -rf ~\"; if echo \"$cmd\" | grep -qiE \"$patterns\"; then matched=$(echo \"$cmd\" | grep -oiE \"$patterns\" | head -1); echo \"BLOCKED: Destructive operation detected: '$matched'. Confirm this is intentional.\" >&2; exit 2; else echo \"{}\"; fi"
           }
         ]
       },
@@ -140,14 +155,8 @@
   },
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true,
-    "code-simplifier@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
-    "context-mode@context-mode": true,
-    "skill-creator@claude-plugins-official": true,
-    "ralph-loop@claude-plugins-official": true,
-    "claude-md-management@claude-plugins-official": true,
-    "pr-review-toolkit@claude-plugins-official": true
+    "context-mode@context-mode": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {

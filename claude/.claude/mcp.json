@@ -6,7 +6,7 @@
     },
     "things": {
       "command": "uvx",
-      "args": ["things-mcp"]
+      "args": ["things-mcp==0.7.3"]
     }
   }
 }

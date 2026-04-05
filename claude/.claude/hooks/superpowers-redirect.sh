@@ -1,4 +1,8 @@
 #!/bin/bash
+# Logging: stderr goes to ~/.claude/logs/hooks.log
+mkdir -p "$HOME/.claude/logs"
+exec 2>>"$HOME/.claude/logs/hooks.log"
+
 # PreToolUse hook: Redirect .md files to appropriate storage
 # - .md files under /Users/bharat/projects/*: ALLOW (project context)
 # - Superpowers docs outside projects: redirect to Obsidian vault (sacredyak/superpowers/)
@@ -20,8 +24,8 @@ if [[ "$FILE_PATH" == */.claude/* ]] || \
   exit 0
 fi
 
-# Allow all .md writes within any project under /Users/bharat/projects/
-if [[ "$FILE_PATH" == /Users/bharat/projects/* ]]; then
+# Allow all .md writes within any project under $HOME/projects/
+if [[ "$FILE_PATH" == $HOME/projects/* ]]; then
   exit 0
 fi
 
@@ -32,12 +36,13 @@ if [[ "$FILE_PATH" == *superpowers* ]] || \
    [[ "$FILE_PATH" == *-spec.md ]] || \
    [[ "$FILE_PATH" == *-review.md ]] || \
    [[ "$FILE_PATH" == *-brainstorm.md ]]; then
+  echo "[superpowers-redirect] $(date -u +%FT%TZ) denied write to: $FILE_PATH" >&2
   cat <<'EOF'
 {
   "hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "permissionDecision": "deny",
-    "permissionDecisionReason": "No active project context. Save superpowers docs to the Obsidian vault instead: /Users/bharat/projects/sacredyak/superpowers/ (use appropriate subfolder: specs/, plans/, reviews/, etc.). When working inside a project, save to the project's docs/ folder instead."
+    "permissionDecisionReason": "No active project context. Save superpowers docs to the Obsidian vault instead: $HOME/projects/sacredyak/superpowers/ (use appropriate subfolder: specs/, plans/, reviews/, etc.). When working inside a project, save to the project's docs/ folder instead."
   }
 }
 EOF

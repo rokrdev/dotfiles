@@ -2,13 +2,11 @@
   "mcpServers": {
     "sequential-thinking": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
-      "env": {}
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
     },
     "things": {
-      "command": "/opt/homebrew/bin/uvx",
-      "args": ["things-mcp"],
-      "env": {}
+      "command": "uvx",
+      "args": ["things-mcp"]
     }
   }
 }

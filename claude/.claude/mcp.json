@@ -3,10 +3,6 @@
     "sequential-thinking": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
-    },
-    "things": {
-      "command": "uvx",
-      "args": ["things-mcp==0.7.3"]
     }
   }
 }

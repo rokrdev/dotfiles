@@ -84,6 +84,14 @@
             "command": "f=~/.claude/stop-failures.log; [ -f \"$f\" ] && tail -100 \"$f\" > \"$f.tmp\" && mv \"$f.tmp\" \"$f\" || true"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "LOG=\"$HOME/.claude/logs/hooks.log\"; if [ -f \"$LOG\" ] && [ \"$(stat -f%z \"$LOG\" 2>/dev/null)\" -gt 1048576 ]; then mv \"$LOG\" \"$LOG.1\" && touch \"$LOG\" && echo \"[log-rotate] hooks.log rotated at $(date -u +%FT%TZ)\" >> \"$LOG\"; fi"
+          }
+        ]
       }
     ],
     "Stop": [

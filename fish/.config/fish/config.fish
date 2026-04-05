@@ -60,6 +60,7 @@ alias dcs='docker compose start'
 alias dcx='docker compose stop'
 alias g=git
 alias gst='git status'
+alias gch='git checkout'
 alias gd='git diff'
 alias gds='git diff --staged'
 alias gfm='git pull'

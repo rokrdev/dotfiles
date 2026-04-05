@@ -1,3 +1,19 @@
 {
-  "mcpServers": {}
+  "mcpServers": {
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "env": {}
+    },
+    "bear-notes": {
+      "command": "npx",
+      "args": ["-y", "bear-notes-mcp@latest"],
+      "env": {}
+    },
+    "things": {
+      "command": "/opt/homebrew/bin/uvx",
+      "args": ["things-mcp"],
+      "env": {}
+    }
+  }
 }

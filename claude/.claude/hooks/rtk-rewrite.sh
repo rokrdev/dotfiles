@@ -14,7 +14,7 @@
 #   3 + stdout  Ask rule matched → rewrite but let Claude Code prompt the user
 
 # Logging: stderr goes to ~/.claude/logs/hooks.log
-mkdir -p "$HOME/.claude/logs"
+mkdir -p "$HOME/.claude/logs" || true
 exec 2>>"$HOME/.claude/logs/hooks.log"
 
 if ! command -v jq &>/dev/null; then

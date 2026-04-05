@@ -4,7 +4,7 @@ mkdir -p "$HOME/.claude/logs"
 exec 2>>"$HOME/.claude/logs/hooks.log"
 
 # PreToolUse hook: Redirect .md files to appropriate storage
-# - .md files under /Users/bharat/projects/*: ALLOW (project context)
+# - .md files under $HOME/projects/*: ALLOW (project context)
 # - Superpowers docs outside projects: redirect to Obsidian vault (sacredyak/superpowers/)
 # - All other .md: ALLOW
 # Always allows: .claude/*, CLAUDE.md, MEMORY.md

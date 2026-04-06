@@ -49,7 +49,7 @@ When creating any `.md` file:
 - **Inside a git repo** → create in that repo; use `docs/` for specs and plans
 - **Outside a git repo** → invoke the `obsidian` skill to route to the correct vault folder
 
-Vault root: `~/projects/sacredyak/`
+Vault root: `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/`
 
 Exceptions (always created in their designated locations regardless of context):
 - **Claude Code system files** (under `~/.claude/`): `CLAUDE.md`, `settings.json`, hooks, skills, MCP configs
@@ -58,7 +58,7 @@ Exceptions (always created in their designated locations regardless of context):
 ## Documentation
 - Project specs → `docs/` at repo root
 - Cross-project docs → `~/projects/docs/`
-- Superpowers specs → `~/projects/sacredyak/Resources/projects/superpowers/` (Obsidian vault)
+- Superpowers specs → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/Resources/projects/superpowers/` (Obsidian vault)
 - Finalized docs live in repos
 
 ## Compaction

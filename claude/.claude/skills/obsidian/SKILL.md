@@ -1,13 +1,13 @@
 ---
 name: obsidian
-description: Use when working in the Obsidian vault (~/projects/sacredyak/), or when creating/editing markdown outside a git repo — never use inside a git repo
+description: Use when working in the Obsidian vault (~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/), or when creating/editing markdown outside a git repo — never use inside a git repo
 ---
 
 # Obsidian Vault Routing
 
 ## Overview
 
-The Obsidian vault lives at `~/projects/sacredyak/`. Use this skill when creating or editing any file in the vault.
+The Obsidian vault lives at `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/`. Use this skill when creating or editing any file in the vault.
 
 ## Vault Structure (PARA)
 
@@ -64,7 +64,7 @@ Not sure?
 
 ### Creating a new file
 1. Identify content type using the decision flow above.
-2. Determine the target path: `~/projects/sacredyak/<folder>/[subfolder/]<filename>.md`
+2. Determine the target path: `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/<folder>/[subfolder/]<filename>.md`
 3. Write the file using the Write tool — it creates parent directories automatically.
 4. Confirm the path to the user.
 
@@ -80,8 +80,8 @@ Not sure?
 
 | Content | Target path |
 |---------|-------------|
-| Design spec for a new CLI tool | `~/projects/sacredyak/Projects/cli-tool/design-spec.md` |
-| Notes on managing finances | `~/projects/sacredyak/Areas/finances/investment-notes.md` |
-| Research on SwiftUI TextKit | `~/projects/sacredyak/Resources/swift/textkit2-notes.md` |
-| Daily note for today | `~/projects/sacredyak/Journal/2026/2026-04-06.md` |
-| Quick idea, no clear category | `~/projects/sacredyak/Inbox/app-idea-offline-sync.md` |
+| Design spec for a new CLI tool | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/Projects/cli-tool/design-spec.md` |
+| Notes on managing finances | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/Areas/finances/investment-notes.md` |
+| Research on SwiftUI TextKit | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/Resources/swift/textkit2-notes.md` |
+| Daily note for today | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/Journal/2026/2026-04-06.md` |
+| Quick idea, no clear category | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/Inbox/app-idea-offline-sync.md` |

@@ -1,13 +1,13 @@
 ---
 name: obsidian
-description: Use when creating a markdown file outside a git repo — routes to the correct Obsidian vault folder based on content type (PARA structure)
+description: Use when working in the Obsidian vault (~/projects/sacredyak/), or when creating/editing markdown outside a git repo — never use inside a git repo
 ---
 
 # Obsidian Vault Routing
 
 ## Overview
 
-The Obsidian vault lives at `~/projects/sacredyak/`. When creating a markdown file outside a git repo, use this skill to determine the correct vault folder.
+The Obsidian vault lives at `~/projects/sacredyak/`. Use this skill when creating or editing any file in the vault.
 
 ## Vault Structure (PARA)
 
@@ -54,13 +54,27 @@ Not sure?
 4. **Only create files in `Excalidraw/`** if the user explicitly requests a diagram note.
 5. **Use kebab-case filenames** — e.g. `native-macos-editor-design.md`.
 6. **Subfolders within PARA folders** — group by project name or topic, not by date (except Journal).
+7. **Safe edit protocol** — when editing an existing vault file:
+   - Make a backup first: copy the file to `<filename>.bak` in the same directory
+   - Apply the edit using the Edit tool
+   - Verify the edit was applied correctly and no surrounding content was disrupted
+   - Delete the backup only after verification passes
 
 ## Workflow
 
+### Creating a new file
 1. Identify content type using the decision flow above.
 2. Determine the target path: `~/projects/sacredyak/<folder>/[subfolder/]<filename>.md`
 3. Write the file using the Write tool — it creates parent directories automatically.
 4. Confirm the path to the user.
+
+### Editing an existing file
+1. Read the file (Read tool — needed for Edit).
+2. Copy it to `<filename>.bak` in the same directory (Bash: `cp <path> <path>.bak`).
+3. Apply the edit using the Edit tool.
+4. Read the file again to verify the edit is correct and surrounding content is intact.
+5. Delete the backup (Bash: `rm <path>.bak`).
+6. Confirm the edit to the user.
 
 ## Examples
 

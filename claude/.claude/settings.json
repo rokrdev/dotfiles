@@ -25,7 +25,6 @@
       "Bash(obsidian:*)",
       "Bash(things:*)"
     ],
-    "defaultMode": "acceptEdits",
     "deny": [
       "Read(**/.env*)",
       "Write(**/.env*)",
@@ -36,7 +35,8 @@
       "Write(**/*.key)",
       "Write(**/migrations/**)",
       "Edit(**/migrations/**)"
-    ]
+    ],
+    "defaultMode": "acceptEdits"
   },
   "model": "sonnet",
   "hooks": {
@@ -92,6 +92,15 @@
             "command": "LOG=\"$HOME/.claude/logs/hooks.log\"; if [ -f \"$LOG\" ] && [ \"$(stat -f%z \"$LOG\" 2>/dev/null)\" -gt 1048576 ]; then mv \"$LOG\" \"$LOG.1\" && touch \"$LOG\" && echo \"[log-rotate] hooks.log rotated at $(date -u +%FT%TZ)\" >> \"$LOG\"; fi"
           }
         ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node /Users/bharat/.claude/plugins/cache/context-mode/context-mode/1.0.75/hooks/sessionstart.mjs"
+          }
+        ]
       }
     ],
     "Stop": [
@@ -142,6 +151,15 @@
             "statusMessage": "Checking superpowers doc routing..."
           }
         ]
+      },
+      {
+        "matcher": "Bash|WebFetch|Read|Grep|Agent|Task|mcp__plugin_context-mode_context-mode__ctx_execute|mcp__plugin_context-mode_context-mode__ctx_execute_file|mcp__plugin_context-mode_context-mode__ctx_batch_execute",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node /Users/bharat/.claude/plugins/cache/context-mode/context-mode/1.0.75/hooks/pretooluse.mjs"
+          }
+        ]
       }
     ]
   },
@@ -164,7 +182,8 @@
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
-    "context-mode@context-mode": true
+    "context-mode@context-mode": true,
+    "pr-review-toolkit@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {

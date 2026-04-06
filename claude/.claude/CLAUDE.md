@@ -40,7 +40,7 @@ Call it once at the start to structure your thinking, then proceed with implemen
 ## Active Skills
 - **main-agent-is-orchestrator**: Loaded auto at SessionStart; enforces delegation pattern
 - **capture-to-things**: Invoked explicitly when tasks/action items are identified
-- **obsidian**: Invoked when creating markdown files outside a git repo — routes to correct vault folder
+- **obsidian**: Invoked when working in the Obsidian vault, or when creating/editing markdown outside a git repo — never use inside a git repo
 - **superpowers:***: Planning (writing-plans), reviews (requesting-code-review), debugging, etc.
 
 ## Markdown File Creation — Hard Rule

@@ -9,6 +9,9 @@ description: Use when working in the Obsidian vault (~/Library/Mobile Documents/
 
 The Obsidian vault lives at `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/`. Use this skill when creating or editing any file in the vault.
 
+**Always use the Obsidian CLI (`obsidian` at `/usr/local/bin/obsidian`) — never write directly to the vault path.** The CLI auto-detects the vault, uses vault-relative paths, and keeps backlinks and vault metadata consistent. Direct file writes bypass vault indexing and risk writing to the wrong path.
+Verify it's available with `which obsidian` before use; it was installed at `/usr/local/bin/obsidian`.
+
 ## Vault Structure (PARA)
 
 | Folder | Use for |
@@ -66,28 +69,69 @@ Not sure?
    - Verify the edit was applied correctly and no surrounding content was disrupted
    - Delete the backup only after verification passes
 
+## CLI Reference
+
+```bash
+# Create a new file with content
+obsidian create path="<vault-relative-path>" content="<text>"
+
+# Create using a template
+obsidian create path="<vault-relative-path>" template="<template-name>"
+
+# Read a file
+obsidian read path="<vault-relative-path>"
+
+# Overwrite an existing file
+obsidian create path="<vault-relative-path>" content="<text>" overwrite
+
+# Move/rename a file
+obsidian move path="<from-path>" to="<to-path>"
+```
+
+**Path format:** Always vault-relative — e.g. `Projects/local-ai-server/setup-plan.md`. Never use the absolute iCloud path.
+
+**Multiline content:** Pass content via shell variable or heredoc to handle newlines:
+```bash
+CONTENT=$(cat <<'EOF'
+# My Note
+
+Content here.
+EOF
+)
+obsidian create path="Projects/foo/bar.md" content="$CONTENT"
+```
+
+### Common failures
+- **`obsidian: command not found`** — CLI not in PATH; verify with `which obsidian`
+- **`Error: vault not found`** — Obsidian app must be running for the CLI to detect the active vault
+- **`Error: file already exists`** — add `overwrite` flag to `obsidian create`
+- **`Error: path not found`** — parent folder doesn't exist; the CLI does not create intermediate folders automatically
+
 ## Workflow
 
 ### Creating a new file
 1. Identify content type using the decision flow above.
-2. Determine the target path: `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/<folder>/[subfolder/]<filename>.md`
-3. Write the file using the Write tool — it creates parent directories automatically.
-4. Confirm the path to the user.
+2. Determine the vault-relative path: `<PARA-folder>/[subfolder/]<filename>.md`
+3. Create via Bash: `obsidian create path="<relative-path>" content="<text>"`
+4. Confirm the vault-relative path to the user.
 
 ### Editing an existing file
-1. Read the file (Read tool — needed for Edit).
-2. Copy it to `<filename>.bak` in the same directory (Bash: `cp <path> <path>.bak`).
-3. Apply the edit using the Edit tool.
-4. Read the file again to verify the edit is correct and surrounding content is intact.
-5. Delete the backup (Bash: `rm <path>.bak`).
-6. Confirm the edit to the user.
+1. Read current content: `obsidian read path="<relative-path>"` via Bash
+2. Compute the updated content.
+3. Overwrite: `obsidian create path="<relative-path>" content="<updated>" overwrite`
+4. Verify with another `obsidian read` call.
+
+### Moving a file
+```bash
+obsidian move path="<from>" to="<to>"
+```
 
 ## Examples
 
-| Content | Target path |
+| Content | Vault-relative path |
 |---------|-------------|
-| Design spec for a new CLI tool | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/Projects/cli-tool/design-spec.md` |
-| Notes on managing finances | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/Areas/finances/investment-notes.md` |
-| Research on SwiftUI TextKit | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/Resources/swift/textkit2-notes.md` |
-| Daily note for today | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/Journal/2026/2026-04-06.md` |
-| Quick idea, no clear category | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/Inbox/app-idea-offline-sync.md` |
+| Design spec for a new CLI tool | `Projects/cli-tool/design-spec.md` |
+| Notes on managing finances | `Areas/finances/investment-notes.md` |
+| Research on SwiftUI TextKit | `Resources/swift/textkit2-notes.md` |
+| Daily note for today | `Journal/2026/2026-04-07.md` |
+| Quick idea, no clear category | `Inbox/app-idea-offline-sync.md` |

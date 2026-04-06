@@ -5,7 +5,7 @@ exec 2>>"$HOME/.claude/logs/hooks.log"
 
 # PreToolUse hook: Redirect .md files to appropriate storage
 # - .md files under $HOME/projects/*: ALLOW (project context)
-# - Superpowers docs outside projects: redirect to Obsidian vault (sacredyak/superpowers/)
+# - Superpowers docs outside projects: redirect to Obsidian vault (use obsidian skill to route correctly)
 # - All other .md: ALLOW
 # Always allows: .claude/*, CLAUDE.md, MEMORY.md
 
@@ -42,7 +42,7 @@ if [[ "$FILE_PATH" == *superpowers* ]] || \
   "hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "permissionDecision": "deny",
-    "permissionDecisionReason": "No active project context. Save superpowers docs to the Obsidian vault instead: ${HOME}/projects/sacredyak/superpowers/ (use appropriate subfolder: specs/, plans/, reviews/, etc.). When working inside a project, save to the project's docs/ folder instead."
+    "permissionDecisionReason": "No active project context. Save superpowers docs to the Obsidian vault instead: ${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/ (use the obsidian skill to pick the right subfolder). When working inside a project, save to the project's docs/ folder instead."
   }
 }
 EOF

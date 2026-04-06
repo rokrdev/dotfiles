@@ -34,16 +34,13 @@ done
 # 5. jq  (required by rtk-rewrite hook)
 #    brew install jq
 #
-# 6. Bear app  (macOS note storage, required by store-in-bear skill)
+# 6. Things 3 app  (macOS task manager, required by capture-to-things skill)
 #    Install from Mac App Store
 #
-# 7. Things 3 app  (macOS task manager, required by capture-to-things skill)
-#    Install from Mac App Store
-#
-# 8. ccstatusline  (status bar integration, auto-runs via settings.json statusLine)
+# 7. ccstatusline  (status bar integration, auto-runs via settings.json statusLine)
 #    npx -y ccstatusline@latest
 #
-# 9. Claude Code plugins (auto-installed on first Claude Code run from settings.json):
+# 8. Claude Code plugins (auto-installed on first Claude Code run from settings.json):
 #    - superpowers@claude-plugins-official
 #    - code-simplifier@claude-plugins-official
 #    - context7@claude-plugins-official

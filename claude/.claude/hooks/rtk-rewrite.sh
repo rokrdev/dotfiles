@@ -13,10 +13,6 @@
 #   2           Deny rule matched → pass through (Claude Code native deny handles it)
 #   3 + stdout  Ask rule matched → rewrite but let Claude Code prompt the user
 
-# Logging: stderr goes to ~/.claude/logs/hooks.log
-mkdir -p "$HOME/.claude/logs" || true
-exec 2>>"$HOME/.claude/logs/hooks.log"
-
 if ! command -v jq &>/dev/null; then
   echo "[rtk] WARNING: jq is not installed. Hook cannot rewrite commands. Install jq: https://jqlang.github.io/jq/download/" >&2
   exit 0
@@ -76,8 +72,6 @@ esac
 
 ORIGINAL_INPUT=$(echo "$INPUT" | jq -c '.tool_input')
 UPDATED_INPUT=$(echo "$ORIGINAL_INPUT" | jq --arg cmd "$REWRITTEN" '.command = $cmd')
-
-echo "[rtk-rewrite] $(date -u +%FT%TZ) rewrote command" >&2
 
 if [ "$EXIT_CODE" -eq 3 ]; then
   # Ask: rewrite the command, omit permissionDecision so Claude Code prompts.

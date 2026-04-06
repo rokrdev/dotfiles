@@ -23,6 +23,16 @@
 - **context7**: Library docs — fetch current documentation for any library/framework/API
 - **context-mode**: Context protection — use `ctx_batch_execute`, `ctx_execute`, `ctx_search` to avoid flooding context window
 
+## Sequential Thinking
+
+Use `mcp__sequential-thinking__sequentialthinking` for complex problems before starting work:
+- Multi-step debugging with unclear root cause
+- Architecture decisions with significant trade-offs
+- Planning tasks that require exploring multiple approaches
+- Any problem where you'd otherwise jump straight to a solution
+
+Call it once at the start to structure your thinking, then proceed with implementation.
+
 ## Active Hook Scripts
 - **rtk-rewrite.sh**: Token-saving command rewrites (delegates to RTK Rust binary)
 - **superpowers-redirect.sh**: Redirects superpowers docs to Obsidian vault if outside projects

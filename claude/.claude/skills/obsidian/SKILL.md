@@ -21,10 +21,15 @@ The Obsidian vault lives at `~/Library/Mobile Documents/iCloud~md~obsidian/Docum
 | `Inbox/` | When unsure — quick capture, unprocessed notes, anything that doesn't clearly fit elsewhere |
 | `Archive/` | Completed or inactive items — do NOT create new notes here; only move existing ones |
 | `Templates/` | Obsidian template definitions only — do NOT create new notes here; managed manually |
+| `Attachments/` | Non-markdown assets only — never store notes here. Subfolders: `Images/` (png, jpg, gif, svg), `Audios/` (mp3, m4a, wav), `Pdfs/` (pdf), `Files/` (everything else: json, csv, zip, binaries, etc.) |
 
 ## Decision Flow
 
 ```
+Is this a non-markdown asset (image, audio, pdf, or other file)?
+  → YES → Attachments/<subfolder>/<filename> (see rule #5 for subfolder mapping)
+  → NO
+
 Is this tied to an active, named deliverable or project?
   → YES → Projects/<project-name>/<filename>.md
   → NO
@@ -52,9 +57,10 @@ Not sure?
 2. **Never create files in `Archive/`** — that folder is for moved/retired content.
 3. **Never create files in `Templates/`** — that folder is managed manually for Obsidian template use.
 4. **Only create files in `Excalidraw/`** if the user explicitly requests a diagram note.
-5. **Use kebab-case filenames** — e.g. `native-macos-editor-design.md`.
-6. **Subfolders within PARA folders** — group by project name or topic, not by date (except Journal).
-7. **Safe edit protocol** — when editing an existing vault file:
+5. **Store attachments in `Attachments/`** using the appropriate subfolder: `Images/` (png, jpg, gif, svg), `Audios/` (mp3, m4a, wav), `Pdfs/` (pdf), `Files/` (everything else: json, csv, zip, binaries, etc.). Never store attachments in PARA folders, and never store notes or markdown files in `Attachments/` or any of its subfolders.
+6. **Use kebab-case filenames** — e.g. `native-macos-editor-design.md`.
+7. **Subfolders within PARA folders** — group by project name or topic, not by date (except Journal).
+8. **Safe edit protocol** — when editing an existing vault file:
    - Make a backup first: copy the file to `<filename>.bak` in the same directory
    - Apply the edit using the Edit tool
    - Verify the edit was applied correctly and no surrounding content was disrupted

@@ -120,6 +120,24 @@ digraph orchestrator {
 - The worktree is created automatically — no manual setup required
 - If the repo has no git history yet, skip isolation and note it to the user
 
+## Model Selection (MANDATORY)
+
+**ALWAYS specify `model` when dispatching agents.** Default is `claude-haiku-4-5-20251001`. Only omit when Haiku is intentional.
+
+| Task type | Model |
+|-----------|-------|
+| 1-2 line edits, known exact fix | `haiku` |
+| File reads, search, exploration | `haiku` |
+| Doc/comment/config updates | `haiku` |
+| Multi-file implementation | `sonnet` |
+| Debugging with unknown root cause | `sonnet` |
+| Planning, architecture decisions | `sonnet` |
+| Extended cross-file reasoning (rare) | `opus` |
+
+If the task has any uncertainty, unknown scope, or multi-file reasoning — use Sonnet. If it's mechanical and bounded — use Haiku.
+
+If `model` is omitted, the agent inherits `claude-haiku-4-5-20251001` (the global default). Only omit `model` when Haiku is correct. Always be explicit for Sonnet/Opus.
+
 ## The Architect Brief (Mandatory for Build Tasks)
 
 Before dispatching any coding subagent, the orchestrator MUST write an ARCHITECT-BRIEF.md file at the project root containing:
@@ -139,6 +157,7 @@ Give each subagent:
 1. **Context** — what problem are we solving, where in the codebase
 2. **Scope** — exactly what to do (and what NOT to do)
 3. **Output format** — what to return so you can review efficiently
+4. **Model** — haiku for mechanical/bounded tasks, sonnet for reasoning/multi-file, opus rarely
 
 ## Red Flags — You Are About to Violate This Skill
 
@@ -152,6 +171,8 @@ Give each subagent:
 | "I already know what the fix is" | Dispatch implementation subagent with the fix |
 | "The user wants a quick answer" | Dispatch Explore subagent, report summary |
 | "Let me just run this command" | Delegate to subagent |
+| "I'll just let the model default" | Choose explicitly — default is Haiku, which may be wrong for complex work |
+| "This needs Sonnet for everything" | Use Haiku for mechanical subtasks; only escalate where reasoning is actually needed |
 
 **These thoughts mean STOP. You are rationalizing. Dispatch instead.**
 

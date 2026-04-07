@@ -6,10 +6,10 @@
 - IntelliJ IDEA is standard
 
 ## Model Selection
-- Default: sonnet
+- Default: claude-sonnet-4-6
 - Heavy sessions: `export CLAUDE_MODEL=opus && restart`
-- Subagents: claude-haiku-4-5-20251001 (set via CLAUDE_CODE_SUBAGENT_MODEL)
-- Reasoning: subagent=haiku saves costs; main=sonnet balances speed/quality
+- Subagents: claude-haiku-4-5-20251001 (default — override per-dispatch for heavier work)
+- Reasoning: Haiku default saves cost on bulk subagent work; pass model: sonnet/opus explicitly in Agent calls for reasoning-heavy or multi-file tasks
 
 ## Linting
 - Add PostEdit hooks in **project** settings.json (eslint, ruff, ktlint, etc.)
@@ -23,9 +23,14 @@
 - **context7**: Library docs — fetch current documentation for any library/framework/API
 - **context-mode**: Context protection — use `ctx_batch_execute`, `ctx_execute`, `ctx_search` to avoid flooding context window
 
+## Maintenance Notes
+- **After `ctx upgrade`**: context-mode hook paths in `settings.json` are version-pinned by the plugin. Verify hook commands still resolve after upgrades — run `ctx doctor` if hooks stop firing.
+
 ## Active Hook Scripts
-- **rtk-rewrite.sh**: Token-saving command rewrites (delegates to RTK Rust binary)
-- **superpowers-redirect.sh**: Redirects superpowers docs to Obsidian vault if outside projects
+- **rtk-rewrite.sh** — PreToolUse(Bash): rewrites commands through RTK proxy for token savings
+- **superpowers-redirect.sh** — PreToolUse(Write|Edit): blocks spec/plan markdown writes outside ~/projects/
+- **cleanup-worktrees.sh** — PostToolUse(git push): removes merged worktrees automatically
+- **destructive-guard.sh** — PreToolUse(Bash): blocks DROP TABLE, rm -rf /, force-push to main, etc.
 
 ## Active Skills
 - **main-agent-is-orchestrator**: Loaded auto at SessionStart; enforces delegation pattern
@@ -52,7 +57,7 @@ Exceptions (always created in their designated locations regardless of context):
 - Finalized docs live in repos
 
 ## Compaction
-When compacting, always preserve: file paths, test results, error messages, key decisions, and any explicit user instructions given during the session.
+After compaction, restate: file paths, test results, error messages, key decisions, and any explicit user instructions from the session — so context is not lost.
 
 @RTK.md
 

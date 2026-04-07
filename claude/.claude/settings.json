@@ -1,7 +1,7 @@
 {
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-6",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-haiku-4-5-20251001",
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "75"
   },
   "permissions": {
@@ -66,7 +66,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "SKILL=$(cat /Users/bharat/.claude/skills/main-agent-is-orchestrator/SKILL.md 2>/dev/null) && printf '{\"hookSpecificOutput\": {\"hookEventName\": \"SessionStart\", \"additionalContext\": %s}}' \"$(echo \"$SKILL\" | jq -Rs .)\"",
+            "command": "SKILL=$(cat \"$HOME/.claude/skills/main-agent-is-orchestrator/SKILL.md\" 2>/dev/null); if [ -z \"$SKILL\" ]; then SKILL=\"WARNING: main-agent-is-orchestrator skill not found — run: cd ~/.dotfiles && stow -R claude\"; fi && printf '{\"hookSpecificOutput\": {\"hookEventName\": \"SessionStart\", \"additionalContext\": %s}}' \"$(echo \"$SKILL\" | jq -Rs .)\"",
             "statusMessage": "Loading orchestrator mode..."
           }
         ]
@@ -81,7 +81,6 @@
         ]
       },
       {
-        "matcher": "compact",
         "hooks": [
           {
             "type": "command",
@@ -142,7 +141,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "raw=$(cat 2>/dev/null); cmd=$(echo \"$raw\" | jq -r '.tool_input.command // \"\"' 2>/dev/null); if echo \"$cmd\" | grep -qE \"^obsidian\\b\" && echo \"$cmd\" | grep -qiE \"delete|trash|remove|destroy|purge|wipe\"; then flag=\"$HOME/.claude/obsidian-delete-confirmed\"; if [ -f \"$flag\" ]; then rm -f \"$flag\"; echo \"{}\"; else echo 'BLOCKED: Obsidian deletion requires explicit user permission. Run: touch ~/.claude/obsidian-delete-confirmed — then retry.' >&2; exit 2; fi; exit 0; fi; patterns=\"DROP TABLE|TRUNCATE TABLE|DELETE FROM [a-zA-Z]+|git push.*--force.*main|git push.*--force.*master|rm -rf /|rm -rf ~\"; if echo \"$cmd\" | grep -qiE \"$patterns\"; then matched=$(echo \"$cmd\" | grep -oiE \"$patterns\" | head -1); echo \"BLOCKED: Destructive operation detected: '$matched'. Confirm this is intentional.\" >&2; exit 2; else echo \"{}\"; fi"
+            "command": "bash \"$HOME/.claude/hooks/destructive-guard.sh\""
           }
         ]
       },
@@ -161,6 +160,16 @@
           {
             "type": "command",
             "command": "$HOME/.claude/hooks/superpowers-redirect.sh",
+            "statusMessage": "Checking superpowers doc routing..."
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/superpowers-redirect.sh\"",
             "statusMessage": "Checking superpowers doc routing..."
           }
         ]
@@ -201,7 +210,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "npx -y ccstatusline@latest",
+    "command": "npx -y ccstatusline@2.2.7",
     "padding": 0
   },
   "enabledPlugins": {

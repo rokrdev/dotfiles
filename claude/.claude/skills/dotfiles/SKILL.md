@@ -8,8 +8,9 @@ when_to_use: When the user asks to add, edit, or restructure any dotfile or stow
 
 ## Core Rule
 
-NEVER edit files under `~/.config/`, `~/.hammerspoon/`, `~/.claude/`, or any stow target directly.
-Those paths are symlinks. Always edit the source in `~/.dotfiles/<package>/`.
+NEVER edit stow target files directly — `~/.config/`, `~/.hammerspoon/`, and `~/.claude/` are all symlink destinations.
+Always edit the source files in `~/.dotfiles/<package>/` (e.g. `~/.dotfiles/claude/.claude/` for Claude configs).
+Referencing `~/.claude/` as a path is fine; the rule is about editing via the symlink instead of the source.
 
 ## Before Stowing — Always Dry-Run First
 

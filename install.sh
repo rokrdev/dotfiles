@@ -80,4 +80,87 @@ for d in "$DOTFILES"/*/ ; do
   fi
 done
 
+# ─────────────────────────────────────────────
+# asdf — plugins and tool versions
+# ─────────────────────────────────────────────
+echo "Installing asdf plugins..."
+asdf plugin add bun || true
+asdf plugin add java || true
+asdf plugin add lua-language-server || true
+asdf plugin add nodejs || true
+asdf plugin add python || true
+asdf plugin add ruby || true
+asdf plugin add rust || true
+
+echo "Installing tool versions from ~/.tool-versions..."
+asdf install
+
+# ─────────────────────────────────────────────
+# Language servers
+# ─────────────────────────────────────────────
+
+# npm: typescript-language-server, prettier
+if command -v npm &>/dev/null; then
+  echo "Installing npm language servers..."
+  command -v typescript-language-server &>/dev/null || npm install -g typescript typescript-language-server
+  command -v prettier &>/dev/null || npm install -g prettier
+else
+  echo "WARNING: npm not found — skipping typescript-language-server and prettier. Run after asdf nodejs setup."
+fi
+
+# cargo: simple-completion-language-server (scls)
+if command -v cargo &>/dev/null; then
+  if ! command -v simple-completion-language-server &>/dev/null; then
+    echo "Installing simple-completion-language-server..."
+    cargo install simple-completion-language-server || echo "WARNING: cargo install failed — run manually after Rust is set up."
+  fi
+else
+  echo "WARNING: cargo not found — skipping simple-completion-language-server. Run after asdf rust setup."
+fi
+
+# uv: python-lsp-server with mypy and ruff plugins
+if command -v uv &>/dev/null; then
+  echo "Installing python-lsp-server..."
+  if ! uv tool list 2>/dev/null | grep -q python-lsp-server; then
+    uv tool install python-lsp-server --with python-lsp-mypy --with python-lsp-ruff || \
+      echo "WARNING: python-lsp-server install failed — check uv and network."
+  fi
+else
+  echo "WARNING: uv not found — skipping python-lsp-server."
+fi
+
+# ─────────────────────────────────────────────
+# Claude Code
+# ─────────────────────────────────────────────
+if ! command -v claude &>/dev/null; then
+  echo "Installing Claude Code..."
+  curl -fsSL https://claude.ai/install.sh | bash
+  # Refresh PATH — Claude Code installs to ~/.local/bin
+  export PATH="$HOME/.local/bin:$PATH"
+fi
+
+if command -v claude &>/dev/null; then
+  echo "Installing Claude Code plugins..."
+  claude plugin install superpowers@claude-plugins-official || true
+  claude plugin install context7@claude-plugins-official || true
+  claude plugin install context-mode@context-mode || true
+  claude plugin install pr-review-toolkit@claude-plugins-official || true
+else
+  echo "WARNING: claude not found in PATH — skipping plugin installation. Run manually after setup."
+fi
+
+# ─────────────────────────────────────────────
+# Manual setup required
+# ─────────────────────────────────────────────
+echo ""
 echo "Bootstrap complete! Dotfiles installed to $HOME"
+echo ""
+echo "Manual setup steps:"
+echo "1. Things 3 app (macOS task manager, required by capture-to-things skill)"
+echo "   → Install from Mac App Store"
+echo ""
+echo "2. Set Fish as default shell"
+echo "   → chsh -s /opt/homebrew/bin/fish"
+echo ""
+echo "NOTE: Do NOT stow ~/.claude/settings.local.json — it contains personal"
+echo "      paths, email, and API references specific to this machine."

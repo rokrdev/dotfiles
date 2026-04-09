@@ -40,10 +40,7 @@ done
 # After stowing, the following must be installed
 # for all MCP servers and plugins to work:
 #
-# 1. Claude Code CLI
-#    npm install -g @anthropic-ai/claude-code
-#
-# 2. uv / uvx  (required by things-mcp)
+# 1. uv / uvx  (required by things-mcp)
 #    brew install uv
 #
 # 3. things-mcp  (MCP server for Things 3 integration)

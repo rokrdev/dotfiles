@@ -35,6 +35,21 @@ for d in */ ; do
 done
 
 # ─────────────────────────────────────────────
+# asdf — plugins and tool versions
+# ─────────────────────────────────────────────
+echo "Installing asdf plugins..."
+asdf plugin add bun 2>/dev/null || true
+asdf plugin add java 2>/dev/null || true
+asdf plugin add lua-language-server 2>/dev/null || true
+asdf plugin add nodejs 2>/dev/null || true
+asdf plugin add python 2>/dev/null || true
+asdf plugin add ruby 2>/dev/null || true
+asdf plugin add rust 2>/dev/null || true
+
+echo "Installing tool versions from ~/.tool-versions..."
+asdf install
+
+# ─────────────────────────────────────────────
 # Claude Code
 # ─────────────────────────────────────────────
 if ! command -v claude &>/dev/null; then

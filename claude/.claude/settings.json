@@ -106,6 +106,15 @@
         ]
       },
       {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/cleanup-worktrees.sh\"",
+            "statusMessage": "Cleaning up merged worktrees..."
+          }
+        ]
+      },
+      {
         "matcher": "",
         "hooks": [
           {
@@ -192,18 +201,7 @@
         ]
       }
     ],
-    "PostToolUse": [
-      {
-        "matcher": "Bash(git push:*)",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash $HOME/.claude/hooks/cleanup-worktrees.sh",
-            "async": true
-          }
-        ]
-      }
-    ]
+    "PostToolUse": []
   },
   "worktree": {
     "symlinkDirectories": [

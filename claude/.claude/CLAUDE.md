@@ -29,7 +29,7 @@
 ## Active Hook Scripts
 - **rtk-rewrite.sh** — PreToolUse(Bash): rewrites commands through RTK proxy for token savings
 - **superpowers-redirect.sh** — PreToolUse(Write|Edit): blocks spec/plan markdown writes outside ~/projects/
-- **cleanup-worktrees.sh** — PostToolUse(git push): removes merged worktrees automatically
+- **cleanup-worktrees.sh** — SessionStart: removes merged worktrees automatically (runs on every session start)
 - **destructive-guard.sh** — PreToolUse(Bash): blocks DROP TABLE, rm -rf /, force-push to main, etc.
 
 ## Active Skills

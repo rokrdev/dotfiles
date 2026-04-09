@@ -32,7 +32,7 @@ if echo "$cmd" | grep -qE "^obsidian\b" && echo "$cmd" | grep -qiE "delete|trash
     now=$(date +%s)
     rm -f "$flag"
     if [[ "$confirmed_at" =~ ^[0-9]+$ ]] && [ "$((now - confirmed_at))" -le 30 ]; then
-      echo "{}"
+      jq -n '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"allow",permissionDecisionReason:"destructive-guard: Obsidian deletion confirmed"}}'
       exit 0
     fi
     block "BLOCKED: Obsidian deletion confirmation expired (>30s). Run: echo \$(date +%s) > ~/.claude/obsidian-delete-confirmed — then retry immediately."
@@ -41,7 +41,7 @@ if echo "$cmd" | grep -qE "^obsidian\b" && echo "$cmd" | grep -qiE "delete|trash
 fi
 
 # --- Destructive operation guard ---
-patterns="DROP TABLE|TRUNCATE TABLE|DELETE FROM [a-zA-Z]+|git push.*--force.*main|git push.*--force.*master|git push.*-f\s+.*main|git push.*-f\s+.*master|rm -rf /|rm -rf ~|rm -fr /|rm -fr ~|rm -rf \$HOME|rm -fr \$HOME"
+patterns="DROP TABLE|TRUNCATE TABLE|DELETE FROM [a-zA-Z]+|git push.*--force.*main|git push.*--force.*master|git push.*-f\s+.*main|git push.*-f\s+.*master|rm -rf|rm -fr"
 if echo "$cmd" | grep -qiE "$patterns"; then
   matched=$(echo "$cmd" | grep -oiE "$patterns" | head -1)
   block "BLOCKED: Destructive operation detected: '$matched'. Confirm this is intentional."
@@ -52,5 +52,5 @@ if echo "$cmd" | grep -qE "git push" && echo "$cmd" | grep -qiE "\-\-force-with-
   block "BLOCKED: 'git push --force-with-lease' to main/master detected. Force-with-lease still rewrites remote history. Confirm this is intentional and you are not discarding others' work."
 fi
 
-echo "{}"
+jq -n '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"allow",permissionDecisionReason:"destructive-guard: no destructive patterns detected"}}'
 exit 0

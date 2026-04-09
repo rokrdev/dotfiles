@@ -9,7 +9,7 @@ export LANG="en_US.UTF-8"
 export NNN_OPTS="da"
 export NNN_FIFO="/tmp/nnn.fifo"
 export NNN_PLUG='t:preview-tui;'
-ssh-add -A &>/dev/null
+ssh-add -l &>/dev/null || ssh-add -A &>/dev/null
 
 export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
 export ANDROID_HOME="$HOME/Library/Android/sdk"
@@ -23,7 +23,7 @@ export FZF_DEFAULT_OPTS='--layout=default --bind=ctrl-a:select-all,ctrl-d:desele
 # setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`
 export PATH="$HOME/.docker/bin:$HOME/bin:$HOME/.bun/bin:$GOPATH/bin:$ANDROID_SDK_ROOT:/usr/local/opt/gnu-sed/libexec/gnubin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
-source ~/.env
+test -f ~/.env && not test -w ~/.env && source ~/.env
 
 # ASDF configuration code
 if test -z $ASDF_DATA_DIR

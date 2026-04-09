@@ -34,7 +34,7 @@ if [[ "$FILE_PATH" == */.claude/* ]] || \
 fi
 
 # Allow all .md writes within any project under $HOME/projects/
-if [[ "$FILE_PATH" == $HOME/projects/* ]]; then
+if [[ "$FILE_PATH" == "$HOME/projects/"* ]]; then
   echo "{}"
   exit 0
 fi

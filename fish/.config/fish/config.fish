@@ -140,6 +140,6 @@ fzf --fish | source
 
 export CARGO_TARGET_DIR=~/.cargo-target
 
-alias clq="claude --model claude-haiku-4-5-20251001 --effort high --enable-auto-mode"
-alias clb="claude --model claude-sonnet-4-6 --effort high --enable-auto-mode"
-alias cld="claude --model claude-opus-4-6 --effort high --enable-auto-mode"
+alias clq="claude --model claude-haiku-4-5-20251001 --effort high"
+alias clb="claude --model claude-sonnet-4-6 --effort high"
+alias cld="claude --model claude-opus-4-6 --effort high"

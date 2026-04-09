@@ -11,6 +11,8 @@ brew "bat"
 brew "yazi"
 brew "uv"
 brew "jq"
+brew "fzf"
+brew "ripgrep"
 brew "rtk"
 brew "asdf"
 

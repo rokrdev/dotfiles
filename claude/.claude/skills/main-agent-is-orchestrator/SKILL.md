@@ -148,10 +148,11 @@ If `model` is omitted, the agent inherits `claude-haiku-4-5-20251001` (the globa
 - Before hard choices that affect multiple systems or have long-term consequences
 
 **How to use:**
-1. Dispatch a **prompt-constrained** Opus subagent (no `isolation: "worktree"`, task scope limited to analysis only) with the specific question. The advisor has full tool access but must refuse to write code.
-2. Mark the task clearly: "Advise on [decision]. Do NOT write code — review and recommend."
-3. Review the advisor's recommendation
-4. **Then** dispatch the implementation subagent with the decision made
+1. Announce to the user: `[Advisor] Consulting Opus on: <question>`
+2. Dispatch a **prompt-constrained** Opus subagent (no `isolation: "worktree"`, task scope limited to analysis only) with the specific question. The advisor has full tool access but must refuse to write code.
+3. Mark the task clearly: "Advise on [decision]. Do NOT write code — review and recommend."
+4. Review the advisor's recommendation
+5. **Then** dispatch the implementation subagent with the decision made
 
 **Key constraint:** The advisor subagent MUST NOT write code, modify files, or sketch implementation — its sole role is to analyze tradeoffs and recommend an approach that the orchestrator then delegates to an implementation subagent.
 

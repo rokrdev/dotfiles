@@ -5,16 +5,21 @@ set -e
 # ─────────────────────────────────────────────
 # Homebrew
 # ─────────────────────────────────────────────
-if ! command -v brew &>/dev/null; then
-  echo "Installing Homebrew..."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi
-
 # Add Homebrew to PATH (Apple Silicon: /opt/homebrew, Intel: /usr/local)
 if [[ -f /opt/homebrew/bin/brew ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 elif [[ -f /usr/local/bin/brew ]]; then
   eval "$(/usr/local/bin/brew shellenv)"
+fi
+
+if ! command -v brew &>/dev/null; then
+  echo "Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  if [[ -f /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [[ -f /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  fi
 fi
 
 # Install all formulae and casks from Brewfile
@@ -48,6 +53,36 @@ asdf plugin add rust || true
 
 echo "Installing tool versions from ~/.tool-versions..."
 asdf install
+
+# ─────────────────────────────────────────────
+# Helix language servers
+# ─────────────────────────────────────────────
+
+# npm: typescript-language-server, prettier
+if command -v npm &>/dev/null; then
+  echo "Installing npm language servers..."
+  npm list -g typescript-language-server &>/dev/null || npm install -g typescript typescript-language-server
+  npm list -g prettier &>/dev/null || npm install -g prettier
+else
+  echo "WARNING: npm not found — skipping typescript-language-server and prettier. Run after asdf nodejs setup."
+fi
+
+# cargo: simple-completion-language-server (scls)
+if command -v cargo &>/dev/null; then
+  echo "Installing simple-completion-language-server..."
+  command -v simple-completion-language-server &>/dev/null || cargo install simple-completion-language-server
+else
+  echo "WARNING: cargo not found — skipping simple-completion-language-server. Run after asdf rust setup."
+fi
+
+# uv: python-lsp-server with mypy and ruff plugins
+if command -v uv &>/dev/null; then
+  echo "Installing python-lsp-server..."
+  uv tool list 2>/dev/null | grep -q python-lsp-server || \
+    uv tool install python-lsp-server --with python-lsp-mypy --with python-lsp-ruff
+else
+  echo "WARNING: uv not found — skipping python-lsp-server."
+fi
 
 # ─────────────────────────────────────────────
 # Claude Code

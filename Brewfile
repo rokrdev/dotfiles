@@ -13,6 +13,7 @@ brew "uv"
 brew "jq"
 brew "fzf"
 brew "ripgrep"
+brew "stylua"
 brew "rtk"
 brew "asdf"
 

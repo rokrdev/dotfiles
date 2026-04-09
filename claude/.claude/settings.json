@@ -200,8 +200,7 @@
           }
         ]
       }
-    ],
-    "PostToolUse": []
+    ]
   },
   "worktree": {
     "symlinkDirectories": [
@@ -216,7 +215,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "npx -y ccstatusline@2.2.7",
+    "command": "bunx -y ccstatusline@latest",
     "padding": 0
   },
   "enabledPlugins": {

@@ -11,6 +11,7 @@ brew "bat"
 brew "yazi"
 brew "uv"
 brew "jq"
+brew "asdf"
 
 # Casks
 cask "hammerspoon"

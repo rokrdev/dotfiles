@@ -13,7 +13,6 @@ brew "uv"
 brew "jq"
 
 # Casks
-cask "claude-code"
 cask "hammerspoon"
 cask "karabiner-elements"
 cask "ghostty"

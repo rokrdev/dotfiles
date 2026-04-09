@@ -38,13 +38,13 @@ done
 # asdf — plugins and tool versions
 # ─────────────────────────────────────────────
 echo "Installing asdf plugins..."
-asdf plugin add bun 2>/dev/null || true
-asdf plugin add java 2>/dev/null || true
-asdf plugin add lua-language-server 2>/dev/null || true
-asdf plugin add nodejs 2>/dev/null || true
-asdf plugin add python 2>/dev/null || true
-asdf plugin add ruby 2>/dev/null || true
-asdf plugin add rust 2>/dev/null || true
+asdf plugin add bun || true
+asdf plugin add java || true
+asdf plugin add lua-language-server || true
+asdf plugin add nodejs || true
+asdf plugin add python || true
+asdf plugin add ruby || true
+asdf plugin add rust || true
 
 echo "Installing tool versions from ~/.tool-versions..."
 asdf install
@@ -55,19 +55,28 @@ asdf install
 if ! command -v claude &>/dev/null; then
   echo "Installing Claude Code..."
   curl -fsSL https://claude.ai/install.sh | bash
+  # Refresh PATH — Claude Code installs to ~/.local/bin
+  export PATH="$HOME/.local/bin:$PATH"
 fi
 
-echo "Installing Claude Code plugins..."
-claude plugin install superpowers@claude-plugins-official
-claude plugin install context7@claude-plugins-official
-claude plugin install context-mode@context-mode
-claude plugin install pr-review-toolkit@claude-plugins-official
+if command -v claude &>/dev/null; then
+  echo "Installing Claude Code plugins..."
+  claude plugin install superpowers@claude-plugins-official || true
+  claude plugin install context7@claude-plugins-official || true
+  claude plugin install context-mode@context-mode || true
+  claude plugin install pr-review-toolkit@claude-plugins-official || true
+else
+  echo "WARNING: claude not found in PATH — skipping plugin installation. Run manually after setup."
+fi
 
 # ─────────────────────────────────────────────
 # Manual setup required
 # ─────────────────────────────────────────────
 # 1. Things 3 app  (macOS task manager, required by capture-to-things skill)
 #    Install from Mac App Store
+#
+# 2. Set Fish as default shell
+#    chsh -s /opt/homebrew/bin/fish
 #
 # NOTE: Do NOT stow ~/.claude/settings.local.json — it contains personal
 #       paths, email, and API references specific to this machine.

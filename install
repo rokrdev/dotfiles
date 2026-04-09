@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 set -e
 
@@ -36,7 +36,14 @@ fi
 
 echo "Stowing packages..."
 for d in */ ; do
-  stow --adopt "$d"
+  [[ "$d" == ".claude/" ]] && continue  # skip internal claude worktrees dir
+  conflicts=$(stow -n "$d" 2>&1 | grep "conflict" || true)
+  if [ -n "$conflicts" ]; then
+    echo "WARNING: stow conflicts in $d — skipping (run 'stow -n $d' to see details):"
+    echo "$conflicts"
+  else
+    stow --adopt "$d"
+  fi
 done
 
 # ─────────────────────────────────────────────
@@ -61,16 +68,18 @@ asdf install
 # npm: typescript-language-server, prettier
 if command -v npm &>/dev/null; then
   echo "Installing npm language servers..."
-  npm list -g typescript-language-server &>/dev/null || npm install -g typescript typescript-language-server
-  npm list -g prettier &>/dev/null || npm install -g prettier
+  command -v typescript-language-server &>/dev/null || npm install -g typescript typescript-language-server
+  command -v prettier &>/dev/null || npm install -g prettier
 else
   echo "WARNING: npm not found — skipping typescript-language-server and prettier. Run after asdf nodejs setup."
 fi
 
 # cargo: simple-completion-language-server (scls)
 if command -v cargo &>/dev/null; then
-  echo "Installing simple-completion-language-server..."
-  command -v simple-completion-language-server &>/dev/null || cargo install simple-completion-language-server
+  if ! command -v simple-completion-language-server &>/dev/null; then
+    echo "Installing simple-completion-language-server..."
+    cargo install simple-completion-language-server || echo "WARNING: cargo install failed — run manually after Rust is set up."
+  fi
 else
   echo "WARNING: cargo not found — skipping simple-completion-language-server. Run after asdf rust setup."
 fi
@@ -78,8 +87,10 @@ fi
 # uv: python-lsp-server with mypy and ruff plugins
 if command -v uv &>/dev/null; then
   echo "Installing python-lsp-server..."
-  uv tool list 2>/dev/null | grep -q python-lsp-server || \
-    uv tool install python-lsp-server --with python-lsp-mypy --with python-lsp-ruff
+  if ! uv tool list 2>/dev/null | grep -q python-lsp-server; then
+    uv tool install python-lsp-server --with python-lsp-mypy --with python-lsp-ruff || \
+      echo "WARNING: python-lsp-server install failed — check uv and network."
+  fi
 else
   echo "WARNING: uv not found — skipping python-lsp-server."
 fi

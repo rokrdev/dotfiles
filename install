@@ -35,7 +35,15 @@ for d in */ ; do
 done
 
 # ─────────────────────────────────────────────
-# Claude Code — Manual setup required
+# Claude Code
+# ─────────────────────────────────────────────
+if ! command -v claude &>/dev/null; then
+  echo "Installing Claude Code..."
+  curl -fsSL https://claude.ai/install.sh | bash
+fi
+
+# ─────────────────────────────────────────────
+# Manual setup required
 # ─────────────────────────────────────────────
 # After stowing, the following must be installed
 # for all MCP servers and plugins to work:

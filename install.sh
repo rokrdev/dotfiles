@@ -12,6 +12,7 @@ if ! command -v brew &>/dev/null; then
 fi
 
 # Add Homebrew to PATH (Apple Silicon: /opt/homebrew, Intel: /usr/local)
+# This must run unconditionally on every invocation to ensure brew is in PATH
 if [[ -f /opt/homebrew/bin/brew ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 elif [[ -f /usr/local/bin/brew ]]; then
@@ -27,7 +28,11 @@ if [[ -d "$DOTFILES/.git" ]]; then
   echo "Dotfiles already cloned at $DOTFILES"
 else
   echo "Cloning dotfiles repo..."
-  git clone git@github.com:sacredyak/dotfiles.git "$DOTFILES"
+  # Try SSH first, fall back to HTTPS if it fails
+  if ! git clone git@github.com:sacredyak/dotfiles.git "$DOTFILES" 2>/dev/null; then
+    echo "SSH clone failed, trying HTTPS..."
+    git clone https://github.com/sacredyak/dotfiles.git "$DOTFILES"
+  fi
 fi
 
 cd "$DOTFILES"
@@ -35,6 +40,11 @@ cd "$DOTFILES"
 # ─────────────────────────────────────────────
 # Homebrew packages from Brewfile
 # ─────────────────────────────────────────────
+if [[ ! -f "$DOTFILES/Brewfile" ]]; then
+  echo "ERROR: Brewfile not found at $DOTFILES/Brewfile"
+  exit 1
+fi
+
 echo "Installing dependencies from Brewfile..."
 brew bundle --file="$DOTFILES/Brewfile"
 
@@ -56,15 +66,14 @@ for d in "$DOTFILES"/*/ ; do
     install|.git|docs|node_modules|.claude) continue ;;
   esac
 
-  # Skip if it's a file (not a directory)
-  [[ -f "$DOTFILES/$dirname" ]] && continue
-
   # Dry-run check for conflicts
   conflicts=$(stow -v --no-folding -n -d "$DOTFILES" "$dirname" 2>&1 | grep "conflict" || true)
 
   if [ -n "$conflicts" ]; then
-    echo "WARNING: stow conflicts in $dirname — skipping (run 'stow -n $dirname' to see details):"
+    echo "ERROR: stow conflicts detected in $dirname — cannot proceed"
+    echo "Run 'stow -n $dirname' to see details:"
     echo "$conflicts"
+    exit 1
   else
     echo "Restowing $dirname..."
     stow -R -v --no-folding -d "$DOTFILES" "$dirname"

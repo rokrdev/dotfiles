@@ -5,12 +5,12 @@
 # - SQL destructive statements: DROP TABLE, TRUNCATE TABLE, DELETE FROM <table>
 # - Destructive filesystem/git ops: rm -rf /, rm -rf ~, git push --force to main/master
 
-mkdir -p "$HOME/.claude/logs" || true
-exec 2>>"$HOME/.claude/logs/hooks.log"
+mkdir -p "$HOME/.claude/logs" 2>/dev/null || true
+LOG="$HOME/.claude/logs/hooks.log"
 
 block() {
-  echo "$1"
-  echo "[destructive-guard] $1" >&2
+  echo "$1" >&2
+  echo "[destructive-guard] BLOCKED: $1" >> "$LOG"
   exit 2
 }
 

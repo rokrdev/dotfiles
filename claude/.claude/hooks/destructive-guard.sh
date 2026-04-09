@@ -15,19 +15,13 @@ block() {
 }
 
 if ! command -v jq &>/dev/null; then
-  echo "WARNING: destructive-guard hook dependency missing (jq not found) — guard inactive, all operations allowed" >&2
-  echo "WARNING: Install jq to enable destructive operation protection."
-  echo "{}"
-  exit 0
+  block "BLOCKED: destructive-guard dependency missing (jq not found). Install jq to restore Bash access."
 fi
 
 raw=$(cat 2>/dev/null)
 cmd=$(echo "$raw" | jq -r '.tool_input.command // ""' 2>/dev/null)
-
-if [ -z "$cmd" ]; then
-  echo "[destructive-guard] WARNING: could not extract command from hook input" >&2
-  echo "{}"
-  exit 0
+if [ $? -ne 0 ] || [ -z "$cmd" ]; then
+  block "BLOCKED: destructive-guard could not parse hook input — failing safe."
 fi
 
 # --- Obsidian delete guard ---
@@ -47,7 +41,7 @@ if echo "$cmd" | grep -qE "^obsidian\b" && echo "$cmd" | grep -qiE "delete|trash
 fi
 
 # --- Destructive operation guard ---
-patterns="DROP TABLE|TRUNCATE TABLE|DELETE FROM [a-zA-Z]+|git push.*--force.*main|git push.*--force.*master|rm -rf /|rm -rf ~|rm -fr /|rm -fr ~|rm -rf \$HOME|rm -fr \$HOME"
+patterns="DROP TABLE|TRUNCATE TABLE|DELETE FROM [a-zA-Z]+|git push.*--force.*main|git push.*--force.*master|git push.*-f\s+.*main|git push.*-f\s+.*master|rm -rf /|rm -rf ~|rm -fr /|rm -fr ~|rm -rf \$HOME|rm -fr \$HOME"
 if echo "$cmd" | grep -qiE "$patterns"; then
   matched=$(echo "$cmd" | grep -oiE "$patterns" | head -1)
   block "BLOCKED: Destructive operation detected: '$matched'. Confirm this is intentional."

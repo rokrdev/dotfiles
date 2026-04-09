@@ -42,8 +42,8 @@ fi
 
 # --- Destructive operation guard ---
 patterns="DROP TABLE|TRUNCATE TABLE|DELETE FROM [a-zA-Z]+|git push.*--force.*main|git push.*--force.*master|git push.*-f\s+.*main|git push.*-f\s+.*master|rm -rf|rm -fr"
-if echo "$cmd" | grep -qiE "$patterns"; then
-  matched=$(echo "$cmd" | grep -oiE "$patterns" | head -1)
+if echo "$cmd" | timeout 1 grep -qiE "$patterns"; then
+  matched=$(echo "$cmd" | timeout 1 grep -oiE "$patterns" | head -1)
   block "BLOCKED: Destructive operation detected: '$matched'. Confirm this is intentional."
 fi
 

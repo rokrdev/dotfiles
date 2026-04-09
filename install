@@ -2,11 +2,34 @@
 
 set -e
 
+# ─────────────────────────────────────────────
+# Homebrew
+# ─────────────────────────────────────────────
+if ! command -v brew &>/dev/null; then
+  echo "Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+# Add Homebrew to PATH (Apple Silicon: /opt/homebrew, Intel: /usr/local)
+if [[ -f /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -f /usr/local/bin/brew ]]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+
+# Install all formulae and casks from Brewfile
+echo "Installing dependencies from Brewfile..."
+brew bundle
+
+# ─────────────────────────────────────────────
+# GNU Stow
+# ─────────────────────────────────────────────
 if ! command -v stow &>/dev/null; then
-  echo "ERROR: GNU Stow not found. Install with: brew install stow"
+  echo "ERROR: GNU Stow not found after brew bundle. Check Brewfile."
   exit 1
 fi
 
+echo "Stowing packages..."
 for d in */ ; do
   stow --adopt "$d"
 done

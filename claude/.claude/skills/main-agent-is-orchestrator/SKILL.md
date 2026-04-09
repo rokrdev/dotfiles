@@ -132,11 +132,38 @@ digraph orchestrator {
 | Multi-file implementation | `sonnet` |
 | Debugging with unknown root cause | `sonnet` |
 | Planning, architecture decisions | `sonnet` |
-| Extended cross-file reasoning (rare) | `opus` |
+| Multi-file reasoning with bounded scope | `sonnet` |
+| Architectural unknowns requiring synthesis across multiple constraints (rare) | `opus` (see Opus Advisor Pattern below) |
 
 If the task has any uncertainty, unknown scope, or multi-file reasoning — use Sonnet. If it's mechanical and bounded — use Haiku.
 
 If `model` is omitted, the agent inherits `claude-haiku-4-5-20251001` (the global default). Only omit `model` when Haiku is correct. Always be explicit for Sonnet/Opus.
+
+## Opus Advisor Pattern
+
+**When to dispatch an Opus advisor:**
+- Before committing to an architectural decision where you'd otherwise guess
+- When facing an unknown root cause and no clear path forward
+- When evaluating design tradeoffs with high uncertainty
+- Before hard choices that affect multiple systems or have long-term consequences
+
+**How to use:**
+1. Dispatch a **prompt-constrained** Opus subagent (no `isolation: "worktree"`, task scope limited to analysis only) with the specific question. The advisor has full tool access but must refuse to write code.
+2. Mark the task clearly: "Advise on [decision]. Do NOT write code — review and recommend."
+3. Review the advisor's recommendation
+4. **Then** dispatch the implementation subagent with the decision made
+
+**Key constraint:** The advisor subagent MUST NOT write code, modify files, or sketch implementation — its sole role is to analyze tradeoffs and recommend an approach that the orchestrator then delegates to an implementation subagent.
+
+**Example prompt for Opus advisor:**
+```
+We're debating whether to refactor Module X as a monolith or split it into services.
+Current constraints: [list constraints]
+Previous attempts: [context]
+
+Advise: Is the split worthwhile now, or should we wait? What are the hidden costs?
+Return: a 2-3 paragraph analysis + recommendation. Format as numbered conclusions. Do NOT write pseudocode, function signatures, test cases, or implementation sketches.
+```
 
 ## The Architect Brief (Mandatory for Build Tasks)
 

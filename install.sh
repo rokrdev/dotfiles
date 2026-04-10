@@ -139,15 +139,15 @@ if ! command -v claude &>/dev/null; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 
-if command -v claude &>/dev/null; then
-  echo "Installing Claude Code plugins..."
-  claude plugin install superpowers@claude-plugins-official || true
-  claude plugin install context7@claude-plugins-official || true
-  claude plugin install context-mode@context-mode || true
-  claude plugin install pr-review-toolkit@claude-plugins-official || true
-else
-  echo "WARNING: claude not found in PATH — skipping plugin installation. Run manually after setup."
-fi
+# if command -v claude &>/dev/null; then
+#   echo "Installing Claude Code plugins..."
+#   claude plugin install superpowers@claude-plugins-official || true
+#   claude plugin install context7@claude-plugins-official || true
+#   claude plugin install context-mode@context-mode || true
+#   claude plugin install pr-review-toolkit@claude-plugins-official || true
+# else
+#   echo "WARNING: claude not found in PATH — skipping plugin installation. Run manually after setup."
+# fi
 
 # ─────────────────────────────────────────────
 # Manual setup required

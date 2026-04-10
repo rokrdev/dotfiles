@@ -18,6 +18,7 @@
 ## MCP Servers & RTK Plugins
 - **Things**: Task management (CLI tool — not MCP)
 - **GitHub**: Use `gh` CLI (requires `export GITHUB_TOKEN=<PAT>` with repo + read:org scopes)
+- **Serena**: LSP-backed code intelligence — use for symbol lookup, find references, go-to-definition; prefer over grep/ast-grep when navigating code structure
 
 ## RTK Plugins (loaded via settings.json `enabledPlugins`)
 - **context7**: Library docs — fetch current documentation for any library/framework/API

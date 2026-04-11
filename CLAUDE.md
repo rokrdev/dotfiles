@@ -57,14 +57,6 @@ stow -n fish
 
 Stow target is `$HOME` by default when running from the repo root. No `--target` flag needed.
 
-## Symlink & Restow Workflow
-
-After adding files to an existing package:
-1. Preview what will change: `stow -n -R fish` (dry run)
-2. If preview looks good: `stow -R fish` (update symlinks)
-
-Symlinks always point to source files in `~/.dotfiles/<pkg>/`. Never edit symlinked targets directly — edit the source file, then restow.
-
 ## Key Files
 
 - `fish/.config/fish/config.fish` — main fish shell config
@@ -76,36 +68,13 @@ Symlinks always point to source files in `~/.dotfiles/<pkg>/`. Never edit symlin
 - `claude/.claude/skills/` — custom Claude Code skills
 - `claude/.claude/mcp.json` — MCP server registrations
 
-## Secret Management
-
-Store API keys, tokens, and passwords in `~/.env.local` (not committed to git):
-
-```bash
-# Create ~/.env.local with your secrets
-export API_KEY='your-api-key'
-export GITHUB_TOKEN='ghp_...'
-export DATABASE_PASSWORD='...'
-```
-
-**Setup:**
-- `.gitignore` automatically excludes `.env.local` and related patterns
-- `fish/config.fish` automatically sources `~/.env.local` on shell startup
-- Use `secrets` command to manage: `secrets show`, `secrets edit`, `secrets list`
-
-**Why .env.local?**
-- Zero external dependencies (no 1Password subscription or git-crypt needed)
-- Fast shell startup (direct file sourcing)
-- Works across all tools that read environment variables
-- Easy to rotate secrets manually
-- Can migrate to git-crypt or 1Password later if sharing with a team
-
 ## Conventions
 
 - Each stow package mirrors the exact target path relative to `$HOME`. If a file lives at `~/.config/foo/bar.toml`, the package structure is `foo/.config/foo/bar.toml`.
 - Package names are lowercase and match the tool name.
 - To add a new tool: create a top-level directory with the correct mirrored path inside, then `stow <package>`.
 - Fish functions go in `fish/.config/fish/functions/` — one function per `.fish` file, filename must match the function name.
-- Keep secrets (tokens, API keys) out of the repo — use `~/.env.local` and the `secrets` command.
+- Keep secrets (tokens, API keys) out of the repo — use env vars or the OS keychain.
 
 ## What NOT To Do
 

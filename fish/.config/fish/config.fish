@@ -23,9 +23,7 @@ export FZF_DEFAULT_OPTS='--layout=default --bind=ctrl-a:select-all,ctrl-d:desele
 # setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`
 export PATH="$HOME/.docker/bin:$HOME/bin:$HOME/.bun/bin:$GOPATH/bin:$ANDROID_SDK_ROOT:/usr/local/opt/gnu-sed/libexec/gnubin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
-# Source environment files (in order of precedence)
 test -f ~/.env && not test -w ~/.env && source ~/.env
-test -f ~/.env.local && source ~/.env.local
 
 # ASDF configuration code
 if test -z $ASDF_DATA_DIR

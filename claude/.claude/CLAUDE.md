@@ -37,6 +37,37 @@
 - **cleanup-worktrees.sh** — SessionStart: removes merged worktrees automatically (runs on every session start)
 - **destructive-guard.sh** — PreToolUse(Bash): blocks DROP TABLE, rm -rf /, force-push to main, etc.
 
+## Hook Execution Order
+
+**PreToolUse** hooks fire in this sequence:
+1. **auto-mode.sh** (all tools) — validates environment mode
+2. **destructive-guard.sh** (Bash) — blocks DROP TABLE, rm -rf /, force-push main
+3. **rtk-rewrite.sh** (Bash) — rewrites commands through RTK proxy
+4. **superpowers-redirect.sh** (Write|Edit) — blocks spec/plan writes outside ~/projects/
+
+**SessionStart** hooks fire in this sequence (after orchestrator mode loads):
+1. cleanup-worktrees.sh — removes merged worktrees
+
+## Context-Mode Decision Guide
+
+**GATHER** — `ctx_batch_execute(commands, queries)`: primary entry point for research
+- 2+ commands, or any command producing >20 lines output
+- Results are auto-indexed; pass queries to search them in the same call
+
+**FOLLOW-UP** — `ctx_search(queries: [...])`: query previously indexed content
+- Use after `ctx_batch_execute` or `ctx_fetch_and_index`
+
+**PROCESSING** — `ctx_execute(language, code)` / `ctx_execute_file(path, language, code)`:
+- Sandbox execution; only stdout enters context
+- Use `ctx_execute_file` for analyzing large files without loading them into context
+
+**WEB** — `ctx_fetch_and_index(url, source)` then `ctx_search(queries)`:
+- Fetches, chunks, and indexes web pages; raw HTML never enters context
+
+**Bash** — single short commands only (<20 lines): `git add`, `ls`, `mkdir`, `rm`, `mv`
+
+**Read** — only when you plan to Edit the file afterward (Edit needs content in context)
+
 ## Active Skills
 - **main-agent-is-orchestrator**: Loaded auto at SessionStart; enforces delegation pattern
 - **capture-to-things**: Invoked explicitly when tasks/action items are identified

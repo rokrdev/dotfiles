@@ -66,6 +66,15 @@ Optional. Use for:
 Co-Authored-By: Claude Sonnet <noreply@anthropic.com>
 ```
 
+## Pre-Commit Workflow (MANDATORY)
+
+Before every `git commit`, you MUST run these two steps in order:
+
+1. **`/code-simplifier:code-simplifier`** — simplify and refine changed code
+2. **`/pr-review-toolkit:review-pr`** — run full PR review (code, errors, comments)
+
+Only commit after both pass with no critical issues. This applies to all commits, not just PRs.
+
 ## Commit Practices
 
 - **Never use `--no-verify`** unless explicitly requested by user

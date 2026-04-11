@@ -5,10 +5,3 @@ terminfo/.terminfo/78/xterm-kitty
 /.claude/
 node-compile-cache/
 karabiner/.config/karabiner/automatic_backups/
-
-# Secret management — local env files
-.env.local
-.env.*.local
-.env.production.local
-.env.development.local
-.env.test.local

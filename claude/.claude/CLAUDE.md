@@ -69,7 +69,7 @@
 **Read** — only when you plan to Edit the file afterward (Edit needs content in context)
 
 ## Active Skills
-- **janus** (agent): Loaded via `agent: janus` in settings.json; enforces orchestrator/delegation pattern
+- **yak** (agent): Loaded via `agent: yak` in settings.json; enforces orchestrator/delegation pattern
 - **capture-to-things**: Invoked explicitly when tasks/action items are identified
 - **obsidian**: Invoked when working in the Obsidian vault, or when creating/editing markdown outside a git repo — never use inside a git repo
 - **superpowers:***: Planning (writing-plans), reviews (requesting-code-review), debugging, etc.

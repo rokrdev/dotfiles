@@ -60,18 +60,9 @@
     "defaultMode": "bypassPermissions"
   },
   "model": "claude-sonnet-4-6",
-  "agent": "janus",
+  "agent": "yak",
   "hooks": {
     "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo 'Janus online'",
-            "statusMessage": "Janus online"
-          }
-        ]
-      },
       {
         "hooks": [
           {

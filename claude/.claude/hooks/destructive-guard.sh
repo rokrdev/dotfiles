@@ -27,9 +27,10 @@ if [ $? -ne 0 ] || [ -z "$cmd" ]; then
 fi
 
 # --- Obsidian delete guard ---
-# Block destructive obsidian subcommands (delete, uninstall, workspace:delete, property:remove)
+# Block destructive obsidian subcommands.
 # Scanning only the subcommand — not content — so document text can freely mention these words.
-if echo "$cmd" | grep -qE "^obsidian\s+(delete|workspace:delete|plugin:uninstall|theme:uninstall|property:remove)\b"; then
+obsidian_destructive="delete|workspace:delete|plugin:uninstall|theme:uninstall|property:remove"
+if echo "$cmd" | grep -qE "^obsidian\s+(${obsidian_destructive})\b"; then
   flag="$HOME/.claude/obsidian-delete-confirmed"
   if [ -f "$flag" ]; then
     confirmed_at=$(cat "$flag" 2>/dev/null)

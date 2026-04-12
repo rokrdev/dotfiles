@@ -1,7 +1,9 @@
 #!/bin/bash
 # PreToolUse hook: Block or confirm destructive Bash operations
 # Guards:
-# - Obsidian deletions: require explicit confirmation via timestamp flag file (30s window)
+# - Obsidian destructive subcommands (delete, workspace:delete, plugin:uninstall, theme:uninstall,
+#   property:remove): require explicit confirmation via timestamp flag file (30s window).
+#   Only the subcommand is checked — document content may freely contain these words.
 # - SQL destructive statements: DROP TABLE, TRUNCATE TABLE, DELETE FROM <table>
 # - Destructive filesystem/git ops: rm -rf /, rm -rf ~, git push --force to main/master
 
@@ -25,7 +27,9 @@ if [ $? -ne 0 ] || [ -z "$cmd" ]; then
 fi
 
 # --- Obsidian delete guard ---
-if echo "$cmd" | grep -qE "^obsidian\b" && echo "$cmd" | grep -qiE "delete|trash|remove|destroy|purge|wipe"; then
+# Block destructive obsidian subcommands (delete, uninstall, workspace:delete, property:remove)
+# Scanning only the subcommand — not content — so document text can freely mention these words.
+if echo "$cmd" | grep -qE "^obsidian\s+(delete|workspace:delete|plugin:uninstall|theme:uninstall|property:remove)\b"; then
   flag="$HOME/.claude/obsidian-delete-confirmed"
   if [ -f "$flag" ]; then
     confirmed_at=$(cat "$flag" 2>/dev/null)

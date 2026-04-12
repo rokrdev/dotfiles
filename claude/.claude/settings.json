@@ -60,7 +60,7 @@
     "defaultMode": "bypassPermissions"
   },
   "model": "claude-sonnet-4-6",
-  "agent": "yak",
+  "agent": "neo",
   "hooks": {
     "SessionStart": [
       {

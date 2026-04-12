@@ -60,14 +60,15 @@
     "defaultMode": "bypassPermissions"
   },
   "model": "claude-sonnet-4-6",
+  "agent": "janus",
   "hooks": {
     "SessionStart": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "SKILL=$(cat \"$HOME/.claude/skills/main-agent-is-orchestrator/SKILL.md\" 2>/dev/null); if [ -z \"$SKILL\" ]; then SKILL=\"WARNING: main-agent-is-orchestrator skill not found — run: cd ~/.dotfiles && stow -R claude\"; fi && printf '{\"hookSpecificOutput\": {\"hookEventName\": \"SessionStart\", \"additionalContext\": %s}}' \"$(echo \"$SKILL\" | jq -Rs .)\"",
-            "statusMessage": "Loading orchestrator mode..."
+            "command": "echo 'Janus online'",
+            "statusMessage": "Janus online"
           }
         ]
       },
@@ -159,6 +160,15 @@
           {
             "type": "command",
             "command": "bash \"$HOME/.claude/hooks/destructive-guard.sh\""
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cmd=$(jq -r '.tool_input.command' 2>/dev/null); [ -z \"$cmd\" ] && exit 0; case \"$cmd\" in git*|npm*|npx*|node*|brew*|ls*|mkdir*|mv*|cp*|stow*|which*|rtk*|jq*|uvx*|obsidian*|things*|rm*) ;; *) echo 'ORCHESTRATOR GUARD: You are about to run Bash directly. This violates the Iron Law. Dispatch a subagent instead unless this is git/mkdir/rm/mv/ls.' ;; esac"
           }
         ]
       },

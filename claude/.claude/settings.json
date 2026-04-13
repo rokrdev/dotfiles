@@ -85,7 +85,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "f=~/.claude/stop-failures.log; [ -f \"$f\" ] && tail -100 \"$f\" > \"$f.tmp\" && mv \"$f.tmp\" \"$f\" || true"
+            "command": "f=~/.claude/stop-failures.log; [ -f \"$f\" ] && tail -100 \"$f\" > \"$f.tmp\" && mv \"$f.tmp\" \"$f\" || true",
+            "statusMessage": "Rotating stop-failures log..."
           }
         ]
       },
@@ -93,7 +94,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "LOG=\"$HOME/.claude/logs/hooks.log\"; if [ -f \"$LOG\" ] && [ \"$(stat -f%z \"$LOG\" 2>/dev/null)\" -gt 1048576 ]; then mv \"$LOG\" \"$LOG.1\" && touch \"$LOG\" && echo \"[log-rotate] hooks.log rotated at $(date -u +%FT%TZ)\" >> \"$LOG\"; fi"
+            "command": "LOG=\"$HOME/.claude/logs/hooks.log\"; if [ -f \"$LOG\" ] && [ \"$(stat -f%z \"$LOG\" 2>/dev/null)\" -gt 1048576 ]; then mv \"$LOG\" \"$LOG.1\" && touch \"$LOG\" && echo \"[log-rotate] hooks.log rotated at $(date -u +%FT%TZ)\" >> \"$LOG\"; fi",
+            "statusMessage": "Rotating hooks log..."
           }
         ]
       },
@@ -107,11 +109,11 @@
         ]
       },
       {
-        "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "node /Users/bharat/.claude/plugins/cache/context-mode/context-mode/1.0.75/hooks/sessionstart.mjs"
+            "command": "node /Users/bharat/.claude/plugins/cache/context-mode/context-mode/1.0.75/hooks/sessionstart.mjs",
+            "statusMessage": "Injecting context-mode rules..."
           }
         ]
       }

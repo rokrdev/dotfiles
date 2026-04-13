@@ -39,6 +39,13 @@ if [ "$TOOL" = "Bash" ]; then
   exit 0
 fi
 
+# Check if toggle already exists — user is disabling auto-mode
+if [ -f "$TOGGLE" ]; then
+  rm "$TOGGLE"
+  log_event "DISABLED by $TOOL"
+  exit 0
+fi
+
 # Check if auto-mode is currently enabled
 if [ -f "$TOGGLE" ]; then
   # Auto mode is already enabled — grant permission
@@ -62,7 +69,9 @@ if [ -f "$PENDING" ]; then
     exit 0
   else
     # Confirmation window expired — treat as first invocation
+    log_event "confirmation window expired, resetting"
     echo "$CURRENT_TIME" > "$PENDING"
+    log_event "confirmation pending - invoke again within 30s to enable"
     echo "auto-mode.sh: pending confirmation expired. New confirmation window opened." >&2
     echo "auto-mode.sh: Please invoke again within 30 seconds to confirm auto-mode enable." >&2
     exit 0
@@ -71,6 +80,7 @@ else
   # No pending file — this is the first invocation
   CURRENT_TIME=$(date +%s)
   echo "$CURRENT_TIME" > "$PENDING"
+  log_event "confirmation pending - invoke again within 30s to enable"
   echo "auto-mode.sh: auto-mode pending confirmation — please invoke again within 30 seconds to confirm" >&2
   exit 0
 fi

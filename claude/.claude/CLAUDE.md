@@ -27,12 +27,12 @@
 ## RTK Plugins (loaded via settings.json `enabledPlugins`)
 - **context7**: Library docs — fetch current documentation for any library/framework/API
 - **context-mode**: Context protection — use `ctx_batch_execute`, `ctx_execute`, `ctx_search` to avoid flooding context window
+- **Note**: No separate `mcp.json` — all MCP integration is plugin-based via `enabledPlugins` in `settings.json`
 
 ## Maintenance Notes
 - **After `ctx upgrade`**: context-mode hook paths in `settings.json` are version-pinned by the plugin. Verify hook commands still resolve after upgrades — run `ctx doctor` if hooks stop firing.
 
 ## Active Hook Scripts
-- **orchestrator-guard.sh** — PreToolUse (Bash): enforces Iron Law — only allowlisted commands run directly; non-allowlisted commands are denied
 - **rtk-rewrite.sh** — PreToolUse (Bash): rewrites commands through RTK proxy for token savings
 - **superpowers-redirect.sh** — PreToolUse (Write|Edit): blocks spec/plan markdown writes outside ~/projects/
 - **cleanup-worktrees.sh** — SessionStart: removes merged worktrees automatically (runs on every session start)
@@ -40,11 +40,10 @@
 ## Hook Execution Order
 
 **PreToolUse** hooks fire in this sequence:
-1. **orchestrator-guard.sh** (Bash) — enforces Iron Law: only allowlisted commands run directly; non-allowlisted commands are denied
-2. **rtk-rewrite.sh** (Bash) — rewrites commands through RTK proxy for token savings
-3. **superpowers-redirect.sh** (Write|Edit) — blocks spec/plan writes outside ~/projects/
+1. **rtk-rewrite.sh** (Bash) — rewrites commands through RTK proxy for token savings
+2. **superpowers-redirect.sh** (Write|Edit) — blocks spec/plan writes outside ~/projects/
 
-**SessionStart** hooks fire in this sequence (after orchestrator mode loads):
+**SessionStart** hooks fire in this sequence:
 1. cleanup-worktrees.sh — removes merged worktrees
 
 ## Context-Mode Decision Guide
@@ -71,7 +70,7 @@
 - **neo** (agent): Loaded via `agent: neo` in settings.json; enforces orchestrator/delegation pattern
 - **capture-to-things**: Invoked explicitly when tasks/action items are identified
 - **obsidian**: Invoked when working in the Obsidian vault, or when creating/editing markdown outside a git repo — never use inside a git repo
-- **simplify**: Invoke before commits — simplify and refine changed code for quality
+- **pre-commit**: Invoke before commits — runs simplify → review → test in sequence
 
 ## Superpowers Skills (invoke via Skill tool)
 | Skill | Trigger | Purpose |

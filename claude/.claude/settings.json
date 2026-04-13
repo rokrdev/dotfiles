@@ -57,7 +57,7 @@
       "Write(**/migrations/**)",
       "Edit(**/migrations/**)"
     ],
-    "defaultMode": "bypassPermissions"
+    "defaultMode": "default"
   },
   "model": "claude-sonnet-4-6",
   "agent": "neo",
@@ -137,15 +137,6 @@
       }
     ],
     "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash $HOME/.claude/hooks/orchestrator-guard.sh"
-          }
-        ]
-      },
       {
         "matcher": "Bash",
         "hooks": [

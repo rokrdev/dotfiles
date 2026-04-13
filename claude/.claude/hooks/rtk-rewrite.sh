@@ -13,23 +13,13 @@
 #   2           Deny rule matched → pass through (Claude Code native deny handles it)
 #   3 + stdout  Ask rule matched → rewrite but let Claude Code prompt the user
 
-LOGDIR="$HOME/.claude/logs"
-LOGFILE="$LOGDIR/hooks.log"
-
-_log_warning() {
-  mkdir -p "$LOGDIR"
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [rtk-rewrite] WARNING: $1" >> "$LOGFILE"
-}
-
 if ! command -v jq &>/dev/null; then
   echo "[rtk] WARNING: jq is not installed. Hook cannot rewrite commands. Install jq: https://jqlang.github.io/jq/download/" >&2
-  _log_warning "jq not found, skipping rewrite"
   exit 0
 fi
 
 if ! command -v rtk &>/dev/null; then
   echo "[rtk] WARNING: rtk is not installed or not in PATH. Hook cannot rewrite commands. Install: https://github.com/rtk-ai/rtk#installation" >&2
-  _log_warning "rtk not found, skipping rewrite"
   exit 0
 fi
 
@@ -42,7 +32,6 @@ if [ -n "$RTK_VERSION" ]; then
   # Require >= 0.23.0
   if [ "$MAJOR" -eq 0 ] && [ "$MINOR" -lt 23 ]; then
     echo "[rtk] WARNING: rtk $RTK_VERSION is too old (need >= 0.23.0). Upgrade: cargo install rtk" >&2
-    _log_warning "rtk version $RTK_VERSION too old (need >= 0.23.0), skipping rewrite"
     exit 0
   fi
 fi
@@ -51,7 +40,6 @@ INPUT=$(cat)
 CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 
 if [ -z "$CMD" ]; then
-  _log_warning "empty command input, skipping rewrite"
   exit 0
 fi
 
@@ -67,12 +55,10 @@ case $EXIT_CODE in
     ;;
   1)
     # No RTK equivalent — pass through unchanged.
-    _log_warning "no RTK equivalent for command, skipping rewrite"
     exit 0
     ;;
   2)
     # Deny rule matched — let Claude Code's native deny rule handle it.
-    _log_warning "deny rule matched for command, deferring to native deny"
     exit 0
     ;;
   3)
@@ -80,7 +66,6 @@ case $EXIT_CODE in
     # Claude Code prompts the user for confirmation.
     ;;
   *)
-    _log_warning "unexpected rtk exit code $EXIT_CODE, skipping rewrite"
     exit 0
     ;;
 esac

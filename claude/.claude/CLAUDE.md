@@ -32,10 +32,11 @@
 - **After `ctx upgrade`**: context-mode hook paths in `settings.json` are version-pinned by the plugin. Verify hook commands still resolve after upgrades — run `ctx doctor` if hooks stop firing.
 
 ## Active Hook Scripts
-- **rtk-rewrite.sh** — PreToolUse(Bash): rewrites commands through RTK proxy for token savings
-- **superpowers-redirect.sh** — PreToolUse(Write|Edit): blocks spec/plan markdown writes outside ~/projects/
+- **auto-mode.sh** — PreToolUse (all tools): grants permission for all non-Bash tool calls when toggle is enabled; toggle: `touch ~/.claude/.auto-mode` (enable) / `rm ~/.claude/.auto-mode` (disable)
+- **rtk-rewrite.sh** — PreToolUse (Bash): rewrites commands through RTK proxy for token savings
+- **superpowers-redirect.sh** — PreToolUse (Write|Edit): blocks spec/plan markdown writes outside ~/projects/
 - **cleanup-worktrees.sh** — SessionStart: removes merged worktrees automatically (runs on every session start)
-- **destructive-guard.sh** — PreToolUse(Bash): blocks DROP TABLE, rm -rf /, force-push to main, etc.
+- **destructive-guard.sh** — PreToolUse (Bash): blocks DROP TABLE, rm -rf /, force-push to main, etc.
 
 ## Hook Execution Order
 
@@ -72,7 +73,15 @@
 - **neo** (agent): Loaded via `agent: neo` in settings.json; enforces orchestrator/delegation pattern
 - **capture-to-things**: Invoked explicitly when tasks/action items are identified
 - **obsidian**: Invoked when working in the Obsidian vault, or when creating/editing markdown outside a git repo — never use inside a git repo
-- **superpowers:***: Planning (writing-plans), reviews (requesting-code-review), debugging, etc.
+- **simplify**: Invoke before commits — simplify and refine changed code for quality
+
+## Superpowers Skills (invoke via Skill tool)
+| Skill | Trigger | Purpose |
+|-------|---------|---------|
+| `superpowers:writing-plans` | Before entering plan mode on complex tasks | Structured planning with brainstorming step |
+| `superpowers:test-driven-development` | When writing new features with tests | TDD workflow enforcement |
+| `superpowers:requesting-code-review` | After completing a logical chunk of work | Structured code review checklist |
+| `superpowers:systematic-debugging` | When debugging with unknown root cause | Step-by-step debugging protocol |
 
 ## Markdown File Creation — Hard Rule
 
@@ -94,8 +103,6 @@ Exceptions (always created in their designated locations regardless of context):
 
 ## Compaction
 After compaction, restate: file paths, test results, error messages, key decisions, and any explicit user instructions from the session — so context is not lost.
-
-@RTK.md
 
 # context-mode — MANDATORY routing rules
 
@@ -159,3 +166,5 @@ When spawning subagents (Agent/Task tool), the routing block is automatically in
 | `ctx stats` | Call the `ctx_stats` MCP tool and display the full output verbatim |
 | `ctx doctor` | Call the `ctx_doctor` MCP tool, run the returned shell command, display as checklist |
 | `ctx upgrade` | Call the `ctx_upgrade` MCP tool, run the returned shell command, display as checklist |
+
+@RTK.md

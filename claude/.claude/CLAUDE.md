@@ -32,6 +32,7 @@
 - **After `ctx upgrade`**: context-mode hook paths in `settings.json` are version-pinned by the plugin. Verify hook commands still resolve after upgrades — run `ctx doctor` if hooks stop firing.
 
 ## Active Hook Scripts
+- **orchestrator-guard.sh** — PreToolUse (Bash): enforces Iron Law — only allowlisted commands run directly; non-allowlisted commands are denied
 - **rtk-rewrite.sh** — PreToolUse (Bash): rewrites commands through RTK proxy for token savings
 - **superpowers-redirect.sh** — PreToolUse (Write|Edit): blocks spec/plan markdown writes outside ~/projects/
 - **cleanup-worktrees.sh** — SessionStart: removes merged worktrees automatically (runs on every session start)
@@ -39,8 +40,9 @@
 ## Hook Execution Order
 
 **PreToolUse** hooks fire in this sequence:
-1. **rtk-rewrite.sh** (Bash) — rewrites commands through RTK proxy
-2. **superpowers-redirect.sh** (Write|Edit) — blocks spec/plan writes outside ~/projects/
+1. **orchestrator-guard.sh** (Bash) — enforces Iron Law: only allowlisted commands run directly; non-allowlisted commands are denied
+2. **rtk-rewrite.sh** (Bash) — rewrites commands through RTK proxy for token savings
+3. **superpowers-redirect.sh** (Write|Edit) — blocks spec/plan writes outside ~/projects/
 
 **SessionStart** hooks fire in this sequence (after orchestrator mode loads):
 1. cleanup-worktrees.sh — removes merged worktrees

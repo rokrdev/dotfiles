@@ -142,7 +142,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cmd=$(jq -r '.tool_input.command' 2>/dev/null); [ -z \"$cmd\" ] && exit 0; case \"$cmd\" in git*|npm*|npx*|node*|brew*|ls*|mkdir*|mv*|cp*|stow*|which*|rtk*|jq*|uvx*|obsidian*|things*|rm*) ;; *) echo 'ORCHESTRATOR GUARD: You are about to run Bash directly. This violates the Iron Law. Dispatch a subagent instead unless this is git/mkdir/rm/mv/ls.' ;; esac"
+            "command": "bash $HOME/.claude/hooks/orchestrator-guard.sh"
           }
         ]
       },

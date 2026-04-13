@@ -12,3 +12,12 @@
 
 **SessionStart** hooks fire in this sequence:
 1. cleanup-worktrees.sh — removes merged worktrees
+
+## Maintenance
+
+- **After `ctx upgrade`**: context-mode hook paths in `settings.json` are version-pinned by the plugin. Verify hook commands still resolve after upgrades — run `ctx doctor` if hooks stop firing.
+
+## Linting
+
+- Add PostEdit hooks in **project** settings.json (eslint, ruff, ktlint, etc.)
+- Never add to global — linters vary by project

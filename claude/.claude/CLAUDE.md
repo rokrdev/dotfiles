@@ -34,3 +34,5 @@
 ## MCP Servers & RTK Plugins
 
 See `@rules/mcp-servers.md` for full server list and configuration details.
+
+See `@rules/hooks.md` for active hook scripts and maintenance notes.

@@ -39,14 +39,14 @@ Detect and run the project test suite:
 
 If tests fail → stop. Report failures. Do NOT commit.
 
-## Step 5: Confirm and commit
+## Step 5: Commit
 
 All checks passed. Report:
 - What was simplified (Step 2)
 - Reviewer verdict (Step 3)
 - Test results (Step 4)
 
-Ask the user for the commit message, then commit.
+Generate a commit message from the staged diff following conventional commits format (type(scope): description). Show the message to the user, then commit immediately — do not ask the user for the commit message.
 
 ## Error handling
 

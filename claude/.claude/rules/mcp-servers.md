@@ -2,11 +2,12 @@
 
 - **Things**: Task management (CLI tool — not MCP)
 - **GitHub**: Use `gh` CLI (requires `export GITHUB_TOKEN=<PAT>` with repo + read:org scopes)
-- **Serena**: LSP-backed code intelligence — use for symbol lookup, find references, go-to-definition; prefer over text-based code search tools when navigating code structure
-  - Always use Serena tools in coding projects instead of Read/Grep for exploration
-  - Call `check_onboarding_performed` once per new project (the check is idempotent); if not done, run `onboarding` before working
-  - Tool priority: `get_symbols_overview` → `find_symbol` → `find_referencing_symbols` → `search_for_pattern` (regex-based, for when symbol names are unknown); only use `Read` when you need to `Edit` a file
-  - For file discovery, use `find_file` instead of Bash `find`
+- **Serena**: LSP-backed code intelligence — mandatory for code navigation when onboarded
+  - Call `check_onboarding_performed` once per new project (idempotent); if not done, run `onboarding` before working
+  - **Grep is PROHIBITED for code navigation when Serena is onboarded.** Fall back to Grep only if Serena is NOT onboarded, or for non-code files (YAML, JSON, markdown, plain text).
+  - Tool priority: `get_symbols_overview` → `find_symbol` → `find_referencing_symbols` → `search_for_pattern` (regex within Serena)
+  - Use `Read` only when about to `Edit` a file immediately — never for exploration
+  - Use `find_file` instead of Bash `find` for file discovery
 
 ## RTK Plugins (loaded via settings.json `enabledPlugins`)
 

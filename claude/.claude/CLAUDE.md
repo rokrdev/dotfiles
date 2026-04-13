@@ -32,19 +32,15 @@
 - **After `ctx upgrade`**: context-mode hook paths in `settings.json` are version-pinned by the plugin. Verify hook commands still resolve after upgrades — run `ctx doctor` if hooks stop firing.
 
 ## Active Hook Scripts
-- **auto-mode.sh** — PreToolUse (all tools): grants permission for all non-Bash tool calls when toggle is enabled; toggle: `touch ~/.claude/.auto-mode` (enable) / `rm ~/.claude/.auto-mode` (disable)
 - **rtk-rewrite.sh** — PreToolUse (Bash): rewrites commands through RTK proxy for token savings
 - **superpowers-redirect.sh** — PreToolUse (Write|Edit): blocks spec/plan markdown writes outside ~/projects/
 - **cleanup-worktrees.sh** — SessionStart: removes merged worktrees automatically (runs on every session start)
-- **destructive-guard.sh** — PreToolUse (Bash): blocks DROP TABLE, rm -rf /, force-push to main, etc.
 
 ## Hook Execution Order
 
 **PreToolUse** hooks fire in this sequence:
-1. **auto-mode.sh** (all tools) — validates environment mode
-2. **destructive-guard.sh** (Bash) — blocks DROP TABLE, rm -rf /, force-push main
-3. **rtk-rewrite.sh** (Bash) — rewrites commands through RTK proxy
-4. **superpowers-redirect.sh** (Write|Edit) — blocks spec/plan writes outside ~/projects/
+1. **rtk-rewrite.sh** (Bash) — rewrites commands through RTK proxy
+2. **superpowers-redirect.sh** (Write|Edit) — blocks spec/plan writes outside ~/projects/
 
 **SessionStart** hooks fire in this sequence (after orchestrator mode loads):
 1. cleanup-worktrees.sh — removes merged worktrees

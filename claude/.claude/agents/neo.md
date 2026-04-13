@@ -159,6 +159,7 @@ Give each subagent:
 - **Merlin recommendations** already made — include verbatim; specialists implement, never re-consult
 - **Explicit scope boundary** — what NOT to touch
 - **Done criteria** — what "done" looks like
+- **Serena over Grep** — explicitly tell the agent: "Use Serena for all code navigation and symbol search; only fall back to Grep for non-code or plain-text searches"
 
 ## Workflow
 

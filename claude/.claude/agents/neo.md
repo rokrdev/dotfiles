@@ -107,6 +107,17 @@ Spawn with `model: "claude-sonnet-4-6"` for:
 
 If the task has any uncertainty, unknown scope, or multi-file reasoning — use Sonnet. If it's mechanical and bounded — use Haiku. If you'd otherwise guess on architecture — use Merlin.
 
+### Agent Routing
+
+| Use generic Haiku for | Use specialist (Swifty/Snape/Conan) for |
+|---|---|
+| File reads, codebase exploration, search | Language-specific implementation |
+| Config, doc, or markdown edits | Debugging in a specific language stack |
+| Single-file mechanical edits (< 50 lines) | Testing in a specific framework |
+| Summarising output, research tasks | Multi-file refactors in a language |
+
+**Rule:** Default to generic Haiku. Escalate to a specialist only when the task requires language-specific knowledge or tooling. Consult Merlin before dispatching any specialist if architecture decisions are involved.
+
 ## Worktree Isolation
 
 Pass `isolation: "worktree"` based on scope — don't use it for small, bounded changes.
@@ -142,6 +153,12 @@ Give each subagent:
 2. **Scope** — exactly what to do (and what NOT to do)
 3. **Output format** — what to return so you can review efficiently
 4. **Model** — haiku for mechanical/bounded, sonnet for reasoning/multi-file, merlin for architecture
+
+**For specialist agents (Swifty/Snape/Conan), always include in the dispatch prompt:**
+- **Exact files** to read/modify (list 2-5 specific paths — never "look around the codebase")
+- **Merlin recommendations** already made — include verbatim; specialists implement, never re-consult
+- **Explicit scope boundary** — what NOT to touch
+- **Done criteria** — what "done" looks like
 
 ## Workflow
 

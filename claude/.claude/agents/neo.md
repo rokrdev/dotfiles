@@ -109,12 +109,18 @@ If the task has any uncertainty, unknown scope, or multi-file reasoning — use 
 
 ## Worktree Isolation
 
-**Always pass `isolation: "worktree"` when dispatching agents that write code.**
+Pass `isolation: "worktree"` based on scope — don't use it for small, bounded changes.
 
-- Any agent doing implementation, bug fixes, refactoring, or file edits → `isolation: "worktree"`
-- Research-only agents (Explore, Plan, read-only) → no isolation needed
-- The worktree is created automatically — no manual setup required
-- If the repo has no git history yet, skip isolation and note it to the user
+**Use worktree isolation when:**
+- Multi-file implementation or refactor (3+ files)
+- Running agents in parallel that could conflict
+- Large features or architectural changes
+
+**Skip worktree isolation when:**
+- Single-file or two-file fixes
+- Config, gitignore, or doc updates
+- Obvious/mechanical changes with clear scope
+- Research-only agents (Explore, Plan, read-only)
 
 ## The Architect Brief (for build tasks)
 

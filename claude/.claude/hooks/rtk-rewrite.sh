@@ -13,19 +13,21 @@
 #   2           Deny rule matched → pass through (Claude Code native deny handles it)
 #   3 + stdout  Ask rule matched → rewrite but let Claude Code prompt the user
 
+export PATH="/opt/homebrew/bin:$PATH"
+
 if ! command -v jq &>/dev/null; then
   echo "[rtk] WARNING: jq is not installed. Hook cannot rewrite commands. Install jq: https://jqlang.github.io/jq/download/" >&2
   exit 0
 fi
 
-if ! command -v rtk &>/dev/null; then
+if ! command -v /opt/homebrew/bin/rtk &>/dev/null; then
   echo "[rtk] WARNING: rtk is not installed or not in PATH. Hook cannot rewrite commands. Install: https://github.com/rtk-ai/rtk#installation" >&2
   exit 0
 fi
 
 # Version guard: rtk rewrite was added in 0.23.0.
 # Older binaries: warn once and exit cleanly (no silent failure).
-RTK_VERSION=$(rtk --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+RTK_VERSION=$(/opt/homebrew/bin/rtk --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
 if [ -n "$RTK_VERSION" ]; then
   MAJOR=$(echo "$RTK_VERSION" | cut -d. -f1)
   MINOR=$(echo "$RTK_VERSION" | cut -d. -f2)
@@ -44,7 +46,7 @@ if [ -z "$CMD" ]; then
 fi
 
 # Delegate all rewrite + permission logic to the Rust binary.
-REWRITTEN=$(rtk rewrite "$CMD" 2>/dev/null)
+REWRITTEN=$(/opt/homebrew/bin/rtk rewrite "$CMD" 2>/dev/null)
 EXIT_CODE=$?
 
 case $EXIT_CODE in

@@ -3,6 +3,11 @@ name: pre-commit
 description: Run before committing — simplify staged code, review it, fix issues, then run tests
 ---
 
+> ⚠️ **MANUAL SKILL** — No automatic trigger. Invoke explicitly before every `git commit`:
+> - "run pre-commit"
+> - "pre-commit check"
+> - "check before committing"
+
 # Pre-Commit Quality Gate
 
 Run this before `git commit`. Catches issues before they land in history.

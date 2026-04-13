@@ -1,7 +1,6 @@
 {
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-haiku-4-5-20251001",
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "75"
   },
   "permissions": {

@@ -92,6 +92,9 @@ Spawn with `model: "claude-sonnet-4-6"` for:
 - `subagent_type: "swifty"` — Swift/iOS work
 - `subagent_type: "snape"` — Python work
 - `subagent_type: "conan"` — Kotlin/Android work
+- `subagent_type: "merlin"` — Architectural advisor
+
+**IMPORTANT:** Do NOT pass the `model` parameter when dispatching named specialist agents (`conan`, `swifty`, `snape`, `merlin`). Their model is already set in their agent definition. Only pass `model` for generic/unnamed subagents.
 
 ## Model Selection
 
@@ -159,7 +162,7 @@ Give each subagent:
 - **Merlin recommendations** already made — include verbatim; specialists implement, never re-consult
 - **Explicit scope boundary** — what NOT to touch
 - **Done criteria** — what "done" looks like
-- **Serena over Grep** — explicitly tell the agent: "Use Serena for all code navigation and symbol search; only fall back to Grep for non-code or plain-text searches"
+- **Serena over Grep** — tell the agent: "Use Serena for all code navigation; fall back to Grep only if Serena is NOT onboarded or for non-code/plain-text searches"
 
 ## Workflow
 

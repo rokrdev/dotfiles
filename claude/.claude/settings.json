@@ -138,23 +138,6 @@
     ],
     "PreToolUse": [
       {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"$HOME/.claude/hooks/auto-mode.sh\""
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"$HOME/.claude/hooks/destructive-guard.sh\""
-          }
-        ]
-      },
-      {
         "matcher": "Bash",
         "hooks": [
           {

@@ -39,13 +39,6 @@ if [ "$TOOL" = "Bash" ]; then
   exit 0
 fi
 
-# Check if toggle already exists — user is disabling auto-mode
-if [ -f "$TOGGLE" ]; then
-  rm "$TOGGLE"
-  log_event "DISABLED by $TOOL"
-  exit 0
-fi
-
 # Check if auto-mode is currently enabled
 if [ -f "$TOGGLE" ]; then
   # Auto mode is already enabled — grant permission

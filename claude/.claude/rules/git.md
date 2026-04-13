@@ -66,16 +66,6 @@ Optional. Use for:
 Co-Authored-By: Claude Sonnet <noreply@anthropic.com>
 ```
 
-## Pre-Commit Workflow (MANDATORY)
-
-Before every `git commit`, you MUST run these three steps in strict sequential order:
-
-1. **`/simplify`** — simplify and refine changed code
-2. **`/pr-review-toolkit:review-pr`** — run full PR review (code, errors, comments)
-3. **Run tests** — execute the project's test suite; only skip if there are genuinely no tests applicable to the change
-
-**Hard Rule**: Commits MUST NOT happen until all three steps pass with no critical issues. Steps cannot be skipped or reordered — sequential execution is non-negotiable. This applies to all commits, not just PRs.
-
 ## Commit Practices
 
 - **Never use `--no-verify`** unless explicitly requested by user

@@ -3,98 +3,55 @@ name: pre-commit
 description: Run before committing — simplify staged code, review it, fix issues, then run tests
 ---
 
-> ⚠️ **MANUAL SKILL** — No automatic trigger. Invoke explicitly before every `git commit`:
+> ⚠️ **MANUAL SKILL** — Invoke explicitly before every `git commit`:
 > - "run pre-commit"
 > - "pre-commit check"
 > - "check before committing"
 
-# Pre-Commit Quality Gate
+# Pre-Commit Workflow
 
-Run this before `git commit`. Catches issues before they land in history.
+When this skill is invoked, execute the following steps automatically — do not ask the user to do them manually.
 
-**Core principle:** A commit is a promise. Make sure the code keeps it.
+## Step 1: Check staged files
 
-## When to Use
+Run `git diff --cached --stat` and list what's staged. If nothing is staged, report "Nothing staged — nothing to check" and stop.
 
-Invoke manually before any `git commit`.
+## Step 2: Dispatch code-simplifier
 
-**Skip only when:**
-- Reverting a commit (revert commits are already-reviewed code)
-- Emergency hotfix with explicit user permission
+Dispatch `code-simplifier:code-simplifier` subagent on the staged files. Pass the list of staged file paths and instruct it to simplify and refine for quality.
 
-## Workflow
+After it completes, re-stage any files it modified: `git add -u`
 
-### Step 1 — Check staged changes
+## Step 3: Dispatch code reviewer
 
-```bash
-git diff --cached --stat
-```
+Dispatch `pr-review-toolkit:code-reviewer` on the staged diff (`git diff --cached`). Instruct it to check for correctness, style, and maintainability.
 
-No staged changes? Stop — nothing to commit.
+If the reviewer returns **CRITICAL** or **IMPORTANT** issues → stop. Report the issues to the user and do NOT proceed to commit. Wait for fixes.
 
-Note which files are staged for steps 2–4.
+## Step 4: Run project tests
 
-### Step 2 — Simplify
+Detect and run the project test suite:
+- JavaScript/Node.js: `npm test`
+- Python: `pytest` or `python -m unittest`
+- Kotlin/Java: `./gradlew test`
+- Swift: `swift test`
+- If no test command detected: skip this step and note it
 
-Dispatch `code-simplifier:code-simplifier` subagent, passing the full staged diff as context:
+If tests fail → stop. Report failures. Do NOT commit.
 
-```bash
-git diff --cached
-```
+## Step 5: Confirm and commit
 
-After simplifier runs: re-stage any files it modified.
+All checks passed. Report:
+- What was simplified (Step 2)
+- Reviewer verdict (Step 3)
+- Test results (Step 4)
 
-```bash
-git add <modified files>
-```
+Ask the user for the commit message, then commit.
 
-### Step 3 — Code Review
+## Error handling
 
-Dispatch `pr-review-toolkit:code-reviewer` subagent on the staged diff (re-run `git diff --cached` to get post-simplify version).
-
-**Act on findings:**
-
-| Severity | Action |
-|----------|--------|
-| CRITICAL | Fix immediately, re-stage, re-run review |
-| IMPORTANT | Fix before proceeding, re-stage |
-| MINOR | Note for later — don't block commit |
-
-After fixing: re-stage and re-run review to confirm issues are resolved.
-
-### Step 4 — Tests
-
-Check if tests apply to staged changes:
-1. Does a test suite exist? (`test/`, `src/test/`, `__tests__/`, `*.test.*`, `*_test.*`)
-2. Do staged files touch tested logic?
-3. If yes → run them
-
-**Run tests:**
-- Kotlin/Gradle: `./gradlew test`
-- Python/pytest: `pytest`
-- Node/npm: `npm test`
-
-**Results:**
-- All pass → proceed
-- Failures → fix, re-stage, re-run
-- Cannot fix → block commit and report what failed
-
-### Step 5 — Done
-
-All clear:
-```
-✅ Pre-commit checks passed. Safe to commit.
-```
-
-Unresolved issues:
-```
-❌ Pre-commit blocked: <reason>
-```
-
-## Checklist
-
-- [ ] Staged changes confirmed
-- [ ] Simplify ran — changes re-staged
-- [ ] Code review clean — no unresolved CRITICAL/IMPORTANT
-- [ ] Tests passed (if applicable)
-- [ ] Safe to commit
+Any step can fail. On failure:
+- Stop immediately
+- Report what failed and why
+- Return control to the user for fixes
+- Do NOT commit on partial success

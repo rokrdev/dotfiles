@@ -61,7 +61,7 @@
 **WEB** — `ctx_fetch_and_index(url, source)` then `ctx_search(queries)`:
 - Fetches, chunks, and indexes web pages; raw HTML never enters context
 
-**Bash** — single short commands only (<20 lines): `git add`, `ls`, `mkdir`, `rm`, `mv`
+**Bash** — single short commands only (<20 lines): `git`, `npm`, `npx`, `node`, `brew`, `ls`, `mkdir`, `mv`, `cp`, `stow`, `which`, `rtk`, `jq`, `uvx`, `obsidian`, `things`, `rm`
 
 **Read** — only when you plan to Edit the file afterward (Edit needs content in context)
 

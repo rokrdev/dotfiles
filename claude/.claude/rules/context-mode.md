@@ -23,7 +23,7 @@ Instead use:
 ## REDIRECTED tools — use sandbox equivalents
 
 ### Bash (>20 lines output)
-Bash is ONLY for: `git`, `mkdir`, `rm`, `mv`, `cd`, `ls`, `npm install`, `pip install`, and other short-output commands.
+Bash is ONLY for: `git`, `npm`, `npx`, `node`, `brew`, `ls`, `mkdir`, `mv`, `cp`, `stow`, `which`, `rtk`, `jq`, `uvx`, `obsidian`, `things`, `rm` — short-output commands only.
 For everything else, use:
 - `ctx_batch_execute(commands, queries)` — run multiple commands + search in ONE call
 - `ctx_execute(language: "shell", code: "...")` — run in sandbox, only stdout enters context

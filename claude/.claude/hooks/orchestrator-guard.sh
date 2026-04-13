@@ -5,6 +5,8 @@
 
 ALLOWED="git|npm|npx|node|brew|ls|mkdir|mv|cp|stow|which|rtk|jq|uvx|obsidian|things|rm"
 
+_log() { mkdir -p "$HOME/.claude/logs"; echo "[$(date '+%Y-%m-%d %H:%M:%S')] [$1] $2" >> "$HOME/.claude/logs/hooks.log"; }
+
 INPUT=$(cat)
 CMD=$(echo "$INPUT" | jq -r '.tool_input.command // ""' 2>/dev/null)
 
@@ -28,6 +30,7 @@ while IFS= read -r segment; do
 done < <(echo "$CMD" | tr ';|&' '\n')
 
 if [[ -n "$DENIED_CMD" ]]; then
+    _log "orchestrator-guard" "denied: $DENIED_CMD"
     jq -n \
       --arg cmd "$DENIED_CMD" \
       '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"deny",permissionDecisionReason:"Orchestrator Iron Law: \($cmd) is not in the allowlist. Dispatch a subagent instead."}}'

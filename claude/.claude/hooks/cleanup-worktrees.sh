@@ -6,6 +6,8 @@ REPO="$HOME/.dotfiles"
 LOG="$HOME/.claude/logs/hooks.log"
 mkdir -p "$HOME/.claude/logs" 2>/dev/null || true
 
+_log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] [$1] $2" >> "$LOG"; }
+
 if [ ! -d "$REPO/.git" ]; then exit 0; fi
 
 WORKTREE_BASE="$REPO/.claude/worktrees"
@@ -23,13 +25,13 @@ while IFS= read -r -d '' worktree_path; do
   if [ -z "$branch" ]; then continue; fi
 
   if git -C "$REPO" branch --merged "$TRUNK" | grep -qw "$branch"; then
-    echo "[cleanup-worktrees] $(date -u +%FT%TZ) removing merged worktree: $worktree_path (branch: $branch)" >> "$LOG"
+    _log "cleanup-worktrees" "removed worktree: $(basename "$worktree_path")"
     if ! remove_err=$(git -C "$REPO" worktree remove "$worktree_path" --force 2>&1); then
-      echo "[cleanup-worktrees] ERROR removing $worktree_path: $remove_err" >> "$LOG"
+      _log "cleanup-worktrees" "ERROR removing $worktree_path: $remove_err"
       continue
     fi
     if ! branch_err=$(git -C "$REPO" branch -d "$branch" 2>&1); then
-      echo "[cleanup-worktrees] WARNING deleting branch $branch: $branch_err" >> "$LOG"
+      _log "cleanup-worktrees" "WARNING deleting branch $branch: $branch_err"
     fi
   fi
 done < <(find "$WORKTREE_BASE" -mindepth 1 -maxdepth 1 -type d -print0 2>/dev/null)

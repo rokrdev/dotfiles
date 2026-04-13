@@ -140,6 +140,15 @@
     ],
     "PreToolUse": [
       {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/auto-mode.sh",
+            "statusMessage": "Checking auto-mode..."
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {

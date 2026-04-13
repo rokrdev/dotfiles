@@ -1,8 +1,4 @@
 #!/bin/bash
-# Logging: stderr goes to ~/.claude/logs/hooks.log
-mkdir -p "$HOME/.claude/logs" || true
-exec 2>>"$HOME/.claude/logs/hooks.log"
-
 # PreToolUse hook: Redirect .md files to appropriate storage
 # Handles both Write and Edit tool events — both pass file_path in .tool_input.file_path
 # - .md files under $HOME/projects/*: ALLOW (project context)
@@ -10,8 +6,10 @@ exec 2>>"$HOME/.claude/logs/hooks.log"
 # - All other .md: ALLOW
 # Always allows: .claude/*, CLAUDE.md, MEMORY.md
 
+_log() { mkdir -p "$HOME/.claude/logs"; echo "[$(date '+%Y-%m-%d %H:%M:%S')] [$1] $2" >> "$HOME/.claude/logs/hooks.log"; }
+
 if ! command -v jq &>/dev/null; then
-  echo "WARNING: superpowers-redirect hook dependency missing (jq not found) — redirect inactive" >&2
+  _log "superpowers-redirect" "WARNING: dependency missing (jq not found) — redirect inactive"
   echo "{}"
   exit 0
 fi
@@ -46,7 +44,7 @@ if [[ "$FILE_PATH" == *superpowers* ]] || \
    [[ "$FILE_PATH" == *-spec.md ]] || \
    [[ "$FILE_PATH" == *-review.md ]] || \
    [[ "$FILE_PATH" == *-brainstorm.md ]]; then
-  echo "[superpowers-redirect] $(date -u +%FT%TZ) denied write to: $FILE_PATH" >&2
+  _log "superpowers-redirect" "redirected write to Obsidian: $FILE_PATH"
   cat <<EOF
 {
   "hookSpecificOutput": {

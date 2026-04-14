@@ -46,7 +46,18 @@ All checks passed. Report:
 - Reviewer verdict (Step 3)
 - Test results (Step 4)
 
-Generate a commit message from the staged diff following conventional commits format (type(scope): description). Show the message to the user, then commit immediately — do not ask the user for the commit message.
+Generate a commit message from the staged diff following conventional commits format (type(scope): description). Show the message to the user, then commit immediately — do not ask the user for the commit message. On success, proceed to Step 6.
+
+## Step 6: Update memory
+
+Commit succeeded — invoke the `update-memory` skill to consolidate what was just shipped into project memory.
+
+Focus the memory update on:
+- What this commit added/changed (update `current-work.md` "Recent Work Completed")
+- Whether any architectural decision was made (update `architecture-decisions.md` if relevant)
+- Any new lessons or feedback surfaced during review (add topic file if warranted)
+
+Skip this step only if the commit was trivial (e.g. typo fix, comment update, version bump) — use judgment.
 
 ## Error handling
 

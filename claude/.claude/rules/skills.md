@@ -13,3 +13,4 @@
 | `superpowers:test-driven-development` | When writing new features with tests | TDD workflow enforcement |
 | `superpowers:requesting-code-review` | After completing a logical chunk of work | Structured code review checklist |
 | `superpowers:systematic-debugging` | When debugging with unknown root cause | Step-by-step debugging protocol |
+| `update-memory` | After completing a session or merging a PR | Memory consolidation checklist |

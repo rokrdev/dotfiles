@@ -1,4 +1,5 @@
 {
+  "autoMemoryEnabled": true,
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "75"
@@ -59,7 +60,6 @@
     "defaultMode": "bypassPermissions"
   },
   "model": "claude-sonnet-4-6",
-  "agent": "neo",
   "hooks": {
     "SessionStart": [
       {
@@ -104,15 +104,6 @@
             "type": "command",
             "command": "bash \"$HOME/.claude/hooks/cleanup-worktrees.sh\"",
             "statusMessage": "Cleaning up merged worktrees..."
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node /Users/bharat/.claude/plugins/cache/context-mode/context-mode/1.0.75/hooks/sessionstart.mjs",
-            "statusMessage": "Injecting context-mode rules..."
           }
         ]
       }
@@ -175,15 +166,6 @@
             "statusMessage": "Checking superpowers doc routing..."
           }
         ]
-      },
-      {
-        "matcher": "Bash|WebFetch|Read|Grep|Agent|Task|mcp__plugin_context-mode_context-mode__ctx_execute|mcp__plugin_context-mode_context-mode__ctx_execute_file|mcp__plugin_context-mode_context-mode__ctx_batch_execute",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node /Users/bharat/.claude/plugins/cache/context-mode/context-mode/1.0.75/hooks/pretooluse.mjs"
-          }
-        ]
       }
     ]
   },
@@ -231,5 +213,6 @@
     }
   },
   "effortLevel": "high",
+  "agent": "neo",
   "skipDangerousModePermissionPrompt": true
 }

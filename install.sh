@@ -99,13 +99,14 @@ asdf install
 # Language servers
 # ─────────────────────────────────────────────
 
-# npm: typescript-language-server, prettier
+# npm: typescript-language-server, prettier, basedpyright
 if command -v npm &>/dev/null; then
   echo "Installing npm language servers..."
   command -v typescript-language-server &>/dev/null || npm install -g typescript typescript-language-server
   command -v prettier &>/dev/null || npm install -g prettier
+  command -v basedpyright &>/dev/null || npm install -g basedpyright
 else
-  echo "WARNING: npm not found — skipping typescript-language-server and prettier. Run after asdf nodejs setup."
+  echo "WARNING: npm not found — skipping typescript-language-server, prettier, and basedpyright. Run after asdf nodejs setup."
 fi
 
 # cargo: simple-completion-language-server (scls)
@@ -118,16 +119,8 @@ else
   echo "WARNING: cargo not found — skipping simple-completion-language-server. Run after asdf rust setup."
 fi
 
-# uv: python-lsp-server with mypy and ruff plugins
-if command -v uv &>/dev/null; then
-  echo "Installing python-lsp-server..."
-  if ! uv tool list 2>/dev/null | grep -q python-lsp-server; then
-    uv tool install python-lsp-server --with python-lsp-mypy --with python-lsp-ruff || \
-      echo "WARNING: python-lsp-server install failed — check uv and network."
-  fi
-else
-  echo "WARNING: uv not found — skipping python-lsp-server."
-fi
+# Python LSP: basedpyright (npm, above) + ruff (brew, Brewfile)
+# pylsp is no longer used — replaced by basedpyright for type checking and ruff for linting/formatting.
 
 # ─────────────────────────────────────────────
 # Claude Code

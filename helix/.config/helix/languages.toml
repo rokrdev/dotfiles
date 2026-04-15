@@ -45,17 +45,17 @@ formatter = { command = "stylua", args = ["-"] }
 [language-server.lua-language-server.config.Lua]
 diagnostics = { globals = [ "vim", "hs" ] }
 
+[language-server.basedpyright]
+command = "basedpyright-langserver"
+args = ["--stdio"]
+
+[language-server.basedpyright.config.basedpyright.analysis]
+pythonPath = "/Users/bharat/.asdf/shims/python"
+
 [[language]]
 name = "python"
 auto-format = true
-language-servers = ["pylsp"]
-
-[language-server.pylsp.config.pylsp.plugins]
-pycodestyle = { enabled = false }
-mccabe = { enabled = false }
-pyflakes = { enabled = false }
-pylsp_mypy = { enabled = true }
-ruff = { enabled = true, formatEnabled = true }
+language-servers = ["basedpyright", "ruff"]
 
 [[language]]
 name = "csv"

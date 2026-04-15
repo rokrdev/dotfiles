@@ -14,6 +14,7 @@ brew "jq"
 brew "fzf"
 brew "ripgrep"
 brew "stylua"
+brew "ruff"
 brew "rtk"
 brew "asdf"
 

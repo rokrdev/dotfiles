@@ -2,13 +2,14 @@
 # SessionStart hook: remove worktrees whose branches are merged into main
 # Runs at session start to catch any worktrees missed by previous sessions.
 
-REPO="$HOME/.dotfiles"
+REPO=$(git rev-parse --show-toplevel 2>/dev/null)
+if [ -z "$REPO" ]; then
+  exit 0  # not in a git repo, nothing to do
+fi
 LOG="$HOME/.claude/logs/hooks.log"
 mkdir -p "$HOME/.claude/logs" 2>/dev/null || true
 
 _log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] [$1] $2" >> "$LOG"; }
-
-if [ ! -d "$REPO/.git" ]; then exit 0; fi
 
 WORKTREE_BASE="$REPO/.claude/worktrees"
 if [ ! -d "$WORKTREE_BASE" ]; then exit 0; fi

@@ -148,6 +148,19 @@ Pass `isolation: "worktree"` based on scope — don't use it for small, bounded 
 - Obvious/mechanical changes with clear scope
 - Research-only agents (Explore, Plan, read-only)
 
+### Worktree Mechanics
+
+- Worktrees are created at `<repo>/.claude/worktrees/<name>`, branch named `worktree-<name>`
+- Always branch from `origin/HEAD` — if `origin/HEAD` is stale, fix with `git remote set-head origin -a`
+- Gitignored files (`.env`, secrets) are **NOT** copied into the new worktree — handle via a `WorktreeCreate` hook if needed
+- Auto-cleanup: `cleanup-worktrees.sh` runs at SessionStart and removes merged worktrees
+
+### Advanced Patterns
+
+**Writer/Reviewer:** Dispatch two parallel agents on separate worktrees — one writes, one reviews with fresh context. Avoids reviewer bias toward code it just wrote.
+
+**`WorktreeCreate` hook:** When you need custom worktree behavior (copy `.env`, non-default base branch, monorepo strategies), configure a `WorktreeCreate` hook. It replaces Claude Code's default worktree creation logic entirely — receives `{name, session_id, cwd}` on stdin, must print the absolute path of the created directory to stdout.
+
 ## The Architect Brief (for build tasks)
 
 Before dispatching any coding subagent, write an ARCHITECT-BRIEF.md at the project root containing:

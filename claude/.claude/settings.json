@@ -1,5 +1,4 @@
 {
-  "autoMemoryEnabled": true,
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "75"
@@ -196,7 +195,8 @@
     "claude-md-management@claude-plugins-official": true,
     "ralph-loop@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
-    "security-guidance@claude-plugins-official": true
+    "security-guidance@claude-plugins-official": true,
+    "caveman@caveman": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -210,9 +210,16 @@
         "source": "github",
         "repo": "mksglu/context-mode"
       }
+    },
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
     }
   },
   "effortLevel": "high",
   "agent": "neo",
+  "autoMemoryEnabled": true,
   "skipDangerousModePermissionPrompt": true
 }

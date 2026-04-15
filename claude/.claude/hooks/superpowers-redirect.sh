@@ -26,13 +26,20 @@ fi
 # Allow system/config markdown files
 if [[ "$FILE_PATH" == */.claude/* ]] || \
    [[ "$FILE_PATH" == */CLAUDE.md ]] || \
-   [[ "$FILE_PATH" == */MEMORY.md ]]; then
+   [[ "$FILE_PATH" == */MEMORY.md ]] || \
+   [[ "$FILE_PATH" == "$HOME/.dotfiles/"* ]]; then
   echo "{}"
   exit 0
 fi
 
 # Allow all .md writes within any project under $HOME/projects/
 if [[ "$FILE_PATH" == "$HOME/projects/"* ]]; then
+  echo "{}"
+  exit 0
+fi
+
+# Allow all .md writes within the Obsidian vault (already routed correctly)
+if [[ "$FILE_PATH" == "$HOME/Library/Mobile Documents/iCloud~md~obsidian/"* ]]; then
   echo "{}"
   exit 0
 fi

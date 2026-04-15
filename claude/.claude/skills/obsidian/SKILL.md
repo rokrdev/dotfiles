@@ -12,6 +12,21 @@ The Obsidian vault lives at `~/Library/Mobile Documents/iCloud~md~obsidian/Docum
 **Always use the Obsidian CLI (`obsidian` at `/usr/local/bin/obsidian`) — never write directly to the vault path.** The CLI auto-detects the vault, uses vault-relative paths, and keeps backlinks and vault metadata consistent. Direct file writes bypass vault indexing and risk writing to the wrong path.
 Verify it's available with `which obsidian` before use; it was installed at `/usr/local/bin/obsidian`.
 
+## Workflow Rules
+
+| Operation | Tool |
+|---|---|
+| Create new vault note | Obsidian CLI + apply Note.md template |
+| Edit existing vault note | `Read` (get content) → `Edit` → Obsidian CLI if rename/move needed |
+| Analyse/review vault note | `ctx_execute_file` — keeps raw content out of context window |
+| Superpowers doc outside git repo | Hook redirects → use obsidian skill to route correctly |
+| Claude system files (`~/.dotfiles/`, `~/.claude/`) | Direct Edit, bypass hook |
+
+**Key rules:**
+- **All vault writes** go through the Obsidian CLI — never write directly with the Write/Edit tool alone
+- **Analysis reads** use `ctx_execute_file`, NOT `Read` — vault files are large and flood context
+- **Edit reads** use `Read` tool — content must be in context to make the edit
+
 ## Vault Structure (PARA)
 
 | Folder | Use for |
@@ -53,6 +68,26 @@ Is this date-based (daily note, meeting note, reflection)?
 Not sure?
   → Inbox/<filename>.md
 ```
+
+## Note Template
+
+Every new note created in the vault MUST start with this frontmatter:
+
+```yaml
+---
+date: "[[YYYY-MM-DD]]"
+time: HH:mm
+tags: []
+---
+```
+
+Rules:
+- `date` must use wiki-link format: `"[[2026-04-15]]"` — NOT plain `2026-04-15`
+- `time` is 24-hour format: `15:03`
+- `tags` are plain strings — NO `#` prefix. Obsidian adds `#` automatically.
+  - ✓ `- ai-engineering`
+  - ✗ `- "#ai-engineering"`
+- When updating an existing note missing correct frontmatter, fix it to match this template.
 
 ## Rules
 

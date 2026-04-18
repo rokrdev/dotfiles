@@ -20,3 +20,5 @@ See `@rules/hooks.md` for active hook scripts and maintenance notes.
 See `@rules/context-mode.md` for context-mode routing rules and tool selection hierarchy.
 
 See `@RTK.md` for RTK CLI usage and hook-based command rewriting.
+
+See `@rules/coding.md` for coding behavior principles.

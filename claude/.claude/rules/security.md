@@ -1,6 +1,5 @@
 ---
 description: Security rules
-globs: ["**/auth/**", "**/api/**", "**/routes/**", "**/*.env*", "**/config/**"]
 ---
 # Security Rules
 - Never commit secrets, tokens, or credentials

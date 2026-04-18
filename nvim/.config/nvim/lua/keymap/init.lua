@@ -123,8 +123,6 @@ wk.add({
   { "<leader>o", group = "others" },
   { "<leader>on", "<cmd>lua require('keymap.utils').toggleNumbers()<CR>", desc = "Cycle number" },
   { "<leader>s", group = "session" },
-  { "<leader>sd", ":SD ~/.vim/sessions/_Users_bharat_.dotfiles-", desc = "Delete session" },
-  { "<leader>sr", ":SR ~/.vim/sessions/_Users_bharat_.dotfiles-", desc = "Reload session" },
   { "<leader>ss", ":SS<Space>", desc = "Save session" },
   { "<leader>z", group = "lazy" },
   { "<leader>zc", "<cmd>lua require('lazy').health()<CR>", desc = "Check health" },

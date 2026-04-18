@@ -23,7 +23,7 @@ export FZF_DEFAULT_OPTS='--layout=default --bind=ctrl-a:select-all,ctrl-d:desele
 # setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`
 export PATH="$HOME/.docker/bin:$HOME/bin:$HOME/.bun/bin:$GOPATH/bin:$ANDROID_SDK_ROOT:/usr/local/opt/gnu-sed/libexec/gnubin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
-test -f ~/.env && not test -w ~/.env && source ~/.env
+test -f ~/.env && source ~/.env
 
 # ASDF configuration code
 if test -z $ASDF_DATA_DIR
@@ -140,6 +140,6 @@ fzf --fish | source
 
 export CARGO_TARGET_DIR=~/.cargo-target
 
-alias clq="claude --model claude-haiku-4-5-20251001 --effort low"
-alias clb="claude --model claude-sonnet-4-6 --effort high"
-alias cld="claude --model claude-opus-4-6 --effort high"
+alias clq="claude --model $CLAUDE_MODEL_HAIKU --effort low"
+alias clb="claude --model $CLAUDE_MODEL_SONNET --effort high"
+alias cld="claude --model $CLAUDE_MODEL_OPUS --effort high"

@@ -1,23 +1,29 @@
 # Active Hook Scripts
 
-- **rtk-rewrite.sh** — PreToolUse (Bash): rewrites commands through RTK proxy for token savings
-- **superpowers-redirect.sh** — PreToolUse (Write|Edit): blocks spec/plan markdown writes outside ~/projects/
-- **cleanup-worktrees.sh** — SessionStart: removes merged worktrees automatically (runs on every session start)
+Hook scripts live in `~/.claude/hooks/` and are registered in `settings.json`.
 
-## Hook Execution Order
+## PreToolUse
 
-**PreToolUse** hooks fire in this sequence:
-1. **rtk-rewrite.sh** (Bash) — rewrites commands through RTK proxy for token savings
-2. **superpowers-redirect.sh** (Write|Edit) — blocks spec/plan writes outside ~/projects/
+Fire in this order:
 
-**SessionStart** hooks fire in this sequence:
-1. cleanup-worktrees.sh — removes merged worktrees
+1. **rtk-rewrite.sh** (Bash) — rewrites commands through the RTK proxy for token savings
+2. **superpowers-redirect.sh** (Write, Edit) — blocks spec/plan markdown writes outside `~/projects/`
+3. **pre-commit-reminder.sh** (Bash `git commit:*`) — reminds the user to invoke the `pre-commit` skill before committing
+
+## SessionStart
+
+1. **cleanup-worktrees.sh** — removes merged worktrees
+
+## WorktreeCreate
+
+1. **worktree-create.sh** — creates a worktree at `<repo-root>/.claude/worktrees/<name>` branching from `origin/HEAD`, copies `.env*` files from the main worktree, and prints the absolute worktree path to stdout
 
 ## Maintenance
 
-- **After `ctx upgrade`**: context-mode hook paths in `settings.json` are version-pinned by the plugin. Verify hook commands still resolve after upgrades — run `ctx doctor` if hooks stop firing.
+- Plugin-provided hooks (e.g. context-mode) are version-pinned in `settings.json` and may change on plugin update. Run `ctx doctor` if a plugin hook stops firing.
+- The three plugins (context-mode, caveman, thedotmack) are configured with `autoUpdate: false` in `settings.json`, so their hook paths are stable — manual updates required via `ctx upgrade` or equivalent.
+- Local hooks under `~/.claude/hooks/` are stable — edit the source in `~/.dotfiles/claude/.claude/hooks/` and re-stow.
 
 ## Linting
 
-- Add PostEdit hooks in **project** settings.json (eslint, ruff, ktlint, etc.)
-- Never add to global — linters vary by project
+Add PostEdit hooks (eslint, ruff, ktlint, etc.) in **project** `settings.json`, never in global — linters vary by project.

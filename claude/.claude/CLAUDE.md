@@ -22,3 +22,13 @@ See `@rules/context-mode.md` for context-mode routing rules and tool selection h
 See `@RTK.md` for RTK CLI usage and hook-based command rewriting.
 
 See `@rules/coding.md` for coding behavior principles.
+
+See `@rules/testing.md` for TDD workflow and test location rules.
+
+See `@rules/git.md` for commit format and PR standards.
+
+See `@rules/security.md` for security rules (no secrets, parameterized queries, etc.).
+
+See `@rules/skills.md` for active skills reference.
+
+See `@rules/file-creation.md` for markdown file routing rules.

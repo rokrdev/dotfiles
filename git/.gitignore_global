@@ -4,3 +4,4 @@ __backup__*
 .rgignore
 .git
 kls_database.db
+.serena/

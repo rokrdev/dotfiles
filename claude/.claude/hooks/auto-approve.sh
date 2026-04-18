@@ -33,9 +33,9 @@ if [[ -z "$CWD" ]]; then
   exit 0
 fi
 
-# Working-dir allowlist: only /Users/bharat/projects or /Users/bharat/.dotfiles
+# Working-dir allowlist: only $HOME/projects or $HOME/.dotfiles
 case "$CWD" in
-  /Users/bharat/projects*|/Users/bharat/.dotfiles*)
+  $HOME/projects*|$HOME/.dotfiles*)
     ;;
   *)
     exit 0

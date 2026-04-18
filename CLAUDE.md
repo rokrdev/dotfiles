@@ -40,7 +40,7 @@ Non-package items at root: `install/`, `CLAUDE.md`, `webp_convertor.sh`, `xterm-
 ## How to Apply Configs
 
 ```bash
-# From /Users/bharat/.dotfiles — stow a single package
+# From $HOME/.dotfiles — stow a single package
 stow fish
 stow helix
 stow claude

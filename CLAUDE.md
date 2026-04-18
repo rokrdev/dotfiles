@@ -66,7 +66,6 @@ Stow target is `$HOME` by default when running from the repo root. No `--target`
 - `claude/.claude/settings.json` — Claude Code settings (hooks, permissions)
 - `claude/.claude/hooks/` — Claude Code hook scripts
 - `claude/.claude/skills/` — custom Claude Code skills
-- `claude/.claude/mcp.json` — MCP server registrations
 
 ## Conventions
 

@@ -12,6 +12,7 @@ rainbow-brackets = true
 # rulers = [120]
 # Minimum severity to show a diagnostic after the end of a line:
 end-of-line-diagnostics = "hint"
+auto-format = true
 
 [editor.cursor-shape]
 insert = "bar"

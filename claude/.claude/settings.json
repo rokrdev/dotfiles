@@ -1,8 +1,7 @@
 {
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "75",
-    "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1"
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "75"
   },
   "permissions": {
     "allow": [
@@ -43,8 +42,7 @@
       "mcp__plugin_context-mode_context-mode__ctx_index",
       "mcp__plugin_context-mode_context-mode__ctx_stats",
       "mcp__plugin_context7_context7__resolve-library-id",
-      "mcp__plugin_context7_context7__query-docs",
-      "mcp__sequential-thinking__sequentialthinking"
+      "mcp__plugin_context7_context7__query-docs"
     ],
     "deny": [
       "Read(**/.env*)",
@@ -57,9 +55,8 @@
       "Write(**/migrations/**)",
       "Edit(**/migrations/**)"
     ],
-    "defaultMode": "bypassPermissions"
+    "defaultMode": "auto"
   },
-  "model": "claude-sonnet-4-6",
   "hooks": {
     "SessionStart": [
       {
@@ -84,15 +81,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "f=~/.claude/stop-failures.log; [ -f \"$f\" ] && tail -100 \"$f\" > \"$f.tmp\" && mv \"$f.tmp\" \"$f\" || true",
-            "statusMessage": "Rotating stop-failures log..."
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
             "command": "LOG=\"$HOME/.claude/logs/hooks.log\"; if [ -f \"$LOG\" ] && [ \"$(stat -f%z \"$LOG\" 2>/dev/null)\" -gt 1048576 ]; then mv \"$LOG\" \"$LOG.1\" && touch \"$LOG\" && echo \"[log-rotate] hooks.log rotated at $(date -u +%FT%TZ)\" >> \"$LOG\"; fi || true",
             "statusMessage": "Rotating hooks log..."
           }
@@ -102,42 +90,24 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$HOME/.claude/hooks/cleanup-worktrees.sh\"",
+            "command": "$HOME/.claude/hooks/cleanup-worktrees.sh",
             "statusMessage": "Cleaning up merged worktrees..."
           }
         ]
       }
     ],
-    "Stop": [
+    "WorktreeCreate": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "mkdir -p ~/.claude/logs && echo \"$(date '+%Y-%m-%d %H:%M'): Session ended\" >> ~/.claude/logs/sessions.log"
-          }
-        ]
-      },
-      {
-        "matcher": "rate_limit_error|server_error|overloaded_error",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "mkdir -p ~/.claude && echo \"$(date): StopFailure - $CLAUDE_STOP_REASON\" >> ~/.claude/stop-failures.log",
-            "statusMessage": "Handling stop failure..."
+            "command": "$HOME/.claude/hooks/worktree-create.sh",
+            "statusMessage": "Creating worktree and copying .env files..."
           }
         ]
       }
     ],
     "PreToolUse": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/auto-mode.sh",
-            "statusMessage": "Checking auto-mode..."
-          }
-        ]
-      },
       {
         "matcher": "Bash",
         "hooks": [
@@ -162,8 +132,18 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$HOME/.claude/hooks/superpowers-redirect.sh\"",
+            "command": "$HOME/.claude/hooks/superpowers-redirect.sh",
             "statusMessage": "Checking superpowers doc routing..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(git commit:*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/pre-commit-reminder.sh",
+            "statusMessage": "Checking pre-commit reminder..."
           }
         ]
       }
@@ -197,30 +177,41 @@
     "ralph-loop@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
     "security-guidance@claude-plugins-official": true,
-    "caveman@caveman": true
+    "caveman@caveman": true,
+    "claude-mem@thedotmack": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
       "source": {
         "source": "github",
         "repo": "anthropics/claude-plugins-official"
-      }
+      },
+      "autoUpdate": false
     },
     "context-mode": {
       "source": {
         "source": "github",
         "repo": "mksglu/context-mode"
-      }
+      },
+      "autoUpdate": false
     },
     "caveman": {
       "source": {
         "source": "github",
         "repo": "JuliusBrussee/caveman"
-      }
+      },
+      "autoUpdate": false
+    },
+    "thedotmack": {
+      "source": {
+        "source": "github",
+        "repo": "thedotmack/claude-mem"
+      },
+      "autoUpdate": false
     }
   },
   "effortLevel": "high",
   "agent": "neo",
   "autoMemoryEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+  "skipAutoPermissionPrompt": true
 }

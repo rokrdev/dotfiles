@@ -13,11 +13,11 @@
 ## Task 1: Register orchestrator-guard.sh in settings.json + Update Hook Order Docs
 
 ### Files to Modify
-- `/Users/bharat/.dotfiles/claude/.claude/settings.json` (Create/Modify)
-- `/Users/bharat/.dotfiles/claude/.claude/CLAUDE.md` (Modify Hook Execution Order section)
+- `$HOME/.dotfiles/claude/.claude/settings.json` (Create/Modify)
+- `$HOME/.dotfiles/claude/.claude/CLAUDE.md` (Modify Hook Execution Order section)
 
 ### Current State
-- `orchestrator-guard.sh` exists at `/Users/bharat/.dotfiles/claude/.claude/hooks/orchestrator-guard.sh` but is **NOT registered** in settings.json
+- `orchestrator-guard.sh` exists at `$HOME/.dotfiles/claude/.claude/hooks/orchestrator-guard.sh` but is **NOT registered** in settings.json
 - Hook Execution Order section in CLAUDE.md lists only `rtk-rewrite.sh` and `superpowers-redirect.sh` — missing orchestrator-guard.sh
 
 ### Steps
@@ -47,11 +47,11 @@ Replace with:
 
 **1.2: Validate JSON**
 ```bash
-jq empty /Users/bharat/.dotfiles/claude/.claude/settings.json
+jq empty $HOME/.dotfiles/claude/.claude/settings.json
 ```
 Expected: No output (valid JSON).
 
-**1.3: Update Hook Execution Order section in `/Users/bharat/.dotfiles/claude/.claude/CLAUDE.md`**
+**1.3: Update Hook Execution Order section in `$HOME/.dotfiles/claude/.claude/CLAUDE.md`**
 
 Current section:
 ```markdown
@@ -101,8 +101,8 @@ Closes #[issue-number-if-any]
 ## Task 2: Fix RTK Documentation Claim
 
 ### Files to Modify
-- `/Users/bharat/.dotfiles/claude/.claude/CLAUDE.md` (Modify RTK mention)
-- `/Users/bharat/.claude/CLAUDE.md` (Modify RTK mention — global, NOT stow-managed)
+- `$HOME/.dotfiles/claude/.claude/CLAUDE.md` (Modify RTK mention)
+- `$HOME/.claude/CLAUDE.md` (Modify RTK mention — global, NOT stow-managed)
 
 ### Current State
 - Both CLAUDE.md files claim RTK version is "confirmed in SessionStart hook" — **FALSE**
@@ -111,7 +111,7 @@ Closes #[issue-number-if-any]
 
 ### Steps
 
-**2.1: Fix `/Users/bharat/.dotfiles/claude/.claude/CLAUDE.md`**
+**2.1: Fix `$HOME/.dotfiles/claude/.claude/CLAUDE.md`**
 
 Find section mentioning RTK (under "Maintenance Notes" or "MCP Servers & RTK Plugins"):
 
@@ -125,7 +125,7 @@ Replace with:
 RTK (Rust Token Killer) — guaranteed by system bootstrap; always installed; never flag as missing
 ```
 
-**2.2: Fix `/Users/bharat/.claude/CLAUDE.md` (global, NOT stow-managed)**
+**2.2: Fix `$HOME/.claude/CLAUDE.md` (global, NOT stow-managed)**
 
 Find section: "Maintenance Notes" or "MCP Servers & RTK Plugins"
 
@@ -164,16 +164,16 @@ Global ~/.claude/CLAUDE.md updated directly (not stow-managed).
 ## Task 3: Remove context-mode Duplication from Global CLAUDE.md
 
 ### Files to Modify
-- `/Users/bharat/.claude/CLAUDE.md` (global, NOT stow-managed — edit directly)
+- `$HOME/.claude/CLAUDE.md` (global, NOT stow-managed — edit directly)
 
 ### Current State
-- Full context-mode routing rules section exists in `/Users/bharat/.claude/CLAUDE.md`
-- Canonical version lives in `/Users/bharat/.dotfiles/claude/.claude/rules/context-mode.md`
+- Full context-mode routing rules section exists in `$HOME/.claude/CLAUDE.md`
+- Canonical version lives in `$HOME/.dotfiles/claude/.claude/rules/context-mode.md`
 - Duplication creates maintenance risk: changes to canonical are not synced to global
 
 ### Steps
 
-**3.1: Locate section in `/Users/bharat/.claude/CLAUDE.md`**
+**3.1: Locate section in `$HOME/.claude/CLAUDE.md`**
 
 Find:
 ```markdown
@@ -210,16 +210,16 @@ For exact tool signatures and comprehensive routing rules, see the canonical rul
 - [ ] Global CLAUDE.md is shorter, single source of truth clarified
 
 ### Commit
-**No git commit** — `/Users/bharat/.claude/CLAUDE.md` is NOT stow-managed and not tracked. Edit directly and leave.
+**No git commit** — `$HOME/.claude/CLAUDE.md` is NOT stow-managed and not tracked. Edit directly and leave.
 
 ---
 
 ## Task 4: Add Scope Constraints to Specialist Agents
 
 ### Files to Modify
-- `/Users/bharat/.dotfiles/claude/.claude/agents/conan.md` (Modify)
-- `/Users/bharat/.dotfiles/claude/.claude/agents/snape.md` (Modify)
-- `/Users/bharat/.dotfiles/claude/.claude/agents/swifty.md` (Modify)
+- `$HOME/.dotfiles/claude/.claude/agents/conan.md` (Modify)
+- `$HOME/.dotfiles/claude/.claude/agents/snape.md` (Modify)
+- `$HOME/.dotfiles/claude/.claude/agents/swifty.md` (Modify)
 
 ### Current State
 - Specialist agents have full tool access and no explicit scope constraints
@@ -332,8 +332,8 @@ Closes #[issue-number-if-any]
 ## Task 5: Add Neo Dispatch Brief Reminder + Merlin Decision Matrix
 
 ### Files to Modify
-- `/Users/bharat/.dotfiles/claude/.claude/agents/neo.md` (Modify)
-- `/Users/bharat/.dotfiles/claude/.claude/agents/merlin.md` (Modify)
+- `$HOME/.dotfiles/claude/.claude/agents/neo.md` (Modify)
+- `$HOME/.dotfiles/claude/.claude/agents/merlin.md` (Modify)
 
 ### Current State
 - neo.md has "Crafting Good Subagent Prompts" section but no explicit reminder about dispatch brief content
@@ -441,9 +441,9 @@ Closes #[issue-number-if-any]
 ## Task 6: Add Cross-Language Handoff Pattern to Specialist Agents
 
 ### Files to Modify
-- `/Users/bharat/.dotfiles/claude/.claude/agents/conan.md` (Modify)
-- `/Users/bharat/.dotfiles/claude/.claude/agents/snape.md` (Modify)
-- `/Users/bharat/.dotfiles/claude/.claude/agents/swifty.md` (Modify)
+- `$HOME/.dotfiles/claude/.claude/agents/conan.md` (Modify)
+- `$HOME/.dotfiles/claude/.claude/agents/snape.md` (Modify)
+- `$HOME/.dotfiles/claude/.claude/agents/swifty.md` (Modify)
 
 ### Current State
 - Specialist agents have no guidance for when they encounter work outside their language domain
@@ -495,8 +495,8 @@ If the task requires work outside your language domain (Python, Kotlin, JavaScri
 - [ ] **Step 1:** Add cross-language handoff clause to conan.md Scope Constraints section
 - [ ] **Step 2:** Add cross-language handoff clause to snape.md Scope Constraints section
 - [ ] **Step 3:** Add cross-language handoff clause to swifty.md Scope Constraints section
-- [ ] **Step 4:** Verify: `grep -l "Cross-language handoff" /Users/bharat/.dotfiles/claude/.claude/agents/*.md` returns all three files
-- [ ] **Step 5:** Commit: `git -C /Users/bharat/.dotfiles add claude/.claude/agents/ && git -C /Users/bharat/.dotfiles commit -m "docs(agents): add cross-language handoff pattern to specialists"`
+- [ ] **Step 4:** Verify: `grep -l "Cross-language handoff" $HOME/.dotfiles/claude/.claude/agents/*.md` returns all three files
+- [ ] **Step 5:** Commit: `git -C $HOME/.dotfiles add claude/.claude/agents/ && git -C $HOME/.dotfiles commit -m "docs(agents): add cross-language handoff pattern to specialists"`
 
 ### Commit
 ```
@@ -515,7 +515,7 @@ Closes #[issue-number-if-any]
 ## Task 7: Automate Pre-Commit Skill Execution
 
 ### Files to Modify
-- `/Users/bharat/.dotfiles/claude/.claude/skills/pre-commit/SKILL.md` (Modify)
+- `$HOME/.dotfiles/claude/.claude/skills/pre-commit/SKILL.md` (Modify)
 
 ### Current State
 - Pre-commit skill is a manual checklist the user fills out
@@ -572,7 +572,7 @@ Commits only proceed when:
 **7.3: Verify the changes**
 
 Confirm that:
-- `grep -c "Dispatch" /Users/bharat/.dotfiles/claude/.claude/skills/pre-commit/SKILL.md` returns > 0
+- `grep -c "Dispatch" $HOME/.dotfiles/claude/.claude/skills/pre-commit/SKILL.md` returns > 0
 - The file has been edited (not created)
 - Frontmatter is intact
 - No manual checklist remains
@@ -580,14 +580,14 @@ Confirm that:
 **7.4: Commit**
 
 ```bash
-git -C /Users/bharat/.dotfiles add claude/.claude/skills/pre-commit/SKILL.md && git -C /Users/bharat/.dotfiles commit -m "refactor(pre-commit): automate dispatch workflow, remove manual checklist"
+git -C $HOME/.dotfiles add claude/.claude/skills/pre-commit/SKILL.md && git -C $HOME/.dotfiles commit -m "refactor(pre-commit): automate dispatch workflow, remove manual checklist"
 ```
 
 ### Verification
 - [ ] **Step 1:** Read current SKILL.md to understand existing structure
 - [ ] **Step 2:** Rewrite body to dispatch-based workflow (keep frontmatter and manual callout)
 - [ ] **Step 3:** Verify dispatch workflow with automated steps (1-7 as listed above)
-- [ ] **Step 4:** Commit: `git -C /Users/bharat/.dotfiles add claude/.claude/skills/pre-commit/SKILL.md && git -C /Users/bharat/.dotfiles commit -m "refactor(pre-commit): automate dispatch workflow, remove manual checklist"`
+- [ ] **Step 4:** Commit: `git -C $HOME/.dotfiles add claude/.claude/skills/pre-commit/SKILL.md && git -C $HOME/.dotfiles commit -m "refactor(pre-commit): automate dispatch workflow, remove manual checklist"`
 
 ### Commit
 ```
@@ -604,7 +604,7 @@ refactor(pre-commit): automate dispatch workflow, remove manual checklist
 ## Task 8: Define Generic Haiku Subagent Routing in neo.md
 
 ### Files to Modify
-- `/Users/bharat/.dotfiles/claude/.claude/agents/neo.md` (Modify)
+- `$HOME/.dotfiles/claude/.claude/agents/neo.md` (Modify)
 
 ### Current State
 - neo.md dispatches "Haiku subagents" for generic work but has no clear definition
@@ -643,7 +643,7 @@ Add:
 
 Run:
 ```bash
-grep -A 10 "Agent Routing" /Users/bharat/.dotfiles/claude/.claude/agents/neo.md
+grep -A 10 "Agent Routing" $HOME/.dotfiles/claude/.claude/agents/neo.md
 ```
 
 Expected: Table visible with "Use generic Haiku for" and "Use specialist" columns.
@@ -651,15 +651,15 @@ Expected: Table visible with "Use generic Haiku for" and "Use specialist" column
 **8.4: Commit**
 
 ```bash
-git -C /Users/bharat/.dotfiles add claude/.claude/agents/neo.md && git -C /Users/bharat/.dotfiles commit -m "docs(neo): add agent routing table — Haiku vs specialist decision rules"
+git -C $HOME/.dotfiles add claude/.claude/agents/neo.md && git -C $HOME/.dotfiles commit -m "docs(neo): add agent routing table — Haiku vs specialist decision rules"
 ```
 
 ### Verification
 - [ ] **Step 1:** Read neo.md to find agent routing section
 - [ ] **Step 2:** Add or integrate Agent Routing decision table
 - [ ] **Step 3:** Table shows clear criteria: generic Haiku for exploration, specialists for language work
-- [ ] **Step 4:** Verify table is present with: `grep -A 10 "Agent Routing" /Users/bharat/.dotfiles/claude/.claude/agents/neo.md`
-- [ ] **Step 5:** Commit: `git -C /Users/bharat/.dotfiles add claude/.claude/agents/neo.md && git -C /Users/bharat/.dotfiles commit -m "docs(neo): add agent routing table — Haiku vs specialist decision rules"`
+- [ ] **Step 4:** Verify table is present with: `grep -A 10 "Agent Routing" $HOME/.dotfiles/claude/.claude/agents/neo.md`
+- [ ] **Step 5:** Commit: `git -C $HOME/.dotfiles add claude/.claude/agents/neo.md && git -C $HOME/.dotfiles commit -m "docs(neo): add agent routing table — Haiku vs specialist decision rules"`
 
 ### Commit
 ```

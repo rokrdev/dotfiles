@@ -55,7 +55,7 @@
       "Write(**/migrations/**)",
       "Edit(**/migrations/**)"
     ],
-    "defaultMode": "auto"
+    "defaultMode": "acceptEdits"
   },
   "hooks": {
     "SessionStart": [
@@ -114,6 +114,15 @@
           {
             "type": "command",
             "command": "$HOME/.claude/hooks/rtk-rewrite.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/auto-approve.sh"
           }
         ]
       },

@@ -35,7 +35,7 @@ Remote: `git@github.com:sacredyak/dotfiles.git`
 | `terminfo` | Terminal info entries |
 | `snippets` | Code/text snippets |
 
-Non-package items at root: `install/`, `CLAUDE.md`, `webp_convertor.sh`, `xterm-24bit.terminfo`, `clear-all`
+Non-package items at root: `CLAUDE.md`, `webp_convertor.sh`, `xterm-24bit.terminfo`, `clear-all`
 
 ## How to Apply Configs
 

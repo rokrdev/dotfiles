@@ -4,9 +4,10 @@ macOS dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
 ## Prerequisites
 
+- macOS
 - [Homebrew](https://brew.sh/)
 - [GNU Stow](https://formulae.brew.sh/formula/stow) — `brew install stow`
-- [fish shell](https://fishshell.com/) — `brew install fish`
+- git
 
 ## Quick Install
 
@@ -61,6 +62,10 @@ Each package mirrors the exact target path relative to `$HOME`. For example, a f
 To add a new tool: create a top-level directory with the correct mirrored path, then `stow <package>`.
 
 **Never edit files under `~/.config/` or `~/.hammerspoon/` directly** — those are symlinks. Always edit source files in `~/.dotfiles/<package>/`.
+
+## Utilities
+
+- **`clear-all`** — zsh script at repo root that unstows all packages at once (`stow -D` on each). Useful for a clean removal of all symlinks.
 
 ## Docs
 

@@ -186,8 +186,7 @@
     "ralph-loop@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
     "security-guidance@claude-plugins-official": true,
-    "caveman@caveman": true,
-    "claude-mem@thedotmack": true
+    "caveman@caveman": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {

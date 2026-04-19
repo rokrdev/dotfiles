@@ -60,6 +60,8 @@ Generate a commit message from the staged diff using conventional commits format
 - **edit** → accept the user's revised message and commit.
 - **cancel** → stop without committing.
 
+After your PR is reviewed and merged, use the `compound` skill to capture pattern-level learnings as permanent rules in the project CLAUDE.md.
+
 ## Error handling
 
 Any step may fail. On failure:

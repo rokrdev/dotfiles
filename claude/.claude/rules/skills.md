@@ -52,17 +52,6 @@ Custom skills live in `~/.dotfiles/claude/.claude/skills/` and are stowed to `~/
 | `caveman:caveman-commit` | Commit message generation | Ultra-compressed conventional commit messages |
 | `caveman:caveman-help` | `/caveman-help` or "what caveman commands" | Quick-reference card for all caveman modes |
 
-### claude-mem (`claude-mem@thedotmack`)
-| Skill | Trigger | Purpose |
-|-------|---------|---------|
-| `claude-mem:mem-search` | "do you remember", cross-session memory queries | Search persistent cross-session memory database |
-| `claude-mem:make-plan` | Creating a phased implementation plan | Structured plan with documentation discovery |
-| `claude-mem:do` | Executing a phased plan | Subagent-driven plan execution |
-| `claude-mem:smart-explore` | Token-optimized code navigation | AST-based structural code search (replaces Read+Grep) |
-| `claude-mem:knowledge-agent` | Building/querying AI knowledge bases | Build and query knowledge bases from observations |
-| `claude-mem:timeline-report` | Analyzing project history | Narrative report of project's entire development history |
-| `claude-mem:version-bump` | Releasing a Claude Code plugin | Semantic versioning and release workflow |
-
 ### pr-review-toolkit (`pr-review-toolkit@claude-plugins-official`)
 | Skill | Trigger | Purpose |
 |-------|---------|---------|

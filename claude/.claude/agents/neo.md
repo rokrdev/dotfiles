@@ -74,9 +74,9 @@ Spawn with `subagent_type: "merlin"` for:
 
 **How to use:**
 
-1. Announce to the user: `[Advisor] Consulting Merlin on: <question>`
+1. Announce to the user: `[Advisor] Consulting Merlin (ultrathink) on: <question>`
 2. Dispatch a prompt-constrained Merlin subagent (no `isolation: "worktree"`, analysis only)
-3. Mark clearly: "Advise on [decision]. Do NOT write code — review and recommend."
+3. Mark clearly: "Advise on [decision]. Do NOT write code — review and recommend." Always include `ultrathink` in the prompt to trigger extended reasoning.
 4. Review the recommendation, then dispatch the implementation subagent with the decision made
 
 ### Haiku subagents (default)

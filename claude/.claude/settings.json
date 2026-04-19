@@ -209,13 +209,6 @@
         "repo": "JuliusBrussee/caveman"
       },
       "autoUpdate": false
-    },
-    "thedotmack": {
-      "source": {
-        "source": "github",
-        "repo": "thedotmack/claude-mem"
-      },
-      "autoUpdate": false
     }
   },
   "effortLevel": "high",

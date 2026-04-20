@@ -80,7 +80,6 @@ alias k=kubectl
 alias kgp="kubectl get pods"
 alias kl="kubectl logs"
 alias klf="kubectl logs -f"
-alias klf="kubectl logs -f"
 alias lg=lazygit
 alias n=npm
 alias ni='npm install'

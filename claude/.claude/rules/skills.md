@@ -8,7 +8,6 @@ Custom skills live in `~/.dotfiles/claude/.claude/skills/` and are stowed to `~/
 |-------|---------|---------|
 | **neo** (agent) | Loaded via `agent: neo` in settings.json | Orchestrator — enforces delegation pattern; never does work directly |
 | **capture-to-things** | Invoke explicitly when tasks/action items identified | Add todos to Things 3 with correct project/area assignment |
-| **dotfiles** | Invoke when adding, editing, or restructuring dotfiles | Enforces stow conventions — never edit symlink targets, always dry-run before stowing |
 | **obsidian** | Invoke when creating/editing markdown outside a git repo, or working in the vault | Routes markdown files to the correct Obsidian vault folder |
 | **pre-commit** | Invoke before committing | Runs simplify → review → test in sequence |
 

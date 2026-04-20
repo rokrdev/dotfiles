@@ -76,9 +76,9 @@ Defined in `fish/.config/fish/config.fish`:
 
 | Alias | Model | Effort | Auto-approve |
 |-------|-------|--------|--------------|
-| `clb` | claude-sonnet-4-6 | medium | no |
+| `clb` | claude-sonnet-4-6 | high | no |
 | `cld` | claude-opus (high) | high | no |
-| `clb-auto` | claude-sonnet-4-6 | medium | yes |
+| `clb-auto` | claude-sonnet-4-6 | high | yes |
 | `cld-auto` | claude-opus (high) | high | yes |
 
 The `-auto` variants set `CLAUDE_AUTO_APPROVE=1`, which activates the `auto-approve.sh` PreToolUse hook to bypass most permission prompts. The hook maintains a denylist for destructive patterns and logs all auto-approved actions to `~/.claude/logs/auto-approve.jsonl`. You can also activate auto-approve on an existing session via the `cc-auto` Fish function.

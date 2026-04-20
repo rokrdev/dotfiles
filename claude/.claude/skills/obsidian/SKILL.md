@@ -1,6 +1,7 @@
 ---
 name: obsidian
 description: Use when working in the Obsidian vault (~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/), or when creating/editing markdown outside a git repo — never use inside a git repo
+when_to_use: Invoke when creating or editing any markdown file in the Obsidian vault, or when creating markdown files outside a git repo. Do NOT invoke inside a git repo (use the repo directly).
 ---
 
 # Obsidian Vault Routing
@@ -17,7 +18,7 @@ Verify it's available with `which obsidian` before use; it was installed at `/us
 | Operation | Tool |
 |---|---|
 | Create new vault note | Obsidian CLI + apply Note.md template |
-| Edit existing vault note | `Read` (get content) → `Edit` → Obsidian CLI if rename/move needed |
+| Edit existing vault note | `obsidian read` (get content) → compute changes → `obsidian create --overwrite` → Obsidian CLI if rename/move needed |
 | Analyse/review vault note | `ctx_execute_file` — keeps raw content out of context window |
 | Superpowers doc outside git repo | Hook redirects → use obsidian skill to route correctly |
 | Claude system files (`~/.dotfiles/`, `~/.claude/`) | Direct Edit, bypass hook |
@@ -99,10 +100,11 @@ Rules:
 6. **Use kebab-case filenames** — e.g. `native-macos-editor-design.md`.
 7. **Subfolders within PARA folders** — group by project name or topic, not by date (except Journal).
 8. **Safe edit protocol** — when editing an existing vault file:
-   - Make a backup first: copy the file to `<filename>.bak` in the same directory
-   - Apply the edit using the Edit tool
-   - Verify the edit was applied correctly and no surrounding content was disrupted
-   - Delete the backup only after verification passes
+   - Read the current content first via `obsidian read path="<relative-path>"` — this captures the original state before any overwrite
+   - Optionally create a backup with `cp "<vault-root>/<relative-path>" "<vault-root>/<relative-path>.bak"` before overwriting for extra safety
+   - Overwrite with `obsidian create path="<relative-path>" content="<updated>" overwrite`
+   - If the overwrite fails, the original file is still intact (no data loss — the CLI does not partial-write)
+   - Verify the result with another `obsidian read` call; delete any `.bak` only after verification passes
 
 ## CLI Reference
 
@@ -141,25 +143,6 @@ obsidian create path="Projects/foo/bar.md" content="$CONTENT"
 - **`Error: vault not found`** — Obsidian app must be running for the CLI to detect the active vault
 - **`Error: file already exists`** — add `overwrite` flag to `obsidian create`
 - **`Error: path not found`** — parent folder doesn't exist; the CLI does not create intermediate folders automatically
-
-## Workflow
-
-### Creating a new file
-1. Identify content type using the decision flow above.
-2. Determine the vault-relative path: `<PARA-folder>/[subfolder/]<filename>.md`
-3. Create via Bash: `obsidian create path="<relative-path>" content="<text>"`
-4. Confirm the vault-relative path to the user.
-
-### Editing an existing file
-1. Read current content: `obsidian read path="<relative-path>"` via Bash
-2. Compute the updated content.
-3. Overwrite: `obsidian create path="<relative-path>" content="<updated>" overwrite`
-4. Verify with another `obsidian read` call.
-
-### Moving a file
-```bash
-obsidian move path="<from>" to="<to>"
-```
 
 ## Examples
 

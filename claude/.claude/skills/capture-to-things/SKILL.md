@@ -1,19 +1,17 @@
 ---
 name: capture-to-things
 description: Use when tasks, action items, or next steps are identified in any context — planning sessions, code discussions, or implementation plans. Also use when the user says to add tasks to Things.
+when_to_use: |
+  - Tasks or next steps are identified during any session
+  - User says "add to Things", "track this in Things", or similar
+  - A plan is written and produces a list of next actions
 ---
 
 # Capture to Things
 
 ## Overview
 
-Things app is the **source of truth for all actionable tasks**. Use the **Things CLI** to capture tasks directly from conversations. Whenever tasks surface — from planning sessions, notes, or discussions — they go into the right Things project.
-
-## When to Use
-
-- Tasks or next steps are identified during any session
-- User says "add to Things", "track this in Things", or similar
-- A plan is written and produces a list of next actions
+Things app is the **source of truth for all actionable tasks**. Use the **Things CLI** (`/opt/homebrew/bin/things`) to capture tasks directly from conversations — whenever tasks surface from planning sessions, notes, or discussions, they go into the right Things project.
 
 **Do NOT use when:**
 - The item is reference material, not an action
@@ -21,74 +19,25 @@ Things app is the **source of truth for all actionable tasks**. Use the **Things
 
 ## Things CLI Reference
 
-The Things CLI is located at `/opt/homebrew/bin/things`. All commands below use this binary.
+`things add` accepts any combination of these flags:
 
-### Add to Inbox (no project)
+| Flag | Purpose | Example |
+|------|---------|---------|
+| `--list` | Target project (omit for Inbox) | `--list="Project Name"` |
+| `--notes` | Context / reference info | `--notes="Context here"` |
+| `--tags` | Comma-separated tags | `--tags="tag1,tag2"` |
+| `--heading` | Group under a heading in the project | `--heading="Phase 1"` |
+| `--deadline` | Hard due date | `--deadline="2026-04-15"` |
+| `--when` | Schedule; `today`, `tomorrow`, `evening`, `anytime`, `someday`, a date `2026-04-15`, or datetime with reminder `2026-04-15T14:30:00` | `--when="today"` |
+| `--checklist-item` | Subtask (repeatable) | `--checklist-item="Subtask 1" --checklist-item="Subtask 2"` |
 
-```bash
-things add "Clear, actionable task title"
-```
-
-### Add to Inbox with Notes
-
-```bash
-things add "Task title" --notes="Context or reference information"
-```
-
-### Add to Specific Project
-
-```bash
-things add "Task title" --list="Project Name"
-```
-
-### Add to Project with Notes
-
-```bash
-things add "Task title" --list="Project Name" --notes="Context here"
-```
-
-### Add with Tags
-
-```bash
-things add "Task title" --list="Project Name" --tags="tag1,tag2"
-```
-
-### Add with Deadline
-
-```bash
-things add "Task title" --list="Project Name" --deadline="2026-04-15"
-```
-
-### Add with Schedule (when)
-
-```bash
-# Possible values: today, tomorrow, evening, anytime, someday
-# Or a date: 2026-04-15
-# Or datetime with reminder: 2026-04-15T14:30:00
-things add "Task title" --list="Project Name" --when="today"
-```
-
-### Add to Project with Heading
-
-```bash
-things add "Task title" --list="Project Name" --heading="Phase 1"
-```
-
-### Add with Multiple Checklist Items
-
-```bash
-things add "Task title" --list="Project Name" \
-  --checklist-item="Subtask 1" \
-  --checklist-item="Subtask 2"
-```
-
-### Create New Project
+Create a new project:
 
 ```bash
 things add-project "Project Name" --notes="Stack/Tool: ...\nRepo: ~/projects/..."
 ```
 
-### Full Example
+Full example combining everything:
 
 ```bash
 things add "Implement auth flow" \
@@ -105,16 +54,12 @@ things add "Implement auth flow" \
 ### 1. Search for or Create the Project
 
 ```bash
-# List all projects to find a match
-things projects
-
-# If no match, create a new project
+things search "project name"   # faster — try first
+things projects                # fall back if search misses
 things add-project "New Project" --notes="Stack/Tool: ...\nRepo: ..."
 ```
 
-- Match loosely by project name when one exists
-- Use `add-project` if no suitable project exists
-- Never duplicate a project
+Match loosely by project name when one exists. Never duplicate a project — only `add-project` if no suitable match.
 
 ### 2. Add Todos
 
@@ -126,8 +71,6 @@ things add "Clear, actionable task title" --list="Project Name"
 - Title must be a concrete action, not a vague label
 - Add `--notes` when the task needs context (e.g. "Deferred — needs live TWS running")
 - Use `--when="today"` only if the user explicitly asks to schedule it
-- Use `--heading` to organize tasks within a project
-- Use `--tags` to label tasks (comma-separated)
 
 ## Quick Reference
 
@@ -135,14 +78,12 @@ things add "Clear, actionable task title" --list="Project Name"
 |------|-------------|
 | List all projects | `things projects` |
 | List today's tasks | `things today` |
-| Create a new project | `things add-project "Name" --notes="..."` |
+| Search tasks | `things search "query"` |
 | Add task to inbox | `things add "Title"` |
 | Add task to project | `things add "Title" --list="Project"` |
-| Add with notes | `things add "Title" --list="Project" --notes="..."` |
-| Add with tags | `things add "Title" --list="Project" --tags="tag1,tag2"` |
-| Add with deadline | `things add "Title" --list="Project" --deadline="2026-04-15"` |
-| Add with checklist | `things add "Title" --checklist-item="Item 1" --checklist-item="Item 2"` |
-| Search tasks | `things search "query"` |
+| Create a new project | `things add-project "Name" --notes="..."` |
+
+See the flag table above for `--notes`, `--tags`, `--deadline`, `--checklist-item`, etc.
 
 ## Common Mistakes
 

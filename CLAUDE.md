@@ -104,6 +104,5 @@ The `-auto` variants set `CLAUDE_AUTO_APPROVE=1`, which activates the `auto-appr
 |-------|---------|---------|
 | `neo` (agent) | Loaded via `agent: neo` in settings.json | Orchestrator — never does work directly, dispatches subagents for everything |
 | `capture-to-things` | Invoke explicitly when tasks/action items identified | Adds todos to Things 3 with correct project/area assignment |
-| `dotfiles` | Invoke when adding, editing, or restructuring dotfiles | Enforces stow conventions — never edit symlink targets, always dry-run before stowing |
 | `obsidian` | Invoke when creating `.md` files outside a git repo | Routes markdown to the correct Obsidian vault folder |
 

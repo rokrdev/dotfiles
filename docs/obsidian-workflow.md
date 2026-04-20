@@ -146,7 +146,7 @@ Claude only ever writes between `<!-- Claude context -->` and `<!-- END Claude c
    - `task` → Things 3 (via Things CLI capture)
    - `note-fragment` → append to relevant Area or Project note (Claude proposes which)
    - `reference` → `Resources/References.md` or specific Resource note
-   - `learning` → append to `Resources/Learnings.md` + queue for claude-mem observation
+   - `learning` → append to `Resources/Learnings.md`
    - `noise` → discard (list shown for user confirmation)
 4. Prints the full routing plan as a table. Waits for user approval (`y` / edit / skip per item).
 5. Executes approved actions.
@@ -207,11 +207,10 @@ Claude only ever writes between `<!-- Claude context -->` and `<!-- END Claude c
 **Trigger**: `cld "distill observations"` or invoked at end of monthly distill
 
 **What Claude does**:
-1. Reads recent claude-mem observations (via `claude-mem:mem-search` skill).
-2. Identifies clusters of related observations.
-3. Drafts a permanent note for each cluster in `Resources/` (e.g. `Resources/Learnings/distributed-systems.md`).
-4. Shows drafted notes to user for approval before writing.
-5. Writes only approved notes.
+1. Identifies clusters of related learnings from recent journal entries and inbox triage.
+2. Drafts a permanent note for each cluster in `Resources/` (e.g. `Resources/Learnings/distributed-systems.md`).
+3. Shows drafted notes to user for approval before writing.
+4. Writes only approved notes.
 
 **Done criteria**: No file is written without explicit user approval. Draft is shown as full markdown before commit. Existing notes are appended to (not overwritten) if a matching resource note already exists.
 

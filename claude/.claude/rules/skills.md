@@ -10,6 +10,7 @@ Custom skills live in `~/.dotfiles/claude/.claude/skills/` and are stowed to `~/
 | **capture-to-things** | Invoke explicitly when tasks/action items identified | Add todos to Things 3 with correct project/area assignment |
 | **obsidian** | Invoke when creating/editing markdown outside a git repo, or working in the vault | Routes markdown files to the correct Obsidian vault folder |
 | **pre-commit** | Invoke before committing | Runs simplify → review → test in sequence |
+| **session-handoff** | Invoke when user says "session handoff", "wrap up session", "hand off", or wants end-of-session summary | Produces structured handoff summary for seamless next-session continuation |
 
 ## Superpowers Skills (`superpowers@claude-plugins-official` v5.0.7)
 

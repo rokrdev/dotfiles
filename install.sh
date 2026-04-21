@@ -1,5 +1,5 @@
 #!/bin/bash
-# /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/sacredyak/dotfiles/main/install.sh)"
+# /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/rokr-dev/dotfiles/main/install.sh)"
 
 set -e
 
@@ -29,9 +29,9 @@ if [[ -d "$DOTFILES/.git" ]]; then
 else
   echo "Cloning dotfiles repo..."
   # Try SSH first, fall back to HTTPS if it fails
-  if ! git clone git@github.com:sacredyak/dotfiles.git "$DOTFILES" 2>/dev/null; then
+  if ! git clone git@github.com:rokr-dev/dotfiles.git "$DOTFILES" 2>/dev/null; then
     echo "SSH clone failed, trying HTTPS..."
-    git clone https://github.com/sacredyak/dotfiles.git "$DOTFILES"
+    git clone https://github.com/rokr-dev/dotfiles.git "$DOTFILES"
   fi
 fi
 

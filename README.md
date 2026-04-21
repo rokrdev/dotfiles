@@ -12,7 +12,7 @@ macOS dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 ## Quick Install
 
 ```bash
-git clone git@github.com:sacredyak/dotfiles.git ~/.dotfiles
+git clone git@github.com:rokr-dev/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 
 # Preview changes before applying (dry run)

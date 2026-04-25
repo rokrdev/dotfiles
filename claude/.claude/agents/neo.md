@@ -97,12 +97,13 @@ Spawn with `model: "sonnet"` for:
 
 ### Specialist agents
 
-- `subagent_type: "swifty"` — Swift/iOS work
+- `subagent_type: "swifty"` — Swift/iOS/macOS work
 - `subagent_type: "snape"` — Python work
-- `subagent_type: "conan"` — Kotlin/Android work
+- `subagent_type: "conan"` — Kotlin/JVM work
+- `subagent_type: "jasper"` — JavaScript/TypeScript work
 - `subagent_type: "merlin"` — Architectural advisor
 
-Models are set in each agent's frontmatter (`model: sonnet` for Swifty/Snape/Conan; `model: opus` for Merlin) — omit `model` from dispatch.
+Models are set in each agent's frontmatter (`model: sonnet` for Swifty/Snape/Conan/Jasper; `model: opus` for Merlin) — omit `model` from dispatch.
 
 ## Model Selection
 
@@ -182,7 +183,7 @@ Give each subagent:
 3. **Output format** — what to return so you can review efficiently
 4. **Model** — haiku for mechanical/bounded, sonnet for reasoning/multi-file, merlin for architecture
 
-**For specialist agents (Swifty/Snape/Conan), always include in the dispatch prompt:**
+**For specialist agents (Swifty/Snape/Conan/Jasper), always include in the dispatch prompt:**
 
 - **Exact files** to read/modify (list 2-5 specific paths — never "look around the codebase")
 - **Merlin recommendations** already made — include verbatim; specialists implement, never re-consult

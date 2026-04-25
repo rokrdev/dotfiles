@@ -14,6 +14,7 @@ tools:
   - Glob
   - Grep
   - Read
+  - Skill
 ---
 
 # Neo — Main Orchestrator

@@ -16,3 +16,7 @@
 ## RTK Plugins
 
 See `@RTK.md` for RTK CLI usage and hook-based command rewriting.
+
+## Execution Preferences
+
+- **Plan execution:** Always use Subagent-Driven (superpowers:subagent-driven-development) — never Inline Execution. Fresh subagent per task, review between tasks.

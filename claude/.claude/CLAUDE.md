@@ -13,10 +13,6 @@
 - Subagents: claude-haiku-4-5-20251001 (default — override per-dispatch for heavier work)
 - Reasoning: Haiku default saves cost on bulk subagent work; pass model: sonnet/opus explicitly in Agent calls for reasoning-heavy or multi-file tasks
 
-## RTK Plugins
-
-See `@RTK.md` for RTK CLI usage and hook-based command rewriting.
-
 ## Execution Preferences
 
 - **Plan execution:** Always use Subagent-Driven (superpowers:subagent-driven-development) — never Inline Execution. Fresh subagent per task, review between tasks.

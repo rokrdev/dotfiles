@@ -7,7 +7,7 @@
 3. Refactor — clean up without breaking tests
 4. Repeat per feature increment
 
-For language-specific runners and patterns, see the specialist agents: Snape (pytest), Swifty (XCTest / Swift Testing), Conan (Kotest / JUnit5).
+For language-specific runners and patterns, see the specialist agents: Snape (pytest), Swifty (XCTest / Swift Testing), Conan (Kotest / JUnit5), Jasper (Vitest / Jest).
 
 ## Test Location
 

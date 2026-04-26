@@ -4,7 +4,7 @@
 
 macOS dotfiles managed with GNU Stow. Each top-level directory is a stow package. Running `stow <package>` from the repo root symlinks that package's contents into `$HOME`, preserving the directory structure under each package.
 
-Remote: `git@github.com:sacredyak/dotfiles.git`
+Remote: `git@github.com:rokr-dev/dotfiles.git`
 
 ## Stow Packages
 

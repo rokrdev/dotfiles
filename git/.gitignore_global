@@ -5,3 +5,6 @@ __backup__*
 .git
 kls_database.db
 .serena/
+.superpowers/
+
+**/settings.local.json

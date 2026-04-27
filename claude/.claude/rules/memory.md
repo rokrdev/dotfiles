@@ -39,8 +39,7 @@ Topic files:
 
 ## Global Memory Reference Rule
 
-Whenever you work in a project and read (or create) its MEMORY.md, check that it contains a
-## Global Memory section. If it does not, add it near the top, after the H1.
+Whenever you work in a project and read (or create) its MEMORY.md, check that it contains a `## Global Memory` section. If it does not, add it near the top, after the H1.
 
 The section must be a SHORT POINTER only. Do NOT duplicate the topic file list into project
 MEMORY.md. The list lives in ~/.claude/memory/memory.md (single source of truth). Project

@@ -48,6 +48,7 @@ MEMORY.md has a 200-line budget — use it for project knowledge, not boilerplat
 
 Canonical template for project MEMORY.md:
 
+```markdown
 ## Global Memory
 
 Read ~/.claude/memory/memory.md for memory rules and topic files.
@@ -55,12 +56,14 @@ Read ~/.claude/memory/memory.md for memory rules and topic files.
 When a new file is added to ~/.claude/memory/:
 - Add it to the ## Global Memory topic file list in ~/.claude/rules/memory.md only
 - Do NOT update individual project MEMORY.md files
+```
 
 ## Repo Memory Auto-Init
 
 At session start in any project, check for MEMORY.md in the project memory directory
 (~/.claude/projects/{mapped-path}/memory/). If it does not exist, create it:
 
+```markdown
 # {Project Name} - Project Memory
 
 ## Global Memory
@@ -70,6 +73,7 @@ Read ~/.claude/memory/memory.md for memory rules and topic files.
 ## Project Notes
 
 (Populated as you work in this project)
+```
 
 ## Domain Knowledge Lifecycle
 

@@ -55,7 +55,7 @@
       "Write(**/migrations/**)",
       "Edit(**/migrations/**)"
     ],
-    "defaultMode": "bypassPermissions"
+    "defaultMode": "acceptEdits"
   },
   "hooks": {
     "SessionStart": [

@@ -2,6 +2,7 @@
 name: swifty
 description: Swift expert. Use for all Swift, SwiftUI, UIKit, AppKit, SPM, XCTest, Swift Testing, and server-side Swift (Vapor) tasks. Covers iOS, macOS, and backend Swift. Enforces Swift best practices, delegates research and small isolated tasks to Haiku, consults Merlin (subagent_type "merlin") for architectural decisions before proceeding.
 model: sonnet
+permissionMode: auto
 ---
 
 # Swifty — Swift Expert (iOS, macOS, Server)

@@ -2,6 +2,7 @@
 name: snape
 description: Python expert. Use for all Python 3.10+, Poetry, pytest, ruff, mypy, FastAPI, Django, and data science/ML tasks (pandas, numpy, scikit-learn, Jupyter). Enforces Python best practices, delegates research and small isolated tasks to Haiku, consults Merlin (subagent_type "merlin") for architectural decisions before proceeding.
 model: sonnet
+permissionMode: auto
 ---
 
 # Snape — Python Expert

@@ -15,6 +15,7 @@ tools:
   - Grep
   - Read
   - Skill
+permissionMode: auto
 ---
 
 # Neo — Main Orchestrator
@@ -175,6 +176,8 @@ The coding subagent prompt must include: "Read ARCHITECT-BRIEF.md first. Confirm
 Skip the brief only for trivial one-file fixes where scope is unambiguous.
 
 ## Crafting Good Subagent Prompts
+
+> **Always pass `mode: "auto"`** when dispatching agents via the Agent tool. Without this, generic agents inherit `defaultMode: "plan"` from settings.json and cannot write files — breaking all implementation tasks.
 
 Give each subagent:
 

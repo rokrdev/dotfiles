@@ -36,6 +36,8 @@ Read ~/.claude/memory/memory.md at session start. Load specific topic files only
 
 Topic files:
 - ~/.claude/memory/general.md — cross-project conventions and preferences
+- ~/.claude/memory/domain/{topic}.md — domain-specific knowledge files
+- ~/.claude/memory/tools/{tool}.md — tool configs, CLI patterns, workarounds
 
 ## Global Memory Reference Rule
 
@@ -53,7 +55,7 @@ Canonical template for project MEMORY.md:
 Read ~/.claude/memory/memory.md for memory rules and topic files.
 
 When a new file is added to ~/.claude/memory/:
-- Add it to the ## Global Memory topic file list in ~/.claude/rules/memory.md only
+- Add it to the ## Global Memory topic file list in ~/.claude/memory/memory.md only
 - Do NOT update individual project MEMORY.md files
 ```
 

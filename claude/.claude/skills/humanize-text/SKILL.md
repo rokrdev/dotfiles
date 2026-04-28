@@ -51,7 +51,7 @@ This is the working checklist. Not every tell is wrong in every context — judg
 
 ### Punctuation and typography
 
-- **Em dashes used as parenthetical breaks.** "The plan — which we drafted last week — needs review." Replace with commas, parentheses, or two sentences. The em dash itself isn't bad; the *frequency* is the tell. If a 200-word email has three em dashes, two of them have to go.
+- **Em dashes used as parenthetical breaks.** "The plan — which we drafted last week — needs review." Replace with commas, parentheses, or two sentences. Default to removing all em dashes in rewrites — AI prose saturates them, so even one remaining can be a tell. Only keep an em dash if a comma or sentence break genuinely can't carry the same weight.
 - **Em dashes used for dramatic pivots.** "I thought it was over — but it wasn't." Often better as two sentences or with a comma.
 - **Smart/curly quotes in casual contexts** (texts, Slack, code comments). Use straight quotes there.
 - **Title Case In Headings That Don't Need Headings At All.**

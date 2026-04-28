@@ -34,11 +34,6 @@ When I say "reorganize memory":
 
 Read ~/.claude/memory/memory.md at session start. Load specific topic files only when relevant.
 
-Topic files:
-- ~/.claude/memory/general.md — cross-project conventions and preferences
-- ~/.claude/memory/domain/{topic}.md — domain-specific knowledge files
-- ~/.claude/memory/tools/{tool}.md — tool configs, CLI patterns, workarounds
-
 ## Global Memory Reference Rule
 
 Whenever you work in a project and read (or create) its MEMORY.md, check that it contains a `## Global Memory` section. If it does not, add it near the top, after the H1.

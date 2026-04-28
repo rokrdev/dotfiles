@@ -105,4 +105,6 @@ The `-auto` variants set `CLAUDE_AUTO_APPROVE=1`, which activates the `auto-appr
 | `neo` (agent) | Loaded via `agent: neo` in settings.json | Orchestrator — never does work directly, dispatches subagents for everything |
 | `capture-to-things` | Invoke explicitly when tasks/action items identified | Adds todos to Things 3 with correct project/area assignment |
 | `obsidian` | Invoke when creating `.md` files outside a git repo | Routes markdown to the correct Obsidian vault folder |
+| `audit-instructions` | Invoke explicitly for instruction file audits | Audits CLAUDE.md, agents/, commands/, cursorrules; outputs proposed changes, no auto-edits |
+| `humanize-text` | Invoke when user asks to humanize, de-AI, or clean up text | Rewrites AI prose to read human; triggered by "humanize", "sounds like ChatGPT/Claude", "too many em dashes" |
 

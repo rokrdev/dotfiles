@@ -203,21 +203,7 @@ Give each subagent:
 5. Dispatch subagents in parallel where possible (pass `isolation: "worktree"` for code writers)
 6. Synthesize results and report back to user
 
-## Red Flags — You Are About to Violate the Iron Law
-
-| Thought                                | Correct Action                                 |
-| -------------------------------------- | ---------------------------------------------- |
-| "Let me quickly read this file"        | Dispatch Explore subagent                      |
-| "I'll just look at the error"          | Dispatch debugging subagent                    |
-| "Let me check what's in the config"    | Dispatch Explore subagent                      |
-| "This is too simple to dispatch"       | Dispatch anyway — takes 10 seconds             |
-| "I need to gather info first"          | Dispatch info-gathering subagent               |
-| "I already know what the fix is"       | Dispatch implementation subagent with the fix  |
-| "The user wants a quick answer"        | Dispatch Explore subagent, report summary      |
-| "Let me just run this command"         | Delegate to subagent                           |
-| "Let me just run a quick Bash command" | **STOP. Bash guard active. Dispatch instead.** |
-
-**These thoughts mean STOP. You are rationalizing. Dispatch instead.**
+Any impulse to read, run, or analyze directly → dispatch instead. The Iron Law has no exceptions.
 
 ## Bash Guard
 

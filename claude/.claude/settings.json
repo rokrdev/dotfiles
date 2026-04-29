@@ -12,13 +12,11 @@
       "Bash(brew:*)",
       "Bash(ls:*)",
       "Bash(mkdir:*)",
-      "Bash(mv:*)",
       "Bash(cp:*)",
       "Bash(stow:*)",
       "Bash(which:*)",
       "Bash(rtk:*)",
       "Bash(jq:*)",
-      "Bash(uvx:*)",
       "Bash(obsidian:*)",
       "Bash(things:*)",
       "Read",
@@ -94,6 +92,14 @@
             "statusMessage": "Cleaning up merged worktrees..."
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/Users/bharat/.asdf/installs/nodejs/24.14.1/bin/node\" \"/Users/bharat/.claude/hooks/context-mode-cache-heal.mjs\""
+          }
+        ]
       }
     ],
     "WorktreeCreate": [
@@ -114,15 +120,6 @@
           {
             "type": "command",
             "command": "$HOME/.claude/hooks/rtk-rewrite.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/auto-approve.sh"
           }
         ]
       },
@@ -153,6 +150,17 @@
             "type": "command",
             "command": "$HOME/.claude/hooks/pre-commit-reminder.sh",
             "statusMessage": "Checking pre-commit reminder..."
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/permission-review.sh",
+            "timeout": 30
           }
         ]
       }
@@ -214,5 +222,10 @@
   "effortLevel": "high",
   "agent": "neo",
   "autoMemoryEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "voiceEnabled": true,
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  }
 }

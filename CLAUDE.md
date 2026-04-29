@@ -65,7 +65,6 @@ Stow target is `$HOME` by default when running from the repo root. No `--target`
 - `hammerspoon/.hammerspoon/init.lua` — Hammerspoon automation entry point
 - `claude/.claude/settings.json` — Claude Code settings (hooks, permissions)
 - `claude/.claude/hooks/` — Claude Code hook scripts
-- `claude/.claude/hooks/auto-approve.sh` — env-var gated auto-approval hook (`CLAUDE_AUTO_APPROVE=1`)
 - `claude/.claude/skills/` — custom Claude Code skills
 - `claude/.claude/agents/neo.md` — neo orchestrator agent definition
 - `docs/obsidian-workflow.md` — Obsidian vault integration plan
@@ -78,10 +77,6 @@ Defined in `fish/.config/fish/config.fish`:
 |-------|-------|--------|--------------|
 | `clb` | claude-sonnet-4-6 | high | no |
 | `cld` | claude-opus (high) | high | no |
-| `clb-auto` | claude-sonnet-4-6 | high | yes |
-| `cld-auto` | claude-opus (high) | high | yes |
-
-The `-auto` variants set `CLAUDE_AUTO_APPROVE=1`, which activates the `auto-approve.sh` PreToolUse hook to bypass most permission prompts. The hook maintains a denylist for destructive patterns and logs all auto-approved actions to `~/.claude/logs/auto-approve.jsonl`. You can also activate auto-approve on an existing session via the `cc-auto` Fish function.
 
 ## Conventions
 

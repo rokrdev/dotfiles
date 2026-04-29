@@ -8,3 +8,5 @@ karabiner/.config/karabiner/automatic_backups/
 
 # Rust cargo build artifacts
 ~/.cargo-target/
+
+.serena/

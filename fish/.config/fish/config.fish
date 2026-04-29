@@ -141,5 +141,3 @@ export CARGO_TARGET_DIR=~/.cargo-target
 
 alias clb="claude --model $CLAUDE_MODEL_SONNET --effort high"
 alias cld="claude --model $CLAUDE_MODEL_OPUS --effort high"
-alias clb-auto="CLAUDE_AUTO_APPROVE=1 claude --model $CLAUDE_MODEL_SONNET --effort high"
-alias cld-auto="CLAUDE_AUTO_APPROVE=1 claude --model $CLAUDE_MODEL_OPUS --effort high"

@@ -29,6 +29,15 @@ TIMESTAMP=$(date -u +%FT%TZ)
 TOOL_JSON=$(echo "$INPUT" | jq -c '.tool_name // null' 2>/dev/null) || TOOL_JSON='"unknown"'
 CMD_JSON=$(echo "$INPUT" | jq -c '.tool_input.command // null' 2>/dev/null) || CMD_JSON='null'
 
+# Extract OAuth token from Keychain for subprocess auth
+_KEYCHAIN_JSON=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null)
+if [ -n "$_KEYCHAIN_JSON" ]; then
+  _TOKEN=$(echo "$_KEYCHAIN_JSON" | jq -r '.claudeAiOauth.accessToken // empty' 2>/dev/null)
+  if [ -n "$_TOKEN" ]; then
+    export ANTHROPIC_API_KEY="$_TOKEN"
+  fi
+fi
+
 # Call Opus — capture exit code explicitly; stderr merged into RESPONSE for error logging
 RESPONSE=""
 CLAUDE_EXIT=0

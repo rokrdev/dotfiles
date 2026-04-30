@@ -51,6 +51,7 @@ Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by d
 | `yazi` | yazi file manager config |
 | `ideavim` | IdeaVim (IntelliJ) — `~/.ideavimrc` |
 | `claude` | Claude Code — `~/.claude/` (settings, hooks, skills) |
+| `zed` | Zed editor — `~/.config/zed/` |
 | `keylayout` | Custom keyboard layout files |
 | `terminfo` | Terminal info entries |
 | `snippets` | Code/text snippets |

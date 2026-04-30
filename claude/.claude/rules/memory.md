@@ -21,14 +21,7 @@ Maintain a structured memory system rooted at .claude/memory/
 
 ### Maintenance
 
-When I say "reorganize memory":
-1. Read all memory files
-2. Remove duplicates and outdated entries
-3. Merge entries that belong together
-4. Split files that cover too many topics
-5. Re-sort entries by date within each file
-6. Update memory.md index
-7. Show me a summary of what changed
+Reorganize on user request "reorganize memory": read all files, deduplicate, merge related entries, split oversized files, re-sort by date, update index, show summary.
 
 ## Global Memory
 

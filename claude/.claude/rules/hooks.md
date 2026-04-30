@@ -31,3 +31,10 @@ Fire in this order:
 ## Linting
 
 Add PostEdit hooks (eslint, ruff, ktlint, etc.) in **project** `settings.json`, never in global — linters vary by project.
+
+## Bash Allowlist
+
+Canonical permitted Bash commands (short-output only):
+`git`, `npm`, `npx`, `node`, `brew`, `ls`, `mkdir`, `mv`, `cp`, `stow`, `which`, `rtk`, `jq`, `uvx`, `obsidian`, `things`, `rm`
+
+Everything else routes through context-mode sandbox tools.

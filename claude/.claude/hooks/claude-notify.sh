@@ -1,10 +1,17 @@
 #!/bin/bash
 # claude-notify.sh — macOS system notifications for Claude Code hook events
-# Handles: Notification (waiting/needs attention), Stop (task finished)
+# Handles: Notification (waiting/needs attention), StopFailure (task error)
 # Exit 0 always — never blocks. Never writes to stdout.
 
 INPUT=$(cat)
-EVENT=$(echo "$INPUT" | jq -r '.hook_event_name // empty' 2>/dev/null)
+
+# Extract all fields in one jq call
+read -r EVENT MESSAGE ERROR DETAILS < <(echo "$INPUT" | jq -r '[
+  .hook_event_name // "",
+  .message // "Claude needs your attention",
+  .error // "unknown",
+  .error_details // ""
+] | @tsv' 2>/dev/null)
 
 _notify() {
   local title="$1"
@@ -20,12 +27,15 @@ EOF
 
 case "$EVENT" in
   Notification)
-    MSG=$(echo "$INPUT" | jq -r '.message // "Claude needs your attention"' 2>/dev/null)
-    MSG="${MSG:-Claude needs your attention}"
-    _notify "Claude — Waiting" "$MSG" "Tink"
+    _notify "Claude — Waiting" "$MESSAGE" "Tink"
     ;;
-  Stop)
-    _notify "Claude — Finished" "Task complete" "Glass"
+  StopFailure)
+    if [ -n "$DETAILS" ]; then
+      MSG="$ERROR: $DETAILS"
+    else
+      MSG="$ERROR"
+    fi
+    _notify "Claude — Error" "$MSG" "Basso"
     ;;
 esac
 

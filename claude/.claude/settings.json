@@ -6,7 +6,14 @@
   "permissions": {
     "allow": [
       "Bash(git:*)",
-      "Bash(npm:*)",
+      "Bash(npm run:*)",
+      "Bash(npm test:*)",
+      "Bash(npm ci:*)",
+      "Bash(npm install:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm view:*)",
+      "Bash(npm outdated:*)",
+      "Bash(npm audit:*)",
       "Bash(npx:*)",
       "Bash(node:*)",
       "Bash(brew:*)",
@@ -175,7 +182,8 @@
         ]
       }
     ],
-    "Stop": [
+    "Stop": [],
+    "StopFailure": [
       {
         "hooks": [
           {

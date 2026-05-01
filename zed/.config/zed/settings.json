@@ -7,8 +7,16 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "minimap": {
+    "show": "auto"
+  },
+  "inlay_hints": {
+    "show_background": false,
+    "enabled": true
+  },
   "vim": {
-    "use_smartcase_find": true
+    "use_system_clipboard": "on_yank",
+    "use_smartcase_find": true,
   },
   "project_panel": {
     "dock": "left",

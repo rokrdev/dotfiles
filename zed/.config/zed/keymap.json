@@ -13,32 +13,25 @@
       "ctrl-w l": "workspace::ActivatePaneRight",
       "ctrl-w k": "workspace::ActivatePaneUp",
       "ctrl-w j": "workspace::ActivatePaneDown",
-      "cmd-T": "workspace::NewTerminal",
       "ctrl-w L": "pane::SplitRight",
       "ctrl-w H": "pane::SplitLeft",
       "ctrl-w J": "pane::SplitDown",
-      "ctrl-w K": "pane::SplitUp"
+      "ctrl-w K": "pane::SplitUp",
     },
   },
   {
     "context": "Editor && vim_mode == insert",
     "bindings": {
       // "j k": "vim::NormalBefore"
-    }
+    },
   },
   {
     "context": "Workspace",
     "bindings": {
       "cmd-G": [
         "task::Spawn",
-        { "task_name": "Gitui", "reveal_target": "center" }
-      ]
+        { "task_name": "Gitui", "reveal_target": "center" },
+      ],
     },
-  },
-  {
-    "context": "Workspace",
-    "unbind": {
-      "ctrl-~": "workspace::NewTerminal"
-    }
   },
 ]

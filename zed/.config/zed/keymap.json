@@ -26,9 +26,13 @@
     },
   },
   {
-    "context": "Workspace",
+    "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting && !menu",
     "bindings": {
-      "cmd-G": [
+      "space f": "file_finder::Toggle",
+      "space e": "project_panel::ToggleFocus",
+      "space /": "editor::ToggleComments",
+      "space b d": "pane::CloseActiveItem",
+      "space g": [
         "task::Spawn",
         { "task_name": "Gitui", "reveal_target": "center" },
       ],

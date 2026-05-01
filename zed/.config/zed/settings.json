@@ -7,38 +7,61 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "vim": {
+    "use_smartcase_find": true
+  },
   "project_panel": {
     "dock": "left",
     "git_status_indicator": false,
     "diagnostic_badges": false,
     "bold_folder_labels": false,
-    "hide_gitignore": true
+    "hide_gitignore": false,
   },
   "use_system_window_tabs": false,
   "tabs": {
     "file_icons": true,
-    "git_status": true
+    "git_status": true,
   },
   "title_bar": {
-    "show_branch_status_icon": true
+    "show_branch_status_icon": true,
   },
   "disable_ai": true,
   "agent": {
     "play_sound_when_agent_done": "always",
     "sidebar_side": "left",
     "favorite_models": [],
-    "model_parameters": []
+    "model_parameters": [],
   },
-  "vim_mode": false,
+  "vim_mode": true,
   "buffer_font_weight": 100.0,
   "buffer_font_family": "MonoLisa Nerd Font",
   "icon_theme": "Catppuccin Mocha",
-  "helix_mode": true,
+  "helix_mode": false,
   "ui_font_size": 16,
   "buffer_font_size": 14.0,
   "theme": {
     "mode": "system",
     "light": "One Light",
     "dark": "Catppuccin Mocha",
+  },
+  "lsp": {
+    "kotlin-lsp": {
+      "binary": {
+        "path": "/opt/homebrew/bin/kotlin-lsp",
+        "arguments": ["--stdio"],
+      },
+      "settings": {
+        "compiler": {
+          "jvm": {
+            "target": "21",
+          },
+        },
+      },
+    },
+  },
+  "languages": {
+    "Kotlin": {
+      "language_servers": ["kotlin-lsp"],
+    },
   },
 }

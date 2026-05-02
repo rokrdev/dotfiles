@@ -20,19 +20,35 @@
     },
   },
   {
-    "context": "Editor && vim_mode == insert",
+    "context": "ProjectPanel && not_editing",
     "bindings": {
-      // "j k": "vim::NormalBefore"
+      "h": "project_panel::CollapseSelectedEntry",
+      "l": "project_panel::ExpandSelectedEntry",
+      "j": "menu::SelectNext",
+      "k": "menu::SelectPrevious",
+      "o": "menu::Confirm",
+      "r": "project_panel::Rename",
+      "z c": "project_panel::CollapseSelectedEntry",
+      "z o": "project_panel::ExpandSelectedEntry",
+      "shift-o": "project_panel::RevealInFileManager",
+      "x": "project_panel::Cut",
+      "c": "project_panel::Copy",
+      "p": "project_panel::Paste",
+      "d": "project_panel::Delete",
+      "a": "project_panel::NewFile",
+      "shift-a": "project_panel::NewDirectory",
+      "shift-y": "workspace::CopyRelativePath",
+      "g y": "workspace::CopyPath",
     },
   },
   {
     "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting && !menu",
     "bindings": {
       "space f": "file_finder::Toggle",
-      "space e": "project_panel::ToggleFocus",
-      "space /": "editor::ToggleComments",
+      "space r": "project_panel::ToggleFocus",
+      "space s": "pane::DeploySearch",
       "space b d": "pane::CloseActiveItem",
-      "space g": [
+      "space G": [
         "task::Spawn",
         { "task_name": "Gitui", "reveal_target": "center" },
       ],

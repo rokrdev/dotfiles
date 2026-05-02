@@ -7,16 +7,25 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "which_key": {
+    "enabled": true,
+  },
+  "diagnostics": {
+    "inline": {
+      "enabled": true,
+    },
+  },
   "minimap": {
-    "show": "auto"
+    "current_line_highlight": "all",
+    "display_in": "all_editors",
+    "show": "always",
   },
   "inlay_hints": {
-    "show_background": false,
-    "enabled": true
+    "enabled": false,
   },
   "vim": {
     "use_system_clipboard": "on_yank",
-    "use_smartcase_find": true,
+    "use_smartcase_find": false,
   },
   "project_panel": {
     "dock": "left",
@@ -37,20 +46,17 @@
   "agent": {
     "play_sound_when_agent_done": "always",
     "sidebar_side": "left",
-    "favorite_models": [],
-    "model_parameters": [],
   },
   "vim_mode": true,
-  "buffer_font_weight": 100.0,
   "buffer_font_family": "MonoLisa Nerd Font",
-  "icon_theme": "Catppuccin Mocha",
-  "helix_mode": false,
+  "buffer_font_weight": 100,
+  "buffer_font_size": 14,
   "ui_font_size": 16,
-  "buffer_font_size": 14.0,
+  "icon_theme": "Catppuccin Mocha",
   "theme": {
     "mode": "system",
     "light": "One Light",
-    "dark": "Catppuccin Mocha",
+    "dark": "Catppuccin Mocha (Blur) [Heavy]",
   },
   "lsp": {
     "kotlin-lsp": {

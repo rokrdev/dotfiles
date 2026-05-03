@@ -54,4 +54,47 @@
       ],
     },
   },
+  {
+    "context": "MarkdownPreview",
+    "bindings": {
+      "j": "markdown::ScrollDown",
+      "k": "markdown::ScrollUp",
+      "d": "markdown::ScrollPageDown",
+      "u": "markdown::ScrollPageUp",
+    },
+  },
+  {
+    "context": "vim_operator == a || vim_operator == i || vim_operator == cs",
+    "bindings": {
+      // Traditional Vim behavior
+      // "q": "vim::AnyQuotes",
+      // "b": "vim::AnyBrackets",
+
+      // mini.ai plugin behavior
+      "q": "vim::MiniQuotes",
+      "b": "vim::MiniBrackets",
+    },
+  },
+  {
+    "context": "Workspace && !Terminal",
+    "bindings": {
+      "space o": [
+        "projects::OpenRecent",
+        {
+          "create_new_window": false,
+        },
+      ],
+    },
+  },
+  {
+    "context": "Workspace",
+    "unbind": {
+      "ctrl-r": [
+        "projects::OpenRecent",
+        {
+          "create_new_window": false,
+        },
+      ],
+    },
+  },
 ]

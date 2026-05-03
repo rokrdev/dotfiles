@@ -7,6 +7,8 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "autosave": "on_focus_change",
+  "current_line_highlight": "all",
   "which_key": {
     "enabled": true,
   },
@@ -28,6 +30,8 @@
     "use_smartcase_find": false,
   },
   "project_panel": {
+    "hide_root": false,
+    "git_status": true,
     "dock": "left",
     "git_status_indicator": false,
     "diagnostic_badges": false,
@@ -56,7 +60,7 @@
   "theme": {
     "mode": "system",
     "light": "One Light",
-    "dark": "Catppuccin Mocha (Blur) [Heavy]",
+    "dark": "Catppuccin Mocha",
   },
   "lsp": {
     "kotlin-lsp": {
@@ -77,5 +81,17 @@
     "Kotlin": {
       "language_servers": ["kotlin-lsp"],
     },
+  },
+  "auto_install_extensions": {
+    "catppuccin": true,
+    "catppuccin-icons": true,
+    "fish": true,
+    "html": true,
+    "kotlin": true,
+    "lua": true,
+    "python-snippets": true,
+    "react-typescript-snippets": true,
+    "toml": true,
+    "typescript-snippets": true,
   },
 }

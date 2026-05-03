@@ -70,6 +70,15 @@ Load on demand — not auto-loaded every session. See `rules/skills.md` for alwa
 |-------|---------|---------|
 | `claude-code-setup:claude-automation-recommender` | Analyzing a codebase for automation opportunities | Recommend hooks, subagents, skills, and workflows |
 
+### swift-lsp (`swift-lsp@claude-plugins-official`)
+LSP-backed Swift language intelligence — provides symbol navigation, type resolution, and diagnostics for Swift/iOS/macOS projects.
+
+### code-simplifier (`code-simplifier@claude-plugins-official`)
+Simplifies code for clarity and maintainability — reviews changed code and suggests reductions in complexity.
+
+### security-guidance (`security-guidance@claude-plugins-official`)
+Security review guidance and best practices — provides structured security analysis and remediation recommendations.
+
 ## Built-in / Native Skills (always available)
 | Skill | Purpose |
 |-------|---------|

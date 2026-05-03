@@ -16,8 +16,7 @@ Maintain a structured memory system rooted at .claude/memory/
 3. Entries: date, what, why — nothing more
 4. Read memory.md at session start. Load other files only when relevant
 5. If a file doesn't exist yet, create it
-6. Before removing or modifying any existing memory entry, use AskUserQuestion to confirm
-   with the user — show the current content and the proposed change
+6. Before removing or modifying any existing memory entry, ask the user directly — show the current content and the proposed change
 
 ### Maintenance
 

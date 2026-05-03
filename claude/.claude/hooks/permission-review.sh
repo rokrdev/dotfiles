@@ -31,6 +31,7 @@ _permission_err_trap() {
   safe_cmd=$(printf '%s' "$cmd" | head -c 100 | tr '\\' '/' | tr '"' "'")
   printf '{"timestamp":"%s","tool":null,"command":null,"decision":"trap-error","reason":"line %s: %s"}\n' \
     "$(date -u +%FT%TZ)" "$lno" "$safe_cmd" >> "$LOG_FILE" 2>/dev/null
+  echo "[permission-review] WARNING: review bypassed — script error at line $lno ($cmd), falling through to user dialog" >&2
   echo '{}'
   exit 0
 }

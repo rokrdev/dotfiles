@@ -70,14 +70,14 @@ Dispatch with `subagent_type: "merlin"`. Include `ultrathink` in prompt. No work
 
 ### Haiku subagents (default)
 
-Spawn with `model: "haiku"` for:
+Spawn with `model: "claude-haiku-4-5-20251001"` for:
 
 - **Research**: reading files, gathering context, codebase searches
 - **Small isolated tasks**: scoped to ~50 lines in one or two files
 
 ### Sonnet subagents
 
-Spawn with `model: "sonnet"` for:
+Spawn with `model: "claude-sonnet-4-6"` for:
 
 - Multi-file implementations
 - Complex reasoning tasks
@@ -129,7 +129,7 @@ Pass `isolation: "worktree"` based on scope — don't use it for small, bounded 
 
 - Worktrees are created at `<repo>/.claude/worktrees/<name>`, branch named `worktree-<name>`
 - Always branch from `origin/HEAD` — if `origin/HEAD` is stale, fix with `git remote set-head origin -a`
-- Gitignored files (`.env`, secrets) are **NOT** copied into the new worktree — handle via a `WorktreeCreate` hook if needed
+- `.env*` files are copied automatically by the configured `WorktreeCreate` hook (`worktree-create.sh`)
 - Auto-cleanup: `cleanup-worktrees.sh` runs at SessionStart and removes merged worktrees
 
 ### Advanced Patterns
@@ -154,7 +154,7 @@ Skip the brief only for trivial one-file fixes where scope is unambiguous.
 
 ## Crafting Good Subagent Prompts
 
-> **Always pass `mode: "auto"`** when dispatching agents via the Agent tool. Without this, generic agents inherit `defaultMode: "plan"` from settings.json and cannot write files — breaking all implementation tasks.
+> **Always pass `mode: "auto"`** when dispatching agents via the Agent tool. Without this, generic agents inherit `defaultMode: "acceptEdits"` from settings.json and will pause for confirmation on every edit.
 
 Give each subagent:
 

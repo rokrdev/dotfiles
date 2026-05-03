@@ -12,11 +12,21 @@ Fire in this order:
 
 ## PermissionRequest
 
-1. **permission-review.sh** — routes all permission requests to Claude Opus 4.5 (effort: medium); ALLOW → auto-approves; DENY/error → falls through to user dialog; logs to `~/.claude/logs/permission-review.jsonl`
+1. **permission-review.sh** — routes all permission requests to claude-sonnet-4-6 (configurable via `CLAUDE_PERMISSION_REVIEW_MODEL` env var; effort: medium); ALLOW → auto-approves; DENY/error → falls through to user dialog; logs to `~/.claude/logs/permission-review.jsonl`
+
+## Notification / StopFailure
+
+1. **claude-notify.sh** — sends macOS system notifications via `osascript`. Fires on both `Notification` (informational alerts) and `StopFailure` (session stop failures) events. Always exits 0, never writes to stdout.
 
 ## SessionStart
 
-1. **cleanup-worktrees.sh** — removes merged worktrees
+Fire in this order:
+
+1. **RTK check** (inline) — verifies `rtk` is installed and prints version; warns if missing
+2. **Context restore** (inline) — prints Iron Law reminder and recent git log for post-compaction continuity
+3. **Log rotation** (inline) — rotates `hooks.log` if > 1 MB
+4. **cleanup-worktrees.sh** — removes merged and stale worktrees
+5. **context-mode-cache-heal.mjs** (plugin) — context-mode plugin hook for cache healing
 
 ## WorktreeCreate
 
@@ -25,7 +35,7 @@ Fire in this order:
 ## Maintenance
 
 - Plugin-provided hooks (e.g. context-mode) are version-pinned in `settings.json` and may change on plugin update. Run `ctx doctor` if a plugin hook stops firing.
-- The plugins (context-mode, caveman) are configured with `autoUpdate: false` in `settings.json`, so their hook paths are stable — manual updates required via `ctx upgrade` or equivalent.
+- Plugin hook paths may change on plugin update. Run `ctx upgrade` for context-mode updates.
 - Local hooks under `~/.claude/hooks/` are stable — edit the source in `~/.dotfiles/claude/.claude/hooks/` and re-stow.
 
 ## Linting

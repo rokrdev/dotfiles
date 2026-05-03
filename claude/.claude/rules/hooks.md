@@ -7,13 +7,26 @@ Hook scripts live in `~/.claude/hooks/` and are registered in `settings.json`.
 Fire in this order:
 
 1. **rtk-rewrite.sh** (Bash) — rewrites commands through the RTK proxy for token savings
-2. **auto-approve.sh** (Bash) — env-var gated auto-approval; activate via `cc-auto` Fish function; denylist blocks destructive patterns; logs to `~/.claude/logs/auto-approve.jsonl`; fails closed on error
-3. **superpowers-redirect.sh** (Write, Edit) — blocks spec/plan markdown writes outside `~/projects/`
-4. **pre-commit-reminder.sh** (Bash `git commit:*`) — reminds the user to invoke the `pre-commit` skill before committing
+2. **superpowers-redirect.sh** (Write, Edit) — blocks spec/plan markdown writes outside `~/projects/`
+3. **pre-commit-reminder.sh** (Bash `git commit:*`) — reminds the user to invoke the `pre-commit` skill before committing
+
+## PermissionRequest
+
+1. **permission-review.sh** — routes all permission requests to claude-sonnet-4-6 (configurable via `CLAUDE_PERMISSION_REVIEW_MODEL` env var; effort: medium); ALLOW → auto-approves; DENY/error → falls through to user dialog; logs to `~/.claude/logs/permission-review.jsonl`
+
+## Notification / StopFailure
+
+1. **claude-notify.sh** — sends macOS system notifications via `osascript`. Fires on both `Notification` (informational alerts) and `StopFailure` (session stop failures) events. Always exits 0, never writes to stdout.
 
 ## SessionStart
 
-1. **cleanup-worktrees.sh** — removes merged worktrees
+Fire in this order:
+
+1. **RTK check** (inline) — verifies `rtk` is installed and prints version; warns if missing
+2. **Context restore** (inline) — prints Iron Law reminder and recent git log for post-compaction continuity
+3. **Log rotation** (inline) — rotates `hooks.log` if > 1 MB
+4. **cleanup-worktrees.sh** — removes merged and stale worktrees
+5. **context-mode-cache-heal.mjs** (plugin) — context-mode plugin hook for cache healing
 
 ## WorktreeCreate
 
@@ -22,9 +35,16 @@ Fire in this order:
 ## Maintenance
 
 - Plugin-provided hooks (e.g. context-mode) are version-pinned in `settings.json` and may change on plugin update. Run `ctx doctor` if a plugin hook stops firing.
-- The three plugins (context-mode, caveman, thedotmack) are configured with `autoUpdate: false` in `settings.json`, so their hook paths are stable — manual updates required via `ctx upgrade` or equivalent.
+- Plugin hook paths may change on plugin update. Run `ctx upgrade` for context-mode updates.
 - Local hooks under `~/.claude/hooks/` are stable — edit the source in `~/.dotfiles/claude/.claude/hooks/` and re-stow.
 
 ## Linting
 
 Add PostEdit hooks (eslint, ruff, ktlint, etc.) in **project** `settings.json`, never in global — linters vary by project.
+
+## Bash Allowlist
+
+Canonical permitted Bash commands (short-output only):
+`git`, `npm`, `npx`, `node`, `brew`, `ls`, `mkdir`, `mv`, `cp`, `stow`, `which`, `rtk`, `jq`, `uvx`, `obsidian`, `things`, `rm`
+
+Everything else routes through context-mode sandbox tools.

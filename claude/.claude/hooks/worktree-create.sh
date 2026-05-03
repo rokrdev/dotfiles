@@ -9,8 +9,12 @@ LOG_PREFIX="[worktree-create]"
 
 # Read stdin JSON
 INPUT=$(cat)
-NAME=$(echo "$INPUT" | jq -r '.name')
-CWD=$(echo "$INPUT" | jq -r '.cwd')
+NAME=$(echo "$INPUT" | jq -r '.name // empty')
+CWD=$(echo "$INPUT"  | jq -r '.cwd  // empty')
+if [[ -z "$NAME" || -z "$CWD" ]]; then
+  echo "$LOG_PREFIX ERROR: missing required fields name/cwd in input" >&2
+  exit 1
+fi
 
 echo "$LOG_PREFIX name=$NAME cwd=$CWD" >&2
 
@@ -32,23 +36,26 @@ mkdir -p "$(dirname "$WORKTREE_DIR")"
 # Detect default branch, with fallbacks if origin/HEAD is not set
 DEFAULT_BRANCH=""
 
-# Try: git remote show origin to detect the default branch
 if command -v git &> /dev/null; then
-  DEFAULT_BRANCH=$(git -C "$REPO_ROOT" remote show origin 2>/dev/null | grep "HEAD branch" | awk '{print $NF}' || true)
-  if [ -z "$DEFAULT_BRANCH" ]; then
-    # Fallback 1: try origin/main
-    if git -C "$REPO_ROOT" rev-parse --verify "origin/main" &>/dev/null; then
+  # First: try local symbolic-ref (no network)
+  _SYMREF=$(git -C "$REPO_ROOT" symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || true)
+  if [ -n "$_SYMREF" ]; then
+    DEFAULT_BRANCH="origin/$_SYMREF"
+  else
+    # Network fallback: git remote show origin
+    echo "$LOG_PREFIX WARNING: origin/HEAD not set locally, falling back to network call" >&2
+    _REMOTE=$(git -C "$REPO_ROOT" remote show origin 2>/dev/null | grep "HEAD branch" | awk '{print $NF}' || true)
+    if [ -n "$_REMOTE" ]; then
+      DEFAULT_BRANCH="origin/$_REMOTE"
+    # Static fallbacks
+    elif git -C "$REPO_ROOT" rev-parse --verify "origin/main" &>/dev/null; then
       DEFAULT_BRANCH="origin/main"
-    # Fallback 2: try origin/master
     elif git -C "$REPO_ROOT" rev-parse --verify "origin/master" &>/dev/null; then
       DEFAULT_BRANCH="origin/master"
     else
-      # Fallback 3: use current HEAD (no remote base)
+      # Last resort: use current HEAD (no remote base)
       DEFAULT_BRANCH="HEAD"
     fi
-  else
-    # git remote show returns the branch name without origin/ prefix; add it
-    DEFAULT_BRANCH="origin/$DEFAULT_BRANCH"
   fi
 fi
 
@@ -60,17 +67,22 @@ fi
 echo "$LOG_PREFIX default branch=$DEFAULT_BRANCH" >&2
 
 # Create the worktree branching from the detected default branch
-git -C "$REPO_ROOT" worktree add "$WORKTREE_DIR" -b "$NAME" "$DEFAULT_BRANCH" 2>&1 | while IFS= read -r line; do
-  echo "$LOG_PREFIX git: $line" >&2
-done
+GIT_OUT=$(git -C "$REPO_ROOT" worktree add "$WORKTREE_DIR" -b "worktree-$NAME" "$DEFAULT_BRANCH" 2>&1) || {
+  echo "$LOG_PREFIX ERROR: git worktree add failed: $GIT_OUT" >&2
+  exit 1
+}
+echo "$GIT_OUT" | while IFS= read -r line; do echo "$LOG_PREFIX git: $line" >&2; done
 
 # Copy .env* files from cwd into the new worktree
 ENV_COUNT=0
 while IFS= read -r -d '' ENV_FILE; do
   BASENAME=$(basename "$ENV_FILE")
   DEST="$WORKTREE_DIR/$BASENAME"
-  cp "$ENV_FILE" "$DEST"
-  echo "$LOG_PREFIX copied $BASENAME → $DEST" >&2
+  if cp "$ENV_FILE" "$DEST"; then
+    echo "$LOG_PREFIX copied $BASENAME → $DEST" >&2
+  else
+    echo "$LOG_PREFIX WARNING: failed to copy $BASENAME to $DEST (continuing)" >&2
+  fi
   ENV_COUNT=$((ENV_COUNT + 1))
 done < <(find "$CWD" -maxdepth 1 -name '.env*' -type f -print0 2>/dev/null)
 

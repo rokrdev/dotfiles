@@ -19,6 +19,8 @@ brew "rtk"
 brew "asdf"
 
 # Casks
+cask "ghostty"
 cask "hammerspoon"
 cask "karabiner-elements"
-cask "ghostty"
+cask "zen-browser"
+cask "zed"

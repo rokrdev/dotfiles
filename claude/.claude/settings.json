@@ -6,21 +6,29 @@
   "permissions": {
     "allow": [
       "Bash(git:*)",
-      "Bash(npm:*)",
+      "Bash(npm run:*)",
+      "Bash(npm test:*)",
+      "Bash(npm ci:*)",
+      "Bash(npm install:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm view:*)",
+      "Bash(npm outdated:*)",
+      "Bash(npm audit:*)",
       "Bash(npx:*)",
       "Bash(node:*)",
       "Bash(brew:*)",
       "Bash(ls:*)",
       "Bash(mkdir:*)",
-      "Bash(mv:*)",
       "Bash(cp:*)",
       "Bash(stow:*)",
       "Bash(which:*)",
       "Bash(rtk:*)",
       "Bash(jq:*)",
-      "Bash(uvx:*)",
       "Bash(obsidian:*)",
       "Bash(things:*)",
+      "Bash(mv:*)",
+      "Bash(rm:*)",
+      "Bash(uvx:*)",
       "Read",
       "Grep",
       "Glob",
@@ -55,7 +63,7 @@
       "Write(**/migrations/**)",
       "Edit(**/migrations/**)"
     ],
-    "defaultMode": "bypassPermissions"
+    "defaultMode": "acceptEdits"
   },
   "hooks": {
     "SessionStart": [
@@ -94,6 +102,14 @@
             "statusMessage": "Cleaning up merged worktrees..."
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/Users/bharat/.asdf/installs/nodejs/24.14.1/bin/node\" \"/Users/bharat/.claude/hooks/context-mode-cache-heal.mjs\""
+          }
+        ]
       }
     ],
     "WorktreeCreate": [
@@ -114,15 +130,6 @@
           {
             "type": "command",
             "command": "$HOME/.claude/hooks/rtk-rewrite.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/auto-approve.sh"
           }
         ]
       },
@@ -153,6 +160,38 @@
             "type": "command",
             "command": "$HOME/.claude/hooks/pre-commit-reminder.sh",
             "statusMessage": "Checking pre-commit reminder..."
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/permission-review.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/claude-notify.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [],
+    "StopFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/claude-notify.sh"
           }
         ]
       }
@@ -213,6 +252,12 @@
   },
   "effortLevel": "high",
   "agent": "neo",
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  },
   "autoMemoryEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "voiceEnabled": true,
+  "remoteControlAtStartup": false
 }

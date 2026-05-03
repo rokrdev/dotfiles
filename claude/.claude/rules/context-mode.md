@@ -16,9 +16,9 @@ Instead use:
 - `ctx_execute(language, code)` to run HTTP calls in sandbox — only stdout enters context
 
 ### WebFetch — BLOCKED
-WebFetch calls are denied entirely. The URL is extracted and you are told to use `ctx_fetch_and_index` instead.
+WebFetch calls are denied entirely. The URL is extracted and you are told to use the `web-fetch` skill instead.
 Instead use:
-- `ctx_fetch_and_index(url, source)` then `ctx_search(queries)` to query the indexed content
+- **Invoke the `web-fetch` skill** — it handles lane selection (static vs JS-rendered), fetches via `ctx_fetch_and_index`, and keeps raw content in sandbox. See `~/.claude/skills/web-fetch/SKILL.md`.
 
 ## REDIRECTED tools — use sandbox equivalents
 
@@ -40,7 +40,7 @@ Grep results can flood context. Use `ctx_execute(language: "shell", code: "grep 
 1. **GATHER**: `ctx_batch_execute(commands, queries)` — Primary tool. Runs all commands, auto-indexes output, returns search results. ONE call replaces 30+ individual calls.
 2. **FOLLOW-UP**: `ctx_search(queries: ["q1", "q2", ...])` — Query indexed content. Pass ALL questions as array in ONE call.
 3. **PROCESSING**: `ctx_execute(language, code)` | `ctx_execute_file(path, language, code)` — Sandbox execution. Only stdout enters context.
-4. **WEB**: `ctx_fetch_and_index(url, source)` then `ctx_search(queries)` — Fetch, chunk, index, query. Raw HTML never enters context.
+4. **WEB**: Invoke the `web-fetch` skill — three-lane strategy (static / Jina JS-rendered / local CLI). `ctx_fetch_and_index` + `ctx_search`. Raw HTML never enters context.
 5. **INDEX**: `ctx_index(content, source)` — Store content in FTS5 knowledge base for later search.
 
 ## Subagent routing

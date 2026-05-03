@@ -16,3 +16,6 @@
 ## Execution Preferences
 
 - **Plan execution:** Always use Subagent-Driven (superpowers:subagent-driven-development) — never Inline Execution. Fresh subagent per task, review between tasks.
+# graphify
+- **graphify** (`~/.claude/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
+When the user types `/graphify`, invoke the Skill tool with `skill: "graphify"` before doing anything else.

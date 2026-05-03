@@ -11,6 +11,16 @@ macOS dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
 ## Quick Install
 
+### Bootstrap (new machine)
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/rokr-dev/dotfiles/main/install.sh)"
+```
+
+This installs Homebrew, clones the repo, runs `brew bundle`, stows all packages, and sets up language servers and tools automatically.
+
+### Manual install
+
 ```bash
 git clone git@github.com:rokr-dev/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
@@ -51,6 +61,7 @@ Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by d
 | `yazi` | yazi file manager config |
 | `ideavim` | IdeaVim (IntelliJ) — `~/.ideavimrc` |
 | `claude` | Claude Code — `~/.claude/` (settings, hooks, skills) |
+| `zed` | Zed editor — `~/.config/zed/` |
 | `keylayout` | Custom keyboard layout files |
 | `terminfo` | Terminal info entries |
 | `snippets` | Code/text snippets |

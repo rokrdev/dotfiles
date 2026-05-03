@@ -31,6 +31,7 @@ Remote: `git@github.com:rokr-dev/dotfiles.git`
 | `yazi` | yazi file manager config |
 | `ideavim` | IdeaVim (IntelliJ) — `~/.ideavimrc` |
 | `claude` | Claude Code — `~/.claude/` (settings.json, hooks, MCP, skills) |
+| `zed` | Zed editor — `~/.config/zed/` (keymap, settings, tasks) |
 | `keylayout` | Custom keyboard layout files |
 | `terminfo` | Terminal info entries |
 | `snippets` | Code/text snippets |
@@ -65,7 +66,6 @@ Stow target is `$HOME` by default when running from the repo root. No `--target`
 - `hammerspoon/.hammerspoon/init.lua` — Hammerspoon automation entry point
 - `claude/.claude/settings.json` — Claude Code settings (hooks, permissions)
 - `claude/.claude/hooks/` — Claude Code hook scripts
-- `claude/.claude/hooks/auto-approve.sh` — env-var gated auto-approval hook (`CLAUDE_AUTO_APPROVE=1`)
 - `claude/.claude/skills/` — custom Claude Code skills
 - `claude/.claude/agents/neo.md` — neo orchestrator agent definition
 - `docs/obsidian-workflow.md` — Obsidian vault integration plan
@@ -78,10 +78,6 @@ Defined in `fish/.config/fish/config.fish`:
 |-------|-------|--------|--------------|
 | `clb` | claude-sonnet-4-6 | high | no |
 | `cld` | claude-opus (high) | high | no |
-| `clb-auto` | claude-sonnet-4-6 | high | yes |
-| `cld-auto` | claude-opus (high) | high | yes |
-
-The `-auto` variants set `CLAUDE_AUTO_APPROVE=1`, which activates the `auto-approve.sh` PreToolUse hook to bypass most permission prompts. The hook maintains a denylist for destructive patterns and logs all auto-approved actions to `~/.claude/logs/auto-approve.jsonl`. You can also activate auto-approve on an existing session via the `cc-auto` Fish function.
 
 ## Conventions
 
@@ -98,11 +94,12 @@ The `-auto` variants set `CLAUDE_AUTO_APPROVE=1`, which activates the `auto-appr
 - Do NOT delete the `.dotfiles` directory without first running `stow -D <pkg>` for each package, or you will leave broken symlinks across `$HOME`.
 - Do NOT commit machine-specific secrets, tokens, or large binaries.
 
-## Skills Reference
+## graphify
 
-| Skill | Trigger | Purpose |
-|-------|---------|---------|
-| `neo` (agent) | Loaded via `agent: neo` in settings.json | Orchestrator — never does work directly, dispatches subagents for everything |
-| `capture-to-things` | Invoke explicitly when tasks/action items identified | Adds todos to Things 3 with correct project/area assignment |
-| `obsidian` | Invoke when creating `.md` files outside a git repo | Routes markdown to the correct Obsidian vault folder |
+This project has a graphify knowledge graph at graphify-out/.
 
+Rules:
+- Before answering architecture or codebase questions, read graphify-out/GRAPH_REPORT.md for god nodes and community structure
+- If graphify-out/wiki/index.md exists, navigate it instead of reading raw files
+- For cross-module "how does X relate to Y" questions, prefer `graphify query "<question>"`, `graphify path "<A>" "<B>"`, or `graphify explain "<concept>"` over grep — these traverse the graph's EXTRACTED + INFERRED edges instead of scanning files
+- After modifying code files in this session, run `graphify update .` to keep the graph current (AST-only, no API cost)

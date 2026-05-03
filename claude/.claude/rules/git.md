@@ -71,9 +71,6 @@ Co-Authored-By: Claude Sonnet <noreply@anthropic.com>
 - **Never use `--no-verify`** unless explicitly requested by user
 - **Never use `--no-gpg-sign`** unless signing is broken
 - **Never use `-f` (force push)** to main/master — use rebase or new commits
-- **One logical change per commit** — avoid "fix all the things" commits
-- **Write imperative subjects**: "add feature", not "adds feature" or "added feature"
-- **Reference issues** when applicable: `Closes #123`
 
 ## Examples
 
@@ -90,11 +87,10 @@ Closes #42
 
 ### Fix
 ```
-fix(settings): remove buddy-reroll hook from SessionStart
+fix(hooks): remove stale SessionStart hook
 
-The npx buddy-reroll command was running on every session start
-but is no longer needed. Removes hook entry entirely to reduce
-session startup latency.
+The rtk-check hook was no longer needed after RTK setup was confirmed stable.
+Removes the hook entry to reduce session startup latency.
 ```
 
 ### Chore

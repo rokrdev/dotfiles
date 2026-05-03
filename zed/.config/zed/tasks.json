@@ -1,0 +1,26 @@
+[
+  {
+    "label": "Gitui",
+    "command": "gitui -d $ZED_WORKTREE_ROOT",
+    "env": {},
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "reveal_target": "center",
+    "hide": "always",
+    "shell": "system",
+    "tags": []
+  },
+  {
+    "label": "Lazygit",
+    "command": "lazygit -p $ZED_WORKTREE_ROOT",
+    "env": {},
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "reveal_target": "center",
+    "hide": "always",
+    "shell": "system",
+    "tags": []
+  }
+]

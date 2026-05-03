@@ -1,0 +1,100 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+  {
+    "context": "Dock",
+    "bindings": {
+      "ctrl-w h": "workspace::ActivatePaneLeft",
+      "ctrl-w l": "workspace::ActivatePaneRight",
+      "ctrl-w k": "workspace::ActivatePaneUp",
+      "ctrl-w j": "workspace::ActivatePaneDown",
+      "ctrl-w L": "pane::SplitRight",
+      "ctrl-w H": "pane::SplitLeft",
+      "ctrl-w J": "pane::SplitDown",
+      "ctrl-w K": "pane::SplitUp",
+    },
+  },
+  {
+    "context": "ProjectPanel && not_editing",
+    "bindings": {
+      "h": "project_panel::CollapseSelectedEntry",
+      "l": "project_panel::ExpandSelectedEntry",
+      "j": "menu::SelectNext",
+      "k": "menu::SelectPrevious",
+      "o": "menu::Confirm",
+      "r": "project_panel::Rename",
+      "z c": "project_panel::CollapseSelectedEntry",
+      "z o": "project_panel::ExpandSelectedEntry",
+      "shift-o": "project_panel::RevealInFileManager",
+      "x": "project_panel::Cut",
+      "c": "project_panel::Copy",
+      "p": "project_panel::Paste",
+      "d": "project_panel::Delete",
+      "a": "project_panel::NewFile",
+      "shift-a": "project_panel::NewDirectory",
+      "shift-y": "workspace::CopyRelativePath",
+      "g y": "workspace::CopyPath",
+    },
+  },
+  {
+    "context": "Editor && (vim_mode == normal || vim_mode == visual) && !VimWaiting && !menu",
+    "bindings": {
+      "space f": "file_finder::Toggle",
+      "space r": "project_panel::ToggleFocus",
+      "space s": "pane::DeploySearch",
+      "space b d": "pane::CloseActiveItem",
+      "space G": [
+        "task::Spawn",
+        { "task_name": "Gitui", "reveal_target": "center" },
+      ],
+    },
+  },
+  {
+    "context": "MarkdownPreview",
+    "bindings": {
+      "j": "markdown::ScrollDown",
+      "k": "markdown::ScrollUp",
+      "d": "markdown::ScrollPageDown",
+      "u": "markdown::ScrollPageUp",
+    },
+  },
+  {
+    "context": "vim_operator == a || vim_operator == i || vim_operator == cs",
+    "bindings": {
+      // Traditional Vim behavior
+      // "q": "vim::AnyQuotes",
+      // "b": "vim::AnyBrackets",
+
+      // mini.ai plugin behavior
+      "q": "vim::MiniQuotes",
+      "b": "vim::MiniBrackets",
+    },
+  },
+  {
+    "context": "Workspace && !Terminal",
+    "bindings": {
+      "space o": [
+        "projects::OpenRecent",
+        {
+          "create_new_window": false,
+        },
+      ],
+    },
+  },
+  {
+    "context": "Workspace",
+    "unbind": {
+      "ctrl-r": [
+        "projects::OpenRecent",
+        {
+          "create_new_window": false,
+        },
+      ],
+    },
+  },
+]

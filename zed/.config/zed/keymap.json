@@ -64,6 +64,12 @@
     },
   },
   {
+    "context": "vim_mode == visual",
+    "bindings": {
+      "shift-s": ["vim::PushAddSurrounds", {}],
+    },
+  },
+  {
     "context": "vim_operator == a || vim_operator == i || vim_operator == cs",
     "bindings": {
       // Traditional Vim behavior

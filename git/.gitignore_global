@@ -8,3 +8,4 @@ kls_database.db
 .superpowers/
 
 **/settings.local.json
+graphify-out/

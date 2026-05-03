@@ -143,6 +143,18 @@ fi
 # fi
 
 # ─────────────────────────────────────────────
+# graphify — codebase knowledge graph tool
+# ─────────────────────────────────────────────
+if command -v uv &>/dev/null; then
+  if ! command -v graphify &>/dev/null; then
+    echo "Installing graphify..."
+    uv tool install graphifyy
+  fi
+else
+  echo "WARNING: uv not found — skipping graphify. Run 'uv tool install graphifyy' after uv is set up."
+fi
+
+# ─────────────────────────────────────────────
 # Manual setup required
 # ─────────────────────────────────────────────
 echo ""

@@ -11,6 +11,16 @@ macOS dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
 ## Quick Install
 
+### Bootstrap (new machine)
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/rokr-dev/dotfiles/main/install.sh)"
+```
+
+This installs Homebrew, clones the repo, runs `brew bundle`, stows all packages, and sets up language servers and tools automatically.
+
+### Manual install
+
 ```bash
 git clone git@github.com:rokr-dev/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles

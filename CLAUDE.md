@@ -31,6 +31,7 @@ Remote: `git@github.com:rokr-dev/dotfiles.git`
 | `yazi` | yazi file manager config |
 | `ideavim` | IdeaVim (IntelliJ) — `~/.ideavimrc` |
 | `claude` | Claude Code — `~/.claude/` (settings.json, hooks, MCP, skills) |
+| `zed` | Zed editor — `~/.config/zed/` (keymap, settings, tasks) |
 | `keylayout` | Custom keyboard layout files |
 | `terminfo` | Terminal info entries |
 | `snippets` | Code/text snippets |

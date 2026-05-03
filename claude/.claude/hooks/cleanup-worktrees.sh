@@ -7,7 +7,10 @@ if [ -z "$REPO" ]; then
   exit 0  # not in a git repo, nothing to do
 fi
 LOG="$HOME/.claude/logs/hooks.log"
-mkdir -p "$HOME/.claude/logs" 2>/dev/null || true
+if ! mkdir -p "$HOME/.claude/logs" 2>/dev/null; then
+  echo "[cleanup-worktrees] WARNING: could not create log directory; logging disabled" >&2
+  LOG="/dev/null"
+fi
 
 _log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] [$1] $2" >> "$LOG"; }
 
@@ -15,7 +18,10 @@ WORKTREE_BASE="$REPO/.claude/worktrees"
 if [ ! -d "$WORKTREE_BASE" ]; then exit 0; fi
 
 TRUNK=$(git -C "$REPO" symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
-if [ -z "$TRUNK" ]; then TRUNK="main"; fi
+if [ -z "$TRUNK" ]; then
+  _log "cleanup-worktrees" "WARNING: origin/HEAD not set, defaulting TRUNK to main"
+  TRUNK="main"
+fi
 
 STALE_SECONDS=$((15 * 24 * 3600))
 STALE_CUTOFF=$(( $(date +%s) - STALE_SECONDS ))

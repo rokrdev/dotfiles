@@ -1,6 +1,6 @@
 ---
 name: pre-commit
-description: Run before committing — simplify staged code, review it, fix issues, then run tests
+description: Run before committing — review staged code, fix issues, then run tests
 when_to_use: Invoke explicitly before every `git commit` — when user says "run pre-commit", "pre-commit check", or "check before committing"
 ---
 
@@ -19,19 +19,13 @@ Run `git diff --cached --stat`.
   - Tracked files modified → list all modified files and warn: "These tracked files will be staged. If you have unrelated WIP changes, stage manually with `git add <file>` instead of proceeding." Then wait for confirmation before running `git add -u`.
   - Working tree clean → report "Nothing to commit — working tree clean" and stop.
 
-## Step 2: Simplify staged code
-
-Invoke the `simplify` skill with the staged file paths. Instruct it to simplify and refine for quality.
-
-After it completes, re-stage any modified files with `git add -u`.
-
-## Step 3: Review staged diff
+## Step 2: Review staged diff
 
 Dispatch `pr-review-toolkit:review-pr` on the staged diff (`git diff --cached`). Instruct it to check correctness, style, and maintainability.
 
 If the reviewer returns **CRITICAL** or **IMPORTANT** issues → stop, report them, and wait for fixes. Do NOT commit.
 
-## Step 4: Run project tests
+## Step 3: Run project tests
 
 Detect and run the project test suite:
 
@@ -46,12 +40,11 @@ If no test command is detected, skip this step and note it in the final report.
 
 If tests fail → stop, report failures. Do NOT commit.
 
-## Step 5: Commit
+## Step 4: Commit
 
 All checks passed. Report:
-- What was simplified (Step 2)
-- Reviewer verdict (Step 3)
-- Test results (Step 4)
+- Reviewer verdict (Step 2)
+- Test results (Step 3)
 
 Generate a commit message from the staged diff using conventional commits format (`type(scope): description`). Present it and ask: "Commit with this message? (yes/edit/cancel)". Then:
 - **yes** → commit.

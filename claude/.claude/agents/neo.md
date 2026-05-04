@@ -163,6 +163,9 @@ Give each subagent:
 3. **Output format** — what to return so you can review efficiently
 4. **Model** — haiku for mechanical/bounded, sonnet for reasoning/multi-file, merlin for architecture
 
+**For any subagent that needs to fetch web content:**
+- Include: "Use the `web-fetch` skill for any URL fetching — do not use WebFetch directly. The skill handles tiered fetching (static / JS-rendered / CLI) and keeps raw content in sandbox."
+
 **For specialist agents (Swifty/Snape/Conan/Jasper), always include in the dispatch prompt:**
 
 - **Exact files** to read/modify (list 2-5 specific paths — never "look around the codebase")

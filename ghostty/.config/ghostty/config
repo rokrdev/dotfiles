@@ -18,4 +18,4 @@ window-padding-y = 3
 adjust-cursor-thickness = 75%
 keybind = shift+enter=text:\x1b\r
 
-custom-shader = ~/.config/ghostty/shaders/sparks-from-fire.glsl
+# custom-shader = ~/.config/ghostty/shaders/sparks-from-fire.glsl

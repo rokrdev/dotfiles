@@ -64,6 +64,14 @@ See `rules/specialist-agents.md` for shared limits (3-file cap, NEEDS_CONTEXT, D
 
 ### Testing
 
+**Red-first is mandatory.** On any ticket with a test file in `files-touched`:
+- The first file you create or edit MUST be the test file
+- Run the test (`npx vitest run <path>` or project equivalent) and confirm it FAILS
+- Capture the RED output before touching any src/ file
+- Violating this order is a scope error — stop, revert src/ edits, restart from the test
+
+This applies whether or not the ticket explicitly references TDD. It is the default behaviour.
+
 - Vitest for Vite-based projects; Jest for everything else — never introduce a second runner
 - React Testing Library for component tests; test behaviour not implementation
 - No mocks except at system boundaries (HTTP calls, file system, clock)

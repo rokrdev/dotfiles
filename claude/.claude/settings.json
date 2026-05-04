@@ -185,7 +185,6 @@
         ]
       }
     ],
-    "Stop": [],
     "StopFailure": [
       {
         "hooks": [

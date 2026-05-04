@@ -7,8 +7,6 @@ Hook scripts live in `~/.claude/hooks/` and are registered in `settings.json`.
 Fire in this order:
 
 1. **rtk-rewrite.sh** (Bash) — rewrites commands through the RTK proxy for token savings
-2. **superpowers-redirect.sh** (Write, Edit) — blocks spec/plan markdown writes outside `~/projects/`
-3. **pre-commit-reminder.sh** (Bash `git commit:*`) — reminds the user to invoke the `pre-commit` skill before committing
 
 ## PermissionRequest
 

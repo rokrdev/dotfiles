@@ -83,7 +83,6 @@ Security review guidance and best practices — provides structured security ana
 | Skill | Purpose |
 |-------|---------|
 | `simplify` | Review changed code for reuse, quality, efficiency; fix issues |
-| `pre-commit` | Simplify → review → test before committing |
 | `init` | Initialize a new CLAUDE.md for a repo |
 | `review` | Review a pull request |
 | `security-review` | Security review of pending branch changes |

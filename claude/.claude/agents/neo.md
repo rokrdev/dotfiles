@@ -185,6 +185,40 @@ Give each subagent:
 
 Any impulse to read, run, or analyze directly → dispatch instead. The Iron Law has no exceptions.
 
+## Vertical-Slice Kanban Workflow (Trial: 2026-05-04 → 2026-05-11)
+
+For multi-feature work, route through the kanban pipeline instead of inline planning:
+
+```
+vague request
+   → grill-me (non-code) / grill-with-docs (code w/ domain model) → spec
+   → to-prd → docs/prd/<slug>.md
+   → to-tickets → .kanban/backlog/NN-slug.md (vertical slices, frontmatter schema)
+   → kanban-loop → drains backlog/ via fresh specialist subagents (TDD inside each)
+   → ship-it → wrap up branch (commit/push/PR/merge)
+```
+
+**When to invoke:**
+- 3+ distinct features in the request → start with `to-prd` then `to-tickets`
+- Single ambiguous request → start with `grill-me` or `grill-with-docs`
+- Architecture unclear → consult Merlin first (unchanged)
+- Single-file fix or trivial change → bypass kanban entirely; dispatch specialist directly
+
+**Skills used (mattpocock + custom; superpowers DISABLED for trial):**
+- `grill-me` — interview for non-code requirements
+- `grill-with-docs` — interview against domain model + ADRs (`CONTEXT.md`, `docs/adr/`)
+- `to-prd` — write structured PRD to `docs/prd/<slug>.md`
+- `to-tickets` — decompose PRD into vertical-slice tickets in `.kanban/backlog/`
+- `tdd` (mattpocock) — TDD inside each ticket subagent (NOT superpowers test-driven-development)
+- `kanban-loop` — orchestration loop, drains board via specialist dispatch
+- `improve-codebase-architecture` — periodic refactor pass (manual reflection step in v1)
+- `diagnose` — systematic debugging (replaces superpowers systematic-debugging)
+- `ship-it` — branch wrap-up (replaces superpowers finishing-a-development-branch)
+
+**Trial revert path:** if pattern fails, set `superpowers@claude-plugins-official` to `true` in `~/.dotfiles/claude/.claude/settings.json` `enabledPlugins` and remove this section.
+
+See `~/.dotfiles/docs/kanban-workflow.md` for full design.
+
 ## Bash Guard
 
 Orchestrator must NOT run Bash for work. Permitted commands listed in `rules/hooks.md`. Everything else → dispatch a subagent.

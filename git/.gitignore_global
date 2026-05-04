@@ -6,6 +6,7 @@ __backup__*
 kls_database.db
 .serena/
 .superpowers/
+.kanban/
 
 **/settings.local.json
 graphify-out/

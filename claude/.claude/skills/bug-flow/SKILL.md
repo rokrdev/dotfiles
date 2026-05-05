@@ -18,10 +18,10 @@ kanban-loop   → implement fix via TDD; regression guard required
 ship-it       → pre-flight checks + landing options
 ```
 
-At each gate, type:
-- `1` — approve; proceed to next stage
-- `2 <reason>` — reject; rework the current stage with your feedback
-- `3` — abort; stop the pipeline; all work is preserved; use individual skills to continue manually
+At each gate, respond with:
+1. Approve → proceed to next stage
+2. Reject <reason> → rework this stage based on your feedback
+3. Abort → stop here; use individual skills to continue manually
 
 ---
 
@@ -51,9 +51,9 @@ Repro: <from envelope — runnable>
 Suspected fix: <from envelope — one sentence, no code>
 Files to touch: <from envelope>
 
-  1                → approve; write bug ticket + implement fix
-  2 <reason>       → reject; re-investigate with your feedback
-  3                → abort; use individual skills to continue
+  1. Approve             → write bug ticket + implement fix
+  2. Reject <reason>     → re-investigate based on your feedback
+  3. Abort               → stop here; use individual skills to continue manually
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -99,9 +99,9 @@ Changed files:
 
 Review the full diff with: git diff HEAD
 
-  1                → approve; proceed to ship-it (confirms before commit)
-  2 <reason>       → reject; re-enter kanban-loop to fix the issues
-  3                → abort; use /ship-it manually when ready
+  1. Approve             → proceed to ship-it (confirms before committing)
+  2. Reject <reason>     → re-enter kanban-loop to address your feedback
+  3. Abort               → stop here; use /ship-it manually when ready
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 

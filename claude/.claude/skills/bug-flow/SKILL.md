@@ -79,7 +79,13 @@ Run the to-bug-ticket skill using the approved DIAGNOSIS_COMPLETE envelope as in
 
 ## Stage 3 — kanban-loop
 
-Run the kanban-loop skill. The regression guard section in the bug ticket is required — kanban-loop will not mark the ticket done without it passing. Wait for the loop to complete.
+Before invoking kanban-loop, derive the branch slug from the confirmed diagnosis:
+- Use the bug summary from the DIAGNOSIS_COMPLETE envelope (carried forward from Stage 1)
+- Take the first line of the bug summary
+- Slugify: lowercase, replace spaces/special chars with hyphens, ASCII-only, max 50 chars, strip leading/trailing hyphens
+- Pass `--branch fix/<slugified-summary>` when invoking kanban-loop
+
+Run the kanban-loop skill with `--branch fix/<slug>`. The regression guard section in the bug ticket is required — kanban-loop will not mark the ticket done without it passing. Wait for the loop to complete.
 
 ---
 

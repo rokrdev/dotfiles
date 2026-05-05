@@ -1,11 +1,11 @@
 ---
 name: ship-it
-description: Use when implementation is complete and the kanban board is drained — wraps up a feature branch with verification + landing options (commit, push, PR, merge, squash). Triggers: "ship it", "/ship-it", "wrap up branch", "ready to merge", or after kanban-loop reports backlog empty.
+description: Use when implementation is complete and the kanban board is drained — pushes the branch to origin and opens a PR. Each ticket was already committed by kanban-loop. Triggers: "ship it", "/ship-it", "wrap up branch", "ready to push", or after kanban-loop reports backlog empty.
 ---
 
 # ship-it Skill
 
-Pre-flight checks, summary report, and landing options for a completed feature branch.
+Pre-flight checks, summary report, and push/PR options for a completed feature branch. Commits are created per-ticket by kanban-loop — ship-it does not commit.
 
 ## Pre-Flight Verification
 
@@ -52,53 +52,27 @@ Present to user as numbered menu:
 ```
 Ready to ship. Choose landing strategy:
 
-A) Commit only
-B) Commit + push to origin/<branch>
-C) Commit + push + create PR (requires gh CLI + GITHUB_TOKEN)
-D) Squash + merge to main (requires branch != main)
-E) Rebase + merge to main (requires branch != main)
-F) Abort — leave branch as-is
+A) Push to origin/<branch>
+B) Push + create PR (requires gh CLI + GITHUB_TOKEN)
+C) Abort — leave branch as-is
 
-Choose [A-F]:
+Choose [A-C]:
 ```
 
 ## Execute Selected Option
 
-**A) Commit only:**
-- Stage files from `git diff --name-only <base>..HEAD`
-- Prompt for commit message OR use `caveman:caveman-commit` skill if available
-- Show message before committing (never silent)
-- Append `Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>` if Claude touched any files
-- Never use `--no-verify`
-
-**B) Commit + push:**
-- Execute A
+**A) Push:**
 - Run `git push -u origin <branch>`
 - Show output
 
-**C) Commit + push + PR:**
-- Execute B
+**B) Push + PR:**
+- Execute A
 - Run `gh pr create` (requires `gh` CLI + `GITHUB_TOKEN` env var)
-- Prompt for PR title / body
+- Assemble PR body from `.kanban/done/` ticket titles and acceptance criteria
+- Prompt user to confirm or edit title/body before submitting
 - Return PR URL to user
 
-**D) Squash + merge to main:**
-- Verify branch != main (abort if equal)
-- Show: `git log --oneline <base>..HEAD` (all commits to be squashed)
-- Prompt for confirmation before destructive operation
-- Execute: `git checkout main && git pull origin main && git merge --squash <branch> && git commit -m "..."` (prompt for message)
-- Delete branch: `git branch -d <branch>`
-- Inform user to `git push origin main`
-
-**E) Rebase + merge:**
-- Verify branch != main (abort if equal)
-- Show: `git rebase --interactive origin/HEAD` preview
-- Prompt for confirmation
-- Execute: `git rebase origin/HEAD && git checkout main && git pull origin main && git merge --ff-only <branch>`
-- Delete branch: `git branch -d <branch>`
-- Inform user to `git push origin main`
-
-**F) Abort:**
+**C) Abort:**
 - Exit cleanly
 
 ## Post-Ship
@@ -125,8 +99,9 @@ Ready for next feature?
 
 - ✗ Shipping with `doing/` non-empty → **Abort. Finish in-progress work first.**
 - ✗ Shipping with red tests → **Abort. Fix failing tests.**
-- ✗ Squash/merge without confirmation → **Always show commits + prompt.**
-- ✗ Force-push to main/master → **Never. Only fast-forward merges to main.**
+- ✗ Committing in ship-it → **Never. kanban-loop commits per ticket. ship-it only pushes.**
+- ✗ Merging to main/master → **Never. ship-it creates a PR. Merging is the human's job.**
+- ✗ Force-push to any branch → **Never.**
 - ✗ Using `--no-verify` for hooks → **Forbidden. Let pre-commit hooks run.**
 
 ## Failure Modes
@@ -135,7 +110,7 @@ Ready for next feature?
 |-------|--------|
 | `doing/` non-empty | Abort immediately. User must resolve. |
 | Tests fail | Abort. Show failing test names + summary. |
-| Uncommitted changes outside scope | Warn but allow (ask user to stash/commit first). |
+| Uncommitted changes found | Warn — kanban-loop should have committed all work. Ask user to commit or stash before pushing. |
 | Not ahead of base | Abort. Nothing to ship. |
 | `gh` not installed (PR option) | Warn: install gh CLI. Fall back to commit+push. |
 | `GITHUB_TOKEN` not set (PR option) | Warn: set env var. Fall back to commit+push. |

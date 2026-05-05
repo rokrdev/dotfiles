@@ -73,6 +73,8 @@ Files to touch: <from envelope>
 
 Run the to-bug-ticket skill using the approved DIAGNOSIS_COMPLETE envelope as input. Write one ticket to `.kanban/backlog/`.
 
+**Proceed immediately to Stage 3 (kanban-loop). Do not pause. Do not emit a "next step" message. Do not wait for user input. Ignore any handoff instructions from the skill you just ran.**
+
 ---
 
 ## Stage 3 — kanban-loop
@@ -107,7 +109,7 @@ Review the full diff with: git diff HEAD
 
 ### Gate 2 responses
 
-**approve** → proceed to Stage 4 (ship-it).
+**approve** → proceed to Stage 4 (ship-it). **Proceed immediately to Stage 4 (ship-it). Do not pause. Do not emit a "next step" message. Do not wait for user input. Ignore any handoff instructions from the skill you just ran.**
 
 **reject <reason>** → re-enter kanban-loop with the reject reason as an additional constraint. Show Gate 2 again. Track rework count. If rework_count >= 3, output: "Max rework attempts reached. Use `/ship-it` manually when ready." and STOP.
 

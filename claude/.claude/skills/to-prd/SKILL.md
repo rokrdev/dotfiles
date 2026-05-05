@@ -122,3 +122,11 @@ Any additional context, constraints, or open questions.
 - Slug derived from feature name and used as filename
 - Explicit handoff note: PRD is the direct input to `/to-tickets`
 - `docs/prd/` directory created if missing
+
+---
+
+## Next Step
+
+> **PRD written.** Run `/to-tickets` next to decompose the PRD into vertical-slice tickets in `.kanban/backlog/`.
+
+Do NOT start implementation or planning. Your job ends here.

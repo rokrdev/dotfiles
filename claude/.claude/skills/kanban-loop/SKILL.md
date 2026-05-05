@@ -286,3 +286,9 @@ kanban-loop complete
   `~/.claude/skills/tdd/SKILL.md`
 - Design doc: `docs/kanban-workflow.md` — full rationale, schema, parallel rules, stuck-ticket
   detection, verification gates, demo project
+
+---
+
+## Next Step
+
+> **Backlog drained.** Run `/ship-it` next to verify the branch (tests, git state, board empty) and choose a landing strategy (commit / push / PR / merge).

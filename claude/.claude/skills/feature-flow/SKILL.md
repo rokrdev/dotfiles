@@ -32,6 +32,8 @@ Run the grill-me skill: conduct the requirements interview. Ask all clarifying q
 
 Carry forward: the full interview output (requirements, constraints, edge cases).
 
+**Proceed immediately to Stage 2 (to-prd). Do not pause. Do not emit a "next step" message. Do not wait for user input. Ignore any handoff instructions from the skill you just ran.**
+
 ---
 
 ## Stage 2 — to-prd
@@ -80,6 +82,8 @@ Read the full PRD at docs/prd/<slug>.md before approving.
 
 Run the to-tickets skill using the approved PRD. Write tickets to `.kanban/backlog/`.
 
+**Proceed immediately to Stage 4 (kanban-loop). Do not pause. Do not emit a "next step" message. Do not wait for user input. Ignore any handoff instructions from the skill you just ran.**
+
 ---
 
 ## Stage 4 — kanban-loop
@@ -114,7 +118,7 @@ Review the full diff with: git diff HEAD
 
 ### Gate 2 responses
 
-**approve** → proceed to Stage 5 (ship-it).
+**approve** → proceed to Stage 5 (ship-it). **Proceed immediately to Stage 5 (ship-it). Do not pause. Do not emit a "next step" message. Do not wait for user input. Ignore any handoff instructions from the skill you just ran.**
 
 **reject <reason>** → re-enter kanban-loop with the reject reason as a new constraint. Show Gate 2 again after the loop completes. Track rework count. If rework_count >= 3, output: "Max rework attempts reached. Use `/ship-it` manually when ready." and STOP.
 

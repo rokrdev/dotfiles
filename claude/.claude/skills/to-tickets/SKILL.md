@@ -252,3 +252,11 @@ Entry-point present, acceptance exercises the binary, all layers covered.
 - Cycle detection mandatory before writing any files (step 4)
 - Numbering follows topological sort order; slugs are the stable dependency reference
 - Body cap enforced at ~40 lines per ticket
+
+---
+
+## Next Step
+
+> **Tickets created.** Run `/kanban-loop` next to drain the backlog — it will pick eligible tickets, dispatch TDD subagents, and gate on green tests.
+
+Do NOT start implementation. Your job ends here.

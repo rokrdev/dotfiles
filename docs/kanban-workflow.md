@@ -11,6 +11,7 @@
 
 ## Table of Contents
 
+0. [Workflow Lanes](#workflow-lanes)
 1. [Philosophy](#1-philosophy)
 2. [Storage Layout](#2-storage-layout)
 3. [Ticket Schema](#3-ticket-schema)
@@ -26,6 +27,53 @@
 13. [Coverage Gaps to Monitor](#13-coverage-gaps-to-monitor)
 14. [Demo Project — URL Shortener CLI](#14-demo-project--url-shortener-cli)
 15. [MVP Build Order](#15-mvp-build-order)
+
+---
+
+## Workflow Lanes
+
+### Feature Lane
+
+For new features and enhancements.
+
+```
+/grill-me          Clarify requirements via interview (or /grill-with-docs for domain-heavy features)
+    ↓
+/to-prd            Write structured PRD to docs/prd/<slug>.md
+    ↓
+/to-tickets        Decompose PRD into vertical-slice tickets in .kanban/backlog/
+    ↓
+/kanban-loop       Drain the board — picks eligible tickets, dispatches TDD subagents, gates on green tests
+    ↓
+/ship-it           Pre-flight checks (tests, git state, board empty) + landing options (commit/push/PR/merge)
+```
+
+### Bug Fix Lane
+
+For reproducing and fixing existing bugs.
+
+```
+/diagnose          Build a feedback loop → reproduce → hypothesise → instrument → fix → regression test
+    ↓
+/to-bug-ticket     Write a single bug ticket to .kanban/backlog/ (Repro → Root cause → Fix → Regression guard)
+    ↓
+/kanban-loop       Drain the board — same as feature lane; regression guard section required to mark done
+    ↓
+/ship-it           Same as feature lane
+```
+
+### Skill Descriptions
+
+| Skill | What it does |
+|-------|-------------|
+| `/grill-me` | Interviews you with targeted questions to surface requirements, constraints, and edge cases before any spec is written. Pure discovery — no files written. |
+| `/grill-with-docs` | Same as grill-me but pulls in domain model, ADRs, and CONTEXT.md to ground questions in existing architecture. |
+| `/to-prd` | Takes the interview output and writes a structured PRD to `docs/prd/<slug>.md`. Defines goals, non-goals, user stories, and success criteria. |
+| `/to-tickets` | Reads the PRD and decomposes it into vertical-slice tickets in `.kanban/backlog/`. Each ticket delivers one user-observable outcome. Runs topological sort to sequence by dependency. |
+| `/diagnose` | Disciplined 6-phase debugging: build feedback loop → reproduce → hypothesise → instrument → fix → cleanup. Entry point for the bug fix lane. |
+| `/to-bug-ticket` | Writes a single structured bug ticket to `.kanban/backlog/` with four required sections: Repro, Root cause, Fix, Regression guard. |
+| `/kanban-loop` | Drains the backlog by picking eligible tickets (deps satisfied), dispatching a fresh TDD subagent per ticket, and gating completion on passing tests + acceptance verifiable. |
+| `/ship-it` | Pre-merge checklist: verifies board drained, tests green, no uncommitted changes. Then presents landing options: commit / push / PR / squash-merge / rebase-merge. |
 
 ---
 
@@ -172,6 +220,8 @@ planning → topo-sort → FAIL if cycle → replan
 ---
 
 ## 5. Pipeline Overview
+
+> **Note:** This diagram shows the **feature lane** only. For the bug fix lane, see [Workflow Lanes](#workflow-lanes).
 
 ```
 vague request

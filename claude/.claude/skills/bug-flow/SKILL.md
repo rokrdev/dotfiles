@@ -19,9 +19,9 @@ ship-it       → pre-flight checks + landing options
 ```
 
 At each gate, type:
-- `approve` — proceed to next stage
-- `reject <reason>` — rework the current stage with your feedback
-- `abort` — stop the pipeline; all work is preserved; use individual skills to continue manually
+- `1` — approve; proceed to next stage
+- `2 <reason>` — reject; rework the current stage with your feedback
+- `3` — abort; stop the pipeline; all work is preserved; use individual skills to continue manually
 
 ---
 
@@ -51,21 +51,21 @@ Repro: <from envelope — runnable>
 Suspected fix: <from envelope — one sentence, no code>
 Files to touch: <from envelope>
 
-  approve          → write bug ticket + implement fix
-  reject <reason>  → re-investigate with your feedback
-  abort            → stop; use individual skills to continue
+  1                → approve; write bug ticket + implement fix
+  2 <reason>       → reject; re-investigate with your feedback
+  3                → abort; use individual skills to continue
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**STOP. Do not call any tool. Do not write any file. Do not proceed to Stage 2. Wait for the user to type approve / reject / abort.**
+**STOP. Do not call any tool. Do not write any file. Do not proceed to Stage 2. Wait for the user to type 1 / 2 <reason> / 3.**
 
 ### Gate 1 responses
 
-**approve** → proceed to Stage 2 (to-bug-ticket).
+**1** → proceed to Stage 2 (to-bug-ticket).
 
-**reject <reason>** → re-run diagnose with the original bug description AND the reject reason (e.g. "wrong root cause — check the middleware layer"). Show Gate 1 again. Track rework count. If rework_count >= 3, output: "Max rework attempts reached. Use `/diagnose` manually with more specific context." and STOP.
+**2 <reason>** → re-run diagnose with the original bug description AND the reject reason (e.g. "wrong root cause — check the middleware layer"). Show Gate 1 again. Track rework count. If rework_count >= 3, output: "Max rework attempts reached. Use `/diagnose` manually with more specific context." and STOP.
 
-**abort** → output: "Pipeline aborted at Gate 1. Use `/diagnose` then `/to-bug-ticket` manually when ready."
+**3** → output: "Pipeline aborted at Gate 1. Use `/diagnose` then `/to-bug-ticket` manually when ready."
 
 ---
 
@@ -99,21 +99,21 @@ Changed files:
 
 Review the full diff with: git diff HEAD
 
-  approve          → proceed to ship-it (confirms before commit)
-  reject <reason>  → re-enter kanban-loop to fix the issues
-  abort            → stop; use /ship-it manually when ready
+  1                → approve; proceed to ship-it (confirms before commit)
+  2 <reason>       → reject; re-enter kanban-loop to fix the issues
+  3                → abort; use /ship-it manually when ready
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**STOP. Do not call any tool. Do not commit. Do not proceed to Stage 4. Wait for the user to type approve / reject / abort.**
+**STOP. Do not call any tool. Do not commit. Do not proceed to Stage 4. Wait for the user to type 1 / 2 <reason> / 3.**
 
 ### Gate 2 responses
 
-**approve** → proceed to Stage 4 (ship-it). **Proceed immediately to Stage 4 (ship-it). Do not pause. Do not emit a "next step" message. Do not wait for user input. Ignore any handoff instructions from the skill you just ran.**
+**1** → proceed to Stage 4 (ship-it). **Proceed immediately to Stage 4 (ship-it). Do not pause. Do not emit a "next step" message. Do not wait for user input. Ignore any handoff instructions from the skill you just ran.**
 
-**reject <reason>** → re-enter kanban-loop with the reject reason as an additional constraint. Show Gate 2 again. Track rework count. If rework_count >= 3, output: "Max rework attempts reached. Use `/ship-it` manually when ready." and STOP.
+**2 <reason>** → re-enter kanban-loop with the reject reason as an additional constraint. Show Gate 2 again. Track rework count. If rework_count >= 3, output: "Max rework attempts reached. Use `/ship-it` manually when ready." and STOP.
 
-**abort** → output: "Pipeline aborted at Gate 2. Fix preserved. Use `/ship-it` manually when ready."
+**3** → output: "Pipeline aborted at Gate 2. Fix preserved. Use `/ship-it` manually when ready."
 
 ---
 

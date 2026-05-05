@@ -20,9 +20,9 @@ ship-it       → pre-flight checks + landing options
 ```
 
 At each gate, type:
-- `approve` — proceed to next stage
-- `reject <reason>` — rework the current stage with your feedback
-- `abort` — stop the pipeline; all work is preserved; use individual skills to continue manually
+- `1` — approve; proceed to next stage
+- `2 <reason>` — reject; rework the current stage with your feedback
+- `3` — abort; stop the pipeline; all work is preserved; use individual skills to continue manually
 
 ---
 
@@ -60,21 +60,21 @@ Acceptance criteria: <bullet list from PRD>
 
 Read the full PRD at docs/prd/<slug>.md before approving.
 
-  approve          → proceed to ticketing + implementation
-  reject <reason>  → rewrite PRD with your feedback
-  abort            → stop; use individual skills to continue
+  1                → approve; proceed to ticketing + implementation
+  2 <reason>       → reject; rewrite PRD with your feedback
+  3                → abort; stop; use individual skills to continue
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**STOP. Do not call any tool. Do not write any file. Do not proceed to Stage 3. Wait for the user to type approve / reject / abort.**
+**STOP. Do not call any tool. Do not write any file. Do not proceed to Stage 3. Wait for the user to type 1 / 2 <reason> / 3.**
 
 ### Gate 1 responses
 
-**approve** → proceed to Stage 3 (to-tickets).
+**1** → proceed to Stage 3 (to-tickets).
 
-**reject <reason>** → re-run to-prd with the original interview output AND the reject reason as an additional constraint. Show Gate 1 again. Track rework count. If rework_count >= 3, output: "Max rework attempts reached. Edit `docs/prd/<slug>.md` manually, then type `approve` when ready." and STOP.
+**2 <reason>** → re-run to-prd with the original interview output AND the reject reason as an additional constraint. Show Gate 1 again. Track rework count. If rework_count >= 3, output: "Max rework attempts reached. Edit `docs/prd/<slug>.md` manually, then type `1` when ready." and STOP.
 
-**abort** → output: "Pipeline aborted at Gate 1. Work preserved at `docs/prd/<slug>.md`. Resume manually with `/to-tickets` when ready." Do not delete any files.
+**3** → output: "Pipeline aborted at Gate 1. Work preserved at `docs/prd/<slug>.md`. Resume manually with `/to-tickets` when ready." Do not delete any files.
 
 ---
 
@@ -108,21 +108,21 @@ Changed files:
 
 Review the full diff with: git diff HEAD
 
-  approve          → proceed to ship-it (confirms before commit)
-  reject <reason>  → re-enter kanban-loop to fix the issues
-  abort            → stop; use /ship-it manually when ready
+  1                → approve; proceed to ship-it (confirms before commit)
+  2 <reason>       → reject; re-enter kanban-loop to fix the issues
+  3                → abort; use /ship-it manually when ready
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**STOP. Do not call any tool. Do not commit. Do not proceed to Stage 5. Wait for the user to type approve / reject / abort.**
+**STOP. Do not call any tool. Do not commit. Do not proceed to Stage 5. Wait for the user to type 1 / 2 <reason> / 3.**
 
 ### Gate 2 responses
 
-**approve** → proceed to Stage 5 (ship-it). **Proceed immediately to Stage 5 (ship-it). Do not pause. Do not emit a "next step" message. Do not wait for user input. Ignore any handoff instructions from the skill you just ran.**
+**1** → proceed to Stage 5 (ship-it). **Proceed immediately to Stage 5 (ship-it). Do not pause. Do not emit a "next step" message. Do not wait for user input. Ignore any handoff instructions from the skill you just ran.**
 
-**reject <reason>** → re-enter kanban-loop with the reject reason as a new constraint. Show Gate 2 again after the loop completes. Track rework count. If rework_count >= 3, output: "Max rework attempts reached. Use `/ship-it` manually when ready." and STOP.
+**2 <reason>** → re-enter kanban-loop with the reject reason as a new constraint. Show Gate 2 again after the loop completes. Track rework count. If rework_count >= 3, output: "Max rework attempts reached. Use `/ship-it` manually when ready." and STOP.
 
-**abort** → output: "Pipeline aborted at Gate 2. Implementation preserved. Use `/ship-it` manually when ready."
+**3** → output: "Pipeline aborted at Gate 2. Implementation preserved. Use `/ship-it` manually when ready."
 
 ---
 

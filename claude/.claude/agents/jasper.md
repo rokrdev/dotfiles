@@ -70,13 +70,13 @@ See `rules/specialist-agents.md` for shared limits (3-file cap, NEEDS_CONTEXT, D
 - Capture the RED output before touching any src/ file
 - Violating this order is a scope error — stop, revert src/ edits, restart from the test
 
-This applies whether or not the ticket explicitly references TDD. It is the default behaviour.
+This applies whether or not the ticket explicitly references TDD. It is the default behaviour. These rules are stricter than the shared `coding.md` defaults — they apply for all kanban ticket work (no one-liner exceptions).
 
 - Vitest for Vite-based projects; Jest for everything else — never introduce a second runner
 - React Testing Library for component tests; test behaviour not implementation
 - No mocks except at system boundaries (HTTP calls, file system, clock)
 - `msw` (Mock Service Worker) for API mocking in integration tests
-- Test file mirrors source: `src/foo/bar.ts` → `src/foo/bar.test.ts` (or `__tests__/bar.test.ts`)
+- Test file mirrors source: `src/foo/bar.ts` → `src/foo/bar.test.ts` (or `__tests__/bar.test.ts`) — this overrides the global `test/` directory default for JS/TS projects
 
 ### Tooling & Build
 

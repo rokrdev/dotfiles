@@ -87,12 +87,12 @@ Defined in `fish/.config/fish/config.fish`:
 - Fish functions go in `fish/.config/fish/functions/` — one function per `.fish` file, filename must match the function name.
 - Keep secrets (tokens, API keys) out of the repo — use env vars or the OS keychain.
 
-## What NOT To Do
+## Stow Cautions
 
-- Do NOT edit files under `~/.config/`, `~/.hammerspoon/`, etc. directly — those are symlinks. Always edit source files in `~/.dotfiles/<package>/`.
-- Do NOT run `stow` without checking for conflicts first (`stow -n <pkg>`) — stow refuses to overwrite existing non-symlink files.
-- Do NOT delete the `.dotfiles` directory without first running `stow -D <pkg>` for each package, or you will leave broken symlinks across `$HOME`.
-- Do NOT commit machine-specific secrets, tokens, or large binaries.
+- Always edit source in `~/.dotfiles/<package>/` — files under `~/.config/`, `~/.hammerspoon/`, etc. are symlinks.
+- Always dry-run first (`stow -n <pkg>`) — stow refuses to overwrite existing non-symlink files.
+- Run `stow -D <pkg>` for each package before deleting the `.dotfiles` directory, or you will leave broken symlinks across `$HOME`.
+- Never commit machine-specific secrets, tokens, or large binaries.
 
 ## graphify
 

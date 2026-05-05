@@ -204,7 +204,21 @@ Gate 3 — Scope clean
   No uncommitted unrelated changes.
 ```
 
-**All gates pass** → `mv .kanban/doing/NN-slug.md .kanban/done/NN-slug.md`
+**All gates pass** →
+
+1. **Run full test suite** (not just ticket-scoped paths) — must exit 0. If red, fail Gate 1 and push back to backlog.
+2. **Stage only files in `files-touched`** — use `git add <file1> <file2> ...` with explicit paths. Never `git add -A` or `git add .`.
+3. **Commit** with conventional format:
+   ```
+   <type>(<scope>): <ticket title>
+
+   Ticket: <ticket-id>
+   <acceptance criterion>
+
+   Co-Authored-By: Claude Sonnet <noreply@anthropic.com>
+   ```
+   Validate: message must start with `<type>(<scope>):` — if not, reject and prompt subagent to fix.
+4. `mv .kanban/doing/NN-slug.md .kanban/done/NN-slug.md`
 
 **Any gate fails:**
 - Append failure note to ticket body: `## Failure — <gate number>\n<reason>`
@@ -291,4 +305,4 @@ kanban-loop complete
 
 ## Next Step
 
-> **Backlog drained.** Run `/ship-it` next to verify the branch (tests, git state, board empty) and choose a landing strategy (commit / push / PR / merge).
+> **Backlog drained.** All tickets committed. Run `/ship-it` next to push the branch and open a PR.

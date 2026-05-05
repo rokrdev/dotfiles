@@ -15,6 +15,86 @@ running TDD per ticket. See `docs/kanban-workflow.md` for full design rationale.
 | `/kanban-loop` | Serial mode — one ticket at a time |
 | `/kanban-loop --parallel` | Parallel mode — dispatch all eligible `parallel-safe` tickets with no file-overlap at once |
 | `/kanban-loop --dry-run` | Resolve eligibility, print dispatch plan — no moves, no subagents |
+| `/kanban-loop --branch <name>` | Pass suggested branch name to pre-flight prompt (used by feature-flow and bug-flow) |
+
+---
+
+## Step 0 — Branch Pre-flight
+
+Runs once at startup, before eligibility resolution. Prevents per-ticket commits from landing on protected branches.
+
+### 1. Detached HEAD check
+
+Run: `git rev-parse --abbrev-ref HEAD`
+
+If output is `HEAD` → abort:
+```
+ERROR: Detached HEAD state. Checkout a branch before running kanban-loop.
+```
+
+### 2. Dirty working tree check
+
+Run: `git status --porcelain`
+
+If output is non-empty → abort:
+```
+ERROR: Uncommitted changes detected. Stash or commit them before running kanban-loop.
+```
+
+### 3. Protected branch detection
+
+Protected branches (hardcoded): `main`, `master`, `develop`
+
+**If NOT on a protected branch** → skip silently, log `Using branch: <name>`, proceed to Step 1.
+
+**If on a protected branch** → show branch prompt (Step 4).
+
+### 4. Branch prompt
+
+**With `--branch <name>` passed:**
+
+```
+─────────────────────────────────────────────
+  You are on <branch>. Create a branch?
+
+  Suggested: <name>
+
+  1. Yes — use suggested name
+  2. Yes — enter custom name
+  3. Stay on <branch>
+─────────────────────────────────────────────
+```
+
+Wait for user to choose [1-3].
+
+- **1**: proceed with `<name>` (check collision first — Step 5)
+- **2**: prompt user to type a name, then check collision
+- **3**: warn "⚠ Staying on <branch> — commits will land on a protected branch." Proceed to Step 1.
+
+**Without `--branch` (standalone invocation):**
+
+```
+─────────────────────────────────────────────
+  You are on <branch>. Enter a branch name to
+  create, or type SKIP to stay on <branch>:
+─────────────────────────────────────────────
+```
+
+Wait for user input. If `SKIP` → warn and proceed. Otherwise use typed name (check collision).
+
+### 5. Branch name collision
+
+Check if chosen name exists locally: `git show-ref --verify --quiet refs/heads/<name>`
+
+If exists → auto-append `-2`, `-3`, etc. until an unused name is found. Show resolved name to user before creating.
+
+### 6. Branch creation
+
+```bash
+git checkout -b <resolved-name>
+```
+
+Confirm branch created, then proceed to Step 1.
 
 ---
 

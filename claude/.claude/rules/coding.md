@@ -2,7 +2,7 @@
 
 **Think Before Coding** — Surface assumptions explicitly before writing. List all interpretations if the request is ambiguous — don't pick one silently. Push back when a simpler approach exists.
 
-**Simplicity First** — Write the minimum code that solves the problem. No speculative features, no abstractions for single-use code, no unrequested flexibility. Self-test: "Would a senior engineer say this is overcomplicated?"
+**Simplicity First** — Write the minimum code that solves the problem. No speculative features, no abstractions for single-use code, no unrequested flexibility. If you added an abstraction used only once, remove it.
 
 **Surgical Changes** — Touch only what the request requires. Don't improve adjacent code, formatting, or comments. Match existing style. Mention unrelated dead code — don't silently delete it. DO remove imports/variables your changes made unused. Test: "Every changed line should trace directly to the user's request."
 
@@ -41,9 +41,10 @@ For language-specific runners and patterns, see the specialist agents: Snape (py
 
 ## Test Location
 
-- Tests go in `test/` — never under `src/`
+- Tests go in `test/` by default — never under `src/`
 - Mirror the source path: `src/foo/bar.<ext>` → `test/foo/bar_test.<ext>` (or `BarTest`, `BarTests` — follow stack convention)
-- Check project-level CLAUDE.md for overrides
+- **Override:** JS/TS projects using colocated tests (`*.test.ts` next to source) should follow existing project convention. Check for existing test files before creating `test/` directories.
+- Check project-level CLAUDE.md for additional overrides
 
 ## Test Structure
 

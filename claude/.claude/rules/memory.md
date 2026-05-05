@@ -65,10 +65,4 @@ Read ~/.claude/memory/memory.md for memory rules and topic files.
 
 ## Domain Knowledge Lifecycle
 
-1. Staging — knowledge accumulates in ~/.claude/memory/domain/{name}/
-2. Promotion — enough knowledge exists to package as a plugin/skill
-3. Pointer — after promotion, the memory file becomes a pointer to the plugin;
-   content lives in the plugin
-
-When an update is needed to a promoted domain, note it in the memory file so an issue
-can be created on the plugin repo.
+Promoted domains: memory file becomes a pointer to the plugin. Note needed updates in the memory file for future issue tracking.

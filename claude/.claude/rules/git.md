@@ -22,7 +22,7 @@ Required. Describes the kind of change:
 - **test**: Test additions or fixes; no production code changes
 - **perf**: Performance improvements
 - **ci**: CI/CD pipeline changes
-- **style**: Code style (whitespace, semicolons, etc.) — never use for formatting (use **refactor**)
+- **style**: Non-functional whitespace/punctuation changes that don't affect behavior. If the change touches logic structure, use **refactor** instead.
 
 ### Scope
 Optional but recommended. Names the part of the codebase affected: `fish`, `nvim`, `settings`, `hooks`, etc.

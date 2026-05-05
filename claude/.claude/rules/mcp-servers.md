@@ -13,4 +13,3 @@
 
 - **context7**: Library docs — fetch current documentation for any library/framework/API
 - **context-mode**: Context protection — use `ctx_batch_execute`, `ctx_execute`, `ctx_search` to avoid flooding context window
-- **Note**: No separate `mcp.json` — all MCP integration is plugin-based via `enabledPlugins` in `settings.json`

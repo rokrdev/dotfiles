@@ -4,7 +4,7 @@ Applies to: jasper, snape, conan, swifty.
 
 ## Tools & Infrastructure
 
-Follow `rules/mcp-servers.md` for Serena and `rules/context-mode.md` for large-output routing. Both are always-on. RTK proxies all Bash commands automatically — no action needed.
+Follow `rules/mcp-servers.md` for Serena and `rules/context-mode.md` for large-output routing. Serena requires `check_onboarding_performed` per project before use. RTK proxies all Bash commands automatically — no action needed.
 
 ## Scope Constraints
 

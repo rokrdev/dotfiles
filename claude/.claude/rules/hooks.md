@@ -32,8 +32,7 @@ Fire in this order:
 
 ## Maintenance
 
-- Plugin-provided hooks (e.g. context-mode) are version-pinned in `settings.json` and may change on plugin update. Run `ctx doctor` if a plugin hook stops firing.
-- Plugin hook paths may change on plugin update. Run `ctx upgrade` for context-mode updates.
+- Plugin hooks may change on update — run `ctx doctor` to diagnose, `ctx upgrade` to update.
 - Local hooks under `~/.claude/hooks/` are stable — edit the source in `~/.dotfiles/claude/.claude/hooks/` and re-stow.
 
 ## Linting

@@ -4,6 +4,9 @@ Load on demand — not auto-loaded every session. See `rules/skills.md` for alwa
 
 ## Superpowers Skills (`superpowers@claude-plugins-official` v5.0.7)
 
+> **TRIAL PAUSE (2026-05-04 → 2026-05-11):** Superpowers plugin is not in `enabledPlugins`. These skills are unavailable. Re-evaluate on 2026-05-11.
+
+<!--
 | Skill | Trigger | Purpose |
 |-------|---------|---------|
 | `superpowers:brainstorming` | Before any creative work — features, components, architecture | Structured brainstorming before design decisions |
@@ -20,6 +23,7 @@ Load on demand — not auto-loaded every session. See `rules/skills.md` for alwa
 | `superpowers:using-git-worktrees` | Before feature work needing isolation | Git worktree setup and workflow |
 | `superpowers:writing-skills` | When creating or editing skills | Skill authoring and verification workflow |
 | `superpowers:using-superpowers` | Start of any conversation | Discover and load relevant skills |
+-->
 
 ## Plugin Skills (via `enabledPlugins` in settings.json)
 
@@ -71,13 +75,19 @@ Load on demand — not auto-loaded every session. See `rules/skills.md` for alwa
 | `claude-code-setup:claude-automation-recommender` | Analyzing a codebase for automation opportunities | Recommend hooks, subagents, skills, and workflows |
 
 ### swift-lsp (`swift-lsp@claude-plugins-official`)
-LSP-backed Swift language intelligence — provides symbol navigation, type resolution, and diagnostics for Swift/iOS/macOS projects.
+| Skill | Trigger | Purpose |
+|-------|---------|---------|
+| `swift-lsp` | Swift/iOS/macOS projects needing symbol navigation, type resolution, or diagnostics | LSP-backed Swift language intelligence (manual invocation only) |
 
 ### code-simplifier (`code-simplifier@claude-plugins-official`)
-Simplifies code for clarity and maintainability — reviews changed code and suggests reductions in complexity.
+| Skill | Trigger | Purpose |
+|-------|---------|---------|
+| `code-simplifier` | After completing a feature or refactor — reviewing changed code for complexity | Simplifies code for clarity and maintainability (manual invocation only) |
 
 ### security-guidance (`security-guidance@claude-plugins-official`)
-Security review guidance and best practices — provides structured security analysis and remediation recommendations.
+| Skill | Trigger | Purpose |
+|-------|---------|---------|
+| `security-guidance` | When reviewing code for security issues or planning security-sensitive features | Structured security analysis and remediation recommendations (manual invocation only) |
 
 ## Built-in / Native Skills (always available)
 | Skill | Purpose |

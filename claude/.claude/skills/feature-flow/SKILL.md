@@ -88,7 +88,13 @@ Run the to-tickets skill using the approved PRD. Write tickets to `.kanban/backl
 
 ## Stage 4 — kanban-loop
 
-Run the kanban-loop skill. Drain all tickets from backlog to done. Each ticket gets a fresh TDD subagent. Wait for the loop to complete (all tickets in done/, all tests green).
+Before invoking kanban-loop, derive the branch slug from the approved PRD:
+- Read the PRD file at `docs/prd/<slug>.md` (the slug was carried forward from Stage 2)
+- Extract the H1 title (first `# ` line)
+- Slugify: lowercase, replace spaces/special chars with hyphens, ASCII-only, max 50 chars, strip leading/trailing hyphens
+- Pass `--branch feat/<slugified-title>` when invoking kanban-loop
+
+Run the kanban-loop skill with `--branch feat/<slug>`. Drain all tickets from backlog to done. Each ticket gets a fresh TDD subagent. Wait for the loop to complete (all tickets in done/, all tests green).
 
 ---
 

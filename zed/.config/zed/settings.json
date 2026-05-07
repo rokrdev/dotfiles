@@ -7,6 +7,7 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "helix_mode": true,
   "cli_default_open_behavior": "new_window",
   "autosave": "on_focus_change",
   "current_line_highlight": "all",
@@ -52,7 +53,7 @@
     "play_sound_when_agent_done": "always",
     "sidebar_side": "left",
   },
-  "vim_mode": true,
+  "vim_mode": false,
   "buffer_font_family": "MonoLisa Nerd Font",
   "buffer_font_weight": 100,
   "buffer_font_size": 14,

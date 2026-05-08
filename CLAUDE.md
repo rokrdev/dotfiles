@@ -36,7 +36,7 @@ Remote: `git@github.com:rokr-dev/dotfiles.git`
 | `terminfo` | Terminal info entries |
 | `snippets` | Code/text snippets |
 
-Non-package items at root: `CLAUDE.md`, `webp_convertor.sh`, `xterm-24bit.terminfo`, `clear-all`
+Non-package items at root: `CLAUDE.md`, `webp_convertor.sh`, `xterm-24bit.terminfo`, `clear.sh`
 
 ## How to Apply Configs
 

@@ -11,9 +11,9 @@ Single entry point for the full feature pipeline. Runs automatically, pausing at
 
 ```
 grill-me      → clarify requirements via interview
-to-prd        → write PRD to docs/prd/<slug>.md
+to-prd        → write PRD to .workflow/docs/<slug>.md
 ⏸ GATE 1     → you review the PRD
-to-tickets    → decompose into .kanban/backlog/ tickets
+to-tickets    → decompose into .workflow/kanban/backlog/ tickets
 kanban-loop   → drain board via TDD subagents
 ⏸ GATE 2     → you review implementation
 ship-it       → pre-flight checks + landing options
@@ -38,7 +38,7 @@ Carry forward: the full interview output (requirements, constraints, edge cases)
 
 ## Stage 2 — to-prd
 
-Run the to-prd skill using the interview output from Stage 1. Write the PRD to `docs/prd/<slug>.md`.
+Run the to-prd skill using the interview output from Stage 1. Write the PRD to `.workflow/docs/<slug>.md`.
 
 Carry forward: the PRD file path and slug.
 
@@ -52,13 +52,13 @@ After to-prd completes, output this block and STOP:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⏸  GATE 1 — PRD Review
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PRD written to: docs/prd/<slug>.md
+PRD written to: .workflow/docs/<slug>.md
 
 Goal: <one sentence from PRD>
 Non-goals: <bullet list from PRD>
 Acceptance criteria: <bullet list from PRD>
 
-Read the full PRD at docs/prd/<slug>.md before approving.
+Read the full PRD at .workflow/docs/<slug>.md before approving.
 
   1. Approve             → proceed to ticketing + implementation
   2. Reject <reason>     → rewrite PRD based on your feedback
@@ -72,15 +72,15 @@ Read the full PRD at docs/prd/<slug>.md before approving.
 
 **1** → proceed to Stage 3 (to-tickets).
 
-**2 <reason>** → re-run to-prd with the original interview output AND the reject reason as an additional constraint. Show Gate 1 again. Track rework count. If rework_count >= 3, output: "Max rework attempts reached. Edit `docs/prd/<slug>.md` manually, then type `1` when ready." and STOP.
+**2 <reason>** → re-run to-prd with the original interview output AND the reject reason as an additional constraint. Show Gate 1 again. Track rework count. If rework_count >= 3, output: "Max rework attempts reached. Edit `.workflow/docs/<slug>.md` manually, then type `1` when ready." and STOP.
 
-**3** → output: "Pipeline aborted at Gate 1. Work preserved at `docs/prd/<slug>.md`. Resume manually with `/to-tickets` when ready." Do not delete any files.
+**3** → output: "Pipeline aborted at Gate 1. Work preserved at `.workflow/docs/<slug>.md`. Resume manually with `/to-tickets` when ready." Do not delete any files.
 
 ---
 
 ## Stage 3 — to-tickets
 
-Run the to-tickets skill using the approved PRD. Write tickets to `.kanban/backlog/`.
+Run the to-tickets skill using the approved PRD. Write tickets to `.workflow/kanban/backlog/`.
 
 **Proceed immediately to Stage 4 (kanban-loop). Do not pause. Do not emit a "next step" message. Do not wait for user input. Ignore any handoff instructions from the skill you just ran.**
 
@@ -89,7 +89,7 @@ Run the to-tickets skill using the approved PRD. Write tickets to `.kanban/backl
 ## Stage 4 — kanban-loop
 
 Before invoking kanban-loop, derive the branch slug from the approved PRD:
-- Read the PRD file at `docs/prd/<slug>.md` (the slug was carried forward from Stage 2)
+- Read the PRD file at `.workflow/docs/<slug>.md` (the slug was carried forward from Stage 2)
 - Extract the H1 title (first `# ` line)
 - Slugify: lowercase, replace spaces/special chars with hyphens, ASCII-only, max 50 chars, strip leading/trailing hyphens
 - Pass `--branch feat/<slugified-title>` when invoking kanban-loop
@@ -106,7 +106,7 @@ After kanban-loop drains, output this block and STOP:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⏸  GATE 2 — Implementation Review
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Tickets completed: <list filenames from .kanban/done/>
+Tickets completed: <list filenames from .workflow/kanban/done/>
 Tests: <X passed, 0 failed>
 
 Changed files:

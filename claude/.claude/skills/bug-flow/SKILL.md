@@ -12,7 +12,7 @@ Single entry point for the full bug fix pipeline. Runs automatically, pausing at
 ```
 diagnose      → investigate bug (Phases 1–4); emit DIAGNOSIS_COMPLETE envelope
 ⏸ GATE 1     → you review the diagnosis
-to-bug-ticket → write structured ticket to .kanban/backlog/
+to-bug-ticket → write structured ticket to .workflow/kanban/backlog/
 kanban-loop   → implement fix via TDD; regression guard required
 ⏸ GATE 2     → you review implementation
 ship-it       → pre-flight checks + landing options
@@ -71,7 +71,7 @@ Files to touch: <from envelope>
 
 ## Stage 2 — to-bug-ticket
 
-Run the to-bug-ticket skill using the approved DIAGNOSIS_COMPLETE envelope as input. Write one ticket to `.kanban/backlog/`.
+Run the to-bug-ticket skill using the approved DIAGNOSIS_COMPLETE envelope as input. Write one ticket to `.workflow/kanban/backlog/`.
 
 **Proceed immediately to Stage 3 (kanban-loop). Do not pause. Do not emit a "next step" message. Do not wait for user input. Ignore any handoff instructions from the skill you just ran.**
 
@@ -97,7 +97,7 @@ After kanban-loop completes, output this block and STOP:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⏸  GATE 2 — Implementation Review
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Ticket completed: <ticket filename from .kanban/done/>
+Ticket completed: <ticket filename from .workflow/kanban/done/>
 Tests: <X passed, 0 failed — regression guard included>
 
 Changed files:

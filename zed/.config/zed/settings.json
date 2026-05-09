@@ -97,4 +97,34 @@
     "toml": true,
     "typescript-snippets": true,
   },
+  "context_servers": {
+    "context-mode": {
+      "command": {
+        "path": "context-mode",
+        "args": [],
+        "env": {}
+      }
+    },
+    "github.com/modelcontextprotocol/servers/tree/main/src/github": {
+      "command": {
+        "path": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-github"],
+        "env": {
+          "GITHUB_PERSONAL_ACCESS_TOKEN": ""
+        }
+      }
+    },
+    "serena": {
+      "command": {
+        "path": "uvx",
+        "args": ["--from", "serena", "serena-mcp", "--context", "ide-assistant", "--project-root", "."]
+      }
+    },
+    "context7": {
+      "command": {
+        "path": "npx",
+        "args": ["-y", "@upstash/context7-mcp@latest"]
+      }
+    }
+  },
 }

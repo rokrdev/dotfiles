@@ -1,14 +1,16 @@
 # @feature-flow
+> Invoke: type @feature-flow in Zed agent panel to activate this workflow
 
-Automated feature pipeline with human review gates. Invoke by typing `@feature-flow` in the Agent Panel.
+Single entry point for the full feature pipeline. Runs automatically, pausing at two gates for human review before proceeding.
 
-**Pipeline:**
+## Pipeline
+
 ```
 @grill-me     → clarify requirements via interview
 @to-prd       → write PRD to docs/prd/<slug>.md
 ⏸ GATE 1     → you review the PRD
 @to-tickets   → decompose into .kanban/backlog/ tickets
-@kanban-loop  → work through tickets serially, TDD per ticket
+@kanban-loop  → drain board via TDD (serial, inline)
 ⏸ GATE 2     → you review implementation
 @ship-it      → pre-flight checks + landing options
 ```
@@ -20,42 +22,19 @@ At each gate, respond with:
 
 ---
 
-## Stage 1 — Requirements Interview
+## Stage 1 — @grill-me
 
-Conduct a requirements interview. Ask all clarifying questions before proceeding. Cover:
-- What problem does this solve?
-- Who is the user?
-- What are the success criteria?
-- What is explicitly out of scope?
-- Any technical constraints or dependencies?
-
-Do not proceed to Stage 2 until all questions are answered.
+Use @grill-me to conduct the requirements interview. Ask all clarifying questions before proceeding. Do not proceed to Stage 2 until the interview is complete.
 
 Carry forward: the full interview output (requirements, constraints, edge cases).
 
+**Proceed immediately to Stage 2 (@to-prd). Do not pause. Do not emit a "next step" message. Do not wait for user input.**
+
 ---
 
-## Stage 2 — PRD
+## Stage 2 — @to-prd
 
-Using the interview output from Stage 1, write a Product Requirements Document to `docs/prd/<slug>.md`.
-
-PRD structure:
-```markdown
-# <Feature Title>
-
-## Goal
-One sentence.
-
-## Non-goals
-- Bullet list of what this does NOT do.
-
-## Acceptance Criteria
-- [ ] Criterion 1
-- [ ] Criterion 2
-
-## Technical Notes
-Any constraints, dependencies, or implementation hints from the interview.
-```
+Use @to-prd with the interview output from Stage 1. Write the PRD to `docs/prd/<slug>.md`.
 
 Carry forward: the PRD file path and slug.
 
@@ -63,7 +42,7 @@ Carry forward: the PRD file path and slug.
 
 ## ⏸ GATE 1 — PRD Review
 
-After writing the PRD, output this block and STOP:
+After @to-prd completes, output this block and STOP:
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -87,62 +66,37 @@ Read the full PRD at docs/prd/<slug>.md before approving.
 
 ### Gate 1 responses
 
-**1** → proceed to Stage 3 (ticketing).
+**1** → proceed to Stage 3 (@to-tickets).
 
-**2 <reason>** → rewrite the PRD incorporating the reject reason. Show Gate 1 again. Track rework count. If rework_count >= 3, output: "Max rework attempts reached. Edit `docs/prd/<slug>.md` manually, then type `1` when ready." and STOP.
+**2 <reason>** → re-run @to-prd with the original interview output AND the reject reason as an additional constraint. Show Gate 1 again. Track rework count. If rework_count >= 3, output: "Max rework attempts reached. Edit `docs/prd/<slug>.md` manually, then type `1` when ready." and STOP.
 
-**3** → output: "Pipeline aborted at Gate 1. Work preserved at `docs/prd/<slug>.md`. Resume manually with @to-tickets when ready."
-
----
-
-## Stage 3 — Ticketing
-
-Using the approved PRD, decompose the feature into vertical-slice tickets and write them to `.kanban/backlog/`.
-
-Each ticket file: `.kanban/backlog/NN-<slug>.md`
-
-Ticket frontmatter:
-```yaml
----
-id: <integer>
-slug: <kebab-case>
-language: <shell|typescript|python|kotlin|swift|...>
-parallel-safe: <true|false>
-files-touched:
-  - path/to/file.ext
-depends-on: []
-acceptance: "Single sentence stating what done looks like"
----
-```
-
-Ticket body: context, failing tests to write, implementation notes.
-
-Rules:
-- Each ticket is one vertical slice — a thin piece of working functionality
-- Tickets that touch overlapping files should be sequential (parallel-safe: false)
-- Number from 00, lowest dependencies first
-- acceptance must be non-empty
-
-Proceed immediately to Stage 4 after writing tickets.
+**3** → output: "Pipeline aborted at Gate 1. Work preserved at `docs/prd/<slug>.md`. Resume manually with @to-tickets when ready." Do not delete any files.
 
 ---
 
-## Stage 4 — Implementation
+## Stage 3 — @to-tickets
 
-Before starting, derive the branch slug from the approved PRD:
-- Read `docs/prd/<slug>.md`
-- Extract the H1 title
-- Slugify: lowercase, replace spaces/special chars with hyphens, ASCII-only, max 50 chars
+Use @to-tickets with the approved PRD. Write tickets to `.kanban/backlog/`.
 
-Run `@kanban-loop` with branch name `feat/<slugified-title>`. See `@kanban-loop` for the full serial execution protocol.
+**Proceed immediately to Stage 4 (@kanban-loop). Do not pause. Do not emit a "next step" message. Do not wait for user input.**
 
-Wait for all tickets to move from backlog → done.
+---
+
+## Stage 4 — @kanban-loop
+
+Before starting the board drain, derive the branch slug from the approved PRD:
+- Read the PRD file at `docs/prd/<slug>.md` (slug carried forward from Stage 2)
+- Extract the H1 title (first `# ` line)
+- Slugify: lowercase, replace spaces/special chars with hyphens, ASCII-only, max 50 chars, strip leading/trailing hyphens
+- Use `feat/<slugified-title>` as the suggested branch name
+
+Use @kanban-loop with `--branch feat/<slug>`. Work through all tickets serially in this conversation. Each ticket follows the TDD red→green→refactor loop. Wait for the board drain to complete (all tickets in done/, all tests green).
 
 ---
 
 ## ⏸ GATE 2 — Implementation Review
 
-After all tickets are done, output this block and STOP:
+After @kanban-loop drains, output this block and STOP:
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -156,8 +110,8 @@ Changed files:
 
 Review the full diff with: git diff HEAD
 
-  1. Approve             → proceed to ship-it (confirms before pushing)
-  2. Reject <reason>     → re-run @kanban-loop to address your feedback
+  1. Approve             → proceed to @ship-it (confirms before committing)
+  2. Reject <reason>     → re-enter @kanban-loop to address your feedback
   3. Abort               → stop here; use @ship-it manually when ready
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
@@ -166,20 +120,20 @@ Review the full diff with: git diff HEAD
 
 ### Gate 2 responses
 
-**1** → proceed to Stage 5 (ship-it).
+**1** → proceed to Stage 5 (@ship-it). **Proceed immediately. Do not pause.**
 
-**2 <reason>** → re-run @kanban-loop with the reject reason as a new constraint. Show Gate 2 again after it completes. Track rework count. If rework_count >= 3, output: "Max rework attempts reached. Use @ship-it manually when ready." and STOP.
+**2 <reason>** → re-enter @kanban-loop with the reject reason as a new constraint. Show Gate 2 again after the loop completes. Track rework count. If rework_count >= 3, output: "Max rework attempts reached. Use @ship-it manually when ready." and STOP.
 
 **3** → output: "Pipeline aborted at Gate 2. Implementation preserved. Use @ship-it manually when ready."
 
 ---
 
-## Stage 5 — Ship
+## Stage 5 — @ship-it
 
-Run `@ship-it`. It will show pre-flight results and ask you to choose a landing strategy before doing anything destructive.
+Use @ship-it. It will show pre-flight results and ask you to choose a landing strategy (push / PR) before doing anything destructive.
 
 ---
 
 ## Fallback
 
-All individual prompts (@grill-me, @to-prd, @to-tickets, @kanban-loop, @ship-it) remain fully functional. Use them for manual control at any time.
+All individual prompts (@grill-me, @to-prd, @to-tickets, @kanban-loop, @ship-it) remain fully functional. Use them for manual control at any time. This prompt orchestrates, it does not replace them.

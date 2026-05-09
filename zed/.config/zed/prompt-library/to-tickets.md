@@ -1,7 +1,5 @@
----
-name: to-tickets
-description: Break a plan, spec, or PRD into local kanban tickets written to .kanban/backlog/NN-slug.md using tracer-bullet vertical slices. Invoke with @to-tickets after @to-prd, or pass a path to a PRD/spec file directly.
----
+# @to-tickets
+> Invoke: type @to-tickets in Zed agent panel to activate this workflow
 
 # To Tickets
 
@@ -32,7 +30,7 @@ Break the plan into **tracer bullet** tickets. Each ticket is a thin vertical sl
 - Prefer many thin slices over few thick ones
 - Body cap: ~40 lines per ticket
 
-**Vertical slice — hard constraints (enforced in self-check, step 8):**
+**Vertical slice hard constraints:**
 
 - Every ticket must deliver **user-observable behavior end-to-end** — not an internal module in isolation
 - If acceptance is a CLI/UI/HTTP invocation, the entry-point file (e.g. `src/cli.*`, `src/main.*`, `src/server.*`) **MUST** appear in `files-touched`
@@ -41,10 +39,10 @@ Break the plan into **tracer bullet** tickets. Each ticket is a thin vertical sl
 
 For each slice, determine:
 - **slug**: kebab-case, concise (becomes the filename suffix)
-- **language**: the primary language for this ticket (typescript, python, kotlin, swift, etc.)
-- **depends-on**: list of slugs that must be completed first; use slugs not IDs (slugs survive renumber)
-- **parallel-safe**: `true` only when `files-touched` has zero overlap with ALL other eligible tickets; any shared file → `false` for both tickets. Note: this flag is informational — it documents which tickets are safe to work on simultaneously as a human.
-- **files-touched**: list of paths/dirs the implementation will modify — must include every layer the acceptance requires
+- **language**: routes to the correct toolchain (`typescript`, `python`, `kotlin`, `swift`)
+- **depends-on**: list of slugs that must be done first; use slugs so refs survive renumber
+- **parallel-safe**: `true` only when `files-touched` has zero overlap with ALL other eligible tickets; if two sibling tickets both touch the entry-point file, both must be `false` (informational — useful for planning parallel work)
+- **files-touched**: list of paths/dirs the implementation will modify
 - **acceptance**: one sentence a human (or test) can verify
 
 **Parallel-safe overlap check:** After drafting all tickets, list every file in each ticket's `files-touched` and intersect with siblings. Any shared file → set `parallel-safe: false` for **both** tickets.
@@ -60,6 +58,7 @@ import graphlib
 graph = {
     "slug-a": {"slug-b"},   # slug-a depends on slug-b
     "slug-b": set(),
+    # ... one entry per ticket
 }
 
 ts = graphlib.TopologicalSorter(graph)
@@ -71,7 +70,7 @@ except graphlib.CycleError as e:
     # Planning must stop. Ask user to replan.
 ```
 
-Shell alternative (if Python unavailable):
+Shell alternative:
 ```sh
 tsort edges.txt 2>&1 | grep -q "has a loop" && echo "CYCLE" || echo "OK"
 ```
@@ -83,7 +82,7 @@ If a cycle is detected: **stop, report the cycle to the user, do not write any f
 Present the proposed breakdown as a numbered list. For each ticket, show:
 
 - **Slug**: `slug-name`
-- **Language**: typescript / python / kotlin / swift / etc.
+- **Language**: typescript / python / kotlin / swift
 - **Depends on**: slugs (or "none")
 - **Parallel-safe**: true / false
 - **Files touched**: list of paths
@@ -101,7 +100,6 @@ Iterate until the user approves the breakdown.
 
 After approval, assign numeric IDs using the topological sort order from step 4.
 Use zero-padded integers (`00`, `01`, `02`, …).
-In 90% of cases, `depends-on` is empty — use ID as a rough priority/sequence signal.
 Slugs in `depends-on` are the stable reference; IDs are only for filename ordering.
 
 ### 7. Write ticket files
@@ -122,7 +120,7 @@ Use this template for each file:
 ---
 id: <NN as integer>
 slug: <slug>
-language: <typescript|python|kotlin|swift|...>
+language: <typescript|python|kotlin|swift>
 depends-on: [<slug-a>, <slug-b>]   # omit field if empty
 parallel-safe: false
 files-touched: [src/foo/, test/foo/]
@@ -139,7 +137,7 @@ Restate the acceptance sentence from frontmatter, then add any sub-conditions:
 - Sub-condition 1
 - Sub-condition 2
 
-## Failing Tests (write these FIRST, run RED before any production code edit)
+## Failing Tests (write these FIRST, run RED before any src/ edit)
 
 List each failing test by file::function name. Each must map to a sub-condition of the acceptance criterion.
 
@@ -163,10 +161,10 @@ List each failing test by file::function name. Each must map to a sub-condition 
 For each generated ticket, verify all conditions before emitting:
 
 - [ ] A user can demo the merged result by running the binary/UI — not by calling an internal function
-- [ ] `files-touched` includes every layer needed for the acceptance to pass
+- [ ] `files-touched` includes every layer needed for the acceptance to pass (entry-point, command handler, store, tests)
 - [ ] The acceptance test invocation matches how a real user would trigger it (CLI command, HTTP request, UI interaction)
 - [ ] If the acceptance criterion is a CLI/UI/HTTP call, the entry-point file is in `files-touched`
-- [ ] `failing-tests` lists ≥1 test by `path::name`, each mapping to a sub-condition of the acceptance criterion
+- [ ] `failing-tests` lists ≥1 test by `path::name`, and each maps to a sub-condition of the acceptance criterion
 
 If **any** ticket fails a check → revise it before writing files. Do NOT emit horizontal tickets.
 
@@ -176,7 +174,6 @@ After writing all files, output:
 - Number of tickets written
 - Topological order (slug sequence)
 - Any tickets marked `parallel-safe: true` (candidates for parallel work)
-- Reminder: begin draining the backlog by working through tickets in topological order
 
 ---
 
@@ -186,12 +183,12 @@ After writing all files, output:
 |-------|----------|-------|
 | `id` | yes | Integer matching NN prefix; unique |
 | `slug` | yes | Kebab-case; matches filename after `NN-` |
-| `language` | yes | Primary language for routing |
+| `language` | yes | `typescript`, `python`, `kotlin`, `swift` |
 | `depends-on` | no | List of slugs required before eligible; omit if none |
 | `parallel-safe` | no | Default `false`; `true` only when `files-touched` has zero overlap with ALL other eligible tickets |
 | `files-touched` | no | Paths/dirs implementation will modify |
 | `acceptance` | yes | One sentence a human or test can verify |
-| `failing-tests` | required | Test function names to write FIRST and run RED before any production edit. Format: `path/to/test.ext::test_name`. Minimum 1 entry. |
+| `failing-tests` | yes | Test function names to write FIRST, run RED before any src/ edit. Format: `path/to/test.ext::test_name`. Minimum 1 entry. |
 
 ---
 
@@ -216,7 +213,7 @@ files-touched: [src/store.ts, test/store_test.ts]
 parallel-safe: true
 ```
 
-Fails self-check: acceptance calls an internal function; entry-point is absent; you could ship the store but no CLI subcommand is registered — acceptance cannot be verified by a user.
+Fails: acceptance calls an internal function; entry-point absent; acceptance cannot be verified by a user.
 
 ### Good — vertical slice
 
@@ -233,6 +230,6 @@ Entry-point present, acceptance exercises the binary, all layers covered.
 
 ## Next Step
 
-> **Tickets created.** Begin working through the backlog in topological order, starting with tickets that have no `depends-on` entries.
+> **Tickets created.** Implement each ticket using TDD (@tdd) — write the failing tests first, then implement the minimal code to pass.
 
 Do NOT start implementation. Your job ends here.

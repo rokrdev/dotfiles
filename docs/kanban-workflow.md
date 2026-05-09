@@ -39,9 +39,9 @@ For new features and enhancements.
 ```
 /grill-me          Clarify requirements via interview (or /grill-with-docs for domain-heavy features)
     ↓
-/to-prd            Write structured PRD to docs/prd/<slug>.md
+/to-prd            Write structured PRD to .workflow/docs/<slug>.md
     ↓
-/to-tickets        Decompose PRD into vertical-slice tickets in .kanban/backlog/
+/to-tickets        Decompose PRD into vertical-slice tickets in .workflow/kanban/backlog/
     ↓
 /kanban-loop       Drain the board — picks eligible tickets, dispatches TDD subagents, gates on green tests
     ↓
@@ -55,7 +55,7 @@ For reproducing and fixing existing bugs.
 ```
 /diagnose          Build a feedback loop → reproduce → hypothesise → instrument → fix → regression test
     ↓
-/to-bug-ticket     Write a single bug ticket to .kanban/backlog/ (Repro → Root cause → Fix → Regression guard)
+/to-bug-ticket     Write a single bug ticket to .workflow/kanban/backlog/ (Repro → Root cause → Fix → Regression guard)
     ↓
 /kanban-loop       Drain the board — same as feature lane; regression guard section required to mark done
     ↓
@@ -68,10 +68,10 @@ For reproducing and fixing existing bugs.
 |-------|-------------|
 | `/grill-me` | Interviews you with targeted questions to surface requirements, constraints, and edge cases before any spec is written. Pure discovery — no files written. |
 | `/grill-with-docs` | Same as grill-me but pulls in domain model, ADRs, and CONTEXT.md to ground questions in existing architecture. |
-| `/to-prd` | Takes the interview output and writes a structured PRD to `docs/prd/<slug>.md`. Defines goals, non-goals, user stories, and success criteria. |
-| `/to-tickets` | Reads the PRD and decomposes it into vertical-slice tickets in `.kanban/backlog/`. Each ticket delivers one user-observable outcome. Runs topological sort to sequence by dependency. |
+| `/to-prd` | Takes the interview output and writes a structured PRD to `.workflow/docs/<slug>.md`. Defines goals, non-goals, user stories, and success criteria. |
+| `/to-tickets` | Reads the PRD and decomposes it into vertical-slice tickets in `.workflow/kanban/backlog/`. Each ticket delivers one user-observable outcome. Runs topological sort to sequence by dependency. |
 | `/diagnose` | Disciplined 6-phase debugging: build feedback loop → reproduce → hypothesise → instrument → fix → cleanup. Entry point for the bug fix lane. |
-| `/to-bug-ticket` | Writes a single structured bug ticket to `.kanban/backlog/` with four required sections: Repro, Root cause, Fix, Regression guard. |
+| `/to-bug-ticket` | Writes a single structured bug ticket to `.workflow/kanban/backlog/` with four required sections: Repro, Root cause, Fix, Regression guard. |
 | `/kanban-loop` | Drains the backlog by picking eligible tickets (deps satisfied), dispatching a fresh TDD subagent per ticket, and gating completion on passing tests + acceptance verifiable. |
 | `/ship-it` | Pre-merge checklist: verifies board drained, tests green, no uncommitted changes. Then presents landing options: commit / push / PR / squash-merge / rebase-merge. |
 
@@ -98,14 +98,15 @@ No database, no server, no sync conflicts.
 
 ```
 <project-root>/
-└── .kanban/
-    ├── backlog/
-    │   ├── 01-create-short-url.md
-    │   └── 03-list-urls.md
-    ├── doing/
-    │   └── 02-redirect-url.md
-    └── done/
-        └── 00-cli-scaffold.md
+└── .workflow/
+    └── kanban/
+        ├── backlog/
+        │   ├── 01-create-short-url.md
+        │   └── 03-list-urls.md
+        ├── doing/
+        │   └── 02-redirect-url.md
+        └── done/
+            └── 00-cli-scaffold.md
 ```
 
 ### Rules
@@ -113,19 +114,19 @@ No database, no server, no sync conflicts.
 - **Column directories:** `backlog/`, `doing/`, `done/` — no others.
 - **Filename format:** `NN-slug.md` where `NN` is a zero-padded integer (topo sort order).
 - **Move with `mv`**, never `git mv`. The board is never committed.
-- **Global gitignore:** Add `.kanban/` to `~/.config/git/ignore` so it is invisible to git
+- **Global gitignore:** Add `.workflow/` to `~/.config/git/ignore` so it is invisible to git
   across every project without touching per-project `.gitignore`.
 
 ```bash
 # Add once — global gitignore
-echo '.kanban/' >> ~/.config/git/ignore
+echo '.workflow/' >> ~/.config/git/ignore
 ```
 
 ### Why per-file over BOARD.md
 
 - Atomic moves — `mv` is a single syscall, no partial writes.
 - Race-free — parallel agents each own a distinct file; no merge conflicts.
-- Grep-able — `ls .kanban/done/` is the dependency oracle.
+- Grep-able — `ls .workflow/kanban/done/` is the dependency oracle.
 
 ---
 
@@ -233,10 +234,10 @@ grill-me / grill-with-docs      ← mattpocock skill (clarifies requirements)
 spec (markdown)
     │
     ▼
-to-prd (local adapted)          ← writes docs/prd/<slug>.md
+to-prd (local adapted)          ← writes .workflow/docs/<slug>.md
     │
     ▼
-to-tickets (adapted)            ← writes .kanban/backlog/NN-slug.md
+to-tickets (adapted)            ← writes .workflow/kanban/backlog/NN-slug.md
     │
     ▼
 kanban-loop                     ← drains backlog → done
@@ -250,8 +251,8 @@ ralph reflection                ← reads done/ + tests + coverage → new backl
 | Stage | Skill | Input | Output |
 |-------|-------|-------|--------|
 | Clarify | `grill-me` or `grill-with-docs` | user request | structured spec |
-| PRD | `to-prd` (local) | spec | `docs/prd/<slug>.md` |
-| Tickets | `to-tickets` (adapted) | PRD | `.kanban/backlog/NN-slug.md` files |
+| PRD | `to-prd` (local) | spec | `.workflow/docs/<slug>.md` |
+| Tickets | `to-tickets` (adapted) | PRD | `.workflow/kanban/backlog/NN-slug.md` files |
 | Implement | `kanban-loop` | backlog/ | done/ tickets + passing tests |
 | Reflect | ralph (v2) | done/ + coverage | new backlog/ tickets |
 
@@ -265,17 +266,17 @@ ralph reflection                ← reads done/ + tests + coverage → new backl
 loop:
   check_stuck()                        # warn if anything in doing/ > 1hr old
 
-  eligible = [t for t in backlog/ if all deps in done/]
+  eligible = [t for t in .workflow/kanban/backlog/ if all deps in .workflow/kanban/done/]
 
-  if eligible is empty and backlog/ is non-empty:
+  if eligible is empty and .workflow/kanban/backlog/ is non-empty:
     DEADLOCK → warn user, list blocking deps, halt
 
-  if eligible is empty and backlog/ is empty:
+  if eligible is empty and .workflow/kanban/backlog/ is empty:
     DONE → report summary, exit
 
   ticket = min(eligible, key=id)       # lowest ID first
 
-  mv backlog/NN-slug.md → doing/NN-slug.md
+  mv .workflow/kanban/backlog/NN-slug.md → .workflow/kanban/doing/NN-slug.md
 
   agent = route_specialist(ticket.language)
   # typescript → jasper, python → snape, kotlin → conan, swift → swifty
@@ -291,7 +292,7 @@ loop:
       assert acceptance sentence verifiable
       assert frontmatter valid (id, slug, language, acceptance present)
 
-    mv doing/NN-slug.md → done/NN-slug.md
+    mv .workflow/kanban/doing/NN-slug.md → .workflow/kanban/done/NN-slug.md
 
   loop
 ```
@@ -310,9 +311,9 @@ loop:
 
 | State | Action |
 |-------|--------|
-| `backlog/` empty, `doing/` empty | Normal exit — report summary |
-| `backlog/` non-empty, `eligible` empty | Deadlock — list unresolved deps, halt |
-| Verification fails after 1 retry | Move ticket back to `backlog/`, append failure note to body, warn user |
+| `.workflow/kanban/backlog/` empty, `.workflow/kanban/doing/` empty | Normal exit — report summary |
+| `.workflow/kanban/backlog/` non-empty, `eligible` empty | Deadlock — list unresolved deps, halt |
+| Verification fails after 1 retry | Move ticket back to `.workflow/kanban/backlog/`, append failure note to body, warn user |
 
 ---
 
@@ -354,16 +355,16 @@ At the start of every loop iteration, kanban-loop runs a 10-line check:
 
 ```bash
 # Pseudocode — run inside kanban-loop skill
-for ticket in doing/:
+for ticket in .workflow/kanban/doing/:
   age = now() - mtime(ticket)
   if age > 3600:
-    warn("STUCK: {ticket} has been in doing/ for {age}s — investigate")
+    warn("STUCK: {ticket} has been in .workflow/kanban/doing/ for {age}s — investigate")
 ```
 
 If a stuck ticket is found, the loop **warns the user and pauses** before picking the next
 ticket. The user can:
-- Investigate and manually move the ticket back to `backlog/`
-- Force-continue (loop picks next eligible ticket, leaving stuck one in `doing/`)
+- Investigate and manually move the ticket back to `.workflow/kanban/backlog/`
+- Force-continue (loop picks next eligible ticket, leaving stuck one in `.workflow/kanban/doing/`)
 
 The check does not auto-recover — human judgment required.
 
@@ -391,7 +392,7 @@ Gate 3: Frontmatter valid
 
 Failure at any gate:
 - Append failure note to ticket body
-- Move back to `backlog/`
+- Move back to `.workflow/kanban/backlog/`
 - Warn user with gate number and reason
 
 ---
@@ -404,17 +405,17 @@ Not built in v1. Manual re-planning between drains.
 
 An outer loop wraps kanban-loop. After each drain (backlog empty), a reflector subagent:
 
-1. Reads all `done/` tickets
+1. Reads all `.workflow/kanban/done/` tickets
 2. Reads test coverage report
 3. Reads TODO/FIXME comments in touched files
 4. Produces new tickets with **cited evidence** (e.g. "coverage gap at src/auth/refresh.ts:42")
-5. Writes new tickets to `backlog/`
+5. Writes new tickets to `.workflow/kanban/backlog/`
 6. kanban-loop restarts
 
 ### v1 (Manual)
 
 User re-plans by hand between drains:
-- Review `done/` tickets
+- Review `.workflow/kanban/done/` tickets
 - Run coverage tool manually
 - Write new tickets via to-tickets skill
 - Re-invoke kanban-loop
@@ -438,8 +439,8 @@ User re-plans by hand between drains:
 
 | Skill | Source | Adaptation |
 |-------|--------|-----------|
-| `to-tickets` | mattpocock `to-issues` | Writes `.kanban/backlog/NN-slug.md` instead of GitHub issues. Adds YAML frontmatter. Runs topo sort. |
-| `to-prd` | mattpocock `to-prd` | Writes `docs/prd/<slug>.md` locally instead of remote. No GitHub dependency. |
+| `to-tickets` | mattpocock `to-issues` | Writes `.workflow/kanban/backlog/NN-slug.md` instead of GitHub issues. Adds YAML frontmatter. Runs topo sort. |
+| `to-prd` | mattpocock `to-prd` | Writes `.workflow/docs/<slug>.md` locally instead of remote. No GitHub dependency. |
 
 ### New Skills (built for this workflow)
 
@@ -458,11 +459,11 @@ function kb
     # kb add     — invoke to-tickets on a spec file
     switch $argv[1]
         case status
-            echo "=== DOING ===";  ls .kanban/doing/  2>/dev/null || echo "(empty)"
-            echo "=== BACKLOG ==="; ls .kanban/backlog/ 2>/dev/null || echo "(empty)"
-            echo "=== DONE ===";   ls .kanban/done/   2>/dev/null | wc -l; echo "tickets"
+            echo "=== DOING ===";  ls .workflow/kanban/doing/  2>/dev/null || echo "(empty)"
+            echo "=== BACKLOG ==="; ls .workflow/kanban/backlog/ 2>/dev/null || echo "(empty)"
+            echo "=== DONE ===";   ls .workflow/kanban/done/   2>/dev/null | wc -l; echo "tickets"
         case next
-            ls .kanban/backlog/ 2>/dev/null | head -1
+            ls .workflow/kanban/backlog/ 2>/dev/null | head -1
         case loop
             claude --skill kanban-loop
         case add
@@ -482,7 +483,7 @@ end
 - [ ] Pull 6 mattpocock skills verbatim into `claude/.claude/skills/` + build custom `ship-it` skill
 - [ ] Adapt `to-tickets` (local) and `to-prd` (local)
 - [ ] Build `kanban-loop` skill
-- [ ] Add `.kanban/` to `~/.config/git/ignore`
+- [ ] Add `.workflow/` to `~/.config/git/ignore`
 - [ ] Create `kb` fish function in `fish/.config/fish/functions/kb.fish`
 - [ ] Comment out `superpowers` from `enabledPlugins` in `claude/.claude/settings.json`
 - [ ] Update Neo agent prompt to reference kanban-loop and new skill stack
@@ -611,10 +612,10 @@ Sequenced tasks for the `vertical-slices` branch:
 |------|------|-------|
 | 1 | This doc (done) | Claude |
 | 2 | Pull 6 mattpocock skills verbatim into `claude/.claude/skills/` + build custom `ship-it` skill | Claude |
-| 3 | Adapt `to-tickets` skill (local .kanban/ output, YAML frontmatter, topo sort) | Claude |
-| 4 | Adapt `to-prd` skill (local `docs/prd/` output, no GitHub) | Claude |
+| 3 | Adapt `to-tickets` skill (local .workflow/kanban/ output, YAML frontmatter, topo sort) | Claude |
+| 4 | Adapt `to-prd` skill (local `.workflow/docs/` output, no GitHub) | Claude |
 | 5 | Build `kanban-loop` skill (eligible check, dispatch, 3-gate verify, mv) | Claude |
-| 6 | Add `.kanban/` to `~/.config/git/ignore` | Claude |
+| 6 | Add `.workflow/` to `~/.config/git/ignore` | Claude |
 | 7 | Create `kb` fish function in `fish/.config/fish/functions/kb.fish` | Claude |
 | 8 | Disable superpowers: comment out from `enabledPlugins` in `claude/.claude/settings.json` | Claude |
 | 9 | Update Neo agent prompt to reference new skill stack + kanban-loop | Claude |

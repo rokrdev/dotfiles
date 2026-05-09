@@ -1,11 +1,11 @@
 ---
 name: kanban-loop
-description: Use to drain a local .kanban/ board of vertical-slice tickets. Picks eligible tickets (deps satisfied), dispatches a fresh specialist subagent per ticket running TDD, moves files between columns. Triggers: "drain the board", "run kanban", "/kanban-loop", or after to-tickets fills backlog/.
+description: Use to drain a local .workflow/kanban/ board of vertical-slice tickets. Picks eligible tickets (deps satisfied), dispatches a fresh specialist subagent per ticket running TDD, moves files between columns. Triggers: "drain the board", "run kanban", "/kanban-loop", or after to-tickets fills backlog/.
 ---
 
 # kanban-loop
 
-Drains `.kanban/backlog/` → `doing/` → `done/` by dispatching fresh specialist subagents
+Drains `.workflow/kanban/backlog/` → `doing/` → `done/` by dispatching fresh specialist subagents
 running TDD per ticket. See `docs/kanban-workflow.md` for full design rationale.
 
 ## Commands
@@ -100,18 +100,29 @@ Confirm branch created, then proceed to Step 1.
 
 ## Step 1 — Pre-flight
 
+### 0. Migrate legacy .kanban/ board (if present)
+
+If `.kanban/` exists and `.workflow/kanban/` does not, run:
+
+```bash
+mv .kanban/ .workflow/kanban/
+```
+Log: "Migrated .kanban/ → .workflow/kanban/"
+
+This handles projects that ran kanban-loop before the `.workflow/` path change.
+
 Check board structure exists:
 
 ```
-.kanban/backlog/    ← tickets waiting
-.kanban/doing/      ← tickets in-flight
-.kanban/done/       ← completed tickets
+.workflow/kanban/backlog/    ← tickets waiting
+.workflow/kanban/doing/      ← tickets in-flight
+.workflow/kanban/done/       ← completed tickets
 ```
 
 If any directory is missing → abort with:
 
 ```
-ERROR: .kanban/ board not initialised.
+ERROR: .workflow/kanban/ board not initialised.
 Run `to-tickets` to populate backlog/, or create the three columns manually.
 ```
 
@@ -124,8 +135,8 @@ Required fields: `id` (integer), `slug` (kebab-case, matches `NN-{slug}.md`), `l
 
 ```python
 import os, time
-for f in os.listdir(".kanban/doing"):
-    age = time.time() - os.path.getmtime(f".kanban/doing/{f}")
+for f in os.listdir(".workflow/kanban/doing"):
+    age = time.time() - os.path.getmtime(f".workflow/kanban/doing/{f}")
     if age > 3600:
         print(f"STUCK ({int(age//60)}min): {f}")
 ```
@@ -143,14 +154,14 @@ If any stuck tickets found → pause, show list, ask user:
 import os, re, yaml  # drop into ctx_execute for dry-run preview
 
 done_slugs = set()
-for f in os.listdir(".kanban/done"):
+for f in os.listdir(".workflow/kanban/done"):
     m = re.match(r"\d+-(.+)\.md", f)
     if m:
         done_slugs.add(m.group(1))
 
 eligible = []
-for f in sorted(os.listdir(".kanban/backlog")):
-    path = f".kanban/backlog/{f}"
+for f in sorted(os.listdir(".workflow/kanban/backlog")):
+    path = f".workflow/kanban/backlog/{f}"
     with open(path) as fh:
         body = fh.read()
     fm = yaml.safe_load(body.split("---")[1])
@@ -160,10 +171,10 @@ for f in sorted(os.listdir(".kanban/backlog")):
 
 eligible.sort(key=lambda x: x[0])  # lowest id first
 
-if not eligible and os.listdir(".kanban/backlog"):
+if not eligible and os.listdir(".workflow/kanban/backlog"):
     blocked = []
-    for f in os.listdir(".kanban/backlog"):
-        with open(f".kanban/backlog/{f}") as fh:
+    for f in os.listdir(".workflow/kanban/backlog"):
+        with open(f".workflow/kanban/backlog/{f}") as fh:
             fm = yaml.safe_load(fh.read().split("---")[1])
         unmet = [d for d in (fm.get("depends-on") or []) if d not in done_slugs]
         blocked.append((f, unmet))
@@ -183,7 +194,7 @@ abort. Do not continue. Human must resolve.
 
 For the ticket with the lowest `id`:
 
-1. `mv .kanban/backlog/NN-slug.md .kanban/doing/NN-slug.md`
+1. `mv .workflow/kanban/backlog/NN-slug.md .workflow/kanban/doing/NN-slug.md`
 2. Map `language` → specialist:
 
 | `language` | `subagent_type` |
@@ -205,7 +216,7 @@ isolation: "worktree"   ← only when files-touched has > 3 distinct paths
 ### Subagent prompt template
 
 ```
-You are working on ticket .kanban/doing/NN-slug.md.
+You are working on ticket .workflow/kanban/doing/NN-slug.md.
 
 1. Read the ticket file in full (frontmatter + body).
 2. Invoke the `tdd` skill via the Skill tool — do NOT read the skill file and
@@ -298,11 +309,11 @@ Gate 3 — Scope clean
    Co-Authored-By: Claude Sonnet <noreply@anthropic.com>
    ```
    Validate: message must start with `<type>(<scope>):` — if not, reject and prompt subagent to fix.
-4. `mv .kanban/doing/NN-slug.md .kanban/done/NN-slug.md`
+4. `mv .workflow/kanban/doing/NN-slug.md .workflow/kanban/done/NN-slug.md`
 
 **Any gate fails:**
 - Append failure note to ticket body: `## Failure — <gate number>\n<reason>`
-- `mv .kanban/doing/NN-slug.md .kanban/backlog/NN-slug.md`
+- `mv .workflow/kanban/doing/NN-slug.md .workflow/kanban/backlog/NN-slug.md`
 - Warn user with gate number, reason, ticket name
 - Increment failure counter. If 3+ consecutive failures → **circuit breaker**: halt loop,
   surface failures, ask user to intervene before continuing.
@@ -342,7 +353,7 @@ Repeat steps 2–5 until one of the stop conditions is reached:
 | Condition | Action |
 |-----------|--------|
 | `backlog/` empty, `doing/` empty | Normal exit — print summary |
-| `eligible` empty, `backlog/` non-empty | Deadlock — list unmet deps, halt |
+| `eligible` empty, `.workflow/kanban/backlog/` non-empty | Deadlock — list unmet deps, halt |
 | User types abort / ctrl-c | Halt, leave state as-is, print partial summary |
 | 3+ consecutive ticket failures | Circuit breaker — halt, surface all failed tickets |
 
@@ -375,7 +386,7 @@ kanban-loop complete
 
 ## Related skills
 
-- `to-tickets` — fills `.kanban/backlog/` from a spec; run before this skill
+- `to-tickets` — fills `.workflow/kanban/backlog/` from a spec; run before this skill
 - `tdd` — the TDD loop run **inside** each ticket's subagent; see
   `~/.claude/skills/tdd/SKILL.md`
 - Design doc: `docs/kanban-workflow.md` — full rationale, schema, parallel rules, stuck-ticket

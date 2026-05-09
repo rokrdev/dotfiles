@@ -153,8 +153,8 @@ For multi-feature work, route through the kanban pipeline instead of inline plan
 ```
 vague request
    → grill-me (non-code) / grill-with-docs (code w/ domain model) → spec
-   → to-prd → docs/prd/<slug>.md
-   → to-tickets → .kanban/backlog/NN-slug.md (vertical slices, frontmatter schema)
+   → to-prd → .workflow/docs/<slug>.md
+   → to-tickets → .workflow/kanban/backlog/NN-slug.md (vertical slices, frontmatter schema)
    → kanban-loop → drains backlog/ via fresh specialist subagents (TDD inside each)
    → ship-it → wrap up branch (commit/push/PR/merge)
 ```
@@ -168,8 +168,8 @@ vague request
 **Skills used (mattpocock + custom; superpowers DISABLED for trial):**
 - `grill-me` — interview for non-code requirements
 - `grill-with-docs` — interview against domain model + ADRs (`CONTEXT.md`, `docs/adr/`)
-- `to-prd` — write structured PRD to `docs/prd/<slug>.md`
-- `to-tickets` — decompose PRD into vertical-slice tickets in `.kanban/backlog/`
+- `to-prd` — write structured PRD to `.workflow/docs/<slug>.md`
+- `to-tickets` — decompose PRD into vertical-slice tickets in `.workflow/kanban/backlog/`
 - `tdd` (mattpocock) — TDD inside each ticket subagent (NOT superpowers test-driven-development)
 - `kanban-loop` — orchestration loop, drains board via specialist dispatch
 - `improve-codebase-architecture` — periodic refactor pass (manual reflection step in v1)

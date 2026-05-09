@@ -6,8 +6,8 @@ Pre-flight checks, summary report, and push/PR options for a completed feature b
 ## Pre-Flight Verification
 
 **Backlog state:**
-- `.kanban/backlog/` must be empty (warn if not; can proceed)
-- `.kanban/doing/` must be empty (abort if not — work in progress)
+- `.workflow/kanban/backlog/` must be empty (warn if not; can proceed)
+- `.workflow/kanban/doing/` must be empty (abort if not — work in progress)
 
 **Test suite:**
 - Detect test command from `package.json`, `Cargo.toml`, `pyproject.toml`, `go.mod`, or Makefile
@@ -28,7 +28,7 @@ Print to user before presenting landing options:
 ✓ No uncommitted changes
 
 Tickets completed (N):
-  <list from .kanban/done/>
+  <list from .workflow/kanban/done/>
 
 Files modified:
   <git diff --stat output>
@@ -59,7 +59,7 @@ Choose [A-C]:
 **B) Push + PR:**
 - Execute A
 - Run `gh pr create` (requires `gh` CLI + `GITHUB_TOKEN` env var)
-- Assemble PR body from `.kanban/done/` ticket titles and acceptance criteria
+- Assemble PR body from `.workflow/kanban/done/` ticket titles and acceptance criteria
 - Prompt user to confirm or edit title/body before submitting
 - Return PR URL to user
 
@@ -82,13 +82,13 @@ Ready for next feature?
 ```
 
 **Optional cleanup:**
-- Ask user: "Archive completed tickets? (A) move to `.kanban/archive/<date>/` or (D) delete?"
-- If A: `mkdir -p .kanban/archive/$(date +%Y-%m-%d) && mv .kanban/done/* .kanban/archive/$(date +%Y-%m-%d)/`
-- If D: `rm .kanban/done/*`
+- Ask user: "Archive completed tickets? (A) move to `.workflow/kanban/archive/<date>/` or (D) delete?"
+- If A: `mkdir -p .workflow/kanban/archive/$(date +%Y-%m-%d) && mv .workflow/kanban/done/* .workflow/kanban/archive/$(date +%Y-%m-%d)/`
+- If D: `rm .workflow/kanban/done/*`
 
 ## Anti-Patterns (Call Out Explicitly)
 
-- Shipping with `doing/` non-empty → **Abort. Finish in-progress work first.**
+- Shipping with `.workflow/kanban/doing/` non-empty → **Abort. Finish in-progress work first.**
 - Shipping with red tests → **Abort. Fix failing tests.**
 - Committing in @ship-it → **Never. @kanban-loop commits per ticket. @ship-it only pushes.**
 - Merging to main/master → **Never. @ship-it creates a PR. Merging is the human's job.**
@@ -99,7 +99,7 @@ Ready for next feature?
 
 | State | Action |
 |-------|--------|
-| `doing/` non-empty | Abort immediately. User must resolve. |
+| `.workflow/kanban/doing/` non-empty | Abort immediately. User must resolve. |
 | Tests fail | Abort. Show failing test names + summary. |
 | Uncommitted changes found | Warn — @kanban-loop should have committed all work. Ask user to commit or stash before pushing. |
 | Not ahead of base | Abort. Nothing to ship. |

@@ -1,13 +1,11 @@
----
-name: session-handoff
-description: Produce a structured end-of-session summary so context can be cleared and a fresh agent picks up seamlessly. Invoke with @session-handoff when wrapping up a session or about to clear context.
----
+# @session-handoff
+> Invoke: type @session-handoff in Zed agent panel to activate this workflow
 
 # Session Handoff
 
-Produce a repeatable end-of-session summary so the user can clear context and start a fresh agent without losing continuity. The audience is a future instance of you, not a stakeholder — this is a context-handoff artifact, not a status report. The next agent should be able to pick up by reading this summary alone.
+Produce a repeatable end-of-session summary so the user can start a fresh agent without losing continuity. The audience is a future instance of you, not a stakeholder — this is a context-handoff artifact, not a status report. The next agent should be able to pick up by reading this summary alone.
 
-Also invoke proactively if the user says they're about to clear context without having run it yet.
+Also invoke proactively if the user says they're about to clear context without having run this yet.
 
 ## How to produce the summary
 
@@ -15,9 +13,10 @@ Also invoke proactively if the user says they're about to clear context without 
 2. **Pull state from these sources:**
    - Plan files referenced this session.
    - Any in-progress or pending tasks noted during the session.
-   - Files created or modified this session — you know what you touched; don't scan the filesystem to re-discover.
+   - Background processes started during the session — process IDs are load-bearing for the next agent.
+   - Files created or modified this session — you know what you touched; don't grep to re-discover.
    - Unresolved questions — things you asked the user that never got a clear answer, or things the user asked that got deflected.
-3. **Do NOT audit the filesystem.** This is synthesis of what happened in THIS session. No broad file sweeps. If you didn't touch it this session, it doesn't belong here.
+3. **Do NOT audit the filesystem.** This is synthesis of what happened in THIS session. No `git log`, no broad file sweeps. If you didn't touch it this session, it doesn't belong here.
 4. **Produce the output in chat.** Do not write a file.
 
 ## Output template — use exactly this structure, every time
@@ -37,9 +36,9 @@ Also invoke proactively if the user says they're about to clear context without 
 - Plan file: `<path>` (if a plan drove the session)
 
 ## Running state
-- Background processes: <what they are + how to stop> — or "none"
+- Background processes: <process IDs + what they are + how to kill> — or "none"
 - Dev servers / ports: <url + port> — or "none"
-- Open branches: <names> — or "none"
+- Open branches: <branch names> — or "none"
 
 ## Verification — how to confirm things still work
 - `<command>` — <expected outcome>
@@ -59,5 +58,6 @@ Also invoke proactively if the user says they're about to clear context without 
 2. **Never invent state.** If a section has nothing to report, write "none" — do not omit the section. Structure stability is the whole point.
 3. **Absolute paths always.** The next agent may have a different working directory.
 4. **If a plan file drove the session, name it first** in "Key files" so the next agent reads it before anything else.
-5. **No emojis, no hype, no retrospectives.** Terse and concrete — paths, commands, decisions. This is not a "what went well / what went poorly" retro. Match the tone of a seasoned engineer handing off at end-of-shift.
-6. **No recommendations beyond the single "Pick up here" line.** The next agent decides; you just hand off.
+5. **Background process IDs are critical.** If any background processes were started, their IDs must appear in "Running state" with the kill command.
+6. **No emojis, no hype, no retrospectives.** Terse and concrete — paths, commands, process IDs, decisions. This is not a "what went well / what went poorly" retro. Match the tone of a seasoned engineer handing off at end-of-shift.
+7. **No recommendations beyond the single "Pick up here" line.** The next agent decides; you just hand off.

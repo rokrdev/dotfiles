@@ -1,14 +1,12 @@
----
-name: to-prd
-description: Turn the current conversation context into a PRD and write it to docs/prd/<slug>.md in the project root. Invoke with @to-prd after running @grill-me or when you have enough context to write a PRD. The PRD is the direct input to @to-tickets.
----
+# @to-prd
+> Invoke: type @to-prd in Zed agent panel to activate this workflow
 
 # To PRD
 
 Synthesize the current conversation context and codebase understanding into a PRD.
 Writes output to `docs/prd/<slug>.md` in the project root (creates dir if missing).
 
-**This PRD is the input to @to-tickets** — run this prompt first, then run @to-tickets to break the PRD into `.kanban/backlog/` tickets.
+**This PRD is the input to @to-tickets** — run this first, then run @to-tickets to break the PRD into `.kanban/backlog/` tickets.
 
 Do NOT interview the user — synthesize what you already know. If critical information is missing, ask one focused question before proceeding.
 

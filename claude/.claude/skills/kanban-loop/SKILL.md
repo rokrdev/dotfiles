@@ -303,7 +303,6 @@ Gate 3 — Scope clean
    ```
    <type>(<scope>): <ticket title>
 
-   Ticket: <ticket-id>
    <acceptance criterion>
 
    Co-Authored-By: Claude Sonnet <noreply@anthropic.com>

@@ -380,6 +380,7 @@ kanban-loop complete
   push back to backlog. Scope drift compounds across tickets.
 - **Never dispatch multiple tickets onto the same worktree** — isolation: worktree means one
   worktree per ticket per dispatch.
+- **Never stage or commit `.workflow/` files** — `.workflow/` contains ephemeral board state (tickets, PRDs). It is globally gitignored. If a subagent's `files-touched` list includes any `.workflow/` path, fail Gate 3 immediately.
 
 ---
 

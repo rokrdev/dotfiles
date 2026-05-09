@@ -1,18 +1,18 @@
 <!--
 Adapted from: github.com/mattpocock/skills/to-issues
-Adapted: 2026-05-04 for local .kanban/ workflow
+Adapted: 2026-05-04 for local .workflow/kanban/ workflow
 See docs/kanban-workflow.md for design context
 -->
 
 ---
 name: to-tickets
-description: Break a plan, spec, or PRD into local kanban tickets written to .kanban/backlog/NN-slug.md using tracer-bullet vertical slices. No issue-tracker API required. Use when user wants to convert a PRD or spec into kanban tickets.
+description: Break a plan, spec, or PRD into local kanban tickets written to .workflow/kanban/backlog/NN-slug.md using tracer-bullet vertical slices. No issue-tracker API required. Use when user wants to convert a PRD or spec into kanban tickets.
 ---
 
 # To Tickets
 
 Break a plan into independently-workable tickets using vertical slices (tracer bullets).
-Writes each ticket to `.kanban/backlog/NN-slug.md` in the project root.
+Writes each ticket to `.workflow/kanban/backlog/NN-slug.md` in the project root.
 The PRD from `/to-prd` is the canonical input — run that first if you have only a spec.
 
 See `docs/kanban-workflow.md` for the full design context, eligibility rules, and parallel-dispatch logic.
@@ -24,7 +24,7 @@ See `docs/kanban-workflow.md` for the full design context, eligibility rules, an
 ### 1. Gather context
 
 Work from whatever is in the conversation context. If the user passes a path to a PRD
-or spec file, read it. If a PRD was just produced by `/to-prd`, use that directly.
+or spec file, read it. If a PRD was just produced by `/to-prd` (in `.workflow/docs/<slug>.md`), use that directly.
 
 ### 2. Explore the codebase (optional)
 
@@ -119,14 +119,15 @@ Slugs in `depends-on` are the stable reference; IDs are only for filename orderi
 
 ### 7. Write ticket files
 
-For each ticket, write `.kanban/backlog/NN-slug.md` (create `.kanban/backlog/` if missing).
+For each ticket, write `.workflow/kanban/backlog/NN-slug.md` (create `.workflow/kanban/backlog/` if missing).
 
 ```
-.kanban/
-└── backlog/
-    ├── 00-cli-scaffold.md
-    ├── 01-store-short-url.md
-    └── ...
+.workflow/
+└── kanban/
+    └── backlog/
+        ├── 00-cli-scaffold.md
+        ├── 01-store-short-url.md
+        └── ...
 ```
 
 Use this template for each file:
@@ -200,7 +201,7 @@ After writing all files, output:
 | `id` | yes | Integer matching NN prefix; unique |
 | `slug` | yes | Kebab-case; matches filename after `NN-` |
 | `language` | yes | Routes specialist: `typescript`, `python`, `kotlin`, `swift` |
-| `depends-on` | no | List of slugs in `done/` required before eligible; omit if none |
+| `depends-on` | no | List of slugs in `.workflow/kanban/done/` required before eligible; omit if none |
 | `parallel-safe` | no | Default `false`; `true` only when `files-touched` has zero overlap with ALL other eligible tickets; any shared file (including the entry-point) → `false` for both tickets |
 | `files-touched` | no | Paths/dirs implementation will modify — used for parallel overlap detection |
 | `acceptance` | yes | One sentence a human or test can verify |
@@ -213,7 +214,7 @@ After writing all files, output:
 A ticket is **eligible** when every slug in its `depends-on` list has a matching file in `done/`:
 
 ```
-eligible(ticket) ⟺ ∀ slug ∈ ticket.depends-on: ∃ file .kanban/done/NN-{slug}.md
+eligible(ticket) ⟺ ∀ slug ∈ ticket.depends-on: ∃ file .workflow/kanban/done/NN-{slug}.md
 ```
 
 ---
@@ -246,7 +247,7 @@ Entry-point present, acceptance exercises the binary, all layers covered.
 
 ## Key Differences from mattpocock/to-issues
 
-- No GitHub/Linear/issue-tracker API — output is local `.kanban/backlog/` files
+- No GitHub/Linear/issue-tracker API — output is local `.workflow/kanban/backlog/` files
 - HITL/AFK labels replaced by `parallel-safe: true|false` frontmatter flag
 - `needs-triage` label removed — not applicable to local kanban
 - Cycle detection mandatory before writing any files (step 4)

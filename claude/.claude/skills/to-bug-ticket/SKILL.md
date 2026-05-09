@@ -1,11 +1,11 @@
 ---
 name: to-bug-ticket
-description: Write a single structured bug ticket to .kanban/backlog/ after running /diagnose. Use when diagnose has completed and you have a root cause, repro, and fix approach. Triggers: "to-bug-ticket", "/to-bug-ticket", "write bug ticket", "create bug ticket".
+description: Write a single structured bug ticket to .workflow/kanban/backlog/ after running /diagnose. Use when diagnose has completed and you have a root cause, repro, and fix approach. Triggers: "to-bug-ticket", "/to-bug-ticket", "write bug ticket", "create bug ticket".
 ---
 
 # to-bug-ticket
 
-Writes one ticket to `.kanban/backlog/` using the bug ticket template. Takes input from `/diagnose` output.
+Writes one ticket to `.workflow/kanban/backlog/` using the bug ticket template. Takes input from `/diagnose` output.
 
 ## Input Required
 
@@ -19,7 +19,7 @@ If any are missing, tell the user to complete `/diagnose` first.
 
 ## Ticket Filename
 
-Format: `.kanban/backlog/NN-<slug>.md`
+Format: `.workflow/kanban/backlog/NN-<slug>.md`
 
 - `NN`: next available number in backlog (check existing files)
 - `slug`: kebab-case description of the bug (e.g. `null-pointer-on-empty-cart`)

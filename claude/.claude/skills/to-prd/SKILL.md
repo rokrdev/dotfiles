@@ -1,21 +1,21 @@
 <!--
 Adapted from: github.com/mattpocock/skills/to-prd
-Adapted: 2026-05-04 for local docs/prd/ workflow
+Adapted: 2026-05-04 for local .workflow/docs/ workflow
 See docs/kanban-workflow.md for design context
 -->
 
 ---
 name: to-prd
-description: Turn the current conversation context into a PRD and write it to docs/prd/<slug>.md in the project root. No issue-tracker API required. The PRD is the direct input to /to-tickets. Use when user wants to create a PRD from the current context.
+description: Turn the current conversation context into a PRD and write it to .workflow/docs/<slug>.md in the project root. No issue-tracker API required. The PRD is the direct input to /to-tickets. Use when user wants to create a PRD from the current context.
 ---
 
 # To PRD
 
 Synthesize the current conversation context and codebase understanding into a PRD.
-Writes output to `docs/prd/<slug>.md` in the project root (creates dir if missing).
+Writes output to `.workflow/docs/<slug>.md` in the project root (creates dir if missing).
 
 **This PRD is the input to `/to-tickets`** — run this skill first, then run `/to-tickets`
-to break the PRD into `.kanban/backlog/` tickets.
+to break the PRD into `.workflow/kanban/backlog/` tickets.
 
 See `docs/kanban-workflow.md` for the full pipeline context.
 
@@ -45,11 +45,11 @@ Check with the user:
 ### 3. Derive a slug
 
 Derive a short kebab-case slug from the feature name (e.g. `url-shortener-cli`,
-`cart-checkout-flow`). This becomes the filename: `docs/prd/<slug>.md`.
+`cart-checkout-flow`). This becomes the filename: `.workflow/docs/<slug>.md`.
 
 ### 4. Write the PRD file
 
-Create `docs/prd/` if it does not exist, then write `docs/prd/<slug>.md` using the
+Create `.workflow/docs/` if it does not exist, then write `.workflow/docs/<slug>.md` using the
 template below.
 
 ### 5. Report
@@ -58,7 +58,7 @@ After writing the file, output:
 - File path written
 - Slug used
 - Module list (one line each)
-- Reminder: run `/to-tickets docs/prd/<slug>.md` to generate backlog tickets
+- Reminder: run `/to-tickets .workflow/docs/<slug>.md` to generate backlog tickets
 
 ---
 
@@ -117,16 +117,16 @@ Any additional context, constraints, or open questions.
 
 ## Key Differences from mattpocock/to-prd
 
-- No GitHub/Linear/issue-tracker publish step — output is a local `docs/prd/<slug>.md` file
+- No GitHub/Linear/issue-tracker publish step — output is a local `.workflow/docs/<slug>.md` file
 - `needs-triage` label removed — not applicable to local kanban
 - Slug derived from feature name and used as filename
 - Explicit handoff note: PRD is the direct input to `/to-tickets`
-- `docs/prd/` directory created if missing
+- `.workflow/docs/` directory created if missing
 
 ---
 
 ## Next Step
 
-> **PRD written.** Run `/to-tickets` next to decompose the PRD into vertical-slice tickets in `.kanban/backlog/`.
+> **PRD written.** Run `/to-tickets` next to decompose the PRD into vertical-slice tickets in `.workflow/kanban/backlog/`.
 
 Do NOT start implementation or planning. Your job ends here.

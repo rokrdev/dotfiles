@@ -4,9 +4,9 @@
 # To PRD
 
 Synthesize the current conversation context and codebase understanding into a PRD.
-Writes output to `docs/prd/<slug>.md` in the project root (creates dir if missing).
+Writes output to `.workflow/docs/<slug>.md` in the project root (creates dir if missing).
 
-**This PRD is the input to @to-tickets** — run this first, then run @to-tickets to break the PRD into `.kanban/backlog/` tickets.
+**This PRD is the input to @to-tickets** — run this first, then run @to-tickets to break the PRD into `.workflow/kanban/backlog/` tickets.
 
 Do NOT interview the user — synthesize what you already know. If critical information is missing, ask one focused question before proceeding.
 
@@ -31,11 +31,11 @@ Check with the user:
 
 ### 3. Derive a slug
 
-Derive a short kebab-case slug from the feature name (e.g. `url-shortener-cli`, `cart-checkout-flow`). This becomes the filename: `docs/prd/<slug>.md`.
+Derive a short kebab-case slug from the feature name (e.g. `url-shortener-cli`, `cart-checkout-flow`). This becomes the filename: `.workflow/docs/<slug>.md`.
 
 ### 4. Write the PRD file
 
-Create `docs/prd/` if it does not exist, then write `docs/prd/<slug>.md` using the template below.
+Create `.workflow/docs/` if it does not exist, then write `.workflow/docs/<slug>.md` using the template below.
 
 ### 5. Report
 
@@ -102,6 +102,6 @@ Any additional context, constraints, or open questions.
 
 ## Next Step
 
-> **PRD written.** Run @to-tickets next to decompose the PRD into vertical-slice tickets in `.kanban/backlog/`.
+> **PRD written.** Run @to-tickets next to decompose the PRD into vertical-slice tickets in `.workflow/kanban/backlog/`.
 
 Do NOT start implementation or planning. Your job ends here.

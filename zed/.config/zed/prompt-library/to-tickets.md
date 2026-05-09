@@ -4,7 +4,7 @@
 # To Tickets
 
 Break a plan into independently-workable tickets using vertical slices (tracer bullets).
-Writes each ticket to `.kanban/backlog/NN-slug.md` in the project root.
+Writes each ticket to `.workflow/kanban/backlog/NN-slug.md` in the project root.
 The PRD from @to-prd is the canonical input — run that first if you have only a spec.
 
 ---
@@ -104,14 +104,15 @@ Slugs in `depends-on` are the stable reference; IDs are only for filename orderi
 
 ### 7. Write ticket files
 
-For each ticket, write `.kanban/backlog/NN-slug.md` (create `.kanban/backlog/` if missing).
+For each ticket, write `.workflow/kanban/backlog/NN-slug.md` (create `.workflow/kanban/backlog/` if missing).
 
 ```
-.kanban/
-└── backlog/
-    ├── 00-cli-scaffold.md
-    ├── 01-store-short-url.md
-    └── ...
+.workflow/
+└── kanban/
+    └── backlog/
+        ├── 00-cli-scaffold.md
+        ├── 01-store-short-url.md
+        └── ...
 ```
 
 Use this template for each file:
@@ -197,7 +198,7 @@ After writing all files, output:
 A ticket is **eligible** when every slug in its `depends-on` list has a matching file in `done/`:
 
 ```
-eligible(ticket) ⟺ ∀ slug ∈ ticket.depends-on: ∃ file .kanban/done/NN-{slug}.md
+eligible(ticket) ⟺ ∀ slug ∈ ticket.depends-on: ∃ file .workflow/kanban/done/NN-{slug}.md
 ```
 
 ---

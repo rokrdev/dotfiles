@@ -3,7 +3,7 @@
 
 > **Context note:** If context grows large during board drain, use @session-handoff to capture state, start a new conversation, and resume with @kanban-loop from where you left off.
 
-Drains `.kanban/backlog/` → `doing/` → `done/` by working through tickets serially in this conversation using TDD per ticket.
+Drains `.workflow/kanban/backlog/` → `doing/` → `done/` by working through tickets serially in this conversation using TDD per ticket.
 
 ## Commands
 
@@ -99,15 +99,15 @@ Confirm branch created, then proceed to Step 1.
 Check board structure exists:
 
 ```
-.kanban/backlog/    ← tickets waiting
-.kanban/doing/      ← tickets in-flight
-.kanban/done/       ← completed tickets
+.workflow/kanban/backlog/    ← tickets waiting
+.workflow/kanban/doing/      ← tickets in-flight
+.workflow/kanban/done/       ← completed tickets
 ```
 
 If any directory is missing → abort with:
 
 ```
-ERROR: .kanban/ board not initialised.
+ERROR: .workflow/kanban/ board not initialised.
 Run @to-tickets to populate backlog/, or create the three columns manually.
 ```
 
@@ -127,8 +127,8 @@ Required fields: `id` (integer), `slug` (kebab-case, matches `NN-{slug}.md`), `l
 
 Build the eligible ticket list:
 
-1. Collect all slugs from `.kanban/done/` (filenames `NN-slug.md` → extract slug portion)
-2. For each ticket in `.kanban/backlog/` (sorted by filename):
+1. Collect all slugs from `.workflow/kanban/done/` (filenames `NN-slug.md` → extract slug portion)
+2. For each ticket in `.workflow/kanban/backlog/` (sorted by filename):
    - Parse frontmatter (`depends-on` field)
    - If all listed deps are in done_slugs → ticket is eligible
 3. Sort eligible tickets by `id` (lowest first)
@@ -143,7 +143,7 @@ Build the eligible ticket list:
 
 Pick the ticket with the lowest `id` from the eligible set.
 
-1. `mv .kanban/backlog/NN-slug.md .kanban/doing/NN-slug.md`
+1. `mv .workflow/kanban/backlog/NN-slug.md .workflow/kanban/doing/NN-slug.md`
 2. Read the ticket file in full (frontmatter + body)
 3. Work the ticket inline using TDD — red→green→refactor:
 
@@ -209,11 +209,11 @@ Gate 3 — Scope clean
    Co-Authored-By: Claude Sonnet <noreply@anthropic.com>
    ```
    Message must start with `<type>(<scope>):` — if not, fix before committing.
-4. `mv .kanban/doing/NN-slug.md .kanban/done/NN-slug.md`
+4. `mv .workflow/kanban/doing/NN-slug.md .workflow/kanban/done/NN-slug.md`
 
 **Any gate fails:**
 - Append failure note to ticket body: `## Failure — <gate number>\n<reason>`
-- `mv .kanban/doing/NN-slug.md .kanban/backlog/NN-slug.md`
+- `mv .workflow/kanban/doing/NN-slug.md .workflow/kanban/backlog/NN-slug.md`
 - Warn user with gate number, reason, ticket name
 - Increment failure counter. If 3+ consecutive failures → **circuit breaker**: halt loop, surface failures, ask user to intervene
 - Ask user: retry / skip / abort
@@ -226,7 +226,7 @@ Repeat Steps 2–4 until one of the stop conditions is reached:
 
 | Condition | Action |
 |-----------|--------|
-| `backlog/` empty, `doing/` empty | Normal exit — print summary |
+| `.workflow/kanban/backlog/` empty, `doing/` empty | Normal exit — print summary |
 | eligible empty, `backlog/` non-empty | Deadlock — list unmet deps, halt |
 | User types abort | Halt, leave state as-is, print partial summary |
 | 3+ consecutive ticket failures | Circuit breaker — halt, surface all failed tickets |
@@ -244,7 +244,7 @@ Repeat Steps 2–4 until one of the stop conditions is reached:
 
 ## Anti-patterns
 
-- **Never write to `done/` without all verification gates passing** — partial work is worse than no work.
+- **Never write to `.workflow/kanban/done/` without all verification gates passing** — partial work is worse than no work.
 - **Never continue after deadlock** — surface it. A deadlock means @to-tickets produced a broken dependency graph. Human fix required.
 - **Never accept changes to files outside `files-touched`** — fail Gate 3, push back to backlog.
 - **Red-first is non-negotiable** — a test that passes on first run is a fake test.
@@ -253,5 +253,5 @@ Repeat Steps 2–4 until one of the stop conditions is reached:
 
 ## Related prompts
 
-- `@to-tickets` — fills `.kanban/backlog/` from a spec; run before this prompt
+- `@to-tickets` — fills `.workflow/kanban/backlog/` from a spec; run before this prompt
 - `@ship-it` — push branch and open PR after board is drained

@@ -83,7 +83,8 @@ After successful commit/push/merge:
 ✓ Shipped!
 
 Next steps:
-- Branch is now ahead of main by 3 commits
+- Branch is now ahead of main by <N> commits
+  (compute with: git rev-list --count origin/HEAD..HEAD)
 - Create a new ticket via to-tickets skill for next feature
 - Or invoke kanban-loop again if backlog has items
 

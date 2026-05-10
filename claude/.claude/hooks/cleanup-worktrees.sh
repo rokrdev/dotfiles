@@ -1,4 +1,5 @@
 #!/bin/bash
+set -o pipefail
 # SessionStart hook: remove worktrees whose branches are merged into main
 # Runs at session start to catch any worktrees missed by previous sessions.
 
@@ -21,6 +22,11 @@ TRUNK=$(git -C "$REPO" symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed '
 if [ -z "$TRUNK" ]; then
   _log "cleanup-worktrees" "WARNING: origin/HEAD not set, defaulting TRUNK to main"
   TRUNK="main"
+fi
+
+if ! git -C "$REPO" rev-parse --verify "$TRUNK" &>/dev/null; then
+  _log "cleanup-worktrees" "WARNING: trunk branch '$TRUNK' does not exist; skipping cleanup"
+  exit 0
 fi
 
 STALE_SECONDS=$((15 * 24 * 3600))

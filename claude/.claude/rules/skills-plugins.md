@@ -4,9 +4,8 @@ Load on demand — not auto-loaded every session. See `rules/skills.md` for alwa
 
 ## Superpowers Skills (`superpowers@claude-plugins-official` v5.0.7)
 
-> **TRIAL PAUSE (2026-05-04 → 2026-05-11):** Superpowers plugin is not in `enabledPlugins`. These skills are unavailable. Re-evaluate on 2026-05-11.
+> **Trial ended 2026-05-11.** Re-enable superpowers in `settings.json` `enabledPlugins` if keeping; otherwise remove this section.
 
-<!--
 | Skill | Trigger | Purpose |
 |-------|---------|---------|
 | `superpowers:brainstorming` | Before any creative work — features, components, architecture | Structured brainstorming before design decisions |
@@ -23,7 +22,6 @@ Load on demand — not auto-loaded every session. See `rules/skills.md` for alwa
 | `superpowers:using-git-worktrees` | Before feature work needing isolation | Git worktree setup and workflow |
 | `superpowers:writing-skills` | When creating or editing skills | Skill authoring and verification workflow |
 | `superpowers:using-superpowers` | Start of any conversation | Discover and load relevant skills |
--->
 
 ## Plugin Skills (via `enabledPlugins` in settings.json)
 

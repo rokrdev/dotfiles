@@ -114,13 +114,8 @@ No database, no server, no sync conflicts.
 - **Column directories:** `backlog/`, `doing/`, `done/` — no others.
 - **Filename format:** `NN-slug.md` where `NN` is a zero-padded integer (topo sort order).
 - **Move with `mv`**, never `git mv`. The board is never committed.
-- **Global gitignore:** Add `.workflow/` to `~/.config/git/ignore` so it is invisible to git
-  across every project without touching per-project `.gitignore`.
-
-```bash
-# Add once — global gitignore
-echo '.workflow/' >> ~/.config/git/ignore
-```
+- **Global gitignore:** `.workflow/` is already managed by the `git` stow package in `~/.dotfiles/git/.gitignore_global`.
+  No manual step required — it is invisible to git across every project.
 
 ### Why per-file over BOARD.md
 
@@ -483,7 +478,7 @@ end
 - [ ] Pull 6 mattpocock skills verbatim into `claude/.claude/skills/` + build custom `ship-it` skill
 - [ ] Adapt `to-tickets` (local) and `to-prd` (local)
 - [ ] Build `kanban-loop` skill
-- [ ] Add `.workflow/` to `~/.config/git/ignore`
+- [ ] Verify `.workflow/` is ignored via `git/.gitignore_global` (already managed by stow)
 - [ ] Create `kb` fish function in `fish/.config/fish/functions/kb.fish`
 - [ ] Comment out `superpowers` from `enabledPlugins` in `claude/.claude/settings.json`
 - [ ] Update Neo agent prompt to reference kanban-loop and new skill stack
@@ -518,13 +513,11 @@ Three options:
 # 1. Re-enable superpowers in settings.json
 #    Uncomment the "superpowers@claude-plugins-official" entry in enabledPlugins
 
-# 2. Restow claude package
+# 2. Restow claude package to remove symlinks to kanban skills
 cd ~/.dotfiles && stow -R claude
 
-# 3. Optionally remove kanban skills
-rm ~/.claude/skills/kanban-loop.md
-rm ~/.claude/skills/to-tickets.md
-rm ~/.claude/skills/to-prd.md
+# The kanban skills (kanban-loop, to-tickets, to-prd) are directories managed by stow.
+# Restowing automatically removes their symlinks from ~/.claude/skills/
 ```
 
 ---
@@ -615,7 +608,7 @@ Sequenced tasks for the `vertical-slices` branch:
 | 3 | Adapt `to-tickets` skill (local .workflow/kanban/ output, YAML frontmatter, topo sort) | Claude |
 | 4 | Adapt `to-prd` skill (local `.workflow/docs/` output, no GitHub) | Claude |
 | 5 | Build `kanban-loop` skill (eligible check, dispatch, 3-gate verify, mv) | Claude |
-| 6 | Add `.workflow/` to `~/.config/git/ignore` | Claude |
+| 6 | Verify `.workflow/` is ignored via `git/.gitignore_global` (already managed by stow) | Claude |
 | 7 | Create `kb` fish function in `fish/.config/fish/functions/kb.fish` | Claude |
 | 8 | Disable superpowers: comment out from `enabledPlugins` in `claude/.claude/settings.json` | Claude |
 | 9 | Update Neo agent prompt to reference new skill stack + kanban-loop | Claude |

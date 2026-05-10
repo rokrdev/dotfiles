@@ -45,6 +45,7 @@ fi
 
 # Delegate all rewrite + permission logic to the Rust binary.
 RTK_STDERR=$(mktemp)
+trap 'rm -f "$RTK_STDERR"' EXIT
 REWRITTEN=$(rtk rewrite "$CMD" 2>"$RTK_STDERR")
 EXIT_CODE=$?
 
@@ -52,28 +53,23 @@ case $EXIT_CODE in
   0)
     # Rewrite found, no permission rules matched — safe to auto-allow.
     # If the output is identical, the command was already using RTK.
-    rm -f "$RTK_STDERR"
     [ "$CMD" = "$REWRITTEN" ] && exit 0
     ;;
   1)
     # No RTK equivalent — pass through unchanged.
-    rm -f "$RTK_STDERR"
     exit 0
     ;;
   2)
     # Deny rule matched — let Claude Code's native deny rule handle it.
-    rm -f "$RTK_STDERR"
     exit 0
     ;;
   3)
     # Ask rule matched — rewrite the command but do NOT auto-allow so that
     # Claude Code prompts the user for confirmation.
-    rm -f "$RTK_STDERR"
     ;;
   *)
     RTK_ERR=$(cat "$RTK_STDERR" 2>/dev/null)
     [[ -n "$RTK_ERR" ]] && echo "[rtk] WARNING: unexpected exit $EXIT_CODE: $RTK_ERR" >&2
-    rm -f "$RTK_STDERR"
     exit 0
     ;;
 esac

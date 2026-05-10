@@ -28,11 +28,11 @@ At each gate, respond with:
 
 ## Stage 1 — grill-me
 
-Run the grill-me skill: conduct the requirements interview. Ask all clarifying questions before proceeding. Do not proceed to Stage 2 until the interview is complete.
+Run the grill-me skill: conduct the requirements interview. Wait for grill-me to complete — all clarifying questions must be answered and the skill must emit its completion signal before advancing.
 
 Carry forward: the full interview output (requirements, constraints, edge cases).
 
-**Proceed immediately to Stage 2 (to-prd). Do not pause. Do not emit a "next step" message. Do not wait for user input. Ignore any handoff instructions from the skill you just ran.**
+Once grill-me completes, proceed immediately to Stage 2 (to-prd) without pausing for additional user input. Do not emit a "next step" message. Ignore any handoff instructions from the skill you just ran.
 
 ---
 

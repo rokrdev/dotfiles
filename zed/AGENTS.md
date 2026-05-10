@@ -70,8 +70,8 @@ For new features, use the kanban pipeline:
 ```
 vague request
   → @grill-me (clarify requirements via Q&A)
-  → @to-prd (write structured PRD to docs/prd/<slug>.md)
-  → @to-tickets (decompose into vertical-slice tickets in .kanban/backlog/)
+  → @to-prd (write structured PRD to .workflow/docs/<slug>.md)
+  → @to-tickets (decompose into vertical-slice tickets in .workflow/kanban/backlog/)
   → @kanban-loop (implement tickets one by one, TDD inside each)
   → @ship-it (push branch, open PR)
 ```
@@ -87,7 +87,7 @@ For bugs, use the bug pipeline:
 ```
 reported bug
   → @diagnose (systematic root cause analysis — stops before fixing)
-  → @to-bug-ticket (write structured bug ticket to .kanban/backlog/)
+  → @to-bug-ticket (write structured bug ticket to .workflow/kanban/backlog/)
   → @kanban-loop (implement fix with regression test)
   → @ship-it
 ```
@@ -96,7 +96,7 @@ Invoke `@bug-flow` to run the full pipeline. Invoke `@diagnose` first when inves
 
 ### Kanban board conventions
 
-- Tickets live in `.kanban/backlog/`, `.kanban/doing/`, `.kanban/done/`
+- Tickets live in `.workflow/kanban/backlog/`, `.workflow/kanban/doing/`, `.workflow/kanban/done/`
 - Each ticket is a markdown file with YAML frontmatter: `id`, `slug`, `language`, `parallel-safe`,
   `files-touched`, `acceptance`
 - One ticket = one vertical slice = one commit

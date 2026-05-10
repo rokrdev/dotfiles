@@ -5,13 +5,13 @@ You have context-mode MCP tools available. These rules are NOT optional — they
 ## BLOCKED commands — do NOT attempt these
 
 ### curl / wget — BLOCKED
-Any Bash command containing `curl` or `wget` is intercepted and replaced with an error message. Do NOT retry.
+Any Bash command containing `curl` or `wget` is intercepted and replaced with an error message.
 Instead use:
 - `ctx_fetch_and_index(url, source)` to fetch and index web pages
 - `ctx_execute(language: "javascript", code: "const r = await fetch(...)")` to run HTTP calls in sandbox
 
 ### Inline HTTP — BLOCKED
-Any Bash command containing `fetch('http`, `requests.get(`, `requests.post(`, `http.get(`, or `http.request(` is intercepted and replaced with an error message. Do NOT retry with Bash.
+Any Bash command containing `fetch('http`, `requests.get(`, `requests.post(`, `http.get(`, or `http.request(` is intercepted and replaced with an error message.
 Instead use:
 - `ctx_execute(language, code)` to run HTTP calls in sandbox — only stdout enters context
 

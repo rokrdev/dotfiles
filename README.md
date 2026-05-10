@@ -76,7 +76,7 @@ To add a new tool: create a top-level directory with the correct mirrored path, 
 
 ## Utilities
 
-- **`clear-all`** — zsh script at repo root that unstows all packages at once (`stow -D` on each). Useful for a clean removal of all symlinks.
+- **`clear.sh`** — shell script at repo root that unstows all packages at once (`stow -D` on each). Useful for a clean removal of all symlinks.
 
 ## Docs
 

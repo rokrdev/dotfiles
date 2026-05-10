@@ -74,3 +74,4 @@ See `rules/specialist-agents.md` for shared limits (3-file cap, NEEDS_CONTEXT, D
 - No mocks except at system boundaries (network, file system, notifications, hardware)
 - Arrange/Act/Assert; one clear assertion per test where possible
 - Test file mirrors source: `Sources/Foo/Bar.swift` → `Tests/FooTests/BarTests.swift`
+- Xcode test target conventions (`<Name>Tests/`) override the global `test/` directory default.

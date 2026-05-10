@@ -102,4 +102,4 @@ These rules will apply to all future agent sessions in this project.
 
 ## Related Skills
 
-Called from: `pre-commit` skill (post-merge step) — typical invocation order is `pre-commit` → code review (via `superpowers:requesting-code-review` or `pr-review-toolkit:review-pr`) → merge → `compound` to capture lessons.
+Typically invoked after code review (via `superpowers:requesting-code-review` or `pr-review-toolkit:review-pr`) and merging to capture lessons into the project.

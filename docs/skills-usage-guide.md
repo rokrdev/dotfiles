@@ -24,8 +24,8 @@ Branch drained, ready to land → /ship-it
 |-------|------|--------|
 | `grill-me` | Non-code project — gather requirements from scratch | Structured spec (stdout) |
 | `grill-with-docs` | Existing codebase — interview against CONTEXT.md + ADRs | Structured spec (stdout) |
-| `to-prd` | After interview output is ready | `docs/prd/<slug>.md` |
-| `to-tickets` | After PRD exists | `.kanban/backlog/NN-<slug>.md` per slice |
+| `to-prd` | After interview output is ready | `.workflow/docs/<slug>.md` |
+| `to-tickets` | After PRD exists | `.workflow/kanban/backlog/NN-<slug>.md` per slice |
 | `kanban-loop` | After tickets written | Drains backlog via specialist subagents |
 | `tdd` | Inside each ticket subagent (auto — rarely manual) | Red→green→refactor cycle |
 | `diagnose` | Bug with unknown root cause | Hypothesis list → fix plan |
@@ -42,10 +42,10 @@ Branch drained, ready to land → /ship-it
 
 ## kanban-loop behaviour
 
-- Picks tickets from `.kanban/backlog/` with satisfied deps
+- Picks tickets from `.workflow/kanban/backlog/` with satisfied deps
 - Dispatches fresh specialist subagent per ticket (Jasper for TS, Snape for Python, etc.)
 - TDD enforced inside each subagent — red first, no exceptions
-- Moves ticket to `.kanban/done/` on completion
+- Moves ticket to `.workflow/kanban/done/` on completion
 - Pauses for review between tickets if configured
 
 ## tdd (when to invoke manually)

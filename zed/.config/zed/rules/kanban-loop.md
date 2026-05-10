@@ -141,6 +141,8 @@ Build the eligible ticket list:
 
 ## Step 3 — Work Ticket (Serial)
 
+> **Note (Zed adaptation):** Zed runs kanban-loop in a single-agent context. TDD runs inline here, unlike the Claude CLI version which dispatches a fresh specialist subagent per ticket. The Claude CLI version is the reference implementation.
+
 Pick the ticket with the lowest `id` from the eligible set.
 
 1. `mv .workflow/kanban/backlog/NN-slug.md .workflow/kanban/doing/NN-slug.md`
@@ -203,10 +205,9 @@ Gate 3 — Scope clean
    ```
    <type>(<scope>): <ticket title>
 
-   Ticket: <ticket-id>
    <acceptance criterion>
 
-   Co-Authored-By: Claude Sonnet <noreply@anthropic.com>
+   Co-Authored-By: Claude <noreply@anthropic.com>
    ```
    Message must start with `<type>(<scope>):` — if not, fix before committing.
 4. `mv .workflow/kanban/doing/NN-slug.md .workflow/kanban/done/NN-slug.md`

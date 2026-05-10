@@ -85,7 +85,7 @@ Tool preference:
 
 ## ⛔ STOP — Hand Off to @to-bug-ticket
 
-**Do NOT write any fix code. Do NOT proceed to Phase 5.**
+**Do NOT write any code. Do NOT proceed to Phase 5.**
 
 Your job ends at the end of Phase 4. Output the following `DIAGNOSIS_COMPLETE` envelope and stop:
 
@@ -115,7 +115,7 @@ Then tell the user:
 
 ## Phase 5 — Fix + Regression Test
 
-> **Skipped in this workflow.** The fix is implemented via @to-bug-ticket.
+> **Skipped in this workflow.** The fix is implemented via @to-bug-ticket → @kanban-loop.
 > The `DIAGNOSIS_COMPLETE` envelope above contains everything needed.
 
 ## Phase 6 — Cleanup + Post-mortem

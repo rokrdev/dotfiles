@@ -305,7 +305,7 @@ Gate 3 — Scope clean
 
    <acceptance criterion>
 
-   Co-Authored-By: Claude Sonnet <noreply@anthropic.com>
+   Co-Authored-By: Claude <noreply@anthropic.com>
    ```
    Validate: message must start with `<type>(<scope>):` — if not, reject and prompt subagent to fix.
 4. `mv .workflow/kanban/doing/NN-slug.md .workflow/kanban/done/NN-slug.md`

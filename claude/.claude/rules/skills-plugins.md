@@ -2,27 +2,6 @@
 
 Load on demand — not auto-loaded every session. See `rules/skills.md` for always-active custom skills.
 
-## Superpowers Skills (`superpowers@claude-plugins-official` v5.0.7)
-
-> **Trial ended 2026-05-11.** Re-enable superpowers in `settings.json` `enabledPlugins` if keeping; otherwise remove this section.
-
-| Skill | Trigger | Purpose |
-|-------|---------|---------|
-| `superpowers:brainstorming` | Before any creative work — features, components, architecture | Structured brainstorming before design decisions |
-| `superpowers:writing-plans` | Before entering plan mode on complex tasks | Structured planning with brainstorming step |
-| `superpowers:executing-plans` | When executing a written implementation plan | Phased plan execution in a separate session |
-| `superpowers:test-driven-development` | Before writing implementation code for any feature/bugfix | TDD workflow enforcement |
-| `superpowers:requesting-code-review` | After completing a logical chunk of work | Structured code review checklist |
-| `superpowers:receiving-code-review` | When receiving code review feedback | Process feedback before implementing suggestions |
-| `superpowers:systematic-debugging` | When debugging with unknown root cause | Step-by-step debugging protocol |
-| `superpowers:verification-before-completion` | Before claiming work is complete/fixed/passing | Final verification checklist before commit or close |
-| `superpowers:finishing-a-development-branch` | When implementation is complete and tests pass | Decide how to land the branch (PR, squash, etc.) |
-| `superpowers:dispatching-parallel-agents` | When facing 2+ independent tasks | Parallel subagent dispatch for independent work |
-| `superpowers:subagent-driven-development` | When executing plans with independent tasks | Subagent orchestration within current session |
-| `superpowers:using-git-worktrees` | Before feature work needing isolation | Git worktree setup and workflow |
-| `superpowers:writing-skills` | When creating or editing skills | Skill authoring and verification workflow |
-| `superpowers:using-superpowers` | Start of any conversation | Discover and load relevant skills |
-
 ## Plugin Skills (via `enabledPlugins` in settings.json)
 
 ### context-mode (`context-mode@context-mode`)

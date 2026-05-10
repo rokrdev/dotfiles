@@ -134,9 +134,11 @@ Then tell the user:
 > The `DIAGNOSIS_COMPLETE` envelope above contains everything `/to-bug-ticket` needs.
 > `/kanban-loop` will write the failing test first, then implement the fix (TDD), then verify the regression guard passes.
 
-## Phase 6 — Cleanup + Post-mortem
+## Phase 6 — Cleanup + Post-mortem ⚠️ UNREACHABLE IN BUG-FLOW — manual use only
 
 > **Runs after `/kanban-loop` completes**, not here. `/ship-it` will handle final cleanup verification.
+>
+> This phase only executes when diagnose is invoked standalone outside of bug-flow. In the bug-flow workflow, diagnose hard-stops at Phase 4 and hands off to `/to-bug-ticket`. Phase 5 is skipped entirely.
 >
 > One thing to do now: check whether the bug reveals an architectural gap (no good test seam, hidden coupling). If so, note it in the DIAGNOSIS_COMPLETE envelope under "Architecture note".
 

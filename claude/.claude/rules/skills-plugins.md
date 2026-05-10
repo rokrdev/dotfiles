@@ -2,25 +2,6 @@
 
 Load on demand — not auto-loaded every session. See `rules/skills.md` for always-active custom skills.
 
-## Superpowers Skills (`superpowers@claude-plugins-official` v5.0.7)
-
-| Skill | Trigger | Purpose |
-|-------|---------|---------|
-| `superpowers:brainstorming` | Before any creative work — features, components, architecture | Structured brainstorming before design decisions |
-| `superpowers:writing-plans` | Before entering plan mode on complex tasks | Structured planning with brainstorming step |
-| `superpowers:executing-plans` | When executing a written implementation plan | Phased plan execution in a separate session |
-| `superpowers:test-driven-development` | Before writing implementation code for any feature/bugfix | TDD workflow enforcement |
-| `superpowers:requesting-code-review` | After completing a logical chunk of work | Structured code review checklist |
-| `superpowers:receiving-code-review` | When receiving code review feedback | Process feedback before implementing suggestions |
-| `superpowers:systematic-debugging` | When debugging with unknown root cause | Step-by-step debugging protocol |
-| `superpowers:verification-before-completion` | Before claiming work is complete/fixed/passing | Final verification checklist before commit or close |
-| `superpowers:finishing-a-development-branch` | When implementation is complete and tests pass | Decide how to land the branch (PR, squash, etc.) |
-| `superpowers:dispatching-parallel-agents` | When facing 2+ independent tasks | Parallel subagent dispatch for independent work |
-| `superpowers:subagent-driven-development` | When executing plans with independent tasks | Subagent orchestration within current session |
-| `superpowers:using-git-worktrees` | Before feature work needing isolation | Git worktree setup and workflow |
-| `superpowers:writing-skills` | When creating or editing skills | Skill authoring and verification workflow |
-| `superpowers:using-superpowers` | Start of any conversation | Discover and load relevant skills |
-
 ## Plugin Skills (via `enabledPlugins` in settings.json)
 
 ### context-mode (`context-mode@context-mode`)
@@ -71,19 +52,24 @@ Load on demand — not auto-loaded every session. See `rules/skills.md` for alwa
 | `claude-code-setup:claude-automation-recommender` | Analyzing a codebase for automation opportunities | Recommend hooks, subagents, skills, and workflows |
 
 ### swift-lsp (`swift-lsp@claude-plugins-official`)
-LSP-backed Swift language intelligence — provides symbol navigation, type resolution, and diagnostics for Swift/iOS/macOS projects.
+| Skill | Trigger | Purpose |
+|-------|---------|---------|
+| `swift-lsp` | Swift/iOS/macOS projects needing symbol navigation, type resolution, or diagnostics | LSP-backed Swift language intelligence (manual invocation only) |
 
 ### code-simplifier (`code-simplifier@claude-plugins-official`)
-Simplifies code for clarity and maintainability — reviews changed code and suggests reductions in complexity.
+| Skill | Trigger | Purpose |
+|-------|---------|---------|
+| `code-simplifier` | After completing a feature or refactor — reviewing changed code for complexity | Simplifies code for clarity and maintainability (manual invocation only) |
 
 ### security-guidance (`security-guidance@claude-plugins-official`)
-Security review guidance and best practices — provides structured security analysis and remediation recommendations.
+| Skill | Trigger | Purpose |
+|-------|---------|---------|
+| `security-guidance` | When reviewing code for security issues or planning security-sensitive features | Structured security analysis and remediation recommendations (manual invocation only) |
 
 ## Built-in / Native Skills (always available)
 | Skill | Purpose |
 |-------|---------|
 | `simplify` | Review changed code for reuse, quality, efficiency; fix issues |
-| `pre-commit` | Simplify → review → test before committing |
 | `init` | Initialize a new CLAUDE.md for a repo |
 | `review` | Review a pull request |
 | `security-review` | Security review of pending branch changes |

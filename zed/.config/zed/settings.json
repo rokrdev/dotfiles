@@ -7,6 +7,8 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "helix_mode": true,
+  "cli_default_open_behavior": "new_window",
   "autosave": "on_focus_change",
   "current_line_highlight": "all",
   "which_key": {
@@ -51,7 +53,7 @@
     "play_sound_when_agent_done": "always",
     "sidebar_side": "left",
   },
-  "vim_mode": true,
+  "vim_mode": false,
   "buffer_font_family": "MonoLisa Nerd Font",
   "buffer_font_weight": 100,
   "buffer_font_size": 14,
@@ -60,7 +62,7 @@
   "theme": {
     "mode": "system",
     "light": "One Light",
-    "dark": "Noctis Minimus",
+    "dark": "Catppuccin Mocha",
   },
   "lsp": {
     "kotlin-lsp": {
@@ -94,5 +96,27 @@
     "react-typescript-snippets": true,
     "toml": true,
     "typescript-snippets": true,
+  },
+  "context_servers": {
+    "context-mode": {
+      "command": "context-mode",
+      "args": [],
+      "env": {}
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": ""
+      }
+    },
+    "serena": {
+      "command": "uvx",
+      "args": ["--from", "serena", "serena-mcp", "--context", "ide-assistant", "--project-root", "."]
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    }
   },
 }

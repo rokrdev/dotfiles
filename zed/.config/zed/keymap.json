@@ -82,7 +82,7 @@
     },
   },
   {
-    "context": "Workspace && !Terminal",
+    "context": "Workspace && !Terminal && vim_mode == normal",
     "bindings": {
       "space o": [
         "projects::OpenRecent",
@@ -101,6 +101,12 @@
           "create_new_window": false,
         },
       ],
+    },
+  },
+  {
+    "context": "(vim_mode == helix_normal || vim_mode == helix_select) && !menu",
+    "bindings": {
+      "g a": "pane::AlternateFile",
     },
   },
 ]

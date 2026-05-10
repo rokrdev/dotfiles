@@ -1,6 +1,3 @@
----
-description: Security rules
----
 # Security Rules
 - Never commit secrets, tokens, or credentials
 - Always validate at system boundaries (user input, external APIs)

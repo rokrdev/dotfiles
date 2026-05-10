@@ -7,8 +7,6 @@ Hook scripts live in `~/.claude/hooks/` and are registered in `settings.json`.
 Fire in this order:
 
 1. **rtk-rewrite.sh** (Bash) — rewrites commands through the RTK proxy for token savings
-2. **superpowers-redirect.sh** (Write, Edit) — blocks spec/plan markdown writes outside `~/projects/`
-3. **pre-commit-reminder.sh** (Bash `git commit:*`) — reminds the user to invoke the `pre-commit` skill before committing
 
 ## PermissionRequest
 
@@ -34,8 +32,7 @@ Fire in this order:
 
 ## Maintenance
 
-- Plugin-provided hooks (e.g. context-mode) are version-pinned in `settings.json` and may change on plugin update. Run `ctx doctor` if a plugin hook stops firing.
-- Plugin hook paths may change on plugin update. Run `ctx upgrade` for context-mode updates.
+- Plugin hooks may change on update — run `ctx doctor` to diagnose, `ctx upgrade` to update.
 - Local hooks under `~/.claude/hooks/` are stable — edit the source in `~/.dotfiles/claude/.claude/hooks/` and re-stow.
 
 ## Linting

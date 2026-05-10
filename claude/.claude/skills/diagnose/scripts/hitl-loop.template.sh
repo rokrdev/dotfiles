@@ -14,15 +14,21 @@
 
 set -euo pipefail
 
+ERRORED=""
+ERROR_MSG=""
+
 step() {
-  printf '\n>>> %s\n' "$1"
-  read -r -p "    [Enter when done] " _
+  printf '\n>>> %s\n' "$1" >&2
+  read -r -p "    [Enter when done] " _ || true
 }
 
 capture() {
   local var="$1" question="$2" answer
-  printf '\n>>> %s\n' "$question"
-  read -r -p "    > " answer
+  printf '\n>>> %s\n' "$question" >&2
+  if ! read -r -p "    > " answer; then
+    printf '[hitl-loop] ERROR: stdin is not interactive — cannot capture user input\n' >&2
+    exit 1
+  fi
   printf -v "$var" '%s' "$answer"
 }
 
@@ -36,6 +42,6 @@ capture ERROR_MSG "Paste the error message (or 'none'):"
 
 # --- edit above ---------------------------------------------------------
 
-printf '\n--- Captured ---\n'
+printf '\n--- Captured ---\n' >&2
 printf 'ERRORED=%s\n' "$ERRORED"
 printf 'ERROR_MSG=%s\n' "$ERROR_MSG"

@@ -93,8 +93,7 @@
       "Write(**/migrations/**)",
       "Edit(**/migrations/**)"
     ],
-    "defaultMode": "acceptEdits",
-    "_trial_notes_2026_05_04": "~/projects/** permissions added for 7-day kanban-trial (2026-05-04 to 2026-05-11)"
+    "defaultMode": "acceptEdits"
   },
   "hooks": {
     "SessionStart": [

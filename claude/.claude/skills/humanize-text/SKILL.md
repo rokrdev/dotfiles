@@ -1,6 +1,6 @@
 ---
 name: humanize-text
-description: Rewrite AI-generated text so it reads like a human wrote it, without losing meaning or intent. Use this skill whenever the user asks to "humanize", "de-AI", "make this sound human/natural/less robotic", "remove the AI tells", or pastes a draft (email reply, cover letter, message, LinkedIn post, comment, blog draft, doc) and asks to clean it up, edit it, soften it, or make it sound more like them. Also trigger when the user complains that something "sounds AI", has "too many em dashes", or "sounds like ChatGPT/Claude wrote it". Apply this skill even when the user does not explicitly use the word "humanize" — if they're handing you AI-flavored prose and want it polished before they send it, this is the skill.
+description: 'Rewrite AI-generated text so it reads like a human wrote it, without losing meaning or intent. Use this skill whenever the user asks to "humanize", "de-AI", "make this sound human/natural/less robotic", "remove the AI tells", or pastes a draft (email reply, cover letter, message, LinkedIn post, comment, blog draft, doc) and asks to clean it up, edit it, soften it, or make it sound more like them. Also trigger when the user complains that something "sounds AI", has "too many em dashes", or "sounds like ChatGPT/Claude wrote it". Apply this skill even when the user does not explicitly use the word "humanize" — if they''re handing you AI-flavored prose and want it polished before they send it, this is the skill.'
 ---
 
 # humanize-text

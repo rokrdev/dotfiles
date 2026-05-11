@@ -1,6 +1,6 @@
 ---
 name: web-fetch
-description: Use when fetching any webpage to read its content — articles, docs, product pages, SPAs, anything reachable by URL. Handles JavaScript-rendered pages. Keeps all content in the context-mode sandbox to prevent context flooding. Triggers: user says "fetch this URL / read this page / check this site / look at this link", or Claude needs to read web content for any task (research, docs lookup, link previews, etc.).
+description: 'Use when fetching any webpage to read its content — articles, docs, product pages, SPAs, anything reachable by URL. Handles JavaScript-rendered pages. Keeps all content in the context-mode sandbox to prevent context flooding. Triggers: user says "fetch this URL / read this page / check this site / look at this link", or Claude needs to read web content for any task (research, docs lookup, link previews, etc.).'
 when_to_use: |
   Invoke whenever you need to fetch and read a webpage:
   - User provides a URL and asks you to read, check, summarize, or extract from it

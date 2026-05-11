@@ -1,6 +1,6 @@
 ---
 name: kanban-loop
-description: Use to drain a local .workflow/kanban/ board of vertical-slice tickets. Picks eligible tickets (deps satisfied), dispatches a fresh specialist subagent per ticket running TDD, moves files between columns. Triggers: "drain the board", "run kanban", "/kanban-loop", or after to-tickets fills backlog/.
+description: 'Use to drain a local .workflow/kanban/ board of vertical-slice tickets. Picks eligible tickets (deps satisfied), dispatches a fresh specialist subagent per ticket running TDD, moves files between columns. Triggers: "drain the board", "run kanban", "/kanban-loop", or after to-tickets fills backlog/.'
 ---
 
 # kanban-loop

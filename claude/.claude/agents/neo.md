@@ -165,12 +165,12 @@ vague request
 - Architecture unclear → consult Merlin first (unchanged)
 - Single-file fix or trivial change → bypass kanban entirely; dispatch specialist directly
 
-**Skills used (mattpocock + custom; superpowers DISABLED for trial):**
+**Skills used (custom; superpowers DISABLED for trial):**
 - `grill-me` — interview for non-code requirements
 - `grill-with-docs` — interview against domain model + ADRs (`CONTEXT.md`, `docs/adr/`)
 - `to-prd` — write structured PRD to `.workflow/docs/<slug>.md`
 - `to-tickets` — decompose PRD into vertical-slice tickets in `.workflow/kanban/backlog/`
-- `tdd` (mattpocock) — TDD inside each ticket subagent (NOT superpowers test-driven-development)
+- `tdd` — TDD inside each ticket subagent (NOT superpowers test-driven-development)
 - `kanban-loop` — orchestration loop, drains board via specialist dispatch
 - `improve-codebase-architecture` — periodic refactor pass (manual reflection step in v1)
 - `diagnose` — systematic debugging (replaces superpowers systematic-debugging)

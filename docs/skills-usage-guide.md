@@ -70,7 +70,7 @@ Superpowers plugin is **disabled** during the trial. These skills replace:
 | `superpowers:subagent-driven-development` | `kanban-loop` |
 | `superpowers:systematic-debugging` | `diagnose` |
 | `superpowers:finishing-a-development-branch` | `ship-it` |
-| `superpowers:test-driven-development` | `tdd` (mattpocock) |
+| `superpowers:test-driven-development` | `tdd` |
 | `pre-commit` skill | per-ticket TDD gates in kanban-loop |
 
 Revert: set `superpowers@claude-plugins-official: true` in `claude/.claude/settings.json`.

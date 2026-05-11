@@ -1,9 +1,3 @@
-<!--
-Adapted from: github.com/mattpocock/skills/to-prd
-Adapted: 2026-05-04 for local .workflow/docs/ workflow
-See docs/kanban-workflow.md for design context
--->
-
 ---
 name: to-prd
 description: Turn the current conversation context into a PRD and write it to .workflow/docs/<slug>.md in the project root. No issue-tracker API required. The PRD is the direct input to /to-tickets. Use when user wants to create a PRD from the current context.
@@ -112,16 +106,6 @@ Explicit list of things that are out of scope for this PRD.
 
 Any additional context, constraints, or open questions.
 ```
-
----
-
-## Key Differences from mattpocock/to-prd
-
-- No GitHub/Linear/issue-tracker publish step — output is a local `.workflow/docs/<slug>.md` file
-- `needs-triage` label removed — not applicable to local kanban
-- Slug derived from feature name and used as filename
-- Explicit handoff note: PRD is the direct input to `/to-tickets`
-- `.workflow/docs/` directory created if missing
 
 ---
 

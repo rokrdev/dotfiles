@@ -1,11 +1,3 @@
-<!--
-Source: github.com/mattpocock/skills
-Skill: tdd
-Commit: b843cb5e
-Pulled: 2026-05-04
-Trial: 7-day vertical-slice kanban experiment (see docs/kanban-workflow.md)
--->
-
 ---
 name: tdd
 description: 'Test-driven development with red-green-refactor loop. Use when user wants to build features or fix bugs using TDD, mentions "red-green-refactor", wants integration tests, or asks for test-first development.'

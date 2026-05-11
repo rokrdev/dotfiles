@@ -1,9 +1,3 @@
-<!--
-Adapted from: github.com/mattpocock/skills/to-issues
-Adapted: 2026-05-04 for local .workflow/kanban/ workflow
-See docs/kanban-workflow.md for design context
--->
-
 ---
 name: to-tickets
 description: Break a plan, spec, or PRD into local kanban tickets written to .workflow/kanban/backlog/NN-slug.md using tracer-bullet vertical slices. No issue-tracker API required. Use when user wants to convert a PRD or spec into kanban tickets.
@@ -242,17 +236,6 @@ parallel-safe: false   # entry-point also touched by other tickets
 ```
 
 Entry-point present, acceptance exercises the binary, all layers covered.
-
----
-
-## Key Differences from mattpocock/to-issues
-
-- No GitHub/Linear/issue-tracker API — output is local `.workflow/kanban/backlog/` files
-- HITL/AFK labels replaced by `parallel-safe: true|false` frontmatter flag
-- `needs-triage` label removed — not applicable to local kanban
-- Cycle detection mandatory before writing any files (step 4)
-- Numbering follows topological sort order; slugs are the stable dependency reference
-- Body cap enforced at ~40 lines per ticket
 
 ---
 

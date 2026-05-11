@@ -1,11 +1,3 @@
-<!--
-Source: github.com/mattpocock/skills
-Skill: grill-with-docs
-Commit: b843cb5e
-Pulled: 2026-05-04
-Trial: 7-day vertical-slice kanban experiment (see docs/kanban-workflow.md)
--->
-
 ---
 name: grill-with-docs
 description: Grilling session that challenges your plan against the existing domain model, sharpens terminology, and updates documentation (CONTEXT.md, ADRs) inline as decisions crystallise. Use when user wants to stress-test a plan against their project's language and documented decisions.

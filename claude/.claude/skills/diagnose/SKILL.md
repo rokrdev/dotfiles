@@ -1,11 +1,3 @@
-<!--
-Source: github.com/mattpocock/skills
-Skill: diagnose
-Commit: b843cb5e
-Pulled: 2026-05-04
-Trial: 7-day vertical-slice kanban experiment (see docs/kanban-workflow.md)
--->
-
 ---
 name: diagnose
 description: 'Disciplined diagnosis loop for hard bugs and performance regressions. Reproduce → minimise → hypothesise → instrument → fix → regression-test. Use when user says "diagnose this" / "debug this", reports a bug, says something is broken/throwing/failing, or describes a performance regression.'

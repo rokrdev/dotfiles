@@ -1,11 +1,3 @@
-<!--
-Source: github.com/mattpocock/skills
-Skill: grill-me
-Commit: b843cb5e
-Pulled: 2026-05-04
-Trial: 7-day vertical-slice kanban experiment (see docs/kanban-workflow.md)
--->
-
 ---
 name: grill-me
 description: 'Interview the user relentlessly about a plan or design until reaching shared understanding, resolving each branch of the decision tree. Use when user wants to stress-test a plan, get grilled on their design, or mentions "grill me".'

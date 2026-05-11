@@ -1,6 +1,6 @@
 ---
 name: bug-flow
-description: Automated bug fix pipeline with human review gates. Chains diagnose → [GATE 1] → to-bug-ticket → kanban-loop → [GATE 2] → ship-it. Triggers: "bug flow", "/bug-flow", "fix bug", "start bug fix". Fallback: use individual skills for full manual control.
+description: 'Automated bug fix pipeline with human review gates. Chains diagnose → [GATE 1] → to-bug-ticket → kanban-loop → [GATE 2] → ship-it. Triggers: "bug flow", "/bug-flow", "fix bug", "start bug fix". Fallback: use individual skills for full manual control.'
 ---
 
 # bug-flow

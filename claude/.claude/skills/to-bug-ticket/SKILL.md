@@ -1,6 +1,6 @@
 ---
 name: to-bug-ticket
-description: Write a single structured bug ticket to .workflow/kanban/backlog/ after running /diagnose. Use when diagnose has completed and you have a root cause, repro, and fix approach. Triggers: "to-bug-ticket", "/to-bug-ticket", "write bug ticket", "create bug ticket".
+description: 'Write a single structured bug ticket to .workflow/kanban/backlog/ after running /diagnose. Use when diagnose has completed and you have a root cause, repro, and fix approach. Triggers: "to-bug-ticket", "/to-bug-ticket", "write bug ticket", "create bug ticket".'
 ---
 
 # to-bug-ticket

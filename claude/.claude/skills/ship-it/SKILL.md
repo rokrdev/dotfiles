@@ -1,6 +1,6 @@
 ---
 name: ship-it
-description: Use when implementation is complete and the kanban board is drained — pushes the branch to origin and opens a PR. Each ticket was already committed by kanban-loop. Triggers: "ship it", "/ship-it", "wrap up branch", "ready to push", or after kanban-loop reports backlog empty.
+description: 'Use when implementation is complete and the kanban board is drained — pushes the branch to origin and opens a PR. Each ticket was already committed by kanban-loop. Triggers: "ship it", "/ship-it", "wrap up branch", "ready to push", or after kanban-loop reports backlog empty.'
 ---
 
 # ship-it Skill

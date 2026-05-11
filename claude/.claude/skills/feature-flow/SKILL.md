@@ -1,6 +1,6 @@
 ---
 name: feature-flow
-description: Automated feature pipeline with human review gates. Chains grill-me → to-prd → [GATE 1] → to-tickets → kanban-loop → [GATE 2] → ship-it. Triggers: "feature flow", "/feature-flow", "new feature", "start feature". Fallback: use individual skills for full manual control.
+description: 'Automated feature pipeline with human review gates. Chains grill-me → to-prd → [GATE 1] → to-tickets → kanban-loop → [GATE 2] → ship-it. Triggers: "feature flow", "/feature-flow", "new feature", "start feature". Fallback: use individual skills for full manual control.'
 ---
 
 # feature-flow

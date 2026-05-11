@@ -1,11 +1,3 @@
-<!--
-Source: github.com/mattpocock/skills
-Skill: improve-codebase-architecture
-Commit: b843cb5e
-Pulled: 2026-05-04
-Trial: 7-day vertical-slice kanban experiment (see docs/kanban-workflow.md)
--->
-
 ---
 name: improve-codebase-architecture
 description: Find deepening opportunities in a codebase, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, find refactoring opportunities, consolidate tightly-coupled modules, or make a codebase more testable and AI-navigable.

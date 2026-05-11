@@ -1,7 +1,7 @@
 # Vertical-Slice Kanban Workflow
 
 > Design document for a local, file-based kanban workflow built around vertical slices,
-> mattpocock skills, and the Neo orchestrator.
+> custom skills, and the Neo orchestrator.
 >
 > **Branch at time of writing:** `vertical-slices`
 > **Uncommitted changes:** `claude/.claude/.buddy-reroll.json` (deleted)
@@ -223,7 +223,7 @@ planning → topo-sort → FAIL if cycle → replan
 vague request
     │
     ▼
-grill-me / grill-with-docs      ← mattpocock skill (clarifies requirements)
+grill-me / grill-with-docs      ← clarifies requirements
     │
     ▼
 spec (markdown)
@@ -277,7 +277,7 @@ loop:
   # typescript → jasper, python → snape, kotlin → conan, swift → swifty
 
   dispatch fresh agent(agent, ticket):
-    invoke mattpocock tdd skill:
+    invoke tdd skill:
       write failing test (acceptance drives test name)
       write minimum implementation to pass
       refactor
@@ -419,7 +419,7 @@ User re-plans by hand between drains:
 
 ## 11. Skill Stack
 
-### mattpocock Skills (pull verbatim)
+### Core Skills
 
 | Skill | Role in workflow |
 |-------|-----------------|
@@ -427,15 +427,10 @@ User re-plans by hand between drains:
 | `grill-with-docs` | Clarify with library docs context |
 | `tdd` | TDD cycle inside each specialist dispatch |
 | `improve-codebase-architecture` | Architecture review between drains |
-| `ship-it` | Pre-merge checklist — **not in mattpocock repo; built locally as minimal stub. See `~/.dotfiles/claude/.claude/skills/ship-it/SKILL.md`** |
+| `ship-it` | Pre-merge checklist — local stub. See `~/.dotfiles/claude/.claude/skills/ship-it/SKILL.md` |
 | `diagnose` | Debugging when stuck |
-
-### Adapted Skills (local modifications)
-
-| Skill | Source | Adaptation |
-|-------|--------|-----------|
-| `to-tickets` | mattpocock `to-issues` | Writes `.workflow/kanban/backlog/NN-slug.md` instead of GitHub issues. Adds YAML frontmatter. Runs topo sort. |
-| `to-prd` | mattpocock `to-prd` | Writes `.workflow/docs/<slug>.md` locally instead of remote. No GitHub dependency. |
+| `to-tickets` | Writes `.workflow/kanban/backlog/NN-slug.md`. Adds YAML frontmatter. Runs topo sort. |
+| `to-prd` | Writes `.workflow/docs/<slug>.md` locally. No GitHub dependency. |
 
 ### New Skills (built for this workflow)
 
@@ -475,7 +470,7 @@ end
 
 ### Day 0 — Setup (2026-05-04)
 
-- [ ] Pull 6 mattpocock skills verbatim into `claude/.claude/skills/` + build custom `ship-it` skill
+- [ ] Pull skills into `claude/.claude/skills/` + build custom `ship-it` skill
 - [ ] Adapt `to-tickets` (local) and `to-prd` (local)
 - [ ] Build `kanban-loop` skill
 - [ ] Verify `.workflow/` is ignored via `git/.gitignore_global` (already managed by stow)
@@ -501,7 +496,7 @@ Track these signals in `MEMORY.md` as they occur:
 
 Three options:
 
-**Keep:** mattpocock + kanban-loop covers all needs → leave superpowers commented out.
+**Keep:** kanban-loop covers all needs → leave superpowers commented out.
 
 **Revert:** Too many gaps → uncomment superpowers in `settings.json`, restow, delete kanban skills.
 
@@ -529,10 +524,10 @@ Skills dropped when superpowers is disabled, and mitigations:
 | Dropped Skill | Risk | Mitigation |
 |--------------|------|-----------|
 | `verification-before-completion` | Ship broken code | Baked into kanban-loop as 3-gate check |
-| `requesting-code-review` | No structured review step | Use `ship-it` (7 mattpocock skills + 1 custom); note if insufficient |
+| `requesting-code-review` | No structured review step | Use `ship-it`; note if insufficient |
 | `receiving-code-review` | Feedback not processed well | Manual discipline; watch for rushed merges |
 | `dispatching-parallel-agents` | Parallel work not used | Neo handles natively; kanban-loop has parallel mode |
-| `systematic-debugging` | Longer debug cycles | Use `diagnose` from mattpocock verbatim |
+| `systematic-debugging` | Longer debug cycles | Use `diagnose` |
 | `writing-plans` | Unstructured planning | `to-prd` + `to-tickets` replaces this path |
 
 **Verdict signal:** If `requesting-code-review` / `receiving-code-review` gap causes a real
@@ -604,7 +599,7 @@ Sequenced tasks for the `vertical-slices` branch:
 | Step | Task | Owner |
 |------|------|-------|
 | 1 | This doc (done) | Claude |
-| 2 | Pull 6 mattpocock skills verbatim into `claude/.claude/skills/` + build custom `ship-it` skill | Claude |
+| 2 | Pull skills into `claude/.claude/skills/` + build custom `ship-it` skill | Claude |
 | 3 | Adapt `to-tickets` skill (local .workflow/kanban/ output, YAML frontmatter, topo sort) | Claude |
 | 4 | Adapt `to-prd` skill (local `.workflow/docs/` output, no GitHub) | Claude |
 | 5 | Build `kanban-loop` skill (eligible check, dispatch, 3-gate verify, mv) | Claude |

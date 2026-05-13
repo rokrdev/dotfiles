@@ -10,4 +10,5 @@ karabiner/.config/karabiner/automatic_backups/
 ~/.cargo-target/
 
 .serena/
+.claude/tmp
 docs/prd/

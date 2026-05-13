@@ -55,13 +55,41 @@ TIMESTAMP=$(date -u +%FT%TZ)
 TOOL_JSON=$(echo "$INPUT" | jq -c '.tool_name // null' 2>/dev/null) || TOOL_JSON='"unknown"'
 CMD_JSON=$(echo "$INPUT" | jq -c '.tool_input.command // null' 2>/dev/null) || CMD_JSON='null'
 
-# Extract OAuth token from Keychain — NOT exported; scoped to claude subprocess only
-_TOKEN=""
-_KEYCHAIN_JSON=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null) || true
-if [[ -n "$_KEYCHAIN_JSON" ]]; then
-  _TOKEN=$(echo "$_KEYCHAIN_JSON" | jq -r '.claudeAiOauth.accessToken // empty' 2>/dev/null) || true
+# Resolve API key — prefer env var, then temp-file cache, then keychain
+# Cache avoids repeated `security` keychain calls across hook invocations
+_EFFECTIVE_API_KEY=""
+if [[ -n "${ANTHROPIC_API_KEY:-}" ]]; then
+  # Already in env — skip keychain entirely
+  _EFFECTIVE_API_KEY="$ANTHROPIC_API_KEY"
+else
+  _TOKEN=""
+  mkdir -p "$HOME/.claude/tmp"
+  _CACHE_FILE="$HOME/.claude/tmp/pr-token"
+  _CACHE_TTL=3600  # seconds; refresh after 1 hour
+  _NOW=$(date +%s)
+
+  # Read from cache if fresh
+  if [[ -f "$_CACHE_FILE" ]]; then
+    _CACHE_MTIME=$(stat -f %m "$_CACHE_FILE" 2>/dev/null) || _CACHE_MTIME=0
+    if (( _NOW - _CACHE_MTIME < _CACHE_TTL )); then
+      _TOKEN=$(cat "$_CACHE_FILE" 2>/dev/null) || true
+    fi
+  fi
+
+  # Cache miss or expired — hit keychain and repopulate
+  if [[ -z "$_TOKEN" ]]; then
+    _KEYCHAIN_JSON=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null) || true
+    if [[ -n "$_KEYCHAIN_JSON" ]]; then
+      _TOKEN=$(echo "$_KEYCHAIN_JSON" | jq -r '.claudeAiOauth.accessToken // empty' 2>/dev/null) || true
+      if [[ -n "$_TOKEN" ]]; then
+        printf '%s' "$_TOKEN" > "$_CACHE_FILE"
+        chmod 600 "$_CACHE_FILE"
+      fi
+    fi
+  fi
+
+  _EFFECTIVE_API_KEY="$_TOKEN"
 fi
-_EFFECTIVE_API_KEY="${_TOKEN:-${ANTHROPIC_API_KEY:-}}"
 
 # Model selection — env override for per-session escalation to Opus
 _MODEL="${CLAUDE_PERMISSION_REVIEW_MODEL:-claude-sonnet-4-6}"

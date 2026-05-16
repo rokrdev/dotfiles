@@ -35,6 +35,7 @@ cuts through ALL integration layers end-to-end, NOT a horizontal slice of one la
 - A completed slice is demoable or verifiable via its acceptance sentence
 - Prefer many thin slices over few thick ones
 - Body cap: ~40 lines per ticket
+- Acceptance tests are thin probes of one observable delta, not full integration sweeps. Re-asserting behavior verified by a dependency ticket's acceptance test is forbidden.
 </vertical-slice-rules>
 
 **Vertical slice — hard constraints (enforced in self-check, step 7.5):**
@@ -181,7 +182,7 @@ For each generated ticket, verify all four conditions before emitting:
 - [ ] `files-touched` includes every layer needed for the acceptance to pass (entry-point, command handler, store, tests)
 - [ ] The acceptance test invocation matches how a real user would trigger it (CLI command, HTTP request, UI interaction)
 - [ ] If the acceptance criterion is a CLI/UI/HTTP call, the entry-point file is in `files-touched`
-- [ ] `failing-tests` lists ≥1 **unit test** (tests logic in isolation) AND ≥1 **acceptance test** (exercises the entry-point end-to-end); each test maps to a sub-condition of the acceptance criterion
+- [ ] `failing-tests` lists ≥1 **unit test** (logic in isolation) AND ≥1 **acceptance test** that asserts ONLY the new observable behavior this slice introduces. If the acceptance criterion extends an existing acceptance test from a dependency ticket, add a new assertion to that test file rather than creating a new test function — name the exact file and assertion in `## Failing Tests`.
 
 If **any** ticket fails a check → revise it before writing files. Do NOT emit horizontal tickets.
 
@@ -206,7 +207,7 @@ After writing all files, output:
 | `parallel-safe` | no | Default `false`; `true` only when `files-touched` has zero overlap with ALL other eligible tickets; any shared file (including the entry-point) → `false` for both tickets |
 | `files-touched` | no | Paths/dirs implementation will modify — used for parallel overlap detection |
 | `acceptance` | yes | One sentence a human or test can verify |
-| `failing-tests` | required, list[string] | Test function names to write FIRST and run RED before any src/ edit. Format: `path/to/test.ext::test_name_in_snake_case`. Must include ≥1 unit test (logic in isolation) AND ≥1 acceptance test (entry-point invocation). |
+| `failing-tests` | required, list[string] | Test function names to write FIRST and run RED before any src/ edit. Format: `path/to/test.ext::test_name_in_snake_case`. Must include ≥1 unit test (logic in isolation) AND ≥1 acceptance test that asserts only the observable delta this slice introduces. Extend an existing acceptance test from a dependency ticket rather than duplicating entry-point coverage. |
 
 ---
 

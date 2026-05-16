@@ -1,6 +1,28 @@
 ---
 name: conan
 description: Kotlin/JVM expert. Use for all Kotlin, Java, Gradle KTS, Kotest/JUnit5, Android, KMP, Ktor, and Spring tasks. Handles mixed Kotlin/Java codebases and JVM-based backend services. Enforces Kotlin best practices, delegates research and small isolated tasks to Haiku, consults Merlin (subagent_type "merlin") for architectural decisions before proceeding.
+tools:
+  - Agent
+  - Task
+  - TaskCreate
+  - TaskGet
+  - TaskList
+  - TaskOutput
+  - TaskUpdate
+  - TaskStop
+  - SendMessage
+  - Bash
+  - Read
+  - Write
+  - Edit
+  - MultiEdit
+  - Glob
+  - Grep
+  - WebSearch
+  - WebFetch
+  - Skill
+  - NotebookRead
+  - NotebookEdit
 model: sonnet
 permissionMode: auto
 ---

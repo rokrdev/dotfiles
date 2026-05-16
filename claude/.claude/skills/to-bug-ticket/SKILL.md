@@ -67,6 +67,9 @@ acceptance: "<one sentence: what correct behaviour looks like after the fix>"
 
 <!-- Unit tests that target the specific function/handler/logic being fixed. -->
 <!-- These test logic in isolation — NOT the repro scenario end-to-end. -->
+<!-- SCOPE: the exact function/branch/condition identified in Root Cause only. -->
+<!-- Mirror the delta-scoping in to-tickets: test only the fixed logic path. -->
+<!-- Do NOT add tests for callers, entry points, or behavior unaffected by this fix. -->
 <!-- Write these RED first alongside the repro, then make both green with the fix. -->
 
 - `test/<file>_test.<ext>::<test_name>` — what it asserts
@@ -76,6 +79,9 @@ acceptance: "<one sentence: what correct behaviour looks like after the fix>"
 <!-- The repro test above, now expected to pass after the fix. -->
 <!-- Required section — kanban-loop will NOT mark this ticket done without it. -->
 <!-- State: which test file, which test name, what assertion proves the bug is gone. -->
+<!-- SCOPE: assert the fixed behavior delta ONLY. -->
+<!-- Do not re-verify behavior the existing test suite already covers. -->
+<!-- Those tests are unchanged and still run — do not re-assert them here. -->
 
 <regression test plan from diagnose>
 ```
@@ -85,6 +91,8 @@ acceptance: "<one sentence: what correct behaviour looks like after the fix>"
 - One ticket per bug. Multi-ticket only if diagnose explicitly surfaced **independent** defects with separate root causes. Requires a one-line justification in each ticket body.
 - Regression Guard is **required** and non-empty. The kanban-loop subagent will refuse to mark the ticket done if this section is empty.
 - Unit Tests section is **required** and must contain ≥1 test. Tests must cover the specific logic path that contains the bug — not just the end-to-end repro. The kanban-loop subagent must write these RED before touching `src/`.
+- Unit tests and regression guard tests are scoped to the bug's logic path only. Do not re-assert behavior unaffected by this fix — that behavior is already covered by the existing test suite.
+- Do NOT re-assert or re-verify behavior unaffected by this fix in the Unit Tests or Regression Guard sections. That behavior is already covered by the existing test suite and unchanged by this ticket.
 - Do not write the fix — write the ticket. Implementation happens in `/kanban-loop`.
 - Do not create a PRD. Bugs have no PRD.
 

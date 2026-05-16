@@ -63,6 +63,14 @@ acceptance: "<one sentence: what correct behaviour looks like after the fix>"
 
 <fix approach from diagnose>
 
+## Unit Tests
+
+<!-- Unit tests that target the specific function/handler/logic being fixed. -->
+<!-- These test logic in isolation — NOT the repro scenario end-to-end. -->
+<!-- Write these RED first alongside the repro, then make both green with the fix. -->
+
+- `test/<file>_test.<ext>::<test_name>` — what it asserts
+
 ## Regression Guard
 
 <!-- The repro test above, now expected to pass after the fix. -->
@@ -76,6 +84,7 @@ acceptance: "<one sentence: what correct behaviour looks like after the fix>"
 
 - One ticket per bug. Multi-ticket only if diagnose explicitly surfaced **independent** defects with separate root causes. Requires a one-line justification in each ticket body.
 - Regression Guard is **required** and non-empty. The kanban-loop subagent will refuse to mark the ticket done if this section is empty.
+- Unit Tests section is **required** and must contain ≥1 test. Tests must cover the specific logic path that contains the bug — not just the end-to-end repro. The kanban-loop subagent must write these RED before touching `src/`.
 - Do not write the fix — write the ticket. Implementation happens in `/kanban-loop`.
 - Do not create a PRD. Bugs have no PRD.
 

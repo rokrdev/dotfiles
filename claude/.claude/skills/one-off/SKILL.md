@@ -1,3 +1,7 @@
+---
+name: one-off
+description: Lightweight pipeline for single, bounded implementation tasks — use this for any small change that doesn't need a full feature or bug workflow. Trigger whenever a user asks to: add a flag or option to an existing function or script, extract duplicated code into a constant or helper, rename a method or variable, make a hardcoded value configurable via an env var or parameter, add input validation to a specific function, or implement any other isolated change touching 1-3 files. Also trigger for phrases like "small change", "quick task", "single task", "one-off", or "quick fix" followed by an implementation request. Do NOT trigger for bugs with unclear root cause (use bug-flow), multi-file features (use feature-flow), architecture questions, PR reviews, or diagnostics.
+---
 # /one-off — Single Task Implementation
 
 Lightweight pipeline for simple, bounded tasks that don't warrant feature-flow or bug-flow.

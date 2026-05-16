@@ -36,6 +36,7 @@ cuts through ALL integration layers end-to-end, NOT a horizontal slice of one la
 - Prefer many thin slices over few thick ones
 - Body cap: ~40 lines per ticket
 - Acceptance tests are thin probes of one observable delta, not full integration sweeps. Re-asserting behavior verified by a dependency ticket's acceptance test is forbidden.
+- "Observable" means verifiable at any external surface: CLI invocation, HTTP call, or a public test harness entry-point — internal module calls are not observable surfaces
 </vertical-slice-rules>
 
 **Vertical slice — hard constraints (enforced in self-check, step 7.5):**
@@ -44,6 +45,8 @@ cuts through ALL integration layers end-to-end, NOT a horizontal slice of one la
 - If acceptance is a CLI/UI/HTTP invocation, the entry-point file (e.g. `src/cli.*`, `src/main.*`, `src/server.*`) **MUST** appear in `files-touched`
 - Acceptance tests must exercise the entry-point (spawn binary, send HTTP request) — NOT call internal functions directly
 - **Forbidden framings:** "scaffold X module", "extract Y util", "refactor Z" — those are horizontal slices and must not appear as standalone tickets
+- **Walking skeleton exception (max 1 per board):** A single ticket tagged `skeleton: true` in frontmatter may scaffold the build toolchain, project layout, and a hello-world entry-point invocation. Its acceptance must be a runnable binary command (e.g. `java -jar app.jar --help` exits 0). All subsequent tickets must be vertical and depend on this skeleton.
+- **Support tickets (max 2 per board):** A ticket tagged `support: true` may deliver a pure internal module (e.g. domain value types, fare table) **only when** it is blocked-by zero tickets and at least one vertical ticket lists it in `depends-on`. Its acceptance must be a passing unit-test suite for that module's public API — not an entry-point invocation. Every support ticket consumes one slot of the global cap; once 2 are used, remaining internal work must be absorbed into vertical slices.
 
 For each slice, determine:
 - **slug**: kebab-case, concise (becomes the filename suffix)
@@ -176,13 +179,23 @@ Exercise the full vertical slice via the entry point (CLI binary, HTTP request, 
 
 ### 8. Self-check before writing files
 
-For each generated ticket, verify all four conditions before emitting:
+**Cap enforcement (check board-wide FIRST):**
+- [ ] At most **1** ticket has `skeleton: true` in frontmatter; if >1 found → remove excess, converting them to vertical slices
+- [ ] At most **2** tickets have `support: true` in frontmatter; if >2 found → absorb excess into vertical slices
+
+For each generated ticket, verify all conditions before emitting:
 
 - [ ] A user can demo the merged result by running the binary/UI — not by calling an internal function
+  - **Exception:** a ticket tagged `skeleton: true` — its acceptance must be a runnable binary command (e.g. `./app --help` exits 0), not a function call
+  - **Exception:** a ticket tagged `support: true` — its acceptance must be a passing unit-test suite for the module's public API; it must have zero `depends-on` entries and at least one other vertical ticket must list its slug in `depends-on`
 - [ ] `files-touched` includes every layer needed for the acceptance to pass (entry-point, command handler, store, tests)
+  - **Exception:** `support: true` tickets — entry-point is NOT required in `files-touched`; only module source + its unit tests
 - [ ] The acceptance test invocation matches how a real user would trigger it (CLI command, HTTP request, UI interaction)
+  - **Exception:** `support: true` tickets — acceptance test is a unit-test suite for the module's public API
 - [ ] If the acceptance criterion is a CLI/UI/HTTP call, the entry-point file is in `files-touched`
+  - **Exception:** `skeleton: true` and `support: true` tickets as described above
 - [ ] `failing-tests` lists ≥1 **unit test** (logic in isolation) AND ≥1 **acceptance test** that asserts ONLY the new observable behavior this slice introduces. If the acceptance criterion extends an existing acceptance test from a dependency ticket, add a new assertion to that test file rather than creating a new test function — name the exact file and assertion in `## Failing Tests`.
+  - **Exception:** `support: true` tickets — only unit tests required (no entry-point acceptance test); `skeleton: true` tickets — only an acceptance test for the runnable binary (unit tests optional)
 
 If **any** ticket fails a check → revise it before writing files. Do NOT emit horizontal tickets.
 
@@ -208,6 +221,8 @@ After writing all files, output:
 | `files-touched` | no | Paths/dirs implementation will modify — used for parallel overlap detection |
 | `acceptance` | yes | One sentence a human or test can verify |
 | `failing-tests` | required, list[string] | Test function names to write FIRST and run RED before any src/ edit. Format: `path/to/test.ext::test_name_in_snake_case`. Must include ≥1 unit test (logic in isolation) AND ≥1 acceptance test that asserts only the observable delta this slice introduces. Extend an existing acceptance test from a dependency ticket rather than duplicating entry-point coverage. |
+| `skeleton` | no (boolean) | `true` marks the single walking-skeleton ticket. Max 1 per board. Acceptance must be a runnable binary command (e.g. `./app --help` exits 0). All other tickets must depend on this ticket's slug. Omit for all other tickets. |
+| `support` | no (boolean) | `true` marks a pure internal-module ticket (e.g. domain value types, fare table). Max 2 per board. Must have empty `depends-on`; at least one vertical ticket must list this slug in its `depends-on`. Acceptance must be a passing unit-test suite for the module's public API — not an entry-point invocation. Omit for all other tickets. |
 
 ---
 

@@ -57,14 +57,12 @@ Dispatch with:
 - **Scope boundary** — what to implement AND what not to touch
 - **TDD requirement** — write failing test first, then implementation, then refactor
 - **Done criteria** — specific observable outcome that means "done"
-- **Commit** — conventional commit format after implementation
 
 ### Step 5 — Report
 
 After specialist completes, report back:
 - Files changed
 - Test added/modified
-- Commit hash
 
 ## Constraints
 

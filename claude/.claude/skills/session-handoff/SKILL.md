@@ -1,6 +1,6 @@
 ---
 name: session-handoff
-description: 'Use when the user says "session handoff", "wrap up session", "hand off", "handoff summary", or wants a structured end-of-session summary before clearing context. Produces a chat-only handoff covering decisions, shipped changes, key files, running state, verification steps, deferrals, and open questions so a fresh agent can continue seamlessly.'
+description: 'Structured end-of-session summary for context handoff. Triggers: "session handoff", "wrap up session", "hand off", "handoff summary", or user about to /clear.'
 ---
 
 # Session Handoff

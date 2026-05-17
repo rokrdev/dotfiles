@@ -22,13 +22,11 @@ or spec file, read it. If a PRD was just produced by `/to-prd` (in `.workflow/do
 
 ### 2. Explore the codebase (optional)
 
-If you have not already explored the codebase, do so to understand current structure.
-Ticket titles and slugs should use the project's domain vocabulary.
+If not already explored, do so to understand current structure. Slugs/titles should use the project's domain vocabulary.
 
 ### 3. Draft vertical slices
 
-Break the plan into **tracer bullet** tickets. Each ticket is a thin vertical slice that
-cuts through ALL integration layers end-to-end, NOT a horizontal slice of one layer.
+Break the plan into **tracer bullet** tickets — each a thin vertical slice cutting through ALL integration layers, NOT a horizontal slice of one layer.
 
 <vertical-slice-rules>
 - Each slice delivers a narrow but COMPLETE path through every layer (schema, API, UI, tests)
@@ -37,16 +35,28 @@ cuts through ALL integration layers end-to-end, NOT a horizontal slice of one la
 - Body cap: ~40 lines per ticket
 - Acceptance tests are thin probes of one observable delta, not full integration sweeps. Re-asserting behavior verified by a dependency ticket's acceptance test is forbidden.
 - "Observable" means verifiable at any external surface: CLI invocation, HTTP call, or a public test harness entry-point — internal module calls are not observable surfaces
+- Prefer AFK (`human-required: false`) over HITL (`human-required: true`) where possible. HITL blocks kanban-loop until a human reviews and approves.
 </vertical-slice-rules>
 
-**Vertical slice — hard constraints (enforced in self-check, step 7.5):**
+### When to mark `human-required: true` (HITL)
 
-- Every ticket must deliver **user-observable behavior end-to-end** — not an internal module in isolation
-- If acceptance is a CLI/UI/HTTP invocation, the entry-point file (e.g. `src/cli.*`, `src/main.*`, `src/server.*`) **MUST** appear in `files-touched`
-- Acceptance tests must exercise the entry-point (spawn binary, send HTTP request) — NOT call internal functions directly
-- **Forbidden framings:** "scaffold X module", "extract Y util", "refactor Z" — those are horizontal slices and must not appear as standalone tickets
-- **Walking skeleton exception (max 1 per board):** A single ticket tagged `skeleton: true` in frontmatter may scaffold the build toolchain, project layout, and a hello-world entry-point invocation. Its acceptance must be a runnable binary command (e.g. `java -jar app.jar --help` exits 0). All subsequent tickets must be vertical and depend on this skeleton.
-- **Support tickets (max 2 per board):** A ticket tagged `support: true` may deliver a pure internal module (e.g. domain value types, fare table) **only when** it is blocked-by zero tickets and at least one vertical ticket lists it in `depends-on`. Its acceptance must be a passing unit-test suite for that module's public API — not an entry-point invocation. Every support ticket consumes one slot of the global cap; once 2 are used, remaining internal work must be absorbed into vertical slices.
+Mark a ticket HITL when completing it requires a judgment call no autonomous agent should make alone:
+
+- **Architecture decisions** — choosing between two valid designs with non-obvious trade-offs (e.g., event sourcing vs. CQRS, sync vs. async queue)
+- **Design or UX review** — visual, interaction, or API surface choices that need a human eye before merging
+- **Security-sensitive changes** — auth flows, permission models, data exposure decisions, cryptographic choices
+- **Ambiguous scope** — acceptance criterion cannot be written unambiguously without a product decision
+- **Cross-cutting refactors** — changes touching ≥4 modules with unclear blast radius
+
+Everything else is AFK. Default is AFK; omit `human-required` or set `false`.
+
+**Hard constraints (enforced in self-check, step 7.5):**
+
+- Every ticket delivers **user-observable behavior end-to-end** — not an internal module in isolation
+- If acceptance is a CLI/UI/HTTP invocation, the entry-point file (e.g. `src/cli.*`, `src/main.*`, `src/server.*`) **MUST** appear in `files-touched`; acceptance tests must exercise the entry-point (spawn binary, send HTTP request) — NOT call internal functions directly
+- **Forbidden framings:** "scaffold X module", "extract Y util", "refactor Z" — horizontal slices; must not appear as standalone tickets
+- **Walking skeleton exception (max 1 per board):** `skeleton: true` in frontmatter — scaffolds build toolchain + hello-world entry-point. Acceptance must be a runnable binary command (e.g. `java -jar app.jar --help` exits 0). All other tickets must depend on this skeleton.
+- **Support tickets (max 2 per board):** `support: true` — delivers a pure internal module (e.g. domain value types, fare table) only when blocked-by zero tickets and ≥1 vertical ticket lists it in `depends-on`. Acceptance must be a passing unit-test suite for the module's public API. Once 2 used, remaining internal work absorbed into vertical slices.
 
 For each slice, determine:
 - **slug**: kebab-case, concise (becomes the filename suffix)
@@ -91,29 +101,11 @@ If a cycle is detected: **stop, report the cycle to the user, do not write any f
 
 ### 5. Quiz the user
 
-Present the proposed breakdown as a numbered list. For each ticket, show:
-
-- **Slug**: `slug-name`
-- **Language**: typescript / python / kotlin / swift
-- **Depends on**: slugs (or "none")
-- **Parallel-safe**: true / false
-- **Files touched**: list of paths
-- **Acceptance**: one-sentence criterion
-
-Ask the user:
-- Does the granularity feel right? (too coarse / too fine)
-- Are dependency relationships correct?
-- Should any tickets be merged or split further?
-- Are `parallel-safe` flags correct?
-
-Iterate until the user approves the breakdown.
+Present numbered list. For each ticket: slug, language, depends-on, parallel-safe, human-required (HITL/AFK), files-touched, acceptance. Ask: granularity right? deps correct? merge/split? parallel-safe flags correct? HITL/AFK classification correct? Iterate until approved.
 
 ### 6. Assign IDs in topological order
 
-After approval, assign numeric IDs using the topological sort order from step 4.
-Use zero-padded integers (`00`, `01`, `02`, …).
-In 90% of cases, `depends-on` is empty — use ID as a rough priority/sequence signal.
-Slugs in `depends-on` are the stable reference; IDs are only for filename ordering.
+After approval, assign zero-padded integers (`00`, `01`, `02`, …) in topo sort order. Slugs in `depends-on` are the stable reference; IDs only for filename ordering.
 
 ### 7. Write ticket files
 
@@ -137,6 +129,7 @@ slug: <slug>
 language: <typescript|python|kotlin|swift>
 depends-on: [<slug-a>, <slug-b>]   # omit field if empty
 parallel-safe: false
+human-required: false               # true = HITL (kanban-loop pauses for human review); omit or false = AFK
 files-touched: [src/foo/, test/foo/]
 acceptance: "<One sentence a human or test can verify>"
 ---
@@ -179,25 +172,24 @@ Exercise the full vertical slice via the entry point (CLI binary, HTTP request, 
 
 ### 8. Self-check before writing files
 
-**Cap enforcement (check board-wide FIRST):**
-- [ ] At most **1** ticket has `skeleton: true` in frontmatter; if >1 found → remove excess, converting them to vertical slices
-- [ ] At most **2** tickets have `support: true` in frontmatter; if >2 found → absorb excess into vertical slices
+**Cap enforcement (board-wide):**
+- [ ] At most **1** ticket has `skeleton: true`; excess → convert to vertical slices
+- [ ] At most **2** tickets have `support: true`; excess → absorb into vertical slices
 
-For each generated ticket, verify all conditions before emitting:
+**Per-ticket checks** (revise before writing; do NOT emit horizontal tickets):
 
-- [ ] A user can demo the merged result by running the binary/UI — not by calling an internal function
-  - **Exception:** a ticket tagged `skeleton: true` — its acceptance must be a runnable binary command (e.g. `./app --help` exits 0), not a function call
-  - **Exception:** a ticket tagged `support: true` — its acceptance must be a passing unit-test suite for the module's public API; it must have zero `depends-on` entries and at least one other vertical ticket must list its slug in `depends-on`
-- [ ] `files-touched` includes every layer needed for the acceptance to pass (entry-point, command handler, store, tests)
-  - **Exception:** `support: true` tickets — entry-point is NOT required in `files-touched`; only module source + its unit tests
-- [ ] The acceptance test invocation matches how a real user would trigger it (CLI command, HTTP request, UI interaction)
-  - **Exception:** `support: true` tickets — acceptance test is a unit-test suite for the module's public API
-- [ ] If the acceptance criterion is a CLI/UI/HTTP call, the entry-point file is in `files-touched`
-  - **Exception:** `skeleton: true` and `support: true` tickets as described above
-- [ ] `failing-tests` lists ≥1 **unit test** (logic in isolation) AND ≥1 **acceptance test** that asserts ONLY the new observable behavior this slice introduces. If the acceptance criterion extends an existing acceptance test from a dependency ticket, add a new assertion to that test file rather than creating a new test function — name the exact file and assertion in `## Failing Tests`.
-  - **Exception:** `support: true` tickets — only unit tests required (no entry-point acceptance test); `skeleton: true` tickets — only an acceptance test for the runnable binary (unit tests optional)
-
-If **any** ticket fails a check → revise it before writing files. Do NOT emit horizontal tickets.
+- [ ] User can demo by running the binary/UI — not by calling an internal function
+  - `skeleton: true` exception: acceptance is a runnable binary command (e.g. `./app --help` exits 0)
+  - `support: true` exception: acceptance is a passing unit-test suite for the module's public API; zero `depends-on`; ≥1 vertical ticket lists its slug in `depends-on`
+- [ ] `files-touched` includes every layer for acceptance to pass (entry-point, handler, store, tests)
+  - `support: true` exception: only module source + unit tests (no entry-point required)
+- [ ] Acceptance test invocation matches real user trigger (CLI command, HTTP request, UI interaction)
+  - `support: true` exception: acceptance test is a unit-test suite for the module's public API
+- [ ] If acceptance is CLI/UI/HTTP call, entry-point file is in `files-touched`
+  - `skeleton: true` and `support: true` excepted as above
+- [ ] `failing-tests` lists ≥1 **unit test** AND ≥1 **acceptance test** asserting ONLY the new observable behavior this slice introduces. If extending a dependency ticket's acceptance test, add an assertion to that test file rather than a new function — name the exact file and assertion in `## Failing Tests`.
+  - `support: true` exception: only unit tests required; `skeleton: true` exception: only acceptance test for runnable binary (unit tests optional)
+- [ ] `human-required` has been explicitly considered: set `true` (HITL) only for arch decisions, design review, security choices, ambiguous scope, or cross-cutting refactors; all other tickets omit or set `false` (AFK)
 
 ### 9. Report
 
@@ -218,6 +210,7 @@ After writing all files, output:
 | `language` | yes | Routes specialist: `typescript`, `python`, `kotlin`, `swift` |
 | `depends-on` | no | List of slugs in `.workflow/kanban/done/` required before eligible; omit if none |
 | `parallel-safe` | no | Default `false`; `true` only when `files-touched` has zero overlap with ALL other eligible tickets; any shared file (including the entry-point) → `false` for both tickets |
+| `human-required` | no (boolean) | Default `false` (AFK — agent can complete and merge unattended). Set `true` (HITL) for arch decisions, design/UX review, security-sensitive changes, ambiguous scope, or cross-cutting refactors spanning ≥4 modules. HITL tickets pause kanban-loop for human decision before dispatch. |
 | `files-touched` | no | Paths/dirs implementation will modify — used for parallel overlap detection |
 | `acceptance` | yes | One sentence a human or test can verify |
 | `failing-tests` | required, list[string] | Test function names to write FIRST and run RED before any src/ edit. Format: `path/to/test.ext::test_name_in_snake_case`. Must include ≥1 unit test (logic in isolation) AND ≥1 acceptance test that asserts only the observable delta this slice introduces. Extend an existing acceptance test from a dependency ticket rather than duplicating entry-point coverage. |

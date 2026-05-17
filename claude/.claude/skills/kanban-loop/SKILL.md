@@ -21,80 +21,41 @@ running TDD per ticket. See `docs/kanban-workflow.md` for full design rationale.
 
 ## Step 0 — Branch Pre-flight
 
-Runs once at startup, before eligibility resolution. Prevents per-ticket commits from landing on protected branches.
+Runs once at startup. Prevents per-ticket commits landing on protected branches.
 
-### 1. Detached HEAD check
+**Checks (abort on fail):**
+- `git rev-parse --abbrev-ref HEAD` → if `HEAD`: `ERROR: Detached HEAD state. Checkout a branch before running kanban-loop.`
+- `git status --porcelain` → if non-empty: `ERROR: Uncommitted changes detected. Stash or commit them before running kanban-loop.`
 
-Run: `git rev-parse --abbrev-ref HEAD`
+**Protected branches** (hardcoded): `main`, `master`, `develop`
 
-If output is `HEAD` → abort:
-```
-ERROR: Detached HEAD state. Checkout a branch before running kanban-loop.
-```
+- Not on protected branch → log `Using branch: <name>`, proceed to Step 1.
+- On protected branch → show branch prompt:
 
-### 2. Dirty working tree check
-
-Run: `git status --porcelain`
-
-If output is non-empty → abort:
-```
-ERROR: Uncommitted changes detected. Stash or commit them before running kanban-loop.
-```
-
-### 3. Protected branch detection
-
-Protected branches (hardcoded): `main`, `master`, `develop`
-
-**If NOT on a protected branch** → skip silently, log `Using branch: <name>`, proceed to Step 1.
-
-**If on a protected branch** → show branch prompt (Step 4).
-
-### 4. Branch prompt
-
-**With `--branch <name>` passed:**
-
+With `--branch <name>`:
 ```
 ─────────────────────────────────────────────
   You are on <branch>. Create a branch?
-
   Suggested: <name>
-
   1. Yes — use suggested name
   2. Yes — enter custom name
   3. Stay on <branch>
 ─────────────────────────────────────────────
 ```
+- **1**: use `<name>` (check collision); **2**: prompt for name then check collision; **3**: warn and proceed to Step 1.
 
-Wait for user to choose [1-3].
-
-- **1**: proceed with `<name>` (check collision first — Step 5)
-- **2**: prompt user to type a name, then check collision
-- **3**: warn "⚠ Staying on <branch> — commits will land on a protected branch." Proceed to Step 1.
-
-**Without `--branch` (standalone invocation):**
-
+Without `--branch`:
 ```
 ─────────────────────────────────────────────
   You are on <branch>. Enter a branch name to
   create, or type SKIP to stay on <branch>:
 ─────────────────────────────────────────────
 ```
+If `SKIP` → warn and proceed. Otherwise use typed name.
 
-Wait for user input. If `SKIP` → warn and proceed. Otherwise use typed name (check collision).
+**Collision check:** `git show-ref --verify --quiet refs/heads/<name>` — if exists, auto-append `-2`, `-3`, etc. Show resolved name before creating.
 
-### 5. Branch name collision
-
-Check if chosen name exists locally: `git show-ref --verify --quiet refs/heads/<name>`
-
-If exists → auto-append `-2`, `-3`, etc. until an unused name is found. Show resolved name to user before creating.
-
-### 6. Branch creation
-
-```bash
-git checkout -b <resolved-name>
-```
-
-Confirm branch created, then proceed to Step 1.
+**Branch creation:** `git checkout -b <resolved-name>` → confirm, proceed to Step 1.
 
 ---
 
@@ -128,10 +89,9 @@ Run `to-tickets` to populate backlog/, or create the three columns manually.
 
 **Validate every ticket** in `backlog/` and `doing/`:
 
-Required fields: `id` (integer), `slug` (kebab-case, matches `NN-{slug}.md`), `language`,
-`acceptance` (non-empty string). Any violation → abort, list all bad tickets with field name.
+Required fields: `id` (integer), `slug` (kebab-case, matches `NN-{slug}.md`), `language`, `acceptance` (non-empty string). Any violation → abort, list all bad tickets with field name.
 
-**Stuck-ticket check** — for each file in `doing/`:
+**Stuck-ticket check** — for each file in `doing/` older than 3600s:
 
 ```python
 import os, time
@@ -141,10 +101,7 @@ for f in os.listdir(".workflow/kanban/doing"):
         print(f"STUCK ({int(age//60)}min): {f}")
 ```
 
-If any stuck tickets found → pause, show list, ask user:
-- `retry` — move back to `backlog/`, continue loop
-- `skip` — leave in `doing/`, continue loop ignoring it
-- `abort` — stop entirely
+If stuck tickets found → pause, ask user: `retry` (→ backlog) / `skip` (ignore) / `abort`.
 
 ---
 
@@ -193,6 +150,39 @@ abort. Do not continue. Human must resolve.
 ## Step 3 — Dispatch (Serial, default)
 
 For the ticket with the lowest `id`:
+
+### 3a — HITL check (before dispatch)
+
+Read the frontmatter `human-required` field (boolean, default `false`).
+
+If `human-required: true` — **do NOT dispatch a subagent**. Instead:
+
+1. Move ticket to `doing/` with a HITL marker appended to the filename:
+   `mv .workflow/kanban/backlog/NN-slug.md .workflow/kanban/doing/NN-slug.md`
+2. Surface the ticket to the user:
+
+   ```
+   ─────────────────────────────────────────────
+     HITL REQUIRED: NN-slug
+     Path: .workflow/kanban/doing/NN-slug.md
+     Acceptance: <acceptance sentence>
+
+     This ticket requires human review before an agent can proceed.
+     Read the ticket, make any decisions, then type:
+       proceed   — dispatch specialist subagent normally
+       edit      — you will edit the ticket file; re-run kanban-loop after
+       skip      — move back to backlog, continue with next eligible ticket
+       abort     — halt the loop
+   ─────────────────────────────────────────────
+   ```
+
+3. Wait for user input:
+   - `proceed` → continue with steps 1–5 below (dispatch subagent normally)
+   - `edit` → move ticket back to `backlog/`; halt loop so user can edit; tell user to re-run `/kanban-loop` when ready
+   - `skip` → move ticket back to `backlog/`; continue loop with next eligible ticket
+   - `abort` → halt loop, leave state as-is, print partial summary
+
+If `human-required: false` or field absent — proceed directly to step 1 below.
 
 1. `mv .workflow/kanban/backlog/NN-slug.md .workflow/kanban/doing/NN-slug.md`
 2. Map `language` → specialist:
@@ -266,33 +256,19 @@ The dispatched subagent MUST attest to all gates before kanban-loop moves the fi
 
 ```
 Gate 0 — Red-first verified (with assertion failure)
-  Subagent's report includes a `## Red Output` section with test runner output that:
-    a. Was captured BEFORE any src/ file edit (cross-check files-touched ordering)
-    b. Shows ≥1 actual assertion failure (look for "failed", "FAILED",
-       "AssertionError", "expected ... to ...", or framework-equivalent failure markers)
-  
-  A green-on-first-run is NOT a valid RED. Module-not-found / import errors only count as
-  RED if the missing module is one the ticket creates — otherwise it's an environment bug.
-  
-  Fail Gate 0 if:
-    - Red Output section absent
-    - Output shows 0 failures or all-pass
-    - Output shows only import/resolution errors with no assertion attempts
-    - Test file timestamp is later than any src/ file timestamp listed in files-touched
-  
-  When Gate 0 fails: append `## Failure — Gate 0 (fake-green)` note to ticket body
-  with the actual Red Output for review, push back to backlog.
+  Report includes `## Red Output` captured BEFORE any src/ edit, showing ≥1 actual
+  assertion failure ("failed", "FAILED", "AssertionError", "expected ... to ...").
+  NOT valid: green-on-first-run; import errors for modules the ticket doesn't create.
+  Fail if: Red Output absent; 0 failures; only import errors; test file timestamp
+  later than any src/ file in files-touched.
+  On fail: append `## Failure — Gate 0 (fake-green)` to ticket body, push to backlog.
 
-Gate 1 — Tests green
-  All tests for files-touched paths exit 0. Zero failures, zero errors.
+Gate 1 — Tests green: all tests for files-touched exit 0. Zero failures, zero errors.
 
-Gate 2 — Acceptance verifiable
-  The acceptance sentence maps to at least one named test,
-  OR the agent documents exact manual verification steps.
+Gate 2 — Acceptance verifiable: acceptance sentence maps to ≥1 named test, or agent
+  documents exact manual verification steps.
 
-Gate 3 — Scope clean
-  Only files listed in files-touched were modified.
-  No uncommitted unrelated changes.
+Gate 3 — Scope clean: only files-touched modified. No uncommitted unrelated changes.
 ```
 
 **All gates pass** →
@@ -370,17 +346,13 @@ kanban-loop complete
 
 ## Anti-patterns
 
-- **Never run TDD logic inline** — always dispatch a fresh specialist subagent. Each ticket
-  needs clean context; inline execution pollutes the orchestrator's window.
-- **Never write to `done/` without all three verification gates passing** — partial work is
-  worse than no work.
-- **Never continue after deadlock** — surface it. A deadlock means `to-tickets` produced a
-  broken dependency graph. Human fix required.
-- **Never accept a subagent report that modified files outside `files-touched`** — fail Gate 3,
-  push back to backlog. Scope drift compounds across tickets.
-- **Never dispatch multiple tickets onto the same worktree** — isolation: worktree means one
-  worktree per ticket per dispatch.
-- **Never stage or commit `.workflow/` files** — `.workflow/` contains ephemeral board state (tickets, PRDs). It is globally gitignored. If a subagent's `files-touched` list includes any `.workflow/` path, fail Gate 3 immediately.
+- **Never run TDD logic inline** — dispatch a fresh specialist subagent per ticket; inline execution pollutes the orchestrator's window.
+- **Never write to `done/` without all gates passing** — partial work is worse than no work.
+- **Never continue after deadlock** — broken dependency graph; human fix required.
+- **Never accept files modified outside `files-touched`** — fail Gate 3, push to backlog.
+- **Never dispatch multiple tickets onto the same worktree** — one worktree per ticket.
+- **Never stage or commit `.workflow/` files** — ephemeral board state, globally gitignored. Any `.workflow/` path in `files-touched` → fail Gate 3 immediately.
+- **Never auto-drain HITL tickets** — `human-required: true` must surface to the user and pause the loop. Silently dispatching a subagent on a HITL ticket bypasses the review gate it exists to enforce.
 
 ---
 

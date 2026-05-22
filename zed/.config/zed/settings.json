@@ -7,6 +7,10 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "file_finder": {
+    "modal_max_width": "medium"
+  },
+  "use_smartcase_search": true,
   "helix_mode": true,
   "cli_default_open_behavior": "new_window",
   "autosave": "on_focus_change",
@@ -62,7 +66,7 @@
   "theme": {
     "mode": "system",
     "light": "One Light",
-    "dark": "Catppuccin Mocha",
+    "dark": "GitHub Dark Dimmed",
   },
   "lsp": {
     "kotlin-lsp": {

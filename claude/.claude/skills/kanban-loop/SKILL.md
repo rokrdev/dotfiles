@@ -16,6 +16,7 @@ running TDD per ticket. See `docs/kanban-workflow.md` for full design rationale.
 | `/kanban-loop --parallel` | Parallel mode — dispatch all eligible `parallel-safe` tickets with no file-overlap at once |
 | `/kanban-loop --dry-run` | Resolve eligibility, print dispatch plan — no moves, no subagents |
 | `/kanban-loop --branch <name>` | Pass suggested branch name to pre-flight prompt |
+| `/kanban-loop --hitl` | HITL mode — pause for user approval before each commit and before advancing to the next ticket |
 
 ---
 
@@ -273,6 +274,26 @@ Gate 3 — Scope clean: only files-touched modified. No uncommitted unrelated ch
 
 **All gates pass** →
 
+**If `--hitl` active — pre-commit confirmation:**
+
+Before running any `git` command, pause and show:
+
+```
+─────────────────────────────────────────────
+  HITL: Ready to commit NN-slug
+  Files: <files-touched list>
+  Commit: <proposed commit message>
+
+  approve  — stage, commit, move to done/
+  reject   — push back to backlog with note
+  abort    — halt loop, leave state as-is
+─────────────────────────────────────────────
+```
+
+- `approve` → proceed with steps 1–4 below
+- `reject` → append `## Failure — HITL rejected\n<user note>` to ticket body; mv to `backlog/`; warn user; continue loop
+- `abort` → halt loop, print partial summary
+
 1. **Run full test suite** (not just ticket-scoped paths) — must exit 0. If red, fail Gate 1 and push back to backlog.
 2. **Stage only files in `files-touched`** — use `git add <file1> <file2> ...` with explicit paths. Never `git add -A` or `git add .`.
 3. **Commit** with conventional format:
@@ -332,6 +353,22 @@ Repeat steps 2–5 until one of the stop conditions is reached:
 | User types abort / ctrl-c | Halt, leave state as-is, print partial summary |
 | 3+ consecutive ticket failures | Circuit breaker — halt, surface all failed tickets |
 
+**If `--hitl` active — between-ticket confirmation:**
+
+After each ticket moves to `done/`, pause before running the next eligibility pass:
+
+```
+─────────────────────────────────────────────
+  HITL: NN-slug done. Continue to next ticket?
+
+  continue  — run next eligibility pass
+  abort     — halt loop, print summary
+─────────────────────────────────────────────
+```
+
+- `continue` → loop back to Step 2
+- `abort` → halt, print partial summary
+
 **Summary format:**
 
 ```
@@ -353,6 +390,7 @@ kanban-loop complete
 - **Never dispatch multiple tickets onto the same worktree** — one worktree per ticket.
 - **Never stage or commit `.workflow/` files** — ephemeral board state, globally gitignored. Any `.workflow/` path in `files-touched` → fail Gate 3 immediately.
 - **Never auto-drain HITL tickets** — `human-required: true` must surface to the user and pause the loop. Silently dispatching a subagent on a HITL ticket bypasses the review gate it exists to enforce.
+- **Never apply HITL mode silently** — `--hitl` must surface both the pre-commit confirmation and the between-ticket prompt on every iteration. Skipping either defeats the purpose of HITL mode.
 
 ---
 

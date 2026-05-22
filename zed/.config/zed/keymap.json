@@ -84,7 +84,7 @@
   {
     "context": "Workspace && !Terminal && vim_mode == normal",
     "bindings": {
-      "space o": [
+      "ctrl-alt-r": [
         "projects::OpenRecent",
         {
           "create_new_window": false,
@@ -104,9 +104,21 @@
     },
   },
   {
-    "context": "(vim_mode == helix_normal || vim_mode == helix_select) && !menu",
+    "context": "Editor && (vim_mode == helix_normal || vim_mode == helix_select) && !VimWaiting && !menu",
     "bindings": {
       "g a": "pane::AlternateFile",
+      "g i": "editor::GoToImplementation",
+      "space G": [
+        "task::Spawn",
+        { "task_name": "Gitui", "reveal_target": "center" },
+      ],
+    },
+  },
+  {
+    "context": "(vim_mode == helix_normal || vim_mode == helix_select) && !menu",
+    "bindings": {
+      "alt-s": "vim::SelectLargerSyntaxNode",
+      "alt-a": "vim::SelectSmallerSyntaxNode",
     },
   },
 ]

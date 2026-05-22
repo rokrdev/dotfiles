@@ -63,7 +63,7 @@ Never make architecture decisions silently. Expose them.
 
 ## Workflow
 
-### Feature work → @feature-flow
+### Feature work
 
 For new features, use the kanban pipeline:
 
@@ -76,11 +76,11 @@ vague request
   → @ship-it (push branch, open PR)
 ```
 
-Invoke `@feature-flow` to run the full pipeline. Invoke individual steps when resuming mid-pipeline.
+Invoke individual steps when resuming mid-pipeline.
 
 Single-file or trivial changes: skip the pipeline, implement directly.
 
-### Bug fixes → @bug-flow
+### Bug fixes
 
 For bugs, use the bug pipeline:
 
@@ -92,7 +92,7 @@ reported bug
   → @ship-it
 ```
 
-Invoke `@bug-flow` to run the full pipeline. Invoke `@diagnose` first when investigating.
+Invoke `@diagnose` first when investigating.
 
 ### Kanban board conventions
 

@@ -15,7 +15,7 @@ running TDD per ticket. See `docs/kanban-workflow.md` for full design rationale.
 | `/kanban-loop` | Serial mode — one ticket at a time |
 | `/kanban-loop --parallel` | Parallel mode — dispatch all eligible `parallel-safe` tickets with no file-overlap at once |
 | `/kanban-loop --dry-run` | Resolve eligibility, print dispatch plan — no moves, no subagents |
-| `/kanban-loop --branch <name>` | Pass suggested branch name to pre-flight prompt (used by feature-flow and bug-flow) |
+| `/kanban-loop --branch <name>` | Pass suggested branch name to pre-flight prompt |
 
 ---
 

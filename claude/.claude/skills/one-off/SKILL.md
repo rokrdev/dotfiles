@@ -43,16 +43,9 @@ After user answers, write a brief implementation summary (3-5 lines):
 
 Ask: "Does this match what you want? Say yes to proceed."
 
-### Step 4 — Dispatch Specialist
+### Step 4 — Dispatch Subagent
 
-Route by language/stack:
-- Python → `snape`
-- JS/TS/React/Node → `jasper`
-- Swift/iOS/macOS → `swifty`
-- Kotlin/JVM/Android → `conan`
-- Shell/config/other → general-purpose agent (model: sonnet)
-
-Dispatch with:
+Dispatch a general-purpose subagent (model: claude-sonnet-4-6) with:
 - **Exact files** to touch (from step 3)
 - **Scope boundary** — what to implement AND what not to touch
 - **TDD requirement** — write failing test first, then implementation, then refactor
@@ -60,7 +53,7 @@ Dispatch with:
 
 ### Step 5 — Report
 
-After specialist completes, report back:
+After subagent completes, report back:
 - Files changed
 - Test added/modified
 

@@ -36,6 +36,7 @@
     "use_smartcase_find": false,
   },
   "project_panel": {
+    "sticky_scroll": false,
     "hide_root": false,
     "git_status": true,
     "dock": "left",

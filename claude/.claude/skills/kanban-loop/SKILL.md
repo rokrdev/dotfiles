@@ -102,7 +102,13 @@ for f in os.listdir(".workflow/kanban/doing"):
         print(f"STUCK ({int(age//60)}min): {f}")
 ```
 
-If stuck tickets found → pause, ask user: `retry` (→ backlog) / `skip` (ignore) / `abort`.
+If stuck tickets found → pause, ask user:
+```
+  1. Retry   — move back to backlog
+  2. Skip    — ignore, continue
+  3. Abort   — halt loop
+```
+Accept: `1` or `retry`, `2` or `skip`, `3` or `abort`.
 
 ---
 
@@ -169,19 +175,19 @@ If `human-required: true` — **do NOT dispatch a subagent**. Instead:
      Acceptance: <acceptance sentence>
 
      This ticket requires human review before an agent can proceed.
-     Read the ticket, make any decisions, then type:
-       proceed   — dispatch specialist subagent normally
-       edit      — you will edit the ticket file; re-run kanban-loop after
-       skip      — move back to backlog, continue with next eligible ticket
-       abort     — halt the loop
+     Read the ticket, make any decisions, then choose:
+       1. Proceed  — dispatch specialist subagent normally
+       2. Edit     — you will edit the ticket file; re-run kanban-loop after
+       3. Skip     — move back to backlog, continue with next eligible ticket
+       4. Abort    — halt the loop
    ─────────────────────────────────────────────
    ```
 
 3. Wait for user input:
-   - `proceed` → continue with steps 1–5 below (dispatch subagent normally)
-   - `edit` → move ticket back to `backlog/`; halt loop so user can edit; tell user to re-run `/kanban-loop` when ready
-   - `skip` → move ticket back to `backlog/`; continue loop with next eligible ticket
-   - `abort` → halt loop, leave state as-is, print partial summary
+   - `1` or `proceed` → continue with steps 1–5 below (dispatch subagent normally)
+   - `2` or `edit` → move ticket back to `backlog/`; halt loop so user can edit; tell user to re-run `/kanban-loop` when ready
+   - `3` or `skip` → move ticket back to `backlog/`; continue loop with next eligible ticket
+   - `4` or `abort` → halt loop, leave state as-is, print partial summary
 
 If `human-required: false` or field absent — proceed directly to step 1 below.
 
@@ -284,15 +290,15 @@ Before running any `git` command, pause and show:
   Files: <files-touched list>
   Commit: <proposed commit message>
 
-  approve  — stage, commit, move to done/
-  reject   — push back to backlog with note
-  abort    — halt loop, leave state as-is
+  1. Approve  — stage, commit, move to done/
+  2. Reject   — push back to backlog with note
+  3. Abort    — halt loop, leave state as-is
 ─────────────────────────────────────────────
 ```
 
-- `approve` → proceed with steps 1–4 below
-- `reject` → append `## Failure — HITL rejected\n<user note>` to ticket body; mv to `backlog/`; warn user; continue loop
-- `abort` → halt loop, print partial summary
+- `1` or `approve` → proceed with steps 1–4 below
+- `2` or `reject` → append `## Failure — HITL rejected\n<user note>` to ticket body; mv to `backlog/`; warn user; continue loop
+- `3` or `abort` → halt loop, print partial summary
 
 1. **Run full test suite** (not just ticket-scoped paths) — must exit 0. If red, fail Gate 1 and push back to backlog.
 2. **Stage only files in `files-touched`** — use `git add <file1> <file2> ...` with explicit paths. Never `git add -A` or `git add .`.
@@ -313,7 +319,13 @@ Before running any `git` command, pause and show:
 - Warn user with gate number, reason, ticket name
 - Increment failure counter. If 3+ consecutive failures → **circuit breaker**: halt loop,
   surface failures, ask user to intervene before continuing.
-- Ask user: retry / skip / abort
+- Ask user:
+  ```
+    1. Retry   — re-run with subagent
+    2. Skip    — move to backlog, continue
+    3. Abort   — halt loop
+  ```
+  Accept: `1` or `retry`, `2` or `skip`, `3` or `abort`
 
 ---
 
@@ -361,13 +373,13 @@ After each ticket moves to `done/`, pause before running the next eligibility pa
 ─────────────────────────────────────────────
   HITL: NN-slug done. Continue to next ticket?
 
-  continue  — run next eligibility pass
-  abort     — halt loop, print summary
+  1. Continue  — run next eligibility pass
+  2. Abort     — halt loop, print summary
 ─────────────────────────────────────────────
 ```
 
-- `continue` → loop back to Step 2
-- `abort` → halt, print partial summary
+- `1` or `continue` → loop back to Step 2
+- `2` or `abort` → halt, print partial summary
 
 **Summary format:**
 

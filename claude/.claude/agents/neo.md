@@ -58,14 +58,12 @@ If memory doesn't exist or is empty — note it and proceed.
 |------|-------|-------|
 | File reads, search, exploration | generic | haiku |
 | 1-2 line edits, config/doc updates | generic | haiku |
-| Multi-file implementation | generic/specialist | sonnet |
-| Debugging with unknown root cause | generic/specialist | sonnet |
-| Language-specific impl, testing, refactor | specialist | sonnet (frontmatter) |
+| Multi-file implementation | generic | sonnet |
+| Debugging with unknown root cause | generic | sonnet |
+| Language-specific impl, testing, refactor | generic | sonnet |
 | Architectural decisions | merlin | opus (frontmatter) |
 
-Generic agents: pass `model` explicitly. Specialists and Merlin: model is in their frontmatter — omit `model` from dispatch.
-
-**Specialist agents:** `swifty` (Swift/iOS/macOS), `snape` (Python), `conan` (Kotlin/JVM), `jasper` (JS/TS).
+Generic agents: pass `model` explicitly. Merlin: model is in its frontmatter — omit `model` from dispatch.
 
 **Merlin dispatch:** `subagent_type: "merlin"`, include "ultrathink" in prompt, block on response before dispatching any implementation agent.
 
@@ -127,10 +125,10 @@ Give each subagent:
 **For any subagent that needs to fetch web content:**
 - Include: "Use the `web-fetch` skill for any URL fetching — do not use WebFetch directly. The skill handles tiered fetching (static / JS-rendered / CLI) and keeps raw content in sandbox."
 
-**For specialist agents (Swifty/Snape/Conan/Jasper), always include in the dispatch prompt:**
+**For all coding subagents, always include in the dispatch prompt:**
 
 - **Exact files** to read/modify (list 2-5 specific paths — never "look around the codebase")
-- **Merlin recommendations** already made — include verbatim; specialists implement, never re-consult
+- **Merlin recommendations** already made — include verbatim; subagents implement, never re-consult
 - **Explicit scope boundary** — what NOT to touch
 - **Done criteria** — what "done" looks like
 - **Serena over Grep** — tell the agent: "Use Serena for all code navigation; fall back to Grep only if Serena is NOT onboarded or for non-code/plain-text searches"
@@ -155,7 +153,7 @@ vague request
    → grill-me (non-code) / grill-with-docs (code w/ domain model) → spec
    → to-prd → .workflow/docs/<slug>.md
    → to-tickets → .workflow/kanban/backlog/NN-slug.md (vertical slices, frontmatter schema)
-   → kanban-loop → drains backlog/ via fresh specialist subagents (TDD inside each)
+   → kanban-loop → drains backlog/ via fresh general-purpose subagents (TDD inside each)
    → ship-it → wrap up branch (commit/push/PR/merge)
 ```
 
@@ -163,7 +161,7 @@ vague request
 - 3+ distinct features in the request → start with `to-prd` then `to-tickets`
 - Single ambiguous request → start with `grill-me` or `grill-with-docs`
 - Architecture unclear → consult Merlin first (unchanged)
-- Single-file fix or trivial change → bypass kanban entirely; dispatch specialist directly
+- Single-file fix or trivial change → bypass kanban entirely; dispatch a general-purpose subagent directly
 
 **Skills used (custom; superpowers DISABLED for trial):**
 - `grill-me` — interview for non-code requirements
@@ -171,7 +169,7 @@ vague request
 - `to-prd` — write structured PRD to `.workflow/docs/<slug>.md`
 - `to-tickets` — decompose PRD into vertical-slice tickets in `.workflow/kanban/backlog/`
 - `tdd` — TDD inside each ticket subagent (NOT superpowers test-driven-development)
-- `kanban-loop` — orchestration loop, drains board via specialist dispatch
+- `kanban-loop` — orchestration loop, drains board via general-purpose subagent dispatch
 - `improve-codebase-architecture` — periodic refactor pass (manual reflection step in v1)
 - `diagnose` — systematic debugging (replaces superpowers systematic-debugging)
 - `ship-it` — branch wrap-up (replaces superpowers finishing-a-development-branch)

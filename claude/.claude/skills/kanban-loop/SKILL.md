@@ -192,20 +192,11 @@ If `human-required: true` — **do NOT dispatch a subagent**. Instead:
 If `human-required: false` or field absent — proceed directly to step 1 below.
 
 1. `mv .workflow/kanban/backlog/NN-slug.md .workflow/kanban/doing/NN-slug.md`
-2. Map `language` → specialist:
-
-| `language` | `subagent_type` |
-|------------|----------------|
-| `typescript` / `javascript` | `jasper` |
-| `python` | `snape` |
-| `kotlin` | `conan` |
-| `swift` | `swifty` |
-| anything else | ask user before dispatching |
-
-3. Dispatch a **fresh subagent** — never run TDD logic inline:
+2. Dispatch a **fresh general-purpose subagent** for all languages — never run TDD logic inline:
 
 ```
-subagent_type: <specialist>
+subagent_type: general
+model: claude-sonnet-4-6
 mode: "auto"
 isolation: "worktree"   ← only when files-touched has > 3 distinct paths
 ```

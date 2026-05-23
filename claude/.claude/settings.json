@@ -93,7 +93,7 @@
       "Write(**/migrations/**)",
       "Edit(**/migrations/**)"
     ],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "auto"
   },
   "hooks": {
     "SessionStart": [
@@ -101,7 +101,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "rtk --version 2>/dev/null && echo \"RTK active: $(rtk --version 2>/dev/null)\" || echo \"WARNING: RTK not found — token savings inactive. Install: cargo install rtk\"",
+            "command": "rtk --version 2>/dev/null && echo \"RTK active: $(rtk --version 2>/dev/null)\" || echo \"WARNING: RTK not found \u2014 token savings inactive. Install: cargo install rtk\"",
             "statusMessage": "Checking RTK status..."
           }
         ]
@@ -160,17 +160,6 @@
           {
             "type": "command",
             "command": "$HOME/.claude/hooks/rtk-rewrite.sh"
-          }
-        ]
-      }
-    ],
-    "PermissionRequest": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/permission-review.sh",
-            "timeout": 30
           }
         ]
       }
@@ -257,6 +246,7 @@
   },
   "autoMemoryEnabled": true,
   "skipDangerousModePermissionPrompt": true,
+  "remoteControlAtStartup": false,
   "voiceEnabled": true,
-  "remoteControlAtStartup": false
+  "skipAutoPermissionPrompt": true
 }

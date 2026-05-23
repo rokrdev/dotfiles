@@ -273,10 +273,7 @@ loop:
 
   mv .workflow/kanban/backlog/NN-slug.md → .workflow/kanban/doing/NN-slug.md
 
-  agent = route_specialist(ticket.language)
-  # typescript → jasper, python → snape, kotlin → conan, swift → swifty
-
-  dispatch fresh agent(agent, ticket):
+  dispatch fresh general-purpose agent(ticket):
     invoke tdd skill:
       write failing test (acceptance drives test name)
       write minimum implementation to pass
@@ -291,16 +288,6 @@ loop:
 
   loop
 ```
-
-### Specialist Routing
-
-| `language` value | Agent dispatched |
-|-----------------|-----------------|
-| `typescript` | jasper |
-| `python` | snape |
-| `kotlin` | conan |
-| `swift` | swifty |
-| anything else | Neo decides |
 
 ### Exit Conditions
 
@@ -537,7 +524,7 @@ problem (missed bug, rushed merge) within 7 days → note it and consider hybrid
 
 ## 14. Demo Project — URL Shortener CLI
 
-**Why this project:** Small, self-contained, TypeScript (jasper handles it), 5–8 vertical
+**Why this project:** Small, self-contained, TypeScript, 5–8 vertical
 slices with clear user-observable outcomes, no external service dependencies beyond a local
 JSON store.
 

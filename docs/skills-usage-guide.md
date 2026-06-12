@@ -43,7 +43,7 @@ Branch drained, ready to land → /ship-it
 ## kanban-loop behaviour
 
 - Picks tickets from `.workflow/kanban/backlog/` with satisfied deps
-- Dispatches fresh specialist subagent per ticket (Jasper for TS, Snape for Python, etc.)
+- Dispatches a fresh general-purpose subagent per ticket
 - TDD enforced inside each subagent — red first, no exceptions
 - Moves ticket to `.workflow/kanban/done/` on completion
 - Pauses for review between tickets if configured

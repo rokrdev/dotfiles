@@ -115,10 +115,8 @@
     },
   },
   {
-    "context": "(vim_mode == helix_normal || vim_mode == helix_select) && !menu",
     "bindings": {
-      "alt-s": "vim::SelectLargerSyntaxNode",
-      "alt-a": "vim::SelectSmallerSyntaxNode",
+      "ctrl-alt-g": "git_graph::Open",
     },
   },
 ]

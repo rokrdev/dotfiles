@@ -7,16 +7,58 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  "file_finder": {
-    "modal_max_width": "medium"
+  "show_signature_help_after_edits": true,
+  "code_lens": "on",
+  "colorize_brackets": true,
+  "indent_guides": {
+    "coloring": "indent_aware",
   },
+  "auto_signature_help": false,
+  "focus_follows_mouse": {
+    "enabled": true,
+  },
+  "bottom_dock_layout": "contained",
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false,
+    "anthropic_retention": false,
+  },
+  "session": {
+    "trust_all_worktrees": true,
+  },
+  "git_panel": {
+    "file_icons": true,
+    "tree_view": true,
+    "dock": "left",
+  },
+  "outline_panel": {
+    "dock": "left",
+  },
+  "status_bar": {
+    "show_active_file": true,
+  },
+  "close_on_file_delete": true,
+  "diff_view_style": "unified",
   "use_smartcase_search": true,
+  "search": {
+    "center_on_match": true,
+    "regex": true,
+    "include_ignored": false,
+  },
   "helix_mode": true,
   "cli_default_open_behavior": "new_window",
   "autosave": "on_focus_change",
   "current_line_highlight": "all",
   "which_key": {
     "enabled": true,
+  },
+  "terminal": {
+    "detect_venv": {
+      "on": {
+        "directories": [".env", "env", ".venv", "venv"],
+        "activate_script": "default",
+      },
+    },
   },
   "diagnostics": {
     "inline": {
@@ -36,9 +78,11 @@
     "use_smartcase_find": false,
   },
   "project_panel": {
+    "hide_hidden": false,
+    "sticky_scroll": false,
     "hide_root": false,
     "git_status": true,
-    "dock": "left",
+    "dock": "right",
     "git_status_indicator": false,
     "diagnostic_badges": false,
     "bold_folder_labels": false,
@@ -62,13 +106,28 @@
   "buffer_font_weight": 100,
   "buffer_font_size": 14,
   "ui_font_size": 16,
-  "icon_theme": "Catppuccin Mocha",
+  "icon_theme": "Material Icon Theme",
   "theme": {
     "mode": "system",
     "light": "One Light",
     "dark": "GitHub Dark Dimmed",
   },
   "lsp": {
+    "vtsls": {
+      "settings": {
+        "typescript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always",
+          },
+        },
+        "javascript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always",
+          },
+        },
+      },
+      "enable_lsp_tasks": true,
+    },
     "kotlin-lsp": {
       "binary": {
         "path": "/opt/homebrew/bin/kotlin-lsp",
@@ -89,13 +148,12 @@
     },
   },
   "auto_install_extensions": {
-    "catppuccin": true,
-    "catppuccin-icons": true,
+    "github-theme": true,
+    "material-icon-theme": true,
     "fish": true,
     "html": true,
     "kotlin": true,
     "lua": true,
-    "noctis-port": true,
     "python-snippets": true,
     "react-typescript-snippets": true,
     "toml": true,
@@ -105,22 +163,37 @@
     "context-mode": {
       "command": "context-mode",
       "args": [],
-      "env": {}
+      "env": {},
     },
     "github": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-github"],
       "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": ""
-      }
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "",
+      },
     },
     "serena": {
       "command": "uvx",
-      "args": ["--from", "serena", "serena-mcp", "--context", "ide-assistant", "--project-root", "."]
+      "args": [
+        "--from",
+        "serena",
+        "serena-mcp",
+        "--context",
+        "ide-assistant",
+        "--project-root",
+        ".",
+      ],
     },
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
-    }
+      "args": ["-y", "@upstash/context7-mcp@latest"],
+    },
+  },
+  "file_finder": {
+    "file_icons": true,
+    "modal_max_width": "medium",
+    "skip_focus_for_active_in_search": true,
+    "include_ignored": "smart",
+    "include_channels": false,
   },
 }

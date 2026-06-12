@@ -37,8 +37,6 @@ Everything else uses real dependencies: in-memory implementations, real parsers,
 3. Refactor — clean up without breaking tests
 4. Repeat per feature increment
 
-For language-specific runners and patterns, see the specialist agents: Snape (pytest), Swifty (XCTest / Swift Testing), Conan (Kotest / JUnit5), Jasper (Vitest / Jest).
-
 ## Test Location
 
 - Tests go in `test/` by default — never under `src/`

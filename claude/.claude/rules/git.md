@@ -50,7 +50,6 @@ Future: consider moving all hooks to separate config file.
 Optional. Use for:
 - Breaking changes: `BREAKING CHANGE: ...`
 - Issue references: `Closes #123`, `Fixes #456`
-- Collaborators: `Co-Authored-By: Name <email>`
 
 ## Pull Request Guidelines
 
@@ -60,11 +59,6 @@ Optional. Use for:
 - ✗ `feat(everything): major refactor affecting many systems` (too long)
 
 **Body**: Summary of changes, testing performed, rationale
-
-**Co-Authored-By**: Include when Claude has contributed:
-```
-Co-Authored-By: Claude Sonnet <noreply@anthropic.com>
-```
 
 ## Commit Practices
 

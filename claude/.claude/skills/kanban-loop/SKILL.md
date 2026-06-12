@@ -162,7 +162,7 @@ For the ticket with the lowest `id`:
 
 Read the frontmatter `human-required` field (boolean, default `false`).
 
-If `human-required: true` — **do NOT dispatch a subagent**. Instead:
+If `human-required: true` **or `--hitl` flag is active** — **do NOT dispatch a subagent**. Instead:
 
 1. Move ticket to `doing/` with a HITL marker appended to the filename:
    `mv .workflow/kanban/backlog/NN-slug.md .workflow/kanban/doing/NN-slug.md`
@@ -189,23 +189,14 @@ If `human-required: true` — **do NOT dispatch a subagent**. Instead:
    - `3` or `skip` → move ticket back to `backlog/`; continue loop with next eligible ticket
    - `4` or `abort` → halt loop, leave state as-is, print partial summary
 
-If `human-required: false` or field absent — proceed directly to step 1 below.
+If `human-required: false` or field absent, **and `--hitl` is NOT active** — proceed directly to step 1 below.
 
 1. `mv .workflow/kanban/backlog/NN-slug.md .workflow/kanban/doing/NN-slug.md`
-2. Map `language` → specialist:
-
-| `language` | `subagent_type` |
-|------------|----------------|
-| `typescript` / `javascript` | `jasper` |
-| `python` | `snape` |
-| `kotlin` | `conan` |
-| `swift` | `swifty` |
-| anything else | ask user before dispatching |
-
-3. Dispatch a **fresh subagent** — never run TDD logic inline:
+2. Dispatch a **fresh general-purpose subagent** for all languages — never run TDD logic inline:
 
 ```
-subagent_type: <specialist>
+subagent_type: general
+model: claude-sonnet-4-6
 mode: "auto"
 isolation: "worktree"   ← only when files-touched has > 3 distinct paths
 ```

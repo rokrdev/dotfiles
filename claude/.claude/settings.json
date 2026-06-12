@@ -93,7 +93,7 @@
       "Write(**/migrations/**)",
       "Edit(**/migrations/**)"
     ],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "auto"
   },
   "hooks": {
     "SessionStart": [
@@ -160,17 +160,6 @@
           {
             "type": "command",
             "command": "$HOME/.claude/hooks/rtk-rewrite.sh"
-          }
-        ]
-      }
-    ],
-    "PermissionRequest": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/permission-review.sh",
-            "timeout": 30
           }
         ]
       }
@@ -257,6 +246,7 @@
   },
   "autoMemoryEnabled": true,
   "skipDangerousModePermissionPrompt": true,
-  "voiceEnabled": true,
-  "remoteControlAtStartup": false
+  "remoteControlAtStartup": false,
+  "skipAutoPermissionPrompt": true,
+  "voiceEnabled": true
 }

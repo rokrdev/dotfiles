@@ -20,7 +20,7 @@
 [init]
 	defaultBranch = main
 [user]
-	email = 6837979+rokr-dev@users.noreply.github.com
+	email = 6837979+rokrdev@users.noreply.github.com
   name = bharat
 [url "git@github.com:"]
 	insteadOf = https://github.com/
@@ -28,10 +28,6 @@
 	path = ~/gitconfig_me
 [includeIf "gitdir:~/projects/"]
 	path = ~/gitconfig_me
-[includeIf "gitdir:~/afterpay/"]
-	path = ~/gitconfig_afterpay
-[includeIf "gitdir:~/square/"]
-	path = ~/gitconfig_square
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f

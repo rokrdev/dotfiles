@@ -101,7 +101,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "rtk --version 2>/dev/null && echo \"RTK active: $(rtk --version 2>/dev/null)\" || echo \"WARNING: RTK not found \u2014 token savings inactive. Install: cargo install rtk\"",
+            "command": "rtk --version 2>/dev/null && echo \"RTK active: $(rtk --version 2>/dev/null)\" || echo \"WARNING: RTK not found — token savings inactive. Install: cargo install rtk\"",
             "statusMessage": "Checking RTK status..."
           }
         ]
@@ -247,6 +247,6 @@
   "autoMemoryEnabled": true,
   "skipDangerousModePermissionPrompt": true,
   "remoteControlAtStartup": false,
-  "voiceEnabled": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "voiceEnabled": true
 }

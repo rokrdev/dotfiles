@@ -158,7 +158,8 @@
     "pr-review-toolkit@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
-    "caveman@caveman": true
+    "caveman@caveman": true,
+    "exa@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {

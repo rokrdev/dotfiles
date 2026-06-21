@@ -141,3 +141,11 @@ export CARGO_TARGET_DIR=~/.cargo-target
 
 alias clb="claude --model $CLAUDE_MODEL_SONNET --effort high"
 alias cld="claude --model $CLAUDE_MODEL_OPUS --effort high"
+
+# Added by LM Studio CLI (lms)
+set -gx PATH $PATH /Users/bharat/.lmstudio/bin
+# End of LM Studio CLI section
+
+#provider/model
+alias ocq="opencode -m lmstudio/qwen3.6-27b-mlx"
+alias ocg="opencode -m lmstudio/gemma-4-31b"

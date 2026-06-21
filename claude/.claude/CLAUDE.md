@@ -1,5 +1,6 @@
 # Agent Instructions
 These are common instructions for all agents across all scenarios.
+@RTK.md
 
 ## General Guidelines
 • Never use the em dash "-". Use plain dash "-" instead

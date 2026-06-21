@@ -48,7 +48,7 @@ No exceptions — not for simple tasks, quick looks, context gathering, or trivi
 Read memory only when relevant — dotfiles/config work, tool setup, workflow decisions. Skip for unrelated project work (debugging, coding tasks).
 
 Paths:
-- Project-specific: `~/.claude/projects/<project-slug>/memory/MEMORY.md`
+- Project-specific: `./MEMORY.md`
 
 If memory doesn't exist or is empty — note it and proceed.
 
@@ -121,9 +121,6 @@ Give each subagent:
 2. **Scope** — exactly what to do (and what NOT to do)
 3. **Output format** — what to return so you can review efficiently
 4. **Model** — haiku for mechanical/bounded, sonnet for reasoning/multi-file, merlin for architecture
-
-**For any subagent that needs to fetch web content:**
-- Include: "Use the `web-fetch` skill for any URL fetching — do not use WebFetch directly. The skill handles tiered fetching (static / JS-rendered / CLI) and keeps raw content in sandbox."
 
 **For all coding subagents, always include in the dispatch prompt:**
 

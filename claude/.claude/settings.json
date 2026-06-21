@@ -128,27 +128,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/cleanup-worktrees.sh",
-            "statusMessage": "Cleaning up merged worktrees..."
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"/Users/bharat/.asdf/installs/nodejs/24.14.1/bin/node\" \"/Users/bharat/.claude/hooks/context-mode-cache-heal.mjs\""
-          }
-        ]
-      }
-    ],
-    "WorktreeCreate": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/worktree-create.sh",
-            "statusMessage": "Creating worktree and copying .env files..."
+            "command": "node \"$HOME/.claude/hooks/context-mode-cache-heal.mjs\""
           }
         ]
       }
@@ -159,27 +139,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/rtk-rewrite.sh"
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/claude-notify.sh"
-          }
-        ]
-      }
-    ],
-    "StopFailure": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/claude-notify.sh"
+            "command": "rtk hook claude"
           }
         ]
       }
@@ -202,17 +162,11 @@
     "padding": 0
   },
   "enabledPlugins": {
-    "superpowers@claude-plugins-official": false,
     "context7@claude-plugins-official": true,
     "context-mode@context-mode": true,
     "pr-review-toolkit@claude-plugins-official": true,
-    "swift-lsp@claude-plugins-official": false,
     "code-simplifier@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
-    "claude-md-management@claude-plugins-official": false,
-    "ralph-loop@claude-plugins-official": false,
-    "claude-code-setup@claude-plugins-official": false,
-    "security-guidance@claude-plugins-official": false,
     "caveman@caveman": true
   },
   "extraKnownMarketplaces": {

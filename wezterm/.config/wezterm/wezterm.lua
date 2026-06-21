@@ -81,18 +81,22 @@ config.unicode_version              = 14
 -- ============================================================
 -- Keybindings (macOS)
 -- ============================================================
+config.leader = { key = 'b', mods = 'CTRL', timeout_milliseconds = 1000 }
+
 config.keys                         = {
   -- Tabs
   { key = 't', mods = 'SUPER',       action = act.SpawnTab 'CurrentPaneDomain' },
   { key = 'w', mods = 'SUPER',       action = act.CloseCurrentTab { confirm = true } },
 
-  -- Pane splits
-  { key = 'd', mods = 'SUPER',       action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } },
-  { key = 'd', mods = 'SUPER|SHIFT', action = act.SplitVertical { domain = 'CurrentPaneDomain' } },
+  -- Pane splits (tmux: leader + % / ")
+  { key = '\\', mods = 'LEADER',     action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } },
+  { key = '-',  mods = 'LEADER',     action = act.SplitVertical { domain = 'CurrentPaneDomain' } },
 
-  -- Pane navigation
-  { key = '[', mods = 'SUPER',       action = act.ActivatePaneDirection 'Prev' },
-  { key = ']', mods = 'SUPER',       action = act.ActivatePaneDirection 'Next' },
+  -- Pane navigation (tmux: leader + hjkl)
+  { key = 'h', mods = 'LEADER',      action = act.ActivatePaneDirection 'Left' },
+  { key = 'j', mods = 'LEADER',      action = act.ActivatePaneDirection 'Down' },
+  { key = 'k', mods = 'LEADER',      action = act.ActivatePaneDirection 'Up' },
+  { key = 'l', mods = 'LEADER',      action = act.ActivatePaneDirection 'Right' },
 
   -- Clear scrollback
   {

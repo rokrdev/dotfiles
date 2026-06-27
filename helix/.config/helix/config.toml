@@ -63,7 +63,7 @@ C-y = [
 
 [keys.normal.space.g]
 c = "changed_file_picker"
-b = [":new", ":sh zellij run -fc --close-on-exit --x 0 --y 0 --height 100%% --width 100%% -- bash -c 'gitui -f \"$(git -C \"$(dirname %{buffer_name})\" ls-files --full-name %{buffer_name})\"'", ":bc", ":redraw"]
+b = [":sh zellij run -fc --close-on-exit --x 0 --y 0 --height 100%% --width 100%% -- gitui -f %{buffer_name}", ":redraw"]
 g = [":new", ":sh zellij run -fc --close-on-exit --x 0 --y 0 --height 100%% --width 100%% -- gitui", ":bc", ":redraw"]
 
 

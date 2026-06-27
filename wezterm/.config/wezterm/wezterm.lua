@@ -10,7 +10,7 @@ config.font = wezterm.font_with_fallback({
   "Symbols Nerd Font Mono",
   "Apple Color Emoji",
 })
-config.font_size = 15.0
+config.font_size = 14.0
 
 -- ============================================================
 -- Color scheme
@@ -77,6 +77,13 @@ config.selection_word_boundary = " \t\n{}[]()\"',;:@"
 config.check_for_updates = false
 config.enable_kitty_graphics = true
 config.unicode_version = 14
+
+-- macOS Option key: send escape sequences (Alt) instead of composed Unicode glyphs.
+-- Without this, Option+h/j/k/l sends ˙/∆/˚/¬ and Zellij never sees Alt+hjkl.
+if wezterm.target_triple:find("darwin") then
+  config.send_composed_key_when_left_alt_is_pressed = false
+  config.send_composed_key_when_right_alt_is_pressed = false
+end
 
 -- ============================================================
 -- Keybindings (macOS)

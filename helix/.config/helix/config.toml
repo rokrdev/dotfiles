@@ -51,7 +51,8 @@ mode.insert = "I"
 mode.select = "S"
 
 [keys.normal]
-X = ["extend_line_above"]
+F = ["move_prev_word_start", "move_next_word_end", "search_selection", "select_all", "select_regex"]
+X = ["extend_line_up", "extend_to_line_bounds"]
 Z = [":sh zellij run -fc --close-on-exit --x 0 --y 0 --height 100%% --width 100%% -- scooter", ":redraw", ":reload-all"]
 C-y = [
   ':sh rm -f /tmp/unique-file',

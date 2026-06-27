@@ -6,9 +6,7 @@ export EDITOR="hx"
 export VISUAL="hx"
 export FISH_CONFIG="$HOME/.config/fish/config.fish"
 export LANG="en_US.UTF-8"
-export NNN_OPTS="da"
-export NNN_FIFO="/tmp/nnn.fifo"
-export NNN_PLUG='t:preview-tui;'
+export COLORTERM=truecolor
 ssh-add -l &>/dev/null || ssh-add -A &>/dev/null
 
 export GNUPGHOME="$HOME/.asdf/keyrings/nodejs" && mkdir -p "$GNUPGHOME" && chmod 0700 "$GNUPGHOME"
@@ -18,7 +16,8 @@ export GOPATH="$HOME/go"
 export GOBIN="$GOPATH/bin"
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow -S'
 export FZF_CTRL_R_OPTS='--sort --exact'
-export FZF_DEFAULT_OPTS='--layout=default --bind=ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all'
+export FZF_DEFAULT_OPTS='--popup 80% --bind=ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all'
+export _ZO_FZF_OPTS='--popup 80%'
 
 # setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`
 export PATH="$HOME/.docker/bin:$HOME/bin:$HOME/.bun/bin:$GOPATH/bin:$ANDROID_SDK_ROOT:/usr/local/opt/gnu-sed/libexec/gnubin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
@@ -40,10 +39,6 @@ end
 set --erase _asdf_shims
 
 zoxide init fish | source
-
-defaults write -g ApplePressAndHoldEnabled -bool false
-# defaults write -g InitialKeyRepeat -int 15
-# defaults write -g KeyRepeat -int 2
 
 set $fish_term24bit to 1
 set fish_color_command blue
@@ -74,8 +69,6 @@ alias gtr='git log --oneline --graph --decorate --all'
 alias gx='git clean -fxd'
 alias h=hx
 alias hup='brew uninstall helix && brew install helix --HEAD'
-alias icat="kitty +kitten icat"
-# alias k="/Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli  --select-profile "
 alias k=kubectl
 alias kgp="kubectl get pods"
 alias kl="kubectl logs"
@@ -83,28 +76,19 @@ alias klf="kubectl logs -f"
 alias lg=lazygit
 alias n=npm
 alias ni='npm install'
-alias nn='nnn -d -e -H'
-alias nup='brew uninstall neovim && brew install neovim --HEAD'
 alias rf=trash
 alias sf='source $FISH_CONFIG'
 alias st=speedtest-cli
-alias t=zellij
-alias ta='zellij attach || zellij --layout custom'
-alias tg=tig
-alias top=btm
+alias top=btop
 alias upa='brew update && brew upgrade && brew upgrade --cask && brew cleanup && brew doctor; nvim +PackerSync +PackerCompile +qall > /dev/null'
 alias v="hx"
-alias vim="nvim --listen /tmp/nvimsocket"
-alias vimdiff='nvim -d'
-alias vimup='nvim +PackerSync +PackerCompile +qall > /dev/null'
-alias vst='vim-startuptime -vimpath nvim'
 alias y=yazi
 alias ya='yarn add'
 alias yr='yarn run'
 alias ys='yarn start'
 alias yt='yarn test'
 alias zz=zi
-alias zj="zellij --layout custom"
+alias zj="zellij"
 
 # Changing "ls" to "eza"
 # alias ls='eza --color=always --group-directories-first'  # all files and dirs
@@ -149,3 +133,9 @@ set -gx PATH $PATH /Users/bharat/.lmstudio/bin
 #provider/model
 alias ocq="opencode -m lmstudio/qwen3.6-27b-mlx"
 alias ocg="opencode -m lmstudio/gemma-4-31b"
+
+if test (uname) = Darwin
+    defaults write -g ApplePressAndHoldEnabled -bool false
+    # defaults write -g InitialKeyRepeat -int 15
+    # defaults write -g KeyRepeat -int 2
+end

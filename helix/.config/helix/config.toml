@@ -2,12 +2,13 @@ theme = "tokyonight"
 
 [editor]
 completion-timeout = 5
+idle-timeout = 0
 mouse = true
 auto-save = true
 cursorline = false
 bufferline = "always"
 color-modes	= true
-# line-number = "relative"
+line-number = "relative"
 rainbow-brackets = true
 # rulers = [120]
 # Minimum severity to show a diagnostic after the end of a line:
@@ -50,16 +51,20 @@ mode.insert = "I"
 mode.select = "S"
 
 [keys.normal]
-# J = ["select_line_below"]
-# K = ["select_line_above"]
-X = ["extend_line_above"]
+F = ["move_prev_word_start", "move_next_word_end", "search_selection", "select_all", "select_regex"]
+X = ["extend_line_up", "extend_to_line_bounds"]
+Z = [":sh zellij run -fc --close-on-exit --x 0 --y 0 --height 100%% --width 100%% -- scooter", ":redraw", ":reload-all"]
+C-y = [
+  ':sh rm -f /tmp/unique-file',
+  ':insert-output yazi "%{buffer_name}" --chooser-file=/tmp/unique-file',
+  ':sh printf "\x1b[?1049h\x1b[?2004h" > /dev/tty',
+  ':open %sh{cat /tmp/unique-file}',
+  ':redraw',
+]
 
 [keys.normal.space.g]
 c = "changed_file_picker"
-g = [":write-all", ":new", ":insert-output lazygit", ":buffer-close!", ":redraw", ":reload-all"]
-# G = [":new", ":sh zellij run -fc -x 0 -y 0 --height 100%% --width 100%% -- gitui", ":buffer-close!", ":redraw"]
-# n = [":new", ":sh zellij run -fc -x 0 -y 0 --height 100%% --width 100%% -- bash ~/.config/helix/yazi-picker.sh", ":buffer-close!", ":redraw"]
+b = [":sh zellij run -fc --close-on-exit --x 0 --y 0 --height 100%% --width 100%% -- gitui -f %{buffer_name}", ":redraw"]
+g = [":new", ":sh zellij run -fc --close-on-exit --x 0 --y 0 --height 100%% --width 100%% -- gitui", ":bc", ":redraw"]
 
-[keys.select]
-X = ["extend_line_above"]
 

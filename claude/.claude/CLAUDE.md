@@ -1,18 +1,14 @@
-# Global Claude Instructions
+# Agent Instructions
+These are common instructions for all agents across all scenarios.
+@RTK.md
 
-## IDE / Project Structure
-
-- Default layout: `src/` (prod), `test/` (tests) — never under `src/`
-- Check project-level CLAUDE.md for overrides
-
-## Model Selection
-
-- Default: claude-sonnet-4-6
-- Heavy sessions: `export CLAUDE_MODEL=opus && restart`
-- Subagents: claude-haiku-4-5-20251001 (default — override per-dispatch for heavier work)
-- Reasoning: Haiku default saves cost on bulk subagent work; pass model: sonnet/opus explicitly in Agent calls for reasoning-heavy or multi-file tasks
-
-## Execution Preferences
-
-- **Plan execution:** Always use kanban-loop skill — never Inline Execution. Fresh subagent per task, review between tasks.
-- **Graphify:** When user types `/graphify`, invoke the Skill tool with `skill: "graphify"` before doing anything else.
+## General Guidelines
+• Never use the em dash "-". Use plain dash "-" instead
+• When writing commit messages, NEVER auto-add your agent name as co-author
+• Never manually modify CHANGELOG.md files or any files that are marked as auto-generated
+• When writing or substantially editing long Markdown files, put each full sentence on its own line. Preserve normal Markdown structure, but avoid wrapping multiple sentences onto one physical line.
+• When making technical decisions, do not give much weight to development cost. Instead, prefer quality, simplicity, robustness, scalability, and long term maintainability.
+• When doing bug fixes, always start with reproducing the bug in an EZE setting as closely aligned with how an end user experiences the bug. This makes sure you find the real problem so your fix will actually solve it.
+• When end-to-end testing a product, be picky about the UI you see and be obsessed with pixel perfection. If something clearly looks off, even if it is not directly related to what you are doing, try to get it fixed along
+• Apply that same standard of engineering excellence: lint, test failures and test flakiness. If you see one, even if it is not cause by what you are working on right now, still get it fixed.
+• Save project memory in MEMORY.md in the same project.

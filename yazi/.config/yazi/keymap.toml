@@ -1,0 +1,4 @@
+[[mgr.prepend_keymap]]
+on = ["T"]
+run = ["plugin toggle-pane min-parent", "plugin toggle-pane min-preview"]
+desc = "Toggle parent and preview panes"

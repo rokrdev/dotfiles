@@ -11,7 +11,7 @@ formatter = { command = "prettier", args = ["--parser", "json"] }
 [[language]]
 name = "javascript"
 auto-format = true
-language-servers = ["typescript-language-server", "scls"]
+language-servers = ["vtsls"]
 
 
 [[language]]
@@ -24,7 +24,7 @@ name = "yaml"
 auto-format = true
 # indent = { tab-width = 2, unit = "  " }
 formatter = { command = "prettier", args = ["--parser", "yaml"] }
- 
+
 [[language]]
 name = "lua"
 auto-format = true
@@ -42,6 +42,8 @@ pythonPath = "~/.asdf/shims/python"
 
 [[language]]
 name = "python"
+scope = "source.python"
+indent = { tab-width = 4, unit  = "    " }
 auto-format = true
 language-servers = ["basedpyright", "ruff"]
 
@@ -88,31 +90,40 @@ scss = { validate = { enable = true } }
 less = { validate = { enable = true } }
 provideFormatter = true
 
+[language-server.vtsls]
+command = "vtsls"
+args = ["--stdio"]
+config.hostInfo = "helix"
+
+[language-server.vtsls.config.typescript]
+updateImportsOnFileMove = { enabled = "always" }
+suggest = { completeFunctionCalls = true }
+tsserver = { experimental = { enableProjectDiagnostics = true } }
 
 [[language]]
 name = "typescript"
-language-servers = [ "typescript-language-server", "eslint", "emmet-ls" ]
+language-servers = [ "vtsls", "eslint", "emmet-ls" ]
 formatter = { command = "prettier", args = [ "--parser", "typescript" ] }
 # formatter = { command = "dprint", args = [ "fmt", "--stdin", "typescript" ] }
 auto-format = true
 
 [[language]]
 name = "tsx"
-language-servers = [ "deno", "eslint", "emmet-ls" ]
+language-servers = [ "vtsls", "eslint", "emmet-ls" ]
 formatter = { command = "prettier", args = [ "--parser", "typescript" ] }
 # formatter = { command = "dprint", args = [ "fmt", "--stdin", "tsx" ] }
 auto-format = true
 
 [[language]]
 name = "javascript"
-language-servers = [ "typescript-language-server", "eslint", "emmet-ls" ]
+language-servers = [ "vtsls", "eslint", "emmet-ls" ]
 formatter = { command = "prettier", args = [ "--parser", "typescript" ] }
 # formatter = { command = "dprint", args = [ "fmt", "--stdin", "javascript" ] }
 auto-format = true
 
 [[language]]
 name = "jsx"
-language-servers = [ "typescript-language-server", "eslint", "emmet-ls" ]
+language-servers = [ "vtsls", "eslint", "emmet-ls" ]
 formatter = { command = "prettier", args = [ "--parser", "typescript" ] }
 # formatter = { command = "dprint", args = [ "fmt", "--stdin", "jsx" ] }
 auto-format = true

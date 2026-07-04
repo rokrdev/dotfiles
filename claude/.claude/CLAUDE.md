@@ -1,14 +1,12 @@
 # Agent Instructions
-These are common instructions for all agents across all scenarios.
-@RTK.md
 
-## General Guidelines
-• Never use the em dash "-". Use plain dash "-" instead
-• When writing commit messages, NEVER auto-add your agent name as co-author
-• Never manually modify CHANGELOG.md files or any files that are marked as auto-generated
-• When writing or substantially editing long Markdown files, put each full sentence on its own line. Preserve normal Markdown structure, but avoid wrapping multiple sentences onto one physical line.
-• When making technical decisions, do not give much weight to development cost. Instead, prefer quality, simplicity, robustness, scalability, and long term maintainability.
-• When doing bug fixes, always start with reproducing the bug in an EZE setting as closely aligned with how an end user experiences the bug. This makes sure you find the real problem so your fix will actually solve it.
-• When end-to-end testing a product, be picky about the UI you see and be obsessed with pixel perfection. If something clearly looks off, even if it is not directly related to what you are doing, try to get it fixed along
-• Apply that same standard of engineering excellence: lint, test failures and test flakiness. If you see one, even if it is not cause by what you are working on right now, still get it fixed.
-• Save project memory in MEMORY.md in the same project.
+These are common instructions for all agents across all scenarios.
+
+1. Ask, don't assume. If something is unclear, ask before writing a single line. Never make silent assumptions about intent, architecture, or requirements. When running unattended, pick the most reasonable interpretation, proceed, and record the assumption rather than blocking.
+2. Implement the simplest solution for simple problems, better solutions for harder problems. Do not over-engineer or add flexibility that isn't needed yet.
+3. Don't touch unrelated code but please do surface bad code or design smells you discover with me so we can address them as a separate issue.
+4. Flag uncertainty explicitly. If you're unsure about something, see point 1 above. If it makes sense to do so, conduct a small, localised and low-risk experiment and bring the hypothesis and results to me to discuss. Confidence without certainty causes more damage than admitting a gap.
+5. I'm always open to ideas on better ways to do things. Please don't hesitate to suggest a better way, or one that has long lasting impact over a tactical change. (as a few examples)
+6. When writing commit messages, NEVER auto-add your agent name as co-author
+
+@RTK.md

@@ -28,6 +28,8 @@ keybinds clear-defaults=true {
         bind "x" { CloseFocus; SwitchToMode "locked"; }
         bind "z" { TogglePaneFrames; SwitchToMode "locked"; }
         bind "tab" { SwitchFocus; }
+        bind "[" { PreviousSwapLayout; }
+        bind "]" { NextSwapLayout; }
     }
     tab {
         bind "left" { GoToPreviousTab; }
@@ -56,6 +58,8 @@ keybinds clear-defaults=true {
         bind "t" { SwitchToMode "normal"; }
         bind "x" { CloseTab; SwitchToMode "locked"; }
         bind "tab" { ToggleTab; }
+        bind "[" { MoveTab "left"; }
+        bind "]" { MoveTab "right"; }
     }
     resize {
         bind "left" { Resize "Increase left"; }
@@ -156,27 +160,15 @@ keybinds clear-defaults=true {
         }
     }
     shared_among "normal" "locked" {
-        bind "Alt left" { MoveFocus "left"; }
-        bind "Alt down" { MoveFocus "down"; }
-        bind "Alt up" { MoveFocus "up"; }
-        bind "Alt right" { MoveFocus "right"; }
-        bind "Alt +" { Resize "Increase"; }
+        bind "Alt =" "Alt +" { Resize "Increase"; }
         bind "Alt -" { Resize "Decrease"; }
-        bind "Alt =" { Resize "Increase"; }
-        // bind "Alt P" { PreviousSwapLayout; }
-        bind "Alt N" { NextSwapLayout; }
-        bind "Alt f" { ToggleFloatingPanes; }
-        bind "Alt h" { MoveFocus "left"; }
-        bind "Alt j" { MoveFocus "down"; }
-        bind "Alt k" { MoveFocus "up"; }
-        bind "Alt l" { MoveFocus "right"; }
-        bind "Alt n" { NewPane; }
         bind "Alt [" { GoToPreviousTab; }
         bind "Alt ]" { GoToNextTab; }
-        bind "Alt Shift [" { MoveTab "left"; }
-        bind "Alt Shift ]" { MoveTab "right"; }
-        bind "Alt p" { TogglePaneInGroup; }
-        bind "Alt Shift p" { ToggleGroupMarking; }
+        bind "Alt f" { ToggleFloatingPanes; }
+        bind "Alt n" { NewPane; }
+        bind "Alt w" { FocusNextPane; }
+        // bind "Alt p" { TogglePaneInGroup; }
+        // bind "Alt Shift P" { ToggleGroupMarking; }
         bind "Alt 1" { GoToTab 1; }
         bind "Alt 2" { GoToTab 2; }
         bind "Alt 3" { GoToTab 3; }
@@ -186,7 +178,6 @@ keybinds clear-defaults=true {
         bind "Alt 7" { GoToTab 7; }
         bind "Alt 8" { GoToTab 8; }
         bind "Alt 9" { GoToTab 9; }
-        bind "Alt Shift 3" { FocusNextPane; }
     }
     shared_except "locked" "renametab" "renamepane" {
         bind "Ctrl g" { SwitchToMode "locked"; }
@@ -295,8 +286,8 @@ simplified_ui true
 // Choose the theme that is specified in the themes section.
 // Default: default
 //
-theme "iceberg-dark"
-// theme "tokyo-night-dark"
+// theme "iceberg-dark"
+theme "catppuccin-mocha"
 
 // Theme to use when the host terminal reports a dark color palette.
 // Requires `theme_light` to also be set; otherwise `theme` is used.
@@ -365,7 +356,7 @@ pane_frames true
 // eg. when terminal window with an active zellij session is closed
 // (Requires restart)
 // Options:
-//   - detach (Default)
+//   - detach (Defautokyo-night-darklt)
 //   - quit
 //
 on_force_close "quit"

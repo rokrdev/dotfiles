@@ -1,0 +1,4 @@
+{
+  "openai_base_url": "http://localhost:9999",
+  "openai_model": "gemma-4-26B-A4B-it-MLX-8bit"
+}

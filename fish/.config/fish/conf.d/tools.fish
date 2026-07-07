@@ -6,6 +6,8 @@ end
 # Set color scheme
 setscheme tokyonight_night
 
+fish_add_path $HOME/.fzf/bin $HOME/.cargo/bin /snap/bin
+
 # FZF initialization
 fzf --fish | source
 

@@ -166,7 +166,10 @@ keybinds clear-defaults=true {
         bind "Alt ]" { GoToNextTab; }
         bind "Alt f" { ToggleFloatingPanes; }
         bind "Alt n" { NewPane; }
-        bind "Alt w" { FocusNextPane; }
+        bind "Alt w" { MoveFocus "up"; }
+        bind "Alt s" { MoveFocus "down"; }
+        bind "Alt a" { MoveFocus "left"; }
+        bind "Alt d" { MoveFocus "right"; }
         // bind "Alt p" { TogglePaneInGroup; }
         // bind "Alt Shift P" { ToggleGroupMarking; }
         bind "Alt 1" { GoToTab 1; }

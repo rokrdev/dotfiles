@@ -1,5 +1,6 @@
 set --global fish_key_bindings fish_default_key_bindings
 
+test -f ~/.custom.fish && source ~/.custom.fish
 test -f ~/.env && source ~/.env
 
 set $fish_term24bit to 1

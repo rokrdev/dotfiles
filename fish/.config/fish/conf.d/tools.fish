@@ -11,3 +11,6 @@ fzf --fish | source
 
 # Zoxide initialization
 zoxide init fish | source
+
+# Direnv
+direnv hook fish | source

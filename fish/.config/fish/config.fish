@@ -139,3 +139,6 @@ if test (uname) = Darwin
     # defaults write -g InitialKeyRepeat -int 15
     # defaults write -g KeyRepeat -int 2
 end
+
+alias ldeep='fish $HOME/.dotfiles/late/late_switch.fish deep'
+alias llite='fish $HOME/.dotfiles/late/late_switch.fish lite'

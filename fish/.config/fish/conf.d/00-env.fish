@@ -24,11 +24,6 @@ export FZF_DEFAULT_OPTS='--popup 80% --bind=ctrl-a:select-all,ctrl-d:deselect-al
 export _ZO_FZF_OPTS='--popup 80%'
 
 # setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`
-export PATH="$HOME/.docker/bin:$HOME/bin:$HOME/.bun/bin:$GOPATH/bin:$ANDROID_SDK_ROOT:/usr/local/opt/gnu-sed/libexec/gnubin:$HOME/google-cloud-sdk/bin:$HOME/.yarn/bin:$HOME/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="$HOME/.fzf/bin:$HOME/.cargo/bin:/snap/bin:$HOME/.docker/bin:$HOME/bin:$HOME/.bun/bin:$GOPATH/bin:$ANDROID_SDK_ROOT:$HOME/.yarn/bin:$HOME/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 export XDG_CONFIG_HOME="$HOME/.config"
-
-export CARGO_TARGET_DIR=~/.cargo-target
-
-# LM Studio CLI
-set -gx PATH $PATH /Users/bharat/.lmstudio/bin

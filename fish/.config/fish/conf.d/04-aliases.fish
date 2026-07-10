@@ -2,39 +2,39 @@ alias brup='brew update && brew upgrade && brew upgrade --cask && brew cleanup &
 alias cat=bat
 alias bcb='bat cache --build'
 alias d='cd ~/.dotfiles'
-alias dc='docker compose'
-alias dcu='docker compose up'
-alias dcd='docker compose down'
-alias dcs='docker compose start'
-alias dcx='docker compose stop'
+alias dkc='docker compose'
+alias dkcu='docker compose up'
+alias dkcd='docker compose down'
+alias dkcs='docker compose start'
+alias dlcx='docker compose stop'
 alias gfmc='git pull origin (git branch --show-current)'
-alias gmt="git mergetool"
+alias gtmt="git mergetool"
 alias gg="gitui"
-alias groot='cd $(git rev-parse --show-cdup)'
 alias gtr='git log --oneline --graph --decorate --all'
-alias gx='git clean -fxd'
+alias gtx='git clean -fxd'
 alias hup='brew uninstall helix && brew install helix --HEAD'
-alias k=kubectl
-alias kgp="kubectl get pods"
-alias kl="kubectl logs"
-alias klf="kubectl logs -f"
+alias kbgp="kubectl get pods"
+alias kbl="kubectl logs"
+alias kblf="kubectl logs -f"
 alias lg=lazygit
-alias n=npm
 alias rf=trash
 alias sf='source $FISH_CONFIG'
 alias st=speedtest-cli
 alias top=btop
-alias upa='brew update && brew upgrade && brew upgrade --cask && brew cleanup && brew doctor; nvim +PackerSync +PackerCompile +qall > /dev/null'
 
 # Changing "ls" to "eza"
 # alias ls='eza --color=always --group-directories-first'  # all files and dirs
 
 alias python3=python
-alias p=python
 
 alias clb="claude --model $CLAUDE_MODEL_SONNET --effort high"
 alias cld="claude --model $CLAUDE_MODEL_OPUS --effort high"
 
 #provider/model
-# alias ocq="opencode -m lmstudio/qwen3.6-27b-mlx"
-# alias ocg="opencode -m lmstudio/gemma-4-31b"
+alias ocs="opencode -m openrouter/xiaomi/mimo-v2.5"
+alias oco="opencode -m neuralwatt/glm-5.2-flex"
+
+alias ll='eza -lah --group-directories-first'
+alias la='eza -a --group-directories-first'
+alias lt='eza -aT --git-ignore --group-directories-first'
+alias l.='eza -a | egrep "^\."'

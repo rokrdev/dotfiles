@@ -1,0 +1,48 @@
+onboarding = false
+
+[update]
+channel = "stable"
+version_check = true
+manifest_check = true
+
+[terminal]
+default_shell = "/opt/homebrew/bin/fish"
+shell_mode = "auto"
+new_cwd = "follow"
+
+[keys]
+prefix = "ctrl+b"
+
+[[keys.command]]
+key = "prefix+alt+g"
+type = "pane"
+command = "lazygit"
+description = "run lazygit"
+
+[theme]
+name = "tokyo-night"
+auto_switch = true
+light_name = "tokyo-night-day"
+dark_name = "tokyo-night"
+
+[ui]
+sidebar_width = 26
+sidebar_collapsed_mode = "compact"
+mouse_capture = true
+confirm_close = true
+pane_borders = true
+pane_gaps = true
+hide_tab_bar_when_single_tab = true
+accent = "cyan"
+
+[ui.toast]
+delivery = "off"
+
+[ui.sound]
+enabled = false
+
+[advanced]
+scrollback_limit_bytes = 10485760
+
+[session]
+resume_agents_on_restore = true

@@ -1,33 +1,42 @@
 [core]
 	excludesfile = ~/.gitignore_global
 	editor = hx
-[difftool]
-	prompt = true
-[diff]
-	tool = nvimdiff
-[difftool "nvimdiff"]
-	cmd = nvim -d "$REMOTE" "$LOCAL"
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true  # use n and N to move between diff sections
+    dark = true      # or light = true, or omit for auto-detection
+
 [merge]
-	tool = nvimdiff
-[mergetool "nvimdiff"]
-	cmd = nvim -f -c "MergetoolStart" "$MERGED" "$BASE" "$LOCAL" "REMOTE"
+    conflictStyle = zdiff3[difftool]
+
 [pull]
 	ff = only
 [push]
 	default = current
+
 [commit]
 	template = ~/.gitmessage
+
 [init]
 	defaultBranch = main
+
 [user]
 	email = 6837979+rokrdev@users.noreply.github.com
-  name = bharat
+	name = bharat
+
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+
 [includeIf "gitdir:~/.dotfiles/"]
 	path = ~/gitconfig_me
+
 [includeIf "gitdir:~/projects/"]
 	path = ~/gitconfig_me
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f

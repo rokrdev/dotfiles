@@ -53,7 +53,8 @@ function fish_prompt --description 'Write out the prompt'
 
     set -l git (fish_git_prompt)
 
-    set -l prompt '⟫ '
+    # set -l prompt '⟫ '
+    set -l prompt '󰘩 '
 
     set -l prompt_color $red
 

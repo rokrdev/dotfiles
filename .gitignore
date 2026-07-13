@@ -12,3 +12,9 @@ karabiner/.config/karabiner/automatic_backups/
 .serena/
 .claude/tmp
 docs/prd/
+
+# herdr runtime files
+herdr/.config/herdr/session.json
+herdr/.config/herdr/herdr-client.log
+herdr/.config/herdr/herdr-client.sock
+herdr/.config/herdr/herdr.sock

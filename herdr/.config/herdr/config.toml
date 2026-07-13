@@ -12,12 +12,15 @@ new_cwd = "follow"
 
 [keys]
 prefix = "ctrl+b"
+switch_tab = "prefix+1..9"
+switch_workspace = "prefix+shift+1..9"
+focus_agent = "prefix+alt+1..9"
 
 [[keys.command]]
-key = "prefix+alt+g"
+key = "prefix+ctrl+g"
 type = "pane"
-command = "lazygit"
-description = "run lazygit"
+command = "gitui"
+description = "run gitui"
 
 [theme]
 name = "tokyo-night"
@@ -36,10 +39,10 @@ hide_tab_bar_when_single_tab = true
 accent = "cyan"
 
 [ui.toast]
-delivery = "off"
+delivery = "herdr"
 
 [ui.sound]
-enabled = false
+enabled = true
 
 [advanced]
 scrollback_limit_bytes = 10485760

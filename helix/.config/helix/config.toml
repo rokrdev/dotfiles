@@ -61,7 +61,6 @@ X = ["extend_line_up", "extend_to_line_bounds"]
 c = "changed_file_picker"
 b = ":sh git blame -L %{cursor_line},%{cursor_line} %{buffer_name}"
 f = [":write-all", ":insert-output scooter --no-stdin >/dev/tty", ":redraw", ":reload-all"]
-g = [":sh zellij run -fc --close-on-exit --x 0 --y 0 --height 100%% --width 100%% -- gitui >/dev/null 2>&1", ":redraw"]
 n = [
   ':sh rm -f /tmp/unique-file',
   ':insert-output yazi "%{buffer_name}" --chooser-file=/tmp/unique-file',
@@ -69,4 +68,3 @@ n = [
   ':open %sh{cat /tmp/unique-file}',
   ':redraw',
 ]
-B = [":sh zellij run -fc --close-on-exit --x 0 --y 0 --height 100%% --width 100%% -- gitui -f %{buffer_name} >/dev/null 2>&1", ":redraw"]

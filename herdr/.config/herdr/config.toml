@@ -23,10 +23,8 @@ command = "gitui"
 description = "run gitui"
 
 [theme]
-name = "tokyo-night"
-auto_switch = true
-light_name = "tokyo-night-day"
-dark_name = "tokyo-night"
+name = "catppuccin"
+auto_switch = false
 
 [ui]
 sidebar_width = 26

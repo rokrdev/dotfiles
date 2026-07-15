@@ -1,11 +1,11 @@
-theme = "tokyonight"
+theme = "catppuccin_mocha"
 
 [editor]
 completion-timeout = 5
 idle-timeout = 50
 mouse = true
 auto-save = true
-cursorline = false
+cursorline = true
 bufferline = "always"
 color-modes	= true
 # line-number = "relative"

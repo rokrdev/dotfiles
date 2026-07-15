@@ -52,3 +52,6 @@ scrollback_limit_bytes = 10485760
 
 [session]
 resume_agents_on_restore = true
+
+[experimental]
+kitty_graphics = true

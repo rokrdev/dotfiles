@@ -6,7 +6,7 @@ version_check = true
 manifest_check = true
 
 [terminal]
-default_shell = "/opt/homebrew/bin/fish"
+default_shell = "fish"
 shell_mode = "auto"
 new_cwd = "follow"
 

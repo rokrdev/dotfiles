@@ -1,6 +1,7 @@
 ---
 name: humanize-text
 description: 'Rewrite AI-generated text so it reads human. Triggers: "humanize", "de-AI", "sounds like ChatGPT/Claude", "too many em dashes", "make this sound natural/less robotic", or user pastes AI-flavored prose to clean up.'
+user-invocable: true
 ---
 
 # humanize-text

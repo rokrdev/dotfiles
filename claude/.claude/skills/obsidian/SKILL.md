@@ -2,6 +2,7 @@
 name: obsidian
 description: Use when working in the Obsidian vault (~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Sacredyak/), or when creating/editing markdown outside a git repo — never use inside a git repo
 when_to_use: Invoke when creating or editing any markdown file in the Obsidian vault, or when creating markdown files outside a git repo. Do NOT invoke inside a git repo (use the repo directly).
+user-invocable: true
 ---
 
 # Obsidian Vault Routing

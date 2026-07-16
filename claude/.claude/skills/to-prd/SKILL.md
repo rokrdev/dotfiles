@@ -1,6 +1,7 @@
 ---
 name: to-prd
 description: Turn the current conversation context into a PRD and write it to .workflow/docs/<slug>.md in the project root. No issue-tracker API required. The PRD is the direct input to /to-tickets. Use when user wants to create a PRD from the current context.
+user-invocable: true
 ---
 
 # To PRD

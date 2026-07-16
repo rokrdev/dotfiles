@@ -1,6 +1,7 @@
 ---
 name: to-tickets
 description: Break a plan, spec, or PRD into local kanban tickets written to .workflow/kanban/backlog/NN-slug.md using tracer-bullet vertical slices. No issue-tracker API required. Use when user wants to convert a PRD or spec into kanban tickets.
+user-invocable: true
 ---
 
 # To Tickets

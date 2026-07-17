@@ -1,7 +1,7 @@
 notes_dir = "/Users/bharat/Library/Mobile Documents/com~apple~CloudDocs/ekphos"
 journal_folder = "journal"
 welcome_shown = false
-theme = "catppuccin-macchiato"
+theme = "catppuccin-mocha"
 show_empty_dir = true
 syntax_theme = "base16-ocean.dark"
 sidebar_collapsed = false

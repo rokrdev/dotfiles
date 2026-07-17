@@ -1,5 +1,4 @@
-notes_dir = "/Users/bharat/Library/Mobile Documents/com~apple~CloudDocs/ekphos"
-journal_folder = "journal"
+notes_dir = "~/Library/Mobile Documents/com~apple~CloudDocs/ekphos"
 welcome_shown = false
 theme = "catppuccin-mocha"
 show_empty_dir = true
@@ -9,9 +8,15 @@ outline_collapsed = false
 folders_first = true
 frontmatter_hidden = true
 show_tags = true
-check_updates = true
+check_updates = false
 transparent_bg = false
 floating_cursor = false
+journal_folder = "journal"
+
+# Template picker toggles (Alt+N); the 't' daily journal keybinding is unaffected
+daily_notes_enabled = false
+weekly_notes_enabled = true
+monthly_notes_enabled = true
 
 [editor]
 line_wrap = true

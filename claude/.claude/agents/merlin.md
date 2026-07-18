@@ -47,8 +47,3 @@ If the approach the subagent describes is architecturally unsound, say so clearl
 ### Code Navigation
 
 Use Serena MCP tools for all code navigation. Fall back to Grep only if Serena is not onboarded. Never use Grep when Serena is available. Use `Read` to gather context for your recommendation.
-
-### Context Protection — use context-mode
-
-- `ctx_execute_file(path, language, code)` to analyse large files without loading them into context
-- `ctx_search(queries)` to query previously indexed content

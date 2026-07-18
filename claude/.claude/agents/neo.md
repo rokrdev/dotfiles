@@ -56,12 +56,12 @@ If memory doesn't exist or is empty — note it and proceed.
 |------|-------|-------|
 | File reads, search, exploration | generic | haiku |
 | 1-2 line edits, config/doc updates | generic | haiku |
-| Multi-file implementation | generic | sonnet |
+| Multi-file implementation, testing, refactor | generic | sonnet |
 | Debugging with unknown root cause | generic | sonnet |
-| Language-specific impl, testing, refactor | generic | sonnet |
 | Architectural decisions | merlin | opus (frontmatter) |
+| Implementation critique before ship | argus | fable (frontmatter) |
 
-Generic agents: pass `model` explicitly. Merlin: model is in its frontmatter — omit `model` from dispatch.
+Generic agents: pass `model` explicitly. Merlin and argus: model is in frontmatter — omit `model` from dispatch.
 
 **Merlin dispatch:** `subagent_type: "merlin"`, include "ultrathink" in prompt, block on response before dispatching any implementation agent.
 
@@ -93,7 +93,7 @@ Pass `isolation: "worktree"` based on scope — don't use it for small, bounded 
 
 ### Advanced Patterns
 
-**Writer/Reviewer:** Dispatch two parallel agents on separate worktrees — one writes, one reviews with fresh context. Avoids reviewer bias toward code it just wrote.
+**Writer/Reviewer:** Dispatch a writer agent on a worktree; review with `argus` for fresh-context critique instead of an ad-hoc second writer. Avoids reviewer bias toward code it just wrote.
 
 **`WorktreeCreate` hook:** When you need custom worktree behavior (copy `.env`, non-default base branch, monorepo strategies), configure a `WorktreeCreate` hook. It replaces Claude Code's default worktree creation logic entirely — receives `{name, session_id, cwd}` on stdin, must print the absolute path of the created directory to stdout.
 
@@ -153,6 +153,7 @@ vague request
    → to-prd → .workflow/docs/<slug>.md
    → to-tickets → .workflow/kanban/backlog/NN-slug.md (vertical slices, frontmatter schema)
    → kanban-loop → drains backlog/ via fresh general-purpose subagents (TDD inside each)
+   → argus → quality gate: critiques the drained board's diff before ship (see Critique Loop)
    → ship-it → wrap up branch (commit/push/PR/merge)
 ```
 
@@ -173,6 +174,16 @@ vague request
 - `ship-it` — branch wrap-up
 
 See `~/.dotfiles/docs/kanban-workflow.md` for full design.
+
+## Critique Loop
+
+Neo owns the loop; argus is stateless and carries no memory between calls — Neo holds the findings ledger.
+
+1. Dispatch `argus` to critique the diff.
+2. If `FIX FIRST` → dispatch a generic sonnet fixer with the verbatim Findings block.
+3. Re-dispatch `argus` in re-critique mode: pass the prior findings plus a summary of what the fixer changed.
+4. Repeat from step 2, capped at 3 iterations.
+5. On `RETHINK` (any iteration) or cap exceeded → stop dispatching fixers; escalate to human, or to Merlin if the block is a Plan concern.
 
 ## Bash Guard
 

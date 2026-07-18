@@ -61,7 +61,7 @@ Everything else is AFK. Default is AFK; omit `human-required` or set `false`.
 
 For each slice, determine:
 - **slug**: kebab-case, concise (becomes the filename suffix)
-- **language**: routes to the correct specialist (`typescript`, `python`, `kotlin`, `swift`)
+- **language**: implementation stack for context (`typescript`, `python`, `kotlin`, `swift`); all tickets are worked by the same general-purpose subagent
 - **depends-on**: list of slugs (not IDs) that must be in `done/` first; use slugs so refs survive renumber
 - **parallel-safe**: `true` only when `files-touched` has zero overlap with ALL other eligible tickets; if two sibling tickets both touch the entry-point file, both must be `false`
 - **files-touched**: list of paths/dirs the implementation will modify — must include every layer the acceptance requires (entry-point, command handler, store, etc.)
@@ -208,7 +208,7 @@ After writing all files, output:
 |-------|----------|-------|
 | `id` | yes | Integer matching NN prefix; unique |
 | `slug` | yes | Kebab-case; matches filename after `NN-` |
-| `language` | yes | Routes specialist: `typescript`, `python`, `kotlin`, `swift` |
+| `language` | yes | Implementation stack, e.g. `typescript`, `python`, `kotlin`, `swift`; informational — all tickets worked by the same general-purpose subagent |
 | `depends-on` | no | List of slugs in `.workflow/kanban/done/` required before eligible; omit if none |
 | `parallel-safe` | no | Default `false`; `true` only when `files-touched` has zero overlap with ALL other eligible tickets; any shared file (including the entry-point) → `false` for both tickets |
 | `human-required` | no (boolean) | Default `false` (AFK — agent can complete and merge unattended). Set `true` (HITL) for arch decisions, design/UX review, security-sensitive changes, ambiguous scope, or cross-cutting refactors spanning ≥4 modules. HITL tickets pause kanban-loop for human decision before dispatch. |

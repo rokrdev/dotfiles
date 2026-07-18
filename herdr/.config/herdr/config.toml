@@ -22,6 +22,12 @@ type = "pane"
 command = "gitui"
 description = "run gitui"
 
+[[keys.command]]
+key = "prefix+ctrl+d"
+type = "pane"
+command = "ekphos"
+description = "run ekphos"
+
 [theme]
 name = "catppuccin"
 auto_switch = false

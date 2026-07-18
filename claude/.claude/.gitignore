@@ -13,7 +13,6 @@ backups/
 debug/
 shell-snapshots/
 file-history/
-context-mode/
 plugins/
 todos/
 

@@ -1,95 +1,8 @@
 {
-  "agent": "neo",
-  "autoMemoryEnabled": false,
-  "effortLevel": "high",
-  "enabledPlugins": {
-    "caveman@caveman": true,
-    "code-simplifier@claude-plugins-official": true,
-    "context-mode@context-mode": true,
-    "context7@claude-plugins-official": true,
-    "exa@claude-plugins-official": true,
-    "pr-review-toolkit@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true
-  },
   "env": {
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "60",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
-  "extraKnownMarketplaces": {
-    "caveman": {
-      "autoUpdate": false,
-      "source": {
-        "repo": "JuliusBrussee/caveman",
-        "source": "github"
-      }
-    },
-    "claude-plugins-official": {
-      "autoUpdate": false,
-      "source": {
-        "repo": "anthropics/claude-plugins-official",
-        "source": "github"
-      }
-    },
-    "context-mode": {
-      "autoUpdate": false,
-      "source": {
-        "repo": "mksglu/context-mode",
-        "source": "github"
-      }
-    }
-  },
-  "hooks": {
-    "PreToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "/opt/homebrew/bin/rtk hook claude",
-            "type": "command"
-          }
-        ],
-        "matcher": "Bash"
-      }
-    ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "command": "echo '=== POST-COMPACTION CONTEXT RESTORE ===' && echo 'IRON LAW: You are an orchestrator. Never do work directly. Always dispatch subagents.' && echo 'Recent commits:' && git -C \"$PWD\" log --oneline -5 2>/dev/null || echo 'No git repo' && echo 'Date:' && date",
-            "statusMessage": "Restoring post-compaction context...",
-            "type": "command"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "command": "LOG=\"$HOME/.claude/logs/hooks.log\"; if [ -f \"$LOG\" ] && [ \"$(stat -f%z \"$LOG\" 2>/dev/null)\" -gt 1048576 ]; then mv \"$LOG\" \"$LOG.1\" && touch \"$LOG\" && echo \"[log-rotate] hooks.log rotated at $(date -u +%FT%TZ)\" >> \"$LOG\"; fi || true",
-            "statusMessage": "Rotating hooks log...",
-            "type": "command"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "command": "\"/Users/bharat/.asdf/installs/nodejs/24.14.1/bin/node\" \"/Users/bharat/.claude/hooks/context-mode-cache-heal.mjs\"",
-            "type": "command"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "command": "bash '/Users/bharat/.claude/hooks/herdr-agent-state.sh' session",
-            "timeout": 10,
-            "type": "command"
-          }
-        ],
-        "matcher": "*"
-      }
-    ]
-  },
-  "model": "claude-fable-5[1m]",
   "permissions": {
     "allow": [
       "Bash(git:*)",
@@ -129,13 +42,6 @@
       "TaskUpdate",
       "TaskStop",
       "SendMessage",
-      "mcp__plugin_context-mode_context-mode__ctx_execute",
-      "mcp__plugin_context-mode_context-mode__ctx_execute_file",
-      "mcp__plugin_context-mode_context-mode__ctx_batch_execute",
-      "mcp__plugin_context-mode_context-mode__ctx_search",
-      "mcp__plugin_context-mode_context-mode__ctx_fetch_and_index",
-      "mcp__plugin_context-mode_context-mode__ctx_index",
-      "mcp__plugin_context-mode_context-mode__ctx_stats",
       "mcp__plugin_context7_context7__resolve-library-id",
       "mcp__plugin_context7_context7__query-docs",
       "mcp__serena__check_onboarding_performed",
@@ -156,9 +62,7 @@
       "mcp__serena__summarize_changes",
       "mcp__serena__initial_instructions",
       "mcp__serena__restart_langserver",
-      "Write(~/projects/**)",
       "Edit(~/projects/**)",
-      "MultiEdit(~/projects/**)",
       "Read(~/projects/**)",
       "Bash(git init:*)",
       "Bash(git add:*)",
@@ -169,32 +73,61 @@
       "Bash(mkdir -p ~/projects/**:*)",
       "Bash(cd ~/projects/**)"
     ],
-    "defaultMode": "auto",
     "deny": [
       "Read(**/.env*)",
-      "Write(**/.env*)",
       "Edit(**/.env*)",
       "Read(**/*.pem)",
-      "Write(**/*.pem)",
+      "Edit(**/*.pem)",
       "Read(**/*.key)",
-      "Write(**/*.key)",
-      "Write(**/migrations/**)",
+      "Edit(**/*.key)",
       "Edit(**/migrations/**)"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "claude-fable-5[1m]",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/opt/homebrew/bin/rtk hook claude"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '=== POST-COMPACTION CONTEXT RESTORE ===' && echo 'IRON LAW: You are an orchestrator. Never do work directly. Always dispatch subagents.' && echo 'Recent commits:' && git -C \"$PWD\" log --oneline -5 2>/dev/null || echo 'No git repo' && echo 'Date:' && date",
+            "statusMessage": "Restoring post-compaction context..."
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "LOG=\"$HOME/.claude/logs/hooks.log\"; if [ -f \"$LOG\" ] && [ \"$(stat -f%z \"$LOG\" 2>/dev/null)\" -gt 1048576 ]; then mv \"$LOG\" \"$LOG.1\" && touch \"$LOG\" && echo \"[log-rotate] hooks.log rotated at $(date -u +%FT%TZ)\" >> \"$LOG\"; fi || true",
+            "statusMessage": "Rotating hooks log..."
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/Users/bharat/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   },
-  "remoteControlAtStartup": false,
-  "skipAutoPermissionPrompt": true,
-  "skipDangerousModePermissionPrompt": true,
-  "statusLine": {
-    "command": "bunx -y ccstatusline@latest",
-    "padding": 0,
-    "type": "command"
-  },
-  "voice": {
-    "enabled": true,
-    "mode": "hold"
-  },
-  "voiceEnabled": true,
   "worktree": {
     "symlinkDirectories": [
       "node_modules",
@@ -205,5 +138,45 @@
       "dist",
       "build"
     ]
-  }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bunx -y ccstatusline@latest",
+    "padding": 0
+  },
+  "enabledPlugins": {
+    "caveman@caveman": true,
+    "code-simplifier@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "exa@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      },
+      "autoUpdate": false
+    },
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      },
+      "autoUpdate": false
+    }
+  },
+  "effortLevel": "high",
+  "agent": "neo",
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  },
+  "autoMemoryEnabled": false,
+  "skipDangerousModePermissionPrompt": true,
+  "remoteControlAtStartup": false,
+  "skipAutoPermissionPrompt": true,
+  "voiceEnabled": true
 }

@@ -20,3 +20,6 @@ herdr/.config/herdr/herdr-client.sock
 herdr/.config/herdr/herdr.sock
 
 yazi/.config/yazi/flavors/
+
+# macOS system file
+.DS_Store

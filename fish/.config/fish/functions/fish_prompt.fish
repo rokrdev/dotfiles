@@ -20,12 +20,14 @@ function fish_prompt --description 'Write out the prompt'
     set -l git (fish_git_prompt)
 
     # set -l prompt '⟫ '
-    set -l prompt '󰘩 '
+    # set -l prompt '󰘩 '
+    set -l prompt '󰈸 '
 
     set -l prompt_color red
 
     if test $_display_status -eq 0
         set prompt_color green
+        set error_gap = '\n'
     end
 
     set -l pwd (prompt_pwd)
@@ -34,6 +36,11 @@ function fish_prompt --description 'Write out the prompt'
     # if test -n "$HERMIT_ENV"
     #     set hermit '🐚 '
     # end
+
+    set -l duration (format_duration $CMD_DURATION)
+    if test -n "$duration"
+        echo -s -e (set_color brblack) "=== $duration ===" (set_color normal)
+    end
 
     echo -n -s -e (set_color $fish_color_cwd) $pwd $git $hermit(set_color $purple) ' ' (date +%H:%M:%S) '\n' (set_color $prompt_color) $prompt
 end

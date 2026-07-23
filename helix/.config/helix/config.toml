@@ -61,6 +61,7 @@ X = ["extend_line_up", "extend_to_line_bounds"]
 c = "changed_file_picker"
 b = ":sh git blame -L %{cursor_line},%{cursor_line} %{buffer_name}"
 f = [":write-all", ":insert-output scooter --no-stdin >/dev/tty", ":redraw", ":reload-all"]
+g = [":write-all", ":insert-output gitui >/dev/tty", ":redraw", ":reload-all"]
 n = [
   ':sh rm -f /tmp/unique-file',
   ':insert-output yazi "%{buffer_name}" --chooser-file=/tmp/unique-file',

@@ -99,6 +99,7 @@ config.hostInfo = "helix"
 updateImportsOnFileMove = { enabled = "always" }
 suggest = { completeFunctionCalls = true }
 tsserver = { experimental = { enableProjectDiagnostics = true } }
+tsdk = "~/.bun/install/global/node_modules/typescript/lib"
 
 [[language]]
 name = "typescript"

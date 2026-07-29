@@ -18,6 +18,7 @@ language-servers = ["vtsls"]
 name = "markdown"
 auto-format = true
 formatter = { command = "prettier", args = ["--parser", "markdown"] }
+language-servers = ["marksman"]
 
 [[language]]
 name = "yaml"

@@ -1,0 +1,67 @@
+# Markdown-Oxide Configuration
+# Reference: https://oxide.md/Configuration
+# Config location: ~/.config/moxide/settings.toml
+
+# Daily notes format (leave blank to import from Obsidian)
+dailynote = "%Y-%m-%d"
+
+# Fuzzy match file headings in completions
+heading_completions = true
+
+# Insert first heading as display text when completing file links
+title_headings = true
+
+# Show diagnostics for unresolved links
+unresolved_diagnostics = true
+
+# Enable semantic tokens for unresolved links (visual highlighting)
+semantic_tokens = true
+
+# Resolve tags in code blocks
+tags_in_codeblocks = false
+
+# Resolve references in code blocks
+references_in_codeblocks = false
+
+# Folder for new files (blank imports from Obsidian "Default Location for new notes")
+new_file_folder_path = ""
+
+# Folder for daily notes (blank imports from Obsidian "New file location")
+# Applied for: create file from unresolved link, Today/Tomorrow/Yesterday commands
+daily_notes_folder = ""
+
+# Include .md extension in markdown links: [File](file.md) vs [File](file)
+include_md_extension_md_link = false
+
+# Include .md extension in wikilinks: [[File.md]] vs [[File]] (for Markor compatibility)
+include_md_extension_wikilink = false
+
+# Enable hover (relevant for VSCode/Zed mouse hover)
+hover = true
+
+# Case matching in fuzzy matches: "Ignore" | "Smart" | "Respect"
+case_matching = "Smart"
+
+# Enable inlay hints
+inlay_hints = true
+
+# Enable transclusion for embedded block links: ![[link]]
+# Requires inlay_hints = true
+block_transclusion = true
+
+# Transclusion mode: "Full" or "Partial"
+# For Partial, specify length
+block_transclusion_mode = "Full"
+# block_transclusion_length = { partial = 10 }
+
+# Enable automatic link updates when files are renamed
+auto_update_links = true
+
+# Maximum number of workspace symbols to return
+workspace_symbol_limit = 100
+
+# Enable folding range support
+folding_ranges = true
+
+# Document symbols (outline view)
+document_symbols = true

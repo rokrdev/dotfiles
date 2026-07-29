@@ -1,0 +1,25 @@
+# Marksman Configuration
+# Reference: https://github.com/artempyanykh/marksman
+
+[core]
+# The root marker file name (empty means disabled)
+# Marksman looks for this file to determine project root
+root_marker = ""
+
+# Completion
+[completion]
+# Whether to enable completions
+enable = true
+
+# Diagnostics
+[diagnostics]
+# Enable diagnostics
+enable = true
+
+# Excluded paths (glob patterns)
+# excluded_paths = ["node_modules/**", ".git/**"]
+
+# Server
+[server]
+# Max log level (trace, debug, info, warn, error)
+max_log_level = "warn"

@@ -69,3 +69,4 @@ n = [
   ':open %sh{cat /tmp/unique-file}',
   ':redraw',
 ]
+w = ":lsp-workspace-command"

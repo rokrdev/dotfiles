@@ -9,7 +9,7 @@ dailynote = "%Y-%m-%d"
 heading_completions = true
 
 # Insert first heading as display text when completing file links
-title_headings = true
+title_headings = false
 
 # Show diagnostics for unresolved links
 unresolved_diagnostics = true
@@ -24,11 +24,11 @@ tags_in_codeblocks = false
 references_in_codeblocks = false
 
 # Folder for new files (blank imports from Obsidian "Default Location for new notes")
-new_file_folder_path = ""
+new_file_folder_path = "inbox"
 
 # Folder for daily notes (blank imports from Obsidian "New file location")
 # Applied for: create file from unresolved link, Today/Tomorrow/Yesterday commands
-daily_notes_folder = ""
+daily_notes_folder = "Daily"
 
 # Include .md extension in markdown links: [File](file.md) vs [File](file)
 include_md_extension_md_link = false

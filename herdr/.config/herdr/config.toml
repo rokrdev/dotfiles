@@ -25,7 +25,7 @@ description = "run gitui"
 [[keys.command]]
 key = "prefix+ctrl+d"
 type = "pane"
-command = "ekphos"
+command = "fish -c 'cd ~/Documents/rokr_vault; hx index.md'"
 description = "run ekphos"
 
 [theme]

@@ -37,13 +37,13 @@ function fish_prompt --description 'Write out the prompt'
     if test "$fish_key_bindings" = fish_helix_key_bindings
         switch $fish_bind_mode
             case default
-                set mode_indicator (set_color blue)'{N}'(set_color normal)
+                set mode_indicator (set_color brblue)'[N]'(set_color normal)
             case insert
-                set mode_indicator (set_color green)'{I}'(set_color normal)
+                set mode_indicator (set_color brcyan)'[I]'(set_color normal)
             case replace replace_one
-                set mode_indicator (set_color cyan)'{R}'(set_color normal)
+                set mode_indicator (set_color bryellow)'[R]'(set_color normal)
             case visual
-                set mode_indicator (set_color magenta)'{V}'(set_color normal)
+                set mode_indicator (set_color brmagenta)'[V]'(set_color normal)
         end
     end
 
@@ -57,5 +57,5 @@ function fish_prompt --description 'Write out the prompt'
         echo -s -e (set_color brblack) "=== $duration ===" (set_color normal)
     end
 
-    echo -n -s -e (set_color $fish_color_cwd) $pwd ' ' $mode_indicator $git $hermit(set_color $purple) ' ' (date +%H:%M:%S) '\n' (set_color $prompt_color) $prompt
+    echo -n -s -e (set_color $fish_color_cwd) $pwd ' ' $mode_indicator $git $hermit(set_color $purple) ' ' (set_color white) (date +%H:%M:%S) '\n' (set_color $prompt_color) $prompt
 end

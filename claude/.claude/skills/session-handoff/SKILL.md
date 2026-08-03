@@ -1,6 +1,7 @@
 ---
 name: session-handoff
 description: 'Structured end-of-session summary for context handoff. Triggers: "session handoff", "wrap up session", "hand off", "handoff summary", or user about to /clear.'
+user-invocable: true
 ---
 
 # Session Handoff

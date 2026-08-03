@@ -1,0 +1,11 @@
+# Logs
+*.log
+
+# Runtime files
+*.sock
+
+# Session state
+session.json
+
+# Plugin lock file (auto-generated)
+.plugins.lock

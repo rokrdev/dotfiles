@@ -10,33 +10,27 @@ Remote: `git@github.com:rokr-dev/dotfiles.git`
 
 | Package | Manages |
 |---------|---------|
-| `fish` | Fish shell — `~/.config/fish/` (config, functions, completions, conf.d) |
-| `helix` | Helix editor — `~/.config/helix/` |
-| `hammerspoon` | Hammerspoon macOS automation — `~/.hammerspoon/` |
-| `git` | Git config — `~/.gitconfig` and related |
-| `nvim` | Neovim — `~/.config/nvim/` |
-| `tmux` | tmux config |
-| `yabai` | yabai tiling window manager config |
-| `skhd` | skhd hotkey daemon config |
-| `karabiner` | Karabiner-Elements key remapping — `~/.config/karabiner/` |
-| `ghostty` | Ghostty terminal config |
-| `kitty` | Kitty terminal config |
-| `wezterm` | WezTerm config |
-| `alacritty` | Alacritty terminal config |
-| `zellij` | Zellij terminal multiplexer config |
-| `lazygit` | lazygit config |
-| `gitui` | gitui config |
-| `tig` | tig config |
+| `asdf` | asdf version manager — `~/.tool-versions` |
 | `bat` | bat (cat replacement) config |
-| `yazi` | yazi file manager config |
-| `ideavim` | IdeaVim (IntelliJ) — `~/.ideavimrc` |
+| `btop` | btop system monitor — `~/.config/btop/` |
 | `claude` | Claude Code — `~/.claude/` (settings.json, hooks, MCP, skills) |
-| `zed` | Zed editor — `~/.config/zed/` (keymap, settings, tasks) |
+| `fish` | Fish shell — `~/.config/fish/` (config, functions, completions, conf.d) |
+| `ghostty` | Ghostty terminal config |
+| `git` | Git config — `~/.gitconfig` and related |
+| `gitui` | gitui config |
+| `hammerspoon` | Hammerspoon macOS automation — `~/.hammerspoon/` |
+| `helix` | Helix editor — `~/.config/helix/` |
+| `herdr` | herdr config — `~/.config/herdr/` |
+| `ideavim` | IdeaVim (IntelliJ) — `~/.ideavimrc` |
+| `karabiner` | Karabiner-Elements key remapping — `~/.config/karabiner/` |
 | `keylayout` | Custom keyboard layout files |
-| `terminfo` | Terminal info entries |
-| `snippets` | Code/text snippets |
+| `lazygit` | lazygit config |
+| `marksman` | Marksman (markdown LSP) — `~/.config/marksman/` |
+| `moxide` | Moxide config — `~/.config/moxide/` |
+| `yazi` | yazi file manager config |
+| `zed` | Zed editor — `~/.config/zed/` (keymap, settings, tasks) |
 
-Non-package items at root: `CLAUDE.md`, `webp_convertor.sh`, `xterm-24bit.terminfo`, `clear.sh`
+Non-package items at root: `CLAUDE.md`, `README.md`, `Brewfile`, `.editorconfig`, `install.sh`, `clear.sh`
 
 ## How to Apply Configs
 
@@ -68,7 +62,6 @@ Stow target is `$HOME` by default when running from the repo root. No `--target`
 - `claude/.claude/hooks/` — Claude Code hook scripts
 - `claude/.claude/skills/` — custom Claude Code skills
 - `claude/.claude/agents/neo.md` — neo orchestrator agent definition
-- `docs/obsidian-workflow.md` — Obsidian vault integration plan
 
 ## Fish Claude Aliases
 

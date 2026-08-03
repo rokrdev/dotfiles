@@ -63,7 +63,9 @@ for d in "$DOTFILES"/*/ ; do
 
   # Skip non-package directories and files
   case "$dirname" in
-    install|.git|docs|node_modules|.claude) continue ;;
+    .git|.claude|.serena|.opencode|.workflow|.crush|.hermes) continue ;;
+    asdf|bat|btop|claude|fish|ghostty|git|gitui|hammerspoon|helix|herdr|ideavim|karabiner|keylayout|lazygit|marksman|moxide|yazi|zed) ;; # valid packages
+    *) continue ;; # skip anything else (docs, node_modules, etc.)
   esac
 
   # Dry-run check for conflicts

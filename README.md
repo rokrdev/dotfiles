@@ -40,31 +40,25 @@ Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by d
 
 | Package | Manages |
 |---------|---------|
-| `fish` | Fish shell — `~/.config/fish/` (config, functions, completions, conf.d) |
-| `helix` | Helix editor — `~/.config/helix/` |
-| `hammerspoon` | Hammerspoon macOS automation — `~/.hammerspoon/` |
-| `git` | Git config — `~/.gitconfig` and related |
-| `nvim` | Neovim — `~/.config/nvim/` |
-| `tmux` | tmux config |
-| `yabai` | yabai tiling window manager config |
-| `skhd` | skhd hotkey daemon config |
-| `karabiner` | Karabiner-Elements key remapping — `~/.config/karabiner/` |
-| `ghostty` | Ghostty terminal config |
-| `kitty` | Kitty terminal config |
-| `wezterm` | WezTerm config |
-| `alacritty` | Alacritty terminal config |
-| `zellij` | Zellij terminal multiplexer config |
-| `lazygit` | lazygit config |
-| `gitui` | gitui config |
-| `tig` | tig config |
+| `asdf` | asdf version manager — `~/.tool-versions` |
 | `bat` | bat (cat replacement) config |
-| `yazi` | yazi file manager config |
-| `ideavim` | IdeaVim (IntelliJ) — `~/.ideavimrc` |
+| `btop` | btop system monitor — `~/.config/btop/` |
 | `claude` | Claude Code — `~/.claude/` (settings, hooks, skills) |
-| `zed` | Zed editor — `~/.config/zed/` |
+| `fish` | Fish shell — `~/.config/fish/` (config, functions, completions, conf.d) |
+| `ghostty` | Ghostty terminal config |
+| `git` | Git config — `~/.gitconfig` and related |
+| `gitui` | gitui config |
+| `hammerspoon` | Hammerspoon macOS automation — `~/.hammerspoon/` |
+| `helix` | Helix editor — `~/.config/helix/` |
+| `herdr` | herdr config — `~/.config/herdr/` |
+| `ideavim` | IdeaVim (IntelliJ) — `~/.ideavimrc` |
+| `karabiner` | Karabiner-Elements key remapping — `~/.config/karabiner/` |
 | `keylayout` | Custom keyboard layout files |
-| `terminfo` | Terminal info entries |
-| `snippets` | Code/text snippets |
+| `lazygit` | lazygit config |
+| `marksman` | Marksman (markdown LSP) — `~/.config/marksman/` |
+| `moxide` | Moxide config — `~/.config/moxide/` |
+| `yazi` | yazi file manager config |
+| `zed` | Zed editor — `~/.config/zed/` |
 
 ## Structure
 
@@ -76,8 +70,5 @@ To add a new tool: create a top-level directory with the correct mirrored path, 
 
 ## Utilities
 
-- **`clear.sh`** — shell script at repo root that unstows all packages at once (`stow -D` on each). Useful for a clean removal of all symlinks.
-
-## Docs
-
-See [`docs/`](docs/) for detailed workflow documentation.
+- **`install.sh`** — full bootstrap installer (Homebrew, brew bundle, stow, asdf, language servers, Claude Code).
+- **`clear.sh`** — shell script at repo root that unstows all packages at once (`stow -D` on each). Useful for a clean removal of all symlinks. Skips non-package dirs (`.git`, tool dirs, etc.).

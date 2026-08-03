@@ -23,3 +23,6 @@ yazi/.config/yazi/flavors/
 
 # macOS system file
 .DS_Store
+
+# Hermes runtime files (project-local)
+.hermes/

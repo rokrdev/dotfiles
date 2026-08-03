@@ -2,7 +2,7 @@ command = "/opt/homebrew/bin/fish"
 
 shell-integration = fish
 
-theme = tokyonight
+theme = Catppuccin Mocha
 
 macos-titlebar-style = hidden
 

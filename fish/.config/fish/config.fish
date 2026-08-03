@@ -1,10 +1,10 @@
-set --global fish_key_bindings fish_default_key_bindings
+set --global fish_key_bindings fish_helix_key_bindings
 
 test -f ~/.custom.fish && source ~/.custom.fish
 test -f ~/.env && source ~/.env
 
 set $fish_term24bit to 1
-set fish_color_command blue
+# set fish_color_command blue
 set -U fish_greeting
 
 # asdf erlang fails without this in fish

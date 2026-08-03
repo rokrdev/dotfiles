@@ -32,6 +32,21 @@ function fish_prompt --description 'Write out the prompt'
 
     set -l pwd (prompt_pwd)
 
+    # Helix mode indicator: only shown when helix key bindings are active.
+    set -l mode_indicator ''
+    if test "$fish_key_bindings" = fish_helix_key_bindings
+        switch $fish_bind_mode
+            case default
+                set mode_indicator (set_color --bold red)'[N]'(set_color normal)' '
+            case insert
+                set mode_indicator (set_color --bold green)'[I]'(set_color normal)' '
+            case replace replace_one
+                set mode_indicator (set_color --bold cyan)'[R]'(set_color normal)' '
+            case visual
+                set mode_indicator (set_color --bold magenta)'[V]'(set_color normal)' '
+        end
+    end
+
     # set -l hermit ''
     # if test -n "$HERMIT_ENV"
     #     set hermit '🐚 '
@@ -42,5 +57,5 @@ function fish_prompt --description 'Write out the prompt'
         echo -s -e (set_color brblack) "=== $duration ===" (set_color normal)
     end
 
-    echo -n -s -e (set_color $fish_color_cwd) $pwd $git $hermit(set_color $purple) ' ' (date +%H:%M:%S) '\n' (set_color $prompt_color) $prompt
+    echo -n -s -e $mode_indicator (set_color $fish_color_cwd) $pwd $git $hermit(set_color $purple) ' ' (date +%H:%M:%S) '\n' (set_color $prompt_color) $prompt
 end

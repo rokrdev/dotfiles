@@ -59,9 +59,9 @@ u = ["cmd:shortcuts run 'Things Upcoming'", "Upcoming"]
 
 [w]
 label = "Window"
-f = ["window:fullscreen", "Fullscreen"]
-h = ["raycast://extensions/raycast/window-management/left-half", "Left Half"]
-l = ["raycast://extensions/raycast/window-management/right-half", "Right Half"]
-n = ["raycast://extensions/raycast/window-management/next-display", "Move to next display"]
-space = ["raycast://extensions/raycast/window-management/maximize", "Maximize"]
+h = ["window:left-half", "Left Half"]
+l = ["window:right-half", "Right Half"]
+c = ["window:center-half", "Center"]
+n = ["function:nextDisplay", "Next Display"]
+space = ["window:maximized", "Maximize"]
 

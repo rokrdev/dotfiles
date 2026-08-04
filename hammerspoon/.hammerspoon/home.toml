@@ -8,10 +8,6 @@ show_ui = true            # optional, default true, show the ui with your key ma
 
 s = ["raycast://extensions/raycast/navigation/switch-windows", "Switch Windows"]
 
-1 = ["cmd:shortcuts run 'QT'", "Things Add"]
-2 = ["raycast://extensions/loris/things/show-today-list", "Today's Tasks"]
-3 = ["raycast://extensions/loris/things/show-anytime-list", "Anytime Tasks"]
-
 [0]
 label = "Applications"
 b = ["/Applications/Zen.app", "Browser"]

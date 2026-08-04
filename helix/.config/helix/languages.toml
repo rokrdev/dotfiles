@@ -155,6 +155,6 @@ args = ["-data", "$HOME/.cache/jdtls/workspace"]
 [[language]]
 name = "java"
 scope = "source.java"
-file-type = ["java"]
+file-types = ["java"]
 roots = ["pom.xml", "build.gradle", "settings.gradle", ".git"]
 language-servers = ["jdtls"]

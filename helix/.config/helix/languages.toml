@@ -147,3 +147,14 @@ name = "css"
 language-servers = [ "vscode-css-language-server", "emmet-ls" ]
 formatter = { command = 'prettier', args = ["--parser", "css"] }
 auto-format = true
+
+[language-server.jdtls]
+command = "jdtls"
+args = ["-data", "$HOME/.cache/jdtls/workspace"]
+
+[[language]]
+name = "java"
+scope = "source.java"
+file-type = ["java"]
+roots = ["pom.xml", "build.gradle", "settings.gradle", ".git"]
+language-servers = ["jdtls"]

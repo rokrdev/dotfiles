@@ -11,17 +11,19 @@ spoon.Hammerflow.registerFunctions({
   end,
 })
 
-local workLaptop = string.find(os.getenv("USER"), "bjoshi")
+-- select config by machine serial number suffix (no full serials in the repo)
+-- 3F4Y = home (bharat), X177 = work (bjoshi)
+-- note: hs.host.serialNumber() does not exist on this hs version; parse ioreg instead
+local serialOut = hs.execute("ioreg -l | grep IOPlatformSerialNumber") or ""
+local serial = serialOut:match('IOPlatformSerialNumber"%s*=%s*"([^"]+)"') or ""
 
-if workLaptop ~= nil then
-  spoon.Hammerflow.loadFirstValidTomlFile({
-    "work.toml",
-  })
-else
-  spoon.Hammerflow.loadFirstValidTomlFile({
-    "home.toml",
-  })
-end
+local tomlBySerialSuffix = {
+  ["3F4Y"] = "home.toml",
+  ["X177"] = "work.toml",
+}
+
+local suffix = serial:sub(-4)
+spoon.Hammerflow.loadFirstValidTomlFile({ tomlBySerialSuffix[suffix] or "home.toml" })
 -- optionally respect auto_reload setting in the toml config.
 if spoon.Hammerflow.auto_reload then
   hs.loadSpoon("ReloadConfiguration")

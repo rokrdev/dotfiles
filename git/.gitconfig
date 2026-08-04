@@ -28,9 +28,6 @@
 	email = 6837979+rokrdev@users.noreply.github.com
 	name = rokrdev
 
-[url "git@github.com:"]
-	insteadOf = https://github.com/
-
 [includeIf "gitdir:~/.dotfiles/"]
 	path = ~/gitconfig_me
 

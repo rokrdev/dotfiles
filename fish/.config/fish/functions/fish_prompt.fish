@@ -19,8 +19,6 @@ function fish_prompt --description 'Write out the prompt'
 
     set -l git (fish_git_prompt)
 
-    # set -l prompt '⟫ '
-    # set -l prompt '󰘩 '
     set -l prompt '󰈸 '
 
     set -l prompt_color red
@@ -37,13 +35,13 @@ function fish_prompt --description 'Write out the prompt'
     if test "$fish_key_bindings" = fish_helix_key_bindings
         switch $fish_bind_mode
             case default
-                set mode_indicator (set_color brblue)'[N]'(set_color normal)
+                set mode_indicator (set_color brblue)'󰘻'(set_color normal)
             case insert
-                set mode_indicator (set_color brcyan)'[I]'(set_color normal)
+                set mode_indicator (set_color brcyan)''(set_color normal)
             case replace replace_one
-                set mode_indicator (set_color bryellow)'[R]'(set_color normal)
+                set mode_indicator (set_color bryellow)''(set_color normal)
             case visual
-                set mode_indicator (set_color brmagenta)'[V]'(set_color normal)
+                set mode_indicator (set_color brmagenta)'󰈈'(set_color normal)
         end
     end
 

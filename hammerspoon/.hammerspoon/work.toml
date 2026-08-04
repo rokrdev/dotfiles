@@ -8,6 +8,10 @@ show_ui = true            # optional, default true, show the ui with your key ma
 
 s = ["raycast://extensions/raycast/navigation/switch-windows", "Switch Windows"]
 
+1 = ["cmd:shortcuts run 'QT'", "Things Add"]
+2 = ["raycast://extensions/loris/things/show-today-list", "Today's Tasks"]
+3 = ["raycast://extensions/loris/things/show-anytime-list", "Anytime Tasks"]
+
 [0]
 label = "Applications"
 b = ["/Applications/Bear.app", "Bear"]
@@ -20,21 +24,11 @@ s = ["/Applications/Slack.app", "Slack"]
 t = ["/Applications/Ghostty.app", "Ghostty"]
 y = ["/Applications/Things3.app", "Things"]
 z = ["/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app", "Safari"]
-- = ["/Applications/Chrysalis.app", "Chrysalis"]
 
 [b]
 label = "Browser"
 b = ["raycast://extensions/raycast/browser-bookmarks/index", "Bookmarks"]
 h = ["raycast://extensions/crisboarna/browser-history/search-history", "History"]
-t = ["raycast://extensions/koinzhang/browser-tabs/index", "Tabs"]
-
-[n]
-label = "Bear Notes"
-h = ["cmd:shortcuts run '✱ Home'", "✱ Home"]
-m = ["cmd:shortcuts run 'This Month Note'", "Month Note"]
-q = ["cmd:shortcuts run QN", "Quick Note"]
-s = ["raycast://extensions/hmarr/bear/index", "Search"]
-t = ["cmd:shortcuts run 'Today Note'", "Today Note"]
 
 [r]
 label = "Raycast"
@@ -64,4 +58,3 @@ l = ["window:right-half", "Right Half"]
 c = ["window:center-half", "Center"]
 n = ["function:nextDisplay", "Next Display"]
 space = ["window:maximized", "Maximize"]
-

@@ -1,5 +1,16 @@
 hs.loadSpoon("Hammerflow")
 
+-- window management functions
+spoon.Hammerflow.registerFunctions({
+  nextDisplay = function()
+    local win = hs.window.focusedWindow()
+    if not win then
+      return
+    end
+    win:moveToScreen(win:screen():next(), false, true)
+  end,
+})
+
 local workLaptop = string.find(os.getenv("USER"), "bjoshi")
 
 if workLaptop ~= nil then

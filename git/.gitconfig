@@ -24,10 +24,6 @@
 [init]
 	defaultBranch = main
 
-[user]
-	email = 6837979+rokrdev@users.noreply.github.com
-	name = rokrdev
-
 [includeIf "gitdir:~/.dotfiles/"]
 	path = ~/gitconfig_me
 

@@ -18,32 +18,15 @@ b = ["/Applications/Zen.app", "Browser"]
 e = ["/Applications/Zed.app", "Editor"]
 f = ["/System/Library/CoreServices/Finder.app", "Finder"]
 i = ["/System/Volumes/Data/Applications/IntelliJ IDEA.app", "Idea"]
-o = ["/Applications/Obsidian.app", "Obsidian"]
 s = ["/Applications/Slack.app", "Slack"]
 t = ["/Applications/Ghostty.app", "Terminal"]
 y = ["/Applications/Things3.app", "Things"]
 z = ["/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app", "Safari"]
-- = ["/Applications/Chrysalis.app", "Chrysalis"]
 
 [b]
 label = "Browser"
-b = ["raycast://extensions/raycast/browser-bookmarks/index", "Bookmarks"]
-h = ["raycast://extensions/crisboarna/browser-history/search-history", "History"]
-t = ["raycast://extensions/koinzhang/browser-tabs/index", "Tabs"]
-
-# [m]
-# label = "Music"
-# n = ["raycast://extensions/fedevitaledev/music/next-track", "Next Track"]
-# p = ["raycast://extensions/fedevitaledev/music/previous-track", "Previous Track"]
-# t = ["raycast://extensions/fedevitaledev/music/toggle-play-pause", "Toggle Play Pause"]
-
-[n]
-label = "Bear Notes"
-h = ["cmd:shortcuts run '✱ Home'", "✱ Home"]
-m = ["cmd:shortcuts run 'This Month Note'", "Month Note"]
-q = ["cmd:shortcuts run QN", "Quick Note"]
-s = ["raycast://extensions/hmarr/bear/index", "Search"]
-t = ["cmd:shortcuts run 'Today Note'", "Today Note"]
+b = ["raycast://extensions/Keyruu/zen-browser/search-bookmarks", "Bookmarks"]
+h = ["raycast://extensions/Keyruu/zen-browser/search-history", "History"]
 
 [r]
 label = "Raycast"
@@ -73,13 +56,3 @@ l = ["window:right-half", "Right Half"]
 c = ["window:center-half", "Center"]
 n = ["function:nextDisplay", "Next Display"]
 space = ["window:maximized", "Maximize"]
-
-# {
-#     {
-#       "actions" : [
-#         {
-#           "key" : ",",
-#           "type" : "application",
-#           "value" : "/Applications/Matter 2.app"
-#         },
-#     },

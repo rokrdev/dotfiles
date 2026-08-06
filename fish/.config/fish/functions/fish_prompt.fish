@@ -35,13 +35,13 @@ function fish_prompt --description 'Write out the prompt'
     if test "$fish_key_bindings" = fish_helix_key_bindings
         switch $fish_bind_mode
             case default
-                set mode_indicator (set_color brblue)'󰘻'(set_color normal)
+                set mode_indicator (set_color brblue)''(set_color normal)
             case insert
                 set mode_indicator (set_color brcyan)''(set_color normal)
             case replace replace_one
                 set mode_indicator (set_color bryellow)''(set_color normal)
             case visual
-                set mode_indicator (set_color brmagenta)'󰈈'(set_color normal)
+                set mode_indicator (set_color brmagenta)''(set_color normal)
         end
     end
 

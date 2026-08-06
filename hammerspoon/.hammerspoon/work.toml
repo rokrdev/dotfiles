@@ -10,7 +10,7 @@ s = ["raycast://extensions/raycast/navigation/switch-windows", "Switch Windows"]
 
 [0]
 label = "Applications"
-b = ["/Applications/Zen.app", "Browser"]
+b = ["/Applications/Google Chrome.app", "Browser"]
 e = ["/Applications/Zed.app", "Editor"]
 f = ["/System/Library/CoreServices/Finder.app", "Finder"]
 i = ["/System/Volumes/Data/Applications/IntelliJ IDEA.app", "Idea"]

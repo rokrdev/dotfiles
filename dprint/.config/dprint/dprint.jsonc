@@ -1,0 +1,38 @@
+// Global dprint configuration (user-wide defaults).
+// Project-local dprint.json(c) files take precedence over this.
+{
+  "lineWidth": 100,
+  "indentWidth": 2,
+  "useTabs": false,
+  "newLineKind": "lf",
+  "includes": [
+    "**/*.{json,jsonc,md,markdown,yaml,yml}",
+    "**/.dprint.json"
+  ],
+  "excludes": [
+    "**/node_modules",
+    "**/*-lock.json",
+    "**/package-lock.json",
+    "**/yarn.lock",
+    "**/pnpm-lock.yaml"
+  ],
+  "plugins": [
+    // json, jsonc
+    "https://plugins.dprint.dev/json-0.23.0.wasm",
+    // md, markdown
+    "https://plugins.dprint.dev/markdown-0.22.1.wasm",
+    // yaml, yml
+    "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.6.0.wasm"
+  ],
+  "json": {
+    "indentWidth": 2,
+    "lineWidth": 100
+  },
+  "markdown": {
+    "lineWidth": 100,
+    "textWrap": "maintain" // don't reflow prose in notes
+  },
+  "yaml": {
+    "indentWidth": 2
+  }
+}

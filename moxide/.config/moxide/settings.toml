@@ -28,7 +28,7 @@ new_file_folder_path = "Inbox"
 
 # Folder for daily notes (blank imports from Obsidian "New file location")
 # Applied for: create file from unresolved link, Today/Tomorrow/Yesterday commands
-daily_notes_folder = "Journal/Daily"
+daily_notes_folder = "Daily"
 
 # Include .md extension in markdown links: [File](file.md) vs [File](file)
 include_md_extension_md_link = false

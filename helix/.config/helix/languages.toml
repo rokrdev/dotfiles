@@ -6,7 +6,7 @@ formatter = { command = "prettier", args = ["--parser", "toml"] }
 [[language]]
 auto-format = true
 name = "json"
-formatter = { command = "prettier", args = ["--parser", "json"] }
+formatter = { command = "dprint", args = ["fmt", "--stdin", "json"] }
 
 [[language]]
 name = "javascript"
@@ -17,14 +17,14 @@ language-servers = ["vtsls"]
 [[language]]
 name = "markdown"
 auto-format = true
-formatter = { command = "prettier", args = ["--parser", "markdown"] }
+formatter = { command = "dprint", args = ["fmt", "--stdin", "md"] }
 language-servers = ["marksman"]
 
 [[language]]
 name = "yaml"
 auto-format = true
 # indent = { tab-width = 2, unit = "  " }
-formatter = { command = "prettier", args = ["--parser", "yaml"] }
+formatter = { command = "dprint", args = ["fmt", "--stdin", "yaml"] }
 
 [[language]]
 name = "lua"
@@ -132,8 +132,7 @@ auto-format = true
 
 [[language]]
 name = "json"
-formatter = { command = "prettier", args = [ "--parser", "json" ] }
-# formatter = { command = "dprint", args = [ "fmt", "--stdin", "json" ] }
+formatter = { command = "dprint", args = ["fmt", "--stdin", "json"] }
 auto-format = true
 
 [[language]]

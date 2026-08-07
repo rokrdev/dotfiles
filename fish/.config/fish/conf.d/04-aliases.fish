@@ -23,7 +23,7 @@ alias st=speedtest-cli
 alias top=btop
 
 # Changing "ls" to "eza"
-# alias ls='eza --color=always --group-directories-first'  # all files and dirs
+alias ls='eza --icons=always --color=always --group-directories-first'  # all files and dirs
 
 alias python3=python
 
@@ -34,7 +34,7 @@ alias cld="claude --model $CLAUDE_MODEL_OPUS --effort high"
 alias ocs="opencode -m openrouter/xiaomi/mimo-v2.5"
 alias oco="opencode -m neuralwatt/glm-5.2-flex"
 
-alias ll='eza -lah --group-directories-first'
-alias la='eza -a --group-directories-first'
-alias lt='eza -aT --git-ignore --group-directories-first'
-alias l.='eza -a | egrep "^\."'
+alias ll='eza --icons=always -lah --group-directories-first'
+alias la='eza --icons=always -a --group-directories-first'
+alias lt='eza --icons=always -aT --git-ignore --group-directories-first'
+alias l.='eza --icons=always -a | egrep "^\."'

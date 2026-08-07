@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# glowm-watch — long-lived glowm renderer for a herdr pane.
+#
+# Reads file paths from stdin (one per line) and renders each with glowm,
+# live-reloading on file change via entr. Send `__quit__` to exit.
+#
+# Env: GLOWM_STYLE (default tokyo-night), GLOWM_WIDTH (default 100).
+set -u
+
+STYLE="${GLOWM_STYLE:-tokyo-night}"
+WIDTH="${GLOWM_WIDTH:-100}"
+WATCH_PID=""
+
+stop_watch() {
+  [ -n "$WATCH_PID" ] && kill "$WATCH_PID" 2>/dev/null
+  WATCH_PID=""
+}
+trap stop_watch EXIT INT TERM
+
+render() {
+  local f="$1"
+  clear
+  if [ -f "$f" ]; then
+    glowm -no-pager -s "$STYLE" -w "$WIDTH" "$f" 2>/dev/null
+  else
+    printf 'glowm-watch: no such file: %s\n' "$f"
+  fi
+}
+
+while IFS= read -r line; do
+  line="${line//$'\r'/}"
+  case "$line" in
+    __quit__) stop_watch; exit 0 ;;
+    '') continue ;;
+    *)
+      stop_watch
+      render "$line"
+      if [ -f "$line" ]; then
+        printf '%s\n' "$line" | entr -c -p glowm -no-pager -s "$STYLE" -w "$WIDTH" "$line" 2>/dev/null &
+        WATCH_PID=$!
+      fi
+      ;;
+  esac
+done

@@ -70,3 +70,5 @@ n = [
   ':redraw',
 ]
 w = ":lsp-workspace-command"
+m = [":insert-output ~/.local/bin/glowm-preview %{file_path_absolute} >/dev/tty 2>&1", ":redraw"]
+M = [":insert-output ~/.local/bin/glowm-preview --close >/dev/tty 2>&1", ":redraw"]

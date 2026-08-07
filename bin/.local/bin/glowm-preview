@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+# glowm-preview — render a markdown file with glowm in a dedicated herdr pane.
+#
+# Designed to be bound to a Helix key, e.g.:
+#   [keys.normal.space]
+#   m = ':sh glowm-preview %{file_path_absolute}'
+#
+# Behavior:
+#   - reuses an existing "md-preview" herdr pane (state file + title scan)
+#   - creates one (splits the current pane right, ratio 0.4) if missing
+#   - points the pane's glowm-watch loop at <file>; live-reloads on save
+#
+# Subcommands:
+#   glowm-preview <file>   point the preview pane at <file>
+#   glowm-preview --close  close the preview pane
+set -u
+
+STATE="$HOME/.local/state/glowm-preview.pane"
+RATIO=0.40
+mkdir -p "$(dirname "$STATE")"
+
+die() { echo "glowm-preview: $*" >&2; exit 1; }
+
+# Is glowm-watch the foreground process of pane $1?
+watcher_running() {
+  herdr pane process-info --pane "$1" 2>/dev/null | grep -aq "glowm-watch"
+}
+
+# --- close mode ---
+if [ "${1:-}" = "--close" ]; then
+  if [ -f "$STATE" ]; then
+    herdr pane close "$(cat "$STATE")" >/dev/null 2>&1
+    rm -f "$STATE"
+  fi
+  exit 0
+fi
+
+FILE="${1:-}"
+[ -n "$FILE" ] || die "usage: glowm-preview <file> | --close"
+
+# --- resolve pane id ---
+PID=""
+if [ -f "$STATE" ]; then
+  CAND="$(cat "$STATE")"
+  if herdr pane get "$CAND" >/dev/null 2>&1 && watcher_running "$CAND"; then
+    PID="$CAND"
+  fi
+fi
+if [ -z "$PID" ]; then
+  PID="$(herdr pane list 2>/dev/null | python3 -c "
+import json, sys
+try:
+    d = json.load(sys.stdin)
+    for p in d['result']['panes']:
+        t = p.get('terminal_title_stripped') or ''
+        if 'md-preview' in t:
+            print(p['pane_id']); break
+except Exception:
+    pass
+")"
+  if [ -n "$PID" ] && ! watcher_running "$PID"; then
+    herdr pane close "$PID" >/dev/null 2>&1
+    PID=""
+  fi
+fi
+
+# --- create if missing ---
+if [ -z "$PID" ]; then
+  OUT="$(herdr pane split --current --direction right --ratio "$RATIO" 2>/dev/null)" \
+    || die "herdr pane split failed"
+  PID="$(printf '%s' "$OUT" | python3 -c "
+import json, sys
+try:
+    print(json.load(sys.stdin)['result']['pane']['pane_id'])
+except Exception:
+    pass
+")"
+  [ -n "$PID" ] || die "could not parse new pane id: $OUT"
+  herdr pane rename "$PID" md-preview >/dev/null 2>&1
+  herdr pane run "$PID" "$HOME/.local/bin/glowm-watch" >/dev/null 2>&1
+  sleep 0.7
+fi
+
+echo "$PID" > "$STATE"
+# pane run = text + Enter: delivers a clean line to glowm-watch's stdin.
+herdr pane run "$PID" "$FILE" >/dev/null 2>&1 \
+  || die "pane run failed on $PID"

@@ -12,7 +12,6 @@ abbr -a h hx
 abbr -a v hx
 abbr -a yz yazi
 abbr -a zz zi
-abbr -a zj zellij
 
 # Extended Navigation
 abbr -a .. 'cd ..'

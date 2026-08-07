@@ -1,3 +1,6 @@
+# Taps
+tap "atani/tap"
+
 # Formulae
 brew "stow"
 brew "fish"
@@ -18,10 +21,12 @@ brew "stylua"
 brew "ruff"
 brew "rtk"
 brew "asdf"
+brew "glowm"
+brew "entr"
 
 # Casks
 cask "ghostty"
 cask "hammerspoon"
 cask "karabiner-elements"
-cask "zen-browser"
+cask "zen"
 cask "zed"

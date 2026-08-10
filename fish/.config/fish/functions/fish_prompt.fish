@@ -45,15 +45,10 @@ function fish_prompt --description 'Write out the prompt'
         end
     end
 
-    # set -l hermit ''
-    # if test -n "$HERMIT_ENV"
-    #     set hermit '🐚 '
-    # end
-
     set -l duration (format_duration $CMD_DURATION)
     if test -n "$duration"
         echo -s -e (set_color brblack) "=== $duration ===" (set_color normal)
     end
 
-    echo -n -s -e $mode_indicator ' ' (set_color $fish_color_cwd) $pwd ' ' $git $hermit(set_color $purple) ' ' (set_color white) (date +%H:%M:%S) '\n' (set_color $prompt_color) $prompt
+    echo -n -s -e $mode_indicator ' ' (set_color $fish_color_cwd) $pwd $git ' ' (set_color white) (date +%H:%M:%S) '\n' (set_color $prompt_color) $prompt
 end

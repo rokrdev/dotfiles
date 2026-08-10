@@ -148,5 +148,12 @@ formatter = { command = 'prettier', args = ["--parser", "css"] }
 auto-format = true
 
 [[language]]
+name = "kotlin"
+language-servers = ["kmp-lsp"]
+
+[[language]]
 name = "java"
-roots = [".git", "pom.xml", "build.gradle", "build.gradle.kts"]
+language-servers = ["kmp-lsp"]
+
+[language-server.kmp-lsp]
+command = "kmp-lsp"

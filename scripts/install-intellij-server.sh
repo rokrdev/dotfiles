@@ -19,6 +19,9 @@
 #
 # Usage: scripts/install-intellij-server.sh [DEST] [LANG_FILE]
 set -euo pipefail
+# Force UTF-8 for all python3 invocations regardless of locale (C/POSIX locale
+# on fresh systems makes sys.stdin/open() default to ASCII -> UnicodeDecodeError)
+export PYTHONUTF8=1
 
 DEST="${1:-$HOME/.local/share/jetbrains-intellij-server}"
 EXT="$DEST/extension"
@@ -48,7 +51,7 @@ URL=$(curl -s "https://marketplace.visualstudio.com/_apis/public/gallery/extensi
   -d '{"filters":[{"criteria":[{"filterType":7,"value":"JetBrains.intellij-server"}],"assetTypes":[],"pageNumber":1,"pageSize":1,"sortBy":0}],"flags":950}' \
   | python3 - "$PLATFORM" <<'PY'
 import json, sys
-d = json.load(sys.stdin)
+d = json.loads(sys.stdin.buffer.read().decode('utf-8'))
 platform = sys.argv[1]
 ext = d['results'][0]['extensions'][0]
 for v in ext['versions']:
@@ -80,7 +83,7 @@ HASH=$(python3 -c "import hashlib;print(hashlib.sha256(open('$EULA','rb').read()
 python3 - "$LANG_FILE" "$LAUNCHER" "$HOME/.cache/intellij-server" "$JBR" "$HASH" <<'PY'
 import re, sys
 path, launcher, syspath, jbr, hash_ = sys.argv[1:]
-src = open(path).read()
+src = open(path, encoding='utf-8').read()
 start = src.index('[language-server.intellij]')
 # next section boundary at line start; \n[ avoids matching '[' inside the args line
 end = src.index('\n[', start + 1)
@@ -89,7 +92,7 @@ block = re.sub(r'command = ".*"', f'command = "{launcher}"', block)
 block = re.sub(r'--system-path", "[^"]*"', f'--system-path", "{syspath}"', block)
 block = re.sub(r'defaultSdk = "[^"]*"', f'defaultSdk = "{jbr}"', block)
 block = re.sub(r'eulaHash = "[0-9a-f]+"', f'eulaHash = "{hash_}"', block)
-open(path, 'w').write(src[:start] + block + src[end:])
+open(path, 'w', encoding='utf-8').write(src[:start] + block + src[end:])
 print(f'patched {path}')
 PY
 

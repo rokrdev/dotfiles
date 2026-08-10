@@ -46,13 +46,21 @@ case "$(uname -m)" in
 esac
 
 echo "==> Querying marketplace for $PLATFORM..."
-URL=$(curl -s "https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery" \
+if ! curl -fsSL "https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery" \
   -H "Content-Type: application/json" -H "Accept: application/json;api-version=3.0-preview.1" \
   -d '{"filters":[{"criteria":[{"filterType":7,"value":"JetBrains.intellij-server"}],"assetTypes":[],"pageNumber":1,"pageSize":1,"sortBy":0}],"flags":950}' \
-  | python3 - "$PLATFORM" <<'PY'
+  -o "$TMP/marketplace.json"; then
+  echo "ERROR: marketplace query failed (curl exit $?)" >&2
+  exit 1
+fi
+# Run the query script from a temp FILE. Never pipe curl into `python3 - <<PY`:
+# bash binds stdin to the heredoc and silently drops the pipe, so the script
+# would read b'' and die with a JSON decode error.
+cat > "$TMP/query_market.py" <<'PY'
 import json, sys
-d = json.loads(sys.stdin.buffer.read().decode('utf-8'))
-platform = sys.argv[1]
+platform, market_file = sys.argv[1], sys.argv[2]
+with open(market_file, encoding='utf-8') as f:
+    d = json.load(f)
 ext = d['results'][0]['extensions'][0]
 for v in ext['versions']:
     if v['targetPlatform'] == platform:
@@ -63,7 +71,7 @@ for v in ext['versions']:
 print(f'ERROR: no {platform} VSIX found (preview may be arm64-only)', file=sys.stderr)
 sys.exit(1)
 PY
-)
+URL=$(python3 "$TMP/query_market.py" "$PLATFORM" "$TMP/marketplace.json")
 
 echo "==> Downloading $URL"
 curl -sL -o "$TMP/server.vsix" "$URL"

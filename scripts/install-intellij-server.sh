@@ -74,7 +74,9 @@ PY
 URL=$(python3 "$TMP/query_market.py" "$PLATFORM" "$TMP/marketplace.json")
 
 echo "==> Downloading $URL"
-curl -sL -o "$TMP/server.vsix" "$URL"
+# -f: fail loudly on HTTP errors (e.g. expired preview build) instead of
+# saving an HTML error page that unzip would choke on later
+curl -fsSL -o "$TMP/server.vsix" "$URL"
 echo "==> Extracting..."
 unzip -q -o "$TMP/server.vsix" -d "$TMP/x"
 rm -rf "$EXT"
@@ -92,14 +94,28 @@ python3 - "$LANG_FILE" "$LAUNCHER" "$HOME/.cache/intellij-server" "$JBR" "$HASH"
 import re, sys
 path, launcher, syspath, jbr, hash_ = sys.argv[1:]
 src = open(path, encoding='utf-8').read()
-start = src.index('[language-server.intellij]')
-# next section boundary at line start; \n[ avoids matching '[' inside the args line
-end = src.index('\n[', start + 1)
+try:
+    start = src.index('[language-server.intellij]')
+except ValueError:
+    sys.exit(f"ERROR: [language-server.intellij] section not found in {path}")
+# next section boundary at line start; \n[ avoids matching '[' inside the args line.
+# If intellij is the last section (e.g. kmp-lsp commented out below it), patch to EOF.
+end = src.find('\n[', start + 1)
+if end == -1:
+    end = len(src)
 block = src[start:end]
-block = re.sub(r'command = ".*"', f'command = "{launcher}"', block)
-block = re.sub(r'--system-path", "[^"]*"', f'--system-path", "{syspath}"', block)
-block = re.sub(r'defaultSdk = "[^"]*"', f'defaultSdk = "{jbr}"', block)
-block = re.sub(r'eulaHash = "[0-9a-f]+"', f'eulaHash = "{hash_}"', block)
+# Rewrite only real config lines — never lines inside a comment (e.g. a
+# commented-out # [language-server.kmp-lsp] block trailing this section).
+lines = block.split('\n')
+for i, line in enumerate(lines):
+    if line.lstrip().startswith('#'):
+        continue
+    line = re.sub(r'command = ".*"', f'command = "{launcher}"', line)
+    line = re.sub(r'--system-path", "[^"]*"', f'--system-path", "{syspath}"', line)
+    line = re.sub(r'defaultSdk = "[^"]*"', f'defaultSdk = "{jbr}"', line)
+    line = re.sub(r'eulaHash = "[0-9a-f]+"', f'eulaHash = "{hash_}"', line)
+    lines[i] = line
+block = '\n'.join(lines)
 open(path, 'w', encoding='utf-8').write(src[:start] + block + src[end:])
 print(f'patched {path}')
 PY

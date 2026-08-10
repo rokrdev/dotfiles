@@ -149,12 +149,14 @@ auto-format = true
 
 [[language]]
 name = "kotlin"
-language-servers = ["intellij", "kmp-lsp"]
+# kmp-lsp disabled for now (was: language-servers = ["intellij", "kmp-lsp"])
+language-servers = ["intellij"]
 
 [[language]]
 name = "java"
 roots = [".git", "pom.xml", "build.gradle", "build.gradle.kts"]
-language-servers = ["intellij", "kmp-lsp"]
+# kmp-lsp disabled for now (was: language-servers = ["intellij", "kmp-lsp"])
+language-servers = ["intellij"]
 
 # JetBrains IntelliJ engine as LSP (preview builds expire ~30 days after build date;
 # re-run scripts/install-intellij-server.sh when the engine stops, then :lsp-restart)
@@ -164,7 +166,8 @@ args = ["--stdio", "--system-path", "/Users/bharat/.cache/intellij-server"]
 timeout = 120
 config = { eulaHash = "34d850193ee04897", intellijExtensions = true, defaultSdk = "/Users/bharat/.local/share/jetbrains-intellij-server/extension/server/jbr/Contents/Home", projects = [] }
 
-# kmp-lsp stays as second server: IntelliJ is pull-diagnostics-only (no publishDiagnostics),
-# so kmp-lsp provides the squiggles while IntelliJ does completion/hover/refactorings.
-[language-server.kmp-lsp]
-command = "kmp-lsp"
+# kmp-lsp was the second server: IntelliJ is pull-diagnostics-only (no publishDiagnostics),
+# so kmp-lsp provided squiggles while IntelliJ did completion/hover/refactorings.
+# DISABLED for now (2026-08-10). Uncomment to restore:
+# [language-server.kmp-lsp]
+# command = "kmp-lsp"

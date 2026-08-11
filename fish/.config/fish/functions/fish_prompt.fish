@@ -19,7 +19,7 @@ function fish_prompt --description 'Write out the prompt'
 
     set -l git (fish_git_prompt)
 
-    set -l prompt ' '
+    set -l prompt '  '
 
     set -l prompt_color red
 
@@ -50,5 +50,5 @@ function fish_prompt --description 'Write out the prompt'
         echo -s -e (set_color brblack) "=== $duration ===" (set_color normal)
     end
 
-    echo -n -s -e $mode_indicator ' ' (set_color $fish_color_cwd) $pwd $git ' ' (set_color white) (date +%H:%M:%S) '\n' (set_color $prompt_color) $prompt
+    echo -n -s -e $mode_indicator '  ' (set_color $fish_color_cwd) $pwd $git ' ' (set_color white) (date +%H:%M:%S) '\n' (set_color $prompt_color) $prompt
 end

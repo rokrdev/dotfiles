@@ -4,7 +4,6 @@ __backup__*
 .rgignore
 .git
 kls_database.db
-.serena/
 .superpowers/
 .kanban/
 .workflow/
@@ -12,6 +11,12 @@ node_modules/
 
 **/settings.local.json
 graphify-out/
+
+build/
+bin/
+.settings/
+.classpath
+.project
 
 
 **/tokyo-night.yazi

@@ -63,7 +63,7 @@ for d in "$DOTFILES"/*/ ; do
 
   # Skip non-package directories and files
   case "$dirname" in
-    .git|.claude|.serena|.opencode|.workflow|.crush|.hermes) continue ;;
+    .git|.claude|.opencode|.workflow|.crush|.hermes) continue ;;
     asdf|bat|bin|btop|claude|fish|ghostty|git|gitui|hammerspoon|helix|herdr|ideavim|karabiner|keylayout|lazygit|marksman|moxide|yazi|zed) ;; # valid packages
     *) continue ;; # skip anything else (docs, node_modules, etc.)
   esac
@@ -154,6 +154,18 @@ if command -v uv &>/dev/null; then
   fi
 else
   echo "WARNING: uv not found — skipping graphify. Run 'uv tool install graphifyy' after uv is set up."
+fi
+
+# ─────────────────────────────────────────────
+# repowise — codebase intelligence / MCP server for Claude Code
+# ─────────────────────────────────────────────
+if command -v uv &>/dev/null; then
+  if ! command -v repowise &>/dev/null; then
+    echo "Installing repowise..."
+    uv tool install repowise
+  fi
+else
+  echo "WARNING: uv not found — skipping repowise. Run 'uv tool install repowise' after uv is set up."
 fi
 
 # ─────────────────────────────────────────────

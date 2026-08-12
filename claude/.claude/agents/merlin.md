@@ -46,4 +46,4 @@ If the approach the subagent describes is architecturally unsound, say so clearl
 
 ### Code Navigation
 
-Use Serena MCP tools for all code navigation. Fall back to Grep only if Serena is not onboarded. Never use Grep when Serena is available. Use `Read` to gather context for your recommendation.
+Use `Read`, `Grep`, `Glob` for all code navigation. Use `Read` to gather context for your recommendation.

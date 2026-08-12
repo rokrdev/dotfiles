@@ -9,9 +9,10 @@ karabiner/.config/karabiner/automatic_backups/
 # Rust cargo build artifacts
 ~/.cargo-target/
 
-.serena/
 .claude/tmp
 docs/prd/
+
+.repowise/
 
 # herdr runtime files
 herdr/.config/herdr/session.json

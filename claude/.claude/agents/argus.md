@@ -86,4 +86,4 @@ When given a prior findings list and the fixer's changes:
 
 ### Code Navigation
 
-Use `Read`, `Grep`, `Glob` for all code navigation — no Serena dependency. Use `Bash` for git/PR inspection only (`git diff`, `git log`, `git status`, `git merge-base`, `gh pr view`) — never to modify the working tree.
+Use `Read`, `Grep`, `Glob` for all code navigation. Use `Bash` for git/PR inspection only (`git diff`, `git log`, `git status`, `git merge-base`, `gh pr view`) — never to modify the working tree.

@@ -172,18 +172,6 @@
         "GITHUB_PERSONAL_ACCESS_TOKEN": "",
       },
     },
-    "serena": {
-      "command": "uvx",
-      "args": [
-        "--from",
-        "serena",
-        "serena-mcp",
-        "--context",
-        "ide-assistant",
-        "--project-root",
-        ".",
-      ],
-    },
     "context7": {
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp@latest"],

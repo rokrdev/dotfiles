@@ -44,24 +44,6 @@
       "SendMessage",
       "mcp__plugin_context7_context7__resolve-library-id",
       "mcp__plugin_context7_context7__query-docs",
-      "mcp__serena__check_onboarding_performed",
-      "mcp__serena__onboarding",
-      "mcp__serena__get_symbols_overview",
-      "mcp__serena__find_symbol",
-      "mcp__serena__find_referencing_symbols",
-      "mcp__serena__search_for_pattern",
-      "mcp__serena__find_file",
-      "mcp__serena__read_file",
-      "mcp__serena__create_text_file",
-      "mcp__serena__replace_regex",
-      "mcp__serena__delete_lines",
-      "mcp__serena__run_command",
-      "mcp__serena__get_diagnostics",
-      "mcp__serena__think_about_collected_information",
-      "mcp__serena__list_dir",
-      "mcp__serena__summarize_changes",
-      "mcp__serena__initial_instructions",
-      "mcp__serena__restart_langserver",
       "Edit(~/projects/**)",
       "Read(~/projects/**)",
       "Bash(git init:*)",
@@ -145,27 +127,26 @@
     "padding": 0
   },
   "enabledPlugins": {
-    "caveman@caveman": true,
     "code-simplifier@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
     "exa@claude-plugins-official": true,
     "pr-review-toolkit@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true
+    "skill-creator@claude-plugins-official": true,
+    "repowise@repowise": true
   },
   "extraKnownMarketplaces": {
-    "caveman": {
-      "source": {
-        "source": "github",
-        "repo": "JuliusBrussee/caveman"
-      },
-      "autoUpdate": false
-    },
     "claude-plugins-official": {
       "source": {
         "source": "github",
         "repo": "anthropics/claude-plugins-official"
       },
       "autoUpdate": false
+    },
+    "repowise": {
+      "source": {
+        "source": "github",
+        "repo": "repowise-dev/repowise"
+      }
     }
   },
   "effortLevel": "high",

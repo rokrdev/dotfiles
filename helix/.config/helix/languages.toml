@@ -149,20 +149,12 @@ auto-format = true
 
 [[language]]
 name = "kotlin"
-language-servers = ["intellij", "kmp-lsp"]
+language-servers = ["kmp-lsp"]
 
 [[language]]
 name = "java"
 roots = [".git", "pom.xml", "build.gradle", "build.gradle.kts"]
-language-servers = ["intellij", "kmp-lsp"]
-
-# JetBrains IntelliJ engine as LSP (preview builds expire ~30 days after build date;
-# re-run scripts/install-intellij-server.sh when the engine stops, then :lsp-restart)
-[language-server.intellij]
-command = "/Users/bharat/.local/share/jetbrains-intellij-server/extension/server/bin/intellij-server"
-args = ["--stdio", "--system-path", "/Users/bharat/.cache/intellij-server"]
-timeout = 120
-config = { eulaHash = "34d850193ee04897", intellijExtensions = true, defaultSdk = "/Users/bharat/.local/share/jetbrains-intellij-server/extension/server/jbr/Contents/Home", projects = [] }
+language-servers = ["jdtls"]
 
 # kmp-lsp is the diagnostics server: IntelliJ is pull-diagnostics-only (no
 # publishDiagnostics), so kmp-lsp provides squiggles while IntelliJ does

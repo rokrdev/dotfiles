@@ -2,7 +2,7 @@
 
 setopt PIPE_FAIL
 
-SKIP=(.git .claude .serena .opencode .workflow .crush .hermes)
+SKIP=(.git .claude .opencode .workflow .crush .hermes)
 FAILED=0
 
 for d in */ ; do

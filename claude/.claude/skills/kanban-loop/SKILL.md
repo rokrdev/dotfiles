@@ -230,7 +230,7 @@ You are working on ticket .workflow/kanban/doing/NN-slug.md.
    stop immediately, report NEEDS_CONTEXT to kanban-loop with the file and reason.
 4. Acceptance criterion: "<acceptance sentence from frontmatter>"
    This sentence is your success criterion. At least one test must map to it.
-5. Use Serena for all code navigation. Fall back to Grep only for non-code files.
+5. Use Grep/Glob for all code navigation.
 6. When tests are green AND acceptance is verifiable, report:
    DONE: <slug>
    Tests: <runner command + exit 0 confirmation>

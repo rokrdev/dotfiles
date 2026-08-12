@@ -8,7 +8,7 @@ show_ui = true            # optional, default true, show the ui with your key ma
 
 s = ["raycast://extensions/raycast/navigation/switch-windows", "Switch Windows"]
 
-[0]
+[a]
 label = "Applications"
 b = ["/Applications/Google Chrome.app", "Browser"]
 e = ["/Applications/Zed.app", "Editor"]

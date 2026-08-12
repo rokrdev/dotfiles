@@ -26,7 +26,7 @@ description = "run gitui"
 key = "prefix+ctrl+d"
 type = "pane"
 command = "fish -c 'cd ~/Documents/rokr_vault; hx index.md'"
-description = "run ekphos"
+description = "vault"
 
 [theme]
 name = "catppuccin"

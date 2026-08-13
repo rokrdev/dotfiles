@@ -64,7 +64,7 @@ for d in "$DOTFILES"/*/ ; do
   # Skip non-package directories and files
   case "$dirname" in
     .git|.claude|.opencode|.workflow|.crush|.hermes) continue ;;
-    asdf|bat|bin|btop|claude|fish|ghostty|git|gitui|hammerspoon|helix|herdr|ideavim|karabiner|keylayout|lazygit|marksman|moxide|yazi|zed) ;; # valid packages
+    agents|asdf|bat|bin|btop|claude|fish|ghostty|git|gitui|hammerspoon|helix|herdr|ideavim|karabiner|keylayout|lazygit|marksman|moxide|yazi|zed) ;; # valid packages
     *) continue ;; # skip anything else (docs, node_modules, etc.)
   esac
 

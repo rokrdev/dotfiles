@@ -40,6 +40,7 @@ Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by d
 
 | Package | Manages |
 |---------|---------|
+| `agents` | Global agent instructions — `~/AGENTS.md` (Codex, Gemini CLI, Cursor, etc.) |
 | `asdf` | asdf version manager — `~/.tool-versions` |
 | `bat` | bat (cat replacement) config |
 | `btop` | btop system monitor — `~/.config/btop/` |

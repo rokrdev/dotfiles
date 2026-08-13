@@ -10,6 +10,7 @@ Remote: `git@github.com:rokr-dev/dotfiles.git`
 
 | Package | Manages |
 |---------|---------|
+| `agents` | Global agent instructions — `~/AGENTS.md` (Codex, Gemini CLI, Cursor, etc.) |
 | `asdf` | asdf version manager — `~/.tool-versions` |
 | `bat` | bat (cat replacement) config |
 | `btop` | btop system monitor — `~/.config/btop/` |
@@ -54,6 +55,7 @@ Stow target is `$HOME` by default when running from the repo root. No `--target`
 
 ## Key Files
 
+- `agents/AGENTS.md` — global agent instructions for all tools (stows to `~/AGENTS.md`)
 - `fish/.config/fish/config.fish` — main fish shell config
 - `fish/.config/fish/functions/` — custom fish functions (one `.fish` file per function)
 - `helix/.config/helix/config.toml` — Helix editor config

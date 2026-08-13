@@ -18,5 +18,9 @@ bin/
 .classpath
 .project
 
+.repowise/**
+.serena/
+
+.mcp.json
 
 **/tokyo-night.yazi

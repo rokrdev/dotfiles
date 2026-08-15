@@ -21,8 +21,9 @@ z = ["/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app", "Sa
 
 [b]
 label = "Browser"
-b = ["raycast://extensions/Keyruu/zen-browser/search-bookmarks", "Bookmarks"]
-h = ["raycast://extensions/Keyruu/zen-browser/search-history", "History"]
+b = ["raycast://extensions/Codely/google-chrome/search-bookmarks", "Bookmarks"]
+h = ["raycast://extensions/Codely/google-chrome/search-history", "History"]
+t = ["raycast://extensions/Codely/google-chrome/search-tabs", "Tabs"]
 
 [r]
 label = "Raycast"
@@ -35,20 +36,3 @@ w = ["raycast://extensions/raycast/dictionary/define-word", "Word"]
 C = ["raycast://extensions/raycast/raycast/confetti", "Confetti"]
 R = "reload"
 W = ["raycast://extensions/tonka3000/weather/index", "Weather"]
-
-[t]
-label = "Things"
-a = ["cmd:shortcuts run 'Things Anytime'", "Anytime"]
-i = ["cmd:shortcuts run 'Things Inbox'", "Inbox"]
-q = ["cmd:shortcuts run 'QT'", "Quick Todo"]
-t = ["cmd:shortcuts run 'Things Today'", "Today"]
-u = ["cmd:shortcuts run 'Things Upcoming'", "Upcoming"]
-
-
-[w]
-label = "Window"
-h = ["window:left-half", "Left Half"]
-l = ["window:right-half", "Right Half"]
-c = ["window:center-half", "Center"]
-n = ["function:nextDisplay", "Next Display"]
-space = ["window:maximized", "Maximize"]

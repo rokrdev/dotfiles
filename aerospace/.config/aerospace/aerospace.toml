@@ -127,6 +127,11 @@ gaps.outer.right =      2
     alt-minus = 'resize smart -50'
     alt-equal = 'resize smart +50'
 
+    # Toggle temporary fullscreen for the focused window (alt-f)
+    # Exits fullscreen automatically when focus moves to another tile
+    # See: https://nikitabobko.github.io/AeroSpace/commands#fullscreen
+    alt-f = 'fullscreen --no-outer-gaps'
+
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
     alt-1 = 'workspace 1'
     alt-2 = 'workspace 2'

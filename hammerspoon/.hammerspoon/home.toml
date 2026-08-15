@@ -43,12 +43,3 @@ i = ["cmd:shortcuts run 'Things Inbox'", "Inbox"]
 q = ["cmd:shortcuts run 'QT'", "Quick Todo"]
 t = ["cmd:shortcuts run 'Things Today'", "Today"]
 u = ["cmd:shortcuts run 'Things Upcoming'", "Upcoming"]
-
-
-[w]
-label = "Window"
-h = ["window:left-half", "Left Half"]
-l = ["window:right-half", "Right Half"]
-c = ["window:center-half", "Center"]
-n = ["function:nextDisplay", "Next Display"]
-space = ["window:maximized", "Maximize"]

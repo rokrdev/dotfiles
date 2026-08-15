@@ -14,7 +14,7 @@ new_cwd = "follow"
 prefix = "ctrl+b"
 switch_tab = "prefix+1..9"
 switch_workspace = "prefix+shift+1..9"
-focus_agent = "prefix+alt+1..9"
+focus_agent = "prefix+ctrl+1..9"
 
 [[keys.command]]
 key = "prefix+ctrl+g"

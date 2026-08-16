@@ -56,6 +56,11 @@ spotify:subscribe("spotify_change", function(env)
 	end
 end)
 
+-- Clicking the pill opens the Spotify app.
+spotify:subscribe("mouse.clicked", function()
+	sbar.exec("osascript -e 'tell application \"Spotify\" to activate'")
+end)
+
 -- Keep the spotify_change stream alive for the life of the bar.
 local STREAM = "$CONFIG_DIR/helpers/spotify_stream.sh"
 sbar.exec("pkill -f spotify_stream.sh >/dev/null 2>&1; " .. STREAM .. " &> /dev/null &")

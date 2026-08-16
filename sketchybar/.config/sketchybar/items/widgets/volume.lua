@@ -63,7 +63,7 @@ local volume_slider = sbar.add("slider", popup_width, {
 			color = colors.bg2,
 		},
 		knob = {
-			string = "􀀁",
+			string = "●",
 			drawing = true,
 		},
 	},

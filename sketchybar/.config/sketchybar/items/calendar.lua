@@ -4,21 +4,42 @@ local colors = require("colors")
 -- Padding item required because of bracket
 sbar.add("item", { position = "right", width = settings.group_paddings })
 
-local cal = sbar.add("item", {
-	icon = {
+-- Date pill: e.g. "Sun 16 Aug"
+local date_item = sbar.add("item", "datetime.date", {
+	label = {
 		color = colors.white,
 		padding_left = 8,
-		padding_right = 10,
+		padding_right = 8,
 		font = {
 			style = settings.font.style_map["Black"],
 			size = 12.0,
 		},
 	},
+	position = "right",
+	update_freq = 30,
+	padding_left = 1,
+	padding_right = 1,
+	background = {
+		color = colors.bg2,
+		border_color = { alpha = 0 },
+		border_width = 1,
+	},
+	click_script = "open -a 'Calendar'",
+})
+
+sbar.add("bracket", { date_item.name }, {
+	background = {
+		color = colors.transparent,
+		height = 30,
+	},
+})
+
+-- Time pill: e.g. "9:43 PM"
+local time_item = sbar.add("item", "datetime.time", {
 	label = {
 		color = colors.white,
+		padding_left = 8,
 		padding_right = 8,
-		width = 60,
-		align = "right",
 		font = { family = settings.font.numbers },
 	},
 	position = "right",
@@ -33,8 +54,7 @@ local cal = sbar.add("item", {
 	click_script = "open -a 'Calendar'",
 })
 
--- Double border for calendar using a single item bracket
-sbar.add("bracket", { cal.name }, {
+sbar.add("bracket", { time_item.name }, {
 	background = {
 		color = colors.transparent,
 		height = 30,
@@ -44,10 +64,14 @@ sbar.add("bracket", { cal.name }, {
 -- Padding item required because of bracket
 sbar.add("item", { position = "right", width = settings.group_paddings })
 
-cal:subscribe({ "forced", "routine", "system_woke" }, function(env)
-	-- e.g. icon="Sun 16 Aug", label="15:20pm"
-	cal:set({
-		icon = os.date("%a %d %b"),
-		label = os.date("%H:%M") .. os.date("%p"):lower(),
-	})
+date_item:subscribe({ "forced", "routine", "system_woke" }, function(_env)
+	date_item:set({ label = os.date("%a %d %b") })
+end)
+
+time_item:subscribe({ "forced", "routine", "system_woke" }, function(_env)
+	-- 12-hour time, no leading zero on the hour. Lua's os.date() lacks %-I/%l,
+	-- so grab %I (01-12) and strip the leading zero.
+	-- e.g. "9:42 PM"
+	local hour = os.date("%I"):gsub("^0", "")
+	time_item:set({ label = hour .. os.date(":%M %p") })
 end)

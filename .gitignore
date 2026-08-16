@@ -25,5 +25,8 @@ yazi/.config/yazi/flavors/
 # macOS system file
 .DS_Store
 
+# sketchybar compiled helper binary (regenerated via `make` at config startup)
+sketchybar/.config/sketchybar/helper/helper
+
 # Hermes runtime files (project-local)
 .hermes/

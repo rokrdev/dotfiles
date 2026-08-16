@@ -6,9 +6,19 @@
 # Fallback value (if you omit the key): config-version = 1
 config-version = 2
 
-# You can use it to add commands that run after AeroSpace startup.
-# Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = []
+# Run Sketchybar together with AeroSpace
+# sketchybar has a built-in detection of already running process,
+# so it won't be run twice on AeroSpace restart
+after-startup-command = ['exec-and-forget sketchybar',
+    # JankyBorders — highlight focused window. Config lives in
+    # ~/.config/borders/bordersrc (stowed) so color/size stay in one place.
+    'exec-and-forget borders'
+]
+
+# Notify Sketchybar about workspace change
+exec-on-workspace-change = ['/bin/bash', '-c',
+    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+]
 
 # Start AeroSpace at login
 start-at-login = true
@@ -75,7 +85,9 @@ gaps.inner.horizontal = 2
 gaps.inner.vertical =   2
 gaps.outer.left =       2
 gaps.outer.bottom =     2
-gaps.outer.top =        2
+# Reserve the sketchybar strip (40px) on every monitor so tiled windows stop
+# below the bar instead of overlapping its top chrome.
+gaps.outer.top =        [{ monitor.main = 10 }, { monitor.secondary = 41 }, 2]
 gaps.outer.right =      2
 
 # 'main' binding mode declaration

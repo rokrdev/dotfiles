@@ -1,11 +1,10 @@
 local settings = require("settings")
 local colors = require("colors")
 
--- Padding before date
-sbar.add("item", { position = "right", width = settings.group_paddings })
-
--- Date pill: e.g. "Sun 16 Aug"
+-- Date pill: e.g. "Sun 16 Aug". Wrapped in a bracket so the pill chrome
+-- (bg1 + height 30) matches the cpu/battery/volume pills.
 local date_item = sbar.add("item", "datetime.date", {
+	position = "right",
 	label = {
 		color = colors.white,
 		padding_left = 8,
@@ -15,43 +14,40 @@ local date_item = sbar.add("item", "datetime.date", {
 			size = 12.0,
 		},
 	},
-	position = "right",
-	update_freq = 30,
-	padding_left = 3,
-	padding_right = 3,
-	background = {
-		color = colors.bg2,
-		border_color = { alpha = 0 },
-		border_width = 1,
-		height = 28,
-		corner_radius = 9,
-	},
+	icon = { drawing = false },
+	updates = true,
 	click_script = "open -a 'Calendar'",
 })
 
--- Consistent gap between the date and time pills
-sbar.add("item", { position = "right", width = settings.paddings })
+sbar.add("bracket", "datetime.date.bracket", { date_item.name }, {
+	background = {
+		color = colors.bg1,
+		height = 30,
+	},
+})
+
+-- Consistent gap between the date and time pills (same as other pill groups)
+sbar.add("item", { position = "right", width = settings.group_paddings })
 
 -- Time pill: e.g. "9:43 PM"
 local time_item = sbar.add("item", "datetime.time", {
+	position = "right",
 	label = {
 		color = colors.white,
 		padding_left = 8,
 		padding_right = 8,
 		font = { family = settings.font.numbers },
 	},
-	position = "right",
-	update_freq = 30,
-	padding_left = 3,
-	padding_right = 3,
-	background = {
-		color = colors.bg2,
-		border_color = { alpha = 0 },
-		border_width = 1,
-		height = 28,
-		corner_radius = 9,
-	},
+	icon = { drawing = false },
+	updates = true,
 	click_script = "open -a 'Calendar'",
+})
+
+sbar.add("bracket", "datetime.time.bracket", { time_item.name }, {
+	background = {
+		color = colors.bg1,
+		height = 30,
+	},
 })
 
 -- Padding after time

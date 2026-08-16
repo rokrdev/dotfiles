@@ -1,61 +1,46 @@
+-- items/spaces.lua
+-- AeroSpace workspace bar (from derangga/dotfiles): one clickable chip per
+-- workspace. Click to switch; the active workspace is highlighted.
+--
+-- AeroSpace (aerospace.toml) fires `aerospace_workspace_change` on switch:
+--   sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE
 local colors = require("colors")
 local icons = require("icons")
 local settings = require("settings")
 
--- Register aerospace workspace-change event (fired by AeroSpace's exec-on-workspace-change)
+-- Register aerospace workspace-change event
 sbar.add("event", "aerospace_workspace_change")
 
--- Tiling indicator (decorative)
-sbar.add("item", "space.tiling", {
-	icon = {
-		font = { family = settings.font.text },
-		string = icons.tiling,
-		padding_left = 10,
-		padding_right = 10,
-		color = colors.white,
-	},
-	label = { drawing = false },
-	padding_right = 1,
-	padding_left = 1,
-	background = {
-		color = colors.transparent,
-		height = 28,
-		border_width = 0,
-	},
-})
+local spaces = {}
 
--- Single active workspace indicator: shows the focused workspace on the focused monitor
-local active = sbar.add("item", "space.active", {
-	icon = {
-		font = { family = settings.font.numbers },
-		string = "1",
-		padding_left = 10,
-		padding_right = 10,
-		color = colors.black,
-	},
-	label = { drawing = false },
-	padding_right = 1,
-	padding_left = 1,
-	background = {
-		color = colors.white,
-		height = 28,
-		corner_radius = 6,
-		border_width = 0,
-	},
-})
+for i = 1, 9, 1 do
+	local space = sbar.add("item", "space." .. i, {
+		icon = {
+			font = { family = settings.font.numbers },
+			string = i,
+			padding_left = 10,
+			padding_right = 10,
+			color = colors.white,
+		},
+		label = { drawing = false },
+		padding_right = 1,
+		padding_left = 1,
+		background = {
+			color = colors.transparent,
+			height = 28,
+			border_width = 2,
+			border_color = { alpha = 0 },
+		},
+	})
 
-local function set_active(id)
-	if id == nil or id == "" then
-		id = "1"
-	end
-	active:set({ icon = { string = tostring(id) } })
+	spaces[i] = space
+
+	space:subscribe("mouse.clicked", function()
+		sbar.exec("aerospace workspace " .. i)
+	end)
 end
 
-active:subscribe("aerospace_workspace_change", function(env)
-	set_active(env.FOCUSED_WORKSPACE)
-end)
-
--- Wrapping bracket (chip) behind the workspace items
+-- Single bracket wrapping all spaces
 sbar.add("bracket", { "/space\\..*/" }, {
 	background = {
 		color = colors.bg2,
@@ -63,12 +48,33 @@ sbar.add("bracket", { "/space\\..*/" }, {
 	},
 })
 
--- Padding after the workspace chip
+-- Padding after spaces
 sbar.add("item", "space.padding", {
 	width = settings.group_paddings,
 })
 
--- Spaces toggle indicator (swaps between the active workspace and the menus)
+-- Update highlight for all spaces based on focused workspace
+local function update_spaces(focused_workspace)
+	for i = 1, 9 do
+		local selected = (tostring(i) == tostring(focused_workspace))
+		spaces[i]:set({
+			icon = { color = selected and colors.black or colors.white },
+			background = { color = selected and colors.white or colors.transparent },
+		})
+	end
+end
+
+-- Hidden observer that receives the aerospace event (needs updates = true)
+local space_observer = sbar.add("item", {
+	drawing = false,
+	updates = true,
+})
+
+space_observer:subscribe("aerospace_workspace_change", function(env)
+	update_spaces(env.FOCUSED_WORKSPACE)
+end)
+
+-- Spaces toggle indicator (always visible; click to flip back from menu mode)
 local spaces_indicator = sbar.add("item", {
 	padding_left = 0,
 	padding_right = 0,
@@ -131,7 +137,8 @@ spaces_indicator:subscribe("mouse.clicked", function()
 	sbar.trigger("swap_menus_and_spaces")
 end)
 
--- Initialize with the current focused workspace
+-- Initialize with current focused workspace
 sbar.exec("aerospace list-workspaces --focused", function(focused)
-	set_active(focused:gsub("%s+", ""))
+	focused = focused:gsub("%s+", "")
+	update_spaces(focused)
 end)

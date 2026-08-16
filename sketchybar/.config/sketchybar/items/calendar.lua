@@ -1,7 +1,7 @@
 local settings = require("settings")
 local colors = require("colors")
 
--- Padding item required because of bracket
+-- Padding before date
 sbar.add("item", { position = "right", width = settings.group_paddings })
 
 -- Date pill: e.g. "Sun 16 Aug"
@@ -17,22 +17,20 @@ local date_item = sbar.add("item", "datetime.date", {
 	},
 	position = "right",
 	update_freq = 30,
-	padding_left = 1,
-	padding_right = 1,
+	padding_left = 3,
+	padding_right = 3,
 	background = {
 		color = colors.bg2,
 		border_color = { alpha = 0 },
 		border_width = 1,
+		height = 28,
+		corner_radius = 9,
 	},
 	click_script = "open -a 'Calendar'",
 })
 
-sbar.add("bracket", { date_item.name }, {
-	background = {
-		color = colors.transparent,
-		height = 30,
-	},
-})
+-- Consistent gap between the date and time pills
+sbar.add("item", { position = "right", width = settings.paddings })
 
 -- Time pill: e.g. "9:43 PM"
 local time_item = sbar.add("item", "datetime.time", {
@@ -44,24 +42,19 @@ local time_item = sbar.add("item", "datetime.time", {
 	},
 	position = "right",
 	update_freq = 30,
-	padding_left = 1,
-	padding_right = 1,
+	padding_left = 3,
+	padding_right = 3,
 	background = {
 		color = colors.bg2,
 		border_color = { alpha = 0 },
 		border_width = 1,
+		height = 28,
+		corner_radius = 9,
 	},
 	click_script = "open -a 'Calendar'",
 })
 
-sbar.add("bracket", { time_item.name }, {
-	background = {
-		color = colors.transparent,
-		height = 30,
-	},
-})
-
--- Padding item required because of bracket
+-- Padding after time
 sbar.add("item", { position = "right", width = settings.group_paddings })
 
 date_item:subscribe({ "forced", "routine", "system_woke" }, function(_env)

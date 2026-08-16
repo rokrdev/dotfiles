@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# JankyBorders config — focused-window highlight
+# Loaded automatically when borders starts with no args
+# (e.g. ~/.config/borders/bordersrc)
+#
+# Catppuccin Mocha:
+#   active:   lavender   0xffb4befe
+#   inactive: surface0   0xff313244
+
+options=(
+	style=round
+	width=3.0
+	active_color=0xff94e2d5
+	inactive_color=0xff313244
+)
+
+borders "${options[@]}"

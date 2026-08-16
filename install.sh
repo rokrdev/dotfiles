@@ -49,6 +49,21 @@ echo "Installing dependencies from Brewfile..."
 brew bundle --file="$DOTFILES/Brewfile"
 
 # ─────────────────────────────────────────────
+# SbarLua — Lua bindings for sketchybar (needed by the Lua config)
+# ─────────────────────────────────────────────
+if [[ ! -f "${HOME}/.local/share/sketchybar_lua/sketchybar.so" ]]; then
+  echo "Installing SbarLua (sketchybar Lua module)..."
+  if [[ -d /tmp/SbarLua/.git ]]; then
+    (cd /tmp/SbarLua && git pull --ff-only) || true
+  else
+    git clone https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua || true
+  fi
+  (cd /tmp/SbarLua && make install && rm -rf /tmp/SbarLua) \
+    && echo "SbarLua installed." \
+    || echo "WARNING: SbarLua build failed — sketchybar Lua config needs it. Run manually: git clone https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua && cd /tmp/SbarLua && make install"
+fi
+
+# ─────────────────────────────────────────────
 # GNU Stow
 # ─────────────────────────────────────────────
 if ! command -v stow &>/dev/null; then
@@ -64,7 +79,7 @@ for d in "$DOTFILES"/*/ ; do
   # Skip non-package directories and files
   case "$dirname" in
     .git|.claude|.opencode|.workflow|.crush|.hermes) continue ;;
-    agents|asdf|bat|bin|btop|claude|fish|ghostty|git|gitui|hammerspoon|helix|herdr|ideavim|karabiner|keylayout|lazygit|marksman|moxide|yazi|zed) ;; # valid packages
+    agents|aerospace|asdf|bat|bin|borders|btop|claude|fish|ghostty|git|gitui|hammerspoon|helix|herdr|ideavim|karabiner|keylayout|lazygit|marksman|moxide|sketchybar|yazi|zed) ;; # valid packages
     *) continue ;; # skip anything else (docs, node_modules, etc.)
   esac
 

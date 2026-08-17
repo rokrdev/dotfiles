@@ -31,7 +31,7 @@ local spotify = sbar.add("item", "widgets.spotify", {
 	},
 	background = {
 		color = colors.bg1,
-		height = 26,
+		height = 30,
 		corner_radius = 9,
 		border_width = 1,
 		border_color = colors.black,

@@ -24,3 +24,8 @@ bin/
 .mcp.json
 
 **/tokyo-night.yazi
+
+.helix/
+.vscode/
+.tool-versions
+.claude/

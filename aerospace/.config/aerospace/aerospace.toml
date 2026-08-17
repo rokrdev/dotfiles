@@ -81,8 +81,8 @@ key-mapping.preset = 'qwerty'
 #                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
-gaps.inner.horizontal = 5
-gaps.inner.vertical =   5
+gaps.inner.horizontal = 3
+gaps.inner.vertical =   3
 gaps.outer.left =       2
 gaps.outer.bottom =     2
 # Reserve the sketchybar strip (40px) on every monitor so tiled windows stop
@@ -142,7 +142,9 @@ gaps.outer.right =      2
     # Toggle temporary fullscreen for the focused window (alt-f)
     # Exits fullscreen automatically when focus moves to another tile
     # See: https://nikitabobko.github.io/AeroSpace/commands#fullscreen
-    alt-f = 'fullscreen --no-outer-gaps'
+    # No --no-outer-gaps: fullscreen must keep gaps.outer.top so the window
+    # stops below the sketchybar instead of rendering underneath it.
+    alt-f = 'fullscreen'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
     alt-1 = 'workspace 1'

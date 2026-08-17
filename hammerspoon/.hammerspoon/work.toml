@@ -24,7 +24,7 @@ z = ["/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app", "Sa
 label = "Browser"
 b = ["raycast://extensions/Codely/google-chrome/search-bookmarks", "Bookmarks"]
 h = ["raycast://extensions/Codely/google-chrome/search-history", "History"]
-t = ["raycast://extensions/Codely/google-chrome/search-tabs", "Tabs"]
+t = ["raycast://extensions/Codely/google-chrome/search-tab", "Tabs"]
 
 [r]
 label = "Raycast"

@@ -41,7 +41,7 @@ local time_item = sbar.add("item", "datetime.time", {
 	},
 	icon = { drawing = false },
 	updates = true,
-	update_freq = 30,
+	update_freq = 1,
 	click_script = "open -a 'Calendar'",
 })
 

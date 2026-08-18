@@ -53,10 +53,20 @@ sbar.add("item", "space.padding", {
 	width = settings.group_paddings,
 })
 
--- Update highlight for all spaces based on focused workspace
+-- Update highlight for all spaces based on focused workspace.
+-- Ignores nil/empty focus so a transient/bogus event (e.g. mid monitor
+-- attach/detach, or the bar coming up before AeroSpace is ready) never
+-- blanks every pill right after a valid highlight was shown.
 local function update_spaces(focused_workspace)
+	if focused_workspace == nil then
+		return
+	end
+	local fw = tostring(focused_workspace):gsub("%s+", "")
+	if fw == "" then
+		return
+	end
 	for i = 1, 9 do
-		local selected = (tostring(i) == tostring(focused_workspace))
+		local selected = (tostring(i) == fw)
 		spaces[i]:set({
 			icon = { color = selected and colors.black or colors.white },
 			background = { color = selected and colors.white or colors.transparent },
@@ -72,6 +82,15 @@ local space_observer = sbar.add("item", {
 
 space_observer:subscribe("aerospace_workspace_change", function(env)
 	update_spaces(env.FOCUSED_WORKSPACE)
+end)
+
+-- Self-heal: on wake, if AeroSpace raced the bar at startup or a monitor was
+-- reattached, re-query the true focused workspace so the pill reflects reality
+-- instead of staying blank until the first manual workspace switch.
+space_observer:subscribe("system_woke", function()
+	sbar.exec("aerospace list-workspaces --focused", function(focused)
+		update_spaces(focused)
+	end)
 end)
 
 -- Spaces toggle indicator (always visible; click to flip back from menu mode)

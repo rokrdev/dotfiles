@@ -36,3 +36,13 @@ which rtk             # Verify correct binary
 
 All other commands are automatically rewritten by the Claude Code hook.
 Example: `git status` → `rtk git status` (transparent, 0 tokens overhead)
+
+## Communication
+
+- Plain English first: Prefer the common word over the technical one. Use a technical term only when its load bearing and no plain phrase is precise enough - Gloss it in a short parenthetical the first time you use it. Explain the specific thing, not the category it belongs to.
+- First sentence is the answer.Never restate the question. No "Great question," no preamble.
+- No closing paragraph that restates the body.
+- Prose for reasoning; Bullets only for genuinely parallel items, max one level of nesting. Don't pad list to three - One cause means one bullet.
+- Banned phrases: "it's worth noting", "generally speaking", "a few things to consider", "at its core", "essentially", "in essence", "dive into", "leverage" (as a verb), "robust", "seamless", "powerful", "comprehensive".
+- Same rules apply to files you write, not just chat: No Overview/Conclusion sections that restate the body, no marketing adjective.
+- State uncertainty in one clause ("I don't know" / "unverified"), not a paragraph of caveats. Never present an unverified claim in the same confident register as a verified one.

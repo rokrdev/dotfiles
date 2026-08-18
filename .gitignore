@@ -30,3 +30,4 @@ sketchybar/.config/sketchybar/helper/helper
 
 # Hermes runtime files (project-local)
 .hermes/
+!claude/.claude/

@@ -145,6 +145,7 @@ gaps.outer.right =      2
     # No --no-outer-gaps: fullscreen must keep gaps.outer.top so the window
     # stops below the sketchybar instead of rendering underneath it.
     alt-f = 'fullscreen'
+    alt-b = 'balance-sizes'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
     alt-1 = 'workspace 1'

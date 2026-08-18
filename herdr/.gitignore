@@ -9,3 +9,6 @@ session.json
 
 # Plugin lock file (auto-generated)
 .plugins.lock
+
+# Plugin update-check state (auto-generated)
+plugins/config/herdr-navigator/update-check

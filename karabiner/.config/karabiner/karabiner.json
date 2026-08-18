@@ -4,12 +4,12 @@
       "complex_modifications": {
         "rules": [
           {
-            "description": "Trigger f18+a on pressing ctrl+opt+a for quick app switching",
+            "description": "Trigger f18+a on pressing ctrl+opt+cmd+a for quick app switching",
             "manipulators": [
               {
                 "from": {
                   "key_code": "a",
-                  "modifiers": { "mandatory": ["control", "option"] }
+                  "modifiers": { "mandatory": ["control", "option", "command"] }
                 },
                 "to": [
                   {

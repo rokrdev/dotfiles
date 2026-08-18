@@ -1,0 +1,21 @@
+set -u
+
+STATE="${TMPDIR:-/tmp}/hx-say.pid"
+if [ -f "$STATE" ]; then
+  kill "$(cat "$STATE")" 2>/dev/null
+  rm -f "$STATE"
+fi
+
+f="$(mktemp -t hx-say)"
+cat > "$f"
+
+say -f "$f" </dev/null >/dev/null 2>&1 &
+say_pid=$!
+echo "$say_pid" > "$STATE"
+
+( while kill -0 "$say_pid" 2>/dev/null; do sleep 0.2; done
+  rm -f "$f" "$STATE" ) </dev/null >/dev/null 2>&1 &
+
+
+disown -a 2>/dev/null || true
+exit 0

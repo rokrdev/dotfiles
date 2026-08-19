@@ -14,7 +14,7 @@ macOS dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 ### Bootstrap (new machine)
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/rokr-dev/dotfiles/main/install.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/rokrdev/dotfiles/main/install.sh)"
 ```
 
 This installs Homebrew, clones the repo, runs `brew bundle`, stows all packages, and sets up language servers and tools automatically.
@@ -22,7 +22,7 @@ This installs Homebrew, clones the repo, runs `brew bundle`, stows all packages,
 ### Manual install
 
 ```bash
-git clone git@github.com:rokr-dev/dotfiles.git ~/.dotfiles
+git clone git@github.com:rokrdev/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 
 # Preview changes before applying (dry run)
@@ -41,11 +41,15 @@ Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by d
 
 | Package | Manages |
 |---------|---------|
+| `aerospace` | AeroSpace window manager — `~/.config/aerospace/` |
 | `agents` | Global instructions and canonical skills — `~/AGENTS.md`, `~/.agents/skills/` |
 | `asdf` | asdf version manager — `~/.tool-versions` |
 | `bat` | bat (cat replacement) config |
+| `bin` | User scripts — `~/.local/bin/` |
+| `borders` | JankyBorders — `~/.config/borders/` |
 | `btop` | btop system monitor — `~/.config/btop/` |
 | `claude` | Claude Code — `~/.claude/` (settings, hooks, agents, and skill compatibility links) |
+| `dprint` | dprint formatter — `~/.config/dprint/` |
 | `fish` | Fish shell — `~/.config/fish/` (config, functions, completions, conf.d) |
 | `ghostty` | Ghostty terminal config |
 | `git` | Git config — `~/.gitconfig` and related |
@@ -59,6 +63,7 @@ Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by d
 | `lazygit` | lazygit config |
 | `marksman` | Marksman (markdown LSP) — `~/.config/marksman/` |
 | `moxide` | Moxide config — `~/.config/moxide/` |
+| `sketchybar` | SketchyBar menu bar — `~/.config/sketchybar/` |
 | `yazi` | yazi file manager config |
 | `zed` | Zed editor — `~/.config/zed/` |
 

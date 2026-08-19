@@ -80,8 +80,8 @@ stow -R --no-folding agents claude
 
 The engineering flow is intentionally manual:
 
-1. `grill-me` — resolve the design.
-2. `setup-matt-pocock-skills` — once per project, configure GitHub, GitLab, or local issue storage.
+1. `setup-matt-pocock-skills` — once per project, configure GitHub, GitLab, or local issue storage and the domain-doc layout.
+2. `grill-with-docs` — resolve the design while maintaining `CONTEXT.md` and ADRs.
 3. `to-spec` — publish the agreed spec.
 4. `to-tickets` — split it into tracer-bullet tickets.
 5. `kanban-loop <ticket>` — implement exactly one ticket test-first in its own branch/worktree, validate it, and commit locally.

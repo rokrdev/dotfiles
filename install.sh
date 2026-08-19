@@ -1,5 +1,5 @@
 #!/bin/bash
-# /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/rokr-dev/dotfiles/main/install.sh)"
+# /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/rokrdev/dotfiles/main/install.sh)"
 
 set -e
 
@@ -29,9 +29,9 @@ if [[ -d "$DOTFILES/.git" ]]; then
 else
   echo "Cloning dotfiles repo..."
   # Try SSH first, fall back to HTTPS if it fails
-  if ! git clone git@github.com:rokr-dev/dotfiles.git "$DOTFILES" 2>/dev/null; then
+  if ! git clone git@github.com:rokrdev/dotfiles.git "$DOTFILES" 2>/dev/null; then
     echo "SSH clone failed, trying HTTPS..."
-    git clone https://github.com/rokr-dev/dotfiles.git "$DOTFILES"
+    git clone https://github.com/rokrdev/dotfiles.git "$DOTFILES"
   fi
 fi
 
@@ -79,7 +79,7 @@ for d in "$DOTFILES"/*/ ; do
   # Skip non-package directories and files
   case "$dirname" in
     .git|.claude|.opencode|.workflow|.crush|.hermes) continue ;;
-    agents|aerospace|asdf|bat|bin|borders|btop|claude|fish|ghostty|git|gitui|hammerspoon|helix|herdr|ideavim|karabiner|keylayout|lazygit|marksman|moxide|sketchybar|yazi|zed) ;; # valid packages
+    agents|aerospace|asdf|bat|bin|borders|btop|claude|dprint|fish|ghostty|git|gitui|hammerspoon|helix|herdr|ideavim|karabiner|keylayout|lazygit|marksman|moxide|sketchybar|yazi|zed) ;; # valid packages
     *) continue ;; # skip anything else (docs, node_modules, etc.)
   esac
 

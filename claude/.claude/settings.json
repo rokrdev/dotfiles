@@ -222,7 +222,7 @@
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": true,
   "skillOverrides": {
-    "grill-me": "user-invocable-only",
+    "grill-with-docs": "user-invocable-only",
     "handoff": "user-invocable-only",
     "code-review": "user-invocable-only",
     "diagnosing-bugs": "user-invocable-only",

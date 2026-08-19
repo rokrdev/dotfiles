@@ -1,0 +1,4 @@
+[[mgr.prepend_keymap]]
+on = ["g", "r"]
+run = 'shell -- root="$(git rev-parse --show-toplevel 2>/dev/null)"; [ -n "$root" ] && ya emit-to "$YAZI_ID" cd "$root"'
+desc = "Go to git repo root"

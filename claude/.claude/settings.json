@@ -3,6 +3,7 @@
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "60",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
+  "attribution": "",
   "permissions": {
     "allow": [
       "Bash(git:*)",
@@ -61,8 +62,7 @@
       "Read(**/*.pem)",
       "Edit(**/*.pem)",
       "Read(**/*.key)",
-      "Edit(**/*.key)",
-      "Edit(**/migrations/**)"
+      "Edit(**/*.key)"
     ],
     "defaultMode": "auto"
   },

@@ -149,16 +149,37 @@ auto-format = true
 
 [[language]]
 name = "kotlin"
-language-servers = ["kmp-lsp"]
+roots = [
+  "settings.gradle.kts",
+  "settings.gradle",
+  "pom.xml",
+  "MODULE.bazel",
+  "WORKSPACE.bazel",
+  "WORKSPACE",
+  "build.gradle.kts",
+  "build.gradle",
+  ".git",
+]
+language-servers = ["intellij"]
 
 [[language]]
 name = "java"
-roots = [".git", "pom.xml", "build.gradle", "build.gradle.kts"]
-language-servers = ["jdtls"]
+roots = [
+  "settings.gradle.kts",
+  "settings.gradle",
+  "pom.xml",
+  "MODULE.bazel",
+  "WORKSPACE.bazel",
+  "WORKSPACE",
+  "build.gradle.kts",
+  "build.gradle",
+  ".git",
+]
+language-servers = ["intellij"]
 
-# kmp-lsp is the diagnostics server: IntelliJ is pull-diagnostics-only (no
-# publishDiagnostics), so kmp-lsp provides squiggles while IntelliJ does
-# completion/hover/refactorings. Kept as a fallback — if the IntelliJ engine
-# stops answering (preview builds expire ~30 days), kmp-lsp still works.
-[language-server.kmp-lsp]
-command = "kmp-lsp"
+# The wrapper supplies the current launcher, EULA hash, isolated system path,
+# privacy defaults, and jar:/jrt: URI translation needed by Helix.
+[language-server.intellij]
+command = "intellij-server-helix"
+timeout = 120
+config = { projects = [], buildTools = {} }

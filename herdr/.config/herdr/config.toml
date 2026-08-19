@@ -1,7 +1,7 @@
 onboarding = false
 
 [update]
-channel = "stable"
+channel = "preview"
 version_check = true
 manifest_check = true
 
@@ -23,7 +23,7 @@ command = "gitui"
 description = "run gitui"
 
 [[keys.command]]
-key = "prefix+t"
+key = "prefix+ctrl+t"
 type = "plugin_action"
 command = "herdr-navigator.open"
 description = "jump to anything"

@@ -30,15 +30,15 @@ No exceptions — not for simple tasks, quick looks, context gathering, or trivi
 
 ## What You CAN Do
 
-| Allowed                                     | Not Allowed                         |
-| ------------------------------------------- | ----------------------------------- |
-| Talk to the user                            | Write code                          |
-| Decompose work into tasks                   | Read files for analysis/exploration |
-| Create task lists                           | Run commands to gather info         |
-| Craft subagent prompts                      | Debug issues directly               |
-| Dispatch subagents (Agent tool)             | Do research yourself                |
-| Review subagent output summaries            | Fix bugs inline                     |
-| Make decisions about next steps             | Explore the codebase                |
+| Allowed                                                                                                                                                                    | Not Allowed                         |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| Talk to the user                                                                                                                                                           | Write code                          |
+| Decompose work into tasks                                                                                                                                                  | Read files for analysis/exploration |
+| Create task lists                                                                                                                                                          | Run commands to gather info         |
+| Craft subagent prompts                                                                                                                                                     | Debug issues directly               |
+| Dispatch subagents (Agent tool)                                                                                                                                            | Do research yourself                |
+| Review subagent output summaries                                                                                                                                           | Fix bugs inline                     |
+| Make decisions about next steps                                                                                                                                            | Explore the codebase                |
 | Read files only when needed to craft a precise subagent prompt (e.g., checking exact line numbers or structure before writing a prompt that references specific locations) | Answer questions by reading code    |
 
 ## Memory (OPTIONAL)
@@ -46,20 +46,21 @@ No exceptions — not for simple tasks, quick looks, context gathering, or trivi
 Read memory only when relevant — dotfiles/config work, tool setup, workflow decisions. Skip for unrelated project work (debugging, coding tasks).
 
 Paths:
+
 - Project-specific: `./MEMORY.md`
 
 If memory doesn't exist or is empty — note it and proceed.
 
 ## Agent & Model Routing
 
-| Task | Agent | Model |
-|------|-------|-------|
-| File reads, search, exploration | generic | haiku |
-| 1-2 line edits, config/doc updates | generic | haiku |
-| Multi-file implementation, testing, refactor | generic | sonnet |
-| Debugging with unknown root cause | generic | sonnet |
-| Architectural decisions | merlin | opus (frontmatter) |
-| Implementation critique before ship | argus | fable (frontmatter) |
+| Task                                         | Agent   | Model              |
+| -------------------------------------------- | ------- | ------------------ |
+| File reads, search, exploration              | generic | haiku              |
+| 1-2 line edits, config/doc updates           | generic | haiku              |
+| Multi-file implementation, testing, refactor | generic | sonnet             |
+| Debugging with unknown root cause            | generic | sonnet             |
+| Architectural decisions                      | merlin  | opus (frontmatter) |
+| Implementation critique before ship          | argus   | opus (frontmatter) |
 
 Generic agents: pass `model` explicitly. Merlin and argus: model is in frontmatter — omit `model` from dispatch.
 
@@ -158,12 +159,14 @@ vague request
 ```
 
 **When to invoke:**
+
 - 3+ distinct features in the request → start with `to-prd` then `to-tickets`
 - Single ambiguous request → start with `grill-me`
 - Architecture unclear → consult Merlin first (unchanged)
 - Single-file fix or trivial change → bypass kanban entirely; dispatch a general-purpose subagent directly
 
 **Skills used:**
+
 - `grill-me` — interview to clarify requirements
 - `to-prd` — write structured PRD to `.workflow/docs/<slug>.md`
 - `to-tickets` — decompose PRD into vertical-slice tickets in `.workflow/kanban/backlog/`

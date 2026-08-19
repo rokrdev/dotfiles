@@ -10,11 +10,11 @@ Remote: `git@github.com:rokr-dev/dotfiles.git`
 
 | Package | Manages |
 |---------|---------|
-| `agents` | Global agent instructions — `~/AGENTS.md` (Codex, Gemini CLI, Cursor, etc.) |
+| `agents` | Global instructions and canonical skills — `~/AGENTS.md`, `~/.agents/skills/` |
 | `asdf` | asdf version manager — `~/.tool-versions` |
 | `bat` | bat (cat replacement) config |
 | `btop` | btop system monitor — `~/.config/btop/` |
-| `claude` | Claude Code — `~/.claude/` (settings.json, hooks, MCP, skills) |
+| `claude` | Claude Code — `~/.claude/` (settings, hooks, MCP, agents, and skill links) |
 | `fish` | Fish shell — `~/.config/fish/` (config, functions, completions, conf.d) |
 | `ghostty` | Ghostty terminal config |
 | `git` | Git config — `~/.gitconfig` and related |
@@ -39,6 +39,7 @@ Non-package items at root: `CLAUDE.md`, `README.md`, `Brewfile`, `.editorconfig`
 # From $HOME/.dotfiles — stow a single package
 stow fish
 stow helix
+stow agents
 stow claude
 
 # Restow (update symlinks after adding files to a package)
@@ -56,13 +57,14 @@ Stow target is `$HOME` by default when running from the repo root. No `--target`
 ## Key Files
 
 - `agents/AGENTS.md` — global agent instructions for all tools (stows to `~/AGENTS.md`)
+- `agents/.agents/skills/` — canonical cross-harness skills (stows to `~/.agents/skills/`)
 - `fish/.config/fish/config.fish` — main fish shell config
 - `fish/.config/fish/functions/` — custom fish functions (one `.fish` file per function)
 - `helix/.config/helix/config.toml` — Helix editor config
 - `hammerspoon/.hammerspoon/init.lua` — Hammerspoon automation entry point
 - `claude/.claude/settings.json` — Claude Code settings (hooks, permissions)
 - `claude/.claude/hooks/` — Claude Code hook scripts
-- `claude/.claude/skills/` — custom Claude Code skills
+- `claude/.claude/skills/` — per-skill compatibility symlinks to `agents/.agents/skills/`
 - `claude/.claude/agents/neo.md` — neo orchestrator agent definition
 
 ## Fish Claude Aliases

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Kanban Loop"
+  short_description: "Implement and validate one ticket"
+policy:
+  allow_implicit_invocation: false

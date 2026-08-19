@@ -1,0 +1,3 @@
+interface:
+  display_name: "Obsidian"
+  short_description: "Route notes through the Obsidian vault"

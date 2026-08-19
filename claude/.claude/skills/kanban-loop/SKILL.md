@@ -11,13 +11,13 @@ running TDD per ticket. See `docs/kanban-workflow.md` for full design rationale.
 
 ## Commands
 
-| Command | Behaviour |
-|---------|-----------|
-| `/kanban-loop` | Serial mode — one ticket at a time |
-| `/kanban-loop --parallel` | Parallel mode — dispatch all eligible `parallel-safe` tickets with no file-overlap at once |
-| `/kanban-loop --dry-run` | Resolve eligibility, print dispatch plan — no moves, no subagents |
-| `/kanban-loop --branch <name>` | Pass suggested branch name to pre-flight prompt |
-| `/kanban-loop --hitl` | HITL mode — pause for user approval before each commit and before advancing to the next ticket |
+| Command                        | Behaviour                                                                                      |
+| ------------------------------ | ---------------------------------------------------------------------------------------------- |
+| `/kanban-loop`                 | Serial mode — one ticket at a time                                                             |
+| `/kanban-loop --parallel`      | Parallel mode — dispatch all eligible `parallel-safe` tickets with no file-overlap at once     |
+| `/kanban-loop --dry-run`       | Resolve eligibility, print dispatch plan — no moves, no subagents                              |
+| `/kanban-loop --branch <name>` | Pass suggested branch name to pre-flight prompt                                                |
+| `/kanban-loop --hitl`          | HITL mode — pause for user approval before each commit and before advancing to the next ticket |
 
 ---
 
@@ -26,6 +26,7 @@ running TDD per ticket. See `docs/kanban-workflow.md` for full design rationale.
 Runs once at startup. Prevents per-ticket commits landing on protected branches.
 
 **Checks (abort on fail):**
+
 - `git rev-parse --abbrev-ref HEAD` → if `HEAD`: `ERROR: Detached HEAD state. Checkout a branch before running kanban-loop.`
 - `git status --porcelain` → if non-empty: `ERROR: Uncommitted changes detected. Stash or commit them before running kanban-loop.`
 
@@ -35,6 +36,7 @@ Runs once at startup. Prevents per-ticket commits landing on protected branches.
 - On protected branch → show branch prompt:
 
 With `--branch <name>`:
+
 ```
 ─────────────────────────────────────────────
   You are on <branch>. Create a branch?
@@ -44,15 +46,18 @@ With `--branch <name>`:
   3. Stay on <branch>
 ─────────────────────────────────────────────
 ```
+
 - **1**: use `<name>` (check collision); **2**: prompt for name then check collision; **3**: warn and proceed to Step 1.
 
 Without `--branch`:
+
 ```
 ─────────────────────────────────────────────
   You are on <branch>. Enter a branch name to
   create, or type SKIP to stay on <branch>:
 ─────────────────────────────────────────────
 ```
+
 If `SKIP` → warn and proceed. Otherwise use typed name.
 
 **Collision check:** `git show-ref --verify --quiet refs/heads/<name>` — if exists, auto-append `-2`, `-3`, etc. Show resolved name before creating.
@@ -70,6 +75,7 @@ If `.kanban/` exists and `.workflow/kanban/` does not, run:
 ```bash
 mv .kanban/ .workflow/kanban/
 ```
+
 Log: "Migrated .kanban/ → .workflow/kanban/"
 
 This handles projects that ran kanban-loop before the `.workflow/` path change.
@@ -104,11 +110,13 @@ for f in os.listdir(".workflow/kanban/doing"):
 ```
 
 If stuck tickets found → pause, ask user:
+
 ```
-  1. Retry   — move back to backlog
-  2. Skip    — ignore, continue
-  3. Abort   — halt loop
+1. Retry   — move back to backlog
+2. Skip    — ignore, continue
+3. Abort   — halt loop
 ```
+
 Accept: `1` or `retry`, `2` or `skip`, `3` or `abort`.
 
 ---
@@ -299,13 +307,12 @@ Before running any `git` command, pause and show:
    <type>(<scope>): <ticket title>
 
    <acceptance criterion>
-
-   Co-Authored-By: Claude <noreply@anthropic.com>
    ```
    Validate: message must start with `<type>(<scope>):` — if not, reject and prompt subagent to fix.
 4. `mv .workflow/kanban/doing/NN-slug.md .workflow/kanban/done/NN-slug.md`
 
 **Any gate fails:**
+
 - Append failure note to ticket body: `## Failure — <gate number>\n<reason>`
 - `mv .workflow/kanban/doing/NN-slug.md .workflow/kanban/backlog/NN-slug.md`
 - Warn user with gate number, reason, ticket name
@@ -313,9 +320,9 @@ Before running any `git` command, pause and show:
   surface failures, ask user to intervene before continuing.
 - Ask user:
   ```
-    1. Retry   — re-run with subagent
-    2. Skip    — move to backlog, continue
-    3. Abort   — halt loop
+  1. Retry   — re-run with subagent
+  2. Skip    — move to backlog, continue
+  3. Abort   — halt loop
   ```
   Accept: `1` or `retry`, `2` or `skip`, `3` or `abort`
 
@@ -326,6 +333,7 @@ Before running any `git` command, pause and show:
 Activate when user passes `--parallel` OR backlog has > 5 tickets and any are `parallel-safe: true`.
 
 **Parallel eligibility** — from the eligible set, select tickets where:
+
 - `parallel-safe: true`
 - `files-touched` has zero path overlap with any other in-flight ticket
 
@@ -350,12 +358,12 @@ Serial tickets (not parallel-safe, or overlapping) are queued for the next itera
 
 Repeat steps 2–5 until one of the stop conditions is reached:
 
-| Condition | Action |
-|-----------|--------|
-| `backlog/` empty, `doing/` empty | Normal exit — print summary |
-| `eligible` empty, `.workflow/kanban/backlog/` non-empty | Deadlock — list unmet deps, halt |
-| User types abort / ctrl-c | Halt, leave state as-is, print partial summary |
-| 3+ consecutive ticket failures | Circuit breaker — halt, surface all failed tickets |
+| Condition                                               | Action                                             |
+| ------------------------------------------------------- | -------------------------------------------------- |
+| `backlog/` empty, `doing/` empty                        | Normal exit — print summary                        |
+| `eligible` empty, `.workflow/kanban/backlog/` non-empty | Deadlock — list unmet deps, halt                   |
+| User types abort / ctrl-c                               | Halt, leave state as-is, print partial summary     |
+| 3+ consecutive ticket failures                          | Circuit breaker — halt, surface all failed tickets |
 
 **If `--hitl` active — between-ticket confirmation:**
 

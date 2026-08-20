@@ -100,4 +100,35 @@ There is no automatic board draining, pushing, PR creation, or merging. `kanban-
 ## Utilities
 
 - **`install.sh`** — full bootstrap installer (Homebrew, brew bundle, stow, asdf, language servers, Claude Code).
+- **`scripts/install-intellij-server.sh`** — installs and verifies JetBrains' Java/Kotlin IntelliJ language server, records explicit EULA acceptance, and wires its Helix wrapper into `~/.local/bin`.
 - **`clear.sh`** — shell script at repo root that unstows all packages at once (`stow -D` on each). Useful for a clean removal of all symlinks. Skips non-package dirs (`.git`, tool dirs, etc.).
+
+## Java and Kotlin in Helix
+
+Java and Kotlin use the same IntelliJ language-server process so Gradle, Maven,
+and Bazel projects containing both languages share one imported project model.
+The server is distributed separately from the small VS Code/Open VSX extension
+and is covered by a JetBrains EULA.
+
+Install or update it with:
+
+```bash
+scripts/install-intellij-server.sh
+```
+
+The installer fetches the current platform manifest, verifies the server
+archive's published SHA-256, shows the EULA when it changes, and activates the
+new build side-by-side. Run `intellij-server-helix --check` afterwards, then
+restart an existing editor with `:lsp-restart`.
+
+Useful overrides:
+
+- `IJ_JAVA_OPTIONS="-Xmx4g"` increases the language-server heap.
+- `INTELLIJ_REGION=oceania` changes the product-terms region (the wrapper's
+  default for these personal dotfiles).
+- `INTELLIJ_DATA_SHARING=none` controls telemetry (also the default).
+- `INTELLIJ_SERVER_HOME=/path` selects a non-default installation directory.
+
+The wrapper also translates library `jar:` and JDK `jrt:` locations into local
+cached source files, because Helix only opens filesystem URIs. Project-local
+Java/Kotlin navigation does not require this translation.

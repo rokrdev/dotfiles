@@ -9,6 +9,11 @@ name = "json"
 formatter = { command = "dprint", args = ["fmt", "--stdin", "json"] }
 
 [[language]]
+auto-format = true
+name = "jsonc"
+formatter = { command = "dprint", args = ["fmt", "--stdin", "jsonc"] }
+
+[[language]]
 name = "javascript"
 auto-format = true
 language-servers = ["vtsls"]

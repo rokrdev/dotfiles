@@ -46,6 +46,11 @@ wrap-indicator = "↩ "
 # Note that `cursor-line` diagnostics are hidden in insert mode.
 cursor-line = "warning"
 
+[editor.inline-blame]
+# Inline git blame (helix fork #13133). Comment out to revert to default (off).
+show = "cursor-line"
+auto-fetch = true
+
 [editor.statusline]
 left = [ "mode", "spinner", "file-name", "read-only-indicator", "file-modification-indicator", "version-control", "diagnostics" ]
 right = [ "primary-selection-length", "register", "position", "position-percentage", "total-line-numbers", "file-encoding" ]
@@ -58,19 +63,19 @@ mode.select = "S"
 X = ["extend_line_up", "extend_to_line_bounds"]
 
 [keys.normal.space.g]
+label = "Git"
 c = "changed_file_picker"
-b = ":sh git blame -L %{cursor_line},%{cursor_line} %{buffer_name}"
-f = [":write-all", ":insert-output scooter --no-stdin >/dev/tty", ":redraw", ":reload-all"]
-g = [":write-all", ":insert-output gitui >/dev/tty", ":redraw", ":reload-all"]
-n = [
+f = { label = "Search and Replace", command = [":write-all", ":insert-output scooter --no-stdin >/dev/tty", ":redraw", ":reload-all"] }
+g = { label = "GitUI", command = [":write-all", ":insert-output gitui >/dev/tty", ":redraw", ":reload-all"] }
+n = { label = "Files", command = [
   ':sh rm -f /tmp/unique-file',
   ':insert-output yazi "%{buffer_name}" --chooser-file=/tmp/unique-file',
   ':sh printf "\x1b[?1049h\x1b[?2004h\x1b[?1002h\x1b[?1006h" > /dev/tty',
   ':open %sh{cat /tmp/unique-file}',
   ':redraw',
-]
-w = ":lsp-workspace-command"
-y = [":noop %sh{echo \"%{buffer_name}:%{cursor_line}\" | pbcopy}"]
-m = [":insert-output ~/.local/bin/glowm-preview %{file_path_absolute} >/dev/tty 2>&1", ":redraw"]
-M = [":insert-output ~/.local/bin/glowm-preview --close >/dev/tty 2>&1", ":redraw"]
-S = [":pipe-to ~/.local/bin/say-selection"]
+] }
+w = { label = "LSP Commands", command = ":lsp-workspace-command" }
+y = { label = "Copy Path", command = [":noop %sh{echo \"%{buffer_name}:%{cursor_line}\" | pbcopy}"] }
+m = { label = "Preview", command = [":insert-output ~/.local/bin/glowm-preview %{file_path_absolute} >/dev/tty 2>&1", ":redraw"] }
+M = { label = "Close Preview", command = [":insert-output ~/.local/bin/glowm-preview --close >/dev/tty 2>&1", ":redraw"] }
+S = { label = "Speak", command = [":pipe-to ~/.local/bin/say-selection"] }

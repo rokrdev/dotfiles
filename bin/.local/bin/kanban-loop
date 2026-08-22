@@ -1,0 +1,1591 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["PyYAML>=6.0.2,<7"]
+# ///
+"""Deterministic, provider-neutral runner for .workflow/kanban boards."""
+
+from __future__ import annotations
+
+import argparse
+import dataclasses
+import datetime as dt
+import difflib
+import fcntl
+import hashlib
+import json
+import os
+import re
+import shlex
+import shutil
+import subprocess
+import sys
+import tempfile
+import textwrap
+import uuid
+from collections.abc import Iterable
+from pathlib import Path
+from typing import Any
+
+import yaml
+
+SCHEMA_VERSION = 2
+PROTECTED_BRANCHES = {"main", "master", "develop"}
+SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+COMMIT_RE = re.compile(
+    r"^(feat|fix|refactor|test|docs|build|ci|chore|perf)(\([a-z0-9-]+\))?!?: .+"
+)
+EXIT_AWAITING_COMMIT = 0
+EXIT_AWAITING_NEXT = 0
+EXIT_BLOCKED = 22
+
+
+class KanbanError(RuntimeError):
+    """A deterministic workflow failure that requires no traceback."""
+
+
+@dataclasses.dataclass(frozen=True)
+class AllowedChange:
+    path: str
+    operation: str
+
+
+@dataclasses.dataclass(frozen=True)
+class Verification:
+    command: str
+    expected_exit: int = 0
+
+
+@dataclasses.dataclass(frozen=True)
+class Ticket:
+    path: Path
+    raw: str
+    metadata: dict[str, Any]
+    body: str
+    id: int
+    slug: str
+    title: str
+    language: str
+    depends_on: tuple[str, ...]
+    human_required: bool
+    acceptance: str
+    allowed_changes: tuple[AllowedChange, ...]
+    failing_tests: tuple[str, ...]
+    tdd_test_command: str
+    verification: tuple[Verification, ...]
+    commit_message: str
+
+    @property
+    def digest(self) -> str:
+        return sha256_text(self.raw)
+
+    @property
+    def allowed_paths(self) -> set[str]:
+        return {change.path for change in self.allowed_changes}
+
+    @property
+    def test_paths(self) -> set[str]:
+        return {item.split("::", 1)[0] for item in self.failing_tests}
+
+    @property
+    def production_paths(self) -> set[str]:
+        return self.allowed_paths - self.test_paths
+
+
+@dataclasses.dataclass(frozen=True)
+class AgentRequest:
+    role: str
+    prompt: str
+    schema: dict[str, Any]
+    cwd: Path
+    writable: bool
+    model: str | None = None
+    allowed_paths: tuple[str, ...] = ()
+
+
+@dataclasses.dataclass(frozen=True)
+class AgentResult:
+    data: dict[str, Any]
+    raw_output: str
+
+
+def sha256_text(value: str) -> str:
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()
+
+
+def canonical_patch(value: str) -> str:
+    return value.rstrip("\x00\r\n")
+
+
+def run_process(
+    args: list[str],
+    *,
+    cwd: Path,
+    input_text: str | None = None,
+    env: dict[str, str] | None = None,
+    check: bool = True,
+    timeout: int = 3600,
+) -> subprocess.CompletedProcess[str]:
+    completed = subprocess.run(
+        args,
+        cwd=cwd,
+        input=input_text,
+        text=True,
+        capture_output=True,
+        env=env,
+        timeout=timeout,
+        check=False,
+    )
+    if check and completed.returncode != 0:
+        command = shlex.join(args)
+        detail = completed.stderr.strip() or completed.stdout.strip()
+        raise KanbanError(
+            f"Command failed ({completed.returncode}): {command}\n{detail}"
+        )
+    return completed
+
+
+def git(repo: Path, *args: str, check: bool = True) -> str:
+    result = run_process(["git", *args], cwd=repo, check=check)
+    return result.stdout.strip()
+
+
+def repository_root(start: Path) -> Path:
+    result = run_process(["git", "rev-parse", "--show-toplevel"], cwd=start, check=True)
+    return Path(result.stdout.strip()).resolve()
+
+
+def is_existing_worktree(repo: Path) -> bool:
+    git_dir = Path(git(repo, "rev-parse", "--git-dir")).resolve()
+    common_dir = Path(git(repo, "rev-parse", "--git-common-dir")).resolve()
+    return git_dir != common_dir
+
+
+def split_frontmatter(raw: str, path: Path) -> tuple[dict[str, Any], str]:
+    if not raw.startswith("---\n"):
+        raise KanbanError(f"{path}: missing YAML frontmatter")
+    try:
+        frontmatter, body = raw[4:].split("\n---\n", 1)
+    except ValueError as error:
+        raise KanbanError(f"{path}: unclosed YAML frontmatter") from error
+    try:
+        parsed = yaml.safe_load(frontmatter)
+    except yaml.YAMLError as error:
+        raise KanbanError(f"{path}: invalid YAML: {error}") from error
+    if not isinstance(parsed, dict):
+        raise KanbanError(f"{path}: frontmatter must be a mapping")
+    return parsed, body
+
+
+def require(metadata: dict[str, Any], field: str, expected: type, path: Path) -> Any:
+    value = metadata.get(field)
+    if not isinstance(value, expected) or (expected is str and not value.strip()):
+        raise KanbanError(f"{path}: {field!r} must be {expected.__name__}")
+    return value
+
+
+def normalise_ticket_path(value: str, ticket_path: Path) -> str:
+    candidate = Path(value)
+    if candidate.is_absolute() or ".." in candidate.parts or value.endswith("/"):
+        raise KanbanError(
+            f"{ticket_path}: allowed path must be an exact repository-relative file: {value}"
+        )
+    normalised = candidate.as_posix()
+    if normalised.startswith(".workflow/") or normalised == ".workflow":
+        raise KanbanError(
+            f"{ticket_path}: .workflow paths cannot be implementation paths"
+        )
+    return normalised
+
+
+def parse_ticket(path: Path) -> Ticket:
+    raw = path.read_text(encoding="utf-8")
+    metadata, body = split_frontmatter(raw, path)
+    version = metadata.get("schema-version")
+    if version != SCHEMA_VERSION:
+        raise KanbanError(
+            f"{path}: schema-version must be {SCHEMA_VERSION}; legacy tickets must be regenerated"
+        )
+    ticket_id = require(metadata, "id", int, path)
+    slug = require(metadata, "slug", str, path)
+    title = require(metadata, "title", str, path)
+    language = require(metadata, "language", str, path)
+    acceptance = require(metadata, "acceptance", str, path)
+    tdd_test_command = require(metadata, "tdd-test-command", str, path)
+    commit_message = require(metadata, "commit-message", str, path)
+    if not SLUG_RE.fullmatch(slug):
+        raise KanbanError(f"{path}: slug must be kebab-case")
+    expected_name = f"{ticket_id:02d}-{slug}.md"
+    if path.name != expected_name:
+        raise KanbanError(f"{path}: filename must be {expected_name}")
+    if not COMMIT_RE.fullmatch(commit_message):
+        raise KanbanError(f"{path}: commit-message must use Conventional Commits")
+
+    depends_on_raw = metadata.get("depends-on") or []
+    if not isinstance(depends_on_raw, list) or not all(
+        isinstance(item, str) and SLUG_RE.fullmatch(item) for item in depends_on_raw
+    ):
+        raise KanbanError(f"{path}: depends-on must be a list of kebab-case slugs")
+
+    human_required = metadata.get("human-required", False)
+    if not isinstance(human_required, bool):
+        raise KanbanError(f"{path}: human-required must be boolean")
+
+    allowed_raw = metadata.get("allowed-changes")
+    if not isinstance(allowed_raw, list) or not allowed_raw:
+        raise KanbanError(f"{path}: allowed-changes must be a non-empty list")
+    allowed: list[AllowedChange] = []
+    seen_paths: set[str] = set()
+    for item in allowed_raw:
+        if not isinstance(item, dict):
+            raise KanbanError(f"{path}: allowed-changes entries must be mappings")
+        raw_path = item.get("path")
+        operation = item.get("operation")
+        if not isinstance(raw_path, str) or operation not in {
+            "create",
+            "modify",
+            "delete",
+        }:
+            raise KanbanError(
+                f"{path}: allowed changes require path and operation=create|modify|delete"
+            )
+        normalised = normalise_ticket_path(raw_path, path)
+        if normalised in seen_paths:
+            raise KanbanError(f"{path}: duplicate allowed path {normalised}")
+        seen_paths.add(normalised)
+        allowed.append(AllowedChange(normalised, operation))
+
+    failing_tests_raw = metadata.get("failing-tests")
+    if not isinstance(failing_tests_raw, list) or not failing_tests_raw:
+        raise KanbanError(f"{path}: failing-tests must be a non-empty list")
+    failing_tests: list[str] = []
+    for item in failing_tests_raw:
+        if not isinstance(item, str) or "::" not in item:
+            raise KanbanError(f"{path}: failing-tests entries must use path::test-name")
+        test_path, test_name = item.split("::", 1)
+        test_path = normalise_ticket_path(test_path, path)
+        if test_path not in seen_paths or not test_name.strip():
+            raise KanbanError(
+                f"{path}: failing test {item!r} must name a test in allowed-changes"
+            )
+        failing_tests.append(f"{test_path}::{test_name}")
+
+    verification_raw = metadata.get("verification")
+    if not isinstance(verification_raw, list) or not verification_raw:
+        raise KanbanError(f"{path}: verification must be a non-empty list")
+    verifications: list[Verification] = []
+    for item in verification_raw:
+        if not isinstance(item, dict) or not isinstance(item.get("command"), str):
+            raise KanbanError(f"{path}: verification entries require command")
+        expected_exit = item.get("expected-exit", 0)
+        if not isinstance(expected_exit, int):
+            raise KanbanError(f"{path}: verification expected-exit must be integer")
+        verifications.append(Verification(item["command"], expected_exit))
+
+    return Ticket(
+        path=path,
+        raw=raw,
+        metadata=metadata,
+        body=body,
+        id=ticket_id,
+        slug=slug,
+        title=title,
+        language=language,
+        depends_on=tuple(depends_on_raw),
+        human_required=human_required,
+        acceptance=acceptance,
+        allowed_changes=tuple(allowed),
+        failing_tests=tuple(failing_tests),
+        tdd_test_command=tdd_test_command,
+        verification=tuple(verifications),
+        commit_message=commit_message,
+    )
+
+
+def recursively_find(value: Any, key: str) -> Any | None:
+    if isinstance(value, dict):
+        if key in value:
+            return value[key]
+        for nested in value.values():
+            found = recursively_find(nested, key)
+            if found is not None:
+                return found
+    if isinstance(value, list):
+        for nested in value:
+            found = recursively_find(nested, key)
+            if found is not None:
+                return found
+    return None
+
+
+def extract_json_object(raw: str) -> dict[str, Any]:
+    candidates: list[Any] = []
+    try:
+        candidates.append(json.loads(raw))
+    except json.JSONDecodeError:
+        pass
+    for line in raw.splitlines():
+        try:
+            candidates.append(json.loads(line))
+        except json.JSONDecodeError:
+            continue
+    for candidate in reversed(candidates):
+        structured = recursively_find(candidate, "structured_output")
+        if isinstance(structured, dict):
+            return structured
+        if isinstance(candidate, dict) and (
+            "status" in candidate or "verdict" in candidate
+        ):
+            return candidate
+        result = recursively_find(candidate, "result")
+        if isinstance(result, str):
+            try:
+                parsed = json.loads(result)
+            except json.JSONDecodeError:
+                continue
+            if isinstance(parsed, dict):
+                return parsed
+    raise KanbanError("Agent did not return a parseable structured result")
+
+
+def validate_schema(value: Any, schema: dict[str, Any], path: str = "$") -> None:
+    expected_type = schema.get("type")
+    expected_types = (
+        expected_type if isinstance(expected_type, list) else [expected_type]
+    )
+    type_checks = {
+        "object": lambda item: isinstance(item, dict),
+        "array": lambda item: isinstance(item, list),
+        "string": lambda item: isinstance(item, str),
+        "boolean": lambda item: isinstance(item, bool),
+        "integer": lambda item: isinstance(item, int) and not isinstance(item, bool),
+        "null": lambda item: item is None,
+    }
+    if expected_type is not None and not any(
+        type_checks[name](value) for name in expected_types
+    ):
+        raise KanbanError(f"Agent result {path} has the wrong JSON type")
+    if "enum" in schema and value not in schema["enum"]:
+        raise KanbanError(f"Agent result {path} is not an allowed value")
+    if isinstance(value, dict):
+        required = set(schema.get("required", []))
+        missing = required - value.keys()
+        if missing:
+            raise KanbanError(f"Agent result {path} is missing {sorted(missing)}")
+        properties = schema.get("properties", {})
+        if schema.get("additionalProperties") is False:
+            extra = value.keys() - properties.keys()
+            if extra:
+                raise KanbanError(f"Agent result {path} has extra keys {sorted(extra)}")
+        for key, item in value.items():
+            if key in properties:
+                validate_schema(item, properties[key], f"{path}.{key}")
+    if isinstance(value, list) and isinstance(schema.get("items"), dict):
+        for index, item in enumerate(value):
+            validate_schema(item, schema["items"], f"{path}[{index}]")
+
+
+class ProviderAdapter:
+    name = "base"
+
+    def available(self) -> bool:
+        return shutil.which(self.executable) is not None
+
+    @property
+    def executable(self) -> str:
+        raise NotImplementedError
+
+    def build_command(
+        self, request: AgentRequest, schema_path: Path, output_path: Path
+    ) -> list[str]:
+        raise NotImplementedError
+
+    def environment(self, request: AgentRequest) -> dict[str, str]:
+        return os.environ.copy()
+
+    def read_result(
+        self, completed: subprocess.CompletedProcess[str], output_path: Path
+    ) -> AgentResult:
+        raw = (
+            output_path.read_text(encoding="utf-8")
+            if output_path.exists()
+            else completed.stdout
+        )
+        return AgentResult(extract_json_object(raw), raw)
+
+    def run(self, request: AgentRequest) -> AgentResult:
+        with tempfile.TemporaryDirectory(prefix="kanban-agent-") as temp_dir:
+            temp = Path(temp_dir)
+            schema_path = temp / "schema.json"
+            output_path = temp / "output.json"
+            schema_path.write_text(json.dumps(request.schema), encoding="utf-8")
+            command = self.build_command(request, schema_path, output_path)
+            completed = run_process(
+                command,
+                cwd=request.cwd,
+                input_text=request.prompt if command[-1] == "-" else None,
+                env=self.environment(request),
+                check=True,
+            )
+            result = self.read_result(completed, output_path)
+            validate_schema(result.data, request.schema)
+            return result
+
+
+class ClaudeAdapter(ProviderAdapter):
+    name = "claude"
+    executable = "claude"
+
+    def build_command(
+        self, request: AgentRequest, schema_path: Path, output_path: Path
+    ) -> list[str]:
+        tools = ["Read", "Glob", "Grep"]
+        if request.writable:
+            tools.extend(["Edit", "Write"])
+        agent_name = f"kanban-{request.role}"
+        agent = {
+            agent_name: {
+                "description": f"Bounded Kanban {request.role}",
+                "prompt": "Follow the supplied ticket contract exactly.",
+                "tools": tools,
+                "disallowedTools": ["Agent", "Skill", "WebSearch", "WebFetch", "Bash"],
+                "permissionMode": "dontAsk",
+                "maxTurns": 80,
+            }
+        }
+        command = [
+            self.executable,
+            "-p",
+            "--output-format",
+            "json",
+            "--json-schema",
+            json.dumps(request.schema, separators=(",", ":")),
+            "--permission-mode",
+            "dontAsk",
+            "--disable-slash-commands",
+            "--agents",
+            json.dumps(agent, separators=(",", ":")),
+            "--agent",
+            agent_name,
+            "--no-session-persistence",
+        ]
+        if request.model:
+            command.extend(["--model", request.model])
+        command.append(request.prompt)
+        return command
+
+    def environment(self, request: AgentRequest) -> dict[str, str]:
+        env = super().environment(request)
+        # Claude Code prevents accidental recursive interactive sessions. This is
+        # an intentional non-interactive child with its own bounded permissions.
+        env.pop("CLAUDECODE", None)
+        env.pop("CLAUDE_CODE_ENTRYPOINT", None)
+        return env
+
+
+class CodexAdapter(ProviderAdapter):
+    name = "codex"
+    executable = "codex"
+
+    def build_command(
+        self, request: AgentRequest, schema_path: Path, output_path: Path
+    ) -> list[str]:
+        command = [
+            self.executable,
+            "exec",
+            "--ephemeral",
+            "--ignore-user-config",
+            "--output-schema",
+            str(schema_path),
+            "--output-last-message",
+            str(output_path),
+            "--color",
+            "never",
+            "--cd",
+            str(request.cwd),
+            "--sandbox",
+            "workspace-write" if request.writable else "read-only",
+            "-c",
+            'approval_policy="never"',
+        ]
+        if request.model:
+            command.extend(["--model", request.model])
+        command.append("-")
+        return command
+
+
+class OpenCodeAdapter(ProviderAdapter):
+    name = "opencode"
+
+    def __init__(self, executable: str | None = None) -> None:
+        self._executable = executable
+
+    @property
+    def executable(self) -> str:
+        if self._executable:
+            return self._executable
+        for candidate in ("opencode2", "opencode"):
+            if shutil.which(candidate):
+                return candidate
+        return "opencode2"
+
+    def available(self) -> bool:
+        return any(shutil.which(candidate) for candidate in ("opencode2", "opencode"))
+
+    def build_command(
+        self, request: AgentRequest, schema_path: Path, output_path: Path
+    ) -> list[str]:
+        prompt = (
+            f"{request.prompt}\n\nReturn exactly one JSON object matching this schema:\n"
+            f"{json.dumps(request.schema, separators=(',', ':'))}"
+        )
+        command = [self.executable, "run"]
+        if self.executable == "opencode2":
+            command.append("--standalone")
+        else:
+            command.extend(["--dir", str(request.cwd)])
+        command.extend(["--format", "json", "--agent", f"kanban-{request.role}"])
+        if request.model:
+            command.extend(["--model", request.model])
+        command.append(prompt)
+        return command
+
+    def environment(self, request: AgentRequest) -> dict[str, str]:
+        env = super().environment(request)
+        if self.executable == "opencode2":
+            permissions = [
+                {"action": "*", "resource": "*", "effect": "deny"},
+                {"action": "read", "resource": "*", "effect": "allow"},
+                {"action": "read", "resource": "*.env", "effect": "deny"},
+                {"action": "read", "resource": "*.env.*", "effect": "deny"},
+                {"action": "read", "resource": "*.env.example", "effect": "allow"},
+                {"action": "glob", "resource": "*", "effect": "allow"},
+                {"action": "grep", "resource": "*", "effect": "allow"},
+            ]
+            if request.writable:
+                permissions.extend(
+                    {
+                        "action": "edit",
+                        "resource": path,
+                        "effect": "allow",
+                    }
+                    for path in request.allowed_paths
+                )
+            config = {
+                "agents": {
+                    f"kanban-{request.role}": {
+                        "description": f"Bounded Kanban {request.role}",
+                        "mode": "primary",
+                        "system": "Follow the supplied ticket contract exactly.",
+                        "permissions": permissions,
+                    }
+                }
+            }
+            env["OPENCODE_CONFIG_CONTENT"] = json.dumps(config, separators=(",", ":"))
+            return env
+        permission = {
+            "*": "deny",
+            "read": "allow",
+            "glob": "allow",
+            "grep": "allow",
+            "edit": "allow" if request.writable else "deny",
+            "bash": "deny",
+            "task": "deny",
+            "skill": "deny",
+            "webfetch": "deny",
+            "websearch": "deny",
+        }
+        config = {
+            "agent": {
+                f"kanban-{request.role}": {
+                    "description": f"Bounded Kanban {request.role}",
+                    "mode": "primary",
+                    "permission": permission,
+                }
+            }
+        }
+        env["OPENCODE_CONFIG_CONTENT"] = json.dumps(config, separators=(",", ":"))
+        return env
+
+
+ADAPTERS: dict[str, type[ProviderAdapter]] = {
+    "claude": ClaudeAdapter,
+    "codex": CodexAdapter,
+    "opencode": OpenCodeAdapter,
+}
+
+
+def detect_host_provider(environment: dict[str, str]) -> str | None:
+    if environment.get("CLAUDECODE") or environment.get("CLAUDE_CODE_ENTRYPOINT"):
+        return "claude"
+    if environment.get("CODEX_THREAD_ID") or environment.get("CODEX_SESSION_ID"):
+        return "codex"
+    if environment.get("OPENCODE_SESSION_ID") or environment.get("OPENCODE_PID"):
+        return "opencode"
+    return None
+
+
+def select_provider(requested: str, repo: Path) -> ProviderAdapter:
+    candidates: list[str] = []
+    strict = False
+    if requested != "auto":
+        candidates.append(requested)
+        strict = True
+    env_provider = os.environ.get("KANBAN_AGENT_PROVIDER")
+    if not candidates and env_provider:
+        candidates.append(env_provider)
+        strict = True
+    config_path = repo / ".workflow" / "kanban" / "config.yaml"
+    if not candidates and config_path.exists():
+        config = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
+        if isinstance(config, dict) and isinstance(config.get("provider"), str):
+            candidates.append(config["provider"])
+            strict = True
+    if not candidates:
+        host = detect_host_provider(os.environ)
+        if host:
+            candidates.append(host)
+        candidates.extend(name for name in ADAPTERS if name not in candidates)
+    for name in candidates:
+        adapter_type = ADAPTERS.get(name)
+        if adapter_type is None:
+            raise KanbanError(
+                f"Unknown provider {name!r}; choose {', '.join(ADAPTERS)}"
+            )
+        adapter = adapter_type()
+        if adapter.available():
+            return adapter
+        if strict:
+            raise KanbanError(f"Provider executable not found: {adapter.executable}")
+    raise KanbanError("No supported provider executable found")
+
+
+IMPLEMENTER_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "status": {"enum": ["complete", "blocked"]},
+        "summary": {"type": "string"},
+        "files_changed": {"type": "array", "items": {"type": "string"}},
+        "blocker": {"type": ["string", "null"]},
+    },
+    "required": ["status", "summary", "files_changed", "blocker"],
+    "additionalProperties": False,
+}
+
+
+VALIDATOR_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "verdict": {"enum": ["accept", "reject", "blocked"]},
+        "summary": {"type": "string"},
+        "findings": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {"type": "string"},
+                    "blocking": {"type": "boolean"},
+                    "requirement": {"type": "string"},
+                    "evidence": {"type": "string"},
+                    "path": {"type": ["string", "null"]},
+                    "required_outcome": {"type": "string"},
+                },
+                "required": [
+                    "id",
+                    "blocking",
+                    "requirement",
+                    "evidence",
+                    "path",
+                    "required_outcome",
+                ],
+                "additionalProperties": False,
+            },
+        },
+    },
+    "required": ["verdict", "summary", "findings"],
+    "additionalProperties": False,
+}
+
+
+def ticket_prompt(ticket: Ticket) -> str:
+    return f"Ticket path: {ticket.path}\n\n{ticket.raw}"
+
+
+def implementer_prompt(
+    ticket: Ticket, phase: str, findings: list[dict[str, Any]]
+) -> str:
+    phase_paths = ticket.test_paths if phase == "tests" else ticket.production_paths
+    feedback = json.dumps(findings, indent=2) if findings else "none"
+    if phase == "tests":
+        task = """
+        Modify only the declared test files. Add one focused test that fails for the
+        ticket's observable acceptance criterion or the validator finding. Do not
+        edit production code. Do not run commands; the runner executes the tests.
+        """
+    else:
+        task = """
+        Modify only the declared production files. Make the smallest change that
+        passes the already-written failing test. Do not change tests, refactor
+        adjacent code, update dependencies, rename unrelated symbols, or add
+        behavior outside the acceptance criterion. Do not run commands; the runner
+        executes all verification.
+        """
+    return textwrap.dedent(
+        f"""
+        You are the implementation worker in a script-controlled Kanban run.
+        {task}
+
+        Permitted files for this phase:
+        {json.dumps(sorted(phase_paths), indent=2)}
+
+        Validator findings to reproduce or fix:
+        {feedback}
+
+        {ticket_prompt(ticket)}
+
+        Return only the requested structured result. You cannot approve, commit,
+        move the ticket, start another ticket, or broaden its scope. If the ticket
+        cannot be completed within the permitted files, return status=blocked.
+        """
+    ).strip()
+
+
+def validator_prompt(
+    ticket: Ticket, diff: str, verification: list[dict[str, Any]], diff_hash: str
+) -> str:
+    return textwrap.dedent(
+        f"""
+        You are an independent, read-only validator. Review the actual patch against
+        the immutable ticket. You did not implement it and must not edit files.
+
+        Reject only for a blocking acceptance failure, regression, missing meaningful
+        coverage, undeclared/unrelated change, correctness/security/data-loss problem,
+        or an unverifiable requirement. Style preferences and optional improvements
+        are non-blocking and must not cause rejection. Do not invent requirements.
+
+        Diff SHA-256: {diff_hash}
+
+        Verification results:
+        {json.dumps(verification, indent=2)}
+
+        Patch:
+        ```diff
+        {diff}
+        ```
+
+        {ticket_prompt(ticket)}
+
+        Return only the requested structured result.
+        """
+    ).strip()
+
+
+def file_fingerprint(repo: Path, paths: Iterable[str]) -> dict[str, str | None]:
+    result: dict[str, str | None] = {}
+    for relative in paths:
+        path = repo / relative
+        if path.is_file():
+            result[relative] = hashlib.sha256(path.read_bytes()).hexdigest()
+        elif path.exists():
+            result[relative] = "<non-file>"
+        else:
+            result[relative] = None
+    return result
+
+
+def fingerprint_delta(
+    before: dict[str, str | None], after: dict[str, str | None]
+) -> set[str]:
+    return {path for path in before if before[path] != after[path]}
+
+
+def changed_paths(repo: Path) -> set[str]:
+    tracked = git(repo, "diff", "--name-only", "-z", "HEAD")
+    untracked = git(repo, "ls-files", "--others", "--exclude-standard", "-z")
+    return {item for item in (tracked + "\0" + untracked).split("\0") if item}
+
+
+def ticket_board_paths(ticket: Ticket) -> set[str]:
+    return {
+        f".workflow/kanban/{column}/{ticket.path.name}"
+        for column in ("backlog", "doing", "done")
+    }
+
+
+def implementation_changed_paths(repo: Path, ticket: Ticket) -> set[str]:
+    return changed_paths(repo) & ticket.allowed_paths
+
+
+def assert_ticket_immutable(repo: Path, ticket: Ticket) -> None:
+    locations = [repo / path for path in sorted(ticket_board_paths(ticket))]
+    existing = [path for path in locations if path.exists()]
+    if existing != [ticket.path]:
+        relative = [str(path.relative_to(repo)) for path in existing]
+        raise KanbanError(f"Ticket board location changed unexpectedly: {relative}")
+    if sha256_text(ticket.path.read_text(encoding="utf-8")) != ticket.digest:
+        raise KanbanError("Agent modified the immutable ticket")
+
+
+def assert_scope(repo: Path, ticket: Ticket) -> None:
+    assert_ticket_immutable(repo, ticket)
+    actual = changed_paths(repo)
+    unexpected = actual - ticket.allowed_paths - ticket_board_paths(ticket)
+    if unexpected:
+        raise KanbanError(
+            f"Scope violation: undeclared paths changed: {sorted(unexpected)}"
+        )
+    operations = {change.path: change.operation for change in ticket.allowed_changes}
+    for path in implementation_changed_paths(repo, ticket):
+        exists = (repo / path).exists()
+        tracked = bool(
+            git(repo, "ls-files", "--error-unmatch", "--", path, check=False)
+        )
+        operation = operations[path]
+        if operation == "create" and tracked:
+            raise KanbanError(
+                f"Scope violation: {path} declared create but was tracked"
+            )
+        if operation == "modify" and (not tracked or not exists):
+            raise KanbanError(
+                f"Scope violation: {path} declared modify but is not a tracked file"
+            )
+        if operation == "delete" and exists:
+            raise KanbanError(
+                f"Scope violation: {path} declared delete but still exists"
+            )
+
+
+def assert_index_clean(repo: Path) -> None:
+    staged = git(repo, "diff", "--cached", "--name-only")
+    if staged:
+        raise KanbanError(
+            "Agent modified the Git index; only kanban-loop may stage or commit: "
+            f"{staged}"
+        )
+
+
+def run_shell(repo: Path, command: str) -> dict[str, Any]:
+    completed = subprocess.run(
+        command,
+        cwd=repo,
+        shell=True,
+        executable="/bin/zsh",
+        text=True,
+        capture_output=True,
+        check=False,
+        timeout=3600,
+    )
+    return {
+        "command": command,
+        "exit": completed.returncode,
+        "stdout": completed.stdout[-12000:],
+        "stderr": completed.stderr[-12000:],
+    }
+
+
+def run_verification(repo: Path, ticket: Ticket) -> list[dict[str, Any]]:
+    results: list[dict[str, Any]] = []
+    expected_head = git(repo, "rev-parse", "HEAD")
+    for verification in ticket.verification:
+        result = run_shell(repo, verification.command)
+        result["expected_exit"] = verification.expected_exit
+        results.append(result)
+        if result["exit"] != verification.expected_exit:
+            raise KanbanError(
+                f"Verification failed: {verification.command} exited {result['exit']}, "
+                f"expected {verification.expected_exit}"
+            )
+    if git(repo, "rev-parse", "HEAD") != expected_head:
+        raise KanbanError("Verification command changed HEAD")
+    assert_index_clean(repo)
+    assert_scope(repo, ticket)
+    return results
+
+
+def run_red(repo: Path, ticket: Ticket) -> dict[str, Any]:
+    expected_head = git(repo, "rev-parse", "HEAD")
+    result = run_shell(repo, ticket.tdd_test_command)
+    if git(repo, "rev-parse", "HEAD") != expected_head:
+        raise KanbanError("TDD command changed HEAD")
+    assert_index_clean(repo)
+    assert_scope(repo, ticket)
+    if result["exit"] == 0:
+        raise KanbanError(
+            f"TDD RED gate failed: {ticket.tdd_test_command!r} passed before implementation"
+        )
+    combined = f"{result['stdout']}\n{result['stderr']}".lower()
+    if not any(
+        marker in combined
+        for marker in ("fail", "assert", "expected", "panic", "error")
+    ):
+        raise KanbanError("TDD RED gate failed without a recognisable behavior failure")
+    return result
+
+
+def diff_text(repo: Path, ticket: Ticket) -> str:
+    """Return a full patch without mutating the real Git index.
+
+    Plain `git diff HEAD` omits untracked files. A temporary index produces the
+    exact patch that would be committed while leaving the user's index alone.
+    """
+    actual = sorted(implementation_changed_paths(repo, ticket))
+    if not actual:
+        return ""
+    index_path = Path(git(repo, "rev-parse", "--git-path", "index"))
+    if not index_path.is_absolute():
+        index_path = repo / index_path
+    with tempfile.NamedTemporaryFile(prefix="kanban-index-", delete=False) as handle:
+        temporary_index = Path(handle.name)
+    try:
+        if index_path.exists():
+            shutil.copy2(index_path, temporary_index)
+        else:
+            temporary_index.unlink(missing_ok=True)
+        env = os.environ.copy()
+        env["GIT_INDEX_FILE"] = str(temporary_index)
+        run_process(["git", "add", "-A", "--", *actual], cwd=repo, env=env)
+        result = run_process(
+            [
+                "git",
+                "diff",
+                "--cached",
+                "--binary",
+                "--no-renames",
+                "HEAD",
+                "--",
+                *actual,
+            ],
+            cwd=repo,
+            env=env,
+        )
+        return canonical_patch(result.stdout)
+    finally:
+        temporary_index.unlink(missing_ok=True)
+
+
+def runtime_dir(repo: Path) -> Path:
+    path = Path(git(repo, "rev-parse", "--git-path", "kanban-loop"))
+    return path if path.is_absolute() else repo / path
+
+
+def state_dir(repo: Path, run_id: str) -> Path:
+    return runtime_dir(repo) / "runs" / run_id
+
+
+def save_state(repo: Path, run_id: str, state: dict[str, Any]) -> None:
+    directory = state_dir(repo, run_id)
+    directory.mkdir(parents=True, exist_ok=True)
+    state["updated_at"] = dt.datetime.now(dt.timezone.utc).isoformat()
+    temporary = directory / "state.json.tmp"
+    temporary.write_text(json.dumps(state, indent=2) + "\n", encoding="utf-8")
+    temporary.replace(directory / "state.json")
+
+
+def load_state(repo: Path, run_id: str) -> dict[str, Any]:
+    path = state_dir(repo, run_id) / "state.json"
+    if not path.exists():
+        raise KanbanError(f"Unknown run ID: {run_id}")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def board_paths(repo: Path) -> dict[str, Path]:
+    root = repo / ".workflow" / "kanban"
+    return {name: root / name for name in ("backlog", "doing", "done")}
+
+
+def validate_board(repo: Path) -> list[Ticket]:
+    paths = board_paths(repo)
+    for name in ("backlog", "doing", "done"):
+        if not paths[name].is_dir():
+            raise KanbanError(f"Board missing {paths[name]}")
+    tickets: list[Ticket] = []
+    errors: list[str] = []
+    identities: set[tuple[int, str]] = set()
+    for column in ("backlog", "doing", "done"):
+        for path in sorted(paths[column].glob("*.md")):
+            try:
+                ticket = parse_ticket(path)
+                identity = (ticket.id, ticket.slug)
+                if identity in identities:
+                    raise KanbanError(f"{path}: duplicate ticket identity {identity}")
+                identities.add(identity)
+                tickets.append(ticket)
+            except KanbanError as error:
+                errors.append(str(error))
+    if errors:
+        raise KanbanError(
+            "Invalid board:\n" + "\n".join(f"- {error}" for error in errors)
+        )
+    return tickets
+
+
+def eligible_tickets(repo: Path) -> list[Ticket]:
+    paths = board_paths(repo)
+    done = {parse_ticket(path).slug for path in paths["done"].glob("*.md")}
+    backlog = [parse_ticket(path) for path in paths["backlog"].glob("*.md")]
+    eligible = [ticket for ticket in backlog if set(ticket.depends_on) <= done]
+    return sorted(eligible, key=lambda ticket: (ticket.id, ticket.slug))
+
+
+def ensure_clean(repo: Path) -> None:
+    status = git(repo, "status", "--porcelain", "--untracked-files=all")
+    if status:
+        raise KanbanError("Working tree must be clean before starting kanban-loop")
+
+
+def preflight(repo: Path, branch: str | None) -> None:
+    ensure_clean(repo)
+    current = git(repo, "symbolic-ref", "--quiet", "--short", "HEAD", check=False)
+    if not current:
+        raise KanbanError("Detached HEAD is not supported")
+    if current in PROTECTED_BRANCHES:
+        if not branch:
+            raise KanbanError(
+                f"Refusing to commit on protected branch {current!r}; pass --branch NAME"
+            )
+        exists = (
+            run_process(
+                ["git", "show-ref", "--verify", "--quiet", f"refs/heads/{branch}"],
+                cwd=repo,
+                check=False,
+            ).returncode
+            == 0
+        )
+        if exists:
+            raise KanbanError(f"Branch already exists: {branch}")
+        git(repo, "checkout", "-b", branch)
+
+
+def move_ticket(ticket: Ticket, destination: Path) -> Path:
+    destination.mkdir(parents=True, exist_ok=True)
+    target = destination / ticket.path.name
+    ticket.path.replace(target)
+    return target
+
+
+def provider_model(role: str) -> str | None:
+    return os.environ.get(f"KANBAN_{role.upper()}_MODEL")
+
+
+def execute_attempt(
+    repo: Path,
+    ticket: Ticket,
+    provider: ProviderAdapter,
+    findings: list[dict[str, Any]],
+    run_path: Path,
+    attempt: int,
+) -> tuple[dict[str, Any], str, list[dict[str, Any]]]:
+    expected_head = git(repo, "rev-parse", "HEAD")
+    before = file_fingerprint(repo, ticket.allowed_paths)
+    test_result = provider.run(
+        AgentRequest(
+            role="implementer-tests",
+            prompt=implementer_prompt(ticket, "tests", findings),
+            schema=IMPLEMENTER_SCHEMA,
+            cwd=repo,
+            writable=True,
+            model=provider_model("implementer"),
+            allowed_paths=tuple(sorted(ticket.test_paths)),
+        )
+    )
+    (run_path / f"attempt-{attempt:02d}-tests.json").write_text(
+        json.dumps(test_result.data, indent=2) + "\n", encoding="utf-8"
+    )
+    if test_result.data.get("status") != "complete":
+        raise KanbanError(f"Test authoring blocked: {test_result.data.get('blocker')}")
+    if git(repo, "rev-parse", "HEAD") != expected_head:
+        raise KanbanError("Implementation worker changed HEAD during test authoring")
+    assert_index_clean(repo)
+    after_tests = file_fingerprint(repo, ticket.allowed_paths)
+    touched_in_test_phase = fingerprint_delta(before, after_tests)
+    if not touched_in_test_phase or not touched_in_test_phase <= ticket.test_paths:
+        raise KanbanError(
+            f"Test phase must change only declared tests; changed {sorted(touched_in_test_phase)}"
+        )
+    assert_scope(repo, ticket)
+    red = run_red(repo, ticket)
+    (run_path / f"attempt-{attempt:02d}-red.json").write_text(
+        json.dumps(red, indent=2) + "\n", encoding="utf-8"
+    )
+
+    before_production = file_fingerprint(repo, ticket.allowed_paths)
+    implementation = provider.run(
+        AgentRequest(
+            role="implementer-code",
+            prompt=implementer_prompt(ticket, "implementation", findings),
+            schema=IMPLEMENTER_SCHEMA,
+            cwd=repo,
+            writable=True,
+            model=provider_model("implementer"),
+            allowed_paths=tuple(sorted(ticket.production_paths)),
+        )
+    )
+    (run_path / f"attempt-{attempt:02d}-implementation.json").write_text(
+        json.dumps(implementation.data, indent=2) + "\n", encoding="utf-8"
+    )
+    if implementation.data.get("status") != "complete":
+        raise KanbanError(
+            f"Implementation blocked: {implementation.data.get('blocker')}"
+        )
+    if git(repo, "rev-parse", "HEAD") != expected_head:
+        raise KanbanError("Implementation worker changed HEAD during implementation")
+    assert_index_clean(repo)
+    after_production = file_fingerprint(repo, ticket.allowed_paths)
+    touched_in_production = fingerprint_delta(before_production, after_production)
+    if (
+        not touched_in_production
+        or not touched_in_production <= ticket.production_paths
+    ):
+        raise KanbanError(
+            "Implementation phase must change only declared production files; "
+            f"changed {sorted(touched_in_production)}"
+        )
+    assert_scope(repo, ticket)
+    verification = run_verification(repo, ticket)
+    patch = diff_text(repo, ticket)
+    patch_hash = sha256_text(patch)
+
+    validation = provider.run(
+        AgentRequest(
+            role="validator",
+            prompt=validator_prompt(ticket, patch, verification, patch_hash),
+            schema=VALIDATOR_SCHEMA,
+            cwd=repo,
+            writable=False,
+            model=provider_model("validator"),
+        )
+    )
+    if git(repo, "rev-parse", "HEAD") != expected_head:
+        raise KanbanError("Validator changed HEAD")
+    assert_index_clean(repo)
+    (run_path / f"attempt-{attempt:02d}-validation.json").write_text(
+        json.dumps(validation.data, indent=2) + "\n", encoding="utf-8"
+    )
+    if sha256_text(diff_text(repo, ticket)) != patch_hash:
+        raise KanbanError("Patch changed during read-only validation")
+    return validation.data, patch_hash, verification
+
+
+def restore_implementation(repo: Path, ticket: Ticket) -> None:
+    """Restore only ticket-owned implementation files for another TDD attempt."""
+    assert_index_clean(repo)
+    assert_scope(repo, ticket)
+    for relative in sorted(ticket.allowed_paths):
+        tracked_at_head = (
+            run_process(
+                ["git", "cat-file", "-e", f"HEAD:{relative}"],
+                cwd=repo,
+                check=False,
+            ).returncode
+            == 0
+        )
+        path = repo / relative
+        if tracked_at_head:
+            git(repo, "restore", "--source=HEAD", "--worktree", "--", relative)
+        elif path.is_file() or path.is_symlink():
+            path.unlink()
+        elif path.exists():
+            raise KanbanError(
+                f"Refusing to remove non-file implementation path: {relative}"
+            )
+    if implementation_changed_paths(repo, ticket):
+        raise KanbanError("Failed to restore implementation files for the next attempt")
+
+
+def commit_ticket(repo: Path, ticket: Ticket, expected_hash: str) -> tuple[str, Path]:
+    assert_index_clean(repo)
+    assert_scope(repo, ticket)
+    run_verification(repo, ticket)
+    accepted_patch = diff_text(repo, ticket)
+    if sha256_text(accepted_patch) != expected_hash:
+        raise KanbanError("Current patch differs from the accepted patch")
+    implementation_paths = sorted(implementation_changed_paths(repo, ticket))
+    if not implementation_paths:
+        raise KanbanError("No changes to commit")
+    done_path = move_ticket(ticket, board_paths(repo)["done"])
+    board_candidates = sorted(ticket_board_paths(ticket))
+    head_locations = [
+        path
+        for path in board_candidates
+        if run_process(
+            ["git", "cat-file", "-e", f"HEAD:{path}"], cwd=repo, check=False
+        ).returncode
+        == 0
+    ]
+    if len(head_locations) != 1:
+        raise KanbanError(
+            f"Expected exactly one committed ticket location, found {head_locations}"
+        )
+    done_relative = str(done_path.relative_to(repo))
+    board_changes = sorted({head_locations[0], done_relative})
+    commit_paths = sorted({*implementation_paths, *board_changes})
+    git(repo, "add", "-A", "-f", "--", *commit_paths)
+    staged_paths = {
+        item
+        for item in git(
+            repo,
+            "diff",
+            "--cached",
+            "--name-only",
+            "--no-renames",
+            "-z",
+            "HEAD",
+        ).split("\0")
+        if item
+    }
+    if staged_paths != set(commit_paths):
+        raise KanbanError(f"Unexpected staged paths: {sorted(staged_paths)}")
+    staged_implementation = canonical_patch(
+        git(
+            repo,
+            "diff",
+            "--cached",
+            "--binary",
+            "--no-renames",
+            "HEAD",
+            "--",
+            *implementation_paths,
+        )
+    )
+    staged_hash = sha256_text(staged_implementation)
+    if staged_hash != expected_hash:
+        difference = "".join(
+            difflib.unified_diff(
+                accepted_patch.splitlines(keepends=True),
+                staged_implementation.splitlines(keepends=True),
+                fromfile="accepted",
+                tofile="staged",
+            )
+        )
+        raise KanbanError(
+            "Staged implementation patch differs from the accepted patch: "
+            f"accepted={expected_hash} staged={staged_hash}\n{difference}"
+        )
+    if git(repo, "diff", "--name-only") or git(
+        repo, "ls-files", "--others", "--exclude-standard"
+    ):
+        raise KanbanError("Unstaged changes appeared before commit")
+    git(repo, "commit", "-m", ticket.commit_message, "-m", ticket.acceptance)
+    return git(repo, "rev-parse", "HEAD"), done_path
+
+
+def process_ticket(
+    repo: Path,
+    ticket: Ticket,
+    provider: ProviderAdapter,
+    mode: str,
+    max_attempts: int,
+    *,
+    run_id: str | None = None,
+    starting_findings: list[dict[str, Any]] | None = None,
+    starting_attempt: int = 0,
+) -> tuple[str, str]:
+    run_id = run_id or f"{ticket.slug}-{uuid.uuid4().hex[:8]}"
+    run_path = state_dir(repo, run_id)
+    run_path.mkdir(parents=True, exist_ok=True)
+    findings = list(starting_findings or [])
+    current_ticket = ticket
+    if ticket.path.parent.name == "backlog":
+        tracked_ticket = (
+            run_process(
+                [
+                    "git",
+                    "ls-files",
+                    "--error-unmatch",
+                    "--",
+                    str(ticket.path.relative_to(repo)),
+                ],
+                cwd=repo,
+                check=False,
+            ).returncode
+            == 0
+        )
+        if not tracked_ticket:
+            raise KanbanError(
+                f"Approved ticket must be committed before execution: {ticket.path.relative_to(repo)}"
+            )
+        moved = move_ticket(ticket, board_paths(repo)["doing"])
+        current_ticket = parse_ticket(moved)
+    base_commit = git(repo, "rev-parse", "HEAD")
+    for attempt in range(starting_attempt + 1, max_attempts + 1):
+        save_state(
+            repo,
+            run_id,
+            {
+                "run_id": run_id,
+                "phase": "implementing",
+                "mode": mode,
+                "provider": provider.name,
+                "ticket": str(current_ticket.path.relative_to(repo)),
+                "ticket_hash": current_ticket.digest,
+                "base_commit": base_commit,
+                "attempt": attempt,
+                "max_attempts": max_attempts,
+                "findings": findings,
+            },
+        )
+        validation, patch_hash, verification = execute_attempt(
+            repo, current_ticket, provider, findings, run_path, attempt
+        )
+        verdict = validation.get("verdict")
+        if verdict == "blocked":
+            save_state(
+                repo,
+                run_id,
+                {"run_id": run_id, "phase": "needs-replan", "validation": validation},
+            )
+            raise KanbanError(
+                f"Validator blocked ticket {current_ticket.slug}: {validation['summary']}"
+            )
+        if verdict == "reject":
+            findings = [
+                item for item in validation.get("findings", []) if item.get("blocking")
+            ]
+            if not findings:
+                raise KanbanError("Validator rejected without a blocking finding")
+            if attempt < max_attempts:
+                restore_implementation(repo, current_ticket)
+            continue
+        if verdict != "accept":
+            raise KanbanError(f"Unknown validator verdict: {verdict!r}")
+
+        effective_mode = "hitl" if current_ticket.human_required else mode
+        state = {
+            "run_id": run_id,
+            "phase": "awaiting-commit" if effective_mode == "hitl" else "committing",
+            "mode": mode,
+            "provider": provider.name,
+            "ticket": str(current_ticket.path.relative_to(repo)),
+            "ticket_hash": current_ticket.digest,
+            "base_commit": base_commit,
+            "attempt": attempt,
+            "max_attempts": max_attempts,
+            "diff_hash": patch_hash,
+            "validation": validation,
+            "verification": verification,
+        }
+        save_state(repo, run_id, state)
+        if effective_mode == "hitl":
+            print(diff_text(repo, current_ticket))
+            print(json.dumps({"verification": verification}, indent=2))
+            print(json.dumps(validation, indent=2))
+            print(f"KANBAN_AWAITING_COMMIT run_id={run_id}")
+            return run_id, "awaiting-commit"
+        commit_sha, done_path = commit_ticket(repo, current_ticket, patch_hash)
+        save_state(
+            repo,
+            run_id,
+            {
+                **state,
+                "phase": "done",
+                "commit_sha": commit_sha,
+                "ticket": str(done_path.relative_to(repo)),
+            },
+        )
+        print(f"DONE {current_ticket.slug} {commit_sha}")
+        return run_id, "done"
+    save_state(
+        repo,
+        run_id,
+        {"run_id": run_id, "phase": "circuit-breaker", "findings": findings},
+    )
+    raise KanbanError(
+        f"Circuit breaker: {current_ticket.slug} rejected {max_attempts} times"
+    )
+
+
+def command_run(args: argparse.Namespace) -> int:
+    repo = repository_root(Path.cwd())
+    if args.max_attempts < 1:
+        raise KanbanError("--max-attempts must be at least 1")
+    paths = board_paths(repo)
+    runtime = runtime_dir(repo)
+    runtime.mkdir(parents=True, exist_ok=True)
+    with (runtime / ".lock").open("w") as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError as error:
+            raise KanbanError(
+                "Another kanban-loop process holds the board lock"
+            ) from error
+        preflight(repo, args.branch)
+        validate_board(repo)
+        provider = select_provider(args.provider, repo)
+        print(
+            f"provider={provider.name} workspace={repo} "
+            f"existing_worktree={str(is_existing_worktree(repo)).lower()} mode={args.mode}"
+        )
+        while True:
+            eligible = eligible_tickets(repo)
+            if not eligible:
+                backlog = list(paths["backlog"].glob("*.md"))
+                if backlog:
+                    blocked = [
+                        f"{parse_ticket(path).slug}: {parse_ticket(path).depends_on}"
+                        for path in sorted(backlog)
+                    ]
+                    raise KanbanError(
+                        "Deadlock; unmet dependencies:\n" + "\n".join(blocked)
+                    )
+                print("kanban-loop complete")
+                return 0
+            ticket = eligible[0]
+            _, phase = process_ticket(
+                repo, ticket, provider, args.mode, args.max_attempts
+            )
+            if phase == "awaiting-commit":
+                return EXIT_AWAITING_COMMIT
+
+
+def command_validate(args: argparse.Namespace) -> int:
+    repo = repository_root(Path.cwd())
+    tickets = validate_board(repo)
+    print(f"Valid board: {len(tickets)} tickets, schema-version {SCHEMA_VERSION}")
+    return 0
+
+
+def command_plan(args: argparse.Namespace) -> int:
+    repo = repository_root(Path.cwd())
+    validate_board(repo)
+    provider = select_provider(args.provider, repo)
+    eligible = eligible_tickets(repo)
+    payload = {
+        "provider": provider.name,
+        "workspace": str(repo),
+        "existing_worktree": is_existing_worktree(repo),
+        "eligible": [
+            {
+                "id": ticket.id,
+                "slug": ticket.slug,
+                "human_required": ticket.human_required,
+                "allowed_paths": sorted(ticket.allowed_paths),
+                "acceptance": ticket.acceptance,
+            }
+            for ticket in eligible
+        ],
+    }
+    print(json.dumps(payload, indent=2))
+    return 0
+
+
+def command_decide(args: argparse.Namespace) -> int:
+    repo = repository_root(Path.cwd())
+    runtime = runtime_dir(repo)
+    runtime.mkdir(parents=True, exist_ok=True)
+    with (runtime / ".lock").open("w") as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError as error:
+            raise KanbanError(
+                "Another kanban-loop process holds the board lock"
+            ) from error
+        state = load_state(repo, args.run_id)
+        phase = state.get("phase")
+        ticket_path = repo / state["ticket"]
+        ticket = parse_ticket(ticket_path)
+        if ticket.digest != state.get("ticket_hash"):
+            raise KanbanError("Ticket changed after implementation began")
+        if args.decision == "approve":
+            if phase != "awaiting-commit":
+                raise KanbanError(f"Cannot approve run in phase {phase!r}")
+            if git(repo, "rev-parse", "HEAD") != state["base_commit"]:
+                raise KanbanError("HEAD changed after validation")
+            commit_sha, done_path = commit_ticket(repo, ticket, state["diff_hash"])
+            save_state(
+                repo,
+                args.run_id,
+                {
+                    **state,
+                    "phase": "awaiting-next",
+                    "commit_sha": commit_sha,
+                    "ticket": str(done_path.relative_to(repo)),
+                },
+            )
+            print(f"COMMITTED {ticket.slug} {commit_sha}")
+            print(f"KANBAN_AWAITING_NEXT run_id={args.run_id}")
+            return EXIT_AWAITING_NEXT
+        if args.decision == "reject":
+            if phase != "awaiting-commit":
+                raise KanbanError(f"Cannot reject run in phase {phase!r}")
+            feedback = args.feedback.strip()
+            if not feedback:
+                raise KanbanError("Reject requires --feedback")
+            restore_implementation(repo, ticket)
+            provider = select_provider(state["provider"], repo)
+            finding = {
+                "id": "USER",
+                "blocking": True,
+                "requirement": "User review",
+                "evidence": feedback,
+                "path": None,
+                "required_outcome": feedback,
+            }
+            _, next_phase = process_ticket(
+                repo,
+                ticket,
+                provider,
+                state["mode"],
+                state["max_attempts"],
+                run_id=args.run_id,
+                starting_findings=[finding],
+                starting_attempt=state["attempt"],
+            )
+            return EXIT_AWAITING_COMMIT if next_phase == "awaiting-commit" else 0
+        if args.decision == "continue":
+            if phase != "awaiting-next":
+                raise KanbanError(f"Cannot continue run in phase {phase!r}")
+            fcntl.flock(lock, fcntl.LOCK_UN)
+            return command_run(
+                argparse.Namespace(
+                    provider=state["provider"],
+                    mode=state["mode"],
+                    branch=None,
+                    max_attempts=state["max_attempts"],
+                )
+            )
+        if args.decision == "abort":
+            save_state(repo, args.run_id, {**state, "phase": "aborted"})
+            print(f"ABORTED run_id={args.run_id}; workspace left unchanged")
+            return 0
+        raise KanbanError(f"Unsupported decision: {args.decision}")
+
+
+def parser() -> argparse.ArgumentParser:
+    root = argparse.ArgumentParser(description=__doc__)
+    subcommands = root.add_subparsers(dest="command", required=True)
+
+    validate = subcommands.add_parser("validate", help="Validate every board ticket")
+    validate.set_defaults(func=command_validate)
+
+    plan = subcommands.add_parser(
+        "plan", help="Print the deterministic next-ticket plan"
+    )
+    plan.add_argument("--provider", choices=["auto", *ADAPTERS], default="auto")
+    plan.set_defaults(func=command_plan)
+
+    run = subcommands.add_parser("run", help="Drain tickets serially")
+    run.add_argument("--provider", choices=["auto", *ADAPTERS], default="auto")
+    run.add_argument("--mode", choices=["auto", "hitl"], default="hitl")
+    run.add_argument("--branch")
+    run.add_argument("--max-attempts", type=int, default=3)
+    run.set_defaults(func=command_run)
+
+    decide = subcommands.add_parser("decide", help="Resolve a persisted HITL gate")
+    decide.add_argument("run_id")
+    decide.add_argument("decision", choices=["approve", "reject", "continue", "abort"])
+    decide.add_argument("--feedback", default="")
+    decide.set_defaults(func=command_decide)
+    return root
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parser().parse_args(argv)
+    try:
+        return int(args.func(args))
+    except KanbanError as error:
+        print(f"ERROR: {error}", file=sys.stderr)
+        return EXIT_BLOCKED
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

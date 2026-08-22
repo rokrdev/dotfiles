@@ -1,63 +1,25 @@
 ---
 name: to-prd
-description: Turn the current conversation context into a PRD and write it to .workflow/docs/<slug>.md in the project root. No issue-tracker API required. The PRD is the direct input to /to-tickets. Use when user wants to create a PRD from the current context.
+description: Turn the current approved discovery context into a draft product contract at .workflow/docs/<slug>.md. Use when the user explicitly requests a PRD; never create tickets or implement code.
 user-invocable: true
 ---
 
 # To PRD
 
-Synthesize the current conversation context and codebase understanding into a PRD.
-Writes output to `.workflow/docs/<slug>.md` in the project root (creates dir if missing).
+Synthesize the conversation's discovery contract and verified codebase facts into a PRD. Preserve decisions and boundaries; do not invent architecture, requirements, modules, or tests to make the document look complete.
 
-**This PRD is the input to `/to-tickets`** — run this skill first, then run `/to-tickets`
-to break the PRD into `.workflow/kanban/backlog/` tickets.
+Read `~/.dotfiles/docs/kanban-workflow.md` when pipeline context is needed.
 
-See `docs/kanban-workflow.md` for the full pipeline context.
+## Preconditions
 
-Do NOT interview the user — synthesize what you already know. If critical information
-is missing, ask one focused question before proceeding.
+- Use the latest explicitly approved discovery summary.
+- Explore the codebase when a factual claim can be verified locally. Respect ADRs and existing public interfaces.
+- If one scope-affecting fact is missing, ask one focused question. If several are missing, return to `/grill-me`.
+- Record every non-critical inference under `Assumptions`; never disguise it as a decision.
 
----
+## Output
 
-## Process
-
-### 1. Explore the codebase
-
-If you have not already explored the codebase, do so to understand the current state.
-Use the project's domain vocabulary throughout the PRD.
-Respect any ADRs (`docs/adr/`) or existing design decisions in the area you're touching.
-
-### 2. Sketch major modules
-
-Identify the major modules you will need to build or modify to complete the implementation.
-Actively look for opportunities to extract **deep modules** — ones that encapsulate a lot
-of functionality behind a simple, testable interface that rarely changes.
-
-Check with the user:
-- Do these modules match their expectations?
-- Which modules should have tests written for them?
-
-### 3. Derive a slug
-
-Derive a short kebab-case slug from the feature name (e.g. `url-shortener-cli`,
-`cart-checkout-flow`). This becomes the filename: `.workflow/docs/<slug>.md`.
-
-### 4. Write the PRD file
-
-Create `.workflow/docs/` if it does not exist, then write `.workflow/docs/<slug>.md` using the
-template below.
-
-### 5. Report
-
-After writing the file, output:
-- File path written
-- Slug used
-- Module list (one line each)
-- Reminder: run `/to-tickets .workflow/docs/<slug>.md` to generate backlog tickets
-
----
-
-## PRD Template
+Derive a short kebab-case slug and write `.workflow/docs/<slug>.md`:
 
 ```markdown
 # PRD: <Feature Name>
@@ -66,52 +28,52 @@ After writing the file, output:
 > Date: <YYYY-MM-DD>
 > Status: draft
 
-## Problem Statement
+## Problem
 
-The problem that the user is facing, from the user's perspective.
+The user-visible problem and who experiences it.
 
-## Solution
+## Outcomes
 
-The solution to the problem, from the user's perspective.
+Numbered observable outcomes. Each describes a capability, not an implementation.
 
-## User Stories
+## Acceptance Criteria
 
-A numbered list of user stories. Cover all aspects of the feature.
+Numbered, unambiguous scenarios that can later become ticket acceptance tests.
 
-1. As a <actor>, I want <feature>, so that <benefit>
-2. ...
+## Product Decisions
 
-## Implementation Decisions
+Only decisions explicitly made during discovery.
 
-- Modules that will be built or modified
-- Interfaces of those modules
-- Technical clarifications
-- Architectural decisions
-- Schema changes
-- API contracts
-- Specific interactions
+## Technical Constraints
 
-Do NOT include specific file paths or code snippets — they go stale quickly.
+Existing interfaces, compatibility constraints, ADRs, data constraints, performance or security requirements, and repository conventions that implementation must preserve.
 
-## Testing Decisions
+## Candidate Modules
 
-- What makes a good test for this feature (test external behavior, not implementation details)
-- Which modules will be tested
-- Prior art in the codebase (similar test patterns to follow)
+Modules likely to be modified, described by responsibility. Mark unverified candidates as assumptions. Do not include exact file allowlists; `/to-tickets` establishes those from a fresh codebase inspection.
+
+## Testing Priorities
+
+Approved behaviors that need protection and existing test patterns verified in the repository.
 
 ## Out of Scope
 
-Explicit list of things that are out of scope for this PRD.
+Explicitly prohibited adjacent behavior, cleanup, migration, and refactoring.
 
-## Further Notes
+## Assumptions
 
-Any additional context, constraints, or open questions.
+Non-critical inferences that remain visible to the reviewer. Use `none` when empty.
+
+## Unresolved Decisions
+
+Scope-affecting questions. This must be `none` before `/to-tickets` may approve the PRD.
+
+## Approval
+
+- Approved by: pending
+- Approved at: pending
 ```
 
----
+The document remains `draft` until a user explicitly approves its outcomes, acceptance criteria, constraints, and out-of-scope list. Do not mark it approved yourself during initial generation.
 
-## Next Step
-
-> **PRD written.** Run `/to-tickets` next to decompose the PRD into vertical-slice tickets in `.workflow/kanban/backlog/`.
-
-Do NOT start implementation or planning. Your job ends here.
+After writing, report the path, slug, observable outcomes, assumptions, unresolved decisions, and the exact sections the user must review. Do not create tickets or implementation plans. The next explicit command is `/to-tickets .workflow/docs/<slug>.md`.

@@ -1,104 +1,64 @@
 ---
 name: to-bug-ticket
-description: 'Write a single structured bug ticket to .workflow/kanban/backlog/ after running /diagnose. Use when diagnose has completed and you have a root cause, repro, and fix approach. Triggers: "to-bug-ticket", "/to-bug-ticket", "write bug ticket", "create bug ticket".'
+description: Write one immutable schema-v2 regression ticket under .workflow/kanban/backlog after diagnosis confirms a repro, root cause, and bounded fix. Never implement the fix.
 user-invocable: true
 ---
 
-# to-bug-ticket
+# To Bug Ticket
 
-Writes one ticket to `.workflow/kanban/backlog/` using the bug ticket template. Takes input from `/diagnose` output.
+Compile confirmed `/diagnose` output into one ticket accepted by the deterministic `kanban-loop` runner. Read `~/.dotfiles/docs/kanban-workflow.md` before writing it.
 
-## Input Required
+Require a reproducible failing behavior, confirmed root cause, minimal fix boundary, exact files, targeted test command, full verification command, and explicit user approval. If any is missing, return `NEEDS_DECISION`; do not guess.
 
-Before writing the ticket, confirm you have:
-- [ ] A reproducible feedback loop (from diagnose Phase 1)
-- [ ] A confirmed root cause (from diagnose Phase 3–4)
-- [ ] A fix approach (from diagnose Phase 5)
-- [ ] A regression test plan (from diagnose Phase 5)
-
-If any are missing, tell the user to complete `/diagnose` first.
-
-## Ticket Filename
-
-Format: `.workflow/kanban/backlog/NN-<slug>.md`
-
-- `NN`: next available number in backlog (check existing files)
-- `slug`: kebab-case description of the bug (e.g. `null-pointer-on-empty-cart`)
-
-## Frontmatter
-
-```yaml
----
-id: <NN>
-slug: <kebab-case-bug-description>
-kind: bug
-language: <typescript|python|kotlin|swift>
-depends-on: []
-parallel-safe: false
-files-touched: [<list from diagnose>]
-acceptance: "<one sentence: what correct behaviour looks like after the fix>"
----
-```
-
-`kind: bug` distinguishes from feature tickets. `parallel-safe` is always `false` for bugs — bugs share causal chains, never parallelize.
-
-## Ticket Body Template
+Explore the codebase to verify every path and command. Present the complete ticket for approval before writing `.workflow/kanban/backlog/NN-slug.md`.
 
 ```markdown
+---
+schema-version: 2
+id: <NN>
+slug: <kebab-case-bug-description>
+title: <short bug-fix title>
+kind: bug
+language: <implementation stack>
+depends-on: []
+parallel-safe: false
+human-required: false
+acceptance: "<one observable sentence proving the bug is fixed>"
+allowed-changes:
+  - path: <exact regression-test file>
+    operation: <create|modify>
+  - path: <exact production file>
+    operation: modify
+failing-tests:
+  - <test/path>::<regression_test_name>
+tdd-test-command: <exact targeted command>
+verification:
+  - command: <exact targeted command>
+    expected-exit: 0
+  - command: <full suite command>
+    expected-exit: 0
+commit-message: "fix(<scope>): <exact subject>"
+---
+
 ## Repro
 
-<!-- The failing test or script from diagnose Phase 1. Must be runnable. -->
-<!-- This IS the TDD failing-test step — paste it here exactly. -->
-
-<paste repro from diagnose>
+The confirmed externally observable reproduction.
 
 ## Root Cause
 
-<!-- One paragraph from diagnose Phase 3–4. State the hypothesis that was confirmed. -->
+The evidence-backed cause, not an unverified hypothesis.
 
-<root cause from diagnose>
+## Acceptance Test
 
-## Fix
+The named regression test and assertion proving the bug is gone.
 
-<!-- Minimal change needed. Reference specific files and lines from diagnose Phase 5. -->
+## Files to Touch
 
-<fix approach from diagnose>
+Each exact path, operation, and purpose.
 
-## Unit Tests
+## Out of Scope
 
-<!-- Unit tests that target the specific function/handler/logic being fixed. -->
-<!-- These test logic in isolation — NOT the repro scenario end-to-end. -->
-<!-- SCOPE: the exact function/branch/condition identified in Root Cause only. -->
-<!-- Mirror the delta-scoping in to-tickets: test only the fixed logic path. -->
-<!-- Do NOT add tests for callers, entry points, or behavior unaffected by this fix. -->
-<!-- Write these RED first alongside the repro, then make both green with the fix. -->
-
-- `test/<file>_test.<ext>::<test_name>` — what it asserts
-
-## Regression Guard
-
-<!-- The repro test above, now expected to pass after the fix. -->
-<!-- Required section — kanban-loop will NOT mark this ticket done without it. -->
-<!-- State: which test file, which test name, what assertion proves the bug is gone. -->
-<!-- SCOPE: assert the fixed behavior delta ONLY. -->
-<!-- Do not re-verify behavior the existing test suite already covers. -->
-<!-- Those tests are unchanged and still run — do not re-assert them here. -->
-
-<regression test plan from diagnose>
+Adjacent cleanup, refactors, and unaffected behavior.
 ```
 
-## Rules
-
-- One ticket per bug. Multi-ticket only if diagnose explicitly surfaced **independent** defects with separate root causes. Requires a one-line justification in each ticket body.
-- Regression Guard is **required** and non-empty. The kanban-loop subagent will refuse to mark the ticket done if this section is empty.
-- Unit Tests section is **required** and must contain ≥1 test. Tests must cover the specific logic path that contains the bug — not just the end-to-end repro. The kanban-loop subagent must write these RED before touching `src/`.
-- Unit tests and regression guard tests are scoped to the bug's logic path only. Do not re-assert behavior unaffected by this fix — that behavior is already covered by the existing test suite.
-- Do NOT re-assert or re-verify behavior unaffected by this fix in the Unit Tests or Regression Guard sections. That behavior is already covered by the existing test suite and unchanged by this ticket.
-- Do not write the fix — write the ticket. Implementation happens in `/kanban-loop`.
-- Do not create a PRD. Bugs have no PRD.
-
----
-
-## Next Step
-
-> **Bug ticket written.** Run `/kanban-loop` next to drain the backlog — it will implement the fix using TDD and gate on the regression guard passing.
+One root cause produces one ticket. Machine-critical fields belong in frontmatter, not only in prose. Run `kanban-loop validate` after writing; repair any failure. Do not implement or invoke the loop. Tell the user the approved ticket must be reviewed and committed before `kanban-loop` can run; never create that commit without separate explicit approval.

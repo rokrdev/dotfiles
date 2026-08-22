@@ -15,12 +15,13 @@ Pre-flight checks, summary report, and push/PR options for a completed feature b
 - `.workflow/kanban/doing/` must be empty (abort if not — work in progress)
 
 **Test suite:**
-- Detect test command from `package.json`, `Cargo.toml`, `pyproject.toml`, `go.mod`, or Makefile
-- Run test suite for files-touched paths only
+- Read each schema-v2 ticket in `.workflow/kanban/done/`
+- Run every unique command declared in each ticket's `verification` list
+- If no completed ticket declares verification, detect and run the repository's full test command from `package.json`, `Cargo.toml`, `pyproject.toml`, `go.mod`, or Makefile
 - Require: all tests green (zero failures, zero errors)
 
 **Git state:**
-- `git status` shows no uncommitted changes outside files-touched scope
+- `git status --porcelain` must be empty; abort if anything is staged, modified, or untracked
 - Branch is ahead of base (`git rev-list --count origin/HEAD..HEAD > 0`)
 
 ## Summary Report
@@ -45,6 +46,10 @@ Files modified:
 
 Total: +193, -8 lines
 ```
+
+Derive the file list and line totals from Git against the base branch. Do not
+reconstruct it from ticket metadata; `allowed-changes` is a safety boundary,
+not a claim that every listed file changed.
 
 ## Landing Options
 

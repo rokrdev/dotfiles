@@ -43,6 +43,20 @@ RIGHT (vertical):
 
 ## Workflow
 
+### Kanban runner mode
+
+When the prompt identifies a script-controlled Kanban phase, the immutable ticket is the approved plan and the runner owns all process gates:
+
+- Do not ask the user to approve the interface or test plan again.
+- In a test-authoring phase, modify only the exact declared test files and add one focused failing behavior test. Do not touch production code.
+- In an implementation phase, modify only the exact declared production files and make the smallest change that passes the existing failing test. Do not touch tests.
+- Do not run Git commands, move tickets, invoke other skills, start subagents, or decide that a gate passed.
+- Do not refactor, clean up, rename, update dependencies, or improve adjacent code unless that work is explicitly part of the ticket acceptance criterion and allowlist.
+
+The runner—not this skill—executes RED, GREEN, verification, independent validation, approval, and commit transitions.
+
+When Kanban runner mode applies, stop here. The standalone workflow below does not apply and must not be mixed into the runner's phase prompt.
+
 ### 1. Planning
 
 When exploring the codebase, use the project's domain glossary so that test names and interface vocabulary match the project's language, and respect ADRs in the area you're touching.
@@ -133,12 +147,10 @@ Rules:
 
 ### 4. Refactor
 
-After all tests pass, look for [refactor candidates](refactoring.md):
+Outside Kanban runner mode, refactor only when the user requested it or the approved plan includes it. Keep any refactor inside the established behavior boundary:
 
 - [ ] Extract duplication
 - [ ] Deepen modules (move complexity behind simple interfaces)
-- [ ] Apply SOLID principles where natural
-- [ ] Consider what new code reveals about existing code
 - [ ] Run tests after each refactor step
 
 **Never refactor while RED.** Get to GREEN first.

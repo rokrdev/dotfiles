@@ -50,6 +50,7 @@ cursor-line = "warning"
 # Inline git blame (helix fork #13133). Comment out to revert to default (off).
 show = "cursor-line"
 auto-fetch = true
+delay-ms = 250
 
 [editor.statusline]
 left = [ "mode", "spinner", "file-name", "read-only-indicator", "file-modification-indicator", "version-control", "diagnostics" ]
@@ -76,6 +77,9 @@ n = { label = "Files", command = [
 ] }
 w = { label = "LSP Commands", command = ":lsp-workspace-command" }
 y = { label = "Copy Path", command = [":noop %sh{echo \"%{buffer_name}:%{cursor_line}\" | pbcopy}"] }
-m = { label = "Preview", command = [":insert-output ~/.local/bin/glowm-preview %{file_path_absolute} >/dev/tty 2>&1", ":redraw"] }
-M = { label = "Close Preview", command = [":insert-output ~/.local/bin/glowm-preview --close >/dev/tty 2>&1", ":redraw"] }
 S = { label = "Speak", command = [":pipe-to ~/.local/bin/say-selection"] }
+
+[keys.normal.space.g.m]
+label = "Markdown Preview"
+o = { label = "Open", command = [":insert-output ~/.local/bin/glowm-preview %{file_path_absolute} >/dev/tty 2>&1", ":redraw"] }
+c = { label = "Close", command = [":insert-output ~/.local/bin/glowm-preview --close >/dev/tty 2>&1", ":redraw"] }

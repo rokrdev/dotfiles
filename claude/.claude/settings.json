@@ -224,5 +224,16 @@
   "skipDangerousModePermissionPrompt": true,
   "remoteControlAtStartup": false,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "skillOverrides": {
+    "grill-with-docs": "user-invocable-only",
+    "handoff": "user-invocable-only",
+    "code-review": "user-invocable-only",
+    "diagnosing-bugs": "user-invocable-only",
+    "setup-matt-pocock-skills": "user-invocable-only",
+    "tdd": "user-invocable-only",
+    "to-spec": "user-invocable-only",
+    "to-tickets": "user-invocable-only",
+    "kanban-loop": "user-invocable-only"
+  }
 }

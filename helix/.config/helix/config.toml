@@ -66,7 +66,7 @@ X = ["extend_line_up", "extend_to_line_bounds"]
 label = "Git"
 c = "changed_file_picker"
 f = { label = "Search and Replace", command = [":write-all", ":insert-output scooter --no-stdin >/dev/tty", ":redraw", ":reload-all"] }
-g = { label = "GitUI", command = [":write-all", ":insert-output gitui >/dev/tty", ":redraw", ":reload-all"] }
+g = { label = "GitUI", command = [":write-all", ":sh gitui-herdr", ":redraw"] }
 n = { label = "Files", command = [
   ':sh rm -f /tmp/unique-file',
   ':insert-output yazi "%{buffer_name}" --chooser-file=/tmp/unique-file',

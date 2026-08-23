@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+# gitui-herdr — open gitui in a dedicated herdr pane (split right, focused).
+#
+# Designed to be bound to a Helix key, e.g.:
+#   [keys.normal.space.g]
+#   g = ':sh gitui-herdr'
+#
+# Behavior:
+#   - reuses an existing "gitui" herdr pane (state file + title scan)
+#   - creates one (splits the current pane right, ratio 0.5, focused) if missing
+#   - launches gitui in that pane and focuses it
+#
+# Uses the same split-and-run pattern as glowm-preview, but a git TUI is
+# interactive, so the new pane takes focus instead of running in the background.
+set -u
+
+STATE="$HOME/.local/state/gitui-herdr.pane"
+RATIO=0.50
+mkdir -p "$(dirname "$STATE")"
+
+die() { echo "gitui-herdr: $*" >&2; exit 1; }
+
+# Is gitui the foreground process of pane $1?
+gitui_running() {
+  herdr pane process-info --pane "$1" 2>/dev/null | grep -aq "gitui"
+}
+
+# --- resolve pane id (reuse an existing running gitui pane) ---
+PID=""
+if [ -f "$STATE" ]; then
+  CAND="$(cat "$STATE")"
+  if herdr pane get "$CAND" >/dev/null 2>&1 && gitui_running "$CAND"; then
+    PID="$CAND"
+  fi
+fi
+if [ -z "$PID" ]; then
+  PID="$(herdr pane list 2>/dev/null | python3 -c "
+import json, sys
+try:
+    d = json.load(sys.stdin)
+    for p in d['result']['panes']:
+        t = p.get('terminal_title_stripped') or ''
+        if 'gitui' in t:
+            print(p['pane_id']); break
+except Exception:
+    pass
+")"
+  if [ -n "$PID" ] && ! gitui_running "$PID"; then
+    herdr pane close "$PID" >/dev/null 2>&1
+    PID=""
+  fi
+fi
+
+# --- create if missing ---
+if [ -z "$PID" ]; then
+  OUT="$(herdr pane split --current --direction right --ratio "$RATIO" --focus 2>/dev/null)" \
+    || die "herdr pane split failed"
+  PID="$(printf '%s' "$OUT" | python3 -c "
+import json, sys
+try:
+    print(json.load(sys.stdin)['result']['pane']['pane_id'])
+except Exception:
+    pass
+")"
+  [ -n "$PID" ] || die "could not parse new pane id: $OUT"
+  herdr pane rename "$PID" gitui >/dev/null 2>&1
+  # `; exit` closes the pane when gitui quits (herdr reaps panes whose process ends)
+  herdr pane run "$PID" 'gitui; exit' >/dev/null 2>&1 || die "pane run failed on $PID"
+  sleep 0.7
+else
+  # Reuse: bring focus back onto the existing gitui pane.
+  herdr pane focus --direction right --pane "$PID" >/dev/null 2>&1 || true
+fi
+
+echo "$PID" > "$STATE"

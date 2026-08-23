@@ -20,6 +20,7 @@ build/
 
 .repowise/**
 .serena/
+.reasonix/
 
 .mcp.json
 

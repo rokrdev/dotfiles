@@ -18,7 +18,6 @@ name = "javascript"
 auto-format = true
 language-servers = ["vtsls"]
 
-
 [[language]]
 name = "markdown"
 auto-format = true

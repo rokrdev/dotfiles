@@ -1,0 +1,5 @@
+interface:
+  display_name: "To PRD"
+  short_description: "Write a reviewed product contract"
+policy:
+  allow_implicit_invocation: false

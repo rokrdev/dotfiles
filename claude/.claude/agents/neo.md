@@ -155,7 +155,7 @@ For multi-feature work, route through the kanban pipeline instead of inline plan
 
 ```
 vague request
-   → grill-me → spec
+   → grill-with-docs → spec
    → to-prd → .workflow/docs/<slug>.md
    → to-tickets → .workflow/kanban/backlog/NN-slug.md (vertical slices, frontmatter schema)
    → kanban-loop → deterministic runner performs TDD, independent validation, approval, and per-ticket commit
@@ -166,13 +166,13 @@ vague request
 **When to invoke:**
 
 - 3+ distinct features in the request → start with `to-prd` then `to-tickets`
-- Single ambiguous request → start with `grill-me`
+- Single ambiguous request → start with `grill-with-docs`
 - Architecture unclear → consult Merlin first (unchanged)
 - Single-file fix or trivial change → bypass kanban entirely; dispatch a general-purpose subagent directly
 
 **Skills used:**
 
-- `grill-me` — interview to clarify requirements
+- `grill-with-docs` — interview to clarify requirements while maintaining domain docs
 - `to-prd` — write structured PRD to `.workflow/docs/<slug>.md`
 - `to-tickets` — decompose PRD into vertical-slice tickets in `.workflow/kanban/backlog/`
 - `tdd` — TDD inside each ticket subagent

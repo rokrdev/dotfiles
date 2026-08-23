@@ -1,0 +1,5 @@
+interface:
+  display_name: "To Bug Ticket"
+  short_description: "Create a validated regression ticket"
+policy:
+  allow_implicit_invocation: false

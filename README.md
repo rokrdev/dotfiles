@@ -14,7 +14,7 @@ macOS dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 ### Bootstrap (new machine)
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/rokr-dev/dotfiles/main/install.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/rokrdev/dotfiles/main/install.sh)"
 ```
 
 This installs Homebrew, clones the repo, runs `brew bundle`, stows all packages, and sets up language servers and tools automatically.
@@ -22,7 +22,7 @@ This installs Homebrew, clones the repo, runs `brew bundle`, stows all packages,
 ### Manual install
 
 ```bash
-git clone git@github.com:rokr-dev/dotfiles.git ~/.dotfiles
+git clone git@github.com:rokrdev/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 
 # Preview changes before applying (dry run)
@@ -31,6 +31,7 @@ stow -n fish
 # Apply a package
 stow fish
 stow helix
+stow agents
 stow claude
 ```
 
@@ -40,11 +41,15 @@ Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by d
 
 | Package | Manages |
 |---------|---------|
-| `agents` | Global agent instructions — `~/AGENTS.md` (Codex, Gemini CLI, Cursor, etc.) |
+| `aerospace` | AeroSpace window manager — `~/.config/aerospace/` |
+| `agents` | Global instructions and canonical skills — `~/AGENTS.md`, `~/.agents/skills/` |
 | `asdf` | asdf version manager — `~/.tool-versions` |
 | `bat` | bat (cat replacement) config |
+| `bin` | User scripts — `~/.local/bin/` |
+| `borders` | JankyBorders — `~/.config/borders/` |
 | `btop` | btop system monitor — `~/.config/btop/` |
-| `claude` | Claude Code — `~/.claude/` (settings, hooks, skills) |
+| `claude` | Claude Code — `~/.claude/` (settings, hooks, agents, and skill compatibility links) |
+| `dprint` | dprint formatter — `~/.config/dprint/` |
 | `fish` | Fish shell — `~/.config/fish/` (config, functions, completions, conf.d) |
 | `ghostty` | Ghostty terminal config |
 | `git` | Git config — `~/.gitconfig` and related |
@@ -58,6 +63,7 @@ Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by d
 | `lazygit` | lazygit config |
 | `marksman` | Marksman (markdown LSP) — `~/.config/marksman/` |
 | `moxide` | Moxide config — `~/.config/moxide/` |
+| `sketchybar` | SketchyBar menu bar — `~/.config/sketchybar/` |
 | `yazi` | yazi file manager config |
 | `zed` | Zed editor — `~/.config/zed/` |
 
@@ -66,6 +72,26 @@ Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by d
 Each package mirrors the exact target path relative to `$HOME`. For example, a file at `~/.config/fish/config.fish` lives in the repo at `fish/.config/fish/config.fish`.
 
 To add a new tool: create a top-level directory with the correct mirrored path, then `stow <package>`.
+
+## Agent skills
+
+Skills live once under `agents/.agents/skills/`, which Stow exposes as `~/.agents/skills/` for compatible harnesses. Claude Code reads `~/.claude/skills/`, so the `claude` package contains one Git symlink per skill pointing back to the canonical copy. Edit only the canonical files.
+
+Stow both packages after changing the skill set:
+
+```bash
+stow -R --no-folding agents claude
+```
+
+The deterministic local workflow is:
+
+1. `grill-me` or `grill-with-docs` — resolve the product decisions.
+2. `to-prd` — write an explicitly reviewed product contract.
+3. `to-tickets` — create validated schema-v2 tickets under `.workflow/kanban/backlog/`.
+4. `kanban-loop` — run ticket implementation, TDD gates, independent validation, approval, and per-ticket commits.
+5. `ship-it` — optionally push the completed feature branch and open a pull request.
+
+`tdd`, `code-review`, `diagnosing-bugs`, `to-bug-ticket`, and `handoff` remain independently invocable. The issue-tracker-oriented `setup-matt-pocock-skills`, `to-spec`, `grilling`, and domain-modeling skills are also available when a project uses that workflow.
 
 **Never edit files under `~/.config/` or `~/.hammerspoon/` directly** — those are symlinks. Always edit source files in `~/.dotfiles/<package>/`.
 

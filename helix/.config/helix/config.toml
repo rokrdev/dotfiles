@@ -75,6 +75,8 @@ n = { label = "Files", command = [
   ':open %sh{cat /tmp/unique-file}',
   ':redraw',
 ] }
+r = { label = "Reload File", command = [":reload"] }
+R = { label = "Reload Config", command = [":config-reload"] }
 w = { label = "LSP Commands", command = ":lsp-workspace-command" }
 y = { label = "Copy Path", command = [":noop %sh{echo \"%{buffer_name}:%{cursor_line}\" | pbcopy}"] }
 S = { label = "Speak", command = [":pipe-to ~/.local/bin/say-selection"] }

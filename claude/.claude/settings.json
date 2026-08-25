@@ -71,6 +71,18 @@
     "defaultMode": "auto"
   },
   "hooks": {
+    "WorktreeCreate": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/worktree-create.sh\"",
+            "timeout": 60,
+            "statusMessage": "Creating descriptively named worktree..."
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Bash",

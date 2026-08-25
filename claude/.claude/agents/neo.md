@@ -94,7 +94,8 @@ Pass `isolation: "worktree"` based on scope — don't use it for small, bounded 
 ### Worktree Mechanics
 
 - Worktrees are created at `<repo>/.claude/worktrees/<name>`, branch named `worktree-<name>`
-- Worktree base and symlink behavior come from current Claude settings; do not assume unconfigured hooks exist
+- The [WorktreeCreate hook](../hooks/worktree-create.sh) derives `<name>` automatically from the dispatching Agent tool call's `description` field (slugified), not from the harness's opaque agent ID. Always pass a clear, specific `description` when dispatching with `isolation: "worktree"`: it doubles as the worktree directory and branch name. `"Fix bug"` produces a useless slug, while `"Fix worktree naming convention"` produces `.claude/worktrees/fix-worktree-naming-convention` on branch `worktree-fix-worktree-naming-convention`.
+- Worktree symlink behavior comes from current Claude settings
 - Never create a second worktree inside a script-owned or Claude-managed Kanban checkout
 
 ### Advanced Patterns

@@ -9,6 +9,17 @@ These are common instructions for all agents across all scenarios.
 5. I'm always open to ideas on better ways to do things. Please don't hesitate to suggest a better way, or one that has long lasting impact over a tactical change. (as a few examples)
 6. Do not add your agent name as a commit co-author unless the user explicitly requests it. The user-invoked `kanban-loop` skill is an explicit request and supplies the trailer rules.
 
+## Codex subagent routing
+
+When Codex subagents are available, use the primary agent for requirements, planning, scope decisions, review, and final verification.
+
+For change, build, or fix tasks:
+
+- Delegate bounded implementation, file editing, command-heavy investigation, and test execution to the execution-focused worker subagent.
+- The primary agent must review the resulting diff and validation evidence before reporting completion.
+- The primary agent may run small read-only commands needed for planning or review when delegation would add unnecessary overhead.
+- Avoid parallel write-heavy delegation when agents could edit the same files. Keep file ownership explicit when multiple workers are necessary.
+
 ## RTK - Rust Token Killer
 
 **Usage**: Token-optimized CLI proxy (60-90% savings on dev operations)

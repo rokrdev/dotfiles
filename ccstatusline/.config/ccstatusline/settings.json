@@ -5,7 +5,7 @@
       {
         "id": "1",
         "type": "model",
-        "color": "brightCyan"
+        "color": "hex:cba6f7"
       },
       {
         "id": "2",
@@ -14,7 +14,7 @@
       {
         "id": "a1c0d5cb-958b-499f-a7f9-97e29bd93ea5",
         "type": "context-percentage",
-        "color": "brightRed"
+        "color": "hex:f38ba8"
       },
       {
         "id": "9def2785-7ac8-43db-92f3-3115c43dba5b",
@@ -23,7 +23,7 @@
       {
         "id": "3",
         "type": "context-length",
-        "color": "brightGreen"
+        "color": "hex:a6e3a1"
       },
       {
         "id": "4",
@@ -31,13 +31,15 @@
       },
       {
         "id": "4e0d6d19-6386-4813-958a-7cf4481d9e6d",
-        "type": "compaction-counter"
+        "type": "compaction-counter",
+        "color": "hex:f9e2af"
       }
     ],
     [
       {
         "id": "f7696335-7232-4c6a-8389-21298892e0c6",
-        "type": "session-clock"
+        "type": "session-clock",
+        "color": "hex:94e2d5"
       },
       {
         "id": "1406724b-1138-442c-860d-f58e421c2308",
@@ -45,7 +47,8 @@
       },
       {
         "id": "2e6099bb-84e6-4779-8120-b8f1c2eab33b",
-        "type": "session-cost"
+        "type": "session-cost",
+        "color": "hex:a6e3a1"
       },
       {
         "id": "92c55d18-d719-4571-905f-fafb9e9302d4",
@@ -54,6 +57,7 @@
       {
         "id": "2d8c7943-caaf-4eab-8d5a-644aa4bdb10d",
         "type": "reset-timer",
+        "color": "hex:74c7ec",
         "metadata": {
           "display": "time"
         }
@@ -63,7 +67,7 @@
       {
         "id": "1c298dc9-a5d9-4ca3-99cf-107d3e0e2b20",
         "type": "git-branch",
-        "color": "yellow"
+        "color": "hex:89b4fa"
       },
       {
         "id": "3814ca4f-77d2-4392-8674-1e59591f8724",
@@ -72,7 +76,16 @@
       {
         "id": "a0e68f4e-21ee-4ea3-9b6f-a9d4b5de7032",
         "type": "git-worktree",
-        "color": "brightMagenta"
+        "color": "hex:f5c2e7"
+      },
+      {
+        "id": "01a03729-e657-7591-911e-2070def32af4",
+        "type": "separator"
+      },
+      {
+        "id": "01a0372a-1604-7152-abfa-73708487f0a7",
+        "type": "git-ahead-behind",
+        "color": "hex:cba6f7"
       }
     ]
   ],
@@ -83,7 +96,7 @@
   "globalBold": false,
   "minimalistMode": false,
   "powerline": {
-    "enabled": true,
+    "enabled": false,
     "separators": [
       ""
     ],

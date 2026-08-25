@@ -263,6 +263,7 @@ function fish_helix_key_bindings --description 'helix-like key bindings for fish
     bind -s --preset -M default \x7f backward-char
     bind -s --preset -M insert shift-delete backward-delete-char # shifted delete
     bind -s --preset -M default shift-delete backward-delete-char # shifted delete
+    bind -s --preset -M insert ctrl-f forward-char
 
     #    bind -s --preset '~' togglecase-char forward-single-char
     #    bind -s --preset gu downcase-word

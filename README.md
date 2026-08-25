@@ -33,6 +33,7 @@ stow fish
 stow helix
 stow agents
 stow claude
+stow ccstatusline
 ```
 
 Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by default when run from the repo root — no `--target` flag needed.
@@ -48,6 +49,7 @@ Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by d
 | `bin` | User scripts — `~/.local/bin/` |
 | `borders` | JankyBorders — `~/.config/borders/` |
 | `btop` | btop system monitor — `~/.config/btop/` |
+| `ccstatusline` | ccstatusline — `~/.config/ccstatusline/` |
 | `claude` | Claude Code — `~/.claude/` (settings, hooks, agents, and skill compatibility links) |
 | `dprint` | dprint formatter — `~/.config/dprint/` |
 | `fish` | Fish shell — `~/.config/fish/` (config, functions, completions, conf.d) |

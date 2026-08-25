@@ -14,6 +14,7 @@ Remote: `git@github.com:rokrdev/dotfiles.git`
 | `asdf` | asdf version manager — `~/.tool-versions` |
 | `bat` | bat (cat replacement) config |
 | `btop` | btop system monitor — `~/.config/btop/` |
+| `ccstatusline` | ccstatusline — `~/.config/ccstatusline/` |
 | `claude` | Claude Code — `~/.claude/` (settings, hooks, MCP, agents, and skill links) |
 | `fish` | Fish shell — `~/.config/fish/` (config, functions, completions, conf.d) |
 | `ghostty` | Ghostty terminal config |

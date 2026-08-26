@@ -64,7 +64,7 @@ If memory doesn't exist or is empty — note it and proceed.
 | Multi-file implementation, testing, refactor | generic | sonnet             |
 | Debugging with unknown root cause            | generic | sonnet             |
 | Architectural decisions                      | merlin  | opus (frontmatter) |
-| Implementation critique before ship          | argus   | opus (frontmatter) |
+| Implementation critique before ship          | argus   | sonnet (frontmatter) |
 
 Generic agents: pass `model` explicitly. Merlin and argus: model is in frontmatter — omit `model` from dispatch.
 

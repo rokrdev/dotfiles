@@ -57,7 +57,8 @@ After migration, the project will have:
 ```
 
 The legacy tickets remain available for history and auditing, but only the new
-board is executable.
+board is executable. `.workflow/` is local-only tracking: do not stage or
+commit either the archive or the active board.
 
 ## 1. Publish the Dotfiles Branch
 
@@ -126,8 +127,8 @@ Before migrating the project:
 1. Stop the existing Claude session.
 2. Inspect `git status` and the existing board.
 3. Ensure no worker or legacy Kanban loop is still running.
-4. Ensure the board and all completed implementation are committed or otherwise
-   safely backed up.
+4. Ensure completed implementation is committed or otherwise safely backed up,
+   and copy the local board somewhere safe if it is not already backed up.
 5. Resolve anything in `doing/` before archiving the board.
 
 Use:
@@ -152,7 +153,9 @@ Choose the applicable case:
 - If it is unclear whether the acceptance criterion is complete, require Claude
   to compare it with the current code and tests and surface a decision.
 
-The new runner requires a clean checkout before it starts.
+The new runner requires a clean checkout outside `.workflow/` before it starts.
+Its Git index must be entirely clean; untracked or unstaged local board files
+are intentionally ignored.
 
 ## 4. Archive the Legacy Board Intact
 
@@ -163,17 +166,18 @@ dedicated feature branch:
 git switch -c chore/kanban-v2-migration
 ```
 
-Archive a legacy `.workflow/kanban/` board with a recoverable Git move:
+Archive a legacy `.workflow/kanban/` board with an ordinary, recoverable local
+filesystem move:
 
 ```bash
-git mv .workflow/kanban .workflow/kanban-legacy-YYYY-MM-DD
+mv .workflow/kanban .workflow/kanban-legacy-YYYY-MM-DD
 ```
 
 For a board still using the older `.kanban/` location:
 
 ```bash
 mkdir -p .workflow
-git mv .kanban .workflow/kanban-legacy-YYYY-MM-DD
+mv .kanban .workflow/kanban-legacy-YYYY-MM-DD
 ```
 
 Replace `YYYY-MM-DD` with the migration date. Do not delete the old board and
@@ -331,11 +335,11 @@ Expected output resembles:
 Valid board: <count> tickets, schema-version 2
 ```
 
-Also review the Git changes:
+Also review implementation changes separately from the local board:
 
 ```bash
-git status --short
-git diff -- .workflow
+git status --short -- . ':(exclude).workflow'
+find .workflow -maxdepth 3 -type f -print | sort
 ```
 
 Confirm that:
@@ -348,23 +352,12 @@ Confirm that:
   authorization boundary.
 - Validation passes without warnings or errors.
 
-## 8. Commit the Planning Migration
+## 8. Keep the Planning Migration Local
 
-The runner will refuse to start while the checkout is dirty. Review and commit
-the migration before implementation. The planning commit should include:
-
-- The intact archived legacy board.
-- The approved PRD.
-- The new schema-v2 board.
-
-For example, after reviewing the diff:
-
-```bash
-git add .workflow
-git commit -m "chore(workflow): migrate kanban board to schema v2"
-```
-
-Do not include unrelated source changes in this planning commit.
+The runner ignores unstaged and untracked `.workflow/` files, but refuses any
+staged index content. Review the migration locally and do not run
+`git add .workflow` or commit the board. Do not include unrelated source changes
+in a later implementation commit.
 
 ## 9. Preview the New Execution Plan
 
@@ -419,7 +412,7 @@ For each ticket, the runner:
 8. Hashes the complete patch.
 9. Launches a fresh read-only validator.
 10. Pauses for approval when running in HITL mode.
-11. Commits the accepted patch and deterministic doing-to-done move.
+11. Commits only the accepted implementation; the doing-to-done move remains local.
 
 When Claude reports `KANBAN_AWAITING_COMMIT`, review the exact diff,
 verification results, and validator report. Approve, reject with a concise
@@ -447,7 +440,8 @@ ambiguous scope, or risky cross-cutting changes.
 
 - Do not ask Claude to manually pick or move active board tickets.
 - Do not ask Claude to reproduce the loop with inline TDD or ad hoc subagents.
-- Do not manually stage or commit an in-progress runner patch.
+- Do not manually stage or commit an in-progress runner patch, including any
+  `.workflow` file.
 - Do not edit a ticket after it enters `doing/`.
 - Do not create runtime state under `.workflow`; the runner stores it under
   `.git/kanban-loop/runs/`.
@@ -485,8 +479,10 @@ Normally, the approved `/to-tickets` flow creates these directories.
 
 ### `Working tree must be clean before starting kanban-loop`
 
-Review `git status`. Commit the approved PRD and tickets, or separately preserve
-unrelated work. Never start the runner on top of an unexplained patch.
+Review `git status --short -- . ':(exclude).workflow'` and ensure
+`git diff --cached --name-only` is empty. Preserve unrelated work outside the
+local board. Never start the runner on top of an unexplained implementation
+patch.
 
 ### `Deadlock; unmet dependencies`
 
@@ -530,4 +526,3 @@ can use automatic provider discovery.
 - `agents/.agents/skills/kanban-loop/SKILL.md` defines the Claude adapter and
   HITL commands.
 - `bin/.local/bin/kanban-loop` is the provider-neutral executable.
-

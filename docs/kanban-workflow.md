@@ -22,7 +22,7 @@ No skill or worker agent may reproduce the runner's state machine.
 
 ## Board
 
-The board lives at the repository root:
+The board lives locally at the repository root:
 
 ```text
 .workflow/kanban/
@@ -31,8 +31,10 @@ The board lives at the repository root:
 └── done/
 ```
 
-Ticket location is the coarse state. Ephemeral attempt data lives under
-`.git/kanban-loop/runs/<run-id>/`; it never pollutes a patch or commit.
+`.workflow/` is local-only tracking and must never be staged or committed.
+Ticket location is the coarse state. Ephemeral attempt data, raw worker output,
+and failure records live under `.git/kanban-loop/runs/<run-id>/`; none of this
+pollutes a patch or commit.
 
 ## Ticket Contract
 
@@ -68,7 +70,10 @@ commit-message: "feat(cli): add JSON output"
 
 `allowed-changes` contains exact repository-relative files. Directories, globs, `.workflow` paths, and implicit files are invalid. Every test named by `failing-tests` must belong to `allowed-changes`.
 
-The ticket stays unchanged after entering `doing/`. Base commit, attempts, test output, validation findings, diff hashes, and final commit SHA belong under `.git/kanban-loop/runs/`.
+The ticket stays unchanged after entering `doing/`. The ticket itself and its
+backlog → doing → done transition stay local. Base commit, attempts, raw agent
+output, test output, validation findings, failure logs, diff hashes, and final
+commit SHA belong under `.git/kanban-loop/runs/`.
 
 ## Eligibility
 
@@ -76,7 +81,7 @@ A backlog ticket is eligible when every slug in `depends-on` exists in `done/`. 
 
 ## Execution
 
-The runner uses the current checkout. It detects and reuses a Claude- or Codex-created worktree; it never requests another worktree. The checkout must be clean, including the approved PRD and tickets, and on a non-protected branch. Passing `--branch NAME` creates that exact branch when starting on `main`, `master`, or `develop`.
+The runner uses the current checkout. It detects and reuses a Claude- or Codex-created worktree; it never requests another worktree. The checkout must be clean outside `.workflow/`, with an entirely clean Git index, and on a non-protected branch. Passing `--branch NAME` creates that exact branch when starting on `main`, `master`, or `develop`.
 
 For each ticket:
 
@@ -90,7 +95,7 @@ For each ticket:
 8. Hash the complete patch, including new files.
 9. Launch a fresh read-only validator.
 10. On rejection, restore only the ticket's allowed implementation files to HEAD, then feed blocking findings into another RED→GREEN attempt.
-11. On acceptance, commit automatically or pause at HITL. The commit contains the accepted implementation patch plus the deterministic backlog→done ticket move.
+11. On acceptance, commit automatically or pause at HITL. The commit contains only the accepted implementation patch; the deterministic doing→done ticket move happens locally after the commit.
 
 Three rejected attempts trip the circuit breaker.
 
@@ -129,7 +134,7 @@ Adapters currently support:
 - `opencode2 run --standalone` (preferred when installed)
 - `opencode run` (v1 fallback)
 
-Provider adapters own command construction and output parsing only. They never own board state, tests, validation policy, staging, or commits.
+Provider adapters own command construction and output parsing only. They never own board state, tests, validation policy, staging, or commits. JSON results are strictly schema-validated. If a provider emits prose instead, the runner preserves the raw output and accepts it only when it contains an unambiguous status/verdict label or decision phrase (for example, `Implementation complete` or `I accept this patch`), which it normalizes and validates against the same schema. Conflicting decisions fail closed.
 
 The executable requires `uv` and at least one provider CLI on `PATH`. A Claude
 skill should pass `--provider claude`; equivalent Codex or OpenCode wrappers can

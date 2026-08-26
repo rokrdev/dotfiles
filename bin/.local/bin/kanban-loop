@@ -22,6 +22,7 @@ import subprocess
 import sys
 import tempfile
 import textwrap
+import traceback
 import uuid
 from collections.abc import Iterable
 from pathlib import Path
@@ -42,6 +43,23 @@ EXIT_BLOCKED = 22
 
 class KanbanError(RuntimeError):
     """A deterministic workflow failure that requires no traceback."""
+
+
+class AgentResultError(KanbanError):
+    """A worker-result failure that retains the unparsed provider output."""
+
+    def __init__(self, message: str, raw_output: str) -> None:
+        super().__init__(message)
+        self.raw_output = raw_output
+
+
+class ProcessError(KanbanError):
+    """A failed subprocess whose complete output must be retained."""
+
+    def __init__(self, message: str, stdout: str, stderr: str) -> None:
+        super().__init__(message)
+        self.stdout = stdout
+        self.stderr = stderr
 
 
 @dataclasses.dataclass(frozen=True)
@@ -139,8 +157,10 @@ def run_process(
     if check and completed.returncode != 0:
         command = shlex.join(args)
         detail = completed.stderr.strip() or completed.stdout.strip()
-        raise KanbanError(
-            f"Command failed ({completed.returncode}): {command}\n{detail}"
+        raise ProcessError(
+            f"Command failed ({completed.returncode}): {command}\n{detail}",
+            completed.stdout,
+            completed.stderr,
         )
     return completed
 
@@ -302,50 +322,235 @@ def parse_ticket(path: Path) -> Ticket:
     )
 
 
-def recursively_find(value: Any, key: str) -> Any | None:
+def json_values(raw: str) -> list[Any]:
+    """Decode JSON documents from complete, JSONL, fenced, and mixed output."""
+    values: list[Any] = []
+
+    def decode(value: str) -> None:
+        try:
+            values.append(json.loads(value))
+        except json.JSONDecodeError:
+            pass
+
+    decode(raw)
+    for line in raw.splitlines():
+        decode(line)
+    for fenced in re.findall(r"```(?:json)?\s*\n?(.*?)```", raw, re.I | re.S):
+        decode(fenced.strip())
+    decoder = json.JSONDecoder()
+    for index, character in enumerate(raw):
+        if character not in "[{":
+            continue
+        try:
+            value, _ = decoder.raw_decode(raw[index:])
+        except json.JSONDecodeError:
+            continue
+        values.append(value)
+    return values
+
+
+def json_mappings(value: Any) -> Iterable[dict[str, Any]]:
+    """Yield mappings in provider envelopes, including JSON encoded as strings."""
     if isinstance(value, dict):
-        if key in value:
-            return value[key]
-        for nested in value.values():
-            found = recursively_find(nested, key)
-            if found is not None:
-                return found
-    if isinstance(value, list):
-        for nested in value:
-            found = recursively_find(nested, key)
-            if found is not None:
-                return found
+        yield value
+        nested_values = value.values()
+    elif isinstance(value, list):
+        nested_values = value
+    else:
+        return
+    for nested in nested_values:
+        if isinstance(nested, str):
+            for decoded in json_values(nested):
+                yield from json_mappings(decoded)
+        else:
+            yield from json_mappings(nested)
+
+
+def provider_error(raw: str, values: Iterable[Any]) -> str | None:
+    """Recognize provider failures before interpreting prose as a decision."""
+    for value in values:
+        for mapping in json_mappings(value):
+            kind = str(
+                mapping.get("type", mapping.get("event", mapping.get("status", "")))
+            ).lower()
+            error = mapping.get("error")
+            if kind in {"error", "failed", "failure"} or error is not None:
+                if isinstance(error, dict):
+                    detail = error.get("message") or error.get("detail") or error
+                else:
+                    detail = error or mapping.get("message") or mapping
+                return str(detail)
+    markdown_error = re.search(
+        r"(?im)^\s*(?:#{1,6}\s*)?(?:\*\*)?error(?:\*\*)?\s*[:!-]+\s*(.+)$",
+        raw,
+    )
+    if markdown_error:
+        return markdown_error.group(1).strip()
+    markdown_heading = re.search(r"(?im)^\s*#+\s*error\s*$\n+\s*(.+)$", raw)
+    if markdown_heading:
+        return markdown_heading.group(1).strip()
     return None
 
 
+def result_candidate(value: dict[str, Any], schema: dict[str, Any]) -> bool:
+    return bool(value.keys() & set(schema.get("properties", {})))
+
+
 def extract_json_object(raw: str) -> dict[str, Any]:
-    candidates: list[Any] = []
-    try:
-        candidates.append(json.loads(raw))
-    except json.JSONDecodeError:
-        pass
-    for line in raw.splitlines():
-        try:
-            candidates.append(json.loads(line))
-        except json.JSONDecodeError:
-            continue
-    for candidate in reversed(candidates):
-        structured = recursively_find(candidate, "structured_output")
-        if isinstance(structured, dict):
-            return structured
-        if isinstance(candidate, dict) and (
-            "status" in candidate or "verdict" in candidate
-        ):
-            return candidate
-        result = recursively_find(candidate, "result")
-        if isinstance(result, str):
-            try:
-                parsed = json.loads(result)
-            except json.JSONDecodeError:
+    """Compatibility helper: return the last status/verdict-bearing mapping."""
+    results = [
+        mapping
+        for value in json_values(raw)
+        for mapping in json_mappings(value)
+        if "status" in mapping or "verdict" in mapping
+    ]
+    if not results:
+        raise KanbanError("Agent did not return a parseable structured result")
+    return results[-1]
+
+
+def fallback_agent_result(raw: str, schema: dict[str, Any]) -> dict[str, Any]:
+    """Convert an unstructured worker report into the smallest safe result.
+
+    Provider structured-output modes are preferred, but workers occasionally
+    return a prose report. Only an explicit ``status`` or ``verdict`` is
+    accepted from prose; the resulting normalized mapping still passes the
+    same strict schema validation as JSON output.
+    """
+    summary = raw.strip() or "Agent returned no structured report."
+    decision_text = re.sub(r"[*_`]", "", summary)
+    if "status" in schema.get("properties", {}):
+        decisions = {
+            item.lower()
+            for item in re.findall(
+                r"\bstatus\s*[:= -]+\s*(complete|blocked)\b",
+                decision_text,
+                re.I,
+            )
+        }
+        decisions.update(
+            item.lower()
+            for item in re.findall(
+                r"(?im)^\s*#{1,6}\s*status\s*$\s*\n\s*(complete|blocked)\b",
+                decision_text,
+            )
+        )
+        decisions.update(
+            item.lower()
+            for item in re.findall(
+                r"(?im)^\s*\|\s*status\s*\|\s*(complete|blocked)\s*\|?\s*$",
+                decision_text,
+            )
+        )
+        if re.search(r"\bimplementation\s+complete\b", decision_text, re.I):
+            decisions.add("complete")
+        if re.search(r"\bI\s+am\s+blocked\b", decision_text, re.I):
+            decisions.add("blocked")
+        if len(decisions) != 1:
+            raise KanbanError("Agent did not return an unambiguous status")
+        status = decisions.pop().lower()
+        result = {
+            "status": status,
+            "summary": summary,
+            "files_changed": [],
+            "blocker": summary if status == "blocked" else None,
+        }
+        validate_schema(result, schema)
+        return result
+
+    negated_acceptance = bool(
+        re.search(
+            r"\b(?:cannot|can't|can not|do not|don't|not|unable to)\s+(?:be\s+)?(?:accept(?:ed)?|approv(?:e|ed))\b",
+            decision_text,
+            re.I,
+        )
+    )
+    decisions = {
+        item.lower()
+        for item in re.findall(
+            r"\bverdict\s*[:= -]+\s*(accept|reject|blocked)\b",
+            decision_text,
+            re.I,
+        )
+    }
+    decisions.update(
+        item.lower()
+        for item in re.findall(
+            r"(?im)^\s*#{1,6}\s*verdict\s*$\s*\n\s*(accept|reject|blocked)\b",
+            decision_text,
+        )
+    )
+    decisions.update(
+        item.lower()
+        for item in re.findall(
+            r"(?im)^\s*\|\s*verdict\s*\|\s*(accept|reject|blocked)\s*\|?\s*$",
+            decision_text,
+        )
+    )
+    if re.search(
+        r"\bI\s+(?:fully\s+)?(?:accept|approve)(?:\s+(?:this|the)\s+(?:patch|change|implementation))?\b",
+        decision_text,
+        re.I,
+    ) or re.search(r"\b(?:approved|approval\s+granted)\b", decision_text, re.I):
+        decisions.add("accept")
+    if re.search(
+        r"\b(?:I\s+)?reject(?:\s+(?:this|the)\s+(?:patch|change|implementation))\b",
+        decision_text,
+        re.I,
+    ):
+        decisions.add("reject")
+    if re.search(r"\bI\s+am\s+blocked\b", decision_text, re.I):
+        decisions.add("blocked")
+    # A negated acceptance or approval is not authorization. It is compatible
+    # with an explicit reject or blocked verdict, but contradicts acceptance.
+    if negated_acceptance and "accept" in decisions:
+        raise KanbanError("Validator did not return an unambiguous verdict")
+    if len(decisions) != 1:
+        raise KanbanError("Agent did not return an unambiguous verdict")
+    verdict = decisions.pop().lower()
+    findings: list[dict[str, Any]] = []
+    if verdict == "reject":
+        findings.append(
+            {
+                "id": "UNSTRUCTURED_VALIDATOR_REPORT",
+                "blocking": True,
+                "requirement": "Validator report",
+                "evidence": summary,
+                "path": None,
+                "required_outcome": "Return a structured validator report or resolve the reported issue.",
+            }
+        )
+    result = {"verdict": verdict, "summary": summary, "findings": findings}
+    validate_schema(result, schema)
+    return result
+
+
+def parse_agent_result(raw: str, schema: dict[str, Any]) -> dict[str, Any]:
+    """Choose the final schema-valid result from noisy provider output."""
+    values = json_values(raw)
+    valid: list[dict[str, Any]] = []
+    invalid: list[KanbanError] = []
+    for value in values:
+        for mapping in json_mappings(value):
+            if not result_candidate(mapping, schema):
                 continue
-            if isinstance(parsed, dict):
-                return parsed
-    raise KanbanError("Agent did not return a parseable structured result")
+            try:
+                validate_schema(mapping, schema)
+            except KanbanError as validation_error:
+                invalid.append(validation_error)
+            else:
+                valid.append(mapping)
+    if valid:
+        return valid[-1]
+    error = provider_error(raw, values)
+    if error:
+        raise AgentResultError(f"Provider reported an error: {error}", raw)
+    if invalid:
+        raise AgentResultError(
+            f"Agent returned structured output that failed schema validation: {invalid[-1]}",
+            raw,
+        )
+    return fallback_agent_result(raw, schema)
 
 
 def validate_schema(value: Any, schema: dict[str, Any], path: str = "$") -> None:
@@ -404,14 +609,24 @@ class ProviderAdapter:
         return os.environ.copy()
 
     def read_result(
-        self, completed: subprocess.CompletedProcess[str], output_path: Path
+        self,
+        completed: subprocess.CompletedProcess[str],
+        output_path: Path,
+        schema: dict[str, Any],
     ) -> AgentResult:
-        raw = (
-            output_path.read_text(encoding="utf-8")
-            if output_path.exists()
-            else completed.stdout
-        )
-        return AgentResult(extract_json_object(raw), raw)
+        # Providers can stream JSONL errors and progress to stdout while
+        # writing their final structured result to the output file. Keep both
+        # channels, with the file last so its final result has precedence.
+        parts = [completed.stdout] if completed.stdout.strip() else []
+        if output_path.exists():
+            file_output = output_path.read_text(encoding="utf-8")
+            if file_output.strip():
+                parts.append(file_output)
+        raw = "\n".join(parts)
+        try:
+            return AgentResult(parse_agent_result(raw, schema), raw)
+        except KanbanError as error:
+            raise AgentResultError(str(error), raw) from error
 
     def run(self, request: AgentRequest) -> AgentResult:
         with tempfile.TemporaryDirectory(prefix="kanban-agent-") as temp_dir:
@@ -427,9 +642,7 @@ class ProviderAdapter:
                 env=self.environment(request),
                 check=True,
             )
-            result = self.read_result(completed, output_path)
-            validate_schema(result.data, request.schema)
-            return result
+            return self.read_result(completed, output_path, request.schema)
 
 
 class ClaudeAdapter(ProviderAdapter):
@@ -802,7 +1015,11 @@ def fingerprint_delta(
 def changed_paths(repo: Path) -> set[str]:
     tracked = git(repo, "diff", "--name-only", "-z", "HEAD")
     untracked = git(repo, "ls-files", "--others", "--exclude-standard", "-z")
-    return {item for item in (tracked + "\0" + untracked).split("\0") if item}
+    return {
+        item
+        for item in (tracked + "\0" + untracked).split("\0")
+        if item and item != ".workflow" and not item.startswith(".workflow/")
+    }
 
 
 def ticket_board_paths(ticket: Ticket) -> set[str]:
@@ -972,6 +1189,39 @@ def state_dir(repo: Path, run_id: str) -> Path:
     return runtime_dir(repo) / "runs" / run_id
 
 
+def record_failure(
+    directory: Path,
+    name: str,
+    error: BaseException,
+    *,
+    context: dict[str, Any] | None = None,
+) -> Path:
+    """Persist a diagnosable error record outside the working tree."""
+    directory.mkdir(parents=True, exist_ok=True)
+    payload: dict[str, Any] = {
+        "recorded_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "error_type": type(error).__name__,
+        "message": str(error),
+        "traceback": "".join(traceback.format_exception(error)),
+    }
+    if context:
+        payload["context"] = context
+    raw_output = getattr(error, "raw_output", None)
+    if isinstance(raw_output, str):
+        raw_path = directory / f"{name}.raw.txt"
+        raw_path.write_text(raw_output, encoding="utf-8")
+        payload["raw_output"] = raw_path.name
+    for stream in ("stdout", "stderr"):
+        output = getattr(error, stream, None)
+        if isinstance(output, str):
+            output_path = directory / f"{name}.{stream}.txt"
+            output_path.write_text(output, encoding="utf-8")
+            payload[stream] = output_path.name
+    path = directory / f"{name}.failure.json"
+    path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return path
+
+
 def save_state(repo: Path, run_id: str, state: dict[str, Any]) -> None:
     directory = state_dir(repo, run_id)
     directory.mkdir(parents=True, exist_ok=True)
@@ -1028,7 +1278,18 @@ def eligible_tickets(repo: Path) -> list[Ticket]:
 
 
 def ensure_clean(repo: Path) -> None:
-    status = git(repo, "status", "--porcelain", "--untracked-files=all")
+    # Board state is deliberately local-only. Staged content is never ignored:
+    # it could otherwise be accidentally included in the implementation commit.
+    assert_index_clean(repo)
+    status = git(
+        repo,
+        "status",
+        "--porcelain",
+        "--untracked-files=all",
+        "--",
+        ".",
+        ":(exclude).workflow",
+    )
     if status:
         raise KanbanError("Working tree must be clean before starting kanban-loop")
 
@@ -1088,6 +1349,9 @@ def execute_attempt(
             allowed_paths=tuple(sorted(ticket.test_paths)),
         )
     )
+    (run_path / f"attempt-{attempt:02d}-tests.raw.txt").write_text(
+        test_result.raw_output, encoding="utf-8"
+    )
     (run_path / f"attempt-{attempt:02d}-tests.json").write_text(
         json.dumps(test_result.data, indent=2) + "\n", encoding="utf-8"
     )
@@ -1119,6 +1383,9 @@ def execute_attempt(
             model=provider_model("implementer"),
             allowed_paths=tuple(sorted(ticket.production_paths)),
         )
+    )
+    (run_path / f"attempt-{attempt:02d}-implementation.raw.txt").write_text(
+        implementation.raw_output, encoding="utf-8"
     )
     (run_path / f"attempt-{attempt:02d}-implementation.json").write_text(
         json.dumps(implementation.data, indent=2) + "\n", encoding="utf-8"
@@ -1154,6 +1421,9 @@ def execute_attempt(
             writable=False,
             model=provider_model("validator"),
         )
+    )
+    (run_path / f"attempt-{attempt:02d}-validation.raw.txt").write_text(
+        validation.raw_output, encoding="utf-8"
     )
     if git(repo, "rev-parse", "HEAD") != expected_head:
         raise KanbanError("Validator changed HEAD")
@@ -1202,24 +1472,10 @@ def commit_ticket(repo: Path, ticket: Ticket, expected_hash: str) -> tuple[str, 
     implementation_paths = sorted(implementation_changed_paths(repo, ticket))
     if not implementation_paths:
         raise KanbanError("No changes to commit")
-    done_path = move_ticket(ticket, board_paths(repo)["done"])
-    board_candidates = sorted(ticket_board_paths(ticket))
-    head_locations = [
-        path
-        for path in board_candidates
-        if run_process(
-            ["git", "cat-file", "-e", f"HEAD:{path}"], cwd=repo, check=False
-        ).returncode
-        == 0
-    ]
-    if len(head_locations) != 1:
-        raise KanbanError(
-            f"Expected exactly one committed ticket location, found {head_locations}"
-        )
-    done_relative = str(done_path.relative_to(repo))
-    board_changes = sorted({head_locations[0], done_relative})
-    commit_paths = sorted({*implementation_paths, *board_changes})
-    git(repo, "add", "-A", "-f", "--", *commit_paths)
+    # The board is local tracking, never commit material. Commit the accepted
+    # implementation first; only then advance the local ticket to done.
+    commit_paths = implementation_paths
+    git(repo, "add", "-A", "--", *commit_paths)
     staged_paths = {
         item
         for item in git(
@@ -1261,11 +1517,12 @@ def commit_ticket(repo: Path, ticket: Ticket, expected_hash: str) -> tuple[str, 
             "Staged implementation patch differs from the accepted patch: "
             f"accepted={expected_hash} staged={staged_hash}\n{difference}"
         )
-    if git(repo, "diff", "--name-only") or git(
-        repo, "ls-files", "--others", "--exclude-standard"
+    if git(repo, "diff", "--name-only", "--", ".", ":(exclude).workflow") or git(
+        repo, "ls-files", "--others", "--exclude-standard", "--", ":(exclude).workflow"
     ):
         raise KanbanError("Unstaged changes appeared before commit")
     git(repo, "commit", "-m", ticket.commit_message, "-m", ticket.acceptance)
+    done_path = move_ticket(ticket, board_paths(repo)["done"])
     return git(repo, "rev-parse", "HEAD"), done_path
 
 
@@ -1286,24 +1543,6 @@ def process_ticket(
     findings = list(starting_findings or [])
     current_ticket = ticket
     if ticket.path.parent.name == "backlog":
-        tracked_ticket = (
-            run_process(
-                [
-                    "git",
-                    "ls-files",
-                    "--error-unmatch",
-                    "--",
-                    str(ticket.path.relative_to(repo)),
-                ],
-                cwd=repo,
-                check=False,
-            ).returncode
-            == 0
-        )
-        if not tracked_ticket:
-            raise KanbanError(
-                f"Approved ticket must be committed before execution: {ticket.path.relative_to(repo)}"
-            )
         moved = move_ticket(ticket, board_paths(repo)["doing"])
         current_ticket = parse_ticket(moved)
     base_commit = git(repo, "rev-parse", "HEAD")
@@ -1324,9 +1563,29 @@ def process_ticket(
                 "findings": findings,
             },
         )
-        validation, patch_hash, verification = execute_attempt(
-            repo, current_ticket, provider, findings, run_path, attempt
-        )
+        try:
+            validation, patch_hash, verification = execute_attempt(
+                repo, current_ticket, provider, findings, run_path, attempt
+            )
+        except BaseException as error:
+            record_failure(
+                run_path,
+                f"attempt-{attempt:02d}",
+                error,
+                context={"phase": "implementing", "ticket": current_ticket.slug},
+            )
+            save_state(
+                repo,
+                run_id,
+                {
+                    "run_id": run_id,
+                    "phase": "failed",
+                    "attempt": attempt,
+                    "ticket": str(current_ticket.path.relative_to(repo)),
+                    "error": str(error),
+                },
+            )
+            raise
         verdict = validation.get("verdict")
         if verdict == "blocked":
             save_state(
@@ -1582,8 +1841,26 @@ def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
     try:
         return int(args.func(args))
-    except KanbanError as error:
+    except Exception as error:
+        # Errors before a ticket/run exists (preflight, board validation, or a
+        # provider setup failure) still need a durable record.
+        failure_path: Path | None = None
+        try:
+            repo = repository_root(Path.cwd())
+            timestamp = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+            failure_path = record_failure(
+                runtime_dir(repo) / "failures",
+                f"{timestamp}-{uuid.uuid4().hex[:8]}",
+                error,
+                context={"command": args.command},
+            )
+        except Exception:
+            # Preserve the original operational error even if logging is
+            # unavailable (for example outside a Git checkout).
+            pass
         print(f"ERROR: {error}", file=sys.stderr)
+        if failure_path is not None:
+            print(f"Failure log: {failure_path}", file=sys.stderr)
         return EXIT_BLOCKED
 
 

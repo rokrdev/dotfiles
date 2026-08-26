@@ -5,9 +5,12 @@
 # ///
 from __future__ import annotations
 
+import contextlib
 import importlib.machinery
 import importlib.util
+import io
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -157,6 +160,112 @@ class ProviderTests(unittest.TestCase):
         )
         self.assertEqual(kanban.extract_json_object(raw), {"status": "complete"})
 
+    def test_read_result_uses_stdout_when_output_file_is_empty(self) -> None:
+        final = {
+            "status": "complete",
+            "summary": "done",
+            "files_changed": [],
+            "blocker": None,
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            output_path = Path(directory) / "output.json"
+            output_path.touch()
+            result = kanban.ProviderAdapter().read_result(
+                subprocess.CompletedProcess([], 0, stdout=json.dumps(final)),
+                output_path,
+                kanban.IMPLEMENTER_SCHEMA,
+            )
+        self.assertEqual(result.data, final)
+        self.assertEqual(result.raw_output, json.dumps(final))
+
+    def test_read_result_preserves_noisy_stdout_and_prefers_output_file(self) -> None:
+        final = {"verdict": "accept", "summary": "approved", "findings": []}
+        stdout = json.dumps({"type": "error", "error": "transient stream error"})
+        with tempfile.TemporaryDirectory() as directory:
+            output_path = Path(directory) / "output.json"
+            output_path.write_text(json.dumps(final), encoding="utf-8")
+            result = kanban.ProviderAdapter().read_result(
+                subprocess.CompletedProcess([], 0, stdout=stdout),
+                output_path,
+                kanban.VALIDATOR_SCHEMA,
+            )
+        self.assertEqual(result.data, final)
+        self.assertEqual(result.raw_output, stdout + "\n" + json.dumps(final))
+
+    def test_selects_last_schema_valid_result_from_provider_formats(self) -> None:
+        cases = [
+            (
+                kanban.IMPLEMENTER_SCHEMA,
+                {
+                    "status": "complete",
+                    "summary": "done",
+                    "files_changed": ["src/app.py"],
+                    "blocker": None,
+                },
+                {"status": "complete"},
+            ),
+            (
+                kanban.VALIDATOR_SCHEMA,
+                {"verdict": "accept", "summary": "approved", "findings": []},
+                {"verdict": "accept"},
+            ),
+        ]
+        for schema, final, expected in cases:
+            with self.subTest(schema=schema["required"][0]):
+                raw = "\n".join(
+                    [
+                        json.dumps({"type": "event", "structured_output": {"summary": "partial"}}),
+                        json.dumps({"type": "result", "result": json.dumps(final)}),
+                        "```json\n" + json.dumps({"payload": json.dumps(final)}) + "\n```",
+                    ]
+                )
+                result = kanban.parse_agent_result(raw, schema)
+                self.assertEqual(
+                    {key: result[key] for key in expected}, expected
+                )
+
+    def test_provider_errors_do_not_fall_back_to_prose_decisions(self) -> None:
+        for raw in (
+            json.dumps({"type": "error", "error": {"message": "rate limited"}}),
+            "## Error\nProvider failed before validation.\nVerdict: accept",
+        ):
+            with self.subTest(raw=raw), self.assertRaisesRegex(
+                kanban.AgentResultError, "Provider reported an error"
+            ) as raised:
+                kanban.parse_agent_result(raw, kanban.VALIDATOR_SCHEMA)
+            self.assertEqual(raised.exception.raw_output, raw)
+
+    def test_final_valid_result_wins_over_earlier_provider_error_event(self) -> None:
+        cases = [
+            (
+                kanban.IMPLEMENTER_SCHEMA,
+                {
+                    "status": "complete",
+                    "summary": "done",
+                    "files_changed": [],
+                    "blocker": None,
+                },
+                "status",
+            ),
+            (
+                kanban.VALIDATOR_SCHEMA,
+                {"verdict": "accept", "summary": "approved", "findings": []},
+                "verdict",
+            ),
+        ]
+        for schema, final, decision_key in cases:
+            with self.subTest(schema=decision_key):
+                raw = "\n".join(
+                    [
+                        json.dumps({"type": "error", "error": "transient stream error"}),
+                        json.dumps({"type": "result", "structured_output": final}),
+                    ]
+                )
+                self.assertEqual(
+                    kanban.parse_agent_result(raw, schema)[decision_key],
+                    final[decision_key],
+                )
+
     def test_rejects_structured_output_with_extra_keys(self) -> None:
         result = {
             "status": "complete",
@@ -168,10 +277,120 @@ class ProviderTests(unittest.TestCase):
         with self.assertRaisesRegex(kanban.KanbanError, "extra keys"):
             kanban.validate_schema(result, kanban.IMPLEMENTER_SCHEMA)
 
+    def test_accepts_explicit_prose_implementer_status(self) -> None:
+        result = kanban.parse_agent_result(
+            "Work complete.\nstatus: complete", kanban.IMPLEMENTER_SCHEMA
+        )
+        self.assertEqual(result["status"], "complete")
+
+    def test_accepts_explicit_prose_validator_verdict(self) -> None:
+        result = kanban.parse_agent_result(
+            "Reviewed the patch. Verdict: accept", kanban.VALIDATOR_SCHEMA
+        )
+        self.assertEqual(result["verdict"], "accept")
+
+    def test_accepts_markdown_heading_and_table_decisions(self) -> None:
+        cases = [
+            ("### Status\ncomplete", kanban.IMPLEMENTER_SCHEMA, "status", "complete"),
+            ("### Verdict\naccept", kanban.VALIDATOR_SCHEMA, "verdict", "accept"),
+            ("| Status | complete |", kanban.IMPLEMENTER_SCHEMA, "status", "complete"),
+            ("| Verdict | reject |", kanban.VALIDATOR_SCHEMA, "verdict", "reject"),
+        ]
+        for raw, schema, key, expected in cases:
+            with self.subTest(raw=raw):
+                self.assertEqual(kanban.parse_agent_result(raw, schema)[key], expected)
+
+    def test_accepts_markdown_and_unambiguous_bare_prose_decisions(self) -> None:
+        implementation = kanban.parse_agent_result(
+            "Implementation complete", kanban.IMPLEMENTER_SCHEMA
+        )
+        validation = kanban.parse_agent_result(
+            "**Verdict:** accept\nI accept this patch.", kanban.VALIDATOR_SCHEMA
+        )
+        self.assertEqual(implementation["status"], "complete")
+        self.assertEqual(validation["verdict"], "accept")
+
+    def test_rejects_prose_without_explicit_decision(self) -> None:
+        with self.assertRaisesRegex(kanban.KanbanError, "unambiguous verdict"):
+            kanban.parse_agent_result("Looks good to me.", kanban.VALIDATOR_SCHEMA)
+
+    def test_rejects_negated_validator_acceptance_prose(self) -> None:
+        for raw in (
+            "I cannot accept this patch.",
+            "I don't accept this patch.",
+            "I do not accept this patch.",
+            "This patch is not accepted.",
+            "I am unable to accept this patch.",
+            "This patch is not approved.",
+            "I cannot approve this patch.",
+        ):
+            with self.subTest(raw=raw), self.assertRaisesRegex(
+                kanban.KanbanError, "unambiguous verdict"
+            ):
+                kanban.parse_agent_result(raw, kanban.VALIDATOR_SCHEMA)
+
+    def test_explicit_validator_reject_allows_negated_acceptance(self) -> None:
+        result = kanban.parse_agent_result(
+            "Verdict: reject. I cannot accept this patch.",
+            kanban.VALIDATOR_SCHEMA,
+        )
+        self.assertEqual(result["verdict"], "reject")
+
+    def test_explicit_validator_accept_conflicts_with_negated_authorization(self) -> None:
+        for raw in (
+            "Verdict: accept. I cannot accept this patch.",
+            "Verdict: accept. This patch is not approved.",
+        ):
+            with self.subTest(raw=raw), self.assertRaisesRegex(
+                kanban.KanbanError, "unambiguous verdict"
+            ):
+                kanban.parse_agent_result(raw, kanban.VALIDATOR_SCHEMA)
+
+    def test_implementer_blocked_prose_requires_explicit_positive_phrase(self) -> None:
+        for raw in (
+            "blocked",
+            "not currently blocked",
+            "no longer blocked",
+        ):
+            with self.subTest(raw=raw), self.assertRaisesRegex(
+                kanban.KanbanError, "unambiguous status"
+            ):
+                kanban.parse_agent_result(raw, kanban.IMPLEMENTER_SCHEMA)
+        for raw in (
+            "Implementation complete; not currently blocked.",
+            "Implementation complete; no longer blocked.",
+        ):
+            with self.subTest(raw=raw):
+                result = kanban.parse_agent_result(raw, kanban.IMPLEMENTER_SCHEMA)
+                self.assertEqual(result["status"], "complete")
+
+    def test_rejects_conflicting_prose_decisions(self) -> None:
+        with self.assertRaisesRegex(kanban.KanbanError, "unambiguous verdict"):
+            kanban.parse_agent_result(
+                "Verdict: accept, but reject the patch.", kanban.VALIDATOR_SCHEMA
+            )
+        with self.assertRaisesRegex(kanban.KanbanError, "unambiguous status"):
+            kanban.parse_agent_result(
+                "Implementation complete, but I am blocked.",
+                kanban.IMPLEMENTER_SCHEMA,
+            )
+
+    def test_validates_embedded_json_strictly(self) -> None:
+        with self.assertRaisesRegex(kanban.KanbanError, "extra keys"):
+            kanban.parse_agent_result(
+                'Result follows:\n{"status":"complete","summary":"ok","files_changed":[],"blocker":null,"extra":true}',
+                kanban.IMPLEMENTER_SCHEMA,
+            )
+
 
 class GitTests(unittest.TestCase):
     def initialise_repo(self, root: Path) -> None:
         subprocess.run(["git", "init", "-q"], cwd=root, check=True)
+        subprocess.run(
+            ["git", "config", "core.excludesFile", "/dev/null"],
+            cwd=root,
+            check=True,
+        )
         subprocess.run(
             ["git", "config", "user.name", "Kanban Test"], cwd=root, check=True
         )
@@ -186,6 +405,11 @@ class GitTests(unittest.TestCase):
 
     def initialise_board_repo(self, root: Path) -> kanban.Ticket:
         subprocess.run(["git", "init", "-q"], cwd=root, check=True)
+        subprocess.run(
+            ["git", "config", "core.excludesFile", "/dev/null"],
+            cwd=root,
+            check=True,
+        )
         subprocess.run(
             ["git", "config", "user.name", "Kanban Test"], cwd=root, check=True
         )
@@ -209,12 +433,7 @@ class GitTests(unittest.TestCase):
         )
         ticket_path = root / ".workflow/kanban/backlog/00-hello-command.md"
         ticket_path.write_text(ticket_text, encoding="utf-8")
-        subprocess.run(["git", "add", "-A"], cwd=root, check=True)
-        subprocess.run(
-            ["git", "add", "-f", ".workflow/kanban/backlog/00-hello-command.md"],
-            cwd=root,
-            check=True,
-        )
+        subprocess.run(["git", "add", "src", "tests"], cwd=root, check=True)
         subprocess.run(["git", "commit", "-qm", "approved plan"], cwd=root, check=True)
         return kanban.parse_ticket(ticket_path)
 
@@ -256,6 +475,30 @@ class GitTests(unittest.TestCase):
             ):
                 kanban.assert_index_clean(root)
 
+    def test_clean_check_ignores_local_workflow_but_not_staged_index(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.initialise_repo(root)
+            (root / ".workflow").mkdir()
+            (root / ".workflow/local-state.md").write_text("local\n")
+            kanban.ensure_clean(root)
+            (root / "tracked.txt").write_text("staged\n")
+            subprocess.run(["git", "add", "tracked.txt"], cwd=root, check=True)
+            with self.assertRaisesRegex(kanban.KanbanError, "only kanban-loop"):
+                kanban.ensure_clean(root)
+
+    def test_changed_paths_ignores_legacy_tracked_workflow_files(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.initialise_repo(root)
+            (root / ".workflow").mkdir()
+            workflow = root / ".workflow/legacy.md"
+            workflow.write_text("before\n")
+            subprocess.run(["git", "add", ".workflow/legacy.md"], cwd=root, check=True)
+            subprocess.run(["git", "commit", "-qm", "legacy board"], cwd=root, check=True)
+            workflow.write_text("after\n")
+            self.assertNotIn(".workflow/legacy.md", kanban.changed_paths(root))
+
     def test_commit_contains_only_accepted_patch_and_ticket_transition(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -271,14 +514,14 @@ class GitTests(unittest.TestCase):
             _, done_path = kanban.commit_ticket(root, ticket, accepted_hash)
 
             self.assertEqual(done_path.parent.name, "done")
-            status = subprocess.run(
-                ["git", "status", "--porcelain"],
+            visible_status = subprocess.run(
+                ["git", "status", "--porcelain", "--", ".", ":(exclude).workflow"],
                 cwd=root,
                 text=True,
                 capture_output=True,
                 check=True,
             ).stdout
-            self.assertEqual(status, "")
+            self.assertEqual(visible_status, "")
             committed = subprocess.run(
                 ["git", "show", "--pretty=format:", "--name-only", "HEAD"],
                 cwd=root,
@@ -288,8 +531,68 @@ class GitTests(unittest.TestCase):
             ).stdout
             self.assertIn("src/app.py", committed)
             self.assertIn("tests/test_app.py", committed)
-            self.assertIn(".workflow/kanban/done/00-hello-command.md", committed)
-            self.assertNotIn(".workflow/kanban/doing/", committed)
+            self.assertNotIn(".workflow/", committed)
+
+    def test_failed_attempt_writes_durable_failure_record(self) -> None:
+        class FailingProvider(kanban.ProviderAdapter):
+            name = "failing"
+            executable = "false"
+
+            def build_command(self, request, schema_path, output_path):
+                raise NotImplementedError
+
+            def run(self, request):
+                raise kanban.AgentResultError("bad worker output", "not json")
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            ticket = self.initialise_board_repo(root)
+            with self.assertRaisesRegex(kanban.AgentResultError, "bad worker output"):
+                kanban.process_ticket(
+                    root, ticket, FailingProvider(), "auto", 1, run_id="failure-test"
+                )
+            run_path = kanban.state_dir(root, "failure-test")
+            record = json.loads((run_path / "attempt-01.failure.json").read_text())
+            self.assertEqual(record["error_type"], "AgentResultError")
+            self.assertEqual((run_path / "attempt-01.raw.txt").read_text(), "not json")
+
+    def test_provider_failure_records_stdout_and_stderr(self) -> None:
+        class FailingProcessProvider(kanban.ProviderAdapter):
+            executable = "/bin/sh"
+
+            def build_command(self, request, schema_path, output_path):
+                return ["/bin/sh", "-c", "printf stdout; printf stderr >&2; exit 7"]
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.initialise_repo(root)
+            request = kanban.AgentRequest(
+                role="validator",
+                prompt="prompt",
+                schema=kanban.VALIDATOR_SCHEMA,
+                cwd=root,
+                writable=False,
+            )
+            with self.assertRaises(kanban.ProcessError) as raised:
+                FailingProcessProvider().run(request)
+            failure = kanban.record_failure(root, "provider", raised.exception)
+            record = json.loads(failure.read_text())
+            self.assertEqual((root / record["stdout"]).read_text(), "stdout")
+            self.assertEqual((root / record["stderr"]).read_text(), "stderr")
+
+    def test_main_prints_global_failure_log_path(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.initialise_repo(root)
+            original_cwd = Path.cwd()
+            stderr = io.StringIO()
+            try:
+                os.chdir(root)
+                with contextlib.redirect_stderr(stderr):
+                    self.assertEqual(kanban.main(["validate"]), kanban.EXIT_BLOCKED)
+            finally:
+                os.chdir(original_cwd)
+            self.assertIn("Failure log:", stderr.getvalue())
 
     def test_rejection_restore_keeps_ticket_doing_and_resets_code(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

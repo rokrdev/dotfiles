@@ -18,6 +18,9 @@ trim-final-newlines = true
 trim-trailing-whitespace = true
 popup-border = "all"
 
+[editor.search]
+sort-recent = true
+
 [editor.cursor-shape]
 insert = "bar"
 normal = "block"

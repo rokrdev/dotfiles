@@ -29,6 +29,12 @@ command = "herdr-navigator.open"
 description = "jump to anything"
 
 [[keys.command]]
+key = ["prefix+k", "ctrl+alt+k"]
+type = "plugin_action"
+command = "herdr-bar.open"
+description = "command bar"
+
+[[keys.command]]
 key = "prefix+ctrl+d"
 type = "pane"
 command = "fish -c 'cd ~/Documents/rokr_vault; hx index.md'"
@@ -38,6 +44,27 @@ description = "vault"
 name = "catppuccin"
 auto_switch = false
 
+# Explicitly pin the palette to Catppuccin Mocha (herdr's built-in
+# "catppuccin" theme resolves to Mocha; these tokens make the match explicit).
+[theme.custom]
+accent = "#89b4fa"
+panel_bg = "#181825"
+sidebar_bg = "#1e1e2e"
+surface0 = "#313244"
+surface1 = "#45475a"
+surface_dim = "#1e1e2e"
+overlay0 = "#6c7086"
+overlay1 = "#7f849c"
+text = "#cdd6f4"
+subtext0 = "#a6adc8"
+mauve = "#cba6f7"
+green = "#a6e3a1"
+yellow = "#f9e2af"
+red = "#f38ba8"
+blue = "#89b4fa"
+teal = "#94e2d5"
+peach = "#fab387"
+
 [ui]
 sidebar_width = 26
 sidebar_collapsed_mode = "compact"
@@ -46,7 +73,7 @@ confirm_close = true
 pane_borders = true
 pane_gaps = false
 hide_tab_bar_when_single_tab = true
-accent = "cyan"
+accent = "blue"
 show_agent_labels_on_pane_borders = true
 prompt_new_tab_name = true
 pane_scrollbars = false

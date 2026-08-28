@@ -19,4 +19,5 @@ adjust-cursor-thickness = 75%
 keybind = shift+enter=text:\x1b\r
 macos-option-as-alt = left
 
-# custom-shader = ~/.config/ghostty/shaders/sparks-from-fire.glsl
+custom-shader = ~/.config/ghostty/shaders/cursor_warp.glsl
+custom-shader-animation = always

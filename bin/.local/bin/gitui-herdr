@@ -1,0 +1,128 @@
+#!/usr/bin/env bash
+# gitui-herdr — open gitui in a dedicated herdr pane (split right, focused).
+#
+# Designed to be bound to a Helix key, e.g.:
+#   [keys.normal.space.g]
+#   g = ':sh gitui-herdr'
+#
+# Behavior:
+#   - reuses an existing "gitui" herdr pane (state file + title scan)
+#   - creates one (splits the current pane right, ratio 0.5, focused) if missing
+#   - launches gitui in that pane and focuses it
+#
+# Uses the same split-and-run pattern as glowm-preview, but a git TUI is
+# interactive, so the new pane takes focus instead of running in the background.
+set -u
+
+STATE="$HOME/.local/state/gitui-herdr.pane"
+RATIO=0.50
+mkdir -p "$(dirname "$STATE")"
+
+die() { echo "gitui-herdr: $*" >&2; exit 1; }
+
+# Is gitui the foreground process of pane $1?
+gitui_running() {
+  herdr pane process-info --pane "$1" 2>/dev/null | grep -aq "gitui"
+}
+
+# --- current pane + its tab (the helix pane invoking this script) ---
+CUR_PID="$(herdr pane current 2>/dev/null | python3 -c "
+import json, sys
+try:
+    print(json.load(sys.stdin)['result']['pane']['pane_id'])
+except Exception:
+    pass
+")"
+CUR_TAB="$(herdr pane current 2>/dev/null | python3 -c "
+import json, sys
+try:
+    print(json.load(sys.stdin)['result']['pane']['tab_id'])
+except Exception:
+    pass
+")"
+[ -n "$CUR_TAB" ] || die "could not resolve current tab"
+
+# tab_id of pane $1 (empty if it no longer exists)
+pane_tab() {
+  herdr pane get "$1" 2>/dev/null | python3 -c "
+import json, sys
+try:
+    print(json.load(sys.stdin)['result']['pane']['tab_id'])
+except Exception:
+    pass
+"
+}
+
+# --- resolve pane id (reuse an existing running gitui pane in THIS tab) ---
+# Only reuse a gitui pane that lives in the same tab as the current helix pane.
+# A stale state file pointing at another tab/workspace used to make the reuse
+# branch fire and then no-op the focus, so gitui never opened.
+PID=""
+if [ -f "$STATE" ]; then
+  CAND="$(cat "$STATE")"
+  if [ "$(pane_tab "$CAND")" = "$CUR_TAB" ] && gitui_running "$CAND"; then
+    PID="$CAND"
+  fi
+fi
+if [ -z "$PID" ]; then
+  PID="$(herdr pane list 2>/dev/null | python3 -c "
+import json, sys
+cur_tab = '$CUR_TAB'
+try:
+    d = json.load(sys.stdin)
+    for p in d['result']['panes']:
+        if p.get('tab_id') != cur_tab:
+            continue
+        t = p.get('terminal_title_stripped') or ''
+        if 'gitui' in t:
+            print(p['pane_id']); break
+except Exception:
+    pass
+")"
+  if [ -z "$PID" ]; then PID=""; fi
+  if [ -n "$PID" ] && ! gitui_running "$PID"; then
+    herdr pane close "$PID" >/dev/null 2>&1
+    PID=""
+  fi
+fi
+
+# --- create if missing ---
+if [ -z "$PID" ]; then
+  OUT="$(herdr pane split --current --direction right --ratio "$RATIO" --focus 2>/dev/null)" \
+    || die "herdr pane split failed"
+  PID="$(printf '%s' "$OUT" | python3 -c "
+import json, sys
+try:
+    print(json.load(sys.stdin)['result']['pane']['pane_id'])
+except Exception:
+    pass
+")"
+  [ -n "$PID" ] || die "could not parse new pane id: $OUT"
+  herdr pane rename "$PID" gitui >/dev/null 2>&1
+  # `; exit` closes the pane when gitui quits (herdr reaps panes whose process ends)
+  herdr pane run "$PID" 'gitui; exit' >/dev/null 2>&1 || die "pane run failed on $PID"
+  sleep 0.7
+else
+  # Reuse: bring focus back onto the existing gitui pane. Compute the
+  # direction from the current pane to the gitui pane from the tab layout,
+  # since `--direction right --pane $PID` only focuses the right neighbor of
+  # $PID and no-ops when $PID is alone or elsewhere.
+  DIR="$(herdr pane layout --pane "$CUR_PID" 2>/dev/null | python3 -c "
+import json, sys
+try:
+    L = json.load(sys.stdin)['result']['layout']
+    def col(d): return [p for p in L['panes'] if p['pane_id']==d][0]['rect']
+    c = col('$CUR_PID'); t = col('$PID')
+    if t['x'] > c['x']: print('right')
+    elif t['x'] < c['x']: print('left')
+    elif t['y'] > c['y']: print('down')
+    else: print('up')
+except Exception:
+    pass
+")"
+  if [ -n "$DIR" ]; then
+    herdr pane focus --direction "$DIR" >/dev/null 2>&1 || true
+  fi
+fi
+
+echo "$PID" > "$STATE"

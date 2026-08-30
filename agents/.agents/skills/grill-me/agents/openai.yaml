@@ -1,0 +1,5 @@
+interface:
+  display_name: "Grill Me"
+  short_description: "Turn ambiguity into a discovery contract"
+policy:
+  allow_implicit_invocation: false

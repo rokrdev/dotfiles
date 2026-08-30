@@ -3,6 +3,9 @@ fish/.config/fish/fish_variables
 hammerspoon/.hammerspoon/hs
 terminfo/.terminfo/78/xterm-kitty
 /.claude/
+# Local Kanban board and workflow tracking (never committed)
+/.workflow/
+__pycache__/
 node-compile-cache/
 karabiner/.config/karabiner/automatic_backups/
 
@@ -31,3 +34,4 @@ sketchybar/.config/sketchybar/helper/helper
 # Hermes runtime files (project-local)
 .hermes/
 !claude/.claude/
+!bin/.local/

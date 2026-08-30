@@ -1,0 +1,413 @@
+#!/usr/bin/env python3
+"""Launch JetBrains' IntelliJ language server with Helix compatibility fixes."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+import signal
+import subprocess
+import sys
+import threading
+import zipfile
+from collections.abc import Callable
+from pathlib import Path, PurePosixPath
+from typing import BinaryIO, NoReturn
+from urllib.parse import unquote, urlsplit
+
+MAX_LIBRARY_SOURCE_BYTES = 20 * 1024 * 1024
+TEXT_SOURCE_SUFFIXES = {
+    ".java",
+    ".kt",
+    ".kts",
+    ".groovy",
+    ".gradle",
+    ".xml",
+    ".properties",
+}
+
+
+def fail(message: str) -> NoReturn:
+    print(f"intellij-server-helix: {message}", file=sys.stderr)
+    raise SystemExit(1)
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as source:
+        for chunk in iter(lambda: source.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def install_root() -> Path:
+    configured = os.environ.get("INTELLIJ_SERVER_HOME")
+    if configured:
+        return Path(configured).expanduser()
+    return Path.home() / ".local" / "share" / "jetbrains-intellij-server"
+
+
+def server_root(root: Path) -> Path:
+    current = root / "current"
+    if current.exists():
+        return current.resolve()
+
+    # Compatibility with the first version of this dotfiles installer.
+    legacy = root / "extension" / "server"
+    if legacy.exists():
+        return legacy.resolve()
+
+    fail("server is not installed; run ~/.dotfiles/scripts/install-intellij-server.sh")
+
+
+def accepted_eula_hash(root: Path, server: Path) -> str:
+    eula = server / "EULA.txt"
+    if not eula.is_file():
+        fail(f"missing EULA: {eula}")
+
+    current_hash = sha256(eula)[:16]
+    marker = root / "accepted-eula"
+    accepted_hash = (
+        marker.read_text(encoding="utf-8").strip() if marker.is_file() else ""
+    )
+    if accepted_hash != current_hash:
+        fail(
+            "the current EULA has not been accepted; run "
+            "~/.dotfiles/scripts/install-intellij-server.sh and review the prompt"
+        )
+    return current_hash
+
+
+def system_path(create: bool = True) -> Path:
+    cache_root = Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache"))
+    workspace_key = hashlib.sha256(os.fsencode(os.getcwd())).hexdigest()[:16]
+    path = cache_root / "jetbrains-intellij-server" / "helix" / workspace_key
+    if create:
+        path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
+def build_command(
+    extra_args: list[str], *, prepare_cache: bool = True
+) -> tuple[list[str], Path, Path]:
+    root = install_root()
+    server = server_root(root)
+    launcher = server / "bin" / "intellij-server"
+    if not launcher.is_file() or not os.access(launcher, os.X_OK):
+        fail(f"launcher is missing or not executable: {launcher}")
+
+    eula_hash = accepted_eula_hash(root, server)
+    command = [
+        str(launcher),
+        "--stdio",
+        "--system-path",
+        str(system_path(create=prepare_cache)),
+        "--eula",
+        eula_hash,
+        *extra_args,
+    ]
+    return command, root, server
+
+
+class LibraryUriMapper:
+    """Map jar:/jrt: locations to real files Helix can open."""
+
+    def __init__(self, server: Path) -> None:
+        cache_root = Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache"))
+        self.cache = cache_root / "jetbrains-intellij-server" / "library-sources"
+        self.server = server
+        self.to_original: dict[str, str] = {}
+        self.failed: set[str] = set()
+
+    def to_helix(self, value: object) -> object:
+        return self._rewrite(value, self._materialize)
+
+    def to_server(self, value: object) -> object:
+        return self._rewrite(value, lambda item: self.to_original.get(item, item))
+
+    def _rewrite(self, value: object, transform: Callable[[str], str]) -> object:
+        if isinstance(value, str):
+            return transform(value)
+        if isinstance(value, list):
+            return [self._rewrite(item, transform) for item in value]
+        if isinstance(value, dict):
+            return {key: self._rewrite(item, transform) for key, item in value.items()}
+        return value
+
+    def _materialize(self, uri: str) -> str:
+        if not uri.startswith(("jar:", "jrt:")):
+            return uri
+        if uri in self.failed:
+            return uri
+        try:
+            path = (
+                self._jar_source(uri)
+                if uri.startswith("jar:")
+                else self._jrt_source(uri)
+            )
+            if path is None:
+                self.failed.add(uri)
+                return uri
+            file_uri = path.resolve().as_uri()
+            self.to_original[file_uri] = uri
+            return file_uri
+        except (OSError, ValueError, zipfile.BadZipFile, KeyError) as error:
+            if uri not in self.failed:
+                print(
+                    f"intellij-server-helix: cannot materialize {uri}: {error}",
+                    file=sys.stderr,
+                )
+                self.failed.add(uri)
+            return uri
+
+    def _jar_source(self, uri: str) -> Path | None:
+        archive_part, separator, member = uri[4:].partition("!/")
+        if not separator:
+            return None
+
+        if archive_part.startswith("file:"):
+            archive = Path(unquote(urlsplit(archive_part).path))
+        elif archive_part.startswith("//"):
+            archive = Path(unquote(urlsplit(f"file:{archive_part}").path))
+        else:
+            archive = Path(unquote(archive_part))
+
+        member = unquote(member)
+        member_path = PurePosixPath(member)
+        if (
+            not archive.is_file()
+            or member_path.is_absolute()
+            or ".." in member_path.parts
+            or member_path.suffix.lower() not in TEXT_SOURCE_SUFFIXES
+        ):
+            return None
+
+        destination = (
+            self.cache
+            / "jar"
+            / hashlib.sha256(uri.encode()).hexdigest()[:20]
+            / member_path
+        )
+        if destination.is_file():
+            return destination
+        with zipfile.ZipFile(archive) as source:
+            info = source.getinfo(member)
+            if info.file_size > MAX_LIBRARY_SOURCE_BYTES:
+                raise ValueError(
+                    f"library source is unexpectedly large ({info.file_size} bytes)"
+                )
+            self._write_once(destination, source.read(info))
+        return destination
+
+    def _jrt_source(self, uri: str) -> Path | None:
+        path = PurePosixPath(unquote(urlsplit(uri).path).lstrip("/"))
+        parts = list(path.parts)
+        if parts[:1] == ["modules"]:
+            parts = parts[1:]
+        if len(parts) < 2 or ".." in parts:
+            return None
+
+        module, source_parts = parts[0], parts[1:]
+        source_name = source_parts[-1]
+        if source_name.endswith(".class"):
+            source_name = source_name[:-6].split("$", 1)[0] + ".java"
+        source_member = PurePosixPath(module, *source_parts[:-1], source_name)
+        if source_member.suffix != ".java":
+            return None
+
+        for archive in self._jdk_source_archives():
+            if not archive.is_file():
+                continue
+            with zipfile.ZipFile(archive) as source:
+                try:
+                    info = source.getinfo(str(source_member))
+                except KeyError:
+                    continue
+                if info.file_size > MAX_LIBRARY_SOURCE_BYTES:
+                    raise ValueError(
+                        f"JDK source is unexpectedly large ({info.file_size} bytes)"
+                    )
+                destination = (
+                    self.cache
+                    / "jrt"
+                    / hashlib.sha256(uri.encode()).hexdigest()[:20]
+                    / PurePosixPath(*source_parts[:-1], source_name)
+                )
+                if not destination.is_file():
+                    self._write_once(destination, source.read(info))
+                return destination
+        return None
+
+    def _jdk_source_archives(self) -> list[Path]:
+        archives = [
+            self.server / "jbr" / "Contents" / "Home" / "lib" / "src.zip",
+            self.server / "jbr" / "lib" / "src.zip",
+        ]
+        java_home = os.environ.get("JAVA_HOME")
+        if java_home:
+            archives.append(Path(java_home) / "lib" / "src.zip")
+        asdf_data = Path(os.environ.get("ASDF_DATA_DIR", Path.home() / ".asdf"))
+        archives.extend(sorted((asdf_data / "installs" / "java").glob("*/lib/src.zip")))
+        archives.extend(
+            sorted(
+                Path("/Library/Java/JavaVirtualMachines").glob(
+                    "*/Contents/Home/lib/src.zip"
+                )
+            )
+        )
+        return archives
+
+    @staticmethod
+    def _write_once(destination: Path, content: bytes) -> None:
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        temporary = destination.with_name(f".{destination.name}.{os.getpid()}.tmp")
+        temporary.write_bytes(content)
+        os.replace(temporary, destination)
+
+
+def read_message(stream: BinaryIO) -> object | None:
+    headers: dict[bytes, bytes] = {}
+    while True:
+        line = stream.readline()
+        if line == b"":
+            return None
+        if line in (b"\r\n", b"\n"):
+            break
+        name, separator, value = line.partition(b":")
+        if not separator:
+            raise ValueError(f"malformed LSP header: {line!r}")
+        headers[name.strip().lower()] = value.strip()
+
+    raw_length = headers.get(b"content-length")
+    if raw_length is None:
+        raise ValueError("LSP message has no Content-Length header")
+    length = int(raw_length)
+    body = stream.read(length)
+    if len(body) != length:
+        raise EOFError(f"short LSP body: wanted {length} bytes, received {len(body)}")
+    return json.loads(body.decode("utf-8"))
+
+
+def write_message(stream: BinaryIO, message: object, lock: threading.Lock) -> None:
+    body = json.dumps(message, ensure_ascii=False, separators=(",", ":")).encode(
+        "utf-8"
+    )
+    with lock:
+        stream.write(f"Content-Length: {len(body)}\r\n\r\n".encode("ascii"))
+        stream.write(body)
+        stream.flush()
+
+
+def forward_stderr(source: BinaryIO) -> None:
+    for chunk in iter(lambda: source.read(8192), b""):
+        sys.stderr.buffer.write(chunk)
+        sys.stderr.buffer.flush()
+
+
+def launch_environment() -> dict[str, str]:
+    environment = os.environ.copy()
+    # Launcher debug output is written to stdout and corrupts stdio LSP framing.
+    environment.pop("IJ_LAUNCHER_DEBUG", None)
+    if environment.get("INTELLIJ_DATA_SHARING", "none") == "none":
+        environment.pop("INTELLIJ_DATA_SHARING", None)
+    environment.setdefault("INTELLIJ_REGION", "oceania")
+    return environment
+
+
+def proxy(command: list[str], server: Path) -> int:
+    child = subprocess.Popen(
+        command,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        env=launch_environment(),
+    )
+    assert (
+        child.stdin is not None
+        and child.stdout is not None
+        and child.stderr is not None
+    )
+    mapper = LibraryUriMapper(server)
+    server_lock = threading.Lock()
+    client_lock = threading.Lock()
+
+    def stop(_signal: int, _frame: object) -> None:
+        if child.poll() is None:
+            child.terminate()
+
+    signal.signal(signal.SIGTERM, stop)
+    signal.signal(signal.SIGINT, stop)
+
+    def client_to_server() -> None:
+        try:
+            while (message := read_message(sys.stdin.buffer)) is not None:
+                write_message(child.stdin, mapper.to_server(message), server_lock)
+        except (BrokenPipeError, EOFError):
+            pass
+        except Exception as error:  # noqa: BLE001 - keep protocol failures visible
+            print(
+                f"intellij-server-helix: client stream failed: {error}", file=sys.stderr
+            )
+        finally:
+            try:
+                child.stdin.close()
+            except BrokenPipeError:
+                pass
+
+    input_thread = threading.Thread(
+        target=client_to_server, name="helix-to-intellij", daemon=True
+    )
+    error_thread = threading.Thread(
+        target=forward_stderr, args=(child.stderr,), daemon=True
+    )
+    input_thread.start()
+    error_thread.start()
+
+    try:
+        while (message := read_message(child.stdout)) is not None:
+            write_message(sys.stdout.buffer, mapper.to_helix(message), client_lock)
+    except (BrokenPipeError, EOFError):
+        pass
+    except Exception as error:  # noqa: BLE001 - surface malformed server traffic
+        print(f"intellij-server-helix: server stream failed: {error}", file=sys.stderr)
+    try:
+        return child.wait(timeout=5)
+    except subprocess.TimeoutExpired:
+        child.terminate()
+        try:
+            return child.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            child.kill()
+            return child.wait()
+
+
+def main() -> int:
+    check_only = sys.argv[1:] == ["--check"]
+    extra_args = [] if check_only else sys.argv[1:]
+    command, _, server = build_command(extra_args, prepare_cache=not check_only)
+
+    if check_only:
+        build_file = server / "build.txt"
+        build = (
+            build_file.read_text(encoding="utf-8").strip()
+            if build_file.is_file()
+            else "unknown"
+        )
+        print(f"server: {server}")
+        print(f"build: {build}")
+        print("EULA: accepted for this build")
+        return 0
+
+    if os.environ.get("INTELLIJ_HELIX_NO_URI_PROXY") == "1":
+        os.execvpe(command[0], command, launch_environment())
+    exit_code = proxy(command, server)
+    # The input pump may still be blocked waiting for Helix after the server has
+    # honored `exit`. Avoid Python finalizing that daemon around a buffered read.
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(exit_code)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

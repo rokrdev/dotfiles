@@ -79,7 +79,7 @@ for d in "$DOTFILES"/*/ ; do
   # Skip non-package directories and files
   case "$dirname" in
     .git|.claude|.opencode|.workflow|.crush|.hermes) continue ;;
-    agents|aerospace|asdf|bat|bin|borders|btop|claude|dprint|fish|ghostty|git|gitui|hammerspoon|helix|herdr|ideavim|karabiner|keylayout|lazygit|marksman|moxide|sketchybar|yazi|zed) ;; # valid packages
+    agents|aerospace|asdf|bat|bin|borders|btop|ccstatusline|claude|dprint|fish|ghostty|git|gitui|hammerspoon|helix|herdr|ideavim|karabiner|keylayout|lazygit|marksman|moxide|sketchybar|yazi|zed) ;; # valid packages
     *) continue ;; # skip anything else (docs, node_modules, etc.)
   esac
 
@@ -192,6 +192,10 @@ echo ""
 echo "Manual setup steps:"
 echo "1. Set Fish as default shell"
 echo "   → chsh -s /opt/homebrew/bin/fish"
+echo ""
+echo "2. Install the IntelliJ Java/Kotlin language server for Helix"
+echo "   → $DOTFILES/scripts/install-intellij-server.sh"
+echo "   (requires reviewing and accepting JetBrains' EULA)"
 echo ""
 echo "NOTE: Do NOT stow ~/.claude/settings.local.json — it contains personal"
 echo "      paths, email, and API references specific to this machine."

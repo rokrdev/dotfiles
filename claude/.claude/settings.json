@@ -1,9 +1,14 @@
 {
+  "theme": "custom:catppuccin_mocha",
   "env": {
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "60",
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "0",
+    "ENABLE_TOOL_SEARCH": "true"
   },
-  "attribution": "",
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "permissions": {
     "allow": [
       "Bash(git:*)",
@@ -67,6 +72,18 @@
     "defaultMode": "auto"
   },
   "hooks": {
+    "WorktreeCreate": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/worktree-create.sh\"",
+            "timeout": 60,
+            "statusMessage": "Creating descriptively named worktree..."
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Bash",
@@ -231,5 +248,6 @@
     "to-spec": "user-invocable-only",
     "to-tickets": "user-invocable-only",
     "kanban-loop": "user-invocable-only"
-  }
+  },
+  "tui": "fullscreen"
 }

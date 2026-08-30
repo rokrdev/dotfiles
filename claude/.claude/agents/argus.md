@@ -1,7 +1,7 @@
 ---
 name: argus
 description: Read-only implementation critic. Review a branch or worktree against a supplied ticket and fixed base, returning structured findings for a fixer. Never write or edit code.
-model: opus
+model: sonnet
 tools: Read, Grep, Glob, Bash
 ---
 

@@ -9,6 +9,18 @@ TDD is the red → green loop. This skill is the reference that makes that loop 
 
 When exploring the codebase, read `CONTEXT.md` (if it exists) so test names and interface vocabulary match the project's domain language, and respect ADRs in the area you're touching.
 
+## Kanban runner mode
+
+When the prompt identifies a script-controlled Kanban phase, the immutable ticket is the approved plan and the runner owns every process gate:
+
+- Do not ask the user to approve the interface or test plan again.
+- In a test-authoring phase, modify only the declared test files and add one focused failing behavior test. Do not touch production code.
+- In an implementation phase, modify only the declared production files and make the smallest change that passes the existing failing test. Do not touch tests.
+- Do not run Git commands, move tickets, invoke other skills, start subagents, or decide that a gate passed.
+- Do not refactor, rename, update dependencies, or improve adjacent code unless the ticket explicitly includes that work in its acceptance criterion and allowlist.
+
+The runner—not this skill—executes RED, GREEN, verification, independent validation, approval, and commit transitions. When Kanban runner mode applies, follow only the phase assigned by the runner; do not mix in the standalone confirmation gates below.
+
 ## What a good test is
 
 Tests verify behavior through public interfaces, not implementation details. Code can change entirely; tests shouldn't. A good test reads like a specification — "user can checkout with valid cart" tells you exactly what capability exists — and survives refactors because it doesn't care about internal structure.

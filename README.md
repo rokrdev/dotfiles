@@ -33,6 +33,7 @@ stow fish
 stow helix
 stow agents
 stow claude
+stow ccstatusline
 ```
 
 Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by default when run from the repo root — no `--target` flag needed.
@@ -48,6 +49,7 @@ Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by d
 | `bin` | User scripts — `~/.local/bin/` |
 | `borders` | JankyBorders — `~/.config/borders/` |
 | `btop` | btop system monitor — `~/.config/btop/` |
+| `ccstatusline` | ccstatusline — `~/.config/ccstatusline/` |
 | `claude` | Claude Code — `~/.claude/` (settings, hooks, agents, and skill compatibility links) |
 | `dprint` | dprint formatter — `~/.config/dprint/` |
 | `fish` | Fish shell — `~/.config/fish/` (config, functions, completions, conf.d) |
@@ -83,21 +85,50 @@ Stow both packages after changing the skill set:
 stow -R --no-folding agents claude
 ```
 
-The engineering flow is intentionally manual:
+The deterministic local workflow is:
 
-1. `setup-matt-pocock-skills` — once per project, configure GitHub, GitLab, or local issue storage and the domain-doc layout.
-2. `grill-with-docs` — resolve the design while maintaining `CONTEXT.md` and ADRs.
-3. `to-spec` — publish the agreed spec.
-4. `to-tickets` — split it into tracer-bullet tickets.
-5. `kanban-loop <ticket>` — implement exactly one ticket test-first in its own branch/worktree, validate it, and commit locally.
-6. `tdd` and `code-review` — invoke independently when you do not want the complete ticket runner.
-7. `diagnosing-bugs` and `handoff` — invoke when needed.
+1. `grill-me` or `grill-with-docs` — resolve the product decisions.
+2. `to-prd` — write an explicitly reviewed product contract.
+3. `to-tickets` — create validated schema-v2 tickets under `.workflow/kanban/backlog/`.
+4. `kanban-loop` — run ticket implementation, TDD gates, independent validation, approval, and per-ticket commits.
+5. `ship-it` — optionally push the completed feature branch and open a pull request.
 
-There is no automatic board draining, pushing, PR creation, or merging. `kanban-loop` handles one explicitly selected ticket and stops after a validated local commit.
+`tdd`, `code-review`, `diagnosing-bugs`, `to-bug-ticket`, and `handoff` remain independently invocable. The issue-tracker-oriented `setup-matt-pocock-skills`, `to-spec`, `grilling`, and domain-modeling skills are also available when a project uses that workflow.
 
 **Never edit files under `~/.config/` or `~/.hammerspoon/` directly** — those are symlinks. Always edit source files in `~/.dotfiles/<package>/`.
 
 ## Utilities
 
 - **`install.sh`** — full bootstrap installer (Homebrew, brew bundle, stow, asdf, language servers, Claude Code).
+- **`scripts/install-intellij-server.sh`** — installs and verifies JetBrains' Java/Kotlin IntelliJ language server, records explicit EULA acceptance, and wires its Helix wrapper into `~/.local/bin`.
 - **`clear.sh`** — shell script at repo root that unstows all packages at once (`stow -D` on each). Useful for a clean removal of all symlinks. Skips non-package dirs (`.git`, tool dirs, etc.).
+
+## Java and Kotlin in Helix
+
+Java and Kotlin use the same IntelliJ language-server process so Gradle, Maven,
+and Bazel projects containing both languages share one imported project model.
+The server is distributed separately from the small VS Code/Open VSX extension
+and is covered by a JetBrains EULA.
+
+Install or update it with:
+
+```bash
+scripts/install-intellij-server.sh
+```
+
+The installer fetches the current platform manifest, verifies the server
+archive's published SHA-256, shows the EULA when it changes, and activates the
+new build side-by-side. Run `intellij-server-helix --check` afterwards, then
+restart an existing editor with `:lsp-restart`.
+
+Useful overrides:
+
+- `IJ_JAVA_OPTIONS="-Xmx4g"` increases the language-server heap.
+- `INTELLIJ_REGION=oceania` changes the product-terms region (the wrapper's
+  default for these personal dotfiles).
+- `INTELLIJ_DATA_SHARING=none` controls telemetry (also the default).
+- `INTELLIJ_SERVER_HOME=/path` selects a non-default installation directory.
+
+The wrapper also translates library `jar:` and JDK `jrt:` locations into local
+cached source files, because Helix only opens filesystem URIs. Project-local
+Java/Kotlin navigation does not require this translation.

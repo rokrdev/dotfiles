@@ -1,0 +1,5 @@
+interface:
+  display_name: "Ship It"
+  short_description: "Push a branch and open its pull request"
+policy:
+  allow_implicit_invocation: false

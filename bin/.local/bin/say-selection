@@ -9,7 +9,7 @@ fi
 f="$(mktemp -t hx-say)"
 cat > "$f"
 
-say -f "$f" </dev/null >/dev/null 2>&1 &
+say -r 270 -f "$f" </dev/null >/dev/null 2>&1 &
 say_pid=$!
 echo "$say_pid" > "$STATE"
 

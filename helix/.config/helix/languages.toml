@@ -1,35 +1,47 @@
+[language-server.uwu_colors]
+command = "uwu_colors"
+
 [[language]]
 name = "toml"
 auto-format = true
 formatter = { command = "prettier", args = ["--parser", "toml"] }
+language-servers = ["uwu_colors"]
 
 [[language]]
 auto-format = true
 name = "json"
 formatter = { command = "dprint", args = ["fmt", "--stdin", "json"] }
+language-servers = ["vscode-json-language-server", "uwu_colors"]
+
+[[language]]
+auto-format = true
+name = "jsonc"
+formatter = { command = "dprint", args = ["fmt", "--stdin", "jsonc"] }
+language-servers = ["vscode-json-language-server", "uwu_colors"]
 
 [[language]]
 name = "javascript"
 auto-format = true
-language-servers = ["vtsls"]
-
+language-servers = ["vtsls", "uwu_colors"]
 
 [[language]]
 name = "markdown"
 auto-format = true
 formatter = { command = "dprint", args = ["fmt", "--stdin", "md"] }
-language-servers = ["marksman"]
+language-servers = ["marksman", "uwu_colors"]
 
 [[language]]
 name = "yaml"
 auto-format = true
 # indent = { tab-width = 2, unit = "  " }
 formatter = { command = "dprint", args = ["fmt", "--stdin", "yaml"] }
+language-servers = ["uwu_colors"]
 
 [[language]]
 name = "lua"
 auto-format = true
 formatter = { command = "stylua", args = ["-"] }
+language-servers = ["lua_language-server", "uwu_colors"]
 
 [language-server.lua-language-server.config.Lua]
 diagnostics = { globals = [ "vim", "hs" ] }
@@ -46,7 +58,7 @@ name = "python"
 scope = "source.python"
 indent = { tab-width = 4, unit  = "    " }
 auto-format = true
-language-servers = ["basedpyright", "ruff"]
+language-servers = ["basedpyright", "ruff", "uwu_colors"]
 
 [[language]]
 name = "csv"
@@ -60,7 +72,6 @@ source.rev = "896e6d09b23a1b0d87e45bf97ca34a249f41495c"
 
 [language-server]
 deno = { command = "deno", args = [ "lsp" ]}
-emmet-ls = { command = "emmet-ls", args = [ "--stdio" ]}
 
 [language-server.eslint]
 command = "vscode-eslint-language-server"
@@ -104,61 +115,77 @@ tsdk = "~/.bun/install/global/node_modules/typescript/lib"
 
 [[language]]
 name = "typescript"
-language-servers = [ "vtsls", "eslint", "emmet-ls" ]
+language-servers = [ "vtsls", "eslint", "uwu_colors" ]
 formatter = { command = "prettier", args = [ "--parser", "typescript" ] }
 # formatter = { command = "dprint", args = [ "fmt", "--stdin", "typescript" ] }
 auto-format = true
 
 [[language]]
 name = "tsx"
-language-servers = [ "vtsls", "eslint", "emmet-ls" ]
+language-servers = [ "vtsls", "eslint", "uwu_colors" ]
 formatter = { command = "prettier", args = [ "--parser", "typescript" ] }
 # formatter = { command = "dprint", args = [ "fmt", "--stdin", "tsx" ] }
 auto-format = true
 
 [[language]]
 name = "javascript"
-language-servers = [ "vtsls", "eslint", "emmet-ls" ]
+language-servers = [ "vtsls", "eslint", "uwu_colors" ]
 formatter = { command = "prettier", args = [ "--parser", "typescript" ] }
 # formatter = { command = "dprint", args = [ "fmt", "--stdin", "javascript" ] }
 auto-format = true
 
 [[language]]
 name = "jsx"
-language-servers = [ "vtsls", "eslint", "emmet-ls" ]
+language-servers = [ "vtsls", "eslint", "uwu_colors" ]
 formatter = { command = "prettier", args = [ "--parser", "typescript" ] }
 # formatter = { command = "dprint", args = [ "fmt", "--stdin", "jsx" ] }
 auto-format = true
 
 [[language]]
-name = "json"
-formatter = { command = "dprint", args = ["fmt", "--stdin", "json"] }
-auto-format = true
-
-[[language]]
 name = "html"
-language-servers = [ "vscode-html-language-server", "emmet-ls" ]
+language-servers = [ "vscode-html-language-server", "uwu_colors" ]
 formatter = { command = 'prettier', args = ["--parser", "html"] }
 auto-format = true
 
 [[language]]
 name = "css"
-language-servers = [ "vscode-css-language-server", "emmet-ls" ]
+language-servers = [ "vscode-css-language-server", "uwu_colors" ]
 formatter = { command = 'prettier', args = ["--parser", "css"] }
 auto-format = true
 
 [[language]]
 name = "kotlin"
-language-servers = ["kmp-lsp"]
+roots = [
+  "settings.gradle.kts",
+  "settings.gradle",
+  "pom.xml",
+  "MODULE.bazel",
+  "WORKSPACE.bazel",
+  "WORKSPACE",
+  "build.gradle.kts",
+  "build.gradle",
+  ".git",
+]
+language-servers = ["intellij", "uwu_colors"]
 
 [[language]]
 name = "java"
-roots = [".git", "pom.xml", "build.gradle", "build.gradle.kts"]
-language-servers = ["jdtls"]
+roots = [
+  "settings.gradle.kts",
+  "settings.gradle",
+  "pom.xml",
+  "MODULE.bazel",
+  "WORKSPACE.bazel",
+  "WORKSPACE",
+  "build.gradle.kts",
+  "build.gradle",
+  ".git",
+]
+language-servers = ["intellij"]
 
-# kmp-lsp is the diagnostics server: IntelliJ is pull-diagnostics-only (no
-# publishDiagnostics), so kmp-lsp provides squiggles while IntelliJ does
-# completion/hover/refactorings. Kept as a fallback — if the IntelliJ engine
-# stops answering (preview builds expire ~30 days), kmp-lsp still works.
-[language-server.kmp-lsp]
-command = "kmp-lsp"
+# The wrapper supplies the current launcher, EULA hash, isolated system path,
+# privacy defaults, and jar:/jrt: URI translation needed by Helix.
+[language-server.intellij]
+command = "intellij-server-helix"
+timeout = 120
+config = { projects = [], buildTools = {} }

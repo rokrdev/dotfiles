@@ -1,104 +1,148 @@
 ---
 name: to-tickets
-description: Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, published to the configured tracker — edges as text in one file per ticket locally, or native blocking links on a real tracker.
+description: Convert an approved PRD or specification into immutable schema-v2 Markdown tickets under .workflow/kanban/backlog. Use when the user explicitly wants executable Kanban tickets; never implement them.
+user-invocable: true
 ---
 
 # To Tickets
 
-Break a plan, spec, or conversation into a set of **tickets** — tracer-bullet vertical slices, each declaring the tickets that **block** it.
+Compile an approved product contract into thin, observable tickets that the deterministic `kanban-loop` executable can validate and run. The ticket is an authorization boundary, not an implementation suggestion.
 
-The issue tracker should have been provided to you. If not, tell the user to run `/setup-matt-pocock-skills`.
+Read `~/.dotfiles/docs/kanban-workflow.md` before generating tickets.
 
-## Process
+## Preconditions
 
-### 1. Gather context
+1. Read the explicitly supplied PRD or spec. Do not silently choose from conversation history when multiple candidates exist.
+2. Require an approved PRD with no unresolved scope-affecting decisions. If its status is `draft`, show the outcomes, acceptance criteria, constraints, and out-of-scope list and ask for explicit approval. Only after approval change its status to `approved`.
+3. Explore the codebase. This is mandatory: identify the real entry points, existing tests, test command, full-suite command, exact files, manifests, ADRs, and repository vocabulary.
+4. Refuse ticket generation if acceptance, file scope, or verification cannot be stated unambiguously. Return `NEEDS_DECISION`; do not guess.
 
-Work from whatever is already in the conversation context. If the user passes a reference (a spec path, an issue number or URL) as an argument, fetch it and read its full body and comments.
+## Ticket Design
 
-### 2. Explore the codebase (optional)
+Create serial tracer-bullet tickets. Each ticket delivers one narrow observable delta through only the layers that delta actually requires. Do not force schema, API, UI, unit tests, or refactors into a ticket unless its acceptance criterion needs them.
 
-If you have not already explored the codebase, do so to understand the current state of the code. Ticket titles and descriptions should use the project's domain glossary vocabulary, and respect ADRs in the area you're touching.
+Do not create standalone cleanup, scaffold, extraction, architecture, or speculative-refactor tickets. A walking skeleton is allowed only when it produces a runnable externally observable entry point and can be developed test-first.
 
-Look for opportunities to prefactor the code to make the implementation easier. "Make the change easy, then make the easy change."
+For every ticket determine:
 
-### 3. Draft vertical slices
+- Stable numeric ID and kebab-case slug.
+- Short title and implementation language.
+- Dependency slugs.
+- One observable acceptance sentence.
+- Exact repository-relative files and whether each is created, modified, or deleted.
+- Exact test identifiers to write first.
+- One targeted RED/GREEN test command.
+- Deterministic verification commands and expected exit codes.
+- Exact Conventional Commit message.
+- Whether this ticket must require human review even during an AUTO run.
 
-Break the work into **tracer bullet** tickets.
+Directories, globs, optional files, `.workflow` paths, and “other files as needed” are forbidden in `allowed-changes`. If a necessary path cannot be identified, stop and ask.
 
-<vertical-slice-rules>
+## Review Gate
 
-- Each slice cuts a narrow but COMPLETE path through every layer (schema, API, UI, tests) — vertical, NOT a horizontal slice of one layer
-- A completed slice is demoable or verifiable on its own
-- Each slice is sized to fit in a single fresh context window
-- Any prefactoring should be done first
+Before writing files, present the complete proposed ticket set. For every ticket show:
 
-</vertical-slice-rules>
+- ID, slug, and title.
+- Dependencies.
+- Acceptance criterion.
+- Exact allowed changes with operations.
+- Failing test identifiers and targeted command.
+- All verification commands.
+- Commit message.
+- HITL override.
 
-Give each ticket its **blocking edges** — the other tickets that must complete before it can start. A ticket with no blockers can start immediately.
+Ask whether to merge, split, reorder, change scope, or approve. Write nothing until the user explicitly approves the set. After changes, present the complete set again.
 
-**Wide refactors are the exception to vertical slicing.** A **wide refactor** is one mechanical change — rename a column, retype a shared symbol — whose **blast radius** fans across the whole codebase, so a single edit breaks thousands of call sites at once and no vertical slice can land green. Don't force it into a tracer bullet; sequence it as **expand–contract**. First expand: add the new form beside the old so nothing breaks. Then migrate the call sites over in batches sized by blast radius (per package, per directory), each batch its own ticket blocked by the expand, keeping CI green batch to batch because the old form still exists. Finally contract: delete the old form once no caller remains, in a ticket blocked by every migrate batch. When even the batches can't stay green alone, keep the sequence but let them share an integration branch that all block a final integrate-and-verify ticket — green is promised only there.
+Run stable cycle detection: choose the lowest numeric ID and then slug whenever multiple nodes are ready. A dependency cycle stops generation.
 
-### 4. Quiz the user
+## Ticket Format
 
-Present the proposed breakdown as a numbered list. For each ticket, show:
+Write approved tickets to `.workflow/kanban/backlog/NN-slug.md`. Create `backlog/`, `doing/`, and `done/` when missing. Runtime state is created under Git metadata by the runner; never create or track a `runs/` directory.
 
-- **Title**: short descriptive name
-- **Blocked by**: which other tickets (if any) must complete first
-- **What it delivers**: the end-to-end behaviour this ticket makes work
+```markdown
+---
+schema-version: 2
+id: 0
+slug: json-output
+title: Add JSON output
+language: typescript
+depends-on: []
+parallel-safe: false
+human-required: false
+acceptance: "Running `app show --json` prints the requested record as valid JSON."
+allowed-changes:
+  - path: src/cli.ts
+    operation: modify
+  - path: src/commands/show.ts
+    operation: modify
+  - path: test/show.test.ts
+    operation: modify
+failing-tests:
+  - test/show.test.ts::prints_requested_record_as_json
+tdd-test-command: npm test -- test/show.test.ts
+verification:
+  - command: npm test -- test/show.test.ts
+    expected-exit: 0
+  - command: npm test
+    expected-exit: 0
+commit-message: "feat(cli): add JSON output"
+---
 
-Ask the user:
+## Context
 
-- Does the granularity feel right? (too coarse / too fine)
-- Are the blocking edges correct — does each ticket only depend on tickets that genuinely gate it?
-- Should any tickets be merged or split further?
+Why this observable delta exists, its approved constraints, and relevant existing behavior. Maximum five sentences.
 
-Iterate until the user approves the breakdown.
+## Acceptance Test
 
-### 5. Publish the tickets to the configured tracker
+Restate the acceptance sentence and list only necessary observable subconditions.
 
-Publish the approved tickets. **How** depends on the tracker `/setup-matt-pocock-skills` configured — the tickets are the same either way, only the shape of the blocking edges changes:
+## Files to Touch
 
-- **Local files** → write one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order (blockers first). Each file's "Blocked by" lists the numbers/titles it depends on. Use the per-ticket file template below — one ticket per file, never a single combined file.
-- **A real issue tracker (GitHub, Linear, …)** → publish one issue per ticket in dependency order (blockers first) so each ticket's blocking edges can reference real identifiers. Use the platform's native blocking / sub-issue relationship where it has one; otherwise set each ticket's "Blocked by" to the blocking issues. Apply the configured `ready-for-agent` triage label when one exists; otherwise publish without a label.
+- `src/cli.ts` — modify: register the approved option
+- `src/commands/show.ts` — modify: produce the approved output
+- `test/show.test.ts` — modify: add the named failing test
 
-Work the **frontier**: any ticket whose blockers are all done. For a purely linear chain that means top to bottom.
+## Out of Scope
 
-Do NOT close or modify any parent issue.
+- Explicitly prohibited adjacent behavior and refactoring.
 
-<local-ticket-template>
+## Related Tickets
 
-# <NN> — <Ticket title>
+- depends on: none
+- unblocks: none
+```
 
-**What to build:** the end-to-end behaviour this ticket makes work, from the user's perspective — not a layer-by-layer implementation list.
+## Schema Rules
 
-**Blocked by:** the numbers/titles of the tickets that gate this one, or "None — can start immediately".
+| Field | Rule |
+|---|---|
+| `schema-version` | Required integer `2` |
+| `id` | Unique integer matching the zero-padded filename prefix |
+| `slug` | Unique kebab-case slug matching the filename |
+| `title` | Exact human-readable ticket title |
+| `language` | Informational implementation stack |
+| `depends-on` | List of slugs, empty when none |
+| `parallel-safe` | Always `false` while the runner is serial |
+| `human-required` | `true` for architecture, UX/API judgment, security, ambiguous scope, or risky cross-cutting work; otherwise `false` |
+| `acceptance` | One externally observable sentence |
+| `allowed-changes` | Non-empty list of exact file + `create\|modify\|delete` |
+| `failing-tests` | Non-empty list in `path::test-name` form; every path must be allowed |
+| `tdd-test-command` | Exact targeted command that must fail before production edits and pass afterward |
+| `verification` | Non-empty command/expected-exit list; include the full suite |
+| `commit-message` | Exact Conventional Commit subject |
 
-**Status:** ready-for-agent
+The Markdown body may explain intent, but machine-critical information must appear in frontmatter. Never make the runner infer commands, paths, operations, or commit messages from prose.
 
-- [ ] Acceptance criterion 1
-- [ ] Acceptance criterion 2
+## Final Validation
 
-</local-ticket-template>
+Run:
 
-<issue-template>
+```text
+kanban-loop validate
+```
 
-## Parent
+If validation fails, repair the tickets and rerun it. Do not invoke implementation.
 
-A reference to the parent issue on the tracker (if the source was an existing issue, otherwise omit this section).
+Report the files written, stable topological order, approval status, and validation result. End by telling the user that `/kanban-loop` defaults to HITL and `/kanban-loop --auto` must be explicit.
 
-## What to build
-
-The end-to-end behaviour this ticket makes work, from the user's perspective — not layer-by-layer implementation.
-
-## Acceptance criteria
-
-- [ ] Criterion 1
-- [ ] Criterion 2
-
-## Blocked by
-
-- A reference to each blocking ticket, or "None — can start immediately".
-
-</issue-template>
-
-In either form, avoid specific file paths or code snippets — they go stale fast. Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), inline it and note briefly that it came from a prototype. Trim to the decision-rich parts — not a working demo, just the important bits.
+Also state that `kanban-loop` requires a clean checkout: the user must review and commit the approved PRD and ticket files before starting it. Never create that planning commit without a separate explicit approval.

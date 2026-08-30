@@ -81,8 +81,8 @@ key-mapping.preset = 'qwerty'
 #                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
-gaps.inner.horizontal = 3
-gaps.inner.vertical =   3
+gaps.inner.horizontal = 4
+gaps.inner.vertical =   4
 gaps.outer.left =       2
 gaps.outer.bottom =     2
 # Reserve the sketchybar strip (40px) on every monitor so tiled windows stop

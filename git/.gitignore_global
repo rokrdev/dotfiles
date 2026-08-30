@@ -2,6 +2,7 @@
 __backup__*
 .vim/*
 .rgignore
+.ignore
 .git
 kls_database.db
 .superpowers/
@@ -13,13 +14,13 @@ node_modules/
 graphify-out/
 
 build/
-bin/
 .settings/
 .classpath
 .project
 
 .repowise/**
 .serena/
+.reasonix/
 
 .mcp.json
 
@@ -29,3 +30,5 @@ bin/
 .vscode/
 .tool-versions
 .claude/
+
+sketchybar/**/bin/

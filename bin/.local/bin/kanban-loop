@@ -966,22 +966,41 @@ def ticket_prompt(ticket: Ticket) -> str:
 
 
 def implementer_prompt(
-    ticket: Ticket, phase: str, findings: list[dict[str, Any]]
+    ticket: Ticket,
+    phase: str,
+    findings: list[dict[str, Any]],
+    *,
+    revision: bool = False,
 ) -> str:
     phase_paths = ticket.test_paths if phase == "tests" else ticket.production_paths
     feedback = json.dumps(findings, indent=2) if findings else "none"
-    if phase == "tests":
+    if phase == "tests" and not revision:
         task = """
         Modify only the declared test files. Add one focused test that fails for the
         ticket's observable acceptance criterion or the validator finding. Do not
         edit production code. Do not run commands; the runner executes the tests.
         """
-    else:
+    elif phase != "tests" and not revision:
         task = """
         Modify only the declared production files. Make the smallest change that
         passes the already-written failing test. Do not change tests, refactor
         adjacent code, update dependencies, rename unrelated symbols, or add
         behavior outside the acceptance criterion. Do not run commands; the runner
+        executes all verification.
+        """
+    elif phase == "tests":
+        task = """
+        This is an in-place revision of an existing patch. Modify only declared
+        test files if the findings require a focused test or coverage correction.
+        Preserve useful existing changes. Do not make cosmetic or fake edits, and
+        do not edit production code. Do not run commands; the runner executes tests.
+        """
+    else:
+        task = """
+        This is an in-place revision of an existing patch. Modify only declared
+        production files if needed to address the findings. Preserve useful
+        existing changes. Do not make cosmetic or fake edits, change tests,
+        refactor adjacent code, or broaden scope. Do not run commands; the runner
         executes all verification.
         """
     return textwrap.dedent(
@@ -1209,6 +1228,22 @@ def run_red(repo: Path, ticket: Ticket) -> dict[str, Any]:
         for marker in ("fail", "assert", "expected", "panic", "error")
     ):
         raise KanbanError("TDD RED gate failed without a recognisable behavior failure")
+    return result
+
+
+def run_revision_test(repo: Path, ticket: Ticket) -> dict[str, Any]:
+    """Record the focused test command for an in-place revision.
+
+    A coverage-only revision can make an already-passing test more meaningful, so
+    this deliberately has no RED requirement. Full verification still gates the
+    attempted patch.
+    """
+    expected_head = git(repo, "rev-parse", "HEAD")
+    result = run_shell(repo, ticket.tdd_test_command)
+    if git(repo, "rev-parse", "HEAD") != expected_head:
+        raise KanbanError("Revision test command changed HEAD")
+    assert_index_clean(repo)
+    assert_scope(repo, ticket)
     return result
 
 
@@ -1480,13 +1515,15 @@ def execute_attempt(
     findings: list[dict[str, Any]],
     run_path: Path,
     attempt: int,
+    *,
+    revision: bool = False,
 ) -> tuple[dict[str, Any], str, list[dict[str, Any]]]:
     expected_head = git(repo, "rev-parse", "HEAD")
     before = file_fingerprint(repo, ticket.allowed_paths)
     test_result = provider.run(
         AgentRequest(
             role="implementer-tests",
-            prompt=implementer_prompt(ticket, "tests", findings),
+            prompt=implementer_prompt(ticket, "tests", findings, revision=revision),
             schema=IMPLEMENTER_SCHEMA,
             cwd=repo,
             writable=True,
@@ -1507,21 +1544,31 @@ def execute_attempt(
     assert_index_clean(repo)
     after_tests = file_fingerprint(repo, ticket.allowed_paths)
     touched_in_test_phase = fingerprint_delta(before, after_tests)
-    if not touched_in_test_phase or not touched_in_test_phase <= ticket.test_paths:
+    if not touched_in_test_phase <= ticket.test_paths:
         raise KanbanError(
             f"Test phase must change only declared tests; changed {sorted(touched_in_test_phase)}"
         )
     assert_scope(repo, ticket)
-    red = run_red(repo, ticket)
-    (run_path / f"attempt-{attempt:02d}-red.json").write_text(
-        json.dumps(red, indent=2) + "\n", encoding="utf-8"
-    )
+    if not revision and not touched_in_test_phase:
+        raise KanbanError("Test phase must change declared tests")
+    if revision and touched_in_test_phase:
+        revision_test = run_revision_test(repo, ticket)
+        (run_path / f"attempt-{attempt:02d}-revision-test.json").write_text(
+            json.dumps(revision_test, indent=2) + "\n", encoding="utf-8"
+        )
+    elif not revision:
+        red = run_red(repo, ticket)
+        (run_path / f"attempt-{attempt:02d}-red.json").write_text(
+            json.dumps(red, indent=2) + "\n", encoding="utf-8"
+        )
 
     before_production = file_fingerprint(repo, ticket.allowed_paths)
     implementation = provider.run(
         AgentRequest(
             role="implementer-code",
-            prompt=implementer_prompt(ticket, "implementation", findings),
+            prompt=implementer_prompt(
+                ticket, "implementation", findings, revision=revision
+            ),
             schema=IMPLEMENTER_SCHEMA,
             cwd=repo,
             writable=True,
@@ -1544,15 +1591,18 @@ def execute_attempt(
     assert_index_clean(repo)
     after_production = file_fingerprint(repo, ticket.allowed_paths)
     touched_in_production = fingerprint_delta(before_production, after_production)
-    if (
-        not touched_in_production
-        or not touched_in_production <= ticket.production_paths
-    ):
+    if not touched_in_production <= ticket.production_paths:
         raise KanbanError(
             "Implementation phase must change only declared production files; "
             f"changed {sorted(touched_in_production)}"
         )
     assert_scope(repo, ticket)
+    if not revision and not touched_in_production:
+        raise KanbanError("Implementation phase must change declared production files")
+    if revision and not fingerprint_delta(before, after_production):
+        raise KanbanError(
+            "Revision attempt must change at least one declared ticket file"
+        )
     verification = run_verification(repo, ticket)
     patch = diff_text(repo, ticket)
     patch_hash = sha256_text(patch)
@@ -1605,6 +1655,30 @@ def restore_implementation(repo: Path, ticket: Ticket) -> None:
             )
     if implementation_changed_paths(repo, ticket):
         raise KanbanError("Failed to restore implementation files for the next attempt")
+
+
+def snapshot_implementation(
+    repo: Path, ticket: Ticket, run_path: Path, name: str
+) -> Path:
+    """Persist the ticket patch before a revision or destructive restart."""
+    assert_index_clean(repo)
+    assert_scope(repo, ticket)
+    patch = diff_text(repo, ticket)
+    patch_path = run_path / f"{name}.patch"
+    patch_path.write_text(patch, encoding="utf-8")
+    (run_path / f"{name}.json").write_text(
+        json.dumps(
+            {
+                "name": name,
+                "diff_hash": sha256_text(patch),
+                "changed_paths": sorted(implementation_changed_paths(repo, ticket)),
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    return patch_path
 
 
 def commit_ticket(
@@ -1689,7 +1763,10 @@ def process_ticket(
     run_id: str | None = None,
     starting_findings: list[dict[str, Any]] | None = None,
     starting_attempt: int = 0,
+    first_attempt_mode: str = "strict",
 ) -> tuple[str, str]:
+    if first_attempt_mode not in {"strict", "revision"}:
+        raise KanbanError(f"Unknown first attempt mode: {first_attempt_mode!r}")
     run_id = run_id or f"{ticket.key}-{uuid.uuid4().hex[:8]}"
     run_path = state_dir(repo, run_id)
     run_path.mkdir(parents=True, exist_ok=True)
@@ -1700,6 +1777,7 @@ def process_ticket(
         current_ticket = parse_ticket(moved)
     base_commit = git(repo, "rev-parse", "HEAD")
     for attempt in range(starting_attempt + 1, max_attempts + 1):
+        revision = first_attempt_mode == "revision" or attempt > starting_attempt + 1
         save_state(
             repo,
             run_id,
@@ -1714,11 +1792,18 @@ def process_ticket(
                 "attempt": attempt,
                 "max_attempts": max_attempts,
                 "findings": findings,
+                "attempt_mode": "revision" if revision else "strict",
             },
         )
         try:
             validation, patch_hash, verification = execute_attempt(
-                repo, current_ticket, provider, findings, run_path, attempt
+                repo,
+                current_ticket,
+                provider,
+                findings,
+                run_path,
+                attempt,
+                revision=revision,
             )
         except BaseException as error:
             record_failure(
@@ -1756,7 +1841,12 @@ def process_ticket(
             if not findings:
                 raise KanbanError("Validator rejected without a blocking finding")
             if attempt < max_attempts:
-                restore_implementation(repo, current_ticket)
+                snapshot_implementation(
+                    repo,
+                    current_ticket,
+                    run_path,
+                    f"attempt-{attempt:02d}-before-revision",
+                )
             continue
         if verdict != "accept":
             raise KanbanError(f"Unknown validator verdict: {verdict!r}")
@@ -2144,13 +2234,22 @@ def command_decide(args: argparse.Namespace) -> int:
             print(f"COMMITTED {ticket.key} {commit_sha}")
             print(f"KANBAN_AWAITING_NEXT run_id={args.run_id}")
             return EXIT_AWAITING_NEXT
-        if args.decision == "reject":
+        if args.decision in {"revise", "reject", "restart"}:
             if phase != "awaiting-commit":
-                raise KanbanError(f"Cannot reject run in phase {phase!r}")
+                raise KanbanError(f"Cannot {args.decision} run in phase {phase!r}")
             feedback = args.feedback.strip()
             if not feedback:
-                raise KanbanError("Reject requires --feedback")
-            restore_implementation(repo, ticket)
+                raise KanbanError(f"{args.decision.capitalize()} requires --feedback")
+            run_path = state_dir(repo, args.run_id)
+            snapshot_implementation(
+                repo,
+                ticket,
+                run_path,
+                f"attempt-{state['attempt']:02d}-before-{args.decision}",
+            )
+            restart = args.decision == "restart"
+            if restart:
+                restore_implementation(repo, ticket)
             provider = select_provider(state["provider"], repo)
             finding = {
                 "id": "USER",
@@ -2169,6 +2268,7 @@ def command_decide(args: argparse.Namespace) -> int:
                 run_id=args.run_id,
                 starting_findings=[finding],
                 starting_attempt=state["attempt"],
+                first_attempt_mode="strict" if restart else "revision",
             )
             return EXIT_AWAITING_COMMIT if next_phase == "awaiting-commit" else 0
         if args.decision == "continue":
@@ -2224,7 +2324,10 @@ def parser() -> argparse.ArgumentParser:
 
     decide = subcommands.add_parser("decide", help="Resolve a persisted HITL gate")
     decide.add_argument("run_id")
-    decide.add_argument("decision", choices=["approve", "reject", "continue", "abort"])
+    decide.add_argument(
+        "decision",
+        choices=["approve", "revise", "reject", "restart", "continue", "abort"],
+    )
     decide.add_argument("--feedback", default="")
     decide.add_argument("--include", action="append", default=[], metavar="PATH")
     decide.add_argument("--reason", default="", metavar="TEXT")

@@ -414,7 +414,7 @@ branch explicitly:
 /kanban-loop --branch feat/<feature-name>
 ```
 
-For each ticket, the runner:
+For each ticket, the runner starts with one strict RED→GREEN attempt:
 
 1. Moves the ticket from backlog to doing.
 2. Launches a test-only worker.
@@ -425,12 +425,19 @@ For each ticket, the runner:
 7. Runs every declared verification command.
 8. Hashes the complete patch.
 9. Launches a fresh read-only validator.
-10. Pauses for approval when running in HITL mode.
-11. Commits only the accepted implementation; the doing-to-done move remains local.
+10. On an actionable rejection, snapshots the patch and makes a focused in-place
+    revision; the revision may be test-only, production-only, or both, but must
+    change an allowed file and still pass full verification and validation.
+11. Pauses for approval when running in HITL mode.
+12. Commits only the accepted implementation; the doing-to-done move remains local.
 
 When Claude reports `KANBAN_AWAITING_COMMIT`, review the exact diff,
-verification results, and validator report. Approve, reject with a concise
-reason, or abort. Approval authorizes only the corresponding runner decision.
+verification results, and validator report. Approve, revise with a concise
+reason, explicitly restart with a concise reason when the approach must be
+discarded, or abort. `revise` preserves the patch and works on top of it;
+`restart` snapshots the patch, restores ticket-owned files to `HEAD`, and starts
+a fresh strict RED→GREEN attempt. `reject` remains a backward-compatible alias
+for `revise`. Approval authorizes only the corresponding runner decision.
 If you need to commit an additional already-changed file with the ticket, use
 `kanban-loop decide <run-id> approve --include path/to/file --reason "..."`.
 This is an explicit HITL scope expansion, not a ticket edit: the runner reruns

@@ -116,7 +116,7 @@ For each ticket:
 7. Run every verification command and require the declared exit code.
 8. Hash the complete patch, including new files.
 9. Launch a fresh read-only validator.
-10. On rejection, restore only the ticket's allowed implementation files to HEAD, then feed blocking findings into another RED→GREEN attempt.
+10. On an actionable validator rejection, snapshot the ticket patch and feed the blocking findings into an in-place revision attempt. Revisions preserve the patch and may make a focused test-only, production-only, or combined change; they must change at least one allowed file and still pass full verification and independent validation. If tests change, the focused test command is recorded, but a passing result is allowed for coverage-only work.
 11. On acceptance, commit automatically or pause at HITL. The commit contains only the accepted implementation patch; the deterministic doing→done ticket move happens locally after the commit.
 
 Three rejected attempts trip the circuit breaker.
@@ -153,7 +153,8 @@ In HITL, the runner persists the accepted diff and returns a run ID:
 ```text
 kanban-loop decide <run-id> approve
 kanban-loop decide <run-id> approve --include path/to/lsp-config --reason "Resolve LSP warning introduced by this ticket"
-kanban-loop decide <run-id> reject --feedback "..."
+kanban-loop decide <run-id> revise --feedback "..."
+kanban-loop decide <run-id> restart --feedback "..."
 kanban-loop decide <run-id> abort
 kanban-loop decide <run-id> continue
 ```
@@ -171,6 +172,12 @@ verification and a fresh independent read-only validation over the complete
 ticket-plus-supplemental patch, recording the paths, reason, verification,
 validator result, and new patch hash in the run artifacts. A rejected or
 blocked supplemental review leaves the run awaiting commit and commits nothing.
+
+`revise` snapshots the reviewed ticket patch in the run artifacts, then asks the
+workers to make the smallest correction on top of it. `reject` remains a
+backward-compatible alias for `revise`. `restart` also snapshots the patch, but
+then restores only ticket-owned files to `HEAD` before a fresh strict RED→GREEN
+attempt. Use restart only when the existing approach should be discarded.
 
 ## Providers
 

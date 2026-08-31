@@ -11,14 +11,21 @@ Compile confirmed `/diagnose` output into one ticket accepted by the determinist
 Require a reproducible failing behavior, confirmed root cause, minimal fix boundary, exact files, targeted test command, full verification command, and explicit user approval. If any is missing, return `NEEDS_DECISION`; do not guess.
 
 Explore the codebase to verify every path and command. Present the complete
-ticket for approval before writing `.workflow/kanban/backlog/NN-slug.md`. Ensure
-the board has `backlog/`, `doing/`, `paused/`, and `done/` directories; do not
-place a newly approved ticket directly in `paused/`.
+ticket for approval before writing
+`.workflow/kanban/backlog/PREFIX-NN-slug.md`. Determine the canonical kebab-case
+feature or branch slug, derive its 1-8 character uppercase prefix from word
+initials, and assign the next one-based ID within that feature (`01` when it is
+the first ticket). If the prefix is ambiguous or already belongs to another
+feature, return `NEEDS_DECISION`. Ensure the board has `backlog/`, `doing/`,
+`paused/`, and `done/` directories; do not place a newly approved ticket directly
+in `paused/`.
 
 ```markdown
 ---
 schema-version: 2
-id: <NN>
+feature: <kebab-case-feature-or-branch-slug>
+ticket-prefix: <UPPERCASE-FEATURE-CODE>
+id: <one-based-NN-within-feature>
 slug: <kebab-case-bug-description>
 title: <short bug-fix title>
 kind: bug

@@ -56,6 +56,14 @@ commit-message: "feat(cli): add hello command"
 Add one command.
 """
 
+PREFIXED_TICKET = VALID_TICKET.replace(
+    "schema-version: 2\nid: 0\n",
+    "schema-version: 2\n"
+    "feature: ticket-naming-conventions\n"
+    "ticket-prefix: TNC\n"
+    "id: 1\n",
+).replace("slug: hello-command", "slug: add-ticket-prefix")
+
 
 class TicketTests(unittest.TestCase):
     def test_parses_v2_ticket(self) -> None:
@@ -66,6 +74,52 @@ class TicketTests(unittest.TestCase):
             self.assertEqual(ticket.slug, "hello-command")
             self.assertEqual(ticket.test_paths, {"tests/test_app.py"})
             self.assertEqual(ticket.production_paths, {"src/app.py"})
+
+    def test_parses_one_based_prefixed_ticket(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "TNC-01-add-ticket-prefix.md"
+            path.write_text(PREFIXED_TICKET, encoding="utf-8")
+
+            ticket = kanban.parse_ticket(path)
+
+            self.assertEqual(ticket.feature, "ticket-naming-conventions")
+            self.assertEqual(ticket.ticket_prefix, "TNC")
+            self.assertEqual(ticket.id, 1)
+            self.assertEqual(ticket.slug, "add-ticket-prefix")
+            self.assertEqual(ticket.key, "TNC-01-add-ticket-prefix")
+
+    def test_rejects_zero_based_prefixed_ticket(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "TNC-00-add-ticket-prefix.md"
+            path.write_text(
+                PREFIXED_TICKET.replace("id: 1", "id: 0"), encoding="utf-8"
+            )
+
+            with self.assertRaisesRegex(kanban.KanbanError, "IDs start at 1"):
+                kanban.parse_ticket(path)
+
+    def test_rejects_prefixed_filename_that_disagrees_with_frontmatter(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "ABC-01-add-ticket-prefix.md"
+            path.write_text(PREFIXED_TICKET, encoding="utf-8")
+
+            with self.assertRaisesRegex(
+                kanban.KanbanError, "filename must be TNC-01-add-ticket-prefix.md"
+            ):
+                kanban.parse_ticket(path)
+
+    def test_rejects_incomplete_prefixed_identity(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "TNC-01-add-ticket-prefix.md"
+            path.write_text(
+                PREFIXED_TICKET.replace(
+                    "feature: ticket-naming-conventions\n", ""
+                ),
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(kanban.KanbanError, "feature must"):
+                kanban.parse_ticket(path)
 
     def test_rejects_directory_allowlist(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -439,6 +493,122 @@ class GitTests(unittest.TestCase):
         subprocess.run(["git", "commit", "-qm", "approved plan"], cwd=root, check=True)
         return kanban.parse_ticket(ticket_path)
 
+    def write_prefixed_ticket(
+        self,
+        root: Path,
+        *,
+        prefix: str = "TNC",
+        feature: str = "ticket-naming-conventions",
+        ticket_id: int = 1,
+        slug: str = "add-ticket-prefix",
+    ) -> kanban.Ticket:
+        text = (
+            PREFIXED_TICKET.replace(
+                "feature: ticket-naming-conventions", f"feature: {feature}"
+            )
+            .replace("ticket-prefix: TNC", f"ticket-prefix: {prefix}")
+            .replace("id: 1", f"id: {ticket_id}")
+            .replace("slug: add-ticket-prefix", f"slug: {slug}")
+        )
+        path = (
+            root
+            / ".workflow/kanban/backlog"
+            / f"{prefix}-{ticket_id:02d}-{slug}.md"
+        )
+        path.write_text(text, encoding="utf-8")
+        return kanban.parse_ticket(path)
+
+    def test_board_allows_same_one_based_id_under_different_feature_prefixes(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.initialise_board_repo(root)
+            self.write_prefixed_ticket(root)
+            self.write_prefixed_ticket(
+                root,
+                prefix="ABC",
+                feature="another-big-change",
+                slug="add-another-change",
+            )
+
+            tickets = kanban.validate_board(root)
+
+            self.assertEqual(
+                {ticket.key for ticket in tickets},
+                {
+                    "00-hello-command",
+                    "TNC-01-add-ticket-prefix",
+                    "ABC-01-add-another-change",
+                },
+            )
+
+    def test_board_rejects_prefix_reused_for_another_feature(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.initialise_board_repo(root)
+            self.write_prefixed_ticket(root)
+            self.write_prefixed_ticket(
+                root,
+                feature="totally-new-capability",
+                ticket_id=2,
+                slug="add-new-capability",
+            )
+
+            with self.assertRaisesRegex(
+                kanban.KanbanError,
+                "ticket-prefix TNC already belongs to feature ticket-naming-conventions",
+            ):
+                kanban.validate_board(root)
+
+    def test_board_rejects_duplicate_id_within_feature_prefix(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.initialise_board_repo(root)
+            self.write_prefixed_ticket(root)
+            self.write_prefixed_ticket(root, slug="add-another-prefix-change")
+
+            with self.assertRaisesRegex(
+                kanban.KanbanError, "duplicate ticket ID 01 for TNC"
+            ):
+                kanban.validate_board(root)
+
+    def test_board_rejects_duplicate_slug_across_feature_prefixes(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.initialise_board_repo(root)
+            self.write_prefixed_ticket(root)
+            self.write_prefixed_ticket(
+                root,
+                prefix="ABC",
+                feature="another-big-change",
+                slug="add-ticket-prefix",
+            )
+
+            with self.assertRaisesRegex(
+                kanban.KanbanError, "duplicate ticket slug add-ticket-prefix"
+            ):
+                kanban.validate_board(root)
+
+    def test_validate_command_accepts_mixed_legacy_and_prefixed_board(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.initialise_board_repo(root)
+            self.write_prefixed_ticket(root)
+            original_cwd = Path.cwd()
+            stdout = io.StringIO()
+            try:
+                os.chdir(root)
+                with contextlib.redirect_stdout(stdout):
+                    self.assertEqual(kanban.main(["validate"]), 0)
+            finally:
+                os.chdir(original_cwd)
+
+            self.assertEqual(
+                stdout.getvalue(),
+                "Valid board: 2 tickets, schema-version 2, 0 paused\n",
+            )
+
     def test_paused_ticket_is_valid_but_not_eligible(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -541,8 +711,8 @@ class GitTests(unittest.TestCase):
             finally:
                 os.chdir(original_cwd)
 
-            self.assertIn("PAUSED hello-command", stdout.getvalue())
-            self.assertIn("RESUMED hello-command", stdout.getvalue())
+            self.assertIn("PAUSED 00-hello-command", stdout.getvalue())
+            self.assertIn("RESUMED 00-hello-command", stdout.getvalue())
             self.assertTrue(
                 (root / ".workflow/kanban/backlog/00-hello-command.md").exists()
             )
@@ -553,14 +723,7 @@ class GitTests(unittest.TestCase):
             root = Path(directory)
             first = self.initialise_board_repo(root)
             kanban.move_ticket(first, root / ".workflow/kanban/paused")
-            second_text = (
-                VALID_TICKET.replace("id: 0", "id: 1")
-                .replace("slug: hello-command", "slug: goodbye-command")
-                .replace("title: Add hello command", "title: Add goodbye command")
-            )
-            (root / ".workflow/kanban/backlog/01-goodbye-command.md").write_text(
-                second_text, encoding="utf-8"
-            )
+            self.write_prefixed_ticket(root)
             original_cwd = Path.cwd()
             stdout = io.StringIO()
             try:
@@ -576,18 +739,53 @@ class GitTests(unittest.TestCase):
 
             payload = json.loads(stdout.getvalue())
             self.assertEqual(
-                [ticket["slug"] for ticket in payload["eligible"]],
-                ["goodbye-command"],
+                payload["eligible"],
+                [
+                    {
+                        "key": "TNC-01-add-ticket-prefix",
+                        "feature": "ticket-naming-conventions",
+                        "ticket_prefix": "TNC",
+                        "id": 1,
+                        "slug": "add-ticket-prefix",
+                        "human_required": False,
+                        "allowed_paths": ["src/app.py", "tests/test_app.py"],
+                        "acceptance": "Running app hello prints hello.",
+                    }
+                ],
             )
             self.assertEqual(
                 payload["paused"],
                 [
                     {
+                        "key": "00-hello-command",
+                        "feature": None,
+                        "ticket_prefix": None,
                         "id": 0,
                         "slug": "hello-command",
                         "title": "Add hello command",
                     }
                 ],
+            )
+
+    def test_pause_accepts_full_prefixed_ticket_key(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.initialise_board_repo(root)
+            ticket = self.write_prefixed_ticket(root)
+
+            moved = kanban.transition_tickets(
+                root,
+                ["TNC-01-add-ticket-prefix"],
+                "backlog",
+                "paused",
+            )
+
+            self.assertEqual([item.key for item in moved], [ticket.key])
+            self.assertTrue(
+                (
+                    root
+                    / ".workflow/kanban/paused/TNC-01-add-ticket-prefix.md"
+                ).exists()
             )
 
     def test_move_ticket_refuses_to_overwrite_existing_ticket(self) -> None:

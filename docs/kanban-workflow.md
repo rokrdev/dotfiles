@@ -46,7 +46,9 @@ Tickets are Markdown with YAML frontmatter. Schema version 2 is intentionally st
 ```yaml
 ---
 schema-version: 2
-id: 0
+feature: ticket-naming-conventions
+ticket-prefix: TNC
+id: 1
 slug: json-output
 title: Add JSON output
 language: typescript
@@ -71,6 +73,19 @@ commit-message: "feat(cli): add JSON output"
 ---
 ```
 
+New tickets are named `PREFIX-NN-slug.md`. The prefix is the uppercase initials
+of the canonical kebab-case feature or branch slug, and numbering starts at
+`01` within each feature. For example, `ticket-naming-conventions` becomes
+`TNC`, so its first ticket could be `TNC-01-json-output.md`. The explicit
+`feature` and `ticket-prefix` fields must agree with the filename. Prefixes are
+1-8 uppercase letters or digits, start with a letter, and cannot represent two
+different features on the same board. Ticket slugs remain globally unique
+because dependencies continue to reference slugs.
+
+Existing schema-v2 `NN-slug.md` tickets remain valid without `feature` or
+`ticket-prefix`; they do not need to be renamed. The generator emits only the
+new prefixed, one-based format.
+
 `allowed-changes` contains exact repository-relative files. Directories, globs, `.workflow` paths, and implicit files are invalid. Every test named by `failing-tests` must belong to `allowed-changes`.
 
 The ticket stays unchanged after entering `doing/`. Pausing and resuming move an
@@ -83,8 +98,8 @@ diff hashes, and final commit SHA belong under `.git/kanban-loop/runs/`.
 
 A backlog ticket is eligible when every slug in `depends-on` exists in `done/`.
 Tickets in `paused/` are validated and reported by `plan`, but are never
-eligible. Selection is stable: lowest numeric ID, then slug. The runner is
-serial; parallel execution is outside the current contract.
+eligible. Selection is stable: lowest numeric ID, then feature prefix and slug.
+The runner is serial; parallel execution is outside the current contract.
 
 ## Execution
 
@@ -115,8 +130,8 @@ The validator may reject only for acceptance failure, regression, missing meanin
 ```text
 kanban-loop run --provider <provider> --mode auto
 kanban-loop run --provider <provider> --mode hitl
-kanban-loop pause <slug> [<slug> ...]
-kanban-loop resume <slug> [<slug> ...]
+kanban-loop pause <ticket> [<ticket> ...]
+kanban-loop resume <ticket> [<ticket> ...]
 ```
 
 `human-required: true` upgrades one AUTO ticket to HITL.
@@ -125,10 +140,11 @@ kanban-loop resume <slug> [<slug> ...]
 `paused/` while holding the same board lock used by `run`. `resume` returns
 named paused tickets to `backlog/`. Neither command edits ticket contents,
 invokes a provider, runs tests, or changes Git HEAD or the index. For example,
-pause three tickets belonging to XYZ before draining ABC:
+pause three tickets belonging to the TNC feature before draining another
+feature. Commands accept either globally unique slugs or full ticket keys:
 
 ```text
-kanban-loop pause xyz-api xyz-cli xyz-tests
+kanban-loop pause TNC-01-validate-prefix TNC-02-generate-filenames TNC-03-update-docs
 kanban-loop plan --provider <provider>
 ```
 

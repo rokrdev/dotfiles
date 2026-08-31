@@ -4,7 +4,7 @@ theme = "catppuccin_mocha"
 completion-timeout = 5
 idle-timeout = 50
 mouse = true
-auto-save = true
+auto-save = { focus-lost = true, after-delay = { enable = true, timeout = 3000 } }
 cursorline = true
 bufferline = "always"
 color-modes	= true

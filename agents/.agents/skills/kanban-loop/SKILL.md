@@ -21,9 +21,18 @@ Map the user's invocation to exactly one command:
 
 /kanban-loop [--hitl] [--branch NAME]
   → kanban-loop run --provider claude --mode hitl [--branch NAME]
+
+/kanban-loop pause <slug> [<slug> ...]
+  → kanban-loop pause <slug> [<slug> ...]
+
+/kanban-loop resume <slug> [<slug> ...]
+  → kanban-loop resume <slug> [<slug> ...]
 ```
 
 HITL is the default. AUTO must be explicitly requested.
+
+Pause and resume are local board transitions. Return the executable's output
+faithfully; do not edit ticket frontmatter or move the files manually.
 
 Run the executable and return its output faithfully. Do not select tickets, dispatch Agent-tool workers, invoke TDD inline, create worktrees, edit implementation files, validate a patch, stage files, commit, or move board files yourself.
 

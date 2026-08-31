@@ -28,13 +28,16 @@ The board lives locally at the repository root:
 .workflow/kanban/
 ├── backlog/
 ├── doing/
+├── paused/
 └── done/
 ```
 
 `.workflow/` is local-only tracking and must never be staged or committed.
-Ticket location is the coarse state. Ephemeral attempt data, raw worker output,
-and failure records live under `.git/kanban-loop/runs/<run-id>/`; none of this
-pollutes a patch or commit.
+Ticket location is the coarse state. `paused/` holds valid unfinished tickets
+that must not be selected by the loop. Existing three-column boards remain
+valid; `kanban-loop pause` creates `paused/` on first use. Ephemeral attempt
+data, raw worker output, and failure records live under
+`.git/kanban-loop/runs/<run-id>/`; none of this pollutes a patch or commit.
 
 ## Ticket Contract
 
@@ -70,14 +73,18 @@ commit-message: "feat(cli): add JSON output"
 
 `allowed-changes` contains exact repository-relative files. Directories, globs, `.workflow` paths, and implicit files are invalid. Every test named by `failing-tests` must belong to `allowed-changes`.
 
-The ticket stays unchanged after entering `doing/`. The ticket itself and its
-backlog → doing → done transition stay local. Base commit, attempts, raw agent
-output, test output, validation findings, failure logs, diff hashes, and final
-commit SHA belong under `.git/kanban-loop/runs/`.
+The ticket stays unchanged after entering `doing/`. Pausing and resuming move an
+unchanged ticket between `backlog/` and `paused/`; execution moves it through
+backlog → doing → done. All ticket transitions stay local. Base commit,
+attempts, raw agent output, test output, validation findings, failure logs,
+diff hashes, and final commit SHA belong under `.git/kanban-loop/runs/`.
 
 ## Eligibility
 
-A backlog ticket is eligible when every slug in `depends-on` exists in `done/`. Selection is stable: lowest numeric ID, then slug. The runner is serial; parallel execution is outside the current contract.
+A backlog ticket is eligible when every slug in `depends-on` exists in `done/`.
+Tickets in `paused/` are validated and reported by `plan`, but are never
+eligible. Selection is stable: lowest numeric ID, then slug. The runner is
+serial; parallel execution is outside the current contract.
 
 ## Execution
 
@@ -108,9 +115,22 @@ The validator may reject only for acceptance failure, regression, missing meanin
 ```text
 kanban-loop run --provider <provider> --mode auto
 kanban-loop run --provider <provider> --mode hitl
+kanban-loop pause <slug> [<slug> ...]
+kanban-loop resume <slug> [<slug> ...]
 ```
 
 `human-required: true` upgrades one AUTO ticket to HITL.
+
+`pause` validates all named tickets and destinations, then moves them into
+`paused/` while holding the same board lock used by `run`. `resume` returns
+named paused tickets to `backlog/`. Neither command edits ticket contents,
+invokes a provider, runs tests, or changes Git HEAD or the index. For example,
+pause three tickets belonging to XYZ before draining ABC:
+
+```text
+kanban-loop pause xyz-api xyz-cli xyz-tests
+kanban-loop plan --provider <provider>
+```
 
 In HITL, the runner persists the accepted diff and returns a run ID:
 

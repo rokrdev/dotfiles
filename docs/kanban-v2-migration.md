@@ -21,17 +21,18 @@ The `kanban-loop` executable, rather than Claude itself, now owns:
 - HITL approval state and automatic continuation.
 
 The runner requires schema-v2 tickets and deliberately rejects legacy tickets.
-It validates Markdown files in all three active columns:
+It validates Markdown files in every execution-aware column:
 
 ```text
 .workflow/kanban/
 ├── backlog/
 ├── doing/
+├── paused/
 └── done/
 ```
 
 Consequently, converting only `backlog/` is not sufficient when old-format
-tickets remain in `done/` or `doing/`.
+tickets remain in `done/`, `doing/`, or `paused/`.
 
 There is intentionally no blind, mechanical migration. Fields such as exact
 allowed paths, file operations, test commands, and full verification commands
@@ -49,6 +50,7 @@ After migration, the project will have:
 ├── kanban/
 │   ├── backlog/       # New schema-v2 tickets
 │   ├── doing/
+│   ├── paused/        # Valid tickets deliberately excluded from execution
 │   └── done/
 └── kanban-legacy-<date>/
     ├── backlog/       # Original tickets, unchanged
@@ -183,8 +185,8 @@ mv .kanban .workflow/kanban-legacy-YYYY-MM-DD
 Replace `YYYY-MM-DD` with the migration date. Do not delete the old board and
 do not rewrite its tickets merely to satisfy the new schema.
 
-The new runner only scans the active `.workflow/kanban/backlog`, `doing`, and
-`done` directories, so the archived board will not interfere with validation.
+The new runner only scans `.workflow/kanban/backlog`, `doing`, `paused`, and
+`done`, so the archived board will not interfere with validation.
 
 Do not start `kanban-loop` yet. The new active board does not exist until the
 remaining work has been reviewed and regenerated.
@@ -315,6 +317,7 @@ When the ticket set is approved, Claude creates:
 .workflow/kanban/
 ├── backlog/
 ├── doing/
+├── paused/
 └── done/
 ```
 
@@ -443,6 +446,9 @@ ambiguous scope, or risky cross-cutting changes.
 - Do not manually stage or commit an in-progress runner patch, including any
   `.workflow` file.
 - Do not edit a ticket after it enters `doing/`.
+- Use `kanban-loop pause <slug> [<slug> ...]` to exclude unfinished backlog
+  tickets from selection, and `kanban-loop resume <slug> [<slug> ...]` to make
+  them eligible again. Do not edit their frontmatter to represent pause state.
 - Do not create runtime state under `.workflow`; the runner stores it under
   `.git/kanban-loop/runs/`.
 - Do not use the legacy `--parallel` behavior. The deterministic runner is
@@ -458,16 +464,16 @@ ambiguous scope, or risky cross-cutting changes.
 
 ### `schema-version must be 2; legacy tickets must be regenerated`
 
-At least one Markdown ticket in the active `backlog/`, `doing/`, or `done/`
-directory is still legacy format. Move it into the preserved legacy archive or
-regenerate it through the approved PRD and `to-tickets` workflow.
+At least one Markdown ticket in `backlog/`, `doing/`, `paused/`, or `done/` is
+still legacy format. Move it into the preserved legacy archive or regenerate it
+through the approved PRD and `to-tickets` workflow.
 
 Do not add only `schema-version: 2`; the remaining required fields must also be
 derived and validated.
 
 ### `Board missing ...`
 
-The active board must contain all three directories:
+The active board must contain these three execution directories:
 
 ```bash
 mkdir -p .workflow/kanban/backlog
@@ -476,6 +482,8 @@ mkdir -p .workflow/kanban/done
 ```
 
 Normally, the approved `/to-tickets` flow creates these directories.
+`paused/` is backward-compatible and optional until first use; new boards create
+it up front, and `kanban-loop pause` creates it automatically.
 
 ### `Working tree must be clean before starting kanban-loop`
 
@@ -489,7 +497,8 @@ patch.
 A backlog ticket depends on a slug that is not present in the active `done/`
 column. During migration this commonly means a new ticket still references an
 archived legacy slug. Revisit the PRD and ticket graph rather than copying a fake
-completion marker into `done/`.
+completion marker into `done/`. A dependency that is deliberately paused also
+keeps its dependants blocked until it is resumed and completed.
 
 ### Claude does not recognize the new skills
 

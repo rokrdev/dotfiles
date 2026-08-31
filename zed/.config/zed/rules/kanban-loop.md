@@ -3,7 +3,7 @@
 
 > **Context note:** If context grows large during board drain, use @session-handoff to capture state, start a new conversation, and resume with @kanban-loop from where you left off.
 
-Drains `.workflow/kanban/backlog/` → `doing/` → `done/` by working through tickets serially in this conversation using TDD per ticket.
+Drains `.workflow/kanban/backlog/` → `doing/` → `done/` by working through tickets serially in this conversation using TDD per ticket. Tickets in `.workflow/kanban/paused/` are visible but excluded from selection.
 
 ## Commands
 
@@ -12,6 +12,12 @@ Drains `.workflow/kanban/backlog/` → `doing/` → `done/` by working through t
 | `@kanban-loop` | Serial mode — one ticket at a time |
 | `@kanban-loop --dry-run` | Resolve eligibility, print plan — no moves, no implementation |
 | `@kanban-loop --branch <name>` | Suggested branch name for pre-flight prompt |
+| `@kanban-loop pause <slug> [<slug> ...]` | Move named backlog tickets unchanged into `paused/` |
+| `@kanban-loop resume <slug> [<slug> ...]` | Move named paused tickets unchanged into `backlog/` |
+
+For pause or resume, invoke the matching `kanban-loop pause` or
+`kanban-loop resume` executable command and return its output. Do not edit ticket
+frontmatter or continue into implementation in the same invocation.
 
 ---
 
@@ -101,6 +107,7 @@ Check board structure exists:
 ```
 .workflow/kanban/backlog/    ← tickets waiting
 .workflow/kanban/doing/      ← tickets in-flight
+.workflow/kanban/paused/     ← tickets deliberately excluded from the loop
 .workflow/kanban/done/       ← completed tickets
 ```
 
@@ -108,7 +115,7 @@ If any directory is missing → abort with:
 
 ```
 ERROR: .workflow/kanban/ board not initialised.
-Run @to-tickets to populate backlog/, or create the three columns manually.
+Run @to-tickets to populate backlog/, or create the execution columns manually.
 ```
 
 **Validate every ticket** in `backlog/` and `doing/`:
@@ -132,6 +139,10 @@ Build the eligible ticket list:
    - Parse frontmatter (`depends-on` field)
    - If all listed deps are in done_slugs → ticket is eligible
 3. Sort eligible tickets by `id` (lowest first)
+
+Never select a ticket from `paused/`. Validate paused ticket structure when the
+directory exists, but do not treat paused tickets as a deadlock or unfinished
+executable backlog.
 
 **Deadlock** — if eligible is empty and `backlog/` is non-empty → surface blocked list showing each ticket's unmet deps. Halt. Human must resolve.
 
@@ -237,6 +248,7 @@ Repeat Steps 2–4 until one of the stop conditions is reached:
 ```
 @kanban-loop complete
   Done:    N tickets
+  Paused:  P tickets
   Failed:  M tickets (in backlog/ with failure notes)
   Skipped: K tickets
 ```

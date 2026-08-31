@@ -41,6 +41,12 @@ Run the executable and return its output faithfully. Do not select tickets, disp
 When the executable returns `KANBAN_AWAITING_COMMIT run_id=<id>`, present its exact diff, verification results, and validator report. Ask the user for one decision:
 
 - Approve → `kanban-loop decide <id> approve`
+- Approve with human-authored supplemental changed files → collect each exact
+  repository-relative path and a concise reason, then run
+  `kanban-loop decide <id> approve --include <path> [--include <path> ...] --reason <reason>`
+  using safe argument passing. This triggers fresh verification and independent
+  validation; do not use it for unchanged, ticket-allowed, board, Git metadata,
+  directory, glob, absolute, or traversal paths.
 - Reject → collect a concise reason, then `kanban-loop decide <id> reject --feedback <reason>` using safe argument passing
 - Abort → `kanban-loop decide <id> abort`
 

@@ -431,6 +431,13 @@ For each ticket, the runner:
 When Claude reports `KANBAN_AWAITING_COMMIT`, review the exact diff,
 verification results, and validator report. Approve, reject with a concise
 reason, or abort. Approval authorizes only the corresponding runner decision.
+If you need to commit an additional already-changed file with the ticket, use
+`kanban-loop decide <run-id> approve --include path/to/file --reason "..."`.
+This is an explicit HITL scope expansion, not a ticket edit: the runner reruns
+verification and independent validation on the expanded patch before staging
+the exact combined file set. It rejects paths that are unchanged, already
+allowed by the ticket, directories/globs, absolute/traversal paths, or board
+and Git metadata paths.
 
 After a ticket commit, HITL mode may report `KANBAN_AWAITING_NEXT`. Choose
 whether to continue to the next eligible ticket or abort the run.

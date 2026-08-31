@@ -338,11 +338,58 @@ class ProviderTests(unittest.TestCase):
         )
         self.assertEqual(result["status"], "complete")
 
+    def test_claude_success_envelope_requires_explicit_inner_status(self) -> None:
+        raw = json.dumps(
+            {
+                "type": "result",
+                "subtype": "success",
+                "terminal_reason": "completed",
+                "result": "Added three focused tests. No production code was touched.",
+            }
+        )
+        with self.assertRaisesRegex(kanban.KanbanError, "unambiguous status"):
+            kanban.parse_agent_result(raw, kanban.IMPLEMENTER_SCHEMA)
+
+    def test_accepts_explicit_status_in_claude_success_envelope(self) -> None:
+        raw = json.dumps(
+            {
+                "type": "result",
+                "subtype": "success",
+                "terminal_reason": "completed",
+                "result": (
+                    "Added three focused tests. No production code was touched.\n"
+                    "Status: complete"
+                ),
+            }
+        )
+        result = kanban.parse_agent_result(raw, kanban.IMPLEMENTER_SCHEMA)
+        self.assertEqual(result["status"], "complete")
+        self.assertEqual(
+            result["summary"],
+            "Added three focused tests. No production code was touched.\n"
+            "Status: complete",
+        )
+
     def test_accepts_explicit_prose_validator_verdict(self) -> None:
         result = kanban.parse_agent_result(
             "Reviewed the patch. Verdict: accept", kanban.VALIDATOR_SCHEMA
         )
         self.assertEqual(result["verdict"], "accept")
+
+    def test_prompts_require_explicit_claude_code_prose_fallbacks(self) -> None:
+        ticket = SimpleNamespace(
+            path=Path(".workflow/tickets/in-progress/ABC-01-test.md"),
+            raw="ticket body",
+            test_paths=("tests/test_app.py",),
+            production_paths=("src/app.py",),
+        )
+        implementer = kanban.implementer_prompt(ticket, "tests", [])
+        validator = kanban.validator_prompt(ticket, "", [], "abc123")
+        self.assertIn("`Status: complete`", implementer)
+        self.assertIn("`Status: blocked`", implementer)
+        self.assertIn("`Verdict: accept`", validator)
+        self.assertIn("`Verdict: reject`", validator)
+        self.assertIn("`Verdict: blocked`", validator)
 
     def test_accepts_markdown_heading_and_table_decisions(self) -> None:
         cases = [

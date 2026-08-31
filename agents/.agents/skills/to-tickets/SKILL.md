@@ -25,7 +25,13 @@ Do not create standalone cleanup, scaffold, extraction, architecture, or specula
 
 For every ticket determine:
 
-- Stable numeric ID and kebab-case slug.
+- The canonical kebab-case feature or branch slug for the approved work.
+- A 1-8 character uppercase ticket prefix derived from the first character of
+  each feature-slug word (`ticket-naming-conventions` → `TNC`). If the derived
+  prefix is unclear, exceeds eight characters, or belongs to another feature
+  already on the board, return `NEEDS_DECISION` and ask for an override.
+- A one-based numeric ID within that feature and a globally unique kebab-case
+  ticket slug. The first ticket is `01`, never `00`.
 - Short title and implementation language.
 - Dependency slugs.
 - One observable acceptance sentence.
@@ -42,7 +48,8 @@ Directories, globs, optional files, `.workflow` paths, and “other files as nee
 
 Before writing files, present the complete proposed ticket set. For every ticket show:
 
-- ID, slug, and title.
+- Feature slug, ticket prefix, full ticket key, and title. The key format is
+  `PREFIX-NN-slug`, for example `TNC-01-add-prefix-validation`.
 - Dependencies.
 - Acceptance criterion.
 - Exact allowed changes with operations.
@@ -53,11 +60,13 @@ Before writing files, present the complete proposed ticket set. For every ticket
 
 Ask whether to merge, split, reorder, change scope, or approve. Write nothing until the user explicitly approves the set. After changes, present the complete set again.
 
-Run stable cycle detection: choose the lowest numeric ID and then slug whenever multiple nodes are ready. A dependency cycle stops generation.
+Run stable cycle detection: choose the lowest numeric ID and then ticket key
+whenever multiple nodes are ready. A dependency cycle stops generation.
 
 ## Ticket Format
 
-Write approved tickets to `.workflow/kanban/backlog/NN-slug.md`. Create
+Write approved tickets to
+`.workflow/kanban/backlog/PREFIX-NN-slug.md`. Create
 `backlog/`, `doing/`, `paused/`, and `done/` when missing. `paused/` contains
 unchanged tickets deliberately excluded from loop eligibility. Runtime state is
 created under Git metadata by the runner; never create or track a `runs/`
@@ -66,7 +75,9 @@ directory.
 ```markdown
 ---
 schema-version: 2
-id: 0
+feature: ticket-naming-conventions
+ticket-prefix: TNC
+id: 1
 slug: json-output
 title: Add JSON output
 language: typescript
@@ -121,11 +132,13 @@ Restate the acceptance sentence and list only necessary observable subconditions
 | Field | Rule |
 |---|---|
 | `schema-version` | Required integer `2` |
-| `id` | Unique integer matching the zero-padded filename prefix |
-| `slug` | Unique kebab-case slug matching the filename |
+| `feature` | Required kebab-case feature or branch slug for newly generated tickets |
+| `ticket-prefix` | Required 1-8 character uppercase code for the feature; starts with a letter and matches the filename |
+| `id` | One-based integer within the feature; `01` is first and must match the filename |
+| `slug` | Globally unique kebab-case action slug matching the filename suffix |
 | `title` | Exact human-readable ticket title |
 | `language` | Informational implementation stack |
-| `depends-on` | List of slugs, empty when none |
+| `depends-on` | List of globally unique ticket slugs, empty when none |
 | `parallel-safe` | Always `false` while the runner is serial |
 | `human-required` | `true` for architecture, UX/API judgment, security, ambiguous scope, or risky cross-cutting work; otherwise `false` |
 | `acceptance` | One externally observable sentence |
@@ -135,7 +148,11 @@ Restate the acceptance sentence and list only necessary observable subconditions
 | `verification` | Non-empty command/expected-exit list; include the full suite |
 | `commit-message` | Exact Conventional Commit subject |
 
-The Markdown body may explain intent, but machine-critical information must appear in frontmatter. Never make the runner infer commands, paths, operations, or commit messages from prose.
+The Markdown body may explain intent, but machine-critical information must
+appear in frontmatter. The runner accepts older schema-v2 `NN-slug.md` tickets
+for compatibility, but this skill must only generate the new one-based prefixed
+format. Never make the runner infer commands, paths, operations, feature
+identity, or commit messages from prose.
 
 ## Final Validation
 
@@ -147,6 +164,8 @@ kanban-loop validate
 
 If validation fails, repair the tickets and rerun it. Do not invoke implementation.
 
-Report the files written, stable topological order, approval status, and validation result. End by telling the user that `/kanban-loop` defaults to HITL and `/kanban-loop --auto` must be explicit.
+Report the feature slug, ticket prefix, files written, stable topological order,
+approval status, and validation result. End by telling the user that
+`/kanban-loop` defaults to HITL and `/kanban-loop --auto` must be explicit.
 
 Also state that `kanban-loop` requires a clean checkout: the user must review and commit the approved PRD and ticket files before starting it. Never create that planning commit without a separate explicit approval.

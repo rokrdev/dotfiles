@@ -22,11 +22,11 @@ Map the user's invocation to exactly one command:
 /kanban-loop [--hitl] [--branch NAME]
   → kanban-loop run --provider claude --mode hitl [--branch NAME]
 
-/kanban-loop pause <slug> [<slug> ...]
-  → kanban-loop pause <slug> [<slug> ...]
+/kanban-loop pause <ticket> [<ticket> ...]
+  → kanban-loop pause <ticket> [<ticket> ...]
 
-/kanban-loop resume <slug> [<slug> ...]
-  → kanban-loop resume <slug> [<slug> ...]
+/kanban-loop resume <ticket> [<ticket> ...]
+  → kanban-loop resume <ticket> [<ticket> ...]
 ```
 
 HITL is the default. AUTO must be explicitly requested.

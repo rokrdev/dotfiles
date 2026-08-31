@@ -249,7 +249,8 @@ targeted test commands, full-suite commands, and repository vocabulary.
 Before writing any files, Claude must present the complete proposed ticket set.
 For every ticket, review:
 
-- ID, slug, title, and dependency slugs.
+- Feature or branch slug, derived ticket prefix, one-based ID, action slug,
+  full ticket key, title, and dependency slugs.
 - One externally observable acceptance criterion.
 - Every exact allowed file and its `create`, `modify`, or `delete` operation.
 - Exact tests to write during the RED phase.
@@ -269,7 +270,9 @@ Every active ticket follows this shape:
 ```yaml
 ---
 schema-version: 2
-id: 0
+feature: ticket-naming-conventions
+ticket-prefix: TNC
+id: 1
 slug: json-output
 title: Add JSON output
 language: typescript
@@ -297,7 +300,15 @@ commit-message: "feat(cli): add JSON output"
 Important schema rules:
 
 - `schema-version` must be the integer `2`.
-- The numeric ID and slug must match the filename.
+- Newly generated tickets use `PREFIX-NN-slug.md`, where `feature` is the
+  canonical kebab-case feature or branch slug, `ticket-prefix` is its approved
+  1-8 character uppercase code, and `01` is the first ticket within the
+  feature. For example, `ticket-naming-conventions` produces
+  `TNC-01-json-output.md`.
+- The ticket prefix, numeric ID, and slug must match the filename. Ticket slugs
+  remain globally unique because dependencies reference slugs.
+- Existing schema-v2 `NN-slug.md` tickets remain valid and do not need renaming;
+  only newly generated tickets use the prefixed one-based format.
 - `parallel-safe` is currently always `false`; the runner is serial.
 - `allowed-changes` must contain exact repository-relative files, never
   directories, globs, optional paths, or `.workflow` paths.
@@ -335,7 +346,7 @@ kanban-loop validate
 Expected output resembles:
 
 ```text
-Valid board: <count> tickets, schema-version 2
+Valid board: <count> tickets, schema-version 2, <count> paused
 ```
 
 Also review implementation changes separately from the local board:
@@ -446,9 +457,11 @@ ambiguous scope, or risky cross-cutting changes.
 - Do not manually stage or commit an in-progress runner patch, including any
   `.workflow` file.
 - Do not edit a ticket after it enters `doing/`.
-- Use `kanban-loop pause <slug> [<slug> ...]` to exclude unfinished backlog
-  tickets from selection, and `kanban-loop resume <slug> [<slug> ...]` to make
-  them eligible again. Do not edit their frontmatter to represent pause state.
+- Use `kanban-loop pause <ticket> [<ticket> ...]` to exclude unfinished backlog
+  tickets from selection, and `kanban-loop resume <ticket> [<ticket> ...]` to
+  make them eligible again. Each reference may be a globally unique slug or a
+  full key such as `TNC-01-add-prefix-validation`. Do not edit frontmatter to
+  represent pause state.
 - Do not create runtime state under `.workflow`; the runner stores it under
   `.git/kanban-loop/runs/`.
 - Do not use the legacy `--parallel` behavior. The deterministic runner is

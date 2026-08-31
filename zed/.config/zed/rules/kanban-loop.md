@@ -12,8 +12,8 @@ Drains `.workflow/kanban/backlog/` → `doing/` → `done/` by working through t
 | `@kanban-loop` | Serial mode — one ticket at a time |
 | `@kanban-loop --dry-run` | Resolve eligibility, print plan — no moves, no implementation |
 | `@kanban-loop --branch <name>` | Suggested branch name for pre-flight prompt |
-| `@kanban-loop pause <slug> [<slug> ...]` | Move named backlog tickets unchanged into `paused/` |
-| `@kanban-loop resume <slug> [<slug> ...]` | Move named paused tickets unchanged into `backlog/` |
+| `@kanban-loop pause <ticket> [<ticket> ...]` | Move named backlog tickets unchanged into `paused/` |
+| `@kanban-loop resume <ticket> [<ticket> ...]` | Move named paused tickets unchanged into `backlog/` |
 
 For pause or resume, invoke the matching `kanban-loop pause` or
 `kanban-loop resume` executable command and return its output. Do not edit ticket
@@ -120,7 +120,7 @@ Run @to-tickets to populate backlog/, or create the execution columns manually.
 
 **Validate every ticket** in `backlog/` and `doing/`:
 
-Required fields: `id` (integer), `slug` (kebab-case, matches `NN-{slug}.md`), `language`,
+Required fields: `id` (integer), `slug` (kebab-case and matches the filename suffix), `language`,
 `acceptance` (non-empty string). Any violation → abort, list all bad tickets with field name.
 
 **Stuck-ticket check** — for each file in `doing/`: if mtime > 1 hour ago, flag as STUCK. Pause, show list, ask user:
@@ -134,7 +134,7 @@ Required fields: `id` (integer), `slug` (kebab-case, matches `NN-{slug}.md`), `l
 
 Build the eligible ticket list:
 
-1. Collect all slugs from `.workflow/kanban/done/` (filenames `NN-slug.md` → extract slug portion)
+1. Parse all tickets in `.workflow/kanban/done/` and collect their frontmatter slugs
 2. For each ticket in `.workflow/kanban/backlog/` (sorted by filename):
    - Parse frontmatter (`depends-on` field)
    - If all listed deps are in done_slugs → ticket is eligible
@@ -156,7 +156,7 @@ executable backlog.
 
 Pick the ticket with the lowest `id` from the eligible set.
 
-1. `mv .workflow/kanban/backlog/NN-slug.md .workflow/kanban/doing/NN-slug.md`
+1. Move the selected ticket file unchanged from `backlog/` to `doing/`
 2. Read the ticket file in full (frontmatter + body)
 3. Work the ticket inline using TDD — red→green→refactor:
 
@@ -221,11 +221,11 @@ Gate 3 — Scope clean
    Co-Authored-By: Claude <noreply@anthropic.com>
    ```
    Message must start with `<type>(<scope>):` — if not, fix before committing.
-4. `mv .workflow/kanban/doing/NN-slug.md .workflow/kanban/done/NN-slug.md`
+4. Move the selected ticket file unchanged from `doing/` to `done/`
 
 **Any gate fails:**
 - Append failure note to ticket body: `## Failure — <gate number>\n<reason>`
-- `mv .workflow/kanban/doing/NN-slug.md .workflow/kanban/backlog/NN-slug.md`
+- Move the selected ticket file unchanged from `doing/` back to `backlog/`
 - Warn user with gate number, reason, ticket name
 - Increment failure counter. If 3+ consecutive failures → **circuit breaker**: halt loop, surface failures, ask user to intervene
 - Ask user: retry / skip / abort

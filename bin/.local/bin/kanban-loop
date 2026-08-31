@@ -35,6 +35,7 @@ PROTECTED_BRANCHES = {"main", "master", "develop"}
 BOARD_COLUMNS = ("backlog", "doing", "paused", "done")
 REQUIRED_BOARD_COLUMNS = ("backlog", "doing", "done")
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+TICKET_PREFIX_RE = re.compile(r"^[A-Z][A-Z0-9]{0,7}$")
 COMMIT_RE = re.compile(
     r"^(feat|fix|refactor|test|docs|build|ci|chore|perf)(\([a-z0-9-]+\))?!?: .+"
 )
@@ -82,6 +83,8 @@ class Ticket:
     raw: str
     metadata: dict[str, Any]
     body: str
+    feature: str | None
+    ticket_prefix: str | None
     id: int
     slug: str
     title: str
@@ -98,6 +101,10 @@ class Ticket:
     @property
     def digest(self) -> str:
         return sha256_text(self.raw)
+
+    @property
+    def key(self) -> str:
+        return self.path.stem
 
     @property
     def allowed_paths(self) -> set[str]:
@@ -237,7 +244,23 @@ def parse_ticket(path: Path) -> Ticket:
     commit_message = require(metadata, "commit-message", str, path)
     if not SLUG_RE.fullmatch(slug):
         raise KanbanError(f"{path}: slug must be kebab-case")
-    expected_name = f"{ticket_id:02d}-{slug}.md"
+    feature = metadata.get("feature")
+    ticket_prefix = metadata.get("ticket-prefix")
+    if feature is None and ticket_prefix is None:
+        expected_name = f"{ticket_id:02d}-{slug}.md"
+    else:
+        if not isinstance(feature, str) or not SLUG_RE.fullmatch(feature):
+            raise KanbanError(f"{path}: feature must be a kebab-case name")
+        if not isinstance(ticket_prefix, str) or not TICKET_PREFIX_RE.fullmatch(
+            ticket_prefix
+        ):
+            raise KanbanError(
+                f"{path}: ticket-prefix must be 1-8 uppercase letters or digits "
+                "and start with a letter"
+            )
+        if ticket_id < 1:
+            raise KanbanError(f"{path}: prefixed ticket IDs start at 1")
+        expected_name = f"{ticket_prefix}-{ticket_id:02d}-{slug}.md"
     if path.name != expected_name:
         raise KanbanError(f"{path}: filename must be {expected_name}")
     if not COMMIT_RE.fullmatch(commit_message):
@@ -309,6 +332,8 @@ def parse_ticket(path: Path) -> Ticket:
         raw=raw,
         metadata=metadata,
         body=body,
+        feature=feature,
+        ticket_prefix=ticket_prefix,
         id=ticket_id,
         slug=slug,
         title=title,
@@ -1252,15 +1277,43 @@ def validate_board(repo: Path) -> list[Ticket]:
             raise KanbanError(f"Board missing {paths[name]}")
     tickets: list[Ticket] = []
     errors: list[str] = []
-    identities: set[tuple[int, str]] = set()
+    identities: set[str] = set()
+    sequence_ids: set[tuple[str | None, int]] = set()
+    slugs: set[str] = set()
+    prefix_features: dict[str, str] = {}
+    feature_prefixes: dict[str, str] = {}
     for column in BOARD_COLUMNS:
         for path in sorted(paths[column].glob("*.md")):
             try:
                 ticket = parse_ticket(path)
-                identity = (ticket.id, ticket.slug)
-                if identity in identities:
-                    raise KanbanError(f"{path}: duplicate ticket identity {identity}")
-                identities.add(identity)
+                if ticket.key in identities:
+                    raise KanbanError(f"{path}: duplicate ticket identity {ticket.key}")
+                sequence_id = (ticket.ticket_prefix, ticket.id)
+                if sequence_id in sequence_ids:
+                    label = ticket.ticket_prefix or "legacy tickets"
+                    raise KanbanError(
+                        f"{path}: duplicate ticket ID {ticket.id:02d} for {label}"
+                    )
+                if ticket.slug in slugs:
+                    raise KanbanError(f"{path}: duplicate ticket slug {ticket.slug}")
+                identities.add(ticket.key)
+                sequence_ids.add(sequence_id)
+                slugs.add(ticket.slug)
+                if ticket.ticket_prefix and ticket.feature:
+                    existing_feature = prefix_features.get(ticket.ticket_prefix)
+                    if existing_feature not in {None, ticket.feature}:
+                        raise KanbanError(
+                            f"{path}: ticket-prefix {ticket.ticket_prefix} already "
+                            f"belongs to feature {existing_feature}"
+                        )
+                    existing_prefix = feature_prefixes.get(ticket.feature)
+                    if existing_prefix not in {None, ticket.ticket_prefix}:
+                        raise KanbanError(
+                            f"{path}: feature {ticket.feature} already uses "
+                            f"ticket-prefix {existing_prefix}"
+                        )
+                    prefix_features[ticket.ticket_prefix] = ticket.feature
+                    feature_prefixes[ticket.feature] = ticket.ticket_prefix
                 tickets.append(ticket)
             except KanbanError as error:
                 errors.append(str(error))
@@ -1276,7 +1329,10 @@ def eligible_tickets(repo: Path) -> list[Ticket]:
     done = {parse_ticket(path).slug for path in paths["done"].glob("*.md")}
     backlog = [parse_ticket(path) for path in paths["backlog"].glob("*.md")]
     eligible = [ticket for ticket in backlog if set(ticket.depends_on) <= done]
-    return sorted(eligible, key=lambda ticket: (ticket.id, ticket.slug))
+    return sorted(
+        eligible,
+        key=lambda ticket: (ticket.id, ticket.ticket_prefix or "", ticket.slug),
+    )
 
 
 def ensure_clean(repo: Path) -> None:
@@ -1328,31 +1384,32 @@ def move_ticket(ticket: Ticket, destination: Path) -> Path:
     return target
 
 
-def find_ticket_by_slug(repo: Path, column: str, slug: str) -> Ticket:
+def find_ticket(repo: Path, column: str, reference: str) -> Ticket:
     if column not in BOARD_COLUMNS:
         raise KanbanError(f"Unknown board column: {column}")
-    if not SLUG_RE.fullmatch(slug):
-        raise KanbanError(f"Ticket slug must be kebab-case: {slug!r}")
+    if not reference or Path(reference).name != reference:
+        raise KanbanError(f"Ticket reference must be a slug or key: {reference!r}")
+    key = reference.removesuffix(".md")
     matches = [
         ticket
         for ticket in (
             parse_ticket(path) for path in board_paths(repo)[column].glob("*.md")
         )
-        if ticket.slug == slug
+        if ticket.slug == key or ticket.key == key
     ]
     if not matches:
-        raise KanbanError(f"No ticket with slug {slug!r} in {column}/")
+        raise KanbanError(f"No ticket matching {reference!r} in {column}/")
     if len(matches) > 1:
-        raise KanbanError(f"Multiple tickets with slug {slug!r} in {column}/")
+        raise KanbanError(f"Multiple tickets match {reference!r} in {column}/")
     return matches[0]
 
 
 def transition_tickets(
-    repo: Path, slugs: list[str], source: str, destination: str
+    repo: Path, references: list[str], source: str, destination: str
 ) -> list[Ticket]:
-    if len(slugs) != len(set(slugs)):
-        raise KanbanError("Ticket slugs must not be repeated")
-    tickets = [find_ticket_by_slug(repo, source, slug) for slug in slugs]
+    if len(references) != len(set(references)):
+        raise KanbanError("Ticket references must not be repeated")
+    tickets = [find_ticket(repo, source, reference) for reference in references]
     targets = [board_paths(repo)[destination] / ticket.path.name for ticket in tickets]
     existing = [target for target in targets if target.exists()]
     if existing:
@@ -1575,7 +1632,7 @@ def process_ticket(
     starting_findings: list[dict[str, Any]] | None = None,
     starting_attempt: int = 0,
 ) -> tuple[str, str]:
-    run_id = run_id or f"{ticket.slug}-{uuid.uuid4().hex[:8]}"
+    run_id = run_id or f"{ticket.key}-{uuid.uuid4().hex[:8]}"
     run_path = state_dir(repo, run_id)
     run_path.mkdir(parents=True, exist_ok=True)
     findings = list(starting_findings or [])
@@ -1610,7 +1667,7 @@ def process_ticket(
                 run_path,
                 f"attempt-{attempt:02d}",
                 error,
-                context={"phase": "implementing", "ticket": current_ticket.slug},
+                context={"phase": "implementing", "ticket": current_ticket.key},
             )
             save_state(
                 repo,
@@ -1632,7 +1689,7 @@ def process_ticket(
                 {"run_id": run_id, "phase": "needs-replan", "validation": validation},
             )
             raise KanbanError(
-                f"Validator blocked ticket {current_ticket.slug}: {validation['summary']}"
+                f"Validator blocked ticket {current_ticket.key}: {validation['summary']}"
             )
         if verdict == "reject":
             findings = [
@@ -1679,7 +1736,7 @@ def process_ticket(
                 "ticket": str(done_path.relative_to(repo)),
             },
         )
-        print(f"DONE {current_ticket.slug} {commit_sha}")
+        print(f"DONE {current_ticket.key} {commit_sha}")
         return run_id, "done"
     save_state(
         repo,
@@ -1687,7 +1744,7 @@ def process_ticket(
         {"run_id": run_id, "phase": "circuit-breaker", "findings": findings},
     )
     raise KanbanError(
-        f"Circuit breaker: {current_ticket.slug} rejected {max_attempts} times"
+        f"Circuit breaker: {current_ticket.key} rejected {max_attempts} times"
     )
 
 
@@ -1718,7 +1775,7 @@ def command_run(args: argparse.Namespace) -> int:
                 backlog = list(paths["backlog"].glob("*.md"))
                 if backlog:
                     blocked = [
-                        f"{parse_ticket(path).slug}: {parse_ticket(path).depends_on}"
+                        f"{parse_ticket(path).key}: {parse_ticket(path).depends_on}"
                         for path in sorted(backlog)
                     ]
                     raise KanbanError(
@@ -1762,7 +1819,7 @@ def command_plan(args: argparse.Namespace) -> int:
             parse_ticket(path)
             for path in board_paths(repo)["paused"].glob("*.md")
         ),
-        key=lambda ticket: (ticket.id, ticket.slug),
+        key=lambda ticket: (ticket.id, ticket.ticket_prefix or "", ticket.slug),
     )
     payload = {
         "provider": provider.name,
@@ -1770,6 +1827,9 @@ def command_plan(args: argparse.Namespace) -> int:
         "existing_worktree": is_existing_worktree(repo),
         "eligible": [
             {
+                "key": ticket.key,
+                "feature": ticket.feature,
+                "ticket_prefix": ticket.ticket_prefix,
                 "id": ticket.id,
                 "slug": ticket.slug,
                 "human_required": ticket.human_required,
@@ -1780,6 +1840,9 @@ def command_plan(args: argparse.Namespace) -> int:
         ],
         "paused": [
             {
+                "key": ticket.key,
+                "feature": ticket.feature,
+                "ticket_prefix": ticket.ticket_prefix,
                 "id": ticket.id,
                 "slug": ticket.slug,
                 "title": ticket.title,
@@ -1805,10 +1868,10 @@ def command_transition(
                 "Another kanban-loop process holds the board lock"
             ) from error
         validate_board(repo)
-        tickets = transition_tickets(repo, args.slugs, source, destination)
+        tickets = transition_tickets(repo, args.tickets, source, destination)
         validate_board(repo)
     for ticket in tickets:
-        print(f"{label} {ticket.slug} -> {destination}/{ticket.path.name}")
+        print(f"{label} {ticket.key} -> {destination}/{ticket.path.name}")
     return 0
 
 
@@ -1853,7 +1916,7 @@ def command_decide(args: argparse.Namespace) -> int:
                     "ticket": str(done_path.relative_to(repo)),
                 },
             )
-            print(f"COMMITTED {ticket.slug} {commit_sha}")
+            print(f"COMMITTED {ticket.key} {commit_sha}")
             print(f"KANBAN_AWAITING_NEXT run_id={args.run_id}")
             return EXIT_AWAITING_NEXT
         if args.decision == "reject":
@@ -1925,13 +1988,13 @@ def parser() -> argparse.ArgumentParser:
     pause = subcommands.add_parser(
         "pause", help="Move backlog tickets out of loop eligibility"
     )
-    pause.add_argument("slugs", nargs="+", metavar="SLUG")
+    pause.add_argument("tickets", nargs="+", metavar="TICKET")
     pause.set_defaults(func=command_pause)
 
     resume = subcommands.add_parser(
         "resume", help="Return paused tickets to the executable backlog"
     )
-    resume.add_argument("slugs", nargs="+", metavar="SLUG")
+    resume.add_argument("tickets", nargs="+", metavar="TICKET")
     resume.set_defaults(func=command_resume)
 
     decide = subcommands.add_parser("decide", help="Resolve a persisted HITL gate")

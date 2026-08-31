@@ -4,7 +4,7 @@
 # To Tickets
 
 Break a plan into independently-workable tickets using vertical slices (tracer bullets).
-Writes each ticket to `.workflow/kanban/backlog/NN-slug.md` in the project root
+Writes each ticket to `.workflow/kanban/backlog/PREFIX-NN-slug.md` in the project root
 and ensures `backlog/`, `doing/`, `paused/`, and `done/` exist.
 The PRD from @to-prd is the canonical input — run that first if you have only a spec.
 
@@ -39,6 +39,11 @@ Break the plan into **tracer bullet** tickets. Each ticket is a thin vertical sl
 - **Forbidden framings:** "scaffold X module", "extract Y util", "refactor Z" — those are horizontal slices and must not appear as standalone tickets
 
 For each slice, determine:
+- **feature**: canonical kebab-case feature or branch slug
+- **ticket-prefix**: 1-8 uppercase characters derived from the initials of the
+  feature words (`ticket-naming-conventions` → `TNC`); stop and ask if it is
+  ambiguous or conflicts with another feature
+- **id**: one-based position within the feature (`01` is first; never `00`)
 - **slug**: kebab-case, concise (becomes the filename suffix)
 - **language**: routes to the correct toolchain (`typescript`, `python`, `kotlin`, `swift`)
 - **depends-on**: list of slugs that must be done first; use slugs so refs survive renumber
@@ -82,6 +87,9 @@ If a cycle is detected: **stop, report the cycle to the user, do not write any f
 
 Present the proposed breakdown as a numbered list. For each ticket, show:
 
+- **Feature**: `ticket-naming-conventions`
+- **Ticket prefix**: `TNC`
+- **Full key**: `TNC-01-slug-name`
 - **Slug**: `slug-name`
 - **Language**: typescript / python / kotlin / swift
 - **Depends on**: slugs (or "none")
@@ -100,19 +108,21 @@ Iterate until the user approves the breakdown.
 ### 6. Assign IDs in topological order
 
 After approval, assign numeric IDs using the topological sort order from step 4.
-Use zero-padded integers (`00`, `01`, `02`, …).
-Slugs in `depends-on` are the stable reference; IDs are only for filename ordering.
+Use one-based zero-padded integers within the feature (`01`, `02`, `03`, …).
+Slugs in `depends-on` are globally unique stable references; IDs are only for
+filename ordering within the feature.
 
 ### 7. Write ticket files
 
-For each ticket, write `.workflow/kanban/backlog/NN-slug.md` (create `.workflow/kanban/backlog/` if missing).
+For each ticket, write `.workflow/kanban/backlog/PREFIX-NN-slug.md` (create the
+board columns if missing).
 
 ```
 .workflow/
 └── kanban/
     └── backlog/
-        ├── 00-cli-scaffold.md
-        ├── 01-store-short-url.md
+        ├── TNC-01-validate-prefix.md
+        ├── TNC-02-generate-ticket-name.md
         └── ...
 ```
 
@@ -120,7 +130,9 @@ Use this template for each file:
 
 ```markdown
 ---
-id: <NN as integer>
+feature: <kebab-case-feature-or-branch-slug>
+ticket-prefix: <UPPERCASE-FEATURE-CODE>
+id: <one-based-NN-within-feature>
 slug: <slug>
 language: <typescript|python|kotlin|swift>
 depends-on: [<slug-a>, <slug-b>]   # omit field if empty
@@ -174,6 +186,7 @@ If **any** ticket fails a check → revise it before writing files. Do NOT emit 
 
 After writing all files, output:
 - Number of tickets written
+- Feature slug and ticket prefix
 - Topological order (slug sequence)
 - Any tickets marked `parallel-safe: true` (candidates for parallel work)
 
@@ -183,8 +196,10 @@ After writing all files, output:
 
 | Field | Required | Notes |
 |-------|----------|-------|
-| `id` | yes | Integer matching NN prefix; unique |
-| `slug` | yes | Kebab-case; matches filename after `NN-` |
+| `feature` | yes | Canonical kebab-case feature or branch slug |
+| `ticket-prefix` | yes | 1-8 uppercase characters matching the filename and unique to the feature |
+| `id` | yes | One-based integer within the feature matching NN; `01` is first |
+| `slug` | yes | Globally unique kebab-case action matching the filename suffix |
 | `language` | yes | `typescript`, `python`, `kotlin`, `swift` |
 | `depends-on` | no | List of slugs required before eligible; omit if none |
 | `parallel-safe` | no | Default `false`; `true` only when `files-touched` has zero overlap with ALL other eligible tickets |
@@ -199,7 +214,7 @@ After writing all files, output:
 A ticket is **eligible** when every slug in its `depends-on` list has a matching file in `done/`:
 
 ```
-eligible(ticket) ⟺ ∀ slug ∈ ticket.depends-on: ∃ file .workflow/kanban/done/NN-{slug}.md
+eligible(ticket) ⟺ ∀ slug ∈ ticket.depends-on: ∃ parsed ticket in done/ with that slug
 ```
 
 ---

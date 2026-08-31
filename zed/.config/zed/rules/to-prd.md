@@ -6,7 +6,8 @@
 Synthesize the current conversation context and codebase understanding into a PRD.
 Writes output to `.workflow/docs/<slug>.md` in the project root (creates dir if missing).
 
-**This PRD is the input to @to-tickets** — run this first, then run @to-tickets to break the PRD into `.workflow/kanban/backlog/` tickets.
+**This PRD is the input to @to-tickets** — run this first, then run @to-tickets
+to create a schema-v3 feature and intent tickets under `.workflow/kanban/`.
 
 Do NOT interview the user — synthesize what you already know. If critical information is missing, ask one focused question before proceeding.
 
@@ -102,6 +103,6 @@ Any additional context, constraints, or open questions.
 
 ## Next Step
 
-> **PRD written.** Run @to-tickets next to decompose the PRD into vertical-slice tickets in `.workflow/kanban/backlog/`.
+> **PRD written.** Run @to-tickets next to create the schema-v3 feature and serial intent tickets.
 
 Do NOT start implementation or planning. Your job ends here.

@@ -1,5 +1,5 @@
 interface:
   display_name: "Kanban Loop"
-  short_description: "Run the deterministic Kanban board"
+  short_description: "Run and control schema-v3 Kanban work"
 policy:
   allow_implicit_invocation: false

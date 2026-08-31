@@ -5,1477 +5,1294 @@
 # ///
 from __future__ import annotations
 
-import contextlib
-import importlib.machinery
-import importlib.util
-import io
 import json
-import os
 import subprocess
 import sys
 import tempfile
 import unittest
+from collections.abc import Callable
 from pathlib import Path
-from types import SimpleNamespace
-from unittest import mock
+from typing import Any
 
-RUNNER = Path(__file__).resolve().parents[1] / "bin/.local/bin/kanban-loop"
-LOADER = importlib.machinery.SourceFileLoader("kanban_loop", str(RUNNER))
-SPEC = importlib.util.spec_from_loader("kanban_loop", LOADER)
-assert SPEC and SPEC.loader
-kanban = importlib.util.module_from_spec(SPEC)
-sys.modules["kanban_loop"] = kanban
-SPEC.loader.exec_module(kanban)
+LIBRARY = Path(__file__).resolve().parents[1] / "bin/.local/lib"
+sys.path.insert(0, str(LIBRARY))
 
-
-VALID_TICKET = """---
-schema-version: 2
-id: 0
-slug: hello-command
-title: Add hello command
-language: python
-depends-on: []
-human-required: false
-acceptance: "Running app hello prints hello."
-allowed-changes:
-  - path: src/app.py
-    operation: modify
-  - path: tests/test_app.py
-    operation: modify
-failing-tests:
-  - tests/test_app.py::test_hello_command
-tdd-test-command: python -m unittest tests.test_app.TestApp.test_hello_command
-verification:
-  - command: python -m unittest
-    expected-exit: 0
-commit-message: "feat(cli): add hello command"
----
-
-## Context
-
-Add one command.
-"""
-
-PREFIXED_TICKET = VALID_TICKET.replace(
-    "schema-version: 2\nid: 0\n",
-    "schema-version: 2\n"
-    "feature: ticket-naming-conventions\n"
-    "ticket-prefix: TNC\n"
-    "id: 1\n",
-).replace("slug: hello-command", "slug: add-ticket-prefix")
+from kanban_loop import gitops
+from kanban_loop.cli import execute, parser
+from kanban_loop.engine import Engine
+from kanban_loop.model import (
+    KanbanError,
+    feature_status,
+    parse_ticket,
+    render_markdown,
+)
+from kanban_loop.providers import (
+    IMPLEMENTER_SCHEMA,
+    AgentResult,
+    ClaudeAdapter,
+    CodexAdapter,
+    OpenCodeAdapter,
+    ProviderFailure,
+    parse_agent_result,
+)
+from kanban_loop.storage import (
+    BoardStore,
+    SessionStore,
+    apply_migration,
+    migration_preview,
+    restore_migration,
+)
 
 
-class TicketTests(unittest.TestCase):
-    def test_parses_v2_ticket(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / "00-hello-command.md"
-            path.write_text(VALID_TICKET, encoding="utf-8")
-            ticket = kanban.parse_ticket(path)
-            self.assertEqual(ticket.slug, "hello-command")
-            self.assertEqual(ticket.test_paths, {"tests/test_app.py"})
-            self.assertEqual(ticket.production_paths, {"src/app.py"})
+def command(root: Path, *arguments: str) -> str:
+    completed = subprocess.run(
+        list(arguments), cwd=root, text=True, capture_output=True, check=True
+    )
+    return completed.stdout.strip()
 
-    def test_parses_one_based_prefixed_ticket(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / "TNC-01-add-ticket-prefix.md"
-            path.write_text(PREFIXED_TICKET, encoding="utf-8")
 
-            ticket = kanban.parse_ticket(path)
+def feature_text(slug: str = "loop-redesign", prefix: str = "LR") -> str:
+    return render_markdown(
+        {
+            "schema-version": 3,
+            "kind": "feature",
+            "feature": slug,
+            "ticket-prefix": prefix,
+            "title": "Loop redesign",
+            "priority": 0,
+        }
+    )
 
-            self.assertEqual(ticket.feature, "ticket-naming-conventions")
-            self.assertEqual(ticket.ticket_prefix, "TNC")
-            self.assertEqual(ticket.id, 1)
-            self.assertEqual(ticket.slug, "add-ticket-prefix")
-            self.assertEqual(ticket.key, "TNC-01-add-ticket-prefix")
 
-    def test_rejects_zero_based_prefixed_ticket(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / "TNC-00-add-ticket-prefix.md"
-            path.write_text(
-                PREFIXED_TICKET.replace("id: 1", "id: 0"), encoding="utf-8"
+def ticket_text(
+    *,
+    number: int = 1,
+    slug: str = "deliver-outcome",
+    prefix: str = "LR",
+    feature: str = "loop-redesign",
+    depends_on: list[str] | None = None,
+    priority: int = 0,
+    mode: str = "inherit",
+    verification: list[Any] | None = None,
+    strict_tdd: bool = False,
+    tdd_command: str | None = None,
+    likely_files: list[str] | None = None,
+) -> str:
+    metadata: dict[str, Any] = {
+        "schema-version": 3,
+        "kind": "ticket",
+        "feature": feature,
+        "ticket-prefix": prefix,
+        "id": number,
+        "slug": slug,
+        "title": slug.replace("-", " ").title(),
+        "depends-on": depends_on or [],
+        "priority": priority,
+        "mode": mode,
+        "acceptance": ["The requested observable outcome is delivered."],
+        "constraints": ["Preserve unrelated behavior."],
+        "out-of-scope": ["Unrelated cleanup."],
+        "verification": verification
+        if verification is not None
+        else ["python -c 'print(1)'"],
+        "strict-tdd": strict_tdd,
+        "implementation-hints": [],
+        "likely-files": likely_files or [],
+    }
+    if tdd_command is not None:
+        metadata["tdd-test-command"] = tdd_command
+    return render_markdown(metadata, "## Context\n\nDeliver one outcome.")
+
+
+class RepoCase(unittest.TestCase):
+    def setUp(self) -> None:
+        self.temporary = tempfile.TemporaryDirectory()
+        self.root = Path(self.temporary.name)
+        command(self.root, "git", "init", "-b", "topic")
+        command(self.root, "git", "config", "user.name", "Test User")
+        command(self.root, "git", "config", "user.email", "test@example.com")
+        (self.root / "src").mkdir()
+        (self.root / "src/app.py").write_text("VALUE = 0\n", encoding="utf-8")
+        (self.root / "README.md").write_text("baseline\n", encoding="utf-8")
+        command(self.root, "git", "add", "src/app.py", "README.md")
+        command(self.root, "git", "commit", "-m", "initial")
+        self.store = BoardStore(self.root)
+        self.store.initialise()
+        (self.store.features_dir / "loop-redesign.md").write_text(
+            feature_text(), encoding="utf-8"
+        )
+
+    def tearDown(self) -> None:
+        self.temporary.cleanup()
+
+    def write_ticket(
+        self,
+        *,
+        column: str = "ready",
+        number: int = 1,
+        slug: str = "deliver-outcome",
+        **kwargs: Any,
+    ) -> Path:
+        key = f"LR-{number:02d}-{slug}"
+        path = self.store.tickets_dir / column / f"{key}.md"
+        path.write_text(
+            ticket_text(number=number, slug=slug, **kwargs), encoding="utf-8"
+        )
+        return path
+
+
+class ModelTests(RepoCase):
+    def test_intent_ticket_needs_no_file_allowlist_or_commit_message(self) -> None:
+        path = self.write_ticket(likely_files=["tests/test_app.py"])
+        ticket = parse_ticket(path)
+        self.assertEqual(ticket.key, "LR-01-deliver-outcome")
+        self.assertEqual(ticket.likely_files, ("tests/test_app.py",))
+        self.assertEqual(
+            ticket.acceptance[0], "The requested observable outcome is delivered."
+        )
+
+    def test_strict_tdd_requires_a_command(self) -> None:
+        path = self.write_ticket(strict_tdd=True)
+        with self.assertRaisesRegex(KanbanError, "requires tdd-test-command"):
+            parse_ticket(path)
+
+    def test_feature_prefix_and_ticket_identity_must_agree(self) -> None:
+        path = self.write_ticket()
+        path.write_text(
+            path.read_text().replace("ticket-prefix: LR", "ticket-prefix: XX")
+        )
+        with self.assertRaisesRegex(KanbanError, "identity fields disagree"):
+            parse_ticket(path)
+
+    def test_board_rejects_cycles(self) -> None:
+        self.write_ticket(depends_on=["LR-02-second"])
+        self.write_ticket(number=2, slug="second", depends_on=["LR-01-deliver-outcome"])
+        with self.assertRaisesRegex(KanbanError, "dependency cycle"):
+            self.store.load()
+
+    def test_eligibility_uses_dependencies_then_priority(self) -> None:
+        self.write_ticket(number=1, slug="first", priority=1)
+        self.write_ticket(
+            number=2, slug="second", priority=9, depends_on=["LR-01-first"]
+        )
+        board = self.store.load()
+        self.assertEqual(
+            [item.ticket.key for item in board.eligible()], ["LR-01-first"]
+        )
+        first = board.tickets["LR-01-first"]
+        self.store.transition(first.ticket, "ready", "done")
+        self.assertEqual(
+            [item.ticket.key for item in self.store.load().eligible()], ["LR-02-second"]
+        )
+
+    def test_feature_completion_is_derived(self) -> None:
+        self.write_ticket(column="done")
+        self.assertEqual(
+            feature_status(self.store.load(), "loop-redesign"), "completed"
+        )
+        self.write_ticket(number=2, slug="more")
+        self.assertEqual(feature_status(self.store.load(), "loop-redesign"), "ready")
+
+    def test_feature_status_is_blocked_when_ready_ticket_dependency_is_paused(
+        self,
+    ) -> None:
+        self.write_ticket(column="paused", number=1, slug="first")
+        (self.store.features_dir / "dependent-feature.md").write_text(
+            feature_text("dependent-feature", "DF"), encoding="utf-8"
+        )
+        (self.store.tickets_dir / "ready/DF-01-second.md").write_text(
+            ticket_text(
+                number=1,
+                slug="second",
+                prefix="DF",
+                feature="dependent-feature",
+                depends_on=["LR-01-first"],
+            ),
+            encoding="utf-8",
+        )
+        self.assertEqual(
+            feature_status(self.store.load(), "dependent-feature"), "blocked"
+        )
+
+
+class StorageTests(RepoCase):
+    def test_initialise_adds_checkout_local_workflow_exclusion(self) -> None:
+        exclude = Path(
+            command(self.root, "git", "rev-parse", "--git-path", "info/exclude")
+        )
+        if not exclude.is_absolute():
+            exclude = self.root / exclude
+        self.assertIn("/.workflow/", exclude.read_text().splitlines())
+
+    def test_individual_pause_survives_feature_resume(self) -> None:
+        self.write_ticket(number=1, slug="one")
+        self.write_ticket(number=2, slug="two")
+        self.store.pause_ticket("LR-01-one")
+        self.store.pause_feature("loop-redesign")
+        self.store.resume_feature("loop-redesign")
+        board = self.store.load()
+        self.assertEqual(board.tickets["LR-01-one"].column, "paused")
+        self.assertEqual(board.tickets["LR-02-two"].column, "ready")
+
+    def test_feature_pause_preserves_completed_ticket(self) -> None:
+        self.write_ticket(column="done", number=1, slug="done")
+        self.write_ticket(number=2, slug="todo")
+        keys = self.store.pause_feature("loop-redesign")
+        self.assertEqual(keys, ["LR-02-todo"])
+        board = self.store.load()
+        self.assertEqual(board.tickets["LR-01-done"].column, "done")
+        self.assertEqual(board.tickets["LR-02-todo"].column, "paused")
+
+    def test_completed_feature_archives_and_restores(self) -> None:
+        self.write_ticket(column="done")
+        target = self.store.archive_feature("loop-redesign")
+        self.assertTrue((target / "feature.md").exists())
+        board = self.store.load()
+        self.assertIn("loop-redesign", board.archived_features)
+        self.assertIn("LR-01-deliver-outcome", board.completed_keys)
+        self.store.restore_feature("loop-redesign")
+        self.assertEqual(
+            self.store.load().tickets["LR-01-deliver-outcome"].column, "done"
+        )
+
+    def test_cancelled_feature_cannot_archive(self) -> None:
+        self.write_ticket(column="cancelled")
+        with self.assertRaisesRegex(KanbanError, "only completed"):
+            self.store.archive_feature("loop-redesign")
+
+    def test_session_state_updates_atomically_and_events_persist(self) -> None:
+        sessions = SessionStore(self.root)
+        run_id = sessions.create({"ticket": "LR-01-x", "phase": "active"})
+        state = sessions.save(run_id, {"phase": "review"})
+        self.assertEqual(state["revision"], 1)
+        events = (sessions.path(run_id) / "events.jsonl").read_text().splitlines()
+        self.assertEqual(json.loads(events[0])["event"], "session-created")
+
+    def test_session_lock_rejects_a_concurrent_writer(self) -> None:
+        sessions = SessionStore(self.root)
+        with (
+            sessions.lock(),
+            self.assertRaisesRegex(KanbanError, "Another kanban-loop"),
+            sessions.lock(),
+        ):
+            self.fail("Concurrent lock unexpectedly succeeded")
+
+
+class MigrationTests(RepoCase):
+    def setUp(self) -> None:
+        super().setUp()
+        import shutil
+
+        shutil.rmtree(self.store.root)
+        for column in ("backlog", "doing", "paused", "done"):
+            (self.store.root / column).mkdir(parents=True)
+
+    def legacy_ticket(
+        self, column: str, number: int, slug: str, *, prefixed: bool = True
+    ) -> None:
+        metadata = {
+            "schema-version": 2,
+            "feature": "legacy-feature",
+            "ticket-prefix": "LF",
+            "id": number,
+            "slug": slug,
+            "title": slug.replace("-", " ").title(),
+            "language": "python",
+            "depends-on": [],
+            "human-required": column == "doing",
+            "acceptance": "Legacy behavior remains represented.",
+            "allowed-changes": [{"path": "src/app.py", "operation": "modify"}],
+            "failing-tests": ["tests/test_app.py::test_behavior"],
+            "tdd-test-command": "python -m unittest",
+            "verification": [{"command": "python -c 'print(1)'", "expected-exit": 0}],
+            "commit-message": "feat: legacy",
+        }
+        filename = (
+            f"LF-{number:02d}-{slug}.md" if prefixed else f"{number:02d}-{slug}.md"
+        )
+        path = self.store.root / column / filename
+        path.write_text(render_markdown(metadata, "Legacy context."), encoding="utf-8")
+
+    def test_migration_preview_is_non_mutating(self) -> None:
+        self.legacy_ticket("backlog", 1, "first")
+        legacy_run = SessionStore(self.root).root / "runs/legacy-run"
+        legacy_run.mkdir(parents=True)
+        (legacy_run / "state.json").write_text("{}\n", encoding="utf-8")
+        preview = migration_preview(self.store)
+        self.assertEqual(preview["status"], "ready")
+        self.assertTrue((self.store.root / "backlog/LF-01-first.md").exists())
+        self.assertFalse(self.store.features_dir.exists())
+        self.assertEqual(preview["legacy-runtime"]["runs"], ["legacy-run"])
+        self.assertTrue(legacy_run.exists())
+
+    def test_apply_migration_preserves_identity_and_pauses_active_work(self) -> None:
+        self.legacy_ticket("backlog", 1, "first")
+        self.legacy_ticket("doing", 2, "second")
+        result = apply_migration(self.store)
+        self.assertEqual(result["status"], "migrated")
+        self.assertTrue(Path(result["backup"]).exists())
+        board = self.store.load()
+        self.assertEqual(board.tickets["LF-01-first"].column, "ready")
+        self.assertEqual(board.tickets["LF-02-second"].column, "paused")
+        self.assertEqual(board.tickets["LF-02-second"].ticket.mode, "hitl")
+        key, destination = self.store.resume_ticket("LF-02-second", "migration")
+        self.assertEqual((key, destination), ("LF-02-second", "ready"))
+
+    def test_migration_rejects_duplicate_legacy_dependency_slugs(self) -> None:
+        self.legacy_ticket("backlog", 1, "duplicate")
+        self.legacy_ticket("done", 2, "duplicate")
+        preview = migration_preview(self.store)
+        self.assertEqual(preview["status"], "blocked")
+        self.assertIn("ambiguous", "\n".join(preview["errors"]))
+
+    def test_migration_adds_stable_prefix_to_legacy_unprefixed_filename(self) -> None:
+        self.legacy_ticket("backlog", 1, "first", prefixed=False)
+        result = apply_migration(self.store)
+        self.assertEqual(result["status"], "migrated")
+        self.assertIn("LF-01-first", self.store.load().tickets)
+
+    def test_migration_restore_reinstates_v2_and_backs_up_v3(self) -> None:
+        self.legacy_ticket("backlog", 1, "first")
+        migrated = apply_migration(self.store)
+        restored = restore_migration(self.store, migrated["backup"])
+        self.assertEqual(restored["status"], "restored-schema-v2")
+        self.assertTrue((self.store.root / "backlog/LF-01-first.md").exists())
+        self.assertTrue(Path(restored["schema-v3-backup"]).exists())
+
+
+class GitTests(RepoCase):
+    def test_baseline_tolerates_unrelated_dirty_work(self) -> None:
+        (self.root / "README.md").write_text("user work\n")
+        baseline = gitops.capture_baseline(self.root)
+        (self.root / "src/app.py").write_text("VALUE = 1\n")
+        paths, overlap = gitops.session_delta(self.root, baseline)
+        self.assertEqual(paths, {"src/app.py"})
+        self.assertEqual(overlap, set())
+
+    def test_modifying_preexisting_dirty_path_is_overlap(self) -> None:
+        (self.root / "README.md").write_text("user work\n")
+        baseline = gitops.capture_baseline(self.root)
+        (self.root / "README.md").write_text("agent rewrote user work\n")
+        _, overlap = gitops.session_delta(self.root, baseline)
+        self.assertEqual(overlap, {"README.md"})
+
+    def test_session_rejects_branch_change_even_when_head_is_unchanged(self) -> None:
+        baseline = gitops.capture_baseline(self.root)
+        command(self.root, "git", "switch", "-c", "other-topic")
+        with self.assertRaisesRegex(KanbanError, "branch changed"):
+            gitops.session_delta(self.root, baseline)
+
+    def test_patch_shelving_and_restore(self) -> None:
+        baseline = gitops.capture_baseline(self.root)
+        (self.root / "src/app.py").write_text("VALUE = 2\n")
+        patch = gitops.patch_for_paths(self.root, {"src/app.py"})
+        patch_path = self.root / "saved.patch"
+        patch_path.write_text(patch)
+        gitops.restore_paths(self.root, {"src/app.py"}, baseline["base-commit"])
+        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 0\n")
+        gitops.restore_patch(self.root, patch_path, {"src/app.py"})
+        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 2\n")
+
+    def test_commit_contains_only_session_paths(self) -> None:
+        (self.root / "README.md").write_text("user work\n")
+        (self.root / "src/app.py").write_text("VALUE = 3\n")
+        sha = gitops.commit_paths(self.root, {"src/app.py"}, "feat: update value")
+        self.assertEqual(
+            command(self.root, "git", "show", "--format=", "--name-only", sha),
+            "src/app.py",
+        )
+        self.assertIn("README.md", command(self.root, "git", "status", "--short"))
+
+    def test_verification_worktree_mutation_is_reported_with_results(self) -> None:
+        with self.assertRaises(gitops.CommandFailure) as caught:
+            gitops.run_verification(
+                self.root,
+                [
+                    {
+                        "command": 'python -c \'from pathlib import Path; Path("generated.txt").write_text("side effect")\'',
+                        "expected-exit": 0,
+                        "required": True,
+                    }
+                ],
             )
-
-            with self.assertRaisesRegex(kanban.KanbanError, "IDs start at 1"):
-                kanban.parse_ticket(path)
-
-    def test_rejects_prefixed_filename_that_disagrees_with_frontmatter(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / "ABC-01-add-ticket-prefix.md"
-            path.write_text(PREFIXED_TICKET, encoding="utf-8")
-
-            with self.assertRaisesRegex(
-                kanban.KanbanError, "filename must be TNC-01-add-ticket-prefix.md"
-            ):
-                kanban.parse_ticket(path)
-
-    def test_rejects_incomplete_prefixed_identity(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / "TNC-01-add-ticket-prefix.md"
-            path.write_text(
-                PREFIXED_TICKET.replace(
-                    "feature: ticket-naming-conventions\n", ""
-                ),
-                encoding="utf-8",
-            )
-
-            with self.assertRaisesRegex(kanban.KanbanError, "feature must"):
-                kanban.parse_ticket(path)
-
-    def test_rejects_directory_allowlist(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / "00-hello-command.md"
-            path.write_text(
-                VALID_TICKET.replace("src/app.py", "src/"), encoding="utf-8"
-            )
-            with self.assertRaisesRegex(
-                kanban.KanbanError, "exact repository-relative file"
-            ):
-                kanban.parse_ticket(path)
-
-    def test_rejects_legacy_ticket(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / "00-hello-command.md"
-            path.write_text(
-                VALID_TICKET.replace("schema-version: 2\n", ""), encoding="utf-8"
-            )
-            with self.assertRaisesRegex(kanban.KanbanError, "schema-version"):
-                kanban.parse_ticket(path)
+        self.assertEqual(
+            caught.exception.diagnostics["reason"],
+            "verification-mutated-worktree",
+        )
+        self.assertEqual(
+            caught.exception.diagnostics["changed-paths"], ["generated.txt"]
+        )
+        self.assertEqual(caught.exception.diagnostics["results"][0]["exit"], 0)
 
 
 class ProviderTests(unittest.TestCase):
-    def request(self, writable: bool = True) -> kanban.AgentRequest:
-        return kanban.AgentRequest(
-            role="validator" if not writable else "implementer-code",
-            prompt="prompt",
-            schema=kanban.VALIDATOR_SCHEMA
-            if not writable
-            else kanban.IMPLEMENTER_SCHEMA,
-            cwd=Path("/tmp/repo"),
-            writable=writable,
-            allowed_paths=("src/app.py",) if writable else (),
-        )
-
-    def test_claude_uses_noninteractive_structured_output(self) -> None:
-        command = kanban.ClaudeAdapter().build_command(
-            self.request(), Path("/tmp/schema.json"), Path("/tmp/output.json")
-        )
-        self.assertIn("-p", command)
-        self.assertIn("--json-schema", command)
-        self.assertNotIn("--worktree", command)
-
-    def test_codex_uses_exec_and_read_only_validator(self) -> None:
-        command = kanban.CodexAdapter().build_command(
-            self.request(writable=False),
-            Path("/tmp/schema.json"),
-            Path("/tmp/output.json"),
-        )
-        self.assertEqual(command[:2], ["codex", "exec"])
-        self.assertEqual(command[command.index("--sandbox") + 1], "read-only")
-        self.assertNotIn("--ask-for-approval", command)
-        self.assertIn('approval_policy="never"', command)
-
-    def test_opencode_v1_supplies_bounded_agent_config(self) -> None:
-        request = self.request(writable=False)
-        env = kanban.OpenCodeAdapter("opencode").environment(request)
-        config = json.loads(env["OPENCODE_CONFIG_CONTENT"])
-        permission = config["agent"]["kanban-validator"]["permission"]
-        self.assertEqual(permission["edit"], "deny")
-        self.assertEqual(permission["bash"], "deny")
-
-    def test_opencode2_uses_v2_cli_and_exact_edit_permission(self) -> None:
-        adapter = kanban.OpenCodeAdapter("opencode2")
-        request = self.request(writable=True)
-        command = adapter.build_command(
-            request, Path("/tmp/schema.json"), Path("/tmp/output.json")
-        )
-        self.assertEqual(command[:3], ["opencode2", "run", "--standalone"])
-        self.assertNotIn("--dir", command)
-        config = json.loads(adapter.environment(request)["OPENCODE_CONFIG_CONTENT"])
-        permissions = config["agents"]["kanban-implementer-code"]["permissions"]
-        edit_rules = [rule for rule in permissions if rule["action"] == "edit"]
-        self.assertEqual(
-            edit_rules,
-            [{"action": "edit", "resource": "src/app.py", "effect": "allow"}],
-        )
-
-    def test_detects_current_host_before_executable_fallback(self) -> None:
-        self.assertEqual(
-            kanban.detect_host_provider({"CODEX_THREAD_ID": "thread"}), "codex"
-        )
-        self.assertEqual(
-            kanban.detect_host_provider(
-                {"CODEX_THREAD_ID": "thread", "CLAUDECODE": "1"}
-            ),
-            "claude",
-        )
-
-    def test_extracts_nested_structured_output(self) -> None:
-        raw = json.dumps(
-            {"type": "result", "structured_output": {"status": "complete"}}
-        )
-        self.assertEqual(kanban.extract_json_object(raw), {"status": "complete"})
-
-    def test_read_result_uses_stdout_when_output_file_is_empty(self) -> None:
-        final = {
+    def implementer(self, **updates: Any) -> dict[str, Any]:
+        value = {
             "status": "complete",
             "summary": "done",
             "files_changed": [],
+            "verification_commands": [],
+            "proposed_commit_message": "feat: deliver outcome",
+            "assumptions": [],
+            "scope_notes": [],
             "blocker": None,
         }
-        with tempfile.TemporaryDirectory() as directory:
-            output_path = Path(directory) / "output.json"
-            output_path.touch()
-            result = kanban.ProviderAdapter().read_result(
-                subprocess.CompletedProcess([], 0, stdout=json.dumps(final)),
-                output_path,
-                kanban.IMPLEMENTER_SCHEMA,
-            )
-        self.assertEqual(result.data, final)
-        self.assertEqual(result.raw_output, json.dumps(final))
+        value.update(updates)
+        return value
 
-    def test_read_result_preserves_noisy_stdout_and_prefers_output_file(self) -> None:
-        final = {"verdict": "accept", "summary": "approved", "findings": []}
-        stdout = json.dumps({"type": "error", "error": "transient stream error"})
-        with tempfile.TemporaryDirectory() as directory:
-            output_path = Path(directory) / "output.json"
-            output_path.write_text(json.dumps(final), encoding="utf-8")
-            result = kanban.ProviderAdapter().read_result(
-                subprocess.CompletedProcess([], 0, stdout=stdout),
-                output_path,
-                kanban.VALIDATOR_SCHEMA,
-            )
-        self.assertEqual(result.data, final)
-        self.assertEqual(result.raw_output, stdout + "\n" + json.dumps(final))
-
-    def test_selects_last_schema_valid_result_from_provider_formats(self) -> None:
-        cases = [
-            (
-                kanban.IMPLEMENTER_SCHEMA,
-                {
-                    "status": "complete",
-                    "summary": "done",
-                    "files_changed": ["src/app.py"],
-                    "blocker": None,
-                },
-                {"status": "complete"},
-            ),
-            (
-                kanban.VALIDATOR_SCHEMA,
-                {"verdict": "accept", "summary": "approved", "findings": []},
-                {"verdict": "accept"},
-            ),
-        ]
-        for schema, final, expected in cases:
-            with self.subTest(schema=schema["required"][0]):
-                raw = "\n".join(
-                    [
-                        json.dumps({"type": "event", "structured_output": {"summary": "partial"}}),
-                        json.dumps({"type": "result", "result": json.dumps(final)}),
-                        "```json\n" + json.dumps({"payload": json.dumps(final)}) + "\n```",
-                    ]
-                )
-                result = kanban.parse_agent_result(raw, schema)
-                self.assertEqual(
-                    {key: result[key] for key in expected}, expected
-                )
-
-    def test_provider_errors_do_not_fall_back_to_prose_decisions(self) -> None:
-        for raw in (
-            json.dumps({"type": "error", "error": {"message": "rate limited"}}),
-            "## Error\nProvider failed before validation.\nVerdict: accept",
-        ):
-            with self.subTest(raw=raw), self.assertRaisesRegex(
-                kanban.AgentResultError, "Provider reported an error"
-            ) as raised:
-                kanban.parse_agent_result(raw, kanban.VALIDATOR_SCHEMA)
-            self.assertEqual(raised.exception.raw_output, raw)
-
-    def test_final_valid_result_wins_over_earlier_provider_error_event(self) -> None:
-        cases = [
-            (
-                kanban.IMPLEMENTER_SCHEMA,
-                {
-                    "status": "complete",
-                    "summary": "done",
-                    "files_changed": [],
-                    "blocker": None,
-                },
-                "status",
-            ),
-            (
-                kanban.VALIDATOR_SCHEMA,
-                {"verdict": "accept", "summary": "approved", "findings": []},
-                "verdict",
-            ),
-        ]
-        for schema, final, decision_key in cases:
-            with self.subTest(schema=decision_key):
-                raw = "\n".join(
-                    [
-                        json.dumps({"type": "error", "error": "transient stream error"}),
-                        json.dumps({"type": "result", "structured_output": final}),
-                    ]
-                )
-                self.assertEqual(
-                    kanban.parse_agent_result(raw, schema)[decision_key],
-                    final[decision_key],
-                )
-
-    def test_rejects_structured_output_with_extra_keys(self) -> None:
-        result = {
-            "status": "complete",
-            "summary": "done",
-            "files_changed": [],
-            "blocker": None,
-            "unexpected": True,
-        }
-        with self.assertRaisesRegex(kanban.KanbanError, "extra keys"):
-            kanban.validate_schema(result, kanban.IMPLEMENTER_SCHEMA)
-
-    def test_accepts_explicit_prose_implementer_status(self) -> None:
-        result = kanban.parse_agent_result(
-            "Work complete.\nstatus: complete", kanban.IMPLEMENTER_SCHEMA
+    def test_last_schema_valid_candidate_wins_and_candidates_are_retained(self) -> None:
+        invalid = {"status": "complete"}
+        final = self.implementer(summary="final")
+        parsed, candidates = parse_agent_result(
+            json.dumps(invalid) + "\n" + json.dumps(final), IMPLEMENTER_SCHEMA
         )
-        self.assertEqual(result["status"], "complete")
+        self.assertEqual(parsed["summary"], "final")
+        self.assertFalse(candidates[0]["valid"])
+        self.assertTrue(candidates[-1]["valid"])
 
-    def test_claude_success_envelope_requires_explicit_inner_status(self) -> None:
-        raw = json.dumps(
-            {
-                "type": "result",
-                "subtype": "success",
-                "terminal_reason": "completed",
-                "result": "Added three focused tests. No production code was touched.",
-            }
+    def test_missing_fields_are_reported_before_failure(self) -> None:
+        with self.assertRaises(ProviderFailure) as raised:
+            parse_agent_result('{"status":"complete"}', IMPLEMENTER_SCHEMA)
+        diagnostics = raised.exception.diagnostics
+        self.assertIn("missing fields", diagnostics["candidates"][0]["error"])
+        self.assertIn("raw-output", diagnostics)
+
+    def test_ambiguous_prose_cannot_authorize(self) -> None:
+        with self.assertRaises(ProviderFailure):
+            parse_agent_result("Looks good, probably complete.", IMPLEMENTER_SCHEMA)
+
+    def test_explicit_labelled_prose_is_normalized(self) -> None:
+        parsed, candidates = parse_agent_result(
+            "Implementation finished.\nStatus: complete", IMPLEMENTER_SCHEMA
         )
-        with self.assertRaisesRegex(kanban.KanbanError, "unambiguous status"):
-            kanban.parse_agent_result(raw, kanban.IMPLEMENTER_SCHEMA)
+        self.assertEqual(parsed["status"], "complete")
+        self.assertEqual(candidates[-1]["source"], "labelled-prose")
 
-    def test_accepts_explicit_status_in_claude_success_envelope(self) -> None:
-        raw = json.dumps(
-            {
-                "type": "result",
-                "subtype": "success",
-                "terminal_reason": "completed",
-                "result": (
-                    "Added three focused tests. No production code was touched.\n"
-                    "Status: complete"
-                ),
-            }
-        )
-        result = kanban.parse_agent_result(raw, kanban.IMPLEMENTER_SCHEMA)
-        self.assertEqual(result["status"], "complete")
-        self.assertEqual(
-            result["summary"],
-            "Added three focused tests. No production code was touched.\n"
-            "Status: complete",
-        )
+    def test_final_valid_result_wins_over_earlier_provider_error(self) -> None:
+        raw = '{"type":"error","error":"transient"}\n' + json.dumps(self.implementer())
+        parsed, _ = parse_agent_result(raw, IMPLEMENTER_SCHEMA)
+        self.assertEqual(parsed["status"], "complete")
 
-    def test_accepts_explicit_prose_validator_verdict(self) -> None:
-        result = kanban.parse_agent_result(
-            "Reviewed the patch. Verdict: accept", kanban.VALIDATOR_SCHEMA
-        )
-        self.assertEqual(result["verdict"], "accept")
-
-    def test_prompts_require_explicit_claude_code_prose_fallbacks(self) -> None:
-        ticket = SimpleNamespace(
-            path=Path(".workflow/tickets/in-progress/ABC-01-test.md"),
-            raw="ticket body",
-            test_paths=("tests/test_app.py",),
-            production_paths=("src/app.py",),
-        )
-        implementer = kanban.implementer_prompt(ticket, "tests", [])
-        validator = kanban.validator_prompt(ticket, "", [], "abc123")
-        self.assertIn("`Status: complete`", implementer)
-        self.assertIn("`Status: blocked`", implementer)
-        self.assertIn("`Verdict: accept`", validator)
-        self.assertIn("`Verdict: reject`", validator)
-        self.assertIn("`Verdict: blocked`", validator)
-
-    def test_accepts_markdown_heading_and_table_decisions(self) -> None:
-        cases = [
-            ("### Status\ncomplete", kanban.IMPLEMENTER_SCHEMA, "status", "complete"),
-            ("### Verdict\naccept", kanban.VALIDATOR_SCHEMA, "verdict", "accept"),
-            ("| Status | complete |", kanban.IMPLEMENTER_SCHEMA, "status", "complete"),
-            ("| Verdict | reject |", kanban.VALIDATOR_SCHEMA, "verdict", "reject"),
-        ]
-        for raw, schema, key, expected in cases:
-            with self.subTest(raw=raw):
-                self.assertEqual(kanban.parse_agent_result(raw, schema)[key], expected)
-
-    def test_accepts_markdown_and_unambiguous_bare_prose_decisions(self) -> None:
-        implementation = kanban.parse_agent_result(
-            "Implementation complete", kanban.IMPLEMENTER_SCHEMA
-        )
-        validation = kanban.parse_agent_result(
-            "**Verdict:** accept\nI accept this patch.", kanban.VALIDATOR_SCHEMA
-        )
-        self.assertEqual(implementation["status"], "complete")
-        self.assertEqual(validation["verdict"], "accept")
-
-    def test_rejects_prose_without_explicit_decision(self) -> None:
-        with self.assertRaisesRegex(kanban.KanbanError, "unambiguous verdict"):
-            kanban.parse_agent_result("Looks good to me.", kanban.VALIDATOR_SCHEMA)
-
-    def test_rejects_negated_validator_acceptance_prose(self) -> None:
-        for raw in (
-            "I cannot accept this patch.",
-            "I don't accept this patch.",
-            "I do not accept this patch.",
-            "This patch is not accepted.",
-            "I am unable to accept this patch.",
-            "This patch is not approved.",
-            "I cannot approve this patch.",
-        ):
-            with self.subTest(raw=raw), self.assertRaisesRegex(
-                kanban.KanbanError, "unambiguous verdict"
-            ):
-                kanban.parse_agent_result(raw, kanban.VALIDATOR_SCHEMA)
-
-    def test_explicit_validator_reject_allows_negated_acceptance(self) -> None:
-        result = kanban.parse_agent_result(
-            "Verdict: reject. I cannot accept this patch.",
-            kanban.VALIDATOR_SCHEMA,
-        )
-        self.assertEqual(result["verdict"], "reject")
-
-    def test_explicit_validator_accept_conflicts_with_negated_authorization(self) -> None:
-        for raw in (
-            "Verdict: accept. I cannot accept this patch.",
-            "Verdict: accept. This patch is not approved.",
-        ):
-            with self.subTest(raw=raw), self.assertRaisesRegex(
-                kanban.KanbanError, "unambiguous verdict"
-            ):
-                kanban.parse_agent_result(raw, kanban.VALIDATOR_SCHEMA)
-
-    def test_implementer_blocked_prose_requires_explicit_positive_phrase(self) -> None:
-        for raw in (
-            "blocked",
-            "not currently blocked",
-            "no longer blocked",
-        ):
-            with self.subTest(raw=raw), self.assertRaisesRegex(
-                kanban.KanbanError, "unambiguous status"
-            ):
-                kanban.parse_agent_result(raw, kanban.IMPLEMENTER_SCHEMA)
-        for raw in (
-            "Implementation complete; not currently blocked.",
-            "Implementation complete; no longer blocked.",
-        ):
-            with self.subTest(raw=raw):
-                result = kanban.parse_agent_result(raw, kanban.IMPLEMENTER_SCHEMA)
-                self.assertEqual(result["status"], "complete")
-
-    def test_rejects_conflicting_prose_decisions(self) -> None:
-        with self.assertRaisesRegex(kanban.KanbanError, "unambiguous verdict"):
-            kanban.parse_agent_result(
-                "Verdict: accept, but reject the patch.", kanban.VALIDATOR_SCHEMA
-            )
-        with self.assertRaisesRegex(kanban.KanbanError, "unambiguous status"):
-            kanban.parse_agent_result(
-                "Implementation complete, but I am blocked.",
-                kanban.IMPLEMENTER_SCHEMA,
-            )
-
-    def test_validates_embedded_json_strictly(self) -> None:
-        with self.assertRaisesRegex(kanban.KanbanError, "extra keys"):
-            kanban.parse_agent_result(
-                'Result follows:\n{"status":"complete","summary":"ok","files_changed":[],"blocker":null,"extra":true}',
-                kanban.IMPLEMENTER_SCHEMA,
-            )
+    def test_adapter_capabilities_are_explicit(self) -> None:
+        for adapter in (ClaudeAdapter(), CodexAdapter(), OpenCodeAdapter()):
+            capabilities = adapter.capabilities()
+            self.assertTrue(capabilities["writable-execution"])
+            self.assertTrue(capabilities["read-only-review"])
+            self.assertIn("session-resume", capabilities)
 
 
-class GitTests(unittest.TestCase):
-    def initialise_repo(self, root: Path) -> None:
-        subprocess.run(["git", "init", "-q"], cwd=root, check=True)
-        subprocess.run(
-            ["git", "config", "core.excludesFile", "/dev/null"],
-            cwd=root,
-            check=True,
-        )
-        subprocess.run(
-            ["git", "config", "user.name", "Kanban Test"], cwd=root, check=True
-        )
-        subprocess.run(
-            ["git", "config", "user.email", "kanban@example.invalid"],
-            cwd=root,
-            check=True,
-        )
-        (root / "tracked.txt").write_text("before\n", encoding="utf-8")
-        subprocess.run(["git", "add", "tracked.txt"], cwd=root, check=True)
-        subprocess.run(["git", "commit", "-qm", "initial"], cwd=root, check=True)
+class FakeAdapter:
+    name = "fake"
+    executable = "fake"
 
-    def initialise_board_repo(self, root: Path) -> kanban.Ticket:
-        subprocess.run(["git", "init", "-q"], cwd=root, check=True)
-        subprocess.run(
-            ["git", "config", "core.excludesFile", "/dev/null"],
-            cwd=root,
-            check=True,
-        )
-        subprocess.run(
-            ["git", "config", "user.name", "Kanban Test"], cwd=root, check=True
-        )
-        subprocess.run(
-            ["git", "config", "user.email", "kanban@example.invalid"],
-            cwd=root,
-            check=True,
-        )
-        for relative in (
-            "src",
-            "tests",
-            ".workflow/kanban/backlog",
-            ".workflow/kanban/doing",
-            ".workflow/kanban/paused",
-            ".workflow/kanban/done",
-        ):
-            (root / relative).mkdir(parents=True, exist_ok=True)
-        (root / "src/app.py").write_text("before\n", encoding="utf-8")
-        (root / "tests/test_app.py").write_text("before test\n", encoding="utf-8")
-        ticket_text = VALID_TICKET.replace(
-            "  - command: python -m unittest\n", '  - command: "true"\n'
-        )
-        ticket_path = root / ".workflow/kanban/backlog/00-hello-command.md"
-        ticket_path.write_text(ticket_text, encoding="utf-8")
-        subprocess.run(["git", "add", "src", "tests"], cwd=root, check=True)
-        subprocess.run(["git", "commit", "-qm", "approved plan"], cwd=root, check=True)
-        return kanban.parse_ticket(ticket_path)
-
-    def awaiting_commit_state(self, root: Path, ticket: kanban.Ticket, run_id: str) -> None:
-        kanban.save_state(
-            root,
-            run_id,
-            {
-                "run_id": run_id,
-                "phase": "awaiting-commit",
-                "mode": "hitl",
-                "provider": "fake",
-                "ticket": str(ticket.path.relative_to(root)),
-                "ticket_hash": ticket.digest,
-                "base_commit": kanban.git(root, "rev-parse", "HEAD"),
-                "attempt": 1,
-                "max_attempts": 3,
-                "diff_hash": kanban.sha256_text(kanban.diff_text(root, ticket)),
-                "validation": {"verdict": "accept", "summary": "initial", "findings": []},
-                "verification": [],
-            },
-        )
-
-    def decision(
-        self, root: Path, run_id: str, decision: str, *arguments: str
-    ) -> int:
-        previous = Path.cwd()
-        try:
-            os.chdir(root)
-            args = kanban.parser().parse_args(
-                ["decide", run_id, decision, *arguments]
-            )
-            return kanban.command_decide(args)
-        finally:
-            os.chdir(previous)
-
-    def decide(self, root: Path, run_id: str, *arguments: str) -> int:
-        return self.decision(root, run_id, "approve", *arguments)
-
-    def write_prefixed_ticket(
+    def __init__(
         self,
         root: Path,
-        *,
-        prefix: str = "TNC",
-        feature: str = "ticket-naming-conventions",
-        ticket_id: int = 1,
-        slug: str = "add-ticket-prefix",
-    ) -> kanban.Ticket:
-        text = (
-            PREFIXED_TICKET.replace(
-                "feature: ticket-naming-conventions", f"feature: {feature}"
-            )
-            .replace("ticket-prefix: TNC", f"ticket-prefix: {prefix}")
-            .replace("id: 1", f"id: {ticket_id}")
-            .replace("slug: add-ticket-prefix", f"slug: {slug}")
-        )
-        path = (
-            root
-            / ".workflow/kanban/backlog"
-            / f"{prefix}-{ticket_id:02d}-{slug}.md"
-        )
-        path.write_text(text, encoding="utf-8")
-        return kanban.parse_ticket(path)
-
-    def test_board_allows_same_one_based_id_under_different_feature_prefixes(
-        self,
+        steps: list[tuple[str, dict[str, Any], Callable[[Any], None] | None]],
     ) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.initialise_board_repo(root)
-            self.write_prefixed_ticket(root)
-            self.write_prefixed_ticket(
-                root,
-                prefix="ABC",
-                feature="another-big-change",
-                slug="add-another-change",
+        self.root = root
+        self.steps = list(steps)
+        self.calls: list[str] = []
+
+    def run(self, request: Any) -> AgentResult:
+        if not self.steps:
+            raise AssertionError(f"Unexpected provider call: {request.role}")
+        role, data, callback = self.steps.pop(0)
+        if role != request.role:
+            raise AssertionError(f"Expected {role}, got {request.role}")
+        self.calls.append(role)
+        if callback:
+            callback(request)
+        raw = json.dumps(data)
+        return AgentResult(
+            data, raw, raw, "", ("fake", role), ({"value": data, "valid": True},)
+        )
+
+
+def implementer_result(
+    *,
+    status: str = "complete",
+    blocker: str | None = None,
+    message: str = "feat: deliver outcome",
+) -> dict[str, Any]:
+    return {
+        "status": status,
+        "summary": "implemented" if status == "complete" else "needs a decision",
+        "files_changed": ["src/app.py"] if status == "complete" else [],
+        "verification_commands": [],
+        "proposed_commit_message": message if status == "complete" else None,
+        "assumptions": [],
+        "scope_notes": ["Production code was required."],
+        "blocker": blocker,
+    }
+
+
+def review_result(verdict: str = "accept", blocking: bool = False) -> dict[str, Any]:
+    findings = []
+    if verdict != "accept" or blocking:
+        findings = [
+            {
+                "id": "R1",
+                "classification": "blocking" if blocking else "advisory",
+                "category": "correctness" if blocking else "maintainability",
+                "summary": "Needs correction" if blocking else "Optional improvement",
+                "evidence": "Observed in patch",
+                "path": "src/app.py",
+                "required_outcome": "Correct it" if blocking else None,
+            }
+        ]
+    return {
+        "verdict": verdict,
+        "summary": verdict,
+        "findings": findings,
+        "assumptions": [],
+    }
+
+
+class EngineTests(RepoCase):
+    def engine(self, adapter: FakeAdapter) -> Engine:
+        engine = Engine(self.root)
+        engine.provider = lambda state=None: adapter  # type: ignore[method-assign]
+        return engine
+
+    def change_value(self, value: int) -> Callable[[Any], None]:
+        def callback(_: Any) -> None:
+            (self.root / "src/app.py").write_text(
+                f"VALUE = {value}\n", encoding="utf-8"
             )
 
-            tickets = kanban.validate_board(root)
+        return callback
 
-            self.assertEqual(
-                {ticket.key for ticket in tickets},
-                {
-                    "00-hello-command",
-                    "TNC-01-add-ticket-prefix",
-                    "ABC-01-add-another-change",
-                },
+    def test_new_run_rejects_another_active_implementation_session(self) -> None:
+        self.write_ticket(column="active", number=1, slug="first")
+        self.write_ticket(number=2, slug="second")
+        sessions = SessionStore(self.root)
+        sessions.create(
+            {
+                "ticket": "LR-01-first",
+                "phase": "implementing",
+                "baseline": gitops.capture_baseline(self.root),
+            }
+        )
+        engine = Engine(self.root)
+        with self.assertRaisesRegex(KanbanError, "active implementation session"):
+            engine.start(
+                ticket_ref=None,
+                feature=None,
+                all_tickets=True,
+                mode="hitl",
+                branch=None,
+                max_attempts=3,
             )
 
-    def test_board_rejects_prefix_reused_for_another_feature(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.initialise_board_repo(root)
-            self.write_prefixed_ticket(root)
-            self.write_prefixed_ticket(
-                root,
-                feature="totally-new-capability",
-                ticket_id=2,
-                slug="add-new-capability",
-            )
+    def test_hitl_discovers_production_scope_not_listed_by_ticket(self) -> None:
+        self.write_ticket(likely_files=["tests/test_app.py"])
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer", implementer_result(), self.change_value(1)),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        result = self.engine(adapter).start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        self.assertEqual(result["status"], "awaiting-review")
+        self.assertEqual(result["review-packet"]["changed-files"], ["src/app.py"])
 
-            with self.assertRaisesRegex(
-                kanban.KanbanError,
-                "ticket-prefix TNC already belongs to feature ticket-naming-conventions",
-            ):
-                kanban.validate_board(root)
+    def test_hitl_revision_can_expand_to_another_file(self) -> None:
+        self.write_ticket()
 
-    def test_board_rejects_duplicate_id_within_feature_prefix(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.initialise_board_repo(root)
-            self.write_prefixed_ticket(root)
-            self.write_prefixed_ticket(root, slug="add-another-prefix-change")
+        def revision(_: Any) -> None:
+            (self.root / "src/app.py").write_text("VALUE = 2\n")
+            (self.root / "docs.md").write_text("supporting detail\n")
 
-            with self.assertRaisesRegex(
-                kanban.KanbanError, "duplicate ticket ID 01 for TNC"
-            ):
-                kanban.validate_board(root)
-
-    def test_board_rejects_duplicate_slug_across_feature_prefixes(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.initialise_board_repo(root)
-            self.write_prefixed_ticket(root)
-            self.write_prefixed_ticket(
-                root,
-                prefix="ABC",
-                feature="another-big-change",
-                slug="add-ticket-prefix",
-            )
-
-            with self.assertRaisesRegex(
-                kanban.KanbanError, "duplicate ticket slug add-ticket-prefix"
-            ):
-                kanban.validate_board(root)
-
-    def test_validate_command_accepts_mixed_legacy_and_prefixed_board(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.initialise_board_repo(root)
-            self.write_prefixed_ticket(root)
-            original_cwd = Path.cwd()
-            stdout = io.StringIO()
-            try:
-                os.chdir(root)
-                with contextlib.redirect_stdout(stdout):
-                    self.assertEqual(kanban.main(["validate"]), 0)
-            finally:
-                os.chdir(original_cwd)
-
-            self.assertEqual(
-                stdout.getvalue(),
-                "Valid board: 2 tickets, schema-version 2, 0 paused\n",
-            )
-
-    def test_paused_ticket_is_valid_but_not_eligible(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            ticket = self.initialise_board_repo(root)
-            paused_path = kanban.move_ticket(
-                ticket, root / ".workflow/kanban/paused"
-            )
-
-            tickets = kanban.validate_board(root)
-
-            self.assertEqual([item.slug for item in tickets], ["hello-command"])
-            self.assertEqual(kanban.eligible_tickets(root), [])
-            self.assertIn(
-                ".workflow/kanban/paused/00-hello-command.md",
-                kanban.ticket_board_paths(kanban.parse_ticket(paused_path)),
-            )
-
-    def test_existing_three_column_board_remains_valid(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.initialise_board_repo(root)
-            (root / ".workflow/kanban/paused").rmdir()
-
-            tickets = kanban.validate_board(root)
-
-            self.assertEqual([ticket.slug for ticket in tickets], ["hello-command"])
-
-    def test_bulk_pause_and_resume_preserve_ticket_contents(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            first = self.initialise_board_repo(root)
-            second_text = (
-                VALID_TICKET.replace("id: 0", "id: 1")
-                .replace("slug: hello-command", "slug: goodbye-command")
-                .replace("title: Add hello command", "title: Add goodbye command")
-            )
-            second_path = root / ".workflow/kanban/backlog/01-goodbye-command.md"
-            second_path.write_text(second_text, encoding="utf-8")
-            second = kanban.parse_ticket(second_path)
-            original = {first.slug: first.raw, second.slug: second.raw}
-
-            paused = kanban.transition_tickets(
-                root,
-                ["hello-command", "goodbye-command"],
-                "backlog",
-                "paused",
-            )
-            self.assertEqual(
-                [ticket.slug for ticket in paused],
-                ["hello-command", "goodbye-command"],
-            )
-            self.assertEqual(kanban.eligible_tickets(root), [])
-            for slug, raw in original.items():
-                path = next(
-                    (root / ".workflow/kanban/paused").glob(f"*-{slug}.md")
-                )
-                self.assertEqual(path.read_text(encoding="utf-8"), raw)
-
-            kanban.transition_tickets(
-                root,
-                ["hello-command", "goodbye-command"],
-                "paused",
-                "backlog",
-            )
-            self.assertEqual(
-                [ticket.slug for ticket in kanban.eligible_tickets(root)],
-                ["hello-command", "goodbye-command"],
-            )
-
-    def test_pause_rejects_duplicate_slug_arguments_without_moving_ticket(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            ticket = self.initialise_board_repo(root)
-
-            with self.assertRaisesRegex(kanban.KanbanError, "must not be repeated"):
-                kanban.transition_tickets(
-                    root,
-                    ["hello-command", "hello-command"],
-                    "backlog",
-                    "paused",
-                )
-
-            self.assertTrue(ticket.path.exists())
-
-    def test_pause_and_resume_commands_move_ticket_under_board_lock(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.initialise_board_repo(root)
-            original_cwd = Path.cwd()
-            stdout = io.StringIO()
-            try:
-                os.chdir(root)
-                with contextlib.redirect_stdout(stdout):
-                    self.assertEqual(
-                        kanban.main(["pause", "hello-command"]), 0
-                    )
-                    self.assertEqual(
-                        kanban.main(["resume", "hello-command"]), 0
-                    )
-            finally:
-                os.chdir(original_cwd)
-
-            self.assertIn("PAUSED 00-hello-command", stdout.getvalue())
-            self.assertIn("RESUMED 00-hello-command", stdout.getvalue())
-            self.assertTrue(
-                (root / ".workflow/kanban/backlog/00-hello-command.md").exists()
-            )
-            self.assertTrue((root / ".git/kanban-loop/.lock").exists())
-
-    def test_plan_reports_paused_tickets_separately_from_eligible(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            first = self.initialise_board_repo(root)
-            kanban.move_ticket(first, root / ".workflow/kanban/paused")
-            self.write_prefixed_ticket(root)
-            original_cwd = Path.cwd()
-            stdout = io.StringIO()
-            try:
-                os.chdir(root)
-                with mock.patch.object(
-                    kanban,
-                    "select_provider",
-                    return_value=SimpleNamespace(name="test-provider"),
-                ), contextlib.redirect_stdout(stdout):
-                    self.assertEqual(kanban.main(["plan"]), 0)
-            finally:
-                os.chdir(original_cwd)
-
-            payload = json.loads(stdout.getvalue())
-            self.assertEqual(
-                payload["eligible"],
-                [
-                    {
-                        "key": "TNC-01-add-ticket-prefix",
-                        "feature": "ticket-naming-conventions",
-                        "ticket_prefix": "TNC",
-                        "id": 1,
-                        "slug": "add-ticket-prefix",
-                        "human_required": False,
-                        "allowed_paths": ["src/app.py", "tests/test_app.py"],
-                        "acceptance": "Running app hello prints hello.",
-                    }
-                ],
-            )
-            self.assertEqual(
-                payload["paused"],
-                [
-                    {
-                        "key": "00-hello-command",
-                        "feature": None,
-                        "ticket_prefix": None,
-                        "id": 0,
-                        "slug": "hello-command",
-                        "title": "Add hello command",
-                    }
-                ],
-            )
-
-    def test_pause_accepts_full_prefixed_ticket_key(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.initialise_board_repo(root)
-            ticket = self.write_prefixed_ticket(root)
-
-            moved = kanban.transition_tickets(
-                root,
-                ["TNC-01-add-ticket-prefix"],
-                "backlog",
-                "paused",
-            )
-
-            self.assertEqual([item.key for item in moved], [ticket.key])
-            self.assertTrue(
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer", implementer_result(), self.change_value(1)),
+                ("reviewer", review_result(), None),
                 (
-                    root
-                    / ".workflow/kanban/paused/TNC-01-add-ticket-prefix.md"
-                ).exists()
-            )
-
-    def test_move_ticket_refuses_to_overwrite_existing_ticket(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            ticket = self.initialise_board_repo(root)
-            target = root / ".workflow/kanban/paused/00-hello-command.md"
-            target.write_text("existing\n", encoding="utf-8")
-
-            with self.assertRaisesRegex(kanban.KanbanError, "Refusing to overwrite"):
-                kanban.move_ticket(ticket, target.parent)
-
-            self.assertTrue(ticket.path.exists())
-            self.assertEqual(target.read_text(encoding="utf-8"), "existing\n")
-
-    def test_diff_text_includes_tracked_and_untracked_files_without_staging(
-        self,
-    ) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.initialise_repo(root)
-            (root / "tracked.txt").write_text("after\n", encoding="utf-8")
-            (root / "created.txt").write_text("created\n", encoding="utf-8")
-            ticket = SimpleNamespace(allowed_paths={"tracked.txt", "created.txt"})
-            patch = kanban.diff_text(root, ticket)
-            self.assertIn("tracked.txt", patch)
-            self.assertIn("created.txt", patch)
-            staged = subprocess.run(
-                ["git", "diff", "--cached", "--name-only"],
-                cwd=root,
-                text=True,
-                capture_output=True,
-                check=True,
-            ).stdout
-            self.assertEqual(staged, "")
-
-    def test_existing_worktree_detection_is_false_for_primary_checkout(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.initialise_repo(root)
-            self.assertFalse(kanban.is_existing_worktree(root))
-
-    def test_agent_cannot_modify_real_git_index(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.initialise_repo(root)
-            (root / "tracked.txt").write_text("after\n", encoding="utf-8")
-            subprocess.run(["git", "add", "tracked.txt"], cwd=root, check=True)
-            with self.assertRaisesRegex(
-                kanban.KanbanError, "only kanban-loop may stage or commit"
-            ):
-                kanban.assert_index_clean(root)
-
-    def test_clean_check_ignores_local_workflow_but_not_staged_index(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.initialise_repo(root)
-            (root / ".workflow").mkdir()
-            (root / ".workflow/local-state.md").write_text("local\n")
-            kanban.ensure_clean(root)
-            (root / "tracked.txt").write_text("staged\n")
-            subprocess.run(["git", "add", "tracked.txt"], cwd=root, check=True)
-            with self.assertRaisesRegex(kanban.KanbanError, "only kanban-loop"):
-                kanban.ensure_clean(root)
-
-    def test_changed_paths_ignores_legacy_tracked_workflow_files(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.initialise_repo(root)
-            (root / ".workflow").mkdir()
-            workflow = root / ".workflow/legacy.md"
-            workflow.write_text("before\n")
-            subprocess.run(["git", "add", ".workflow/legacy.md"], cwd=root, check=True)
-            subprocess.run(["git", "commit", "-qm", "legacy board"], cwd=root, check=True)
-            workflow.write_text("after\n")
-            self.assertNotIn(".workflow/legacy.md", kanban.changed_paths(root))
-
-    def test_commit_contains_only_accepted_patch_and_ticket_transition(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            backlog_ticket = self.initialise_board_repo(root)
-            doing_path = kanban.move_ticket(
-                backlog_ticket, root / ".workflow/kanban/doing"
-            )
-            ticket = kanban.parse_ticket(doing_path)
-            (root / "src/app.py").write_text("after\n", encoding="utf-8")
-            (root / "tests/test_app.py").write_text("after test\n", encoding="utf-8")
-            accepted_hash = kanban.sha256_text(kanban.diff_text(root, ticket))
-
-            _, done_path = kanban.commit_ticket(root, ticket, accepted_hash)
-
-            self.assertEqual(done_path.parent.name, "done")
-            visible_status = subprocess.run(
-                ["git", "status", "--porcelain", "--", ".", ":(exclude).workflow"],
-                cwd=root,
-                text=True,
-                capture_output=True,
-                check=True,
-            ).stdout
-            self.assertEqual(visible_status, "")
-            committed = subprocess.run(
-                ["git", "show", "--pretty=format:", "--name-only", "HEAD"],
-                cwd=root,
-                text=True,
-                capture_output=True,
-                check=True,
-            ).stdout
-            self.assertIn("src/app.py", committed)
-            self.assertIn("tests/test_app.py", committed)
-            self.assertNotIn(".workflow/", committed)
-
-    def test_scope_expansion_commits_modified_and_untracked_files_after_review(self) -> None:
-        class AcceptingProvider:
-            name = "fake"
-
-            def run(self, request):
-                self.prompt = request.prompt
-                return kanban.AgentResult(
-                    {"verdict": "accept", "summary": "reviewed", "findings": []},
-                    "Verdict: accept\n",
-                )
-
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            backlog_ticket = self.initialise_board_repo(root)
-            ticket = kanban.parse_ticket(
-                kanban.move_ticket(backlog_ticket, root / ".workflow/kanban/doing")
-            )
-            (root / "src/app.py").write_text("ticket after\n", encoding="utf-8")
-            (root / "tests/test_app.py").write_text("ticket test after\n", encoding="utf-8")
-            self.awaiting_commit_state(root, ticket, "scope-success")
-            (root / "src/app.py").write_text("user LSP edit after review\n", encoding="utf-8")
-            (root / "lsp.toml").write_text("enabled = true\n", encoding="utf-8")
-            (root / "tracked.txt").write_text("lsp fix\n", encoding="utf-8")
-            provider = AcceptingProvider()
-
-            with mock.patch.object(kanban, "select_provider", return_value=provider):
-                self.assertEqual(
-                    self.decide(
-                        root,
-                        "scope-success",
-                        "--include", "tracked.txt",
-                        "--include", "lsp.toml",
-                        "--reason", "Resolve LSP warnings from the ticket change",
-                    ),
-                    kanban.EXIT_AWAITING_NEXT,
-                )
-
-            self.assertIn("supplemental changed paths", provider.prompt)
-            self.assertIn("tracked.txt", provider.prompt)
-            self.assertIn("not listed there", provider.prompt)
-            committed = kanban.git(root, "show", "--pretty=format:", "--name-only", "HEAD")
-            self.assertEqual(
-                set(committed.splitlines()),
-                {"src/app.py", "tests/test_app.py", "tracked.txt", "lsp.toml"},
-            )
-            state = kanban.load_state(root, "scope-success")
-            self.assertEqual(state["phase"], "awaiting-next")
-            self.assertEqual(state["scope_expansion"]["paths"], ["tracked.txt", "lsp.toml"])
-            self.assertEqual(
-                state["scope_expansion"]["reason"],
-                "Resolve LSP warnings from the ticket change",
-            )
-            self.assertTrue((kanban.state_dir(root, "scope-success") / "scope-expansion.json").exists())
-            self.assertTrue((kanban.state_dir(root, "scope-success") / "scope-expansion-validation.json").exists())
-
-    def test_scope_expansion_requires_reason_and_exact_changed_non_ticket_paths(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            backlog_ticket = self.initialise_board_repo(root)
-            ticket = kanban.parse_ticket(
-                kanban.move_ticket(backlog_ticket, root / ".workflow/kanban/doing")
-            )
-            (root / "src/app.py").write_text("ticket after\n", encoding="utf-8")
-            (root / "tests/test_app.py").write_text("ticket test after\n", encoding="utf-8")
-            (root / "extra.py").write_text("extra\n", encoding="utf-8")
-            self.awaiting_commit_state(root, ticket, "scope-invalid")
-            cases = [
-                (["--include", "extra.py"], "requires --reason"),
-                (["--include", "src/app.py", "--reason", "duplicate"], "already in ticket"),
-                (["--include", "missing.py", "--reason", "missing"], "not a changed file"),
-                (["--include", "../extra.py", "--reason", "traversal"], "Invalid supplemental path"),
-                (["--include", "/tmp/extra.py", "--reason", "absolute"], "Invalid supplemental path"),
-                (["--include", "*.py", "--reason", "glob"], "Invalid supplemental path"),
-                (["--include", "src", "--reason", "directory"], "file, not a directory"),
-                (["--include", ".git/config", "--reason", "git"], "Invalid supplemental path"),
-                (["--include", ".workflow/x", "--reason", "board"], "Invalid supplemental path"),
-                (["--include", "extra.py", "--include", "extra.py", "--reason", "repeat"], "must not be repeated"),
-            ]
-            for arguments, error in cases:
-                with self.subTest(arguments=arguments), self.assertRaisesRegex(
-                    kanban.KanbanError, error
-                ):
-                    self.decide(root, "scope-invalid", *arguments)
-            self.assertEqual(kanban.load_state(root, "scope-invalid")["phase"], "awaiting-commit")
-
-    def test_accepted_scope_expansion_evidence_survives_commit_failure(self) -> None:
-        class AcceptingProvider:
-            name = "fake"
-
-            def run(self, request):
-                return kanban.AgentResult(
-                    {"verdict": "accept", "summary": "reviewed", "findings": []},
-                    "Verdict: accept\n",
-                )
-
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            backlog_ticket = self.initialise_board_repo(root)
-            ticket = kanban.parse_ticket(
-                kanban.move_ticket(backlog_ticket, root / ".workflow/kanban/doing")
-            )
-            (root / "src/app.py").write_text("ticket after\n", encoding="utf-8")
-            (root / "tests/test_app.py").write_text("ticket test after\n", encoding="utf-8")
-            (root / "extra.py").write_text("extra\n", encoding="utf-8")
-            self.awaiting_commit_state(root, ticket, "scope-commit-failure")
-            with (
-                mock.patch.object(kanban, "select_provider", return_value=AcceptingProvider()),
-                mock.patch.object(kanban, "commit_ticket", side_effect=kanban.KanbanError("commit failed")),
-            ):
-                with self.assertRaisesRegex(kanban.KanbanError, "commit failed"):
-                    self.decide(
-                        root,
-                        "scope-commit-failure",
-                        "--include",
-                        "extra.py",
-                        "--reason",
-                        "LSP fix",
-                    )
-            state = kanban.load_state(root, "scope-commit-failure")
-            self.assertEqual(state["phase"], "awaiting-commit")
-            self.assertEqual(state["scope_expansion"]["status"], "accept")
-            self.assertEqual(state["scope_expansion"]["validation"]["verdict"], "accept")
-
-    def test_scope_expansion_rejection_keeps_awaiting_commit_and_evidence(self) -> None:
-        class RejectingProvider:
-            name = "fake"
-
-            def run(self, request):
-                return kanban.AgentResult(
-                    {
-                        "verdict": "reject",
-                        "summary": "supplement breaks compatibility",
-                        "findings": [{"blocking": True}],
-                    },
-                    "Verdict: reject\n",
-                )
-
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            backlog_ticket = self.initialise_board_repo(root)
-            ticket = kanban.parse_ticket(
-                kanban.move_ticket(backlog_ticket, root / ".workflow/kanban/doing")
-            )
-            (root / "src/app.py").write_text("ticket after\n", encoding="utf-8")
-            (root / "tests/test_app.py").write_text("ticket test after\n", encoding="utf-8")
-            (root / "extra.py").write_text("extra\n", encoding="utf-8")
-            self.awaiting_commit_state(root, ticket, "scope-reject")
-            head_before = kanban.git(root, "rev-parse", "HEAD")
-            with mock.patch.object(kanban, "select_provider", return_value=RejectingProvider()):
-                with self.assertRaisesRegex(kanban.KanbanError, "validator reject"):
-                    self.decide(
-                        root, "scope-reject", "--include", "extra.py", "--reason", "LSP fix"
-                    )
-            self.assertEqual(kanban.load_state(root, "scope-reject")["phase"], "awaiting-commit")
-            self.assertTrue((root / ".workflow/kanban/doing/00-hello-command.md").exists())
-            self.assertEqual(kanban.git(root, "rev-parse", "HEAD"), head_before)
-            expansion = kanban.load_state(root, "scope-reject")["scope_expansion"]
-            self.assertEqual(expansion["status"], "reject")
-            self.assertEqual(expansion["validation"]["verdict"], "reject")
-            self.assertTrue((kanban.state_dir(root, "scope-reject") / "scope-expansion-validation.raw.txt").exists())
-
-    def test_non_approval_decisions_reject_scope_expansion_arguments(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            backlog_ticket = self.initialise_board_repo(root)
-            ticket = kanban.parse_ticket(
-                kanban.move_ticket(backlog_ticket, root / ".workflow/kanban/doing")
-            )
-            (root / "src/app.py").write_text("ticket after\n", encoding="utf-8")
-            (root / "tests/test_app.py").write_text("ticket test after\n", encoding="utf-8")
-            self.awaiting_commit_state(root, ticket, "decision-arguments")
-            for decision in ("reject", "continue", "abort"):
-                for arguments in (
-                    ("--include", "extra.py"),
-                    ("--reason", "LSP fix"),
-                ):
-                    with self.subTest(decision=decision, arguments=arguments), self.assertRaisesRegex(
-                        kanban.KanbanError, "valid only with approve"
-                    ):
-                        self.decision(root, "decision-arguments", decision, *arguments)
-            self.assertEqual(
-                kanban.load_state(root, "decision-arguments")["phase"],
-                "awaiting-commit",
-            )
-
-    def test_normal_approve_retains_original_hash_requirement(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            backlog_ticket = self.initialise_board_repo(root)
-            ticket = kanban.parse_ticket(
-                kanban.move_ticket(backlog_ticket, root / ".workflow/kanban/doing")
-            )
-            (root / "src/app.py").write_text("ticket after\n", encoding="utf-8")
-            (root / "tests/test_app.py").write_text("ticket test after\n", encoding="utf-8")
-            self.awaiting_commit_state(root, ticket, "strict-hash")
-            (root / "src/app.py").write_text("edited after review\n", encoding="utf-8")
-            with self.assertRaisesRegex(kanban.KanbanError, "differs from the accepted patch"):
-                self.decide(root, "strict-hash")
-            self.assertEqual(kanban.load_state(root, "strict-hash")["phase"], "awaiting-commit")
-
-    def test_failed_attempt_writes_durable_failure_record(self) -> None:
-        class FailingProvider(kanban.ProviderAdapter):
-            name = "failing"
-            executable = "false"
-
-            def build_command(self, request, schema_path, output_path):
-                raise NotImplementedError
-
-            def run(self, request):
-                raise kanban.AgentResultError("bad worker output", "not json")
-
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            ticket = self.initialise_board_repo(root)
-            with self.assertRaisesRegex(kanban.AgentResultError, "bad worker output"):
-                kanban.process_ticket(
-                    root, ticket, FailingProvider(), "auto", 1, run_id="failure-test"
-                )
-            run_path = kanban.state_dir(root, "failure-test")
-            record = json.loads((run_path / "attempt-01.failure.json").read_text())
-            self.assertEqual(record["error_type"], "AgentResultError")
-            self.assertEqual((run_path / "attempt-01.raw.txt").read_text(), "not json")
-
-    def test_provider_failure_records_stdout_and_stderr(self) -> None:
-        class FailingProcessProvider(kanban.ProviderAdapter):
-            executable = "/bin/sh"
-
-            def build_command(self, request, schema_path, output_path):
-                return ["/bin/sh", "-c", "printf stdout; printf stderr >&2; exit 7"]
-
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.initialise_repo(root)
-            request = kanban.AgentRequest(
-                role="validator",
-                prompt="prompt",
-                schema=kanban.VALIDATOR_SCHEMA,
-                cwd=root,
-                writable=False,
-            )
-            with self.assertRaises(kanban.ProcessError) as raised:
-                FailingProcessProvider().run(request)
-            failure = kanban.record_failure(root, "provider", raised.exception)
-            record = json.loads(failure.read_text())
-            self.assertEqual((root / record["stdout"]).read_text(), "stdout")
-            self.assertEqual((root / record["stderr"]).read_text(), "stderr")
-
-    def test_main_prints_global_failure_log_path(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.initialise_repo(root)
-            original_cwd = Path.cwd()
-            stderr = io.StringIO()
-            try:
-                os.chdir(root)
-                with contextlib.redirect_stderr(stderr):
-                    self.assertEqual(kanban.main(["validate"]), kanban.EXIT_BLOCKED)
-            finally:
-                os.chdir(original_cwd)
-            self.assertIn("Failure log:", stderr.getvalue())
-
-    def test_parser_offers_revise_restart_and_reject_alias(self) -> None:
-        parser = kanban.parser()
-        for decision in ("revise", "restart", "reject"):
-            with self.subTest(decision=decision):
-                self.assertEqual(
-                    parser.parse_args(["decide", "run-id", decision]).decision,
-                    decision,
-                )
-
-    def test_automatic_rejection_revises_in_place_and_snapshots_patch(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            ticket = self.initialise_board_repo(root)
-            seen: list[tuple[bool, str]] = []
-
-            def attempt(
-                repo, current, provider, findings, run_path, number, *, revision
-            ):
-                seen.append((revision, (repo / "src/app.py").read_text()))
-                if number == 1:
-                    (repo / "src/app.py").write_text("first patch\n", encoding="utf-8")
-                    return (
-                        {
-                            "verdict": "reject",
-                            "summary": "fix",
-                            "findings": [{"blocking": True}],
-                        },
-                        "one",
-                        [],
-                    )
-                self.assertEqual((repo / "src/app.py").read_text(), "first patch\n")
-                return (
-                    {"verdict": "accept", "summary": "ok", "findings": []},
-                    "two",
-                    [],
-                )
-
-            with mock.patch.object(kanban, "execute_attempt", side_effect=attempt):
-                _, phase = kanban.process_ticket(
-                    root,
-                    ticket,
-                    SimpleNamespace(name="fake"),
-                    "hitl",
-                    2,
-                    run_id="in-place",
-                )
-            self.assertEqual(phase, "awaiting-commit")
-            self.assertEqual([item[0] for item in seen], [False, True])
-            snapshot = (
-                kanban.state_dir(root, "in-place") / "attempt-01-before-revision.patch"
-            )
-            self.assertIn("first patch", snapshot.read_text())
-            self.assertEqual((root / "src/app.py").read_text(), "first patch\n")
-
-    def test_revise_and_reject_alias_preserve_patch_and_restart_restores_it(
-        self,
-    ) -> None:
-        cases = (
-            ("revise", "patch\n"),
-            ("reject", "patch\n"),
-            ("restart", "before\n"),
+                    "implementer",
+                    implementer_result(message="refactor: use peek"),
+                    revision,
+                ),
+                ("reviewer", review_result(), None),
+            ],
         )
-        for decision, expected in cases:
-            with (
-                self.subTest(decision=decision),
-                tempfile.TemporaryDirectory() as directory,
-            ):
-                root = Path(directory)
-                backlog_ticket = self.initialise_board_repo(root)
-                ticket = kanban.parse_ticket(
-                    kanban.move_ticket(backlog_ticket, root / ".workflow/kanban/doing")
+        engine = self.engine(adapter)
+        initial = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        revised = engine.review_action(
+            initial["run-id"],
+            "revise",
+            feedback="Use peek instead of map and update docs.",
+        )
+        self.assertEqual(revised["status"], "awaiting-review")
+        self.assertEqual(
+            revised["review-packet"]["changed-files"], ["docs.md", "src/app.py"]
+        )
+
+    def test_approve_commits_descriptive_message_and_completes_ticket(self) -> None:
+        self.write_ticket()
+        adapter = FakeAdapter(
+            self.root,
+            [
+                (
+                    "implementer",
+                    implementer_result(message="refactor: use peek for lazy traversal"),
+                    self.change_value(1),
+                ),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        engine = self.engine(adapter)
+        candidate = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        result = engine.review_action(candidate["run-id"], "approve")
+        self.assertEqual(result["status"], "completed")
+        self.assertEqual(
+            command(self.root, "git", "log", "-1", "--pretty=%s"),
+            "refactor: use peek for lazy traversal",
+        )
+        self.assertEqual(
+            self.store.load().tickets["LR-01-deliver-outcome"].column, "done"
+        )
+
+    def test_commit_fallback_uses_title_without_local_ticket_key(self) -> None:
+        self.write_ticket()
+        adapter = FakeAdapter(
+            self.root,
+            [
+                (
+                    "implementer",
+                    implementer_result(message=None),
+                    self.change_value(1),
+                ),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        engine = self.engine(adapter)
+        candidate = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        result = engine.review_action(candidate["run-id"], "approve")
+        self.assertEqual(result["commit-message"], "Deliver Outcome")
+        self.assertNotIn("LR-01", result["commit-message"])
+
+    def test_interrupted_matching_commit_is_completed_without_duplicate(self) -> None:
+        self.write_ticket()
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer", implementer_result(), self.change_value(6)),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        engine = self.engine(adapter)
+        candidate = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        sessions = SessionStore(self.root)
+        state = sessions.load(candidate["run-id"])
+        pre_commit_head = gitops.current_head(self.root)
+        message = state["proposed-commit-message"]
+        sessions.save(
+            candidate["run-id"],
+            {
+                "phase": "committing",
+                "pre-commit-head": pre_commit_head,
+                "commit-message": message,
+            },
+        )
+        commit_sha = gitops.commit_paths(self.root, state["session-paths"], message)
+        recovered = engine.start(
+            ticket_ref="LR-01-deliver-outcome",
+            feature=None,
+            all_tickets=False,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        self.assertEqual(recovered["status"], "completed")
+        self.assertEqual(recovered["commit"], commit_sha)
+        self.assertEqual(command(self.root, "git", "rev-list", "--count", "HEAD"), "2")
+        self.assertEqual(
+            self.store.load().tickets["LR-01-deliver-outcome"].column, "done"
+        )
+
+    def test_hitl_feature_scope_continues_after_approved_commit(self) -> None:
+        self.write_ticket(number=1, slug="first")
+        self.write_ticket(number=2, slug="second", depends_on=["LR-01-first"])
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer", implementer_result(), self.change_value(1)),
+                ("reviewer", review_result(), None),
+                ("implementer", implementer_result(), self.change_value(2)),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        engine = self.engine(adapter)
+        first = engine.start(
+            ticket_ref=None,
+            feature="loop-redesign",
+            all_tickets=False,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        completed = engine.review_action(first["run-id"], "approve")
+        second = engine.continue_scope(completed)
+        self.assertEqual(second["status"], "awaiting-review")
+        self.assertEqual(second["review-packet"]["ticket"], "LR-02-second")
+
+    def test_cancel_preserves_reason_and_does_not_complete_feature(self) -> None:
+        self.write_ticket()
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer", implementer_result(), self.change_value(1)),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        engine = self.engine(adapter)
+        candidate = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        cancelled = engine.review_action(
+            candidate["run-id"], "cancel", reason="Requirement withdrawn"
+        )
+        self.assertEqual(cancelled["status"], "cancelled")
+        board = self.store.load()
+        self.assertEqual(board.tickets["LR-01-deliver-outcome"].column, "cancelled")
+        self.assertEqual(
+            feature_status(board, "loop-redesign"), "closed-with-cancellations"
+        )
+        state = SessionStore(self.root).load(candidate["run-id"])
+        self.assertEqual(state["termination-reason"], "Requirement withdrawn")
+        ticket_status = Engine(self.root).status()["tickets"][0]
+        self.assertEqual(ticket_status["cancellation-reason"], "Requirement withdrawn")
+
+    def test_failed_verification_requires_explicit_override(self) -> None:
+        self.write_ticket(verification=["python -c 'raise SystemExit(1)'"])
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer", implementer_result(), self.change_value(1)),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        engine = self.engine(adapter)
+        candidate = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        with self.assertRaisesRegex(KanbanError, "use override"):
+            engine.review_action(candidate["run-id"], "approve")
+        result = engine.review_action(
+            candidate["run-id"], "override", reason="Known environment-only failure"
+        )
+        self.assertEqual(result["status"], "completed")
+        state = SessionStore(self.root).load(candidate["run-id"])
+        self.assertEqual(state["override"]["reason"], "Known environment-only failure")
+
+    def test_ticket_verification_cannot_run_git_or_remote_tools(self) -> None:
+        self.write_ticket(verification=["git status --short"])
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer", implementer_result(), self.change_value(1)),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        candidate = self.engine(adapter).start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        evidence = candidate["review-packet"]["verification"]
+        self.assertFalse(candidate["review-packet"]["verification-passed"])
+        self.assertTrue(evidence[0]["not-run"])
+        self.assertIn("integration tool", evidence[0]["reason"])
+
+    def test_auto_blocker_shelves_work_and_marks_ticket_blocked(self) -> None:
+        self.write_ticket()
+        adapter = FakeAdapter(
+            self.root,
+            [
+                (
+                    "implementer",
+                    implementer_result(status="blocked", blocker="Choose a public API"),
+                    None,
                 )
-                (root / "src/app.py").write_text("patch\n", encoding="utf-8")
-                self.awaiting_commit_state(root, ticket, f"decision-{decision}")
-                observed: dict[str, object] = {}
+            ],
+        )
+        result = self.engine(adapter).start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="auto",
+            branch=None,
+            max_attempts=3,
+        )
+        self.assertEqual(result["status"], "blocked")
+        self.assertEqual(
+            self.store.load().tickets["LR-01-deliver-outcome"].column, "blocked"
+        )
 
-                def resume(
-                    repo,
-                    current,
-                    provider,
-                    mode,
-                    max_attempts,
-                    observed=observed,
-                    **kwargs,
-                ):
-                    observed["content"] = (repo / "src/app.py").read_text()
-                    observed["mode"] = kwargs["first_attempt_mode"]
-                    return "ignored", "awaiting-commit"
+    def test_auto_revises_blocking_review_then_commits(self) -> None:
+        self.write_ticket()
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer", implementer_result(), self.change_value(1)),
+                ("reviewer", review_result("revise", blocking=True), None),
+                (
+                    "implementer",
+                    implementer_result(message="fix: correct outcome"),
+                    self.change_value(2),
+                ),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        result = self.engine(adapter).start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="auto",
+            branch=None,
+            max_attempts=3,
+        )
+        self.assertEqual(result["status"], "completed")
+        self.assertEqual(
+            adapter.calls, ["implementer", "reviewer", "implementer", "reviewer"]
+        )
 
-                with (
-                    mock.patch.object(
-                        kanban,
-                        "select_provider",
-                        return_value=SimpleNamespace(name="fake"),
-                    ),
-                    mock.patch.object(kanban, "process_ticket", side_effect=resume),
-                ):
-                    self.assertEqual(
-                        self.decision(
-                            root,
-                            f"decision-{decision}",
-                            decision,
-                            "--feedback",
-                            "fix it",
-                        ),
-                        kanban.EXIT_AWAITING_COMMIT,
-                    )
-                self.assertEqual(observed["content"], expected)
-                self.assertEqual(
-                    observed["mode"],
-                    "strict" if decision == "restart" else "revision",
-                )
-                snapshot = (
-                    kanban.state_dir(root, f"decision-{decision}")
-                    / f"attempt-01-before-{decision}.patch"
-                )
-                self.assertIn("patch", snapshot.read_text())
+    def test_strict_tdd_records_red_before_implementation(self) -> None:
+        self.write_ticket(
+            strict_tdd=True,
+            tdd_command="python -c 'print(\"AssertionError\"); raise SystemExit(1)'",
+        )
 
-    def test_revision_attempt_allows_test_only_or_production_only_changes(self) -> None:
-        for changed_path in ("tests/test_app.py", "src/app.py"):
-            with (
-                self.subTest(changed_path=changed_path),
-                tempfile.TemporaryDirectory() as directory,
-            ):
-                root = Path(directory)
-                ticket = self.initialise_board_repo(root)
-
-                class RevisionProvider:
-                    name = "fake"
-
-                    def __init__(self):
-                        self.calls = 0
-
-                    def run(self, request, changed_path=changed_path, root=root):
-                        self.calls += 1
-                        if self.calls == 1 and changed_path.startswith("tests/"):
-                            (root / changed_path).write_text(
-                                "coverage\n", encoding="utf-8"
-                            )
-                        if self.calls == 2 and changed_path.startswith("src/"):
-                            (root / changed_path).write_text(
-                                "repair\n", encoding="utf-8"
-                            )
-                        data = (
-                            {"verdict": "accept", "summary": "ok", "findings": []}
-                            if self.calls == 3
-                            else {"status": "complete", "blocker": None}
-                        )
-                        return kanban.AgentResult(data, "")
-
-                run_path = kanban.state_dir(root, "revision")
-                run_path.mkdir(parents=True)
-                with (
-                    mock.patch.object(kanban, "run_verification", return_value=[]),
-                    mock.patch.object(
-                        kanban, "run_revision_test", return_value={"exit": 0}
-                    ),
-                ):
-                    kanban.execute_attempt(
-                        root,
-                        ticket,
-                        RevisionProvider(),
-                        [],
-                        run_path,
-                        2,
-                        revision=True,
-                    )
-                if changed_path.startswith("tests/"):
-                    self.assertTrue(
-                        (
-                            kanban.state_dir(root, "revision")
-                            / "attempt-02-revision-test.json"
-                        ).exists()
-                    )
-
-    def test_revision_attempt_requires_at_least_one_file_change(self) -> None:
-        class NoopProvider:
-            name = "fake"
-
-            def run(self, request):
-                return kanban.AgentResult({"status": "complete", "blocker": None}, "")
-
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            ticket = self.initialise_board_repo(root)
-            run_path = kanban.state_dir(root, "revision-no-change")
-            run_path.mkdir(parents=True)
-            with self.assertRaisesRegex(
-                kanban.KanbanError,
-                "Revision attempt must change at least one declared ticket file",
-            ):
-                kanban.execute_attempt(
-                    root,
-                    ticket,
-                    NoopProvider(),
-                    [],
-                    run_path,
-                    2,
-                    revision=True,
-                )
-
-    def test_initial_attempt_still_requires_test_and_production_changes(self) -> None:
-        class NoopProvider:
-            name = "fake"
-
-            def run(self, request):
-                return kanban.AgentResult({"status": "complete", "blocker": None}, "")
-
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            ticket = self.initialise_board_repo(root)
-            run_path = kanban.state_dir(root, "strict")
-            run_path.mkdir(parents=True)
-            with self.assertRaisesRegex(kanban.KanbanError, "Test phase must change"):
-                kanban.execute_attempt(root, ticket, NoopProvider(), [], run_path, 1)
-
-    def test_rejection_restore_keeps_ticket_doing_and_resets_code(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            backlog_ticket = self.initialise_board_repo(root)
-            doing_path = kanban.move_ticket(
-                backlog_ticket, root / ".workflow/kanban/doing"
+        def write_test(_: Any) -> None:
+            (self.root / "tests").mkdir()
+            (self.root / "tests/test_app.py").write_text(
+                "def test_value(): assert False\n", encoding="utf-8"
             )
-            ticket = kanban.parse_ticket(doing_path)
-            (root / "src/app.py").write_text("rejected\n", encoding="utf-8")
-            (root / "tests/test_app.py").write_text("rejected test\n", encoding="utf-8")
 
-            kanban.restore_implementation(root, ticket)
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer-tests", implementer_result(), write_test),
+                ("implementer", implementer_result(), self.change_value(1)),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        result = self.engine(adapter).start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        self.assertEqual(result["status"], "awaiting-review")
+        red_path = (
+            SessionStore(self.root).path(result["run-id"]) / "attempt-01-red.json"
+        )
+        self.assertTrue(red_path.exists())
+        self.assertEqual(adapter.calls[0], "implementer-tests")
 
-            self.assertEqual((root / "src/app.py").read_text(), "before\n")
-            self.assertEqual((root / "tests/test_app.py").read_text(), "before test\n")
-            self.assertTrue(doing_path.exists())
-            self.assertFalse(
-                (root / ".workflow/kanban/backlog/00-hello-command.md").exists()
+    def test_review_pause_shelves_and_resume_restores_patch(self) -> None:
+        self.write_ticket()
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer", implementer_result(), self.change_value(7)),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        engine = self.engine(adapter)
+        candidate = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        engine.review_action(candidate["run-id"], "pause")
+        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 0\n")
+        resumed = engine.resume("LR-01-deliver-outcome")
+        self.assertEqual(resumed["status"], "awaiting-review")
+        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 7\n")
+
+    def test_feature_pause_and_resume_restores_review_session(self) -> None:
+        self.write_ticket()
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer", implementer_result(), self.change_value(8)),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        engine = self.engine(adapter)
+        candidate = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        paused = engine.pause_feature("loop-redesign")
+        self.assertEqual(paused["status"], "paused")
+        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 0\n")
+        resumed = engine.resume_feature("loop-redesign")
+        self.assertEqual(resumed["tickets"][0]["status"], "awaiting-review")
+        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 8\n")
+        self.assertEqual(
+            SessionStore(self.root).load(candidate["run-id"])["phase"],
+            "awaiting-review",
+        )
+
+    def test_feature_resume_preserves_independent_ticket_pause(self) -> None:
+        self.write_ticket()
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer", implementer_result(), self.change_value(9)),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        engine = self.engine(adapter)
+        candidate = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        engine.review_action(candidate["run-id"], "pause")
+        engine.pause_feature("loop-redesign")
+        resumed_feature = engine.resume_feature("loop-redesign")
+        self.assertEqual(resumed_feature["tickets"][0]["status"], "paused")
+        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 0\n")
+        resumed_ticket = engine.resume("LR-01-deliver-outcome")
+        self.assertEqual(resumed_ticket["status"], "awaiting-review")
+        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 9\n")
+
+    def test_feature_pause_and_resume_unblocks_saved_session(self) -> None:
+        self.write_ticket()
+        adapter = FakeAdapter(
+            self.root,
+            [
+                (
+                    "implementer",
+                    implementer_result(status="blocked", blocker="Need a choice"),
+                    None,
+                )
+            ],
+        )
+        engine = self.engine(adapter)
+        blocked = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="auto",
+            branch=None,
+            max_attempts=3,
+        )
+        self.assertEqual(blocked["status"], "blocked")
+        engine.pause_feature("loop-redesign")
+        resumed = engine.resume_feature("loop-redesign")
+        self.assertEqual(resumed["tickets"][0]["status"], "active")
+        self.assertEqual(
+            self.store.load().tickets["LR-01-deliver-outcome"].column, "active"
+        )
+
+    def test_blocked_session_can_resume_with_human_feedback(self) -> None:
+        self.write_ticket()
+        adapter = FakeAdapter(
+            self.root,
+            [
+                (
+                    "implementer",
+                    implementer_result(status="blocked", blocker="Choose behavior"),
+                    self.change_value(1),
+                ),
+                ("implementer", implementer_result(), self.change_value(2)),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        engine = self.engine(adapter)
+        blocked = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="auto",
+            branch=None,
+            max_attempts=3,
+        )
+        self.assertEqual(blocked["status"], "blocked")
+        resumed = engine.review_action(
+            blocked["run-id"],
+            "revise",
+            feedback="Use the backward-compatible behavior.",
+        )
+        self.assertEqual(resumed["status"], "awaiting-review")
+
+    def test_provider_failure_is_persisted_before_exception(self) -> None:
+        self.write_ticket()
+        self.store.config_path.write_text("provider-retries: 0\n", encoding="utf-8")
+        root = self.root
+
+        class BrokenAdapter:
+            name = "broken"
+
+            def run(self, request: Any) -> AgentResult:
+                (root / "src/app.py").write_text("VALUE = 12\n", encoding="utf-8")
+                raise ProviderFailure(
+                    "missing authority data",
+                    {
+                        "raw-output": '{"status":"complete"}',
+                        "candidates": [
+                            {"valid": False, "error": "missing fields ['summary']"}
+                        ],
+                    },
+                )
+
+        engine = Engine(self.root)
+        engine.provider = lambda state=None: BrokenAdapter()  # type: ignore[method-assign]
+        with self.assertRaisesRegex(KanbanError, "diagnostics"):
+            engine.start(
+                ticket_ref=None,
+                feature=None,
+                all_tickets=True,
+                mode="hitl",
+                branch=None,
+                max_attempts=3,
             )
+        failures = list(SessionStore(self.root).failures.glob("*.json"))
+        self.assertGreaterEqual(len(failures), 1)
+        combined = "\n".join(path.read_text() for path in failures)
+        self.assertIn("missing fields", combined)
+        self.assertIn("raw-output", combined)
+        self.assertIn("patch-hash", combined)
+        self.assertIn("src/app.py", combined)
+
+    def test_interruption_shelves_patch_and_records_resumable_block(self) -> None:
+        self.write_ticket()
+        root = self.root
+
+        class InterruptedAdapter:
+            name = "interrupted"
+
+            def run(self, request: Any) -> AgentResult:
+                (root / "src/app.py").write_text("VALUE = 13\n", encoding="utf-8")
+                raise KeyboardInterrupt
+
+        engine = Engine(self.root)
+        engine.provider = lambda state=None: InterruptedAdapter()  # type: ignore[method-assign]
+        with self.assertRaises(KeyboardInterrupt):
+            engine.start(
+                ticket_ref=None,
+                feature=None,
+                all_tickets=True,
+                mode="hitl",
+                branch=None,
+                max_attempts=3,
+            )
+        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 0\n")
+        ticket = self.store.load().tickets["LR-01-deliver-outcome"]
+        self.assertEqual(ticket.column, "blocked")
+        run_id, state = SessionStore(self.root).active_for_ticket(
+            ticket.ticket.key
+        ) or (
+            None,
+            {},
+        )
+        self.assertIsNotNone(run_id)
+        self.assertEqual(state["phase"], "blocked")
+        self.assertTrue(state["shelf-patch"])
+
+    def test_ticket_edit_is_reconciled_instead_of_treated_as_corruption(self) -> None:
+        ticket_path = self.write_ticket()
+
+        def edit_code_and_ticket(_: Any) -> None:
+            self.change_value(4)(None)
+            text = ticket_path.parent.parent.joinpath(
+                "active", ticket_path.name
+            ).read_text()
+            active_path = ticket_path.parent.parent / "active" / ticket_path.name
+            active_path.write_text(
+                text.replace("requested observable", "amended observable")
+            )
+
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer", implementer_result(), edit_code_and_ticket),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        engine = self.engine(adapter)
+        result = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        self.assertEqual(result["status"], "awaiting-amendment")
+        incorporated = engine.review_action(result["run-id"], "incorporate")
+        self.assertEqual(incorporated["status"], "awaiting-review")
+
+    def test_ticket_edit_at_review_defers_approval_for_reconciliation(self) -> None:
+        self.write_ticket()
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer", implementer_result(), self.change_value(5)),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        engine = self.engine(adapter)
+        candidate = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        ticket = self.store.load().tickets["LR-01-deliver-outcome"].ticket.path
+        ticket.write_text(
+            ticket.read_text().replace("requested observable", "edited observable"),
+            encoding="utf-8",
+        )
+        result = engine.review_action(candidate["run-id"], "approve")
+        self.assertEqual(result["status"], "awaiting-amendment")
+        self.assertEqual(
+            SessionStore(self.root).load(candidate["run-id"])["phase"],
+            "awaiting-amendment",
+        )
+
+    def test_read_only_investigation_does_not_change_candidate(self) -> None:
+        self.write_ticket()
+        investigation = {
+            "status": "complete",
+            "summary": "The change is lazy.",
+            "evidence": ["src/app.py"],
+            "blocker": None,
+        }
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer", implementer_result(), self.change_value(1)),
+                ("reviewer", review_result(), None),
+                ("investigator", investigation, None),
+            ],
+        )
+        engine = self.engine(adapter)
+        candidate = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        result = engine.review_action(
+            candidate["run-id"], "ask", feedback="Is this lazy?"
+        )
+        self.assertEqual(result["result"]["summary"], "The change is lazy.")
+        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 1\n")
+
+    def test_status_explains_dependency_blockers(self) -> None:
+        self.write_ticket(number=1, slug="first", column="paused")
+        self.write_ticket(number=2, slug="second", depends_on=["LR-01-first"])
+        status = Engine(self.root).status()
+        second = next(
+            item for item in status["tickets"] if item["key"] == "LR-02-second"
+        )
+        self.assertEqual(second["state"], "blocked")
+        self.assertEqual(second["unresolved-dependencies"], ["LR-01-first"])
+
+    def test_status_reports_effective_policy_values_and_sources(self) -> None:
+        self.write_ticket()
+        self.store.config_path.write_text(
+            "max-attempts: 5\nprotected-branches: [release]\n", encoding="utf-8"
+        )
+        status = Engine(self.root).status()
+        effective = status["effective-config"]
+        self.assertEqual(effective["values"]["max-attempts"], 5)
+        self.assertEqual(
+            effective["values"]["protected-branches"],
+            ["develop", "main", "master", "release"],
+        )
+        self.assertEqual(effective["sources"]["provider"], "built-in")
+        self.assertIn("config.yaml", effective["sources"]["max-attempts"])
+        ticket = next(
+            item for item in status["tickets"] if item["key"].startswith("LR")
+        )
+        self.assertIn("tickets/ready", ticket["policy"]["mode"]["source"])
+
+
+class CliTests(RepoCase):
+    def test_plan_is_read_only_and_reports_eligibility(self) -> None:
+        self.write_ticket()
+        args = parser().parse_args(["plan"])
+        result = execute(args, self.root)
+        self.assertFalse(result["mutation"])
+        self.assertEqual(result["eligible"], ["LR-01-deliver-outcome"])
+
+    def test_pause_requires_exactly_one_target_kind(self) -> None:
+        args = parser().parse_args(["pause"])
+        with self.assertRaisesRegex(KanbanError, "requires ticket references"):
+            execute(args, self.root)
 
 
 if __name__ == "__main__":

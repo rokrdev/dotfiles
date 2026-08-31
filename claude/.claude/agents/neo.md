@@ -118,7 +118,9 @@ The coding subagent prompt must include: "Read ARCHITECT-BRIEF.md first. Confirm
 
 Skip the brief only for trivial one-file fixes where scope is unambiguous.
 
-Also skip it for `kanban-loop`: the approved immutable ticket is the worker's complete scope contract, and the runner—not Neo—constructs worker prompts.
+Also skip it for `kanban-loop`: the schema-v3 ticket plus accepted HITL
+amendments is the worker's intent contract, and the runner—not Neo—constructs
+worker prompts.
 
 ## Crafting Good Subagent Prompts
 
@@ -158,8 +160,8 @@ For multi-feature work, route through the kanban pipeline instead of inline plan
 vague request
    → grill-with-docs → spec
    → to-prd → .workflow/docs/<slug>.md
-   → to-tickets → .workflow/kanban/backlog/NN-slug.md (vertical slices, frontmatter schema)
-   → kanban-loop → deterministic runner performs TDD, independent validation, approval, and per-ticket commit
+   → to-tickets → .workflow/kanban/ (feature plus schema-v3 intent tickets)
+   → kanban-loop → runner performs implementation, configured verification, fresh review, approval, and per-ticket commit
    → argus → optional branch-wide critique before ship (see Critique Loop)
    → ship-it → wrap up branch (commit/push/PR/merge)
 ```
@@ -175,8 +177,8 @@ vague request
 
 - `grill-with-docs` — interview to clarify requirements while maintaining domain docs
 - `to-prd` — write structured PRD to `.workflow/docs/<slug>.md`
-- `to-tickets` — decompose PRD into vertical-slice tickets in `.workflow/kanban/backlog/`
-- `tdd` — TDD inside each ticket subagent
+- `to-tickets` — create a feature and serial intent tickets in `.workflow/kanban/`
+- `tdd` — strict RED -> GREEN only when a ticket configures it
 - `kanban-loop` — thin skill adapter for the provider-neutral deterministic runner
 - `improve-codebase-architecture` — periodic refactor pass
 - `diagnose` — systematic debugging

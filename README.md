@@ -89,8 +89,8 @@ The deterministic local workflow is:
 
 1. `grill-me` or `grill-with-docs` — resolve the product decisions.
 2. `to-prd` — write an explicitly reviewed product contract.
-3. `to-tickets` — create validated schema-v2 tickets under `.workflow/kanban/backlog/`.
-4. `kanban-loop` — run ticket implementation, TDD gates, independent validation, approval, and per-ticket commits.
+3. `to-tickets` — create an intent-based schema-v3 feature and serial tickets under `.workflow/kanban/`.
+4. `kanban-loop` — run HITL or explicit AUTO implementation, verification, fresh review, pause/resume, and descriptive per-ticket commits.
 5. `ship-it` — optionally push the completed feature branch and open a pull request.
 
 `tdd`, `code-review`, `diagnosing-bugs`, `to-bug-ticket`, and `handoff` remain independently invocable. The issue-tracker-oriented `setup-matt-pocock-skills`, `to-spec`, `grilling`, and domain-modeling skills are also available when a project uses that workflow.

@@ -17,6 +17,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from unittest import mock
 
 RUNNER = Path(__file__).resolve().parents[1] / "bin/.local/bin/kanban-loop"
 LOADER = importlib.machinery.SourceFileLoader("kanban_loop", str(RUNNER))
@@ -423,6 +424,7 @@ class GitTests(unittest.TestCase):
             "tests",
             ".workflow/kanban/backlog",
             ".workflow/kanban/doing",
+            ".workflow/kanban/paused",
             ".workflow/kanban/done",
         ):
             (root / relative).mkdir(parents=True, exist_ok=True)
@@ -436,6 +438,170 @@ class GitTests(unittest.TestCase):
         subprocess.run(["git", "add", "src", "tests"], cwd=root, check=True)
         subprocess.run(["git", "commit", "-qm", "approved plan"], cwd=root, check=True)
         return kanban.parse_ticket(ticket_path)
+
+    def test_paused_ticket_is_valid_but_not_eligible(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            ticket = self.initialise_board_repo(root)
+            paused_path = kanban.move_ticket(
+                ticket, root / ".workflow/kanban/paused"
+            )
+
+            tickets = kanban.validate_board(root)
+
+            self.assertEqual([item.slug for item in tickets], ["hello-command"])
+            self.assertEqual(kanban.eligible_tickets(root), [])
+            self.assertIn(
+                ".workflow/kanban/paused/00-hello-command.md",
+                kanban.ticket_board_paths(kanban.parse_ticket(paused_path)),
+            )
+
+    def test_existing_three_column_board_remains_valid(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.initialise_board_repo(root)
+            (root / ".workflow/kanban/paused").rmdir()
+
+            tickets = kanban.validate_board(root)
+
+            self.assertEqual([ticket.slug for ticket in tickets], ["hello-command"])
+
+    def test_bulk_pause_and_resume_preserve_ticket_contents(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            first = self.initialise_board_repo(root)
+            second_text = (
+                VALID_TICKET.replace("id: 0", "id: 1")
+                .replace("slug: hello-command", "slug: goodbye-command")
+                .replace("title: Add hello command", "title: Add goodbye command")
+            )
+            second_path = root / ".workflow/kanban/backlog/01-goodbye-command.md"
+            second_path.write_text(second_text, encoding="utf-8")
+            second = kanban.parse_ticket(second_path)
+            original = {first.slug: first.raw, second.slug: second.raw}
+
+            paused = kanban.transition_tickets(
+                root,
+                ["hello-command", "goodbye-command"],
+                "backlog",
+                "paused",
+            )
+            self.assertEqual(
+                [ticket.slug for ticket in paused],
+                ["hello-command", "goodbye-command"],
+            )
+            self.assertEqual(kanban.eligible_tickets(root), [])
+            for slug, raw in original.items():
+                path = next(
+                    (root / ".workflow/kanban/paused").glob(f"*-{slug}.md")
+                )
+                self.assertEqual(path.read_text(encoding="utf-8"), raw)
+
+            kanban.transition_tickets(
+                root,
+                ["hello-command", "goodbye-command"],
+                "paused",
+                "backlog",
+            )
+            self.assertEqual(
+                [ticket.slug for ticket in kanban.eligible_tickets(root)],
+                ["hello-command", "goodbye-command"],
+            )
+
+    def test_pause_rejects_duplicate_slug_arguments_without_moving_ticket(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            ticket = self.initialise_board_repo(root)
+
+            with self.assertRaisesRegex(kanban.KanbanError, "must not be repeated"):
+                kanban.transition_tickets(
+                    root,
+                    ["hello-command", "hello-command"],
+                    "backlog",
+                    "paused",
+                )
+
+            self.assertTrue(ticket.path.exists())
+
+    def test_pause_and_resume_commands_move_ticket_under_board_lock(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.initialise_board_repo(root)
+            original_cwd = Path.cwd()
+            stdout = io.StringIO()
+            try:
+                os.chdir(root)
+                with contextlib.redirect_stdout(stdout):
+                    self.assertEqual(
+                        kanban.main(["pause", "hello-command"]), 0
+                    )
+                    self.assertEqual(
+                        kanban.main(["resume", "hello-command"]), 0
+                    )
+            finally:
+                os.chdir(original_cwd)
+
+            self.assertIn("PAUSED hello-command", stdout.getvalue())
+            self.assertIn("RESUMED hello-command", stdout.getvalue())
+            self.assertTrue(
+                (root / ".workflow/kanban/backlog/00-hello-command.md").exists()
+            )
+            self.assertTrue((root / ".git/kanban-loop/.lock").exists())
+
+    def test_plan_reports_paused_tickets_separately_from_eligible(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            first = self.initialise_board_repo(root)
+            kanban.move_ticket(first, root / ".workflow/kanban/paused")
+            second_text = (
+                VALID_TICKET.replace("id: 0", "id: 1")
+                .replace("slug: hello-command", "slug: goodbye-command")
+                .replace("title: Add hello command", "title: Add goodbye command")
+            )
+            (root / ".workflow/kanban/backlog/01-goodbye-command.md").write_text(
+                second_text, encoding="utf-8"
+            )
+            original_cwd = Path.cwd()
+            stdout = io.StringIO()
+            try:
+                os.chdir(root)
+                with mock.patch.object(
+                    kanban,
+                    "select_provider",
+                    return_value=SimpleNamespace(name="test-provider"),
+                ), contextlib.redirect_stdout(stdout):
+                    self.assertEqual(kanban.main(["plan"]), 0)
+            finally:
+                os.chdir(original_cwd)
+
+            payload = json.loads(stdout.getvalue())
+            self.assertEqual(
+                [ticket["slug"] for ticket in payload["eligible"]],
+                ["goodbye-command"],
+            )
+            self.assertEqual(
+                payload["paused"],
+                [
+                    {
+                        "id": 0,
+                        "slug": "hello-command",
+                        "title": "Add hello command",
+                    }
+                ],
+            )
+
+    def test_move_ticket_refuses_to_overwrite_existing_ticket(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            ticket = self.initialise_board_repo(root)
+            target = root / ".workflow/kanban/paused/00-hello-command.md"
+            target.write_text("existing\n", encoding="utf-8")
+
+            with self.assertRaisesRegex(kanban.KanbanError, "Refusing to overwrite"):
+                kanban.move_ticket(ticket, target.parent)
+
+            self.assertTrue(ticket.path.exists())
+            self.assertEqual(target.read_text(encoding="utf-8"), "existing\n")
 
     def test_diff_text_includes_tracked_and_untracked_files_without_staging(
         self,

@@ -10,7 +10,10 @@ Compile confirmed `/diagnose` output into one ticket accepted by the determinist
 
 Require a reproducible failing behavior, confirmed root cause, minimal fix boundary, exact files, targeted test command, full verification command, and explicit user approval. If any is missing, return `NEEDS_DECISION`; do not guess.
 
-Explore the codebase to verify every path and command. Present the complete ticket for approval before writing `.workflow/kanban/backlog/NN-slug.md`.
+Explore the codebase to verify every path and command. Present the complete
+ticket for approval before writing `.workflow/kanban/backlog/NN-slug.md`. Ensure
+the board has `backlog/`, `doing/`, `paused/`, and `done/` directories; do not
+place a newly approved ticket directly in `paused/`.
 
 ```markdown
 ---

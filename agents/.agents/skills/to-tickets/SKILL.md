@@ -57,7 +57,11 @@ Run stable cycle detection: choose the lowest numeric ID and then slug whenever 
 
 ## Ticket Format
 
-Write approved tickets to `.workflow/kanban/backlog/NN-slug.md`. Create `backlog/`, `doing/`, and `done/` when missing. Runtime state is created under Git metadata by the runner; never create or track a `runs/` directory.
+Write approved tickets to `.workflow/kanban/backlog/NN-slug.md`. Create
+`backlog/`, `doing/`, `paused/`, and `done/` when missing. `paused/` contains
+unchanged tickets deliberately excluded from loop eligibility. Runtime state is
+created under Git metadata by the runner; never create or track a `runs/`
+directory.
 
 ```markdown
 ---

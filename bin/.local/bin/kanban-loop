@@ -32,6 +32,8 @@ import yaml
 
 SCHEMA_VERSION = 2
 PROTECTED_BRANCHES = {"main", "master", "develop"}
+BOARD_COLUMNS = ("backlog", "doing", "paused", "done")
+REQUIRED_BOARD_COLUMNS = ("backlog", "doing", "done")
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 COMMIT_RE = re.compile(
     r"^(feat|fix|refactor|test|docs|build|ci|chore|perf)(\([a-z0-9-]+\))?!?: .+"
@@ -1025,7 +1027,7 @@ def changed_paths(repo: Path) -> set[str]:
 def ticket_board_paths(ticket: Ticket) -> set[str]:
     return {
         f".workflow/kanban/{column}/{ticket.path.name}"
-        for column in ("backlog", "doing", "done")
+        for column in BOARD_COLUMNS
     }
 
 
@@ -1240,18 +1242,18 @@ def load_state(repo: Path, run_id: str) -> dict[str, Any]:
 
 def board_paths(repo: Path) -> dict[str, Path]:
     root = repo / ".workflow" / "kanban"
-    return {name: root / name for name in ("backlog", "doing", "done")}
+    return {name: root / name for name in BOARD_COLUMNS}
 
 
 def validate_board(repo: Path) -> list[Ticket]:
     paths = board_paths(repo)
-    for name in ("backlog", "doing", "done"):
+    for name in REQUIRED_BOARD_COLUMNS:
         if not paths[name].is_dir():
             raise KanbanError(f"Board missing {paths[name]}")
     tickets: list[Ticket] = []
     errors: list[str] = []
     identities: set[tuple[int, str]] = set()
-    for column in ("backlog", "doing", "done"):
+    for column in BOARD_COLUMNS:
         for path in sorted(paths[column].glob("*.md")):
             try:
                 ticket = parse_ticket(path)
@@ -1320,8 +1322,44 @@ def preflight(repo: Path, branch: str | None) -> None:
 def move_ticket(ticket: Ticket, destination: Path) -> Path:
     destination.mkdir(parents=True, exist_ok=True)
     target = destination / ticket.path.name
+    if target.exists():
+        raise KanbanError(f"Refusing to overwrite existing ticket: {target}")
     ticket.path.replace(target)
     return target
+
+
+def find_ticket_by_slug(repo: Path, column: str, slug: str) -> Ticket:
+    if column not in BOARD_COLUMNS:
+        raise KanbanError(f"Unknown board column: {column}")
+    if not SLUG_RE.fullmatch(slug):
+        raise KanbanError(f"Ticket slug must be kebab-case: {slug!r}")
+    matches = [
+        ticket
+        for ticket in (
+            parse_ticket(path) for path in board_paths(repo)[column].glob("*.md")
+        )
+        if ticket.slug == slug
+    ]
+    if not matches:
+        raise KanbanError(f"No ticket with slug {slug!r} in {column}/")
+    if len(matches) > 1:
+        raise KanbanError(f"Multiple tickets with slug {slug!r} in {column}/")
+    return matches[0]
+
+
+def transition_tickets(
+    repo: Path, slugs: list[str], source: str, destination: str
+) -> list[Ticket]:
+    if len(slugs) != len(set(slugs)):
+        raise KanbanError("Ticket slugs must not be repeated")
+    tickets = [find_ticket_by_slug(repo, source, slug) for slug in slugs]
+    targets = [board_paths(repo)[destination] / ticket.path.name for ticket in tickets]
+    existing = [target for target in targets if target.exists()]
+    if existing:
+        raise KanbanError(f"Refusing to overwrite existing tickets: {existing}")
+    for ticket in tickets:
+        move_ticket(ticket, board_paths(repo)[destination])
+    return tickets
 
 
 def provider_model(role: str) -> str | None:
@@ -1686,7 +1724,14 @@ def command_run(args: argparse.Namespace) -> int:
                     raise KanbanError(
                         "Deadlock; unmet dependencies:\n" + "\n".join(blocked)
                     )
-                print("kanban-loop complete")
+                paused_count = len(list(paths["paused"].glob("*.md")))
+                if paused_count:
+                    print(
+                        f"kanban-loop complete; {paused_count} paused "
+                        f"ticket{'s' if paused_count != 1 else ''} remain"
+                    )
+                else:
+                    print("kanban-loop complete")
                 return 0
             ticket = eligible[0]
             _, phase = process_ticket(
@@ -1699,7 +1744,11 @@ def command_run(args: argparse.Namespace) -> int:
 def command_validate(args: argparse.Namespace) -> int:
     repo = repository_root(Path.cwd())
     tickets = validate_board(repo)
-    print(f"Valid board: {len(tickets)} tickets, schema-version {SCHEMA_VERSION}")
+    paused_count = len(list(board_paths(repo)["paused"].glob("*.md")))
+    print(
+        f"Valid board: {len(tickets)} tickets, schema-version {SCHEMA_VERSION}, "
+        f"{paused_count} paused"
+    )
     return 0
 
 
@@ -1708,6 +1757,13 @@ def command_plan(args: argparse.Namespace) -> int:
     validate_board(repo)
     provider = select_provider(args.provider, repo)
     eligible = eligible_tickets(repo)
+    paused = sorted(
+        (
+            parse_ticket(path)
+            for path in board_paths(repo)["paused"].glob("*.md")
+        ),
+        key=lambda ticket: (ticket.id, ticket.slug),
+    )
     payload = {
         "provider": provider.name,
         "workspace": str(repo),
@@ -1722,9 +1778,46 @@ def command_plan(args: argparse.Namespace) -> int:
             }
             for ticket in eligible
         ],
+        "paused": [
+            {
+                "id": ticket.id,
+                "slug": ticket.slug,
+                "title": ticket.title,
+            }
+            for ticket in paused
+        ],
     }
     print(json.dumps(payload, indent=2))
     return 0
+
+
+def command_transition(
+    args: argparse.Namespace, source: str, destination: str, label: str
+) -> int:
+    repo = repository_root(Path.cwd())
+    runtime = runtime_dir(repo)
+    runtime.mkdir(parents=True, exist_ok=True)
+    with (runtime / ".lock").open("w") as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError as error:
+            raise KanbanError(
+                "Another kanban-loop process holds the board lock"
+            ) from error
+        validate_board(repo)
+        tickets = transition_tickets(repo, args.slugs, source, destination)
+        validate_board(repo)
+    for ticket in tickets:
+        print(f"{label} {ticket.slug} -> {destination}/{ticket.path.name}")
+    return 0
+
+
+def command_pause(args: argparse.Namespace) -> int:
+    return command_transition(args, "backlog", "paused", "PAUSED")
+
+
+def command_resume(args: argparse.Namespace) -> int:
+    return command_transition(args, "paused", "backlog", "RESUMED")
 
 
 def command_decide(args: argparse.Namespace) -> int:
@@ -1828,6 +1921,18 @@ def parser() -> argparse.ArgumentParser:
     run.add_argument("--branch")
     run.add_argument("--max-attempts", type=int, default=3)
     run.set_defaults(func=command_run)
+
+    pause = subcommands.add_parser(
+        "pause", help="Move backlog tickets out of loop eligibility"
+    )
+    pause.add_argument("slugs", nargs="+", metavar="SLUG")
+    pause.set_defaults(func=command_pause)
+
+    resume = subcommands.add_parser(
+        "resume", help="Return paused tickets to the executable backlog"
+    )
+    resume.add_argument("slugs", nargs="+", metavar="SLUG")
+    resume.set_defaults(func=command_resume)
 
     decide = subcommands.add_parser("decide", help="Resolve a persisted HITL gate")
     decide.add_argument("run_id")

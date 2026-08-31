@@ -4,7 +4,8 @@
 # To Tickets
 
 Break a plan into independently-workable tickets using vertical slices (tracer bullets).
-Writes each ticket to `.workflow/kanban/backlog/NN-slug.md` in the project root.
+Writes each ticket to `.workflow/kanban/backlog/NN-slug.md` in the project root
+and ensures `backlog/`, `doing/`, `paused/`, and `done/` exist.
 The PRD from @to-prd is the canonical input — run that first if you have only a spec.
 
 ---

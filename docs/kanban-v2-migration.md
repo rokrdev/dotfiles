@@ -1,564 +1,163 @@
-# Migrating an Existing Claude Kanban Board to Schema v2
+# Migrating Schema-v2 Kanban Boards to Schema v3
 
-This runbook explains how to start using the deterministic schema-v2 Kanban
-workflow on another system without deleting or losing legacy backlog, doing, or
-done tickets.
+Schema v3 replaces immutable file-scoped execution contracts with intent-based
+tickets, feature definitions, richer lifecycle state, resumable sessions, and
+complete failure diagnostics. Migration is local, explicit, previewable, and
+recoverable.
 
-## What Changed
+## What Is Preserved
 
-The new workflow treats each ticket as an immutable authorization contract. A
-ticket now has strict YAML frontmatter containing the exact files, operations,
-tests, verification commands, and commit message that the runner is allowed to
-use.
+- feature slug and ticket prefix;
+- full ticket key, number, slug, title, and body;
+- dependency relationships, converted from legacy slugs to stable full keys;
+- backlog, pause, active, and completion meaning;
+- human-review requirements;
+- acceptance intent and verification commands;
+- old exact file lists as non-binding `likely-files` hints;
+- the untouched complete schema-v2 board in a dated backup.
+- legacy `.git/kanban-loop/runs/` evidence, preserved in place and reported by
+  migration/status for manual recovery or audit.
 
-The `kanban-loop` executable, rather than Claude itself, now owns:
+Legacy `doing/` tickets become paused HITL tickets. Schema v2 has no trustworthy
+resumable provider session, so explicit resume returns them to `ready` for a
+fresh attributed run. Existing project changes remain user-owned.
 
-- Ticket selection and board transitions.
-- Test and implementation worker dispatch.
-- RED/GREEN and verification gates.
-- Independent read-only validation.
-- Staging and per-ticket commits.
-- HITL approval state and automatic continuation.
-
-The runner requires schema-v2 tickets and deliberately rejects legacy tickets.
-It validates Markdown files in every execution-aware column:
+## New Layout
 
 ```text
 .workflow/kanban/
-├── backlog/
-├── doing/
-├── paused/
-└── done/
+├── features/
+├── tickets/
+│   ├── ready/
+│   ├── active/
+│   ├── review/
+│   ├── paused/
+│   ├── blocked/
+│   ├── done/
+│   └── cancelled/
+├── archive/
+└── .state/
 ```
 
-Consequently, converting only `backlog/` is not sufficient when old-format
-tickets remain in `done/`, `doing/`, or `paused/`.
-
-There is intentionally no blind, mechanical migration. Fields such as exact
-allowed paths, file operations, test commands, and full verification commands
-must be derived from the current codebase. The safe approach is to preserve the
-legacy board intact and regenerate only the unfinished work.
-
-## Migration Outcome
-
-After migration, the project will have:
+The original board backup is written under:
 
 ```text
-.workflow/
-├── docs/
-│   └── <remaining-work-prd>.md
-├── kanban/
-│   ├── backlog/       # New schema-v2 tickets
-│   ├── doing/
-│   ├── paused/        # Valid tickets deliberately excluded from execution
-│   └── done/
-└── kanban-legacy-<date>/
-    ├── backlog/       # Original tickets, unchanged
-    ├── doing/
-    └── done/
+.workflow/kanban-backups/<UTC timestamp>/
 ```
 
-The legacy tickets remain available for history and auditing, but only the new
-board is executable. `.workflow/` is local-only tracking: do not stage or
-commit either the archive or the active board.
+Both locations are local-only and must remain excluded from Git.
 
-## 1. Publish the Dotfiles Branch
+## Preconditions
 
-The branch must be available from the remote before the other system can pull
-it. On the system containing the changes:
+1. Stop any running legacy Kanban process.
+2. Inspect project work with `git status --short --branch`.
+3. Do not stage Kanban files.
+4. Preserve or commit any unrelated project work normally.
+5. Install/restow the updated `bin`, `agents`, and `claude` packages.
+
+Preview Stow first:
 
 ```bash
-cd ~/.dotfiles
-git status --short --branch
-git push origin codex/helix-intellij-lsp
+stow -n -v -R --no-folding bin agents claude
+stow -v -R --no-folding bin agents claude
 ```
 
-If a different branch contains the workflow changes, substitute that branch
-name in this runbook.
-
-## 2. Install the New Workflow on the Other System
-
-On the other system:
+Confirm the executable:
 
 ```bash
-cd ~/.dotfiles
-git fetch origin
-git switch codex/helix-intellij-lsp
-git pull --ff-only
+kanban-loop --version
+kanban-loop providers
 ```
 
-Preview the Stow changes first:
+## Preview Migration
 
 ```bash
-stow -n -R --no-folding bin agents claude
+kanban-loop migrate
 ```
 
-If the preview is correct, apply them:
+Preview performs no mutation. Review:
+
+- source and target schema;
+- every feature and prefix;
+- every ticket, source column, and target identity;
+- dependency conversions;
+- all reported ambiguities or invalid legacy data.
+
+Migration refuses tickets without schema-v2 feature/prefix identity, conflicting
+prefixes, unknown dependencies, or invalid frontmatter. Correct the legacy
+intent or preserve it separately; do not make the migrator guess.
+
+## Apply Migration
 
 ```bash
-stow -R --no-folding bin agents claude
+kanban-loop migrate --apply
 ```
 
-These packages provide:
+Apply performs these ordered operations:
 
-- `bin`: the `kanban-loop` executable under `~/.local/bin/`.
-- `agents`: the canonical skills under `~/.agents/skills/`.
-- `claude`: Claude settings and compatibility links under `~/.claude/skills/`.
+1. Re-run the complete preview and stop on any error.
+2. Copy the full legacy board to the timestamped backup.
+3. Build a complete schema-v3 board in a temporary local directory.
+4. Validate the converted board, identities, dependencies, and columns.
+5. Atomically replace the active board.
+6. Leave the backup intact for recovery.
 
-Confirm that the executable and its dependencies are available:
+Normal `run`, `status`, and `validate` never migrate automatically.
 
-```bash
-command -v uv
-command -v claude
-command -v kanban-loop
-kanban-loop --help
-```
-
-The executable requires `uv` and at least one supported provider CLI. The
-Claude skill explicitly selects the Claude provider.
-
-Close and restart Claude Code after restowing so it reloads the new skills and
-global instructions.
-
-## 3. Stabilize Existing Work Before Migrating
-
-Do not change workflows while an agent is actively editing a ticket.
-
-Before migrating the project:
-
-1. Stop the existing Claude session.
-2. Inspect `git status` and the existing board.
-3. Ensure no worker or legacy Kanban loop is still running.
-4. Ensure completed implementation is committed or otherwise safely backed up,
-   and copy the local board somewhere safe if it is not already backed up.
-5. Resolve anything in `doing/` before archiving the board.
-
-Use:
-
-```bash
-git status --short --branch
-find .workflow/kanban -maxdepth 2 -type f -name '*.md' -print | sort
-```
-
-If the old board lives at `.kanban/`, inspect that path instead.
-
-### Handling an Existing `doing/` Ticket
-
-Choose the applicable case:
-
-- If implementation is complete, finish and commit it using the old workflow
-  before migration.
-- If no implementation started, treat it as unfinished product intent when
-  constructing the new PRD.
-- If partial code exists, preserve it on a separate commit or stash before
-  migration. Do not let the new runner inherit an unexplained dirty patch.
-- If it is unclear whether the acceptance criterion is complete, require Claude
-  to compare it with the current code and tests and surface a decision.
-
-The new runner requires a clean checkout outside `.workflow/` before it starts.
-Its Git index must be entirely clean; untracked or unstaged local board files
-are intentionally ignored.
-
-## 4. Archive the Legacy Board Intact
-
-Create a migration branch in the project if the work is not already on a
-dedicated feature branch:
-
-```bash
-git switch -c chore/kanban-v2-migration
-```
-
-Archive a legacy `.workflow/kanban/` board with an ordinary, recoverable local
-filesystem move:
-
-```bash
-mv .workflow/kanban .workflow/kanban-legacy-YYYY-MM-DD
-```
-
-For a board still using the older `.kanban/` location:
-
-```bash
-mkdir -p .workflow
-mv .kanban .workflow/kanban-legacy-YYYY-MM-DD
-```
-
-Replace `YYYY-MM-DD` with the migration date. Do not delete the old board and
-do not rewrite its tickets merely to satisfy the new schema.
-
-The new runner only scans `.workflow/kanban/backlog`, `doing`, `paused`, and
-`done`, so the archived board will not interfere with validation.
-
-Do not start `kanban-loop` yet. The new active board does not exist until the
-remaining work has been reviewed and regenerated.
-
-## 5. Reconstruct the Remaining Product Contract with Claude
-
-Start a fresh Claude Code session in the project and explicitly invoke
-`/to-prd`. Paste the following request:
-
-```text
-/to-prd
-
-We are migrating from the legacy Kanban board archived at
-.workflow/kanban-legacy-YYYY-MM-DD/.
-
-Treat:
-- backlog/ tickets as unresolved product intent;
-- done/ tickets as historical evidence, not work to repeat;
-- doing/ tickets as unresolved unless the current code proves their acceptance
-  criteria are already complete.
-
-Inspect the current code and tests before drafting the PRD. Preserve the intent
-of every unfinished ticket, but consolidate duplicates and omit behavior already
-implemented. A dependency on an archived completed ticket should be treated as
-already satisfied only when the current code and tests confirm that behavior.
-Do not create new dependencies on slugs that exist only in the archived board.
-
-Surface inconsistencies, missing acceptance criteria, and scope decisions
-instead of guessing.
-
-Create a draft PRD for only the remaining work. Do not create tickets, move board
-files, run kanban-loop, or implement anything. Stop for my review and explicit
-approval.
-```
-
-Review the generated PRD carefully. In particular, verify:
-
-- Every unfinished legacy acceptance criterion is represented.
-- Already completed behavior is not scheduled again.
-- Partial or uncertain `doing/` work is called out explicitly.
-- Constraints and out-of-scope behavior survived the migration.
-- There are no unresolved scope-affecting decisions.
-
-Approve the PRD explicitly only when it accurately describes the remaining
-work. Approval changes it from a draft into the product contract used to create
-new tickets.
-
-## 6. Generate Schema-v2 Tickets
-
-After approving the PRD, explicitly invoke:
-
-```text
-/to-tickets .workflow/docs/<approved-prd>.md
-```
-
-The `to-tickets` skill must inspect the current codebase before proposing the
-ticket set. It will identify real entry points, existing tests, exact files,
-targeted test commands, full-suite commands, and repository vocabulary.
-
-Before writing any files, Claude must present the complete proposed ticket set.
-For every ticket, review:
-
-- Feature or branch slug, derived ticket prefix, one-based ID, action slug,
-  full ticket key, title, and dependency slugs.
-- One externally observable acceptance criterion.
-- Every exact allowed file and its `create`, `modify`, or `delete` operation.
-- Exact tests to write during the RED phase.
-- The targeted RED/GREEN command.
-- All verification commands and expected exit codes.
-- The exact Conventional Commit message.
-- Whether `human-required` should force review during an AUTO run.
-
-Ask Claude to merge, split, reorder, or correct tickets as needed. The skill is
-required to show the complete revised set after changes and must not write the
-ticket files until approval is explicit.
-
-### Schema-v2 Frontmatter
-
-Every active ticket follows this shape:
-
-```yaml
----
-schema-version: 2
-feature: ticket-naming-conventions
-ticket-prefix: TNC
-id: 1
-slug: json-output
-title: Add JSON output
-language: typescript
-depends-on: []
-parallel-safe: false
-human-required: false
-acceptance: "Running `app show --json` prints the requested record as valid JSON."
-allowed-changes:
-  - path: src/cli.ts
-    operation: modify
-  - path: test/cli.test.ts
-    operation: modify
-failing-tests:
-  - test/cli.test.ts::prints_requested_record_as_json
-tdd-test-command: npm test -- test/cli.test.ts
-verification:
-  - command: npm test -- test/cli.test.ts
-    expected-exit: 0
-  - command: npm test
-    expected-exit: 0
-commit-message: "feat(cli): add JSON output"
----
-```
-
-Important schema rules:
-
-- `schema-version` must be the integer `2`.
-- Newly generated tickets use `PREFIX-NN-slug.md`, where `feature` is the
-  canonical kebab-case feature or branch slug, `ticket-prefix` is its approved
-  1-8 character uppercase code, and `01` is the first ticket within the
-  feature. For example, `ticket-naming-conventions` produces
-  `TNC-01-json-output.md`.
-- The ticket prefix, numeric ID, and slug must match the filename. Ticket slugs
-  remain globally unique because dependencies reference slugs.
-- Existing schema-v2 `NN-slug.md` tickets remain valid and do not need renaming;
-  only newly generated tickets use the prefixed one-based format.
-- `parallel-safe` is currently always `false`; the runner is serial.
-- `allowed-changes` must contain exact repository-relative files, never
-  directories, globs, optional paths, or `.workflow` paths.
-- Every allowed path must declare `create`, `modify`, or `delete`.
-- Every test named in `failing-tests` must use `path::test-name` and its file
-  must also be present in `allowed-changes`.
-- `tdd-test-command` must be a targeted command that fails after test authoring
-  and passes after the implementation phase.
-- `verification` must include deterministic expected exit codes and the full
-  relevant suite.
-- `commit-message` must be an exact Conventional Commit subject.
-- Machine-critical information belongs in frontmatter, not only in prose.
-
-When the ticket set is approved, Claude creates:
-
-```text
-.workflow/kanban/
-├── backlog/
-├── doing/
-├── paused/
-└── done/
-```
-
-It writes the approved schema-v2 tickets into `backlog/`, runs validation, and
-then stops without implementing them.
-
-## 7. Validate and Review the Migration
-
-Run validation directly if necessary:
+## Validate the Result
 
 ```bash
 kanban-loop validate
+kanban-loop status
+kanban-loop plan
 ```
 
-Expected output resembles:
+Confirm:
 
-```text
-Valid board: <count> tickets, schema-version 2, <count> paused
-```
+- unfinished backlog tickets appear as `ready`;
+- legacy paused tickets remain paused;
+- legacy `doing` tickets are paused and resume to `ready` in HITL mode;
+- done tickets remain done and satisfy dependencies;
+- dependencies use full `PREFIX-NN-slug` keys;
+- file lists are hints rather than permissions;
+- HITL is required for imported active work;
+- no project source file or Git index entry changed.
 
-Also review implementation changes separately from the local board:
+## Resuming Imported Work
+
+Inspect imported paused work before resuming:
 
 ```bash
-git status --short -- . ':(exclude).workflow'
-find .workflow -maxdepth 3 -type f -print | sort
+kanban-loop status
+kanban-loop resume <ticket-key>
 ```
 
-Confirm that:
+If partial implementation existed outside the local board, kanban-loop treats
+it as pre-existing user work. It will not absorb or overwrite it silently.
+Reconcile or preserve that patch deliberately before asking an agent to
+continue.
 
-- The archived legacy board still contains every original ticket.
-- The new PRD describes only remaining work.
-- The new active board contains only schema-v2 tickets.
-- No new ticket depends on a slug that exists only in the archive.
-- Every required source and test file is within the appropriate ticket's exact
-  authorization boundary.
-- Validation passes without warnings or errors.
+## Recovery
 
-## 8. Keep the Planning Migration Local
-
-The runner ignores unstaged and untracked `.workflow/` files, but refuses any
-staged index content. Review the migration locally and do not run
-`git add .workflow` or commit the board. Do not include unrelated source changes
-in a later implementation commit.
-
-## 9. Preview the New Execution Plan
-
-In Claude Code, run:
-
-```text
-/kanban-loop --dry-run
-```
-
-This maps to:
+If conversion succeeded but the result is not acceptable, stop before running
+any ticket. Restore the exact backup path reported by migration:
 
 ```bash
-kanban-loop plan --provider claude
+kanban-loop migrate --restore .workflow/kanban-backups/<UTC timestamp>
 ```
 
-It validates the board and reports the currently eligible ticket without moving
-tickets, modifying implementation files, running tests, or committing.
+Restore validates the schema-v2 backup, first backs up the current schema-v3
+board, and then reinstates the legacy board. Ordinary execution will again
+require an explicit migration.
 
-Check the selected ticket, acceptance criterion, and allowed paths before
-starting execution.
+Do not delete the only backup, use `git reset --hard`, or stage `.workflow`.
 
-## 10. Start in Human-in-the-Loop Mode
+## Ticket Generation After Migration
 
-Begin with the default mode:
+New work should be generated with the updated `/to-tickets` skill. Schema-v3
+tickets define outcomes, examples, constraints, exclusions, stable dependencies,
+verification expectations, AUTO eligibility, and optional hints. They do not
+contain exact file allowlists or predetermined commit messages.
 
-```text
-/kanban-loop
-```
-
-This maps to:
-
-```bash
-kanban-loop run --provider claude --mode hitl
-```
-
-If currently on `main`, `master`, or `develop`, supply the new implementation
-branch explicitly:
-
-```text
-/kanban-loop --branch feat/<feature-name>
-```
-
-For each ticket, the runner starts with one strict RED→GREEN attempt:
-
-1. Moves the ticket from backlog to doing.
-2. Launches a test-only worker.
-3. Confirms that only declared test files changed.
-4. Runs the targeted test command and requires RED.
-5. Launches a production-only worker.
-6. Confirms that only declared production files changed.
-7. Runs every declared verification command.
-8. Hashes the complete patch.
-9. Launches a fresh read-only validator.
-10. On an actionable rejection, snapshots the patch and makes a focused in-place
-    revision; the revision may be test-only, production-only, or both, but must
-    change an allowed file and still pass full verification and validation.
-11. Pauses for approval when running in HITL mode.
-12. Commits only the accepted implementation; the doing-to-done move remains local.
-
-When Claude reports `KANBAN_AWAITING_COMMIT`, review the exact diff,
-verification results, and validator report. Approve, revise with a concise
-reason, explicitly restart with a concise reason when the approach must be
-discarded, or abort. `revise` preserves the patch and works on top of it;
-`restart` snapshots the patch, restores ticket-owned files to `HEAD`, and starts
-a fresh strict RED→GREEN attempt. `reject` remains a backward-compatible alias
-for `revise`. Approval authorizes only the corresponding runner decision.
-If you need to commit an additional already-changed file with the ticket, use
-`kanban-loop decide <run-id> approve --include path/to/file --reason "..."`.
-This is an explicit HITL scope expansion, not a ticket edit: the runner reruns
-verification and independent validation on the expanded patch before staging
-the exact combined file set. It rejects paths that are unchanged, already
-allowed by the ticket, directories/globs, absolute/traversal paths, or board
-and Git metadata paths.
-
-After a ticket commit, HITL mode may report `KANBAN_AWAITING_NEXT`. Choose
-whether to continue to the next eligible ticket or abort the run.
-
-## 11. Enable AUTO Only After Establishing Trust
-
-AUTO mode must be explicitly requested:
-
-```text
-/kanban-loop --auto
-```
-
-Use it only after the regenerated tickets and initial HITL runs demonstrate that
-the authorization boundaries and verification commands are correct.
-
-A ticket with `human-required: true` still upgrades itself to HITL during an
-AUTO run. This should be used for architecture, UX or API judgment, security,
-ambiguous scope, or risky cross-cutting changes.
-
-## Operational Rules After Migration
-
-- Do not ask Claude to manually pick or move active board tickets.
-- Do not ask Claude to reproduce the loop with inline TDD or ad hoc subagents.
-- Do not manually stage or commit an in-progress runner patch, including any
-  `.workflow` file.
-- Do not edit a ticket after it enters `doing/`.
-- Use `kanban-loop pause <ticket> [<ticket> ...]` to exclude unfinished backlog
-  tickets from selection, and `kanban-loop resume <ticket> [<ticket> ...]` to
-  make them eligible again. Each reference may be a globally unique slug or a
-  full key such as `TNC-01-add-prefix-validation`. Do not edit frontmatter to
-  represent pause state.
-- Do not create runtime state under `.workflow`; the runner stores it under
-  `.git/kanban-loop/runs/`.
-- Do not use the legacy `--parallel` behavior. The deterministic runner is
-  intentionally serial.
-- Continue using `/to-prd` and `/to-tickets` as separate, explicitly approved
-  planning steps for future features.
-- Use `/to-bug-ticket` for a diagnosed defect that needs a schema-v2 regression
-  ticket.
-- Use `/ship-it` only after implementation is complete; `kanban-loop` already
-  creates the per-ticket commits.
-
-## Troubleshooting
-
-### `schema-version must be 2; legacy tickets must be regenerated`
-
-At least one Markdown ticket in `backlog/`, `doing/`, `paused/`, or `done/` is
-still legacy format. Move it into the preserved legacy archive or regenerate it
-through the approved PRD and `to-tickets` workflow.
-
-Do not add only `schema-version: 2`; the remaining required fields must also be
-derived and validated.
-
-### `Board missing ...`
-
-The active board must contain these three execution directories:
-
-```bash
-mkdir -p .workflow/kanban/backlog
-mkdir -p .workflow/kanban/doing
-mkdir -p .workflow/kanban/done
-```
-
-Normally, the approved `/to-tickets` flow creates these directories.
-`paused/` is backward-compatible and optional until first use; new boards create
-it up front, and `kanban-loop pause` creates it automatically.
-
-### `Working tree must be clean before starting kanban-loop`
-
-Review `git status --short -- . ':(exclude).workflow'` and ensure
-`git diff --cached --name-only` is empty. Preserve unrelated work outside the
-local board. Never start the runner on top of an unexplained implementation
-patch.
-
-### `Deadlock; unmet dependencies`
-
-A backlog ticket depends on a slug that is not present in the active `done/`
-column. During migration this commonly means a new ticket still references an
-archived legacy slug. Revisit the PRD and ticket graph rather than copying a fake
-completion marker into `done/`. A dependency that is deliberately paused also
-keeps its dependants blocked until it is resumed and completed.
-
-### Claude does not recognize the new skills
-
-Confirm the Stow links and restart Claude Code:
-
-```bash
-ls -l ~/.claude/skills/to-prd
-ls -l ~/.claude/skills/to-tickets
-ls -l ~/.claude/skills/kanban-loop
-```
-
-The links should resolve to the canonical copies under `~/.agents/skills/`.
-
-### The runner cannot find a provider
-
-Check:
-
-```bash
-command -v claude
-command -v uv
-```
-
-The Claude skill passes `--provider claude`. Direct provider-neutral invocations
-can use automatic provider discovery.
-
-## Reference
-
-- `docs/kanban-workflow.md` contains the deterministic runner design and state
-  machine.
-- `agents/.agents/skills/to-prd/SKILL.md` defines the PRD contract and approval
-  boundary.
-- `agents/.agents/skills/to-tickets/SKILL.md` defines schema-v2 ticket creation
-  and validation.
-- `agents/.agents/skills/kanban-loop/SKILL.md` defines the Claude adapter and
-  HITL commands.
-- `bin/.local/bin/kanban-loop` is the provider-neutral executable.
+Read [kanban-workflow.md](kanban-workflow.md) for the complete schema and
+runtime contract.

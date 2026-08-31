@@ -1,210 +1,334 @@
-# Deterministic Kanban Workflow
+# Intent-Based Kanban Workflow
 
-The Kanban workflow turns an approved product decision into a sequence of independently validated commits. Markdown captures human intent; the `kanban-loop` executable owns orchestration and Git state.
+Kanban-loop is a provider-neutral local delivery engine for a solo developer
+working with coding agents. Human-readable Markdown records intent. The
+executable owns durable sessions, dependency eligibility, provider dispatch,
+verification evidence, independent review, Git commits, and board transitions.
 
 ## Pipeline
 
 ```text
 grill-me
-  → discovery contract
+  → approved Discovery Contract
   → to-prd
   → approved PRD
   → to-tickets
-  → immutable schema-v2 tickets
-  → kanban-loop
-  → TDD implementation
-  → independent validation
-  → AUTO commit or HITL approval
-  → done
+  → schema-v3 intent tickets
+  → kanban-loop (HITL by default, AUTO explicitly)
+  → one descriptive project commit per completed ticket
+  → archive completed feature when desired
 ```
 
-No skill or worker agent may reproduce the runner's state machine.
+Skills are thin interfaces. No skill or agent may reproduce the executable's
+state machine or directly move machine-managed workflow state.
 
-## Board
+## Local Storage
 
-The board lives locally at the repository root:
+All Kanban data is local-only and excluded from project commits:
 
 ```text
 .workflow/kanban/
-├── backlog/
-├── doing/
-├── paused/
-└── done/
+├── config.yaml                 # optional local policy
+├── features/
+│   └── <feature>.md
+├── tickets/
+│   ├── ready/
+│   ├── active/
+│   ├── review/
+│   ├── paused/
+│   ├── blocked/
+│   ├── done/
+│   └── cancelled/
+├── archive/
+│   └── <feature>/
+│       ├── feature.md
+│       └── tickets/
+└── .state/                     # machine-managed pause origins/control state
 ```
 
-`.workflow/` is local-only tracking and must never be staged or committed.
-Ticket location is the coarse state. `paused/` holds valid unfinished tickets
-that must not be selected by the loop. Existing three-column boards remain
-valid; `kanban-loop pause` creates `paused/` on first use. Ephemeral attempt
-data, raw worker output, and failure records live under
-`.git/kanban-loop/runs/<run-id>/`; none of this pollutes a patch or commit.
+Session state, event logs, patches, raw provider output, diagnostics, and commit
+mappings live under the checkout's Git metadata at
+`.git/kanban-loop/`. Worktree Git directories are resolved correctly.
 
-## Ticket Contract
+Human intent is Markdown. Machine state must not be edited manually.
+`kanban-loop init` creates the board and adds `/.workflow/` to the checkout's
+local Git exclude when needed; it does not edit the project's tracked
+`.gitignore`.
 
-Tickets are Markdown with YAML frontmatter. Schema version 2 is intentionally strict:
+## Feature Contract
 
 ```yaml
 ---
-schema-version: 2
-feature: ticket-naming-conventions
-ticket-prefix: TNC
-id: 1
-slug: json-output
-title: Add JSON output
-language: typescript
-depends-on: []
-parallel-safe: false
-human-required: false
-acceptance: "Running `app show --json` prints the requested record as valid JSON."
-allowed-changes:
-  - path: src/cli.ts
-    operation: modify
-  - path: test/cli.test.ts
-    operation: modify
-failing-tests:
-  - test/cli.test.ts::prints_requested_record_as_json
-tdd-test-command: npm test -- test/cli.test.ts
-verification:
-  - command: npm test -- test/cli.test.ts
-    expected-exit: 0
-  - command: npm test
-    expected-exit: 0
-commit-message: "feat(cli): add JSON output"
+schema-version: 3
+kind: feature
+feature: json-output
+ticket-prefix: JO
+title: JSON output
+priority: 0
 ---
 ```
 
-New tickets are named `PREFIX-NN-slug.md`. The prefix is the uppercase initials
-of the canonical kebab-case feature or branch slug, and numbering starts at
-`01` within each feature. For example, `ticket-naming-conventions` becomes
-`TNC`, so its first ticket could be `TNC-01-json-output.md`. The explicit
-`feature` and `ticket-prefix` fields must agree with the filename. Prefixes are
-1-8 uppercase letters or digits, start with a letter, and cannot represent two
-different features on the same board. Ticket slugs remain globally unique
-because dependencies continue to reference slugs.
+Feature slugs are stable kebab-case identities. Prefixes are unique, start with
+a letter, contain 1-8 uppercase letters or digits, and remain stable after
+tickets exist.
 
-Existing schema-v2 `NN-slug.md` tickets remain valid without `feature` or
-`ticket-prefix`; they do not need to be renamed. The generator emits only the
-new prefixed, one-based format.
+## Ticket Contract
 
-`allowed-changes` contains exact repository-relative files. Directories, globs, `.workflow` paths, and implicit files are invalid. Every test named by `failing-tests` must belong to `allowed-changes`.
-
-The ticket stays unchanged after entering `doing/`. Pausing and resuming move an
-unchanged ticket between `backlog/` and `paused/`; execution moves it through
-backlog → doing → done. All ticket transitions stay local. Base commit,
-attempts, raw agent output, test output, validation findings, failure logs,
-diff hashes, and final commit SHA belong under `.git/kanban-loop/runs/`.
-
-## Eligibility
-
-A backlog ticket is eligible when every slug in `depends-on` exists in `done/`.
-Tickets in `paused/` are validated and reported by `plan`, but are never
-eligible. Selection is stable: lowest numeric ID, then feature prefix and slug.
-The runner is serial; parallel execution is outside the current contract.
-
-## Execution
-
-The runner uses the current checkout. It detects and reuses a Claude- or Codex-created worktree; it never requests another worktree. The checkout must be clean outside `.workflow/`, with an entirely clean Git index, and on a non-protected branch. Passing `--branch NAME` creates that exact branch when starting on `main`, `master`, or `develop`.
-
-For each ticket:
-
-1. Move backlog → doing.
-2. Launch a test-only implementation worker.
-3. Verify only declared test files changed.
-4. Run `tdd-test-command` and require RED.
-5. Launch a production-only implementation worker.
-6. Verify only declared production files changed.
-7. Run every verification command and require the declared exit code.
-8. Hash the complete patch, including new files.
-9. Launch a fresh read-only validator.
-10. On an actionable validator rejection, snapshot the ticket patch and feed the blocking findings into an in-place revision attempt. Revisions preserve the patch and may make a focused test-only, production-only, or combined change; they must change at least one allowed file and still pass full verification and independent validation. If tests change, the focused test command is recorded, but a passing result is allowed for coverage-only work.
-11. On acceptance, commit automatically or pause at HITL. The commit contains only the accepted implementation patch; the deterministic doing→done ticket move happens locally after the commit.
-
-Three rejected attempts trip the circuit breaker.
-
-## Validator Boundary
-
-The validator may reject only for acceptance failure, regression, missing meaningful coverage, scope violation, correctness, security, data-loss risk, or an unverifiable requirement. Style preferences and optional improvements are non-blocking. The validator cannot edit, stage, commit, move tickets, or invent scope.
-
-## Modes
-
-```text
-kanban-loop run --provider <provider> --mode auto
-kanban-loop run --provider <provider> --mode hitl
-kanban-loop pause <ticket> [<ticket> ...]
-kanban-loop resume <ticket> [<ticket> ...]
+```yaml
+---
+schema-version: 3
+kind: ticket
+feature: json-output
+ticket-prefix: JO
+id: 1
+slug: print-requested-record
+title: Print requested record as JSON
+depends-on: []
+priority: 0
+mode: inherit
+acceptance:
+  - Running `app show --json` prints the requested record as valid JSON.
+constraints:
+  - Preserve the existing text output when `--json` is absent.
+out-of-scope:
+  - Streaming multiple records.
+verification:
+  - command: npm test -- test/show.test.ts
+    expected-exit: 0
+    required: true
+  - command: npm test
+    expected-exit: 0
+    required: true
+strict-tdd: false
+implementation-hints:
+  - Reuse the existing record serializer if appropriate.
+likely-files:
+  - src/commands/show.ts
+  - test/show.test.ts
+---
 ```
 
-`human-required: true` upgrades one AUTO ticket to HITL.
+Tickets are named `PREFIX-NN-kebab-slug.md`. The number is readable ordering,
+not an implicit dependency. `depends-on` contains stable full ticket keys and
+may cross feature boundaries.
 
-`pause` validates all named tickets and destinations, then moves them into
-`paused/` while holding the same board lock used by `run`. `resume` returns
-named paused tickets to `backlog/`. Neither command edits ticket contents,
-invokes a provider, runs tests, or changes Git HEAD or the index. For example,
-pause three tickets belonging to the TNC feature before draining another
-feature. Commands accept either globally unique slugs or full ticket keys:
+Tickets define outcomes, examples, constraints, exclusions, dependencies,
+verification expectations, and AUTO eligibility. `likely-files` and
+`implementation-hints` are optional context, never permissions. Tickets do not
+contain exact commit messages or exhaustive file allowlists.
 
-```text
-kanban-loop pause TNC-01-validate-prefix TNC-02-generate-filenames TNC-03-update-docs
-kanban-loop plan --provider <provider>
+`mode` is `inherit`, `hitl`, or `auto`. HITL always overrides AUTO. Strict
+RED→GREEN is opt-in with `strict-tdd: true` and then requires an exact,
+non-destructive `tdd-test-command`. Other tickets use verification appropriate
+to their change type.
+
+## Lifecycle
+
+- **ready** — eligible after dependencies complete.
+- **active** — implementation or revision is running.
+- **review** — a complete candidate awaits a human decision.
+- **paused** — deliberately suspended by ticket or feature action.
+- **blocked** — cannot proceed; state records the cause and recovery action.
+- **done** — the implementation commit succeeded.
+- **cancelled** — explicitly terminated and does not satisfy dependencies.
+
+Dependency blocking is computed. A ready ticket whose direct or transitive
+dependency is unfinished remains stored in `ready/` but is reported as blocked
+with its dependency chain.
+
+A feature is completed only when all its tickets are done. Done plus cancelled
+tickets produce `closed-with-cancellations`, not completed. Adding unfinished
+work reopens a completed feature.
+
+## Selection and Serial Execution
+
+Run exactly one active implementation or review agent at a time. A run targets:
+
+```bash
+kanban-loop run --ticket JO-01-print-requested-record --mode hitl
+kanban-loop run --feature json-output --mode hitl
+kanban-loop run --all --mode auto
 ```
 
-In HITL, the runner persists the accepted diff and returns a run ID:
+Dependencies always override scope. Cross-feature prerequisites are reported;
+the runner never silently broadens a selected scope. Among eligible tickets,
+higher explicit priority wins, followed by ticket number and key.
 
-```text
-kanban-loop decide <run-id> approve
-kanban-loop decide <run-id> approve --include path/to/lsp-config --reason "Resolve LSP warning introduced by this ticket"
-kanban-loop decide <run-id> revise --feedback "..."
-kanban-loop decide <run-id> restart --feedback "..."
-kanban-loop decide <run-id> abort
-kanban-loop decide <run-id> continue
+Ticket scope ends after its commit. Feature and board scope continue after a
+commit without a redundant confirmation. HITL still stops at each candidate's
+review gate.
+
+## HITL
+
+HITL is the default. The ticket is a starting brief. Current explicit human
+feedback outranks stale ticket details and may change implementation, tests,
+approach, or file scope.
+
+At review, use:
+
+```bash
+kanban-loop review <run-id> approve [--message "descriptive subject"]
+kanban-loop review <run-id> revise --feedback "Use peek instead of map"
+kanban-loop review <run-id> ask --feedback "Is traversal still lazy?"
+kanban-loop review <run-id> override --reason "Known CI-only failure"
+kanban-loop review <run-id> pause
+kanban-loop review <run-id> abandon [--reason "..."]
+kanban-loop review <run-id> cancel --reason "Requirement withdrawn"
 ```
 
-Normal approval is valid only while HEAD, ticket hash, and diff hash still match
-what was reviewed. If a human needs to include one or more additional changed
-files after the HITL gate, they must use repeated exact repository-relative
-`--include PATH` options and a non-empty `--reason`. This is available only at
-`awaiting-commit`; active implementer phases and AUTO mode remain strict.
+`revise` preserves useful work and re-runs verification plus a fresh review.
+There is no arbitrary HITL revision limit. `ask` invokes a read-only
+investigation without changing the candidate. `override` records failed or
+unavailable evidence without relabelling it as passed; AUTO cannot override.
 
-Each included path must already be a changed file and must not be a directory,
-glob, absolute/traversal path, `.git` path, `.workflow`/ticket-board path, or a
-path already permitted by the ticket. The runner then re-runs ticket
-verification and a fresh independent read-only validation over the complete
-ticket-plus-supplemental patch, recording the paths, reason, verification,
-validator result, and new patch hash in the run artifacts. A rejected or
-blocked supplemental review leaves the run awaiting commit and commits nothing.
+If a ticket is edited during an active HITL session, kanban-loop offers:
 
-`revise` snapshots the reviewed ticket patch in the run artifacts, then asks the
-workers to make the smallest correction on top of it. `reject` remains a
-backward-compatible alias for `revise`. `restart` also snapshots the patch, but
-then restores only ticket-owned files to `HEAD` before a fresh strict RED→GREEN
-attempt. Use restart only when the existing approach should be discarded.
+```bash
+kanban-loop review <run-id> incorporate
+kanban-loop review <run-id> defer
+kanban-loop review <run-id> restart
+```
 
-## Providers
+AUTO blocks for the same reconciliation rather than guessing.
 
-Provider selection order is `--provider`, `KANBAN_AGENT_PROVIDER`, `.workflow/kanban/config.yaml`, current host detection, then executable discovery. Host detection prefers Claude when `CLAUDECODE` is present, Codex when its session identifiers are present, and OpenCode when its session identifiers are present.
+## AUTO
 
-Adapters currently support:
+AUTO is explicit. It may discover and modify all files reasonably required by
+settled intent. It stops and shelves work when it encounters:
 
-- `claude -p`
-- `codex exec`
-- `opencode2 run --standalone` (preferred when installed)
-- `opencode run` (v1 fallback)
+- materially ambiguous or conflicting requirements;
+- an unsettled user-visible choice;
+- destructive, credential, privacy, security, or data-loss risk;
+- an unimplied dependency, schema, public API, or architecture change;
+- conflicting repository policy;
+- overlap with pre-existing user work;
+- unavailable or untrustworthy verification.
 
-Provider adapters own command construction and output parsing only. They never own board state, tests, validation policy, staging, or commits. JSON results are strictly schema-validated. If a provider emits prose instead, the runner preserves the raw output and accepts it only when it contains an unambiguous status/verdict label or decision phrase (for example, `Implementation complete` or `I accept this patch`), which it normalizes and validates against the same schema. Conflicting decisions fail closed.
+Transient provider/result failures and actionable review findings use a bounded
+retry budget. Exhaustion or a material decision escalates the saved session to
+HITL. Resuming with human feedback continues from the saved patch.
 
-The executable requires `uv` and at least one provider CLI on `PATH`. A Claude
-skill should pass `--provider claude`; equivalent Codex or OpenCode wrappers can
-pass their own provider explicitly. Direct invocations may leave it on `auto`.
+## Pause, Block, and Resume
 
-## Ownership
+```bash
+kanban-loop pause JO-01-print-requested-record
+kanban-loop resume JO-01-print-requested-record
+kanban-loop resume JO-01-print-requested-record --feedback "Use compatibility mode"
+kanban-loop pause --feature json-output
+kanban-loop resume --feature json-output
+```
 
-The runner is the only actor allowed to:
+Pausing an active candidate writes its complete patch and session evidence,
+restores a safe checkout, and releases the workflow lock. Resumption checks the
+current base and refuses to overwrite conflicting work.
 
-- select or move tickets;
-- execute verification commands;
-- decide whether a gate passed;
-- stage files;
-- create commits;
-- advance to the next ticket.
+Feature pause applies an origin-aware pause to every unfinished ticket.
+Feature resume removes only the feature-origin pause; independently paused
+tickets remain paused. Completed tickets never move. External dependents are
+reported as dependency-blocked without being moved.
 
-Implementers and validators are disposable workers. Their reports are evidence, not authority.
+## Verification and Review
+
+The implementer may report focused non-destructive test/build/lint commands.
+The runner combines those with ticket verification, rejects obviously
+destructive or integration commands, executes the accepted commands, and
+records exact exit status, output, timeout, expectation, and source.
+
+Every candidate receives a fresh read-only reviewer context with the accepted
+intent, amendments, complete patch, and verification evidence. Blocking
+findings are limited to acceptance, correctness, regression, meaningful
+coverage, security, data loss, unrelated scope, or unverifiable behavior.
+Style and optional improvements are advisory.
+
+The review packet contains outcome summary, every changed file, scope notes,
+assumptions, exact verification, review findings, patch hash/path, amendments,
+and a proposed descriptive commit message.
+
+## Git Ownership
+
+- A dirty working tree is allowed when changes are unrelated.
+- The Git index must be clean.
+- A session records its baseline and attributes only changes made afterward.
+- Modifying a path already dirty at baseline is an overlap blocker.
+- Only attributed reviewed paths are staged and committed.
+- HITL requires explicit commit approval.
+- Commit messages describe repository changes and never mention local tickets.
+- Protected branches require an explicit new topic branch.
+- The runner never pushes, pulls, merges, rebases, force-updates, opens PRs, or
+  publishes releases.
+- Board state moves to done only after the project commit succeeds.
+
+## Diagnostics and Recovery
+
+Before surfacing a failure, kanban-loop records applicable session, phase,
+attempt, provider/model, commands, patch hash, exit/timeout/interruption,
+stdout, stderr, complete raw provider output, every parsed candidate, exact
+schema failures, failed invariant, traceback, causal error, and recovery
+context. Known secrets are redacted.
+
+State transitions are written atomically. After interruption, `status` exposes
+the last safe phase. Re-running a specific active ticket resumes it; paused or
+blocked work can be restored explicitly. No failed attempt silently discards a
+patch.
+
+```bash
+kanban-loop status
+kanban-loop plan
+kanban-loop validate
+```
+
+## Migration
+
+Schema-v2 boards migrate only through an explicit preview and apply:
+
+```bash
+kanban-loop migrate
+kanban-loop migrate --apply
+kanban-loop migrate --restore .workflow/kanban-backups/<timestamp>
+```
+
+Preview is read-only. Apply refuses ambiguity, backs up the full old board under
+`.workflow/kanban-backups/`, preserves feature/ticket identities and completed
+history, converts file lists to non-binding hints, and imports old `doing/`
+work as paused review-required intent. Normal `run` never migrates.
+
+## Archival and Pruning
+
+```bash
+kanban-loop archive json-output
+kanban-loop restore json-output
+kanban-loop prune
+kanban-loop prune --apply
+```
+
+Only completed features archive. Archived done tickets continue satisfying
+dependencies. Archive is reversible and never deletes diagnostics. Prune is a
+separate previewable action for bulky raw completed-session output and patches;
+durable summaries and commit mappings remain.
+
+## Providers and Configuration
+
+Claude Code, Codex, and OpenCode adapters declare writable execution,
+read-only review, structured result, cancellation, and resume capabilities.
+Missing capabilities are reported instead of weakening policy.
+
+Optional `.workflow/kanban/config.yaml` supplies local defaults such as
+provider, model policy, retry budgets, protected branches, and retention. Use
+`status` to inspect effective local configuration plus the project, feature,
+ticket, and run source of each applicable policy. Configured protected branches
+extend the built-in safety set; they cannot remove `main`, `master`, or
+`develop`. Configuration contains no secrets and is never committed.
+
+## Hard Invariants
+
+The executable never:
+
+- stages or commits work outside the active attributed patch;
+- commits in HITL without explicit approval;
+- marks a ticket done before commit success;
+- runs a dependent ticket before dependencies complete;
+- silently overwrites, merges, or discards user work;
+- lets an agent own workflow state, Git staging, commits, or integration;
+- persists known credentials without redaction;
+- infers authority for destructive repository, filesystem, data, or remote
+  operations.

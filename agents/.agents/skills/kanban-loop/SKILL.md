@@ -1,59 +1,106 @@
 ---
 name: kanban-loop
-description: 'Run the deterministic Kanban executable against schema-v2 tickets in .workflow/kanban. Use for "drain the board", "run kanban", or "/kanban-loop". The executable—not Claude—owns implementation dispatch, independent validation, Git commits, and board transitions.'
-user-invocable: true
+description: Run and control the local schema-v3 Kanban workflow through its executable. Use for ticket, feature, or board execution, review, pause/resume, migration, archival, and recovery.
 ---
 
 # Kanban Loop
 
-This skill is a thin Claude adapter for the provider-neutral `kanban-loop` executable. Read `~/.dotfiles/docs/kanban-workflow.md` only when explaining or diagnosing the workflow.
+Act as a thin conversational adapter for the provider-neutral `kanban-loop`
+executable. The executable owns board state, provider dispatch, verification,
+fresh review, Git isolation, commits, recovery, and diagnostics.
 
-## Commands
+Read `~/.dotfiles/docs/kanban-workflow.md` when explaining, diagnosing, or
+migrating the workflow. Never reproduce the runner inline or move board files
+manually.
 
-Map the user's invocation to exactly one command:
+## Route the Request
+
+HITL is the default. AUTO must be explicit.
 
 ```text
 /kanban-loop --dry-run
-  → kanban-loop plan --provider claude
+  -> kanban-loop plan
 
-/kanban-loop --auto [--branch NAME]
-  → kanban-loop run --provider claude --mode auto [--branch NAME]
+/kanban-loop [--hitl] [--ticket KEY | --feature SLUG | --all]
+  -> kanban-loop run --mode hitl <scope>
 
-/kanban-loop [--hitl] [--branch NAME]
-  → kanban-loop run --provider claude --mode hitl [--branch NAME]
+/kanban-loop --auto [--ticket KEY | --feature SLUG | --all]
+  -> kanban-loop run --mode auto <scope>
 
-/kanban-loop pause <ticket> [<ticket> ...]
-  → kanban-loop pause <ticket> [<ticket> ...]
+/kanban-loop status
+  -> kanban-loop status
 
-/kanban-loop resume <ticket> [<ticket> ...]
-  → kanban-loop resume <ticket> [<ticket> ...]
+/kanban-loop pause <ticket>
+  -> kanban-loop pause <ticket>
+
+/kanban-loop pause --feature <slug>
+  -> kanban-loop pause --feature <slug>
+
+/kanban-loop resume <ticket> [feedback]
+  -> kanban-loop resume <ticket> [--feedback <feedback>]
+
+/kanban-loop resume --feature <slug>
+  -> kanban-loop resume --feature <slug>
+
+/kanban-loop migrate
+  -> kanban-loop migrate
+
+/kanban-loop migrate --apply
+  -> kanban-loop migrate --apply
+
+/kanban-loop migrate --restore <backup>
+  -> kanban-loop migrate --restore <backup>
+
+/kanban-loop archive <feature>
+  -> kanban-loop archive <feature>
+
+/kanban-loop restore <feature>
+  -> kanban-loop restore <feature>
 ```
 
-HITL is the default. AUTO must be explicitly requested.
+Use `--ticket`, `--feature`, or `--all` exactly as the user requests. If no scope
+was supplied, run the next eligible ticket. Pass a requested provider through;
+otherwise let the executable detect the current host or local configuration.
 
-Pause and resume are local board transitions. Return the executable's output
-faithfully; do not edit ticket frontmatter or move the files manually.
+Pause and resume preserve ticket and feature origin. A feature pause pauses all
+unfinished tickets; resume removes only that feature-origin pause, preserving
+ticket-level pauses and dependency blocks. Surface the executable's blocked
+dependency explanation rather than altering dependencies.
 
-Run the executable and return its output faithfully. Do not select tickets, dispatch Agent-tool workers, invoke TDD inline, create worktrees, edit implementation files, validate a patch, stage files, commit, or move board files yourself.
+## HITL Review
 
-## HITL Results
+Present the review packet faithfully: diff, verification evidence, reviewer
+findings, scope changes, and failures. Map the user's natural-language decision
+to one review action:
 
-When the executable returns `KANBAN_AWAITING_COMMIT run_id=<id>`, present its exact diff, verification results, and validator report. Ask the user for one decision:
+- `approve` — commit the verified session patch;
+- `revise --feedback ...` — preserve useful work and revise it, including a
+  justified change of files, tests, or approach;
+- `ask --feedback ...` — investigate or answer without committing;
+- `override --reason ...` — explicit human verification override with its reason;
+- `pause` — shelve the session for later resumption;
+- `abandon` or `cancel --reason ...` — use only when the user clearly requests
+  that outcome; cancellation always preserves its reason;
+- `incorporate`, `defer`, or `restart` — use only for the matching runner-defined
+  recovery path.
 
-- Approve → `kanban-loop decide <id> approve`
-- Approve with human-authored supplemental changed files → collect each exact
-  repository-relative path and a concise reason, then run
-  `kanban-loop decide <id> approve --include <path> [--include <path> ...] --reason <reason>`
-  using safe argument passing. This triggers fresh verification and independent
-  validation; do not use it for unchanged, ticket-allowed, board, Git metadata,
-  directory, glob, absolute, or traversal paths.
-- Revise → collect a concise reason, then `kanban-loop decide <id> revise --feedback <reason>` using safe argument passing. This preserves the accepted patch and makes a focused correction on top.
-- Restart → collect a concise reason, then `kanban-loop decide <id> restart --feedback <reason>` using safe argument passing only when the current approach should be discarded. The runner snapshots the patch, restores ticket-owned files, and starts a fresh strict attempt.
-- Abort → `kanban-loop decide <id> abort`
+Do not reduce feedback to an old file allowlist. A revision is allowed to change
+the implementation scope while remaining within feature intent and hard safety
+boundaries. Never invent approval or a verification override.
 
-When it returns `KANBAN_AWAITING_NEXT run_id=<id>`, ask whether to continue:
+## AUTO Boundary
 
-- Continue → `kanban-loop decide <id> continue`
-- Abort → `kanban-loop decide <id> abort`
+AUTO may retry ordinary implementation or review failures within the configured
+limit. Material scope, architecture, security, destructive behavior, ambiguous
+intent, verification override, or exhausted retry decisions must become HITL.
+Report the escalation and retained session state; do not bypass it.
 
-Do not interpret an approval as permission for any action other than the matching `decide` command. If the executable reports an error, surface it unchanged and stop.
+## Safety and Failure Handling
+
+Do not implement directly, stage paths, commit, invoke another implementation
+agent, edit tickets during a run, or perform remote Git operations. Do not parse
+agent prose as authorization when the executable rejects it.
+
+If the executable fails, report its persisted diagnostic path and the concrete
+missing, malformed, unsafe, or conflicting data. Failure records are part of the
+workflow: never replace them with only a generic exception message.

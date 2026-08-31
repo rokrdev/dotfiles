@@ -1,158 +1,85 @@
 ---
 name: to-tickets
-description: Convert an approved PRD or specification into immutable schema-v2 Markdown tickets under .workflow/kanban/backlog. Use when the user explicitly wants executable Kanban tickets; never implement them.
-user-invocable: true
+description: Convert an approved PRD or specification into an intent-based schema-v3 feature and serial Kanban tickets. Use when the user wants executable local tickets; never implement them.
 ---
 
 # To Tickets
 
-Compile an approved product contract into thin, observable tickets that the deterministic `kanban-loop` executable can validate and run. The ticket is an authorization boundary, not an implementation suggestion.
+Turn an approved product contract into a feature definition and small,
+observable tickets for the `kanban-loop` executable. Tickets communicate intent;
+they are not file permissions or frozen implementation plans.
 
-Read `~/.dotfiles/docs/kanban-workflow.md` before generating tickets.
+Read `~/.dotfiles/docs/kanban-workflow.md` before writing a board.
 
 ## Preconditions
 
-1. Read the explicitly supplied PRD or spec. Do not silently choose from conversation history when multiple candidates exist.
-2. Require an approved PRD with no unresolved scope-affecting decisions. If its status is `draft`, show the outcomes, acceptance criteria, constraints, and out-of-scope list and ask for explicit approval. Only after approval change its status to `approved`.
-3. Explore the codebase. This is mandatory: identify the real entry points, existing tests, test command, full-suite command, exact files, manifests, ADRs, and repository vocabulary.
-4. Refuse ticket generation if acceptance, file scope, or verification cannot be stated unambiguously. Return `NEEDS_DECISION`; do not guess.
+1. Use the explicitly supplied PRD or specification. If more than one candidate
+   exists, ask which is authoritative.
+2. Require explicit approval and no unresolved scope-affecting decisions. Do not
+   silently approve a draft.
+3. Inspect the live codebase for relevant entry points, tests, commands,
+   constraints, and repository vocabulary.
+4. If an outcome, dependency, safety boundary, or verification expectation
+   cannot be stated honestly, return `NEEDS_DECISION` rather than guessing.
 
-## Ticket Design
+## Design the Feature
 
-Create serial tracer-bullet tickets. Each ticket delivers one narrow observable delta through only the layers that delta actually requires. Do not force schema, API, UI, unit tests, or refactors into a ticket unless its acceptance criterion needs them.
+Choose one canonical kebab-case feature slug and a stable 1-8 character uppercase
+prefix. Prefer initials (`ticket-naming-conventions` -> `TNC`), but preserve an
+existing prefix for the feature. A prefix may belong to only one active or
+archived feature.
 
-Do not create standalone cleanup, scaffold, extraction, architecture, or speculative-refactor tickets. A walking skeleton is allowed only when it produces a runnable externally observable entry point and can be developed test-first.
+Create `.workflow/kanban/features/<feature>.md` with schema version 3, feature
+identity, and the approved goal, acceptance criteria,
+constraints, and exclusions. Feature pause, resume, and archive are runner
+operations; do not simulate them by editing ticket files.
 
-For every ticket determine:
+## Design the Tickets
 
-- The canonical kebab-case feature or branch slug for the approved work.
-- A 1-8 character uppercase ticket prefix derived from the first character of
-  each feature-slug word (`ticket-naming-conventions` → `TNC`). If the derived
-  prefix is unclear, exceeds eight characters, or belongs to another feature
-  already on the board, return `NEEDS_DECISION` and ask for an override.
-- A one-based numeric ID within that feature and a globally unique kebab-case
-  ticket slug. The first ticket is `01`, never `00`.
-- Short title and implementation language.
-- Dependency slugs.
-- One observable acceptance sentence.
-- Exact repository-relative files and whether each is created, modified, or deleted.
-- Exact test identifiers to write first.
-- One targeted RED/GREEN test command.
-- Deterministic verification commands and expected exit codes.
-- Exact Conventional Commit message.
-- Whether this ticket must require human review even during an AUTO run.
+Prefer serial tracer bullets: each ticket delivers one narrow observable delta
+through only the layers that delta requires. Do not manufacture horizontal
+scaffold, cleanup, extraction, or architecture tickets unless that work is itself
+an approved observable outcome.
 
-Directories, globs, optional files, `.workflow` paths, and “other files as needed” are forbidden in `allowed-changes`. If a necessary path cannot be identified, stop and ask.
+For each ticket define:
 
-## Review Gate
+- a one-based ID and globally unique full key `PREFIX-NN-kebab-slug`;
+- the feature slug and stable prefix;
+- explicit full-key dependencies and a priority;
+- an outcome and observable acceptance criteria;
+- relevant constraints and explicit exclusions;
+- `mode: inherit` for ordinary work, `hitl` only when the ticket must always
+  stop for a person, or `auto` to document settled low-risk AUTO eligibility;
+- deterministic verification commands and expected exit codes;
+- optional strict TDD configuration only when RED -> GREEN is genuinely required;
+- optional implementation hints and likely files, clearly non-binding.
 
-Before writing files, present the complete proposed ticket set. For every ticket show:
+Do not add an exact file allowlist, a predetermined commit message, mandatory
+failing-test names, or a parallel-safety claim. The runner is serial, and human
+feedback in HITL may legitimately change files, tests, or approach.
 
-- Feature slug, ticket prefix, full ticket key, and title. The key format is
-  `PREFIX-NN-slug`, for example `TNC-01-add-prefix-validation`.
-- Dependencies.
-- Acceptance criterion.
-- Exact allowed changes with operations.
-- Failing test identifiers and targeted command.
-- All verification commands.
-- Commit message.
-- HITL override.
+## Approval Gate
 
-Ask whether to merge, split, reorder, change scope, or approve. Write nothing until the user explicitly approves the set. After changes, present the complete set again.
+Before writing anything, present the feature and complete ticket set. Show each
+ticket's full key, outcome, acceptance criteria, dependencies, priority, mode,
+verification, optional TDD requirement, and important exclusions. Ask the user
+to approve, merge, split, reorder, or revise the set.
 
-Run stable cycle detection: choose the lowest numeric ID and then ticket key
-whenever multiple nodes are ready. A dependency cycle stops generation.
+After any change, present the complete set again. Write only after explicit
+approval. Validate that the dependency graph is acyclic and that stable ordering
+uses priority, then numeric ID, then ticket key.
 
-## Ticket Format
+## Schema-v3 Shape
 
-Write approved tickets to
-`.workflow/kanban/backlog/PREFIX-NN-slug.md`. Create
-`backlog/`, `doing/`, `paused/`, and `done/` when missing. `paused/` contains
-unchanged tickets deliberately excluded from loop eligibility. Runtime state is
-created under Git metadata by the runner; never create or track a `runs/`
-directory.
+Run `kanban-loop init` when the schema-v3 board does not exist; this creates the
+columns and the checkout-local Git exclusion. Write new tickets to
+`.workflow/kanban/tickets/ready/PREFIX-NN-slug.md`. Ensure all schema-v3 columns
+exist: `ready`, `active`, `review`, `paused`, `blocked`, `done`, and `cancelled`.
+Runtime sessions belong under Git metadata and must not be created by this skill.
 
-```markdown
----
-schema-version: 2
-feature: ticket-naming-conventions
-ticket-prefix: TNC
-id: 1
-slug: json-output
-title: Add JSON output
-language: typescript
-depends-on: []
-parallel-safe: false
-human-required: false
-acceptance: "Running `app show --json` prints the requested record as valid JSON."
-allowed-changes:
-  - path: src/cli.ts
-    operation: modify
-  - path: src/commands/show.ts
-    operation: modify
-  - path: test/show.test.ts
-    operation: modify
-failing-tests:
-  - test/show.test.ts::prints_requested_record_as_json
-tdd-test-command: npm test -- test/show.test.ts
-verification:
-  - command: npm test -- test/show.test.ts
-    expected-exit: 0
-  - command: npm test
-    expected-exit: 0
-commit-message: "feat(cli): add JSON output"
----
-
-## Context
-
-Why this observable delta exists, its approved constraints, and relevant existing behavior. Maximum five sentences.
-
-## Acceptance Test
-
-Restate the acceptance sentence and list only necessary observable subconditions.
-
-## Files to Touch
-
-- `src/cli.ts` — modify: register the approved option
-- `src/commands/show.ts` — modify: produce the approved output
-- `test/show.test.ts` — modify: add the named failing test
-
-## Out of Scope
-
-- Explicitly prohibited adjacent behavior and refactoring.
-
-## Related Tickets
-
-- depends on: none
-- unblocks: none
-```
-
-## Schema Rules
-
-| Field | Rule |
-|---|---|
-| `schema-version` | Required integer `2` |
-| `feature` | Required kebab-case feature or branch slug for newly generated tickets |
-| `ticket-prefix` | Required 1-8 character uppercase code for the feature; starts with a letter and matches the filename |
-| `id` | One-based integer within the feature; `01` is first and must match the filename |
-| `slug` | Globally unique kebab-case action slug matching the filename suffix |
-| `title` | Exact human-readable ticket title |
-| `language` | Informational implementation stack |
-| `depends-on` | List of globally unique ticket slugs, empty when none |
-| `parallel-safe` | Always `false` while the runner is serial |
-| `human-required` | `true` for architecture, UX/API judgment, security, ambiguous scope, or risky cross-cutting work; otherwise `false` |
-| `acceptance` | One externally observable sentence |
-| `allowed-changes` | Non-empty list of exact file + `create\|modify\|delete` |
-| `failing-tests` | Non-empty list in `path::test-name` form; every path must be allowed |
-| `tdd-test-command` | Exact targeted command that must fail before production edits and pass afterward |
-| `verification` | Non-empty command/expected-exit list; include the full suite |
-| `commit-message` | Exact Conventional Commit subject |
-
-The Markdown body may explain intent, but machine-critical information must
-appear in frontmatter. The runner accepts older schema-v2 `NN-slug.md` tickets
-for compatibility, but this skill must only generate the new one-based prefixed
-format. Never make the runner infer commands, paths, operations, feature
-identity, or commit messages from prose.
+Use the canonical examples and complete field rules in
+`~/.dotfiles/docs/kanban-workflow.md`. Keep machine-critical values in YAML
+frontmatter and useful context in the body.
 
 ## Final Validation
 
@@ -160,12 +87,10 @@ Run:
 
 ```text
 kanban-loop validate
+kanban-loop plan
 ```
 
-If validation fails, repair the tickets and rerun it. Do not invoke implementation.
-
-Report the feature slug, ticket prefix, files written, stable topological order,
-approval status, and validation result. End by telling the user that
-`/kanban-loop` defaults to HITL and `/kanban-loop --auto` must be explicit.
-
-Also state that `kanban-loop` requires a clean checkout: the user must review and commit the approved PRD and ticket files before starting it. Never create that planning commit without a separate explicit approval.
+Repair validation errors but do not implement tickets or start the loop. Report
+the feature slug, prefix, files written, serial plan, approval status, and
+validation result. Remind the user that `/kanban-loop` defaults to HITL and AUTO
+must be explicit.

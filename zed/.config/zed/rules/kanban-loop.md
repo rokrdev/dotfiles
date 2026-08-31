@@ -1,288 +1,81 @@
 # @kanban-loop
-> Invoke: type @kanban-loop in Zed agent panel to activate this workflow
 
-> **Context note:** If context grows large during board drain, use @session-handoff to capture state, start a new conversation, and resume with @kanban-loop from where you left off.
+> Invoke: type @kanban-loop in the Zed agent panel.
 
-Drains `.workflow/kanban/backlog/` → `doing/` → `done/` by working through tickets serially in this conversation using TDD per ticket. Tickets in `.workflow/kanban/paused/` are visible but excluded from selection.
+Use the provider-neutral `kanban-loop` executable as the sole lifecycle, agent,
+verification, Git, and board authority. Do not reproduce its state machine
+inside Zed or move `.workflow` files manually.
 
-## Commands
+HITL is the default. AUTO must be explicit.
 
-| Command | Behaviour |
-|---------|-----------|
-| `@kanban-loop` | Serial mode — one ticket at a time |
-| `@kanban-loop --dry-run` | Resolve eligibility, print plan — no moves, no implementation |
-| `@kanban-loop --branch <name>` | Suggested branch name for pre-flight prompt |
-| `@kanban-loop pause <ticket> [<ticket> ...]` | Move named backlog tickets unchanged into `paused/` |
-| `@kanban-loop resume <ticket> [<ticket> ...]` | Move named paused tickets unchanged into `backlog/` |
+## Command Mapping
 
-For pause or resume, invoke the matching `kanban-loop pause` or
-`kanban-loop resume` executable command and return its output. Do not edit ticket
-frontmatter or continue into implementation in the same invocation.
+```text
+@kanban-loop --dry-run
+  -> kanban-loop plan
 
-When the executable reaches `KANBAN_AWAITING_COMMIT`, a normal approval is
-`kanban-loop decide <run-id> approve`. To include human-authored supplemental
-changed files in that same commit, collect an exact repository-relative path for
-each file and a reason, then use `kanban-loop decide <run-id> approve --include
-<path> [--include <path> ...] --reason <reason>`. This is only valid at that
-gate and forces verification plus a fresh independent read-only review of the
-expanded patch. Never broaden scope during implementation or AUTO mode, and do
-not pass ticket-allowed, unchanged, board/Git metadata, directory, glob,
-absolute, or traversal paths.
+@kanban-loop [--hitl] [--ticket KEY | --feature SLUG | --all]
+  -> kanban-loop run --provider opencode --mode hitl <scope>
 
-For a normal HITL correction, collect concise feedback and run
-`kanban-loop decide <run-id> revise --feedback <reason>`. This snapshots the
-reviewed patch and revises it in place; preserve useful work and avoid fake
-edits. `reject` remains a backward-compatible alias for `revise`. Use
-`kanban-loop decide <run-id> restart --feedback <reason>` only when the current
-approach should be discarded: it snapshots the patch, restores ticket-owned
-files to `HEAD`, and starts a fresh strict RED→GREEN attempt.
+@kanban-loop --auto [--ticket KEY | --feature SLUG | --all]
+  -> kanban-loop run --provider opencode --mode auto <scope>
 
----
+@kanban-loop status
+  -> kanban-loop status
 
-## Step 0 — Branch Pre-flight
+@kanban-loop pause <ticket>
+  -> kanban-loop pause <ticket>
 
-Runs once at startup. Prevents work from landing on protected branches.
+@kanban-loop pause --feature <slug>
+  -> kanban-loop pause --feature <slug>
 
-### 1. Detached HEAD check
+@kanban-loop resume <ticket> [feedback]
+  -> kanban-loop resume <ticket> [--feedback <feedback>]
 
-Run: `git rev-parse --abbrev-ref HEAD`
+@kanban-loop resume --feature <slug>
+  -> kanban-loop resume --feature <slug>
 
-If output is `HEAD` → abort:
-```
-ERROR: Detached HEAD state. Checkout a branch before running @kanban-loop.
+@kanban-loop migrate [--apply]
+  -> kanban-loop migrate [--apply]
+
+@kanban-loop migrate --restore <backup>
+  -> kanban-loop migrate --restore <backup>
+
+@kanban-loop archive <feature>
+  -> kanban-loop archive <feature>
+
+@kanban-loop restore <feature>
+  -> kanban-loop restore <feature>
 ```
 
-### 2. Dirty working tree check
-
-Run: `git status --porcelain`
-
-If output is non-empty → abort:
-```
-ERROR: Uncommitted changes detected. Stash or commit them before running @kanban-loop.
-```
-
-### 3. Protected branch detection
-
-Protected branches (hardcoded): `main`, `master`, `develop`
-
-**If NOT on a protected branch** → skip silently, log `Using branch: <name>`, proceed to Step 1.
-
-**If on a protected branch** → show branch prompt (Step 4).
-
-### 4. Branch prompt
-
-**With `--branch <name>` passed:**
-
-```
-─────────────────────────────────────────────
-  You are on <branch>. Create a branch?
-
-  Suggested: <name>
-
-  1. Yes — use suggested name
-  2. Yes — enter custom name
-  3. Stay on <branch>
-─────────────────────────────────────────────
-```
-
-Wait for user to choose [1-3].
-
-- **1**: proceed with `<name>` (check collision first — Step 5)
-- **2**: prompt user to type a name, then check collision
-- **3**: warn "⚠ Staying on <branch> — commits will land on a protected branch." Proceed to Step 1.
-
-**Without `--branch` (standalone invocation):**
-
-```
-─────────────────────────────────────────────
-  You are on <branch>. Enter a branch name to
-  create, or type SKIP to stay on <branch>:
-─────────────────────────────────────────────
-```
-
-Wait for user input. If `SKIP` → warn and proceed. Otherwise use typed name (check collision).
-
-### 5. Branch name collision
-
-Check if chosen name exists locally: `git show-ref --verify --quiet refs/heads/<name>`
-
-If exists → auto-append `-2`, `-3`, etc. until an unused name is found. Show resolved name to user before creating.
-
-### 6. Branch creation
-
-```bash
-git checkout -b <resolved-name>
-```
-
-Confirm branch created, then proceed to Step 1.
-
----
-
-## Step 1 — Pre-flight
-
-Check board structure exists:
-
-```
-.workflow/kanban/backlog/    ← tickets waiting
-.workflow/kanban/doing/      ← tickets in-flight
-.workflow/kanban/paused/     ← tickets deliberately excluded from the loop
-.workflow/kanban/done/       ← completed tickets
-```
-
-If any directory is missing → abort with:
-
-```
-ERROR: .workflow/kanban/ board not initialised.
-Run @to-tickets to populate backlog/, or create the execution columns manually.
-```
-
-**Validate every ticket** in `backlog/` and `doing/`:
-
-Required fields: `id` (integer), `slug` (kebab-case and matches the filename suffix), `language`,
-`acceptance` (non-empty string). Any violation → abort, list all bad tickets with field name.
-
-**Stuck-ticket check** — for each file in `doing/`: if mtime > 1 hour ago, flag as STUCK. Pause, show list, ask user:
-- `retry` — move back to `backlog/`, continue loop
-- `skip` — leave in `doing/`, continue loop ignoring it
-- `abort` — stop entirely
-
----
-
-## Step 2 — Eligibility Resolver
-
-Build the eligible ticket list:
-
-1. Parse all tickets in `.workflow/kanban/done/` and collect their frontmatter slugs
-2. For each ticket in `.workflow/kanban/backlog/` (sorted by filename):
-   - Parse frontmatter (`depends-on` field)
-   - If all listed deps are in done_slugs → ticket is eligible
-3. Sort eligible tickets by `id` (lowest first)
-
-Never select a ticket from `paused/`. Validate paused ticket structure when the
-directory exists, but do not treat paused tickets as a deadlock or unfinished
-executable backlog.
-
-**Deadlock** — if eligible is empty and `backlog/` is non-empty → surface blocked list showing each ticket's unmet deps. Halt. Human must resolve.
-
-**Done** — if eligible is empty and `backlog/` is empty → print summary, exit.
-
----
-
-## Step 3 — Work Ticket (Serial)
-
-> **Note (Zed adaptation):** Zed runs kanban-loop in a single-agent context. TDD runs inline here, unlike the Claude CLI version which dispatches a fresh specialist subagent per ticket. The Claude CLI version is the reference implementation.
-
-Pick the ticket with the lowest `id` from the eligible set.
-
-1. Move the selected ticket file unchanged from `backlog/` to `doing/`
-2. Read the ticket file in full (frontmatter + body)
-3. Work the ticket inline using TDD — red→green→refactor:
-
-### TDD Workflow (inline)
-
-**Red-first is mandatory — Gate 0.**
-
-Before editing any production code (`src/` or equivalent):
-1. Write the failing test file(s) first
-2. Detect the project's test runner (see stack detection below) and run it against the new test — capture the RED output
-3. The test must produce an actual assertion failure, not a green-on-first-run
-   - If first run shows all tests passing or only import errors → STOP, rewrite the test to exercise the unimplemented behaviour, re-run until you see real assertion failures
-4. Only after a recorded test failure may you touch any production code file
-
-**Stack detection — choose the test runner:**
-- `package.json` present → use npm/pnpm/yarn test (check scripts.test field)
-- `pyproject.toml` / `setup.py` present → pytest (or `uv run pytest`)
-- `Package.swift` present → `swift test`
-- `build.gradle` / `build.gradle.kts` present → `./gradlew test`
-- `Cargo.toml` present → `cargo test`
-- `Makefile` with a `test` target → `make test`
-- When ambiguous, ask the user
-
-**Stay within the paths listed in `files-touched`.** If you need to touch a file not listed → stop, report the file and reason to the user, wait for guidance.
-
-**Acceptance criterion** from the ticket frontmatter is your success criterion. At least one test must map to it.
-
----
-
-## Step 4 — Verification Gate (before moving to done/)
-
-All gates must pass before moving the file:
-
-```
-Gate 0 — Red-first verified
-  Report includes a "Red Output" section with test runner output that:
-    a. Was captured BEFORE any production code edit
-    b. Shows ≥1 actual assertion failure
-
-Gate 1 — Tests green
-  All tests for files-touched paths exit 0. Zero failures, zero errors.
-
-Gate 2 — Acceptance verifiable
-  The acceptance sentence maps to at least one named test,
-  OR exact manual verification steps are documented.
-
-Gate 3 — Scope clean
-  Only files listed in files-touched were modified.
-  No uncommitted unrelated changes.
-```
-
-**All gates pass →**
-
-1. Run full test suite (not just ticket-scoped paths) — must exit 0. If red, fail Gate 1 and push back to backlog.
-2. Stage only files in `files-touched` — use `git add <file1> <file2> ...` with explicit paths. Never `git add -A` or `git add .`.
-3. Commit with conventional format:
-   ```
-   <type>(<scope>): <ticket title>
-
-   <acceptance criterion>
-
-   Co-Authored-By: Claude <noreply@anthropic.com>
-   ```
-   Message must start with `<type>(<scope>):` — if not, fix before committing.
-4. Move the selected ticket file unchanged from `doing/` to `done/`
-
-**Any gate fails:**
-- Append failure note to ticket body: `## Failure — <gate number>\n<reason>`
-- Move the selected ticket file unchanged from `doing/` back to `backlog/`
-- Warn user with gate number, reason, ticket name
-- Increment failure counter. If 3+ consecutive failures → **circuit breaker**: halt loop, surface failures, ask user to intervene
-- Ask user: retry / skip / abort
-
----
-
-## Step 5 — Loop
-
-Repeat Steps 2–4 until one of the stop conditions is reached:
-
-| Condition | Action |
-|-----------|--------|
-| `.workflow/kanban/backlog/` empty, `doing/` empty | Normal exit — print summary |
-| eligible empty, `backlog/` non-empty | Deadlock — list unmet deps, halt |
-| User types abort | Halt, leave state as-is, print partial summary |
-| 3+ consecutive ticket failures | Circuit breaker — halt, surface all failed tickets |
-
-**Summary format:**
-
-```
-@kanban-loop complete
-  Done:    N tickets
-  Paused:  P tickets
-  Failed:  M tickets (in backlog/ with failure notes)
-  Skipped: K tickets
-```
-
----
-
-## Anti-patterns
-
-- **Never write to `.workflow/kanban/done/` without all verification gates passing** — partial work is worse than no work.
-- **Never continue after deadlock** — surface it. A deadlock means @to-tickets produced a broken dependency graph. Human fix required.
-- **Never accept changes to files outside `files-touched`** — fail Gate 3, push back to backlog.
-- **Red-first is non-negotiable** — a test that passes on first run is a fake test.
-
----
-
-## Related prompts
-
-- `@to-tickets` — fills `.workflow/kanban/backlog/` from a spec; run before this prompt
-- `@ship-it` — push branch and open PR after board is drained
+Use the provider available in the Zed environment; if `opencode` is unavailable,
+report `kanban-loop providers` and ask the user to choose an available adapter.
+
+## HITL Review
+
+Present the executable's complete review packet and translate the user's choice
+to `kanban-loop review <run-id>`:
+
+- `approve` for the verified descriptive commit;
+- `revise --feedback ...` for any requested change, including a justified
+  change of files, tests, or approach;
+- `ask --feedback ...` for read-only investigation;
+- `override --reason ...` only after explicit human verification override;
+- `pause`, `abandon`, or `cancel --reason ...` only when clearly requested;
+- `incorporate`, `defer`, or `restart` for the matching ticket-edit recovery.
+
+There is no arbitrary HITL revision limit. Likely files are hints, not an
+allowlist. Do not invent approval or treat prose rejected by the executable as
+authorization.
+
+AUTO may retry bounded ordinary failures. Material product, architecture,
+dependency, schema, security, destructive, verification, or ambiguity decisions
+must be retained and escalated to HITL.
+
+Pause and resume are origin-aware. Feature resume removes only its own pause;
+independent ticket pauses and dependency blocks remain. Feature archive uses the
+executable and is reversible.
+
+On failure, surface the persisted diagnostic path plus the concrete missing,
+malformed, unsafe, or conflicting data. Never replace it with only a generic
+exception.

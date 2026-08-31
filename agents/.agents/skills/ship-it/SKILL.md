@@ -10,12 +10,13 @@ Pre-flight checks, summary report, and push/PR options for a completed feature b
 
 ## Pre-Flight Verification
 
-**Backlog state:**
-- `.workflow/kanban/backlog/` must be empty (warn if not; can proceed)
-- `.workflow/kanban/doing/` must be empty (abort if not — work in progress)
+**Board state:**
+- `.workflow/kanban/tickets/active/` and `review/` must be empty (abort if not)
+- report remaining `ready`, `paused`, and `blocked` tickets; require the user to
+  confirm shipping an incomplete feature
 
 **Test suite:**
-- Read each schema-v2 ticket in `.workflow/kanban/done/`
+- Read each schema-v3 ticket in `.workflow/kanban/tickets/done/`
 - Run every unique command declared in each ticket's `verification` list
 - If no completed ticket declares verification, detect and run the repository's full test command from `package.json`, `Cargo.toml`, `pyproject.toml`, `go.mod`, or Makefile
 - Require: all tests green (zero failures, zero errors)
@@ -48,8 +49,8 @@ Total: +193, -8 lines
 ```
 
 Derive the file list and line totals from Git against the base branch. Do not
-reconstruct it from ticket metadata; `allowed-changes` is a safety boundary,
-not a claim that every listed file changed.
+reconstruct it from ticket hints, which are not a claim that every listed file
+changed.
 
 ## Landing Options
 
@@ -98,13 +99,12 @@ Ready for next feature?
 ```
 
 **Optional cleanup:**
-- Ask user: "Archive completed tickets? (A) move to `.workflow/kanban/archive/<date>/` or (D) delete?"
-- If A: `mkdir -p .workflow/kanban/archive/$(date +%Y-%m-%d) && mv .workflow/kanban/done/* .workflow/kanban/archive/$(date +%Y-%m-%d)/`
-- If D: `rm .workflow/kanban/done/*`
+- Ask whether to archive a completed feature with
+  `kanban-loop archive <feature>`. Do not move or delete ticket files manually.
 
 ## Anti-Patterns (Call Out Explicitly)
 
-- ✗ Shipping with `doing/` non-empty → **Abort. Finish in-progress work first.**
+- ✗ Shipping with `active/` or `review/` non-empty → **Abort. Resolve the active session first.**
 - ✗ Shipping with red tests → **Abort. Fix failing tests.**
 - ✗ Committing in ship-it → **Never. kanban-loop commits per ticket. ship-it only pushes.**
 - ✗ Merging to main/master → **Never. ship-it creates a PR. Merging is the human's job.**
@@ -115,7 +115,7 @@ Ready for next feature?
 
 | State | Action |
 |-------|--------|
-| `.workflow/kanban/doing/` non-empty | Abort immediately. User must resolve. |
+| `active/` or `review/` non-empty | Abort immediately. User must resolve. |
 | Tests fail | Abort. Show failing test names + summary. |
 | Uncommitted changes found | Warn — kanban-loop should have committed all work. Ask user to commit or stash before pushing. |
 | Not ahead of base | Abort. Nothing to ship. |

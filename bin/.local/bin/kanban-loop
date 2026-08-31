@@ -577,6 +577,20 @@ def parse_agent_result(raw: str, schema: dict[str, Any]) -> dict[str, Any]:
             f"Agent returned structured output that failed schema validation: {invalid[-1]}",
             raw,
         )
+    # Claude Code's JSON output format can return a successful provider
+    # envelope whose ``result`` is prose even when ``--json-schema`` was
+    # requested. Parse only that inner report as prose so JSON escaping cannot
+    # hide its explicit fallback decision. Provider success is deliberately not
+    # treated as task completion; the inner report must still state a status or
+    # verdict that fallback_agent_result recognizes.
+    provider_reports = [
+        mapping["result"]
+        for value in values
+        for mapping in json_mappings(value)
+        if mapping.get("type") == "result" and isinstance(mapping.get("result"), str)
+    ]
+    if provider_reports:
+        return fallback_agent_result(provider_reports[-1], schema)
     return fallback_agent_result(raw, schema)
 
 
@@ -983,9 +997,13 @@ def implementer_prompt(
 
         {ticket_prompt(ticket)}
 
-        Return only the requested structured result. You cannot approve, commit,
-        move the ticket, start another ticket, or broaden its scope. If the ticket
-        cannot be completed within the permitted files, return status=blocked.
+        Your response must communicate exactly one terminal status: complete or
+        blocked. Return only the requested structured result. If Claude Code does
+        not emit the requested JSON schema and returns prose instead, end that
+        prose with exactly one standalone line: `Status: complete` or
+        `Status: blocked`. You cannot approve, commit, move the ticket, start
+        another ticket, or broaden its scope. If the ticket cannot be completed
+        within the permitted files, return status=blocked.
         """
     ).strip()
 
@@ -1015,7 +1033,11 @@ def validator_prompt(
 
         {ticket_prompt(ticket)}
 
-        Return only the requested structured result.
+        Your response must communicate exactly one terminal verdict: accept,
+        reject, or blocked. Return only the requested structured result. If Claude
+        Code does not emit the requested JSON schema and returns prose instead,
+        end that prose with exactly one standalone line: `Verdict: accept`,
+        `Verdict: reject`, or `Verdict: blocked`.
         """
     ).strip()
 

@@ -29,6 +29,14 @@ expanded patch. Never broaden scope during implementation or AUTO mode, and do
 not pass ticket-allowed, unchanged, board/Git metadata, directory, glob,
 absolute, or traversal paths.
 
+For a normal HITL correction, collect concise feedback and run
+`kanban-loop decide <run-id> revise --feedback <reason>`. This snapshots the
+reviewed patch and revises it in place; preserve useful work and avoid fake
+edits. `reject` remains a backward-compatible alias for `revise`. Use
+`kanban-loop decide <run-id> restart --feedback <reason>` only when the current
+approach should be discarded: it snapshots the patch, restores ticket-owned
+files to `HEAD`, and starts a fresh strict RED→GREEN attempt.
+
 ---
 
 ## Step 0 — Branch Pre-flight

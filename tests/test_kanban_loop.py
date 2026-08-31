@@ -1241,6 +1241,222 @@ class GitTests(unittest.TestCase):
                 os.chdir(original_cwd)
             self.assertIn("Failure log:", stderr.getvalue())
 
+    def test_parser_offers_revise_restart_and_reject_alias(self) -> None:
+        parser = kanban.parser()
+        for decision in ("revise", "restart", "reject"):
+            with self.subTest(decision=decision):
+                self.assertEqual(
+                    parser.parse_args(["decide", "run-id", decision]).decision,
+                    decision,
+                )
+
+    def test_automatic_rejection_revises_in_place_and_snapshots_patch(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            ticket = self.initialise_board_repo(root)
+            seen: list[tuple[bool, str]] = []
+
+            def attempt(
+                repo, current, provider, findings, run_path, number, *, revision
+            ):
+                seen.append((revision, (repo / "src/app.py").read_text()))
+                if number == 1:
+                    (repo / "src/app.py").write_text("first patch\n", encoding="utf-8")
+                    return (
+                        {
+                            "verdict": "reject",
+                            "summary": "fix",
+                            "findings": [{"blocking": True}],
+                        },
+                        "one",
+                        [],
+                    )
+                self.assertEqual((repo / "src/app.py").read_text(), "first patch\n")
+                return (
+                    {"verdict": "accept", "summary": "ok", "findings": []},
+                    "two",
+                    [],
+                )
+
+            with mock.patch.object(kanban, "execute_attempt", side_effect=attempt):
+                _, phase = kanban.process_ticket(
+                    root,
+                    ticket,
+                    SimpleNamespace(name="fake"),
+                    "hitl",
+                    2,
+                    run_id="in-place",
+                )
+            self.assertEqual(phase, "awaiting-commit")
+            self.assertEqual([item[0] for item in seen], [False, True])
+            snapshot = (
+                kanban.state_dir(root, "in-place") / "attempt-01-before-revision.patch"
+            )
+            self.assertIn("first patch", snapshot.read_text())
+            self.assertEqual((root / "src/app.py").read_text(), "first patch\n")
+
+    def test_revise_and_reject_alias_preserve_patch_and_restart_restores_it(
+        self,
+    ) -> None:
+        cases = (
+            ("revise", "patch\n"),
+            ("reject", "patch\n"),
+            ("restart", "before\n"),
+        )
+        for decision, expected in cases:
+            with (
+                self.subTest(decision=decision),
+                tempfile.TemporaryDirectory() as directory,
+            ):
+                root = Path(directory)
+                backlog_ticket = self.initialise_board_repo(root)
+                ticket = kanban.parse_ticket(
+                    kanban.move_ticket(backlog_ticket, root / ".workflow/kanban/doing")
+                )
+                (root / "src/app.py").write_text("patch\n", encoding="utf-8")
+                self.awaiting_commit_state(root, ticket, f"decision-{decision}")
+                observed: dict[str, object] = {}
+
+                def resume(
+                    repo,
+                    current,
+                    provider,
+                    mode,
+                    max_attempts,
+                    observed=observed,
+                    **kwargs,
+                ):
+                    observed["content"] = (repo / "src/app.py").read_text()
+                    observed["mode"] = kwargs["first_attempt_mode"]
+                    return "ignored", "awaiting-commit"
+
+                with (
+                    mock.patch.object(
+                        kanban,
+                        "select_provider",
+                        return_value=SimpleNamespace(name="fake"),
+                    ),
+                    mock.patch.object(kanban, "process_ticket", side_effect=resume),
+                ):
+                    self.assertEqual(
+                        self.decision(
+                            root,
+                            f"decision-{decision}",
+                            decision,
+                            "--feedback",
+                            "fix it",
+                        ),
+                        kanban.EXIT_AWAITING_COMMIT,
+                    )
+                self.assertEqual(observed["content"], expected)
+                self.assertEqual(
+                    observed["mode"],
+                    "strict" if decision == "restart" else "revision",
+                )
+                snapshot = (
+                    kanban.state_dir(root, f"decision-{decision}")
+                    / f"attempt-01-before-{decision}.patch"
+                )
+                self.assertIn("patch", snapshot.read_text())
+
+    def test_revision_attempt_allows_test_only_or_production_only_changes(self) -> None:
+        for changed_path in ("tests/test_app.py", "src/app.py"):
+            with (
+                self.subTest(changed_path=changed_path),
+                tempfile.TemporaryDirectory() as directory,
+            ):
+                root = Path(directory)
+                ticket = self.initialise_board_repo(root)
+
+                class RevisionProvider:
+                    name = "fake"
+
+                    def __init__(self):
+                        self.calls = 0
+
+                    def run(self, request, changed_path=changed_path, root=root):
+                        self.calls += 1
+                        if self.calls == 1 and changed_path.startswith("tests/"):
+                            (root / changed_path).write_text(
+                                "coverage\n", encoding="utf-8"
+                            )
+                        if self.calls == 2 and changed_path.startswith("src/"):
+                            (root / changed_path).write_text(
+                                "repair\n", encoding="utf-8"
+                            )
+                        data = (
+                            {"verdict": "accept", "summary": "ok", "findings": []}
+                            if self.calls == 3
+                            else {"status": "complete", "blocker": None}
+                        )
+                        return kanban.AgentResult(data, "")
+
+                run_path = kanban.state_dir(root, "revision")
+                run_path.mkdir(parents=True)
+                with (
+                    mock.patch.object(kanban, "run_verification", return_value=[]),
+                    mock.patch.object(
+                        kanban, "run_revision_test", return_value={"exit": 0}
+                    ),
+                ):
+                    kanban.execute_attempt(
+                        root,
+                        ticket,
+                        RevisionProvider(),
+                        [],
+                        run_path,
+                        2,
+                        revision=True,
+                    )
+                if changed_path.startswith("tests/"):
+                    self.assertTrue(
+                        (
+                            kanban.state_dir(root, "revision")
+                            / "attempt-02-revision-test.json"
+                        ).exists()
+                    )
+
+    def test_revision_attempt_requires_at_least_one_file_change(self) -> None:
+        class NoopProvider:
+            name = "fake"
+
+            def run(self, request):
+                return kanban.AgentResult({"status": "complete", "blocker": None}, "")
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            ticket = self.initialise_board_repo(root)
+            run_path = kanban.state_dir(root, "revision-no-change")
+            run_path.mkdir(parents=True)
+            with self.assertRaisesRegex(
+                kanban.KanbanError,
+                "Revision attempt must change at least one declared ticket file",
+            ):
+                kanban.execute_attempt(
+                    root,
+                    ticket,
+                    NoopProvider(),
+                    [],
+                    run_path,
+                    2,
+                    revision=True,
+                )
+
+    def test_initial_attempt_still_requires_test_and_production_changes(self) -> None:
+        class NoopProvider:
+            name = "fake"
+
+            def run(self, request):
+                return kanban.AgentResult({"status": "complete", "blocker": None}, "")
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            ticket = self.initialise_board_repo(root)
+            run_path = kanban.state_dir(root, "strict")
+            run_path.mkdir(parents=True)
+            with self.assertRaisesRegex(kanban.KanbanError, "Test phase must change"):
+                kanban.execute_attempt(root, ticket, NoopProvider(), [], run_path, 1)
+
     def test_rejection_restore_keeps_ticket_doing_and_resets_code(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

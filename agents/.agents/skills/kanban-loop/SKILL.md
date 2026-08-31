@@ -47,7 +47,8 @@ When the executable returns `KANBAN_AWAITING_COMMIT run_id=<id>`, present its ex
   using safe argument passing. This triggers fresh verification and independent
   validation; do not use it for unchanged, ticket-allowed, board, Git metadata,
   directory, glob, absolute, or traversal paths.
-- Reject → collect a concise reason, then `kanban-loop decide <id> reject --feedback <reason>` using safe argument passing
+- Revise → collect a concise reason, then `kanban-loop decide <id> revise --feedback <reason>` using safe argument passing. This preserves the accepted patch and makes a focused correction on top.
+- Restart → collect a concise reason, then `kanban-loop decide <id> restart --feedback <reason>` using safe argument passing only when the current approach should be discarded. The runner snapshots the patch, restores ticket-owned files, and starts a fresh strict attempt.
 - Abort → `kanban-loop decide <id> abort`
 
 When it returns `KANBAN_AWAITING_NEXT run_id=<id>`, ask whether to continue:

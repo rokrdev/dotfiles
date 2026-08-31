@@ -19,6 +19,16 @@ For pause or resume, invoke the matching `kanban-loop pause` or
 `kanban-loop resume` executable command and return its output. Do not edit ticket
 frontmatter or continue into implementation in the same invocation.
 
+When the executable reaches `KANBAN_AWAITING_COMMIT`, a normal approval is
+`kanban-loop decide <run-id> approve`. To include human-authored supplemental
+changed files in that same commit, collect an exact repository-relative path for
+each file and a reason, then use `kanban-loop decide <run-id> approve --include
+<path> [--include <path> ...] --reason <reason>`. This is only valid at that
+gate and forces verification plus a fresh independent read-only review of the
+expanded patch. Never broaden scope during implementation or AUTO mode, and do
+not pass ticket-allowed, unchanged, board/Git metadata, directory, glob,
+absolute, or traversal paths.
+
 ---
 
 ## Step 0 — Branch Pre-flight

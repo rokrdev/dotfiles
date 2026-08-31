@@ -540,6 +540,42 @@ class GitTests(unittest.TestCase):
         subprocess.run(["git", "commit", "-qm", "approved plan"], cwd=root, check=True)
         return kanban.parse_ticket(ticket_path)
 
+    def awaiting_commit_state(self, root: Path, ticket: kanban.Ticket, run_id: str) -> None:
+        kanban.save_state(
+            root,
+            run_id,
+            {
+                "run_id": run_id,
+                "phase": "awaiting-commit",
+                "mode": "hitl",
+                "provider": "fake",
+                "ticket": str(ticket.path.relative_to(root)),
+                "ticket_hash": ticket.digest,
+                "base_commit": kanban.git(root, "rev-parse", "HEAD"),
+                "attempt": 1,
+                "max_attempts": 3,
+                "diff_hash": kanban.sha256_text(kanban.diff_text(root, ticket)),
+                "validation": {"verdict": "accept", "summary": "initial", "findings": []},
+                "verification": [],
+            },
+        )
+
+    def decision(
+        self, root: Path, run_id: str, decision: str, *arguments: str
+    ) -> int:
+        previous = Path.cwd()
+        try:
+            os.chdir(root)
+            args = kanban.parser().parse_args(
+                ["decide", run_id, decision, *arguments]
+            )
+            return kanban.command_decide(args)
+        finally:
+            os.chdir(previous)
+
+    def decide(self, root: Path, run_id: str, *arguments: str) -> int:
+        return self.decision(root, run_id, "approve", *arguments)
+
     def write_prefixed_ticket(
         self,
         root: Path,
@@ -943,6 +979,206 @@ class GitTests(unittest.TestCase):
             self.assertIn("src/app.py", committed)
             self.assertIn("tests/test_app.py", committed)
             self.assertNotIn(".workflow/", committed)
+
+    def test_scope_expansion_commits_modified_and_untracked_files_after_review(self) -> None:
+        class AcceptingProvider:
+            name = "fake"
+
+            def run(self, request):
+                self.prompt = request.prompt
+                return kanban.AgentResult(
+                    {"verdict": "accept", "summary": "reviewed", "findings": []},
+                    "Verdict: accept\n",
+                )
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            backlog_ticket = self.initialise_board_repo(root)
+            ticket = kanban.parse_ticket(
+                kanban.move_ticket(backlog_ticket, root / ".workflow/kanban/doing")
+            )
+            (root / "src/app.py").write_text("ticket after\n", encoding="utf-8")
+            (root / "tests/test_app.py").write_text("ticket test after\n", encoding="utf-8")
+            self.awaiting_commit_state(root, ticket, "scope-success")
+            (root / "src/app.py").write_text("user LSP edit after review\n", encoding="utf-8")
+            (root / "lsp.toml").write_text("enabled = true\n", encoding="utf-8")
+            (root / "tracked.txt").write_text("lsp fix\n", encoding="utf-8")
+            provider = AcceptingProvider()
+
+            with mock.patch.object(kanban, "select_provider", return_value=provider):
+                self.assertEqual(
+                    self.decide(
+                        root,
+                        "scope-success",
+                        "--include", "tracked.txt",
+                        "--include", "lsp.toml",
+                        "--reason", "Resolve LSP warnings from the ticket change",
+                    ),
+                    kanban.EXIT_AWAITING_NEXT,
+                )
+
+            self.assertIn("supplemental changed paths", provider.prompt)
+            self.assertIn("tracked.txt", provider.prompt)
+            self.assertIn("not listed there", provider.prompt)
+            committed = kanban.git(root, "show", "--pretty=format:", "--name-only", "HEAD")
+            self.assertEqual(
+                set(committed.splitlines()),
+                {"src/app.py", "tests/test_app.py", "tracked.txt", "lsp.toml"},
+            )
+            state = kanban.load_state(root, "scope-success")
+            self.assertEqual(state["phase"], "awaiting-next")
+            self.assertEqual(state["scope_expansion"]["paths"], ["tracked.txt", "lsp.toml"])
+            self.assertEqual(
+                state["scope_expansion"]["reason"],
+                "Resolve LSP warnings from the ticket change",
+            )
+            self.assertTrue((kanban.state_dir(root, "scope-success") / "scope-expansion.json").exists())
+            self.assertTrue((kanban.state_dir(root, "scope-success") / "scope-expansion-validation.json").exists())
+
+    def test_scope_expansion_requires_reason_and_exact_changed_non_ticket_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            backlog_ticket = self.initialise_board_repo(root)
+            ticket = kanban.parse_ticket(
+                kanban.move_ticket(backlog_ticket, root / ".workflow/kanban/doing")
+            )
+            (root / "src/app.py").write_text("ticket after\n", encoding="utf-8")
+            (root / "tests/test_app.py").write_text("ticket test after\n", encoding="utf-8")
+            (root / "extra.py").write_text("extra\n", encoding="utf-8")
+            self.awaiting_commit_state(root, ticket, "scope-invalid")
+            cases = [
+                (["--include", "extra.py"], "requires --reason"),
+                (["--include", "src/app.py", "--reason", "duplicate"], "already in ticket"),
+                (["--include", "missing.py", "--reason", "missing"], "not a changed file"),
+                (["--include", "../extra.py", "--reason", "traversal"], "Invalid supplemental path"),
+                (["--include", "/tmp/extra.py", "--reason", "absolute"], "Invalid supplemental path"),
+                (["--include", "*.py", "--reason", "glob"], "Invalid supplemental path"),
+                (["--include", "src", "--reason", "directory"], "file, not a directory"),
+                (["--include", ".git/config", "--reason", "git"], "Invalid supplemental path"),
+                (["--include", ".workflow/x", "--reason", "board"], "Invalid supplemental path"),
+                (["--include", "extra.py", "--include", "extra.py", "--reason", "repeat"], "must not be repeated"),
+            ]
+            for arguments, error in cases:
+                with self.subTest(arguments=arguments), self.assertRaisesRegex(
+                    kanban.KanbanError, error
+                ):
+                    self.decide(root, "scope-invalid", *arguments)
+            self.assertEqual(kanban.load_state(root, "scope-invalid")["phase"], "awaiting-commit")
+
+    def test_accepted_scope_expansion_evidence_survives_commit_failure(self) -> None:
+        class AcceptingProvider:
+            name = "fake"
+
+            def run(self, request):
+                return kanban.AgentResult(
+                    {"verdict": "accept", "summary": "reviewed", "findings": []},
+                    "Verdict: accept\n",
+                )
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            backlog_ticket = self.initialise_board_repo(root)
+            ticket = kanban.parse_ticket(
+                kanban.move_ticket(backlog_ticket, root / ".workflow/kanban/doing")
+            )
+            (root / "src/app.py").write_text("ticket after\n", encoding="utf-8")
+            (root / "tests/test_app.py").write_text("ticket test after\n", encoding="utf-8")
+            (root / "extra.py").write_text("extra\n", encoding="utf-8")
+            self.awaiting_commit_state(root, ticket, "scope-commit-failure")
+            with (
+                mock.patch.object(kanban, "select_provider", return_value=AcceptingProvider()),
+                mock.patch.object(kanban, "commit_ticket", side_effect=kanban.KanbanError("commit failed")),
+            ):
+                with self.assertRaisesRegex(kanban.KanbanError, "commit failed"):
+                    self.decide(
+                        root,
+                        "scope-commit-failure",
+                        "--include",
+                        "extra.py",
+                        "--reason",
+                        "LSP fix",
+                    )
+            state = kanban.load_state(root, "scope-commit-failure")
+            self.assertEqual(state["phase"], "awaiting-commit")
+            self.assertEqual(state["scope_expansion"]["status"], "accept")
+            self.assertEqual(state["scope_expansion"]["validation"]["verdict"], "accept")
+
+    def test_scope_expansion_rejection_keeps_awaiting_commit_and_evidence(self) -> None:
+        class RejectingProvider:
+            name = "fake"
+
+            def run(self, request):
+                return kanban.AgentResult(
+                    {
+                        "verdict": "reject",
+                        "summary": "supplement breaks compatibility",
+                        "findings": [{"blocking": True}],
+                    },
+                    "Verdict: reject\n",
+                )
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            backlog_ticket = self.initialise_board_repo(root)
+            ticket = kanban.parse_ticket(
+                kanban.move_ticket(backlog_ticket, root / ".workflow/kanban/doing")
+            )
+            (root / "src/app.py").write_text("ticket after\n", encoding="utf-8")
+            (root / "tests/test_app.py").write_text("ticket test after\n", encoding="utf-8")
+            (root / "extra.py").write_text("extra\n", encoding="utf-8")
+            self.awaiting_commit_state(root, ticket, "scope-reject")
+            head_before = kanban.git(root, "rev-parse", "HEAD")
+            with mock.patch.object(kanban, "select_provider", return_value=RejectingProvider()):
+                with self.assertRaisesRegex(kanban.KanbanError, "validator reject"):
+                    self.decide(
+                        root, "scope-reject", "--include", "extra.py", "--reason", "LSP fix"
+                    )
+            self.assertEqual(kanban.load_state(root, "scope-reject")["phase"], "awaiting-commit")
+            self.assertTrue((root / ".workflow/kanban/doing/00-hello-command.md").exists())
+            self.assertEqual(kanban.git(root, "rev-parse", "HEAD"), head_before)
+            expansion = kanban.load_state(root, "scope-reject")["scope_expansion"]
+            self.assertEqual(expansion["status"], "reject")
+            self.assertEqual(expansion["validation"]["verdict"], "reject")
+            self.assertTrue((kanban.state_dir(root, "scope-reject") / "scope-expansion-validation.raw.txt").exists())
+
+    def test_non_approval_decisions_reject_scope_expansion_arguments(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            backlog_ticket = self.initialise_board_repo(root)
+            ticket = kanban.parse_ticket(
+                kanban.move_ticket(backlog_ticket, root / ".workflow/kanban/doing")
+            )
+            (root / "src/app.py").write_text("ticket after\n", encoding="utf-8")
+            (root / "tests/test_app.py").write_text("ticket test after\n", encoding="utf-8")
+            self.awaiting_commit_state(root, ticket, "decision-arguments")
+            for decision in ("reject", "continue", "abort"):
+                for arguments in (
+                    ("--include", "extra.py"),
+                    ("--reason", "LSP fix"),
+                ):
+                    with self.subTest(decision=decision, arguments=arguments), self.assertRaisesRegex(
+                        kanban.KanbanError, "valid only with approve"
+                    ):
+                        self.decision(root, "decision-arguments", decision, *arguments)
+            self.assertEqual(
+                kanban.load_state(root, "decision-arguments")["phase"],
+                "awaiting-commit",
+            )
+
+    def test_normal_approve_retains_original_hash_requirement(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            backlog_ticket = self.initialise_board_repo(root)
+            ticket = kanban.parse_ticket(
+                kanban.move_ticket(backlog_ticket, root / ".workflow/kanban/doing")
+            )
+            (root / "src/app.py").write_text("ticket after\n", encoding="utf-8")
+            (root / "tests/test_app.py").write_text("ticket test after\n", encoding="utf-8")
+            self.awaiting_commit_state(root, ticket, "strict-hash")
+            (root / "src/app.py").write_text("edited after review\n", encoding="utf-8")
+            with self.assertRaisesRegex(kanban.KanbanError, "differs from the accepted patch"):
+                self.decide(root, "strict-hash")
+            self.assertEqual(kanban.load_state(root, "strict-hash")["phase"], "awaiting-commit")
 
     def test_failed_attempt_writes_durable_failure_record(self) -> None:
         class FailingProvider(kanban.ProviderAdapter):

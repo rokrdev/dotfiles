@@ -1009,8 +1009,25 @@ def implementer_prompt(
 
 
 def validator_prompt(
-    ticket: Ticket, diff: str, verification: list[dict[str, Any]], diff_hash: str
+    ticket: Ticket,
+    diff: str,
+    verification: list[dict[str, Any]],
+    diff_hash: str,
+    *,
+    supplemental_paths: tuple[str, ...] = (),
+    supplemental_reason: str | None = None,
 ) -> str:
+    supplemental_context = ""
+    if supplemental_paths:
+        supplemental_context = f"""
+        A human explicitly approved these supplemental changed paths at the HITL
+        commit gate: {json.dumps(list(supplemental_paths))}
+        Human reason: {supplemental_reason}
+
+        Review those supplemental changes for correctness and regressions. They are
+        intentionally outside the immutable ticket's allowed-changes, so do not
+        reject solely because they are not listed there.
+        """
     return textwrap.dedent(
         f"""
         You are an independent, read-only validator. Review the actual patch against
@@ -1022,6 +1039,8 @@ def validator_prompt(
         are non-blocking and must not cause rejection. Do not invent requirements.
 
         Diff SHA-256: {diff_hash}
+
+        {supplemental_context}
 
         Verification results:
         {json.dumps(verification, indent=2)}
@@ -1092,10 +1111,13 @@ def assert_ticket_immutable(repo: Path, ticket: Ticket) -> None:
         raise KanbanError("Agent modified the immutable ticket")
 
 
-def assert_scope(repo: Path, ticket: Ticket) -> None:
+def assert_scope(
+    repo: Path, ticket: Ticket, supplemental_paths: Iterable[str] = ()
+) -> None:
     assert_ticket_immutable(repo, ticket)
     actual = changed_paths(repo)
-    unexpected = actual - ticket.allowed_paths - ticket_board_paths(ticket)
+    permitted = ticket.allowed_paths | set(supplemental_paths)
+    unexpected = actual - permitted - ticket_board_paths(ticket)
     if unexpected:
         raise KanbanError(
             f"Scope violation: undeclared paths changed: {sorted(unexpected)}"
@@ -1149,7 +1171,9 @@ def run_shell(repo: Path, command: str) -> dict[str, Any]:
     }
 
 
-def run_verification(repo: Path, ticket: Ticket) -> list[dict[str, Any]]:
+def run_verification(
+    repo: Path, ticket: Ticket, supplemental_paths: Iterable[str] = ()
+) -> list[dict[str, Any]]:
     results: list[dict[str, Any]] = []
     expected_head = git(repo, "rev-parse", "HEAD")
     for verification in ticket.verification:
@@ -1164,7 +1188,7 @@ def run_verification(repo: Path, ticket: Ticket) -> list[dict[str, Any]]:
     if git(repo, "rev-parse", "HEAD") != expected_head:
         raise KanbanError("Verification command changed HEAD")
     assert_index_clean(repo)
-    assert_scope(repo, ticket)
+    assert_scope(repo, ticket, supplemental_paths)
     return results
 
 
@@ -1188,13 +1212,17 @@ def run_red(repo: Path, ticket: Ticket) -> dict[str, Any]:
     return result
 
 
-def diff_text(repo: Path, ticket: Ticket) -> str:
+def diff_text(
+    repo: Path, ticket: Ticket, supplemental_paths: Iterable[str] = ()
+) -> str:
     """Return a full patch without mutating the real Git index.
 
     Plain `git diff HEAD` omits untracked files. A temporary index produces the
     exact patch that would be committed while leaving the user's index alone.
     """
-    actual = sorted(implementation_changed_paths(repo, ticket))
+    actual = sorted(
+        changed_paths(repo) & (ticket.allowed_paths | set(supplemental_paths))
+    )
     if not actual:
         return ""
     index_path = Path(git(repo, "rev-parse", "--git-path", "index"))
@@ -1579,14 +1607,22 @@ def restore_implementation(repo: Path, ticket: Ticket) -> None:
         raise KanbanError("Failed to restore implementation files for the next attempt")
 
 
-def commit_ticket(repo: Path, ticket: Ticket, expected_hash: str) -> tuple[str, Path]:
+def commit_ticket(
+    repo: Path,
+    ticket: Ticket,
+    expected_hash: str,
+    supplemental_paths: Iterable[str] = (),
+) -> tuple[str, Path]:
+    supplemental_paths = tuple(supplemental_paths)
     assert_index_clean(repo)
-    assert_scope(repo, ticket)
-    run_verification(repo, ticket)
-    accepted_patch = diff_text(repo, ticket)
+    assert_scope(repo, ticket, supplemental_paths)
+    run_verification(repo, ticket, supplemental_paths)
+    accepted_patch = diff_text(repo, ticket, supplemental_paths)
     if sha256_text(accepted_patch) != expected_hash:
         raise KanbanError("Current patch differs from the accepted patch")
-    implementation_paths = sorted(implementation_changed_paths(repo, ticket))
+    implementation_paths = sorted(
+        changed_paths(repo) & (ticket.allowed_paths | set(supplemental_paths))
+    )
     if not implementation_paths:
         raise KanbanError("No changes to commit")
     # The board is local tracking, never commit material. Commit the accepted
@@ -1905,6 +1941,110 @@ def command_resume(args: argparse.Namespace) -> int:
     return command_transition(args, "paused", "backlog", "RESUMED")
 
 
+def normalise_supplemental_path(repo: Path, ticket: Ticket, value: str) -> str:
+    """Validate a user-approved, exact changed file at the commit gate."""
+    if not isinstance(value, str) or not value:
+        raise KanbanError("--include requires an exact repository-relative changed file")
+    candidate = Path(value)
+    if (
+        candidate.is_absolute()
+        or ".." in candidate.parts
+        or value.endswith("/")
+        or any(character in value for character in "*?[]{}")
+    ):
+        raise KanbanError(f"Invalid supplemental path: {value!r}")
+    normalised = candidate.as_posix()
+    if normalised in {".", ""} or normalised != value:
+        raise KanbanError(f"Invalid supplemental path: {value!r}")
+    if normalised == ".git" or normalised.startswith(".git/"):
+        raise KanbanError(f"Invalid supplemental path: {value!r}")
+    if normalised == ".workflow" or normalised.startswith(".workflow/"):
+        raise KanbanError(f"Invalid supplemental path: {value!r}")
+    path = repo / normalised
+    if path.exists() and not path.is_file() and not path.is_symlink():
+        raise KanbanError(f"Supplemental path must be a file, not a directory: {value}")
+    if normalised in ticket.allowed_paths:
+        raise KanbanError(
+            f"Supplemental path is already in ticket allowed-changes: {normalised}"
+        )
+    if normalised not in changed_paths(repo):
+        raise KanbanError(f"Supplemental path is not a changed file: {normalised}")
+    return normalised
+
+
+def validate_scope_expansion(
+    repo: Path, ticket: Ticket, includes: Iterable[str], reason: str
+) -> tuple[str, ...]:
+    supplied = tuple(includes)
+    if not supplied:
+        raise KanbanError("Scope expansion requires at least one --include PATH")
+    if not reason.strip():
+        raise KanbanError("Scope expansion requires --reason TEXT")
+    normalised = tuple(
+        normalise_supplemental_path(repo, ticket, value) for value in supplied
+    )
+    if len(set(normalised)) != len(normalised):
+        raise KanbanError("Supplemental paths must not be repeated")
+    assert_scope(repo, ticket, normalised)
+    return normalised
+
+
+def revalidate_scope_expansion(
+    repo: Path,
+    ticket: Ticket,
+    provider: ProviderAdapter,
+    run_path: Path,
+    includes: tuple[str, ...],
+    reason: str,
+) -> tuple[dict[str, Any], str, list[dict[str, Any]]]:
+    """Re-run verification and independent review for explicit HITL additions."""
+    expected_head = git(repo, "rev-parse", "HEAD")
+    assert_index_clean(repo)
+    assert_scope(repo, ticket, includes)
+    verification = run_verification(repo, ticket, includes)
+    patch = diff_text(repo, ticket, includes)
+    patch_hash = sha256_text(patch)
+    expansion = {
+        "paths": list(includes),
+        "reason": reason,
+        "diff_hash": patch_hash,
+        "verification": verification,
+    }
+    (run_path / "scope-expansion.json").write_text(
+        json.dumps(expansion, indent=2) + "\n", encoding="utf-8"
+    )
+    validation = provider.run(
+        AgentRequest(
+            role="validator",
+            prompt=validator_prompt(
+                ticket,
+                patch,
+                verification,
+                patch_hash,
+                supplemental_paths=includes,
+                supplemental_reason=reason,
+            ),
+            schema=VALIDATOR_SCHEMA,
+            cwd=repo,
+            writable=False,
+            model=provider_model("validator"),
+        )
+    )
+    (run_path / "scope-expansion-validation.raw.txt").write_text(
+        validation.raw_output, encoding="utf-8"
+    )
+    (run_path / "scope-expansion-validation.json").write_text(
+        json.dumps(validation.data, indent=2) + "\n", encoding="utf-8"
+    )
+    if git(repo, "rev-parse", "HEAD") != expected_head:
+        raise KanbanError("Validator changed HEAD during scope-expansion review")
+    assert_index_clean(repo)
+    assert_scope(repo, ticket, includes)
+    if sha256_text(diff_text(repo, ticket, includes)) != patch_hash:
+        raise KanbanError("Patch changed during scope-expansion validation")
+    return validation.data, patch_hash, verification
+
+
 def command_decide(args: argparse.Namespace) -> int:
     repo = repository_root(Path.cwd())
     runtime = runtime_dir(repo)
@@ -1922,17 +2062,80 @@ def command_decide(args: argparse.Namespace) -> int:
         ticket = parse_ticket(ticket_path)
         if ticket.digest != state.get("ticket_hash"):
             raise KanbanError("Ticket changed after implementation began")
+        if args.decision != "approve" and (args.include or args.reason.strip()):
+            raise KanbanError("--include and --reason are valid only with approve")
         if args.decision == "approve":
             if phase != "awaiting-commit":
                 raise KanbanError(f"Cannot approve run in phase {phase!r}")
             if git(repo, "rev-parse", "HEAD") != state["base_commit"]:
                 raise KanbanError("HEAD changed after validation")
-            commit_sha, done_path = commit_ticket(repo, ticket, state["diff_hash"])
+            includes = tuple(args.include)
+            if includes:
+                includes = validate_scope_expansion(repo, ticket, includes, args.reason)
+                save_state(
+                    repo,
+                    args.run_id,
+                    {
+                        **state,
+                        "phase": "awaiting-commit",
+                        "scope_expansion": {
+                            "paths": list(includes),
+                            "reason": args.reason.strip(),
+                            "status": "revalidating",
+                        },
+                    },
+                )
+                provider = select_provider(state["provider"], repo)
+                run_path = state_dir(repo, args.run_id)
+                validation, patch_hash, verification = revalidate_scope_expansion(
+                    repo, ticket, provider, run_path, includes, args.reason.strip()
+                )
+                expansion = {
+                    "paths": list(includes),
+                    "reason": args.reason.strip(),
+                    "diff_hash": patch_hash,
+                    "verification": verification,
+                    "validation": validation,
+                    "status": validation.get("verdict"),
+                }
+                if validation.get("verdict") != "accept":
+                    save_state(
+                        repo,
+                        args.run_id,
+                        {
+                            **state,
+                            "phase": "awaiting-commit",
+                            "scope_expansion": expansion,
+                        },
+                    )
+                    raise KanbanError(
+                        "Scope-expansion validator "
+                        f"{validation.get('verdict')}: {validation.get('summary')}"
+                    )
+                expected_hash = patch_hash
+            else:
+                if args.reason.strip():
+                    raise KanbanError("--reason is valid only with --include")
+                expected_hash = state["diff_hash"]
+                expansion = None
+            accepted_state = {
+                **state,
+                "phase": "awaiting-commit",
+                **(
+                    {"scope_expansion": expansion, "diff_hash": expected_hash}
+                    if expansion
+                    else {}
+                ),
+            }
+            save_state(repo, args.run_id, accepted_state)
+            commit_sha, done_path = commit_ticket(
+                repo, ticket, expected_hash, includes
+            )
             save_state(
                 repo,
                 args.run_id,
                 {
-                    **state,
+                    **accepted_state,
                     "phase": "awaiting-next",
                     "commit_sha": commit_sha,
                     "ticket": str(done_path.relative_to(repo)),
@@ -2023,6 +2226,8 @@ def parser() -> argparse.ArgumentParser:
     decide.add_argument("run_id")
     decide.add_argument("decision", choices=["approve", "reject", "continue", "abort"])
     decide.add_argument("--feedback", default="")
+    decide.add_argument("--include", action="append", default=[], metavar="PATH")
+    decide.add_argument("--reason", default="", metavar="TEXT")
     decide.set_defaults(func=command_decide)
     return root
 

@@ -152,12 +152,25 @@ In HITL, the runner persists the accepted diff and returns a run ID:
 
 ```text
 kanban-loop decide <run-id> approve
+kanban-loop decide <run-id> approve --include path/to/lsp-config --reason "Resolve LSP warning introduced by this ticket"
 kanban-loop decide <run-id> reject --feedback "..."
 kanban-loop decide <run-id> abort
 kanban-loop decide <run-id> continue
 ```
 
-Approval is valid only while HEAD, ticket hash, and diff hash still match what was reviewed.
+Normal approval is valid only while HEAD, ticket hash, and diff hash still match
+what was reviewed. If a human needs to include one or more additional changed
+files after the HITL gate, they must use repeated exact repository-relative
+`--include PATH` options and a non-empty `--reason`. This is available only at
+`awaiting-commit`; active implementer phases and AUTO mode remain strict.
+
+Each included path must already be a changed file and must not be a directory,
+glob, absolute/traversal path, `.git` path, `.workflow`/ticket-board path, or a
+path already permitted by the ticket. The runner then re-runs ticket
+verification and a fresh independent read-only validation over the complete
+ticket-plus-supplemental patch, recording the paths, reason, verification,
+validator result, and new patch hash in the run artifacts. A rejected or
+blocked supplemental review leaves the run awaiting commit and commits nothing.
 
 ## Providers
 

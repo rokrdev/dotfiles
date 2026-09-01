@@ -644,14 +644,16 @@ class EngineTests(RepoCase):
             revised["review-packet"]["changed-files"], ["docs.md", "src/app.py"]
         )
 
-    def test_approve_commits_descriptive_message_and_completes_ticket(self) -> None:
+    def test_approve_commits_conventional_message_and_completes_ticket(self) -> None:
         self.write_ticket()
         adapter = FakeAdapter(
             self.root,
             [
                 (
                     "implementer",
-                    implementer_result(message="refactor: use peek for lazy traversal"),
+                    implementer_result(
+                        message="refactor(engine)!: use peek for lazy traversal"
+                    ),
                     self.change_value(1),
                 ),
                 ("reviewer", review_result(), None),
@@ -670,20 +672,20 @@ class EngineTests(RepoCase):
         self.assertEqual(result["status"], "completed")
         self.assertEqual(
             command(self.root, "git", "log", "-1", "--pretty=%s"),
-            "refactor: use peek for lazy traversal",
+            "refactor(engine)!: use peek for lazy traversal",
         )
         self.assertEqual(
             self.store.load().tickets["LR-01-deliver-outcome"].column, "done"
         )
 
-    def test_commit_fallback_uses_title_without_local_ticket_key(self) -> None:
+    def test_commit_fallback_is_conventional_and_omits_local_ticket_key(self) -> None:
         self.write_ticket()
         adapter = FakeAdapter(
             self.root,
             [
                 (
                     "implementer",
-                    implementer_result(message=None),
+                    implementer_result(message="Deliver Outcome"),
                     self.change_value(1),
                 ),
                 ("reviewer", review_result(), None),
@@ -699,8 +701,35 @@ class EngineTests(RepoCase):
             max_attempts=3,
         )
         result = engine.review_action(candidate["run-id"], "approve")
-        self.assertEqual(result["commit-message"], "Deliver Outcome")
+        self.assertEqual(result["commit-message"], "chore: deliver outcome")
         self.assertNotIn("LR-01", result["commit-message"])
+
+    def test_human_commit_message_must_follow_conventional_commits(self) -> None:
+        self.write_ticket()
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer", implementer_result(), self.change_value(1)),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        engine = self.engine(adapter)
+        candidate = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        with self.assertRaisesRegex(KanbanError, "Conventional Commits"):
+            engine.review_action(
+                candidate["run-id"], "approve", message="Deliver Outcome"
+            )
+        self.assertEqual(command(self.root, "git", "rev-list", "--count", "HEAD"), "1")
+        self.assertEqual(
+            self.store.load().tickets["LR-01-deliver-outcome"].column, "review"
+        )
 
     def test_interrupted_matching_commit_is_completed_without_duplicate(self) -> None:
         self.write_ticket()

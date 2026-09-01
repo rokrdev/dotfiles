@@ -36,6 +36,19 @@ def sha256_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
+CONVENTIONAL_COMMIT_SUBJECT = re.compile(
+    r"^[A-Za-z][A-Za-z0-9-]*(?:\([^()\r\n]+\))?!?: \S.*$"
+)
+
+
+def _is_conventional_commit_subject(value: str) -> bool:
+    return bool(CONVENTIONAL_COMMIT_SUBJECT.fullmatch(value))
+
+
+def _fallback_commit_subject(ticket: Ticket) -> str:
+    return f"chore: {ticket.slug.replace('-', ' ')}"
+
+
 def _test_path(path: str) -> bool:
     lower = path.lower()
     name = Path(lower).name
@@ -168,8 +181,10 @@ Ticket body:
 
 Return exactly one structured result. `files_changed` is your best report, not
 an authority boundary. `verification_commands` may contain only focused,
-non-destructive test/build/lint commands. `proposed_commit_message` must be a
-normal descriptive project commit subject and must not mention the ticket key.
+non-destructive test/build/lint commands. `proposed_commit_message` must follow
+Conventional Commits 1.0.0 as `<type>[optional scope][!]: <description>` and
+must not mention the ticket key. Use `feat` for a feature, `fix` for a bug fix,
+or another accurate project type such as `docs`, `refactor`, `test`, or `chore`.
 If structured output is unavailable, end with exactly one standalone line:
 `Status: complete` or `Status: blocked`.
 """
@@ -933,9 +948,10 @@ class Engine:
         if (
             not isinstance(suggested, str)
             or not suggested.strip()
+            or not _is_conventional_commit_subject(suggested.strip())
             or ticket.key.casefold() in suggested.casefold()
         ):
-            suggested = ticket.title
+            suggested = _fallback_commit_subject(ticket)
         packet = {
             "ticket": ticket.key,
             "feature": ticket.feature,
@@ -1457,11 +1473,23 @@ Return structured evidence. If unavailable, end with `Status: complete` or
         )
         if gitops.patch_hash(patch) != state["patch-hash"]:
             raise KanbanError("Candidate patch differs from the reviewed patch")
-        commit_message = (message or state["proposed-commit-message"]).strip()
+        commit_message = (
+            message.strip()
+            if message is not None
+            else state["proposed-commit-message"].strip()
+        )
         if not commit_message:
             raise KanbanError("Commit message must not be empty")
         if "\n" in commit_message or "\r" in commit_message:
             raise KanbanError("Commit message must be a single descriptive subject")
+        if not _is_conventional_commit_subject(commit_message):
+            if message is None:
+                commit_message = _fallback_commit_subject(ticket)
+            else:
+                raise KanbanError(
+                    "Commit message must follow Conventional Commits: "
+                    "<type>[optional scope][!]: <description>"
+                )
         if ticket.key.casefold() in commit_message.casefold():
             raise KanbanError("Commit message must not mention the local ticket key")
         gitops.ensure_topic_branch(self.repo, None, self._protected_branches())

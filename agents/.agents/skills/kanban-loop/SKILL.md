@@ -73,7 +73,8 @@ Present the review packet faithfully: diff, verification evidence, reviewer
 findings, scope changes, and failures. Map the user's natural-language decision
 to one review action:
 
-- `approve` — commit the verified session patch;
+- `approve` — commit the verified session patch with a Conventional Commit
+  subject (`<type>[optional scope][!]: <description>`);
 - `revise --feedback ...` — preserve useful work and revise it, including a
   justified change of files, tests, or approach;
 - `ask --feedback ...` — investigate or answer without committing;

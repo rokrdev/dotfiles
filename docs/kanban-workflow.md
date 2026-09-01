@@ -167,7 +167,7 @@ approach, or file scope.
 At review, use:
 
 ```bash
-kanban-loop review <run-id> approve [--message "descriptive subject"]
+kanban-loop review <run-id> approve [--message "fix(scope): descriptive subject"]
 kanban-loop review <run-id> revise --feedback "Use peek instead of map"
 kanban-loop review <run-id> ask --feedback "Is traversal still lazy?"
 kanban-loop review <run-id> override --reason "Known CI-only failure"
@@ -242,7 +242,11 @@ Style and optional improvements are advisory.
 
 The review packet contains outcome summary, every changed file, scope notes,
 assumptions, exact verification, review findings, patch hash/path, amendments,
-and a proposed descriptive commit message.
+and a proposed commit subject following
+[Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/):
+`<type>[optional scope][!]: <description>`. Invalid or missing agent proposals
+fall back to a valid `chore:` subject; invalid human `--message` overrides are
+rejected before staging or committing.
 
 ## Git Ownership
 
@@ -252,7 +256,8 @@ and a proposed descriptive commit message.
 - Modifying a path already dirty at baseline is an overlap blocker.
 - Only attributed reviewed paths are staged and committed.
 - HITL requires explicit commit approval.
-- Commit messages describe repository changes and never mention local tickets.
+- Commit messages follow Conventional Commits 1.0.0, describe repository
+  changes, and never mention local tickets.
 - Protected branches require an explicit new topic branch.
 - The runner never pushes, pulls, merges, rebases, force-updates, opens PRs, or
   publishes releases.

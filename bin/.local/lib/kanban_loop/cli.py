@@ -63,7 +63,7 @@ def parser() -> argparse.ArgumentParser:
     )
     review.add_argument("--feedback")
     review.add_argument("--reason")
-    review.add_argument("--message")
+    review.add_argument("--message", help="Conventional Commit subject override")
     review.add_argument("--provider", choices=["auto", *ADAPTERS], default="auto")
     review.add_argument("--model")
 

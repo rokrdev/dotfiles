@@ -70,6 +70,7 @@ X = ["extend_line_up", "extend_to_line_bounds"]
 label = "Custom"
 c = "changed_file_picker"
 f = { label = "Search and Replace", command = [":write-all", ":insert-output scooter --no-stdin >/dev/tty", ":redraw", ":reload-all"] }
+s = { label = "Search with Yanked Text", command = [":write-all", ":insert-output scooter --search-text '%reg{\"}' --no-stdin >/dev/tty", ":redraw", ":reload-all"] }
 g = { label = "GitUI", command = [":write-all", ":sh gitui-herdr", ":redraw"] }
 n = { label = "Files", command = [
   ':sh rm -f /tmp/unique-file',

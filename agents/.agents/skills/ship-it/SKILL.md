@@ -1,12 +1,21 @@
 ---
 name: ship-it
-description: 'Use when implementation is complete and the kanban board is drained — pushes the branch to origin and opens a PR. Each ticket was already committed by kanban-loop. Triggers: "ship it", "/ship-it", "wrap up branch", "ready to push", or after kanban-loop reports backlog empty.'
-user-invocable: true
+description: 'Use when implementation is complete and the kanban board is drained — pushes the branch to origin and opens a PR/MR on the detected host (gh for GitHub, glab for GitLab). Each ticket was already committed by kanban-loop. Triggers: "ship it", "/ship-it", "wrap up branch", "ready to push", or after kanban-loop reports backlog empty.'
 ---
 
 # ship-it Skill
 
-Pre-flight checks, summary report, and push/PR options for a completed feature branch. Commits are created per-ticket by kanban-loop — ship-it does not commit.
+Pre-flight checks, summary report, and push/PR options for a completed feature branch. Commits are created per-ticket by kanban-loop — ship-it does not commit. ship-it detects the remote host and uses the matching CLI: `gh` for GitHub, `glab` for GitLab.
+
+## Detect the Remote Host
+
+Run `git remote -v` once and pick the CLI before presenting the landing options:
+
+- Remote URL contains `github.com` → **GitHub**, use **`gh`**. The landing surface is a **pull request**.
+- Remote URL names GitLab (`gitlab.com`, a self-hosted host containing `gitlab`, or a `gitlab:` ssh host alias) → **GitLab**, use **`glab`**. The landing surface is a **merge request**.
+- Anything ambiguous (e.g. `git@git.example.com:org/repo.git`) → **ask the user** which platform the remote is, rather than guessing. Do not assume GitHub.
+
+Prefer reading the pushed URL line of `origin`. If `origin` is missing or not a fetch/push URL, abort with "no origin remote".
 
 ## Pre-Flight Verification
 
@@ -60,11 +69,17 @@ Present to user as numbered menu:
 Ready to ship. Choose landing strategy:
 
 A) Push to origin/<branch>
-B) Push + create PR (requires gh CLI + GITHUB_TOKEN)
+B) Push + open a pull/merge request (via the detected CLI: gh or glab)
 C) Abort — leave branch as-is
 
 Choose [A-C]:
 ```
+
+Use the CLI resolved in *Detect the Remote Host* (see above): **`gh`** for GitHub,
+**`glab`** for GitLab. Use each tool's own stored auth — neither requires an env
+token for a logged-in local CLI. If the detected CLI is not installed or not
+authenticated, handle it in *Failure Modes* below rather than falling back to a
+different host's tool.
 
 ## Execute Selected Option
 
@@ -72,12 +87,17 @@ Choose [A-C]:
 - Run `git push -u origin <branch>`
 - Show output
 
-**B) Push + PR:**
-- Execute A
-- Run `gh pr create` (requires `gh` CLI + `GITHUB_TOKEN` env var)
-- Assemble PR body from `.workflow/kanban/done/` ticket titles and acceptance criteria
-- Prompt user to confirm or edit title/body before submitting
-- Return PR URL to user
+**B) Push + open a pull/merge request:**
+- Execute A (push the branch).
+- Use the CLI resolved in *Detect the Remote Host*:
+  - **GitHub** (`gh`): run `gh pr create`.
+  - **GitLab** (`glab`): run `glab mr create`.
+  - Never swap hosts: a GitHub remote must use `gh`, a GitLab remote must use `glab`.
+- Both tools use their own stored auth (`gh auth status` / `glab auth status`); no
+  env token is required for a logged-in local CLI.
+- Assemble the body from `.workflow/kanban/done/` ticket titles and acceptance criteria.
+- Prompt user to confirm or edit title/body before submitting.
+- Return the PR/MR URL to user.
 
 **C) Abort:**
 - Exit cleanly
@@ -107,7 +127,7 @@ Ready for next feature?
 - ✗ Shipping with `active/` or `review/` non-empty → **Abort. Resolve the active session first.**
 - ✗ Shipping with red tests → **Abort. Fix failing tests.**
 - ✗ Committing in ship-it → **Never. kanban-loop commits per ticket. ship-it only pushes.**
-- ✗ Merging to main/master → **Never. ship-it creates a PR. Merging is the human's job.**
+- ✗ Merging to main/master → **Never. ship-it creates a PR/MR. Merging is the human's job.**
 - ✗ Force-push to any branch → **Never.**
 - ✗ Using `--no-verify` for hooks → **Forbidden. Let pre-commit hooks run.**
 
@@ -119,8 +139,11 @@ Ready for next feature?
 | Tests fail | Abort. Show failing test names + summary. |
 | Uncommitted changes found | Warn — kanban-loop should have committed all work. Ask user to commit or stash before pushing. |
 | Not ahead of base | Abort. Nothing to ship. |
-| `gh` not installed (PR option) | Warn: install gh CLI. Fall back to commit+push. |
-| `GITHUB_TOKEN` not set (PR option) | Warn: set env var. Fall back to commit+push. |
+| Remote host ambiguous | Ask the user which platform the remote is before choosing `gh` or `glab`. |
+| No origin remote | Abort. Nothing to push to. |
+| `gh` not installed (GitHub remote) | Warn: install gh CLI (`gh auth login`). Fall back to commit+push. |
+| `glab` not installed (GitLab remote) | Warn: install glab CLI (`glab auth login`). Fall back to commit+push. |
+| CLI not authenticated | Warn: run `gh auth status` / `glab auth status`, then `gh auth login` / `glab auth login`. Fall back to commit+push. |
 
 ## Error Handling
 

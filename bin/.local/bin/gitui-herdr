@@ -5,10 +5,14 @@
 #   [keys.normal.space.g]
 #   g = ':sh gitui-herdr'
 #
+# Optional: pass a commit hash to jump to it in gitui, e.g. from Helix:
+#   G = ':noop %sh{gitui-herdr $(git blame -L %{cursor_line},%{cursor_line} --porcelain "%{file_path_absolute}" | head -1 | cut -d" " -f1)}'
+#
 # Behavior:
 #   - reuses an existing "gitui" herdr pane (state file + title scan)
 #   - creates one (splits the current pane right, ratio 0.5, focused) if missing
 #   - launches gitui in that pane and focuses it
+#   - optional first arg: commit hash to pass to gitui
 #
 # Uses the same split-and-run pattern as glowm-preview, but a git TUI is
 # interactive, so the new pane takes focus instead of running in the background.
@@ -16,6 +20,7 @@ set -u
 
 STATE="$HOME/.local/state/gitui-herdr.pane"
 RATIO=0.50
+HASH="${1:-}"
 mkdir -p "$(dirname "$STATE")"
 
 die() { echo "gitui-herdr: $*" >&2; exit 1; }
@@ -100,7 +105,7 @@ except Exception:
   [ -n "$PID" ] || die "could not parse new pane id: $OUT"
   herdr pane rename "$PID" gitui >/dev/null 2>&1
   # `; exit` closes the pane when gitui quits (herdr reaps panes whose process ends)
-  herdr pane run "$PID" 'gitui; exit' >/dev/null 2>&1 || die "pane run failed on $PID"
+  herdr pane run "$PID" "gitui $HASH; exit" >/dev/null 2>&1 || die "pane run failed on $PID"
   sleep 0.7
 else
   # Reuse: bring focus back onto the existing gitui pane. Compute the

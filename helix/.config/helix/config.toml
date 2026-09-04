@@ -84,7 +84,7 @@ R = { label = "Reload Config", command = [":config-reload"] }
 w = { label = "LSP Commands", command = ":lsp-workspace-command" }
 y = { label = "Copy Path", command = [":noop %sh{echo \"%{buffer_name}:%{cursor_line}\" | pbcopy}"] }
 h = { label = "Yank Git Hash of Line", command = [":noop %sh{git blame -L %{cursor_line},%{cursor_line} --porcelain '%{file_path_absolute}' | head -1 | cut -d' ' -f1 | pbcopy}"] }
-G = { label = "Open GitUI at Line", command = [":noop %sh{gitui $(git blame -L %{cursor_line},%{cursor_line} --porcelain '%{file_path_absolute}' | head -1 | cut -d' ' -f1)}"] }
+G = { label = "Open GitUI at Line", command = [":noop %sh{gitui-herdr $(git blame -L %{cursor_line},%{cursor_line} --porcelain '%{file_path_absolute}' | head -1 | cut -d' ' -f1)}"] }
 S = { label = "Speak", command = [":pipe-to ~/.local/bin/say-selection"] }
 
 [keys.normal.space.g.m]

@@ -69,9 +69,9 @@ X = ["extend_line_up", "extend_to_line_bounds"]
 [keys.normal.space.g]
 label = "Custom"
 c = "changed_file_picker"
-f = { label = "Search and Replace", command = [":write-all", ":insert-output scooter --no-stdin >/dev/tty", ":redraw", ":reload-all"] }
-s = { label = "Search with Yanked Text", command = [":write-all", ":insert-output scooter --search-text '%reg{\"}' --no-stdin >/dev/tty", ":redraw", ":reload-all"] }
-g = { label = "GitUI", command = [":write-all", ":sh gitui-herdr", ":redraw"] }
+f = { label = "Search and Replace", command = [":write-all", ":sh helix-herdr scooter", ":redraw"] }
+s = { label = "Search with Yanked Text", command = [":write-all", ":sh helix-herdr scooter --search-text '%reg{\"}'", ":redraw"] }
+g = { label = "GitUI", command = [":write-all", ":sh helix-herdr gitui", ":redraw"] }
 n = { label = "Files", command = [
   ':sh rm -f /tmp/unique-file',
   ':insert-output yazi "%{buffer_name}" --chooser-file=/tmp/unique-file',
@@ -83,8 +83,7 @@ r = { label = "Reload File", command = [":reload"] }
 R = { label = "Reload Config", command = [":config-reload"] }
 w = { label = "LSP Commands", command = ":lsp-workspace-command" }
 y = { label = "Copy Path", command = [":noop %sh{echo \"%{buffer_name}:%{cursor_line}\" | pbcopy}"] }
-h = { label = "Yank Git Hash of Line", command = [":noop %sh{git blame -L %{cursor_line},%{cursor_line} --porcelain '%{file_path_absolute}' | head -1 | cut -d' ' -f1 | pbcopy}"] }
-G = { label = "Open GitUI at Line", command = [":noop %sh{gitui-herdr $(git blame -L %{cursor_line},%{cursor_line} --porcelain '%{file_path_absolute}' | head -1 | cut -d' ' -f1)}"] }
+G = { label = "Open GitUI at Line", command = [":noop %sh{helix-herdr gitui $(git blame -L %{cursor_line},%{cursor_line} --porcelain '%{file_path_absolute}' | head -1 | cut -d' ' -f1)}"] }
 S = { label = "Speak", command = [":pipe-to ~/.local/bin/say-selection"] }
 
 [keys.normal.space.g.m]

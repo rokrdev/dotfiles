@@ -1,0 +1,230 @@
+#!/usr/bin/env bash
+# helix-herdr — open a registered tool (gitui, scooter, yazi, ...) in a
+# dedicated herdr pane, split to the right of the current (Helix) pane.
+#
+# Generic successor to gitui-herdr: the tool name, pane title, process check,
+# and launch command are all per-tool registry entries instead of hard-coded.
+#
+# Designed to be bound to Helix keys, e.g.:
+#   [keys.normal.space.g]
+#   g = { label = "GitUI", command = [":write-all", ":sh helix-herdr gitui", ":redraw"] }
+#   G = { label = "GitUI at Line", command = [":noop %sh{helix-herdr gitui $(git blame -L %{cursor_line},%{cursor_line} --porcelain '%{file_path_absolute}' | head -1 | cut -d' ' -f1)}"] }
+#   f = { label = "Files (yazi)", command = [":write-all", ":sh helix-herdr yazi", ":redraw"] }
+#   s = { label = "Scooter", command = [":write-all", ":sh helix-herdr scooter", ":redraw"] }
+#
+# Subcommands:
+#   helix-herdr <tool> [args...]  open <tool> in a herdr pane split right
+#   helix-herdr <tool> --close    close <tool>'s pane
+#   helix-herdr --list            list registered tools
+#   helix-herdr --help            show usage
+#
+# Behavior (per tool):
+#   - reuses an existing <tool> herdr pane in the current tab (state file +
+#     title scan + process check)
+#   - creates one (splits the current pane right, ratio 0.5, focused) if missing
+#   - launches <tool> in that pane and focuses it (all current tools are
+#     interactive); optional args (e.g. a git hash for gitui) are forwarded
+#
+# NOTE on directions: herdr's `pane split --direction` only supports `right`
+# and `down`. By design this script always splits right; `--side`/`--right`
+# are accepted for CLI clarity but behave identically to the default.
+set -u
+
+STATE_DIR="$HOME/.local/state"
+mkdir -p "$STATE_DIR"
+
+die() { echo "helix-herdr: $*" >&2; exit 1; }
+usage() {
+  cat <<'EOF'
+usage: helix-herdr <tool> [args...]
+       helix-herdr <tool> --close
+       helix-herdr --list
+       helix-herdr --help
+
+Open a registered tool (gitui, scooter, yazi) in a dedicated herdr pane split
+to the right of the current pane, reusing an existing pane for that tool when
+present. '--close' closes the tool's pane. Tools run with the pane focused.
+EOF
+}
+
+# --- per-tool registry -----------------------------------------------------
+# Each tool is a case arm assigning:
+#   TITLE   pane rename title (also names the state file)
+#   PROG    process name to detect as "running" via `process-info`
+#   FOCUS   "yes" = new pane takes focus (interactive TUI), "" = background
+# Then CMD is built from $args (lowercased-passthrough) + optional reaping.
+tool_meta() {
+  case "$1" in
+    gitui)
+      TITLE="gitui"; PROG="gitui"; FOCUS="yes"
+      # optional first arg = commit hash to jump to
+      CMD=(gitui "${args[@]}")
+      ;;
+    scooter)
+      TITLE="scooter"; PROG="scooter"; FOCUS="yes"
+      CMD=(scooter "${args[@]}")
+      ;;
+    yazi)
+      TITLE="yazi"; PROG="yazi"; FOCUS="yes"
+      CMD=(yazi "${args[@]}")
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+# Is PROG the foreground process of pane $1?
+tool_running() {
+  herdr pane process-info --pane "$1" 2>/dev/null | grep -aq "$PROG"
+}
+
+# Shell-quote each arg and join with spaces, so the reconstructed command line
+# round-trips through `herdr pane run`'s shell with spaces/special chars intact.
+quote_cmd() {
+  local out="" a
+  for a in "$@"; do
+    out+=" '${a//\'/\'\\\'\'}'"
+  done
+  printf '%s' "${out# }"
+}
+
+# --- no-arg / dispatch -----------------------------------------------------
+if [ "$#" -eq 0 ]; then usage; exit 1; fi
+
+case "$1" in
+  --help|-h) usage; exit 0 ;;
+  --list)
+    echo "registered tools:"
+    echo "  gitui    git TUI (optional arg: commit hash)"
+    echo "  scooter  interactive find & replace TUI"
+    echo "  yazi     file manager TUI"
+    exit 0
+    ;;
+esac
+
+TOOL="$1"; shift
+
+# `--side`/`--right` accepted (right split is the only behavior); normalize away.
+case "${1:-}" in
+  --side|--right) shift ;;
+esac
+
+# --- per-tool close mode ---------------------------------------------------
+if [ "${1:-}" = "--close" ]; then
+  ST="$STATE_DIR/helix-herdr-$TOOL.pane"
+  if [ -f "$ST" ]; then
+    herdr pane close "$(cat "$ST")" >/dev/null 2>&1
+    rm -f "$ST"
+  fi
+  exit 0
+fi
+
+# Remaining args are forwarded to the tool.
+args=("$@")
+tool_meta "$TOOL" || die "unknown tool: '$TOOL' (try 'helix-herdr --list')"
+
+ST="$STATE_DIR/helix-herdr-$TOOL.pane"
+
+# --- current pane + its tab (the helix pane invoking this script) ---------
+CUR_PID="$(herdr pane current 2>/dev/null | python3 -c "
+import json, sys
+try:
+    print(json.load(sys.stdin)['result']['pane']['pane_id'])
+except Exception:
+    pass
+")"
+CUR_TAB="$(herdr pane current 2>/dev/null | python3 -c "
+import json, sys
+try:
+    print(json.load(sys.stdin)['result']['pane']['tab_id'])
+except Exception:
+    pass
+")"
+[ -n "$CUR_TAB" ] || die "could not resolve current tab"
+
+# tab_id of pane $1 (empty if it no longer exists)
+pane_tab() {
+  herdr pane get "$1" 2>/dev/null | python3 -c "
+import json, sys
+try:
+    print(json.load(sys.stdin)['result']['pane']['tab_id'])
+except Exception:
+    pass
+"
+}
+
+# --- resolve pane id (reuse an existing running <tool> pane in THIS tab) ---
+PID=""
+if [ -f "$ST" ]; then
+  CAND="$(cat "$ST")"
+  if [ "$(pane_tab "$CAND")" = "$CUR_TAB" ] && tool_running "$CAND"; then
+    PID="$CAND"
+  fi
+fi
+if [ -z "$PID" ]; then
+  PID="$(herdr pane list 2>/dev/null | python3 -c "
+import json, sys
+cur_tab = '$CUR_TAB'
+title = '$TITLE'
+try:
+    d = json.load(sys.stdin)
+    for p in d['result']['panes']:
+        if p.get('tab_id') != cur_tab:
+            continue
+        t = p.get('terminal_title_stripped') or ''
+        if title in t:
+            print(p['pane_id']); break
+except Exception:
+    pass
+")"
+  if [ -z "$PID" ]; then PID=""; fi
+  if [ -n "$PID" ] && ! tool_running "$PID"; then
+    herdr pane close "$PID" >/dev/null 2>&1
+    PID=""
+  fi
+fi
+
+# --- create if missing -----------------------------------------------------
+if [ -z "$PID" ]; then
+  SPLIT_FOCUS=""
+  [ "$FOCUS" = "yes" ] && SPLIT_FOCUS="--focus"
+  OUT="$(herdr pane split --current --direction right --ratio 0.5 $SPLIT_FOCUS 2>/dev/null)" \
+    || die "herdr pane split failed"
+  PID="$(printf '%s' "$OUT" | python3 -c "
+import json, sys
+try:
+    print(json.load(sys.stdin)['result']['pane']['pane_id'])
+except Exception:
+    pass
+")"
+  [ -n "$PID" ] || die "could not parse new pane id: $OUT"
+  herdr pane rename "$PID" "$TITLE" >/dev/null 2>&1
+  # `; exit` closes the pane when the tool quits (herdr reaps ended processes).
+  # Quote each element so args containing spaces (e.g. scooter --search-text
+  # with yanked multi-word text) survive the pane's shell unbroken.
+  RUN="$(quote_cmd "${CMD[@]}")"
+  herdr pane run "$PID" "$RUN; exit" >/dev/null 2>&1 || die "pane run failed on $PID"
+  sleep 0.7
+else
+  # Reuse: bring focus back onto the existing <tool> pane. Compute the
+  # direction from the current pane to the <tool> pane from the tab layout.
+  DIR="$(herdr pane layout --pane "$CUR_PID" 2>/dev/null | python3 -c "
+import json, sys
+try:
+    L = json.load(sys.stdin)['result']['layout']
+    def col(d): return [p for p in L['panes'] if p['pane_id']==d][0]['rect']
+    c = col('$CUR_PID'); t = col('$PID')
+    if t['x'] > c['x']: print('right')
+    elif t['x'] < c['x']: print('left')
+    elif t['y'] > c['y']: print('down')
+    else: print('up')
+except Exception:
+    pass
+")"
+  if [ -n "$DIR" ]; then
+    herdr pane focus --direction "$DIR" >/dev/null 2>&1 || true
+  fi
+fi
+
+echo "$PID" > "$ST"

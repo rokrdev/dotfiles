@@ -43,7 +43,7 @@ Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by d
 | Package | Manages |
 |---------|---------|
 | `aerospace` | AeroSpace window manager — `~/.config/aerospace/` |
-| `agents` | Global instructions and canonical skills — `~/AGENTS.md`, `~/.agents/skills/` |
+| `agents` | Global instructions and canonical Codex/DeepSeek Harness skills — `~/AGENTS.md`, `~/.agents/skills/` |
 | `asdf` | asdf version manager — `~/.tool-versions` |
 | `bat` | bat (cat replacement) config |
 | `bin` | User scripts — `~/.local/bin/` |
@@ -77,7 +77,15 @@ To add a new tool: create a top-level directory with the correct mirrored path, 
 
 ## Agent skills
 
-Skills live once under `agents/.agents/skills/`, which Stow exposes as `~/.agents/skills/` for compatible harnesses. Claude Code reads `~/.claude/skills/`, so the `claude` package contains one Git symlink per skill pointing back to the canonical copy. Edit only the canonical files.
+Skills live once under `agents/.agents/skills/`. Stow exposes them as
+`~/.agents/skills/`, the user-level skill directory read by Codex and DeepSeek
+Harness. DeepSeek Harness profiles built on `dsh-base`, including the persistent
+Web profile, watch that directory and refresh their skill catalog after changes.
+
+Claude Code reads `~/.claude/skills/`, so the `claude` package contains one Git
+symlink per skill pointing back to the canonical copy. Edit only the canonical
+files. Invoke a skill using the syntax of the active harness: `$skill-name` in
+Codex or `/skill-name` in Claude Code and DeepSeek Harness.
 
 Stow both packages after changing the skill set:
 

@@ -1,7 +1,6 @@
 ---
 name: to-prd
-description: Turn the current approved discovery context into a draft product contract at .workflow/docs/<slug>.md. Use when the user explicitly requests a PRD; never create tickets or implement code.
-user-invocable: true
+description: Turn the current approved discovery context into a slug-named draft product contract under .workflow/docs. Use when the user explicitly requests a PRD; never create tickets or implement code.
 ---
 
 # To PRD

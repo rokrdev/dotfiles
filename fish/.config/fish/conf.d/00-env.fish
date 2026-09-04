@@ -31,3 +31,13 @@ if test (uname) = Linux
 end
 
 export XDG_CONFIG_HOME="$HOME/.config"
+
+# Point uv's cache at the per-user temp dir so `kanban-loop`/`uv` keep working
+# when launched from inside a sandboxed DeepSeek Harness session. The DSH
+# sandbox (workspace-write) allows writes only under the session workspace and
+# the platform temp area; ~/.cache/uv lies outside both, so uv would fail with
+# "Operation not permitted". $TMPDIR is inside the allowed temp area in every
+# session, so this works in any repo, not just the current workspace.
+if test -n "$TMPDIR"
+    set -gx UV_CACHE_DIR "$TMPDIR/dsh-uv-cache"
+end

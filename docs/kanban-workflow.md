@@ -47,8 +47,9 @@ All Kanban data is local-only and excluded from project commits:
 ```
 
 Session state, event logs, patches, raw provider output, diagnostics, and commit
-mappings live under the checkout's Git metadata at
-`.git/kanban-loop/`. Worktree Git directories are resolved correctly.
+mappings live under the coordinator checkout's Git metadata at
+`.git/kanban-loop/`. Managed HITL and AUTO worktrees keep their own Git indexes
+while their workflow authority and durable evidence remain centralized there.
 
 Human intent is Markdown. Machine state must not be edited manually.
 `kanban-loop init` creates the board and adds `/.workflow/` to the checkout's
@@ -140,14 +141,17 @@ A feature is completed only when all its tickets are done. Done plus cancelled
 tickets produce `closed-with-cancellations`, not completed. Adding unfinished
 work reopens a completed feature.
 
-## Selection and Serial Execution
+## Selection and Execution
 
-Run exactly one active implementation or review agent at a time. A run targets:
+HITL runs exactly one ticket pipeline at a time in a managed Git worktree.
+Broad AUTO scopes run dependency-ready AUTO tickets concurrently in separate
+managed Git worktrees, up to the configured concurrency limit. A run targets:
 
 ```bash
 kanban-loop run --ticket JO-01-print-requested-record --mode hitl
 kanban-loop run --feature json-output --mode hitl
 kanban-loop run --all --mode auto
+kanban-loop run --all --mode auto --jobs 4
 ```
 
 Dependencies always override scope. Cross-feature prerequisites are reported;
@@ -158,11 +162,24 @@ Ticket scope ends after its commit. Feature and board scope continue after a
 commit without a redundant confirmation. HITL still stops at each candidate's
 review gate.
 
+`--jobs` applies only to AUTO and defaults to `auto-concurrency` (built-in: 4).
+`--jobs 1` retains serial AUTO execution. HITL rejects parallelism and remains
+sequential for ticket, feature, and board scopes.
+
 ## HITL
 
 HITL is the default. The ticket is a starting brief. Current explicit human
 feedback outranks stale ticket details and may change implementation, tests,
 approach, or file scope.
+
+Implementation, verification, and review happen in one persistent managed
+worktree. The coordinator checkout remains untouched while the candidate waits
+for approval, is investigated, paused and resumed, or revised. Only one HITL
+ticket may be active, including at the review gate. Approval persists the
+reviewed patch, removes the clean worker checkout, applies the patch to the
+coordinator checkout, and reruns verification plus a fresh independent review
+against that integrated context before committing. Failed integration is
+shelved and returned to HITL rather than overwriting checkout changes.
 
 At review, use:
 
@@ -194,7 +211,29 @@ AUTO blocks for the same reconciliation rather than guessing.
 ## AUTO
 
 AUTO is explicit. It may discover and modify all files reasonably required by
-settled intent. It stops and shelves work when it encounters:
+settled intent. For feature and board scopes, the coordinator selects only
+currently dependency-ready AUTO tickets, creates a unique branch and worktree
+for each, and runs up to `auto-concurrency` ticket pipelines at once. A ticket
+marked `mode: hitl` is never included in that fan-out.
+
+Implementation, verification, and the first fresh review happen inside the
+ticket worktree. Accepted patches return to the coordinator in deterministic
+ticket order. Before each commit, the coordinator applies the patch to the
+advancing target branch, reruns verification, and invokes another fresh
+read-only reviewer against the integrated context. Only then does it commit and
+move the ticket to `done`. This means a dependent ticket is not started until
+its prerequisite commit exists on the target branch.
+
+Managed worktrees are discoverable with `git worktree list --porcelain`. AUTO
+worktrees are removed after their patch is safely persisted; HITL worktrees
+remain registered across review, revision, pause, and resume, then are removed
+after approval queues integration or the session is terminated. The default
+root is a hidden sibling named `.<repo>-kanban-worktrees`; local configuration
+may set an absolute or repository-parent-relative `worktree-root`. Conflicting
+patches, failed integration evidence, or cleanup failures are retained and
+escalated to HITL rather than overwriting another candidate.
+
+AUTO stops and shelves work when it encounters:
 
 - materially ambiguous or conflicting requirements;
 - an unsettled user-visible choice;
@@ -239,6 +278,12 @@ intent, amendments, complete patch, and verification evidence. Blocking
 findings are limited to acceptance, correctness, regression, meaningful
 coverage, security, data loss, unrelated scope, or unverifiable behavior.
 Style and optional improvements are advisory.
+
+Reviewer quality is provider-specific and independent of the implementation
+model selection: Claude reviewers run Opus with high effort, and Codex reviewers
+run `gpt-5.6-sol` with high reasoning effort. OpenCode reviewers continue to use
+the session's configured model. The selected reviewer provider, model, and effort
+are recorded in the review packet.
 
 The review packet contains outcome summary, every changed file, scope notes,
 assumptions, exact verification, review findings, patch hash/path, amendments,
@@ -318,7 +363,8 @@ read-only review, structured result, cancellation, and resume capabilities.
 Missing capabilities are reported instead of weakening policy.
 
 Optional `.workflow/kanban/config.yaml` supplies local defaults such as
-provider, model policy, retry budgets, protected branches, and retention. Use
+provider, implementation model policy, retry budgets, `auto-concurrency`,
+`worktree-root`, protected branches, and retention. Use
 `status` to inspect effective local configuration plus the project, feature,
 ticket, and run source of each applicable policy. Configured protected branches
 extend the built-in safety set; they cannot remove `main`, `master`, or

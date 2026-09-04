@@ -1,4 +1,4 @@
-"""Intent-based serial delivery engine for AUTO and HITL sessions."""
+"""Intent-based delivery engine for parallel AUTO and serial HITL sessions."""
 
 from __future__ import annotations
 
@@ -8,11 +8,20 @@ import json
 import re
 import shlex
 import traceback
+import uuid
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
 from . import gitops
-from .model import KanbanError, LocatedTicket, Ticket, feature_status, parse_ticket
+from .model import (
+    TICKET_COLUMNS,
+    KanbanError,
+    LocatedTicket,
+    Ticket,
+    feature_status,
+    parse_ticket,
+)
 from .providers import (
     IMPLEMENTER_SCHEMA,
     INVESTIGATION_SCHEMA,
@@ -39,6 +48,11 @@ def sha256_text(value: str) -> str:
 CONVENTIONAL_COMMIT_SUBJECT = re.compile(
     r"^[A-Za-z][A-Za-z0-9-]*(?:\([^()\r\n]+\))?!?: \S.*$"
 )
+
+REVIEWER_RUNTIME_BY_PROVIDER: dict[str, tuple[str, str]] = {
+    "claude": ("opus", "high"),
+    "codex": ("gpt-5.6-sol", "high"),
+}
 
 
 def _is_conventional_commit_subject(value: str) -> bool:
@@ -240,6 +254,13 @@ class Engine:
         self.provider_name = provider_name
         self.model = model
 
+    def _execution_repo(self, state: dict[str, Any] | None = None) -> Path:
+        if state:
+            configured = state.get("execution-repo")
+            if isinstance(configured, str) and configured:
+                return Path(configured).resolve()
+        return self.repo
+
     def provider(self, state: dict[str, Any] | None = None) -> ProviderAdapter:
         requested = (
             state.get("provider", self.provider_name) if state else self.provider_name
@@ -265,6 +286,8 @@ class Engine:
             "model": None,
             "provider-retries": 2,
             "max-attempts": 3,
+            "auto-concurrency": 4,
+            "worktree-root": None,
             "protected-branches": sorted(gitops.PROTECTED_BRANCHES),
         }
         values = {**defaults, **configured}
@@ -317,11 +340,12 @@ class Engine:
         recovery: dict[str, Any] = {}
         if run_id and state and isinstance(state.get("baseline"), dict):
             try:
+                execution_repo = self._execution_repo(state)
                 session_paths, overlap = gitops.session_delta(
-                    self.repo, state["baseline"]
+                    execution_repo, state["baseline"]
                 )
                 patch = gitops.patch_for_paths(
-                    self.repo,
+                    execution_repo,
                     session_paths,
                     state["baseline"]["base-commit"],
                 )
@@ -390,15 +414,36 @@ class Engine:
             state = self.sessions.load(run_id)
             ticket_path = state.get("ticket-path")
             excluded = {ticket_path} if isinstance(ticket_path, str) else set()
-            before_head = gitops.current_head(self.repo)
-            before_index = gitops.git(self.repo, "diff", "--cached", "--binary")
+            parallel_group = state.get("parallel-group")
+            execution_repo = request.cwd
+            if (
+                isinstance(parallel_group, str)
+                and execution_repo.resolve() != self.repo.resolve()
+            ):
+                for other in self.sessions.list_states():
+                    other_path = other.get("ticket-path")
+                    if other.get("parallel-group") != parallel_group or not isinstance(
+                        other_path, str
+                    ):
+                        continue
+                    filename = Path(other_path).name
+                    excluded.update(
+                        str(
+                            (self.board.tickets_dir / column / filename).relative_to(
+                                self.repo
+                            )
+                        )
+                        for column in TICKET_COLUMNS
+                    )
+            before_head = gitops.current_head(execution_repo)
+            before_index = gitops.git(execution_repo, "diff", "--cached", "--binary")
             workflow_before = self._workflow_snapshot(exclude=excluded)
             try:
                 result = provider.run(request)
-                if gitops.current_head(self.repo) != before_head:
+                if gitops.current_head(execution_repo) != before_head:
                     raise KanbanError("Agent changed Git HEAD")
                 if (
-                    gitops.git(self.repo, "diff", "--cached", "--binary")
+                    gitops.git(execution_repo, "diff", "--cached", "--binary")
                     != before_index
                 ):
                     raise KanbanError("Agent changed the Git index")
@@ -495,7 +540,20 @@ class Engine:
         mode: str,
         branch: str | None,
         max_attempts: int,
+        parallelism: int = 1,
     ) -> dict[str, Any]:
+        if parallelism < 1:
+            raise KanbanError("parallelism must be positive")
+        if mode == "hitl" and parallelism != 1:
+            raise KanbanError("HITL execution is always sequential")
+        if mode == "auto" and parallelism > 1 and ticket_ref is None:
+            return self.run_auto_parallel(
+                feature=feature,
+                all_tickets=all_tickets,
+                branch=branch,
+                max_attempts=max_attempts,
+                parallelism=parallelism,
+            )
         gitops.assert_index_clean(self.repo)
         gitops.ensure_topic_branch(self.repo, branch, self._protected_branches())
         if ticket_ref:
@@ -509,10 +567,53 @@ class Engine:
                     run_id, existing_state = existing
                     phase = existing_state.get("phase")
                     if phase in {"active", "implementing"}:
-                        return self._attempt(
+                        result = self._attempt(
                             run_id, "Resume from the last safe checkpoint."
                         )
+                        if existing_state.get("integration-required"):
+                            return self._complete_parallel_worker_result(run_id, result)
+                        return result
                     if phase == "awaiting-review":
+                        if existing_state.get(
+                            "review-stage"
+                        ) == "integration" and existing_state.get(
+                            "integration-approved"
+                        ):
+                            if existing_state.get("integration-override-reason") or (
+                                existing_state.get("verification-passed")
+                                and existing_state.get("review", {}).get("verdict")
+                                == "accept"
+                            ):
+                                return self._commit(
+                                    run_id,
+                                    override_reason=existing_state.get(
+                                        "integration-override-reason"
+                                    ),
+                                    message=existing_state.get("integration-message"),
+                                )
+                            return self._block(
+                                run_id,
+                                "Approved HITL candidate failed integration revalidation.",
+                                technical=False,
+                            )
+                        if (
+                            existing_state.get("mode") == "auto"
+                            and existing_state.get("parallel-group")
+                            and not existing_state.get("integration-required")
+                        ):
+                            if (
+                                existing_state.get("verification-passed")
+                                and existing_state.get("review", {}).get("verdict")
+                                == "accept"
+                            ):
+                                return self._commit(
+                                    run_id, override_reason=None, message=None
+                                )
+                            return self._block(
+                                run_id,
+                                "Recovered AUTO integration requires human review.",
+                                technical=False,
+                            )
                         packet = self.sessions.load(run_id).get("review-packet")
                         return {
                             "status": "awaiting-review",
@@ -529,7 +630,30 @@ class Engine:
                         }
                     if phase in {"committing", "commit-created"}:
                         return self._recover_commit(run_id, existing_state)
+                    if phase == "integration-pending":
+                        self._cleanup_parallel_worktree(run_id)
+                        return self._integrate_parallel_candidate(run_id)
+                    if phase == "integrating":
+                        contract = self._contract_ticket(existing_state)
+                        implementer = existing_state.get("implementer")
+                        if not isinstance(implementer, dict):
+                            raise KanbanError(
+                                "Interrupted integration lacks its implementer result"
+                            )
+                        return self._finalize_candidate(
+                            run_id,
+                            contract,
+                            implementer,
+                            artifact_suffix="-integration-recovery",
+                            allow_retry=False,
+                        )
                     if phase in {"paused", "blocked"}:
+                        if (
+                            existing_state.get("mode") == "auto"
+                            and existing_state.get("managed-worktree")
+                            and not existing_state.get("managed-worktree-removed")
+                        ):
+                            self._cleanup_parallel_worktree(run_id)
                         return {
                             "status": phase,
                             "run-id": run_id,
@@ -540,7 +664,16 @@ class Engine:
             state
             for state in self.sessions.list_states()
             if state.get("phase")
-            in {"starting", "active", "implementing", "committing", "commit-created"}
+            in {
+                "starting",
+                "active",
+                "implementing",
+                "awaiting-review",
+                "integration-pending",
+                "integrating",
+                "committing",
+                "commit-created",
+            }
         ]
         if running:
             details = [
@@ -573,6 +706,21 @@ class Engine:
         if self.sessions.active_for_ticket(ticket.key):
             raise KanbanError(f"Ticket already has an active session: {ticket.key}")
         effective_mode = self._resolve_mode(ticket, mode)
+        if effective_mode == "hitl":
+            configured_root = self.board.config().get("worktree-root")
+            if configured_root is not None and not isinstance(configured_root, str):
+                raise KanbanError("worktree-root must be a string when configured")
+            worktree_root = gitops.managed_worktree_root(self.repo, configured_root)
+            run_id = self._prepare_parallel_ticket(
+                located,
+                scope=scope,
+                max_attempts=max_attempts,
+                group_id=uuid.uuid4().hex[:12],
+                worktree_root=worktree_root,
+                base_commit=gitops.current_head(self.repo),
+                mode="hitl",
+            )
+            return self._attempt(run_id, feedback=None)
         baseline = gitops.capture_baseline(self.repo)
         provider = self.provider()
         configured_model = self.board.config().get("model")
@@ -591,6 +739,7 @@ class Engine:
                 "attempt": 0,
                 "amendments": [],
                 "baseline": baseline,
+                "execution-repo": str(self.repo),
                 "ticket-contract-hash": sha256_text(ticket.raw),
                 "ticket-contract-source": f"contracts/start/{ticket.key}.md",
             }
@@ -606,6 +755,476 @@ class Engine:
         )
         return self._attempt(run_id, feedback=None)
 
+    def _parallel_scope(self, *, feature: str | None) -> dict[str, Any]:
+        return (
+            {"kind": "feature", "value": feature}
+            if feature
+            else {"kind": "all", "value": None}
+        )
+
+    def _prepare_parallel_ticket(
+        self,
+        located: LocatedTicket,
+        *,
+        scope: dict[str, Any],
+        max_attempts: int,
+        group_id: str,
+        worktree_root: Path,
+        base_commit: str,
+        mode: str = "auto",
+    ) -> str:
+        ticket = located.ticket
+        branch = gitops.managed_branch_name(ticket.key, group_id)
+        worktree = worktree_root / group_id / ticket.key.lower()
+        run_id: str | None = None
+        moved = False
+        try:
+            gitops.create_managed_worktree(
+                self.repo,
+                path=worktree,
+                branch=branch,
+                base=base_commit,
+            )
+            baseline = gitops.capture_baseline(worktree)
+            provider = self.provider()
+            configured_model = self.board.config().get("model")
+            if configured_model is not None and not isinstance(configured_model, str):
+                raise KanbanError("model must be a string when configured")
+            run_id = self.sessions.create(
+                {
+                    "ticket": ticket.key,
+                    "feature": ticket.feature,
+                    "phase": "starting",
+                    "mode": mode,
+                    "provider": provider.name,
+                    "model": self.model or configured_model,
+                    "scope": scope,
+                    "max-attempts": max_attempts,
+                    "attempt": 0,
+                    "amendments": [],
+                    "baseline": baseline,
+                    "execution-repo": str(worktree),
+                    "managed-worktree": str(worktree),
+                    "managed-branch": branch,
+                    "parallel-group": group_id,
+                    "integration-required": True,
+                    "ticket-contract-hash": sha256_text(ticket.raw),
+                    "ticket-contract-source": f"contracts/start/{ticket.key}.md",
+                }
+            )
+            self.sessions.write_text(
+                run_id, f"contracts/start/{ticket.key}.md", ticket.raw
+            )
+            moved_ticket = self.board.transition(ticket, "ready", "active")
+            moved = True
+            self.sessions.save(
+                run_id,
+                {
+                    "phase": "active",
+                    "ticket-path": str(moved_ticket.path.relative_to(self.repo)),
+                },
+            )
+            self.sessions.event(
+                run_id,
+                "ticket-started",
+                {
+                    "mode": mode,
+                    "scope": scope,
+                    "worktree": str(worktree),
+                    "branch": branch,
+                    "parallel-group": group_id,
+                },
+            )
+            return run_id
+        except Exception:
+            if moved:
+                current = self.board.load().tickets.get(ticket.key)
+                if current and current.column == "active":
+                    self.board.transition(current.ticket, "active", "ready")
+            if run_id:
+                self.sessions.save(run_id, {"phase": "abandoned"})
+            try:
+                gitops.remove_managed_worktree(self.repo, path=worktree, branch=branch)
+            except Exception as cleanup_error:  # noqa: BLE001 - preserve root failure
+                self._record_failure(
+                    cleanup_error,
+                    run_id=run_id,
+                    phase="parallel-prepare-cleanup",
+                    extra={"ticket": ticket.key},
+                )
+            raise
+
+    def _cleanup_parallel_worktree(self, run_id: str) -> None:
+        state = self.sessions.load(run_id)
+        worktree_value = state.get("managed-worktree")
+        branch = state.get("managed-branch")
+        if not isinstance(worktree_value, str) or not isinstance(branch, str):
+            return
+        if state.get("managed-worktree-removed"):
+            return
+        worktree = Path(worktree_value)
+        gitops.remove_managed_worktree(self.repo, path=worktree, branch=branch)
+        self.sessions.save(
+            run_id,
+            {
+                "worker-repo": worktree_value,
+                "execution-repo": str(self.repo),
+                "managed-worktree-removed": True,
+            },
+        )
+        self.sessions.event(
+            run_id,
+            "worktree-removed",
+            {"worktree": worktree_value, "branch": branch},
+        )
+
+    def _queue_managed_candidate(self, run_id: str) -> dict[str, Any]:
+        state = self.sessions.load(run_id)
+        if state.get("phase") != "awaiting-review":
+            raise KanbanError(
+                f"Session {run_id} is {state.get('phase')}, not awaiting-review"
+            )
+        execution_repo = self._execution_repo(state)
+        paths = set(state.get("session-paths", []))
+        patch_name = state.get("candidate-patch")
+        if not isinstance(patch_name, str) or not paths:
+            raise KanbanError("Managed candidate lacks a saved reviewed patch")
+        patch = gitops.patch_for_paths(
+            execution_repo, paths, state["baseline"]["base-commit"]
+        )
+        if gitops.patch_hash(patch) != state.get("patch-hash"):
+            raise KanbanError("Candidate patch differs from the reviewed patch")
+        gitops.restore_paths(execution_repo, paths, state["baseline"]["base-commit"])
+        self.sessions.save(
+            run_id,
+            {
+                "phase": "integration-pending",
+                "integration-patch": patch_name,
+                "shelf-patch": patch_name,
+                "worker-review-packet": state.get("review-packet"),
+            },
+        )
+        self.sessions.event(
+            run_id,
+            "candidate-awaiting-integration",
+            {"patch-hash": state["patch-hash"]},
+        )
+        return {
+            "status": "integration-pending",
+            "run-id": run_id,
+            "ticket": state["ticket"],
+            "patch-hash": state["patch-hash"],
+        }
+
+    def _complete_parallel_worker_result(
+        self, run_id: str, result: dict[str, Any]
+    ) -> dict[str, Any]:
+        if result.get("status") == "failed":
+            return result
+        try:
+            self._cleanup_parallel_worktree(run_id)
+        except Exception as error:  # noqa: BLE001 - persist cleanup failure
+            path = self._record_failure(
+                error,
+                run_id=run_id,
+                phase="parallel-worktree-cleanup",
+            )
+            return self._block_parallel_integration(
+                run_id,
+                f"Managed worktree cleanup failed; diagnostics: {path}",
+                technical=True,
+            )
+        if result.get("status") == "integration-pending":
+            return self._integrate_parallel_candidate(run_id)
+        return result
+
+    def _block_parallel_integration(
+        self, run_id: str, reason: str, *, technical: bool
+    ) -> dict[str, Any]:
+        state = self.sessions.load(run_id)
+        located = self.board.load().tickets.get(state["ticket"])
+        if located is None:
+            raise KanbanError(f"Session ticket is missing: {state['ticket']}")
+        if located.column != "blocked":
+            if located.column not in {"active", "review"}:
+                raise KanbanError(
+                    f"Cannot block integration for ticket in {located.column}"
+                )
+            self.board.transition(located.ticket, located.column, "blocked")
+        baseline = gitops.capture_baseline(self.repo)
+        shelf_patch = state.get("integration-patch") or state.get("shelf-patch")
+        self.sessions.save(
+            run_id,
+            {
+                "phase": "blocked",
+                "mode": "hitl",
+                "escalated-from": "auto",
+                "technical-blocker": technical,
+                "blocker": reason,
+                "resume-column": "review",
+                "shelf-patch": shelf_patch,
+                "execution-repo": str(self.repo),
+                "baseline": baseline,
+                "integration-required": False,
+            },
+        )
+        self.sessions.event(run_id, "integration-blocked", {"reason": reason})
+        return {
+            "status": "blocked",
+            "run-id": run_id,
+            "ticket": state["ticket"],
+            "reason": reason,
+        }
+
+    def _integrate_parallel_candidate(self, run_id: str) -> dict[str, Any]:
+        state = self.sessions.load(run_id)
+        if state.get("phase") != "integration-pending":
+            raise KanbanError(
+                f"Session {run_id} is {state.get('phase')}, not integration-pending"
+            )
+        patch_name = state.get("integration-patch")
+        paths = set(state.get("session-paths", []))
+        if not isinstance(patch_name, str) or not paths:
+            return self._block_parallel_integration(
+                run_id,
+                "Managed candidate lacks a saved integration patch.",
+                technical=True,
+            )
+        baseline = gitops.capture_baseline(self.repo)
+        try:
+            gitops.restore_patch(
+                self.repo,
+                self.sessions.path(run_id) / patch_name,
+                paths,
+            )
+            self.sessions.save(
+                run_id,
+                {
+                    "phase": "integrating",
+                    "worker-baseline": state.get("baseline"),
+                    "baseline": baseline,
+                    "execution-repo": str(self.repo),
+                    "integration-required": False,
+                },
+            )
+            contract = self._contract_ticket(self.sessions.load(run_id))
+            implementer = state.get("implementer")
+            if not isinstance(implementer, dict):
+                raise KanbanError("Parallel candidate lacks its implementer result")
+            return self._finalize_candidate(
+                run_id,
+                contract,
+                implementer,
+                artifact_suffix="-integration",
+                allow_retry=False,
+            )
+        except Exception as error:  # noqa: BLE001 - integration failure boundary
+            current = self.sessions.load(run_id)
+            if current.get("phase") in {"committing", "commit-created"}:
+                try:
+                    return self._recover_commit(run_id, current)
+                except Exception as recovery_error:  # noqa: BLE001 - retain both
+                    self._record_failure(
+                        recovery_error,
+                        run_id=run_id,
+                        phase="parallel-commit-recovery",
+                    )
+            try:
+                if gitops.current_head(self.repo) == baseline["base-commit"]:
+                    session_paths, overlap = gitops.session_delta(self.repo, baseline)
+                    if session_paths and not overlap:
+                        gitops.restore_paths(
+                            self.repo, session_paths, baseline["base-commit"]
+                        )
+            except Exception as restore_error:  # noqa: BLE001 - retain root failure
+                self._record_failure(
+                    restore_error,
+                    run_id=run_id,
+                    phase="parallel-integration-restore",
+                )
+            path = self._record_failure(
+                error,
+                run_id=run_id,
+                phase="parallel-integration",
+                extra={"base-commit": baseline["base-commit"]},
+            )
+            return self._block_parallel_integration(
+                run_id,
+                f"Parallel integration failed; diagnostics: {path}",
+                technical=True,
+            )
+
+    def run_auto_parallel(
+        self,
+        *,
+        feature: str | None,
+        all_tickets: bool,
+        branch: str | None,
+        max_attempts: int,
+        parallelism: int,
+    ) -> dict[str, Any]:
+        if not feature and not all_tickets:
+            raise KanbanError("Parallel AUTO requires a feature or --all scope")
+        gitops.assert_index_clean(self.repo)
+        gitops.ensure_topic_branch(self.repo, branch, self._protected_branches())
+        running = [
+            state
+            for state in self.sessions.list_states()
+            if state.get("phase")
+            in {
+                "starting",
+                "active",
+                "implementing",
+                "awaiting-review",
+                "integration-pending",
+                "integrating",
+                "committing",
+                "commit-created",
+            }
+        ]
+        if running:
+            details = [
+                f"{state.get('ticket')} ({state.get('run-id')}, {state.get('phase')})"
+                for state in running
+            ]
+            raise KanbanError(
+                "Existing sessions must be resolved before parallel AUTO starts: "
+                + ", ".join(details)
+            )
+        scope = self._parallel_scope(feature=feature)
+        configured_root = self.board.config().get("worktree-root")
+        if configured_root is not None and not isinstance(configured_root, str):
+            raise KanbanError("worktree-root must be a string when configured")
+        worktree_root = gitops.managed_worktree_root(self.repo, configured_root)
+        outcomes: list[dict[str, Any]] = []
+        attempted: set[str] = set()
+        preparation_failures: list[dict[str, Any]] = []
+
+        while True:
+            board = self.board.load()
+            eligible = [
+                item
+                for item in board.eligible(feature)
+                if item.ticket.key not in attempted
+                and self._resolve_mode(item.ticket, "auto") == "auto"
+            ]
+            if not eligible:
+                break
+            batch = eligible[:parallelism]
+            group_id = uuid.uuid4().hex[:12]
+            base_commit = gitops.current_head(self.repo)
+            prepared: list[tuple[LocatedTicket, str]] = []
+            for located in batch:
+                attempted.add(located.ticket.key)
+                try:
+                    run_id = self._prepare_parallel_ticket(
+                        located,
+                        scope=scope,
+                        max_attempts=max_attempts,
+                        group_id=group_id,
+                        worktree_root=worktree_root,
+                        base_commit=base_commit,
+                    )
+                    prepared.append((located, run_id))
+                except Exception as error:  # noqa: BLE001 - per-ticket boundary
+                    path = self._record_failure(
+                        error,
+                        run_id=None,
+                        phase="parallel-worktree-prepare",
+                        extra={"ticket": located.ticket.key},
+                    )
+                    preparation_failures.append(
+                        {
+                            "status": "not-started",
+                            "ticket": located.ticket.key,
+                            "diagnostics": str(path),
+                        }
+                    )
+
+            worker_results: dict[str, dict[str, Any]] = {}
+            if prepared:
+                with ThreadPoolExecutor(max_workers=len(prepared)) as executor:
+                    futures = {
+                        executor.submit(self._attempt, run_id, None): (located, run_id)
+                        for located, run_id in prepared
+                    }
+                    for future in as_completed(futures):
+                        located, run_id = futures[future]
+                        try:
+                            worker_results[run_id] = future.result()
+                        except Exception as error:  # noqa: BLE001 - worker boundary
+                            path = self._record_failure(
+                                error,
+                                run_id=run_id,
+                                phase="parallel-worker",
+                            )
+                            try:
+                                worker_results[run_id] = self._block(
+                                    run_id,
+                                    f"Parallel worker failed; diagnostics: {path}",
+                                    technical=True,
+                                )
+                            except Exception as block_error:  # noqa: BLE001 - retain worktree
+                                block_path = self._record_failure(
+                                    block_error,
+                                    run_id=run_id,
+                                    phase="parallel-worker-block",
+                                )
+                                worker_results[run_id] = {
+                                    "status": "failed",
+                                    "run-id": run_id,
+                                    "ticket": located.ticket.key,
+                                    "diagnostics": str(block_path),
+                                    "worktree-retained": True,
+                                }
+
+            for _, run_id in prepared:
+                result = worker_results[run_id]
+                result = self._complete_parallel_worker_result(run_id, result)
+                outcomes.append(result)
+            group_directory = worktree_root / group_id
+            if group_directory.is_dir() and not any(group_directory.iterdir()):
+                group_directory.rmdir()
+            if worktree_root.is_dir() and not any(worktree_root.iterdir()):
+                worktree_root.rmdir()
+
+        board = self.board.load()
+        hitl_ready = [
+            item.ticket.key
+            for item in board.eligible(feature)
+            if self._resolve_mode(item.ticket, "auto") == "hitl"
+        ]
+        completed = [
+            item["ticket"] for item in outcomes if item.get("status") == "completed"
+        ]
+        blocked = [
+            item["ticket"] for item in outcomes if item.get("status") == "blocked"
+        ]
+        failed = [item["ticket"] for item in outcomes if item.get("status") == "failed"]
+        if failed:
+            status = "failed"
+        elif blocked or preparation_failures:
+            status = "blocked"
+        elif hitl_ready:
+            status = "awaiting-hitl"
+        elif completed:
+            status = "completed"
+        else:
+            status = "no-eligible-ticket"
+        return {
+            "status": status,
+            "parallel": True,
+            "mode": "auto",
+            "scope": scope,
+            "concurrency": parallelism,
+            "completed": completed,
+            "blocked": blocked,
+            "failed": failed,
+            "awaiting-hitl": hitl_ready,
+            "preparation-failures": preparation_failures,
+            "results": outcomes,
+        }
+
     def _current_ticket(self, state: dict[str, Any]) -> tuple[Ticket, str]:
         board = self.board.load()
         located = board.tickets.get(state["ticket"])
@@ -620,7 +1239,8 @@ class Engine:
     def _strict_red(
         self, run_id: str, ticket: Ticket, state: dict[str, Any], feedback: str | None
     ) -> list[str]:
-        before_paths, overlap = gitops.session_delta(self.repo, state["baseline"])
+        execution_repo = self._execution_repo(state)
+        before_paths, overlap = gitops.session_delta(execution_repo, state["baseline"])
         if overlap:
             raise KanbanError(
                 f"Session overlaps pre-existing user changes: {sorted(overlap)}"
@@ -635,7 +1255,7 @@ class Engine:
                 strict_test_phase=True,
             ),
             schema=IMPLEMENTER_SCHEMA,
-            cwd=self.repo,
+            cwd=execution_repo,
             writable=True,
             model=state.get("model"),
         )
@@ -647,7 +1267,7 @@ class Engine:
         )
         if result.data["status"] == "blocked":
             raise KanbanError(f"Test authoring blocked: {result.data['blocker']}")
-        after_paths, overlap = gitops.session_delta(self.repo, state["baseline"])
+        after_paths, overlap = gitops.session_delta(execution_repo, state["baseline"])
         if overlap:
             raise KanbanError(
                 f"Test phase overlaps pre-existing user changes: {sorted(overlap)}"
@@ -665,7 +1285,7 @@ class Engine:
         if not safe:
             raise KanbanError(f"Unsafe tdd-test-command: {reason}")
         red = gitops.run_verification(
-            self.repo,
+            execution_repo,
             [
                 {
                     "command": ticket.tdd_test_command,
@@ -745,6 +1365,7 @@ class Engine:
 
     def _attempt(self, run_id: str, feedback: str | None) -> dict[str, Any]:
         state = self.sessions.load(run_id)
+        execution_repo = self._execution_repo(state)
         ticket, column = self._current_ticket(state)
         if column not in {"active", "review"}:
             raise KanbanError(f"Cannot implement ticket in {column}")
@@ -760,7 +1381,7 @@ class Engine:
         try:
             if contract.strict_tdd and attempt == 1:
                 strict_test_paths = self._strict_red(run_id, contract, state, feedback)
-            test_fingerprints = gitops.fingerprints(self.repo, strict_test_paths)
+            test_fingerprints = gitops.fingerprints(execution_repo, strict_test_paths)
             request = AgentRequest(
                 role="implementer",
                 prompt=implementer_prompt(
@@ -770,7 +1391,7 @@ class Engine:
                     amendments=state.get("amendments", []),
                 ),
                 schema=IMPLEMENTER_SCHEMA,
-                cwd=self.repo,
+                cwd=execution_repo,
                 writable=True,
                 model=state.get("model"),
             )
@@ -782,7 +1403,7 @@ class Engine:
             )
             if contract.strict_tdd and strict_test_paths:
                 current_paths, current_overlap = gitops.session_delta(
-                    self.repo, state["baseline"]
+                    execution_repo, state["baseline"]
                 )
                 if current_overlap:
                     raise KanbanError(
@@ -802,7 +1423,7 @@ class Engine:
                 changed_tests = {
                     path
                     for path, before in test_fingerprints.items()
-                    if gitops.file_fingerprint(self.repo / path) != before
+                    if gitops.file_fingerprint(execution_repo / path) != before
                 }
                 if changed_tests:
                     raise KanbanError(
@@ -876,10 +1497,17 @@ class Engine:
             raise KanbanError(f"Implementation failed; diagnostics: {path}") from error
 
     def _finalize_candidate(
-        self, run_id: str, ticket: Ticket, implementer: dict[str, Any]
+        self,
+        run_id: str,
+        ticket: Ticket,
+        implementer: dict[str, Any],
+        *,
+        artifact_suffix: str = "",
+        allow_retry: bool = True,
     ) -> dict[str, Any]:
         state = self.sessions.load(run_id)
-        session_paths, overlap = gitops.session_delta(self.repo, state["baseline"])
+        execution_repo = self._execution_repo(state)
+        session_paths, overlap = gitops.session_delta(execution_repo, state["baseline"])
         if overlap:
             raise KanbanError(
                 f"Session modified pre-existing user work: {sorted(overlap)}"
@@ -889,13 +1517,22 @@ class Engine:
                 "Implementation produced no attributable repository changes"
             )
         patch = gitops.patch_for_paths(
-            self.repo, session_paths, state["baseline"]["base-commit"]
+            execution_repo, session_paths, state["baseline"]["base-commit"]
         )
         digest = gitops.patch_hash(patch)
         attempt = state["attempt"]
-        self.sessions.write_text(run_id, f"attempt-{attempt:02d}.patch", patch)
+        artifact = f"attempt-{attempt:02d}{artifact_suffix}"
+        review_stage = (
+            "integration"
+            if artifact_suffix
+            else "worktree"
+            if state.get("integration-required")
+            else "checkout"
+        )
+        patch_name = f"{artifact}.patch"
+        self.sessions.write_text(run_id, patch_name, patch)
         specs, rejected = self._verification_specs(ticket, implementer)
-        verification = gitops.run_verification(self.repo, specs) if specs else []
+        verification = gitops.run_verification(execution_repo, specs) if specs else []
         verification.extend(rejected)
         if not verification:
             verification.append(
@@ -907,9 +1544,18 @@ class Engine:
                     "reason": "No verification command or equivalent executable evidence was supplied.",
                 }
             )
-        self.sessions.write_json(
-            run_id, f"attempt-{attempt:02d}-verification.json", verification
-        )
+        self.sessions.write_json(run_id, f"{artifact}-verification.json", verification)
+        reviewer_provider = self.provider(state).name
+        selected_reviewer_runtime = REVIEWER_RUNTIME_BY_PROVIDER.get(reviewer_provider)
+        if selected_reviewer_runtime:
+            reviewer_model, reviewer_effort = selected_reviewer_runtime
+        else:
+            reviewer_model, reviewer_effort = state.get("model"), None
+        reviewer_runtime = {
+            "provider": reviewer_provider,
+            "model": reviewer_model,
+            "effort": reviewer_effort,
+        }
         review = self._agent_call(
             run_id,
             AgentRequest(
@@ -918,17 +1564,20 @@ class Engine:
                     ticket, patch, verification, state.get("amendments", [])
                 ),
                 schema=REVIEWER_SCHEMA,
-                cwd=self.repo,
+                cwd=execution_repo,
                 writable=False,
-                model=state.get("model"),
+                model=reviewer_model,
+                effort=reviewer_effort,
             ),
-            f"attempt-{attempt:02d}-review",
+            f"{artifact}-review",
             retries=int(self.board.config().get("provider-retries", 2)),
         ).data
         if (
             gitops.patch_hash(
                 gitops.patch_for_paths(
-                    self.repo, session_paths, state["baseline"]["base-commit"]
+                    execution_repo,
+                    session_paths,
+                    state["baseline"]["base-commit"],
                 )
             )
             != digest
@@ -962,20 +1611,18 @@ class Engine:
             "verification": verification,
             "verification-passed": verification_ok,
             "review": review,
+            "reviewer-runtime": reviewer_runtime,
+            "review-stage": review_stage,
             "patch-hash": digest,
             "patch-file": str(
-                (
-                    self.sessions.path(run_id) / f"attempt-{attempt:02d}.patch"
-                ).relative_to(self.repo)
+                (self.sessions.path(run_id) / patch_name).relative_to(self.repo)
             )
             if self.sessions.path(run_id).is_relative_to(self.repo)
-            else str(self.sessions.path(run_id) / f"attempt-{attempt:02d}.patch"),
+            else str(self.sessions.path(run_id) / patch_name),
             "proposed-commit-message": suggested.strip(),
             "amendments": state.get("amendments", []),
         }
-        self.sessions.write_json(
-            run_id, f"attempt-{attempt:02d}-review-packet.json", packet
-        )
+        self.sessions.write_json(run_id, f"{artifact}-review-packet.json", packet)
         state = self.sessions.save(
             run_id,
             {
@@ -985,7 +1632,10 @@ class Engine:
                 "verification": verification,
                 "verification-passed": verification_ok,
                 "review": review,
-                "review-packet": f"attempt-{attempt:02d}-review-packet.json",
+                "reviewer-runtime": reviewer_runtime,
+                "review-stage": review_stage,
+                "review-packet": f"{artifact}-review-packet.json",
+                "candidate-patch": patch_name,
                 "proposed-commit-message": suggested.strip(),
                 "implementer": implementer,
             },
@@ -996,13 +1646,20 @@ class Engine:
         self.sessions.event(
             run_id,
             "candidate-reviewed",
-            {"verdict": review["verdict"], "verification-passed": verification_ok},
+            {
+                "verdict": review["verdict"],
+                "verification-passed": verification_ok,
+                "stage": review_stage,
+            },
         )
         if state["mode"] == "auto":
             if verification_ok and review["verdict"] == "accept":
+                if state.get("integration-required"):
+                    return self._queue_managed_candidate(run_id)
                 return self._commit(run_id, override_reason=None, message=None)
             if (
-                review["verdict"] == "revise"
+                allow_retry
+                and review["verdict"] == "revise"
                 and state["attempt"] < state["max-attempts"]
             ):
                 feedback = json.dumps(blocking or review["findings"], indent=2)
@@ -1010,6 +1667,19 @@ class Engine:
             return self._block(
                 run_id,
                 "AUTO candidate requires human review after verification or review did not pass.",
+                technical=False,
+            )
+        if review_stage == "integration" and state.get("integration-approved"):
+            override_reason = state.get("integration-override-reason")
+            if override_reason or (verification_ok and review["verdict"] == "accept"):
+                return self._commit(
+                    run_id,
+                    override_reason=override_reason,
+                    message=state.get("integration-message"),
+                )
+            return self._block(
+                run_id,
+                "Approved HITL candidate failed integration revalidation.",
                 technical=False,
             )
         return {
@@ -1036,8 +1706,9 @@ class Engine:
         pause_origin: str = "ticket",
     ) -> dict[str, Any]:
         state = self.sessions.load(run_id)
+        execution_repo = self._execution_repo(state)
         ticket, column = self._current_ticket(state)
-        session_paths, overlap = gitops.session_delta(self.repo, state["baseline"])
+        session_paths, overlap = gitops.session_delta(execution_repo, state["baseline"])
         if overlap:
             raise KanbanError(
                 f"Cannot shelf session because it overlaps user work: {sorted(overlap)}"
@@ -1045,12 +1716,16 @@ class Engine:
         patch_name: str | None = None
         if session_paths:
             patch = gitops.patch_for_paths(
-                self.repo, session_paths, state["baseline"]["base-commit"]
+                execution_repo,
+                session_paths,
+                state["baseline"]["base-commit"],
             )
             patch_name = f"shelf-{state['revision'] + 1:04d}.patch"
             self.sessions.write_text(run_id, patch_name, patch)
             gitops.restore_paths(
-                self.repo, session_paths, state["baseline"]["base-commit"]
+                execution_repo,
+                session_paths,
+                state["baseline"]["base-commit"],
             )
         if destination == "paused":
             self.board.pause_ticket(ticket.key, pause_origin)
@@ -1135,12 +1810,13 @@ class Engine:
                 "reason": "Other pause origins remain active",
             }
         run_id, state = active
+        execution_repo = self._execution_repo(state)
         patch_name = state.get("shelf-patch")
-        baseline = gitops.capture_baseline(self.repo)
+        baseline = gitops.capture_baseline(execution_repo)
         if patch_name:
             try:
                 gitops.restore_patch(
-                    self.repo,
+                    execution_repo,
                     self.sessions.path(run_id) / patch_name,
                     state.get("session-paths", []),
                 )
@@ -1227,12 +1903,13 @@ class Engine:
                 current = self.board.load().tickets[key]
                 self.board.transition(current.ticket, "blocked", destination)
             # The feature operation already moved the ticket, so restore only its patch/state.
-            baseline = gitops.capture_baseline(self.repo)
+            execution_repo = self._execution_repo(state)
+            baseline = gitops.capture_baseline(execution_repo)
             patch_name = state.get("shelf-patch")
             if patch_name:
                 try:
                     gitops.restore_patch(
-                        self.repo,
+                        execution_repo,
                         self.sessions.path(run_id) / patch_name,
                         state.get("session-paths", []),
                     )
@@ -1311,12 +1988,38 @@ class Engine:
                 raise KanbanError(
                     "Candidate has failed verification or blocking review; use override with a reason"
                 )
+            if state.get("integration-required"):
+                ticket, _ = self._current_ticket(state)
+                commit_message = self._validated_commit_message(ticket, state, message)
+                self.sessions.save(
+                    run_id,
+                    {
+                        "integration-approved": True,
+                        "integration-message": commit_message,
+                        "integration-override-reason": None,
+                    },
+                )
+                pending = self._queue_managed_candidate(run_id)
+                return self._complete_parallel_worker_result(run_id, pending)
             return self._commit(run_id, override_reason=None, message=message)
         if action == "override":
             if state["phase"] != "awaiting-review":
                 raise KanbanError(f"Cannot override session in phase {state['phase']}")
             if not reason or not reason.strip():
                 raise KanbanError("override requires --reason")
+            if state.get("integration-required"):
+                ticket, _ = self._current_ticket(state)
+                commit_message = self._validated_commit_message(ticket, state, message)
+                self.sessions.save(
+                    run_id,
+                    {
+                        "integration-approved": True,
+                        "integration-message": commit_message,
+                        "integration-override-reason": reason.strip(),
+                    },
+                )
+                pending = self._queue_managed_candidate(run_id)
+                return self._complete_parallel_worker_result(run_id, pending)
             return self._commit(run_id, override_reason=reason.strip(), message=message)
         if action in {"abandon", "cancel"}:
             if action == "cancel" and (not reason or not reason.strip()):
@@ -1357,6 +2060,7 @@ class Engine:
 
     def _amendment_action(self, run_id: str, action: str) -> dict[str, Any]:
         state = self.sessions.load(run_id)
+        execution_repo = self._execution_repo(state)
         current, _ = self._current_ticket(state)
         if action == "incorporate":
             source = state["pending-ticket-source"]
@@ -1395,13 +2099,15 @@ class Engine:
                 raise KanbanError("No implementation result exists to defer against")
             return self._finalize_candidate(run_id, contract, implementer)
         if action == "restart":
-            session_paths, overlap = gitops.session_delta(self.repo, state["baseline"])
+            session_paths, overlap = gitops.session_delta(
+                execution_repo, state["baseline"]
+            )
             if overlap:
                 raise KanbanError(
                     f"Cannot restart overlapping session: {sorted(overlap)}"
                 )
             gitops.restore_paths(
-                self.repo, session_paths, state["baseline"]["base-commit"]
+                execution_repo, session_paths, state["baseline"]["base-commit"]
             )
             source = state["pending-ticket-source"]
             self.sessions.save(
@@ -1410,7 +2116,7 @@ class Engine:
                     "phase": "active",
                     "ticket-contract-hash": sha256_text(current.raw),
                     "ticket-contract-source": source,
-                    "baseline": gitops.capture_baseline(self.repo),
+                    "baseline": gitops.capture_baseline(execution_repo),
                 },
             )
             return self._attempt(run_id, "Restart using the edited ticket contract.")
@@ -1418,10 +2124,11 @@ class Engine:
 
     def _investigate(self, run_id: str, question: str) -> dict[str, Any]:
         state = self.sessions.load(run_id)
+        execution_repo = self._execution_repo(state)
         ticket = self._contract_ticket(state)
         paths = state.get("session-paths", [])
         before_patch = gitops.patch_for_paths(
-            self.repo, paths, state["baseline"]["base-commit"]
+            execution_repo, paths, state["baseline"]["base-commit"]
         )
         result = self._agent_call(
             run_id,
@@ -1441,7 +2148,7 @@ Patch:
 Return structured evidence. If unavailable, end with `Status: complete` or
 `Status: blocked`.""",
                 schema=INVESTIGATION_SCHEMA,
-                cwd=self.repo,
+                cwd=execution_repo,
                 writable=False,
                 model=state.get("model"),
             ),
@@ -1449,7 +2156,7 @@ Return structured evidence. If unavailable, end with `Status: complete` or
             retries=int(self.board.config().get("provider-retries", 2)),
         )
         after_patch = gitops.patch_for_paths(
-            self.repo, paths, state["baseline"]["base-commit"]
+            execution_repo, paths, state["baseline"]["base-commit"]
         )
         if after_patch != before_patch:
             raise KanbanError("Read-only investigation changed the candidate patch")
@@ -1458,21 +2165,12 @@ Return structured evidence. If unavailable, end with `Status: complete` or
         )
         return {"status": "investigated", "run-id": run_id, "result": result.data}
 
-    def _commit(
-        self, run_id: str, *, override_reason: str | None, message: str | None
-    ) -> dict[str, Any]:
-        state = self.sessions.load(run_id)
-        ticket, column = self._current_ticket(state)
-        if column != "review":
-            raise KanbanError(f"Cannot commit ticket in {column}")
-        session_paths, overlap = gitops.session_delta(self.repo, state["baseline"])
-        if overlap:
-            raise KanbanError(f"Candidate now overlaps user changes: {sorted(overlap)}")
-        patch = gitops.patch_for_paths(
-            self.repo, session_paths, state["baseline"]["base-commit"]
-        )
-        if gitops.patch_hash(patch) != state["patch-hash"]:
-            raise KanbanError("Candidate patch differs from the reviewed patch")
+    def _validated_commit_message(
+        self,
+        ticket: Ticket,
+        state: dict[str, Any],
+        message: str | None,
+    ) -> str:
         commit_message = (
             message.strip()
             if message is not None
@@ -1492,8 +2190,27 @@ Return structured evidence. If unavailable, end with `Status: complete` or
                 )
         if ticket.key.casefold() in commit_message.casefold():
             raise KanbanError("Commit message must not mention the local ticket key")
-        gitops.ensure_topic_branch(self.repo, None, self._protected_branches())
-        pre_commit_head = gitops.current_head(self.repo)
+        return commit_message
+
+    def _commit(
+        self, run_id: str, *, override_reason: str | None, message: str | None
+    ) -> dict[str, Any]:
+        state = self.sessions.load(run_id)
+        execution_repo = self._execution_repo(state)
+        ticket, column = self._current_ticket(state)
+        if column != "review":
+            raise KanbanError(f"Cannot commit ticket in {column}")
+        session_paths, overlap = gitops.session_delta(execution_repo, state["baseline"])
+        if overlap:
+            raise KanbanError(f"Candidate now overlaps user changes: {sorted(overlap)}")
+        patch = gitops.patch_for_paths(
+            execution_repo, session_paths, state["baseline"]["base-commit"]
+        )
+        if gitops.patch_hash(patch) != state["patch-hash"]:
+            raise KanbanError("Candidate patch differs from the reviewed patch")
+        commit_message = self._validated_commit_message(ticket, state, message)
+        gitops.ensure_topic_branch(execution_repo, None, self._protected_branches())
+        pre_commit_head = gitops.current_head(execution_repo)
         self.sessions.save(
             run_id,
             {
@@ -1504,7 +2221,9 @@ Return structured evidence. If unavailable, end with `Status: complete` or
             },
         )
         try:
-            commit_sha = gitops.commit_paths(self.repo, session_paths, commit_message)
+            commit_sha = gitops.commit_paths(
+                execution_repo, session_paths, commit_message
+            )
             self.sessions.save(
                 run_id,
                 {"phase": "commit-created", "commit": commit_sha},
@@ -1517,7 +2236,7 @@ Return structured evidence. If unavailable, end with `Status: complete` or
                 phase="commit",
                 extra={"pre-commit-head": pre_commit_head},
             )
-            if gitops.current_head(self.repo) == pre_commit_head:
+            if gitops.current_head(execution_repo) == pre_commit_head:
                 self.sessions.save(run_id, {"phase": "awaiting-review"})
             raise KanbanError(f"Commit failed; diagnostics: {path}") from error
         completed = self.sessions.save(
@@ -1535,6 +2254,7 @@ Return structured evidence. If unavailable, end with `Status: complete` or
                     if override_reason
                     else None
                 ),
+                "shelf-patch": None,
                 "ticket-path": str(done_ticket.path.relative_to(self.repo)),
                 "completed-at": dt.datetime.now(dt.timezone.utc).isoformat(),
             },
@@ -1560,7 +2280,8 @@ Return structured evidence. If unavailable, end with `Status: complete` or
         pre_commit_head = state.get("pre-commit-head")
         if not isinstance(pre_commit_head, str):
             raise KanbanError(f"Session {run_id} lacks pre-commit recovery data")
-        current_head = gitops.current_head(self.repo)
+        execution_repo = self._execution_repo(state)
+        current_head = gitops.current_head(execution_repo)
         ticket, column = self._current_ticket(state)
         if current_head == pre_commit_head:
             if column != "review":
@@ -1584,11 +2305,11 @@ Return structured evidence. If unavailable, end with `Status: complete` or
                 "review-packet": packet,
                 "recovered": "commit-not-created",
             }
-        parent = gitops.git(self.repo, "rev-parse", f"{current_head}^")
+        parent = gitops.git(execution_repo, "rev-parse", f"{current_head}^")
         committed_paths = {
             item
             for item in gitops.git(
-                self.repo,
+                execution_repo,
                 "diff-tree",
                 "--no-commit-id",
                 "--name-only",
@@ -1600,7 +2321,7 @@ Return structured evidence. If unavailable, end with `Status: complete` or
             if item
         }
         expected_paths = set(state.get("session-paths", []))
-        subject = gitops.git(self.repo, "show", "-s", "--format=%s", current_head)
+        subject = gitops.git(execution_repo, "show", "-s", "--format=%s", current_head)
         if (
             parent != pre_commit_head
             or committed_paths != expected_paths
@@ -1649,11 +2370,14 @@ Return structured evidence. If unavailable, end with `Status: complete` or
         self, run_id: str, action: str, reason: str | None
     ) -> dict[str, Any]:
         state = self.sessions.load(run_id)
+        execution_repo = self._execution_repo(state)
         ticket, column = self._current_ticket(state)
         if column not in {"active", "review", "blocked", "paused"}:
             raise KanbanError(f"Cannot {action} ticket in {column}")
         if state.get("shelf-patch") is None and column in {"active", "review"}:
-            session_paths, overlap = gitops.session_delta(self.repo, state["baseline"])
+            session_paths, overlap = gitops.session_delta(
+                execution_repo, state["baseline"]
+            )
             if overlap:
                 raise KanbanError(
                     f"Cannot {action} overlapping session: {sorted(overlap)}"
@@ -1664,12 +2388,18 @@ Return structured evidence. If unavailable, end with `Status: complete` or
                     run_id,
                     name,
                     gitops.patch_for_paths(
-                        self.repo, session_paths, state["baseline"]["base-commit"]
+                        execution_repo,
+                        session_paths,
+                        state["baseline"]["base-commit"],
                     ),
                 )
                 gitops.restore_paths(
-                    self.repo, session_paths, state["baseline"]["base-commit"]
+                    execution_repo,
+                    session_paths,
+                    state["baseline"]["base-commit"],
                 )
+        if state.get("managed-worktree") and not state.get("managed-worktree-removed"):
+            self._cleanup_parallel_worktree(run_id)
         destination = "cancelled" if action == "cancel" else "ready"
         current = self.board.load().tickets[ticket.key]
         if current.column == "paused":

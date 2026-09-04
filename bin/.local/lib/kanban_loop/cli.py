@@ -26,7 +26,9 @@ def parser() -> argparse.ArgumentParser:
     commands.add_parser("status", help="Explain board, blockers, sessions, and policy")
     commands.add_parser("plan", help="Preview eligibility without mutation")
 
-    run = commands.add_parser("run", help="Run one serial delivery scope")
+    run = commands.add_parser(
+        "run", help="Run a serial HITL or worktree-parallel AUTO scope"
+    )
     target = run.add_mutually_exclusive_group()
     target.add_argument("--ticket", metavar="KEY")
     target.add_argument("--feature", metavar="SLUG")
@@ -36,6 +38,11 @@ def parser() -> argparse.ArgumentParser:
     run.add_argument("--model")
     run.add_argument("--branch")
     run.add_argument("--max-attempts", type=int)
+    run.add_argument(
+        "--jobs",
+        type=int,
+        help="Maximum parallel AUTO tickets; HITL is always one",
+    )
 
     for name in ("pause", "resume"):
         command = commands.add_parser(name, help=f"{name.title()} tickets or a feature")
@@ -112,6 +119,7 @@ def _continue(engine: Engine, result: dict[str, Any]) -> dict[str, Any]:
     current = result
     while (
         current.get("status") == "completed"
+        and not current.get("parallel")
         and current.get("scope", {}).get("kind") != "ticket"
     ):
         current = engine.continue_scope(current)
@@ -162,6 +170,18 @@ def execute(args: argparse.Namespace, repo: Path) -> dict[str, Any]:
             raise KanbanError("max-attempts must be an integer")
         if max_attempts < 1:
             raise KanbanError("--max-attempts must be positive")
+        configured_concurrency = engine.board.config().get("auto-concurrency", 4)
+        parallelism = (
+            args.jobs
+            if args.jobs is not None
+            else configured_concurrency
+            if args.mode == "auto"
+            else 1
+        )
+        if not isinstance(parallelism, int) or isinstance(parallelism, bool):
+            raise KanbanError("auto-concurrency must be an integer")
+        if parallelism < 1:
+            raise KanbanError("--jobs and auto-concurrency must be positive")
         result = engine.start(
             ticket_ref=args.ticket,
             feature=args.feature,
@@ -169,6 +189,7 @@ def execute(args: argparse.Namespace, repo: Path) -> dict[str, Any]:
             mode=args.mode,
             branch=args.branch,
             max_attempts=max_attempts,
+            parallelism=parallelism,
         )
         return _continue(engine, result) if args.mode == "auto" else result
     if args.command == "pause":

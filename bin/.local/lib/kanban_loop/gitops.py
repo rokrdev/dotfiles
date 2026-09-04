@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -87,6 +88,91 @@ def current_branch(repo: Path) -> str:
     if not branch:
         raise KanbanError("Detached HEAD is not supported")
     return branch
+
+
+def registered_worktrees(repo: Path) -> list[dict[str, str | bool]]:
+    """Return every worktree registered with this repository."""
+    output = git(repo, "worktree", "list", "--porcelain", "-z")
+    entries: list[dict[str, str | bool]] = []
+    current: dict[str, str | bool] = {}
+    for field in output.split("\0"):
+        if not field:
+            if current:
+                entries.append(current)
+                current = {}
+            continue
+        key, _, value = field.partition(" ")
+        current[key] = value if value else True
+    if current:
+        entries.append(current)
+    return entries
+
+
+def managed_worktree_root(repo: Path, configured: str | None = None) -> Path:
+    """Resolve the local directory used for managed ticket worktrees."""
+    if configured is not None:
+        if not configured.strip():
+            raise KanbanError("worktree-root must not be empty")
+        root = Path(configured).expanduser()
+        if not root.is_absolute():
+            root = repo.parent / root
+    else:
+        root = repo.parent / f".{repo.name}-kanban-worktrees"
+    root = root.resolve()
+    if root == repo or repo in root.parents:
+        raise KanbanError("worktree-root must be outside the repository checkout")
+    return root
+
+
+def managed_branch_name(ticket_key: str, group_id: str) -> str:
+    ticket = re.sub(r"[^a-z0-9]+", "-", ticket_key.lower()).strip("-")
+    group = re.sub(r"[^a-z0-9]+", "", group_id.lower())[:12]
+    return f"kanban-loop/{ticket}-{group}"
+
+
+def create_managed_worktree(
+    repo: Path,
+    *,
+    path: Path,
+    branch: str,
+    base: str,
+) -> None:
+    if path.exists():
+        raise KanbanError(f"Managed worktree path already exists: {path}")
+    if (
+        run(
+            ["git", "show-ref", "--verify", "--quiet", f"refs/heads/{branch}"],
+            repo,
+            check=False,
+        ).returncode
+        == 0
+    ):
+        raise KanbanError(f"Managed worktree branch already exists: {branch}")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    git(repo, "worktree", "add", "-b", branch, str(path), base)
+
+
+def remove_managed_worktree(repo: Path, *, path: Path, branch: str) -> None:
+    registered = {
+        str(Path(str(item["worktree"])).resolve())
+        for item in registered_worktrees(repo)
+        if "worktree" in item
+    }
+    if str(path.resolve()) in registered:
+        git(repo, "worktree", "remove", str(path))
+    elif path.exists():
+        raise KanbanError(
+            f"Refusing to remove unregistered managed worktree path: {path}"
+        )
+    if (
+        run(
+            ["git", "show-ref", "--verify", "--quiet", f"refs/heads/{branch}"],
+            repo,
+            check=False,
+        ).returncode
+        == 0
+    ):
+        git(repo, "branch", "-d", branch)
 
 
 def assert_index_clean(repo: Path) -> None:

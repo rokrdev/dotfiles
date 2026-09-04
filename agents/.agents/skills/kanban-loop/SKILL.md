@@ -24,8 +24,8 @@ HITL is the default. AUTO must be explicit.
 /kanban-loop [--hitl] [--ticket KEY | --feature SLUG | --all]
   -> kanban-loop run --mode hitl <scope>
 
-/kanban-loop --auto [--ticket KEY | --feature SLUG | --all]
-  -> kanban-loop run --mode auto <scope>
+/kanban-loop --auto [--ticket KEY | --feature SLUG | --all] [--jobs N]
+  -> kanban-loop run --mode auto <scope> [--jobs N]
 
 /kanban-loop status
   -> kanban-loop status
@@ -89,12 +89,26 @@ Do not reduce feedback to an old file allowlist. A revision is allowed to change
 the implementation scope while remaining within feature intent and hard safety
 boundaries. Never invent approval or a verification override.
 
+HITL implementation and review use one persistent managed worktree. Keep the
+coordinator checkout untouched while waiting for human action, and never start
+a second HITL ticket while one is active or awaiting review. Approval causes
+the executable to integrate the persisted candidate, rerun verification and a
+fresh review in the coordinator checkout, and commit only if that gate passes.
+
 ## AUTO Boundary
 
 AUTO may retry ordinary implementation or review failures within the configured
 limit. Material scope, architecture, security, destructive behavior, ambiguous
 intent, verification override, or exhausted retry decisions must become HITL.
 Report the escalation and retained session state; do not bypass it.
+
+Feature and board AUTO scopes may fan out dependency-ready AUTO tickets through
+managed Git worktrees. `--jobs` overrides the local `auto-concurrency` value;
+`--jobs 1` is serial. Tickets whose effective mode is HITL never join the fan-out.
+The executable persists each worktree patch, integrates candidates in selection
+order, and reruns verification plus fresh review on the advancing target branch
+before each commit. HITL uses the same worktree isolation and integration gate,
+but always remains sequential.
 
 ## Safety and Failure Handling
 

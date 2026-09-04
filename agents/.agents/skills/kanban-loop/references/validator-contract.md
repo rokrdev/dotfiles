@@ -5,6 +5,17 @@ HITL amendments, complete attributed patch, and exact verification evidence.
 The reviewer starts in fresh read-only context and must not edit files, invoke
 agents, stage, commit, or mutate workflow state.
 
+The executable selects the review runtime independently of the implementation
+model: Claude uses Opus with high effort, Codex uses `gpt-5.6-sol` with high
+reasoning effort, and OpenCode retains the session model.
+
+For both serial HITL and worktree-parallel AUTO, review the candidate once in
+its isolated worktree. After AUTO acceptance or explicit HITL approval, the
+executable applies the persisted patch to the advancing target branch, reruns
+verification, and invokes another fresh reviewer. That integration review is
+authoritative for an ordinary approval; a conflict or rejection retains the
+patch and requires HITL resolution.
+
 Review only for:
 
 - unmet acceptance or conflicting accepted intent;

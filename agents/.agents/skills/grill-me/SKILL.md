@@ -1,7 +1,6 @@
 ---
 name: grill-me
 description: Interview the user one decision at a time to turn an ambiguous plan into an explicit discovery contract. Use when the user asks to stress-test a design or says "grill me"; never write files or implement.
-user-invocable: true
 ---
 
 # Grill Me

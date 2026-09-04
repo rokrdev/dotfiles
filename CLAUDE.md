@@ -10,7 +10,7 @@ Remote: `git@github.com:rokrdev/dotfiles.git`
 
 | Package | Manages |
 |---------|---------|
-| `agents` | Global instructions and canonical skills — `~/AGENTS.md`, `~/.agents/skills/` |
+| `agents` | Global instructions and canonical Codex/DeepSeek Harness skills — `~/AGENTS.md`, `~/.agents/skills/` |
 | `asdf` | asdf version manager — `~/.tool-versions` |
 | `bat` | bat (cat replacement) config |
 | `btop` | btop system monitor — `~/.config/btop/` |
@@ -58,7 +58,7 @@ Stow target is `$HOME` by default when running from the repo root. No `--target`
 ## Key Files
 
 - `agents/AGENTS.md` — global agent instructions for all tools (stows to `~/AGENTS.md`)
-- `agents/.agents/skills/` — canonical cross-harness skills (stows to `~/.agents/skills/`)
+- `agents/.agents/skills/` — canonical Codex/DeepSeek Harness skills (stows to `~/.agents/skills/`)
 - `fish/.config/fish/config.fish` — main fish shell config
 - `fish/.config/fish/functions/` — custom fish functions (one `.fish` file per function)
 - `helix/.config/helix/config.toml` — Helix editor config
@@ -67,6 +67,12 @@ Stow target is `$HOME` by default when running from the repo root. No `--target`
 - `claude/.claude/hooks/` — Claude Code hook scripts
 - `claude/.claude/skills/` — per-skill compatibility symlinks to `agents/.agents/skills/`
 - `claude/.claude/agents/neo.md` — neo orchestrator agent definition
+
+Codex and DeepSeek Harness read the canonical `~/.agents/skills/` tree directly.
+DeepSeek Harness profiles based on `dsh-base`, including the persistent Web
+profile, watch that tree and refresh their catalogs without a restart. Claude
+Code uses the compatibility links under `~/.claude/skills/`. Invoke skills as
+`$skill-name` in Codex or `/skill-name` in Claude Code and DeepSeek Harness.
 
 ## Fish Claude Aliases
 

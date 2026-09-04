@@ -112,6 +112,7 @@ class AgentRequest:
     cwd: Path
     writable: bool
     model: str | None = None
+    effort: str | None = None
     timeout: int = 3600
 
 
@@ -471,6 +472,8 @@ class ClaudeAdapter(ProviderAdapter):
         ]
         if request.model:
             command.extend(["--model", request.model])
+        if request.effort:
+            command.extend(["--effort", request.effort])
         command.append(request.prompt)
         return command
 
@@ -508,6 +511,8 @@ class CodexAdapter(ProviderAdapter):
         ]
         if request.model:
             command.extend(["--model", request.model])
+        if request.effort:
+            command.extend(["-c", f'model_reasoning_effort="{request.effort}"'])
         command.append("-")
         return command
 

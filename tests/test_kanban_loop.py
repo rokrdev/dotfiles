@@ -9,6 +9,7 @@ import json
 import subprocess
 import sys
 import tempfile
+import threading
 import unittest
 from collections.abc import Callable
 from pathlib import Path
@@ -28,6 +29,8 @@ from kanban_loop.model import (
 )
 from kanban_loop.providers import (
     IMPLEMENTER_SCHEMA,
+    REVIEWER_SCHEMA,
+    AgentRequest,
     AgentResult,
     ClaudeAdapter,
     CodexAdapter,
@@ -480,6 +483,38 @@ class ProviderTests(unittest.TestCase):
             self.assertTrue(capabilities["read-only-review"])
             self.assertIn("session-resume", capabilities)
 
+    def test_claude_reviewer_command_uses_opus_with_high_effort(self) -> None:
+        request = AgentRequest(
+            role="reviewer",
+            prompt="review",
+            schema=REVIEWER_SCHEMA,
+            cwd=Path("/tmp/repo"),
+            writable=False,
+            model="opus",
+            effort="high",
+        )
+        command = ClaudeAdapter().build_command(
+            request, Path("/tmp/schema.json"), Path("/tmp/output.json")
+        )
+        self.assertEqual(command[command.index("--model") + 1], "opus")
+        self.assertEqual(command[command.index("--effort") + 1], "high")
+
+    def test_codex_reviewer_command_uses_sol_with_high_effort(self) -> None:
+        request = AgentRequest(
+            role="reviewer",
+            prompt="review",
+            schema=REVIEWER_SCHEMA,
+            cwd=Path("/tmp/repo"),
+            writable=False,
+            model="gpt-5.6-sol",
+            effort="high",
+        )
+        command = CodexAdapter().build_command(
+            request, Path("/tmp/schema.json"), Path("/tmp/output.json")
+        )
+        self.assertEqual(command[command.index("--model") + 1], "gpt-5.6-sol")
+        self.assertIn('model_reasoning_effort="high"', command)
+
 
 class FakeAdapter:
     name = "fake"
@@ -489,10 +524,13 @@ class FakeAdapter:
         self,
         root: Path,
         steps: list[tuple[str, dict[str, Any], Callable[[Any], None] | None]],
+        *,
+        name: str = "fake",
     ) -> None:
         self.root = root
         self.steps = list(steps)
         self.calls: list[str] = []
+        self.name = name
 
     def run(self, request: Any) -> AgentResult:
         if not self.steps:
@@ -556,12 +594,246 @@ class EngineTests(RepoCase):
         return engine
 
     def change_value(self, value: int) -> Callable[[Any], None]:
-        def callback(_: Any) -> None:
-            (self.root / "src/app.py").write_text(
+        def callback(request: Any) -> None:
+            (request.cwd / "src/app.py").write_text(
                 f"VALUE = {value}\n", encoding="utf-8"
             )
 
         return callback
+
+    def test_auto_runs_independent_tickets_concurrently_in_managed_worktrees(
+        self,
+    ) -> None:
+        for name in ("first", "second"):
+            (self.root / "src" / f"{name}.py").write_text(
+                "VALUE = 0\n", encoding="utf-8"
+            )
+        command(self.root, "git", "add", "src/first.py", "src/second.py")
+        command(self.root, "git", "commit", "-m", "test: add parallel fixtures")
+        self.write_ticket(number=1, slug="first")
+        self.write_ticket(number=2, slug="second")
+        barrier = threading.Barrier(2)
+        review_barrier = threading.Barrier(2)
+        guard = threading.Lock()
+        coordinator_root = self.root.resolve()
+
+        class ParallelAdapter:
+            name = "fake"
+
+            def __init__(self) -> None:
+                self.active = 0
+                self.max_active = 0
+                self.calls: list[tuple[str, Path]] = []
+
+            def run(inner_self, request: Any) -> AgentResult:
+                with guard:
+                    inner_self.calls.append((request.role, request.cwd))
+                if request.role == "implementer":
+                    with guard:
+                        inner_self.active += 1
+                        inner_self.max_active = max(
+                            inner_self.max_active, inner_self.active
+                        )
+                    try:
+                        barrier.wait(timeout=5)
+                        slug = "first" if "LR-01-first" in request.prompt else "second"
+                        (request.cwd / "src" / f"{slug}.py").write_text(
+                            "VALUE = 1\n", encoding="utf-8"
+                        )
+                        data = implementer_result(message=f"feat: deliver {slug}")
+                    finally:
+                        with guard:
+                            inner_self.active -= 1
+                elif request.role == "reviewer":
+                    if request.cwd.resolve() != coordinator_root:
+                        review_barrier.wait(timeout=5)
+                    data = review_result()
+                else:
+                    raise AssertionError(f"Unexpected role: {request.role}")
+                raw = json.dumps(data)
+                return AgentResult(
+                    data,
+                    raw,
+                    raw,
+                    "",
+                    ("fake", request.role),
+                    ({"value": data, "valid": True},),
+                )
+
+        adapter = ParallelAdapter()
+        engine = Engine(self.root)
+        engine.provider = lambda state=None: adapter  # type: ignore[method-assign]
+        before_commits = int(command(self.root, "git", "rev-list", "--count", "HEAD"))
+        result = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="auto",
+            branch=None,
+            max_attempts=3,
+            parallelism=2,
+        )
+
+        self.assertEqual(result["status"], "completed")
+        self.assertTrue(result["parallel"])
+        self.assertEqual(result["completed"], ["LR-01-first", "LR-02-second"])
+        self.assertEqual(adapter.max_active, 2)
+        self.assertEqual((self.root / "src/first.py").read_text(), "VALUE = 1\n")
+        self.assertEqual((self.root / "src/second.py").read_text(), "VALUE = 1\n")
+        self.assertEqual(
+            int(command(self.root, "git", "rev-list", "--count", "HEAD")),
+            before_commits + 2,
+        )
+        reviewer_repos = [cwd for role, cwd in adapter.calls if role == "reviewer"]
+        self.assertEqual(
+            sum(cwd.resolve() == coordinator_root for cwd in reviewer_repos), 2
+        )
+        self.assertEqual(
+            sum(cwd.resolve() != coordinator_root for cwd in reviewer_repos), 2
+        )
+        board = self.store.load()
+        self.assertEqual(board.tickets["LR-01-first"].column, "done")
+        self.assertEqual(board.tickets["LR-02-second"].column, "done")
+        self.assertEqual(len(gitops.registered_worktrees(self.root)), 1)
+
+    def test_hitl_rejects_parallelism(self) -> None:
+        self.write_ticket()
+        with self.assertRaisesRegex(KanbanError, "always sequential"):
+            Engine(self.root).start(
+                ticket_ref=None,
+                feature=None,
+                all_tickets=True,
+                mode="hitl",
+                branch=None,
+                max_attempts=3,
+                parallelism=2,
+            )
+
+    def test_auto_parallel_defers_hitl_only_ticket(self) -> None:
+        self.write_ticket(number=1, slug="manual", mode="hitl")
+        result = Engine(self.root).start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="auto",
+            branch=None,
+            max_attempts=3,
+            parallelism=2,
+        )
+        self.assertEqual(result["status"], "awaiting-hitl")
+        self.assertEqual(result["awaiting-hitl"], ["LR-01-manual"])
+        self.assertEqual(self.store.load().tickets["LR-01-manual"].column, "ready")
+
+    def test_auto_parallel_starts_dependents_only_after_dependency_commit(self) -> None:
+        (self.root / "src/first.py").write_text("VALUE = 0\n", encoding="utf-8")
+        (self.root / "src/second.py").write_text("VALUE = 0\n", encoding="utf-8")
+        command(self.root, "git", "add", "src/first.py", "src/second.py")
+        command(self.root, "git", "commit", "-m", "test: add dependency fixtures")
+        self.write_ticket(number=1, slug="first")
+        self.write_ticket(
+            number=2,
+            slug="second",
+            depends_on=["LR-01-first"],
+        )
+        seen_second_base: list[str] = []
+
+        class DependencyAdapter:
+            name = "fake"
+
+            def run(inner_self, request: Any) -> AgentResult:
+                if request.role == "implementer":
+                    if '"key": "LR-01-first"' in request.prompt:
+                        target = request.cwd / "src/first.py"
+                        message = "feat: deliver first"
+                    else:
+                        seen_second_base.append(
+                            (request.cwd / "src/first.py").read_text()
+                        )
+                        target = request.cwd / "src/second.py"
+                        message = "feat: deliver second"
+                    target.write_text("VALUE = 1\n", encoding="utf-8")
+                    data = implementer_result(message=message)
+                else:
+                    data = review_result()
+                raw = json.dumps(data)
+                return AgentResult(
+                    data,
+                    raw,
+                    raw,
+                    "",
+                    ("fake", request.role),
+                    ({"value": data, "valid": True},),
+                )
+
+        adapter = DependencyAdapter()
+        engine = Engine(self.root)
+        engine.provider = lambda state=None: adapter  # type: ignore[method-assign]
+        result = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="auto",
+            branch=None,
+            max_attempts=3,
+            parallelism=2,
+        )
+        self.assertEqual(result["status"], "completed")
+        self.assertEqual(seen_second_base, ["VALUE = 1\n"])
+
+    def test_auto_parallel_blocks_conflicting_candidate_without_overwrite(self) -> None:
+        self.write_ticket(number=1, slug="first")
+        self.write_ticket(number=2, slug="second")
+        barrier = threading.Barrier(2)
+
+        class ConflictAdapter:
+            name = "fake"
+
+            def run(inner_self, request: Any) -> AgentResult:
+                if request.role == "implementer":
+                    barrier.wait(timeout=5)
+                    first = "LR-01-first" in request.prompt
+                    (request.cwd / "src/app.py").write_text(
+                        f"VALUE = {1 if first else 2}\n", encoding="utf-8"
+                    )
+                    data = implementer_result(
+                        message=f"feat: deliver {'first' if first else 'second'}"
+                    )
+                else:
+                    data = review_result()
+                raw = json.dumps(data)
+                return AgentResult(
+                    data,
+                    raw,
+                    raw,
+                    "",
+                    ("fake", request.role),
+                    ({"value": data, "valid": True},),
+                )
+
+        adapter = ConflictAdapter()
+        engine = Engine(self.root)
+        engine.provider = lambda state=None: adapter  # type: ignore[method-assign]
+        result = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="auto",
+            branch=None,
+            max_attempts=3,
+            parallelism=2,
+        )
+        self.assertEqual(result["status"], "blocked")
+        self.assertEqual(result["completed"], ["LR-01-first"])
+        self.assertEqual(result["blocked"], ["LR-02-second"])
+        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 1\n")
+        board = self.store.load()
+        self.assertEqual(board.tickets["LR-01-first"].column, "done")
+        self.assertEqual(board.tickets["LR-02-second"].column, "blocked")
+        blocked_state = SessionStore(self.root).active_for_ticket("LR-02-second")
+        self.assertIsNotNone(blocked_state)
+        assert blocked_state is not None
+        self.assertTrue(blocked_state[1]["shelf-patch"])
+        self.assertEqual(len(gitops.registered_worktrees(self.root)), 1)
 
     def test_new_run_rejects_another_active_implementation_session(self) -> None:
         self.write_ticket(column="active", number=1, slug="first")
@@ -605,12 +877,58 @@ class EngineTests(RepoCase):
         self.assertEqual(result["status"], "awaiting-review")
         self.assertEqual(result["review-packet"]["changed-files"], ["src/app.py"])
 
+    def assert_reviewer_runtime(
+        self,
+        provider: str,
+        implementation_model: str,
+        expected_model: str,
+        expected_effort: str,
+    ) -> None:
+        self.write_ticket()
+
+        def implement(request: Any) -> None:
+            self.assertEqual(request.model, implementation_model)
+            self.change_value(1)(request)
+
+        def check_reviewer(request: Any) -> None:
+            self.assertEqual(request.model, expected_model)
+            self.assertEqual(request.effort, expected_effort)
+
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer", implementer_result(), implement),
+                ("reviewer", review_result(), check_reviewer),
+            ],
+            name=provider,
+        )
+        engine = Engine(self.root, model=implementation_model)
+        engine.provider = lambda state=None: adapter  # type: ignore[method-assign]
+        result = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        runtime = result["review-packet"]["reviewer-runtime"]
+        self.assertEqual(runtime["provider"], provider)
+        self.assertEqual(runtime["model"], expected_model)
+        self.assertEqual(runtime["effort"], expected_effort)
+
+    def test_claude_reviewer_runtime_uses_opus_high(self) -> None:
+        self.assert_reviewer_runtime("claude", "sonnet", "opus", "high")
+
+    def test_codex_reviewer_runtime_uses_sol_high(self) -> None:
+        self.assert_reviewer_runtime("codex", "gpt-5.6-terra", "gpt-5.6-sol", "high")
+
     def test_hitl_revision_can_expand_to_another_file(self) -> None:
         self.write_ticket()
 
-        def revision(_: Any) -> None:
-            (self.root / "src/app.py").write_text("VALUE = 2\n")
-            (self.root / "docs.md").write_text("supporting detail\n")
+        def revision(request: Any) -> None:
+            (request.cwd / "src/app.py").write_text("VALUE = 2\n")
+            (request.cwd / "docs.md").write_text("supporting detail\n")
 
         adapter = FakeAdapter(
             self.root,
@@ -643,9 +961,20 @@ class EngineTests(RepoCase):
         self.assertEqual(
             revised["review-packet"]["changed-files"], ["docs.md", "src/app.py"]
         )
+        state = SessionStore(self.root).load(initial["run-id"])
+        self.assertEqual(
+            Path(state["execution-repo"]) / "src/app.py",
+            Path(state["managed-worktree"]) / "src/app.py",
+        )
+        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 0\n")
 
     def test_approve_commits_conventional_message_and_completes_ticket(self) -> None:
         self.write_ticket()
+        reviewer_repos: list[Path] = []
+
+        def record_reviewer(request: Any) -> None:
+            reviewer_repos.append(request.cwd.resolve())
+
         adapter = FakeAdapter(
             self.root,
             [
@@ -656,7 +985,8 @@ class EngineTests(RepoCase):
                     ),
                     self.change_value(1),
                 ),
-                ("reviewer", review_result(), None),
+                ("reviewer", review_result(), record_reviewer),
+                ("reviewer", review_result(), record_reviewer),
             ],
         )
         engine = self.engine(adapter)
@@ -668,6 +998,12 @@ class EngineTests(RepoCase):
             branch=None,
             max_attempts=3,
         )
+        state = SessionStore(self.root).load(candidate["run-id"])
+        self.assertNotEqual(
+            Path(state["execution-repo"]).resolve(), self.root.resolve()
+        )
+        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 0\n")
+        self.assertEqual(len(gitops.registered_worktrees(self.root)), 2)
         result = engine.review_action(candidate["run-id"], "approve")
         self.assertEqual(result["status"], "completed")
         self.assertEqual(
@@ -677,6 +1013,9 @@ class EngineTests(RepoCase):
         self.assertEqual(
             self.store.load().tickets["LR-01-deliver-outcome"].column, "done"
         )
+        self.assertEqual(reviewer_repos[-1], self.root.resolve())
+        self.assertNotEqual(reviewer_repos[0], self.root.resolve())
+        self.assertEqual(len(gitops.registered_worktrees(self.root)), 1)
 
     def test_commit_fallback_is_conventional_and_omits_local_ticket_key(self) -> None:
         self.write_ticket()
@@ -688,6 +1027,7 @@ class EngineTests(RepoCase):
                     implementer_result(message="Deliver Outcome"),
                     self.change_value(1),
                 ),
+                ("reviewer", review_result(), None),
                 ("reviewer", review_result(), None),
             ],
         )
@@ -751,6 +1091,17 @@ class EngineTests(RepoCase):
         )
         sessions = SessionStore(self.root)
         state = sessions.load(candidate["run-id"])
+        worker = Path(state["execution-repo"])
+        gitops.restore_paths(
+            worker, state["session-paths"], state["baseline"]["base-commit"]
+        )
+        engine._cleanup_parallel_worktree(candidate["run-id"])
+        integration_baseline = gitops.capture_baseline(self.root)
+        gitops.restore_patch(
+            self.root,
+            sessions.path(candidate["run-id"]) / state["candidate-patch"],
+            state["session-paths"],
+        )
         pre_commit_head = gitops.current_head(self.root)
         message = state["proposed-commit-message"]
         sessions.save(
@@ -759,6 +1110,9 @@ class EngineTests(RepoCase):
                 "phase": "committing",
                 "pre-commit-head": pre_commit_head,
                 "commit-message": message,
+                "baseline": integration_baseline,
+                "execution-repo": str(self.root),
+                "integration-required": False,
             },
         )
         commit_sha = gitops.commit_paths(self.root, state["session-paths"], message)
@@ -784,6 +1138,7 @@ class EngineTests(RepoCase):
             self.root,
             [
                 ("implementer", implementer_result(), self.change_value(1)),
+                ("reviewer", review_result(), None),
                 ("reviewer", review_result(), None),
                 ("implementer", implementer_result(), self.change_value(2)),
                 ("reviewer", review_result(), None),
@@ -832,6 +1187,8 @@ class EngineTests(RepoCase):
         )
         state = SessionStore(self.root).load(candidate["run-id"])
         self.assertEqual(state["termination-reason"], "Requirement withdrawn")
+        self.assertTrue(state["managed-worktree-removed"])
+        self.assertEqual(len(gitops.registered_worktrees(self.root)), 1)
         ticket_status = Engine(self.root).status()["tickets"][0]
         self.assertEqual(ticket_status["cancellation-reason"], "Requirement withdrawn")
 
@@ -841,6 +1198,7 @@ class EngineTests(RepoCase):
             self.root,
             [
                 ("implementer", implementer_result(), self.change_value(1)),
+                ("reviewer", review_result(), None),
                 ("reviewer", review_result(), None),
             ],
         )
@@ -943,9 +1301,9 @@ class EngineTests(RepoCase):
             tdd_command="python -c 'print(\"AssertionError\"); raise SystemExit(1)'",
         )
 
-        def write_test(_: Any) -> None:
-            (self.root / "tests").mkdir()
-            (self.root / "tests/test_app.py").write_text(
+        def write_test(request: Any) -> None:
+            (request.cwd / "tests").mkdir()
+            (request.cwd / "tests/test_app.py").write_text(
                 "def test_value(): assert False\n", encoding="utf-8"
             )
 
@@ -990,11 +1348,17 @@ class EngineTests(RepoCase):
             branch=None,
             max_attempts=3,
         )
+        worktree = Path(
+            SessionStore(self.root).load(candidate["run-id"])["execution-repo"]
+        )
+        self.assertEqual((worktree / "src/app.py").read_text(), "VALUE = 7\n")
         engine.review_action(candidate["run-id"], "pause")
         self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 0\n")
+        self.assertEqual((worktree / "src/app.py").read_text(), "VALUE = 0\n")
         resumed = engine.resume("LR-01-deliver-outcome")
         self.assertEqual(resumed["status"], "awaiting-review")
-        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 7\n")
+        self.assertEqual((worktree / "src/app.py").read_text(), "VALUE = 7\n")
+        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 0\n")
 
     def test_feature_pause_and_resume_restores_review_session(self) -> None:
         self.write_ticket()
@@ -1014,12 +1378,16 @@ class EngineTests(RepoCase):
             branch=None,
             max_attempts=3,
         )
+        worktree = Path(
+            SessionStore(self.root).load(candidate["run-id"])["execution-repo"]
+        )
         paused = engine.pause_feature("loop-redesign")
         self.assertEqual(paused["status"], "paused")
         self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 0\n")
         resumed = engine.resume_feature("loop-redesign")
         self.assertEqual(resumed["tickets"][0]["status"], "awaiting-review")
-        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 8\n")
+        self.assertEqual((worktree / "src/app.py").read_text(), "VALUE = 8\n")
+        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 0\n")
         self.assertEqual(
             SessionStore(self.root).load(candidate["run-id"])["phase"],
             "awaiting-review",
@@ -1050,7 +1418,11 @@ class EngineTests(RepoCase):
         self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 0\n")
         resumed_ticket = engine.resume("LR-01-deliver-outcome")
         self.assertEqual(resumed_ticket["status"], "awaiting-review")
-        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 9\n")
+        state = SessionStore(self.root).load(candidate["run-id"])
+        self.assertEqual(
+            (Path(state["execution-repo"]) / "src/app.py").read_text(), "VALUE = 9\n"
+        )
+        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 0\n")
 
     def test_feature_pause_and_resume_unblocks_saved_session(self) -> None:
         self.write_ticket()
@@ -1115,13 +1487,14 @@ class EngineTests(RepoCase):
     def test_provider_failure_is_persisted_before_exception(self) -> None:
         self.write_ticket()
         self.store.config_path.write_text("provider-retries: 0\n", encoding="utf-8")
-        root = self.root
 
         class BrokenAdapter:
             name = "broken"
 
             def run(self, request: Any) -> AgentResult:
-                (root / "src/app.py").write_text("VALUE = 12\n", encoding="utf-8")
+                (request.cwd / "src/app.py").write_text(
+                    "VALUE = 12\n", encoding="utf-8"
+                )
                 raise ProviderFailure(
                     "missing authority data",
                     {
@@ -1153,13 +1526,14 @@ class EngineTests(RepoCase):
 
     def test_interruption_shelves_patch_and_records_resumable_block(self) -> None:
         self.write_ticket()
-        root = self.root
 
         class InterruptedAdapter:
             name = "interrupted"
 
             def run(self, request: Any) -> AgentResult:
-                (root / "src/app.py").write_text("VALUE = 13\n", encoding="utf-8")
+                (request.cwd / "src/app.py").write_text(
+                    "VALUE = 13\n", encoding="utf-8"
+                )
                 raise KeyboardInterrupt
 
         engine = Engine(self.root)
@@ -1189,8 +1563,8 @@ class EngineTests(RepoCase):
     def test_ticket_edit_is_reconciled_instead_of_treated_as_corruption(self) -> None:
         ticket_path = self.write_ticket()
 
-        def edit_code_and_ticket(_: Any) -> None:
-            self.change_value(4)(None)
+        def edit_code_and_ticket(request: Any) -> None:
+            self.change_value(4)(request)
             text = ticket_path.parent.parent.joinpath(
                 "active", ticket_path.name
             ).read_text()
@@ -1278,7 +1652,11 @@ class EngineTests(RepoCase):
             candidate["run-id"], "ask", feedback="Is this lazy?"
         )
         self.assertEqual(result["result"]["summary"], "The change is lazy.")
-        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 1\n")
+        state = SessionStore(self.root).load(candidate["run-id"])
+        self.assertEqual(
+            (Path(state["execution-repo"]) / "src/app.py").read_text(), "VALUE = 1\n"
+        )
+        self.assertEqual((self.root / "src/app.py").read_text(), "VALUE = 0\n")
 
     def test_status_explains_dependency_blockers(self) -> None:
         self.write_ticket(number=1, slug="first", column="paused")
@@ -1321,6 +1699,16 @@ class CliTests(RepoCase):
     def test_pause_requires_exactly_one_target_kind(self) -> None:
         args = parser().parse_args(["pause"])
         with self.assertRaisesRegex(KanbanError, "requires ticket references"):
+            execute(args, self.root)
+
+    def test_run_parses_auto_job_limit(self) -> None:
+        args = parser().parse_args(["run", "--all", "--mode", "auto", "--jobs", "3"])
+        self.assertEqual(args.jobs, 3)
+
+    def test_cli_rejects_parallel_hitl(self) -> None:
+        self.write_ticket()
+        args = parser().parse_args(["run", "--all", "--mode", "hitl", "--jobs", "2"])
+        with self.assertRaisesRegex(KanbanError, "always sequential"):
             execute(args, self.root)
 
 

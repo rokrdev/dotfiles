@@ -154,6 +154,14 @@ class ModelTests(RepoCase):
             ticket.acceptance[0], "The requested observable outcome is delivered."
         )
 
+    def test_missing_mode_fails_safe_to_hitl(self) -> None:
+        path = self.write_ticket()
+        path.write_text(
+            path.read_text(encoding="utf-8").replace("mode: inherit\n", ""),
+            encoding="utf-8",
+        )
+        self.assertEqual(parse_ticket(path).mode, "hitl")
+
     def test_strict_tdd_requires_a_command(self) -> None:
         path = self.write_ticket(strict_tdd=True)
         with self.assertRaisesRegex(KanbanError, "requires tdd-test-command"):
@@ -723,6 +731,27 @@ class EngineTests(RepoCase):
         self.assertEqual(result["status"], "awaiting-hitl")
         self.assertEqual(result["awaiting-hitl"], ["LR-01-manual"])
         self.assertEqual(self.store.load().tickets["LR-01-manual"].column, "ready")
+
+    def test_auto_parallel_defers_ticket_with_missing_mode(self) -> None:
+        path = self.write_ticket(number=1, slug="missing-mode")
+        path.write_text(
+            path.read_text(encoding="utf-8").replace("mode: inherit\n", ""),
+            encoding="utf-8",
+        )
+        result = Engine(self.root).start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="auto",
+            branch=None,
+            max_attempts=3,
+            parallelism=2,
+        )
+        self.assertEqual(result["status"], "awaiting-hitl")
+        self.assertEqual(result["awaiting-hitl"], ["LR-01-missing-mode"])
+        self.assertEqual(
+            self.store.load().tickets["LR-01-missing-mode"].column, "ready"
+        )
 
     def test_auto_parallel_starts_dependents_only_after_dependency_commit(self) -> None:
         (self.root / "src/first.py").write_text("VALUE = 0\n", encoding="utf-8")

@@ -86,7 +86,7 @@ slug: print-requested-record
 title: Print requested record as JSON
 depends-on: []
 priority: 0
-mode: inherit
+mode: hitl
 acceptance:
   - Running `app show --json` prints the requested record as valid JSON.
 constraints:
@@ -118,10 +118,14 @@ verification expectations, and AUTO eligibility. `likely-files` and
 `implementation-hints` are optional context, never permissions. Tickets do not
 contain exact commit messages or exhaustive file allowlists.
 
-`mode` is `inherit`, `hitl`, or `auto`. HITL always overrides AUTO. Strict
-RED→GREEN is opt-in with `strict-tdd: true` and then requires an exact,
-non-destructive `tdd-test-command`. Other tickets use verification appropriate
-to their change type.
+`mode` is `inherit`, `hitl`, or `auto`. Newly authored tickets must include an
+explicit mode and default to `hitl`; use `auto` only when the user explicitly
+requests AUTO for that ticket. `inherit` remains supported for existing boards,
+but ticket-generation workflows must not emit it. If `mode` is absent, the
+runner fails safe to HITL. HITL always overrides AUTO. Strict RED→GREEN is
+opt-in with `strict-tdd: true` and then requires an exact, non-destructive
+`tdd-test-command`. Other tickets use verification appropriate to their change
+type.
 
 ## Lifecycle
 

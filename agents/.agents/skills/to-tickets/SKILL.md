@@ -48,8 +48,9 @@ For each ticket define:
 - explicit full-key dependencies and a priority;
 - an outcome and observable acceptance criteria;
 - relevant constraints and explicit exclusions;
-- `mode: inherit` for ordinary work, `hitl` only when the ticket must always
-  stop for a person, or `auto` to document settled low-risk AUTO eligibility;
+- an explicit `mode: hitl` for every ticket by default;
+- `mode: auto` only when the user explicitly asks for that specific ticket or
+  ticket set to run without a human approval stop;
 - deterministic verification commands and expected exit codes;
 - optional strict TDD configuration only when RED -> GREEN is genuinely required;
 - optional implementation hints and likely files, clearly non-binding.
@@ -58,12 +59,19 @@ Do not add an exact file allowlist, a predetermined commit message, mandatory
 failing-test names, or a parallel-safety claim. The runner is serial, and human
 feedback in HITL may legitimately change files, tests, or approach.
 
+Never omit `mode` or generate `mode: inherit`. A general request to create
+tickets is not AUTO authorization. Treat any ticket not explicitly requested as
+AUTO as HITL, including low-risk or mechanically straightforward work.
+
 ## Approval Gate
 
 Before writing anything, present the feature and complete ticket set. Show each
 ticket's full key, outcome, acceptance criteria, dependencies, priority, mode,
 verification, optional TDD requirement, and important exclusions. Ask the user
 to approve, merge, split, reorder, or revise the set.
+
+Call out every proposed AUTO ticket explicitly. If the user approves the ticket
+set without specifically approving AUTO for a ticket, keep that ticket HITL.
 
 After any change, present the complete set again. Write only after explicit
 approval. Validate that the dependency graph is acyclic and that stable ordering
@@ -92,5 +100,6 @@ kanban-loop plan
 
 Repair validation errors but do not implement tickets or start the loop. Report
 the feature slug, prefix, files written, serial plan, approval status, and
-validation result. Remind the user that `/kanban-loop` defaults to HITL and AUTO
-must be explicit.
+validation result. Confirm that every ticket contains an explicit mode, that
+HITL is the default, and that each AUTO ticket was explicitly requested by the
+user.

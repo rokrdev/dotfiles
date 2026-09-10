@@ -235,7 +235,9 @@ def parse_ticket(path: Path) -> Ticket:
     title = _string(metadata, "title", path)
     number = metadata.get("id")
     priority = metadata.get("priority", 0)
-    mode = metadata.get("mode", "inherit")
+    # Missing mode must fail safe: an incomplete ticket may never inherit an
+    # AUTO invocation and bypass human review.
+    mode = metadata.get("mode", "hitl")
     if not FEATURE_RE.fullmatch(feature):
         raise KanbanError(f"{path}: feature must be kebab-case")
     if not PREFIX_RE.fullmatch(prefix):

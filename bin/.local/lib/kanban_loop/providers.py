@@ -576,14 +576,83 @@ class OpenCodeAdapter(ProviderAdapter):
         return environment
 
 
+class DSHAdapter(ProviderAdapter):
+    """DeepSeek Harness headless one-shot runner.
+
+    Invokes ``dsh --profile headless --patch <approval-never>`` with the
+    task as a positional argument.  The headless runner prints the final
+    assistant message to stdout; ``parse_agent_result`` extracts JSON or
+    falls back to the ``Status:``/``Verdict:`` labels the prompts already
+    emit.
+
+    Sandbox mode is controlled through ``DSH_PERMISSION_MODE`` (read from
+    the base bundle's sandbox-policy row).  Approval is forced to ``never``
+    via a temporary ``--patch`` overlay so the non-interactive headless
+    process never blocks on an approval prompt.
+
+    Model override is not supported through the headless CLI; the model
+    comes from the profile's ``agent-default-model`` composition row or
+    ``$DSH_HOME/settings.yaml``.
+    """
+
+    name = "dsh"
+    executable = "dsh"
+
+    _APPROVAL_PATCH = (
+        "- id: approval\n"
+        "  config:\n"
+        "    policy: never\n"
+    )
+
+    def build_command(
+        self, request: AgentRequest, schema_path: Path, output_path: Path
+    ) -> list[str]:
+        prompt = (
+            f"{request.prompt}\n\nReturn exactly one JSON object matching:\n"
+            f"{json.dumps(request.schema, separators=(',', ':'))}"
+        )
+        patch_path = schema_path.parent / "dsh-approval-never.patch.yml"
+        patch_path.write_text(self._APPROVAL_PATCH, encoding="utf-8")
+        return [
+            self.executable,
+            "--profile",
+            "headless",
+            "--patch",
+            str(patch_path),
+            prompt,
+        ]
+
+    def environment(self, request: AgentRequest) -> dict[str, str]:
+        environment = super().environment(request)
+        environment["DSH_PERMISSION_MODE"] = (
+            "workspace-write" if request.writable else "read-only"
+        )
+        environment.pop("DSH_SESSION_ID", None)
+        environment.pop("DSH_SESSION_JSONL", None)
+        environment.pop("DSH_WEB_URL", None)
+        return environment
+
+    def capabilities(self) -> dict[str, bool]:
+        return {
+            "writable-execution": True,
+            "read-only-review": True,
+            "structured-results": False,
+            "cancellation": True,
+            "session-resume": False,
+        }
+
+
 ADAPTERS: dict[str, type[ProviderAdapter]] = {
     "claude": ClaudeAdapter,
     "codex": CodexAdapter,
+    "dsh": DSHAdapter,
     "opencode": OpenCodeAdapter,
 }
 
 
 def detect_host_provider(environment: dict[str, str]) -> str | None:
+    if environment.get("DSH_SESSION_ID"):
+        return "dsh"
     if environment.get("CLAUDECODE") or environment.get("CLAUDE_CODE_ENTRYPOINT"):
         return "claude"
     if environment.get("CODEX_THREAD_ID") or environment.get("CODEX_SESSION_ID"):

@@ -285,9 +285,9 @@ Style and optional improvements are advisory.
 
 Reviewer quality is provider-specific and independent of the implementation
 model selection: Claude reviewers run Opus with high effort, and Codex reviewers
-run `gpt-5.6-sol` with high reasoning effort. OpenCode reviewers continue to use
-the session's configured model. The selected reviewer provider, model, and effort
-are recorded in the review packet.
+run `gpt-5.6-sol` with high reasoning effort. DeepSeek Harness and OpenCode
+reviewers continue to use the session's configured model. The selected reviewer
+provider, model, and effort are recorded in the review packet.
 
 The review packet contains outcome summary, every changed file, scope notes,
 assumptions, exact verification, review findings, patch hash/path, amendments,
@@ -362,9 +362,14 @@ durable summaries and commit mappings remain.
 
 ## Providers and Configuration
 
-Claude Code, Codex, and OpenCode adapters declare writable execution,
-read-only review, structured result, cancellation, and resume capabilities.
-Missing capabilities are reported instead of weakening policy.
+Claude Code, Codex, DeepSeek Harness, and OpenCode adapters declare writable
+execution, read-only review, structured result, cancellation, and resume
+capabilities. Missing capabilities are reported instead of weakening policy.
+The DeepSeek Harness adapter uses the headless profile with a temporary
+approval-never patch overlay; its sandbox follows `DSH_PERMISSION_MODE`
+(`workspace-write` for implementers, `read-only` for reviewers) and its
+model comes from the profile's `agent-default-model` row or
+`$DSH_HOME/settings.yaml`, not a CLI flag.
 
 Optional `.workflow/kanban/config.yaml` supplies local defaults such as
 provider, implementation model policy, retry budgets, `auto-concurrency`,

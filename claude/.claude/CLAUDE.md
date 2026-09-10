@@ -1,4 +1,7 @@
+@~/AGENTS.md
 @RTK.md
+
+<!-- AGENTS.md is the single source of shared agent guidelines (read by Claude Code, Codex, and DeepSeek Harness). CLAUDE.md layers Claude-specific instructions on top. Edit AGENTS.md first; changes propagate here. -->
 
 ## Write like a human.
 

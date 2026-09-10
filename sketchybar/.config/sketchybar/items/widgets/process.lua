@@ -3,8 +3,9 @@ local settings = require("settings")
 
 require("items.widgets.memory")
 require("items.widgets.cpu")
+require("items.widgets.gpu")
 
-sbar.add("bracket", "widgets.process.bracket", { "widgets.cpu", "widgets.memory" }, {
+sbar.add("bracket", "widgets.process.bracket", { "widgets.cpu", "widgets.memory", "widgets.gpu" }, {
 	background = {
 		color = colors.bg1,
 		height = 30,

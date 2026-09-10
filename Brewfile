@@ -38,6 +38,5 @@ cask "ghostty"
 cask "hammerspoon"
 cask "karabiner-elements"
 cask "zen"
-cask "zed"
 cask "aerospace"           # i3-like tiling window manager
 cask "font-sketchybar-app-font" # app icons for the sketchybar menu widget

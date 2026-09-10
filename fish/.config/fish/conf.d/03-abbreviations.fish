@@ -1,11 +1,11 @@
 # Git
 abbr -a gt git
 abbr -a gts git status
-abbr -a gtch git checkout
+abbr -a gtc git checkout
 abbr -a gtd git diff
 abbr -a gtds git diff --staged
-abbr -a gtpa git pull
-abbr -a gtpu git push
+abbr -a gtp git pull
+abbr -a gtP git push
 
 # Tools
 abbr -a h hx

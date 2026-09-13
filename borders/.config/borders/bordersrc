@@ -10,8 +10,8 @@
 
 options=(
 	style=round
-	width=4.0
-	active_color=0xffcba6f7
+	width=5.0
+	active_color=0xfff38ba8
 	inactive_color=0xff313244
 )
 

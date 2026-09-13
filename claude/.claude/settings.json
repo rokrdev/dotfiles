@@ -201,7 +201,7 @@
     "code-simplifier@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
     "exa@claude-plugins-official": true,
-    "pr-review-toolkit@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": false,
     "skill-creator@claude-plugins-official": true,
     "repowise@repowise": true,
     "humanizer@humanizer": true

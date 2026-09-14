@@ -48,16 +48,18 @@ which rtk             # Verify correct binary
 All other commands are automatically rewritten by the Claude Code hook.
 Example: `git status` → `rtk git status` (transparent, 0 tokens overhead)
 
-## Write like a human.
+## Write like one engineer talking to another
 
-Write the way you actually talk to a smart friend. Short sentences. Plain words.
-No performance. If you wouldn't say it out loud, don't write it.
+Assume the reader is a senior engineer, same level as you. Don't dumb down or define standard technical terms - mutex, idempotent, race condition, hotpath, N+1 are fine as-is. The problem is never vocabulary. It's structure: Long sentences, nested clauses, and abstractions where a concrete detail would do.
 
 ## The main rule
 
-Say what you mean, simply. "The file is parsed by the loader" becomes "the loader
-parses the file." "Utilize" becomes "use." "It is important to note that" disappears.
-If a sentence could appear in any other project's docs, it says nothing. Cut it.
+Say the concrete thing. Name the file, the function, the actual mechanism - not a wrapper word for it. One claim per sentence. If a sentence needs two, "which"s. a semicolon, or an "in order to", split it into two sentences.
+
+Example:
+
+- Confusing: "The reconciliation loop achieves idempotency by diffing desired and observed state before issuing a patch, which avoids redundant API calls when nothing has changed".
+- Clear: "The loop diffs desired vs observed states first. If nothing changed, it skips the patch call."
 
 ## Cut these (this catches most AI slop)
 

@@ -2,8 +2,8 @@
 # helix-herdr — open a registered tool (gitui, scooter, yazi, ...) in a
 # dedicated herdr pane, split to the right of the current (Helix) pane.
 #
-# Generic successor to gitui-herdr: the tool name, pane title, process check,
-# and launch command are all per-tool registry entries instead of hard-coded.
+# The tool name, pane title, process check, and launch command are all per-tool
+# registry entries instead of hard-coded.
 #
 # Designed to be bound to Helix keys, e.g.:
 #   [keys.normal.space.g]
@@ -24,6 +24,8 @@
 #   - creates one (splits the current pane right, ratio 0.5, focused) if missing
 #   - launches <tool> in that pane and focuses it (all current tools are
 #     interactive); optional args (e.g. a git hash for gitui) are forwarded
+#   - routes GitUI's changed-file editor back to the originating Helix pane,
+#     then closes the GitUI pane; Git metadata editors remain blocking `hx`
 #
 # NOTE on directions: herdr's `pane split --direction` only supports `right`
 # and `down`. By design this script always splits right; `--side`/`--right`
@@ -89,8 +91,63 @@ quote_cmd() {
   printf '%s' "${out# }"
 }
 
+# GitUI launches its configured editor as a blocking child process. For normal
+# worktree files, route that open back to the Helix pane that launched GitUI and
+# close GitUI's temporary pane. Git metadata files must keep the normal blocking
+# editor behavior because GitUI reads them only after the editor exits.
+open_in_helix() {
+  local target="${HELIX_HERDR_PANE:-}"
+  local current="${HELIX_HERDR_TOOL_PANE:-${HERDR_PANE_ID:-}}"
+  local arg base command=":open"
+
+  [ "$#" -gt 0 ] || die "--edit requires a file"
+
+  for arg in "$@"; do
+    base="${arg##*/}"
+    case "$base" in
+      COMMIT_EDITMSG|MERGE_MSG|TAG_EDITMSG|git-rebase-todo)
+        exec hx "$@"
+        ;;
+    esac
+  done
+
+  # If this was invoked outside the managed GitUI pane, retain the user's
+  # configured editor behavior instead of swallowing the open request.
+  if [ -z "$target" ] || [ -z "$current" ] \
+    || ! herdr pane get "$target" >/dev/null 2>&1; then
+    exec hx "$@"
+  fi
+
+  # Helix command-line arguments use doubled single quotes inside a quoted
+  # argument. This safely preserves spaces, percent signs, and apostrophes.
+  for arg in "$@"; do
+    command+=" '${arg//\'/\'\'}'"
+  done
+
+  herdr pane send-keys "$target" esc >/dev/null 2>&1 \
+    || exec hx "$@"
+  herdr pane send-text "$target" "$command" >/dev/null 2>&1 \
+    || exec hx "$@"
+  herdr pane send-keys "$target" enter >/dev/null 2>&1 \
+    || exec hx "$@"
+
+  # Clear only this pane's state entry before closing it. Closing the tool pane
+  # naturally returns focus to the surviving Helix pane.
+  local state="$STATE_DIR/helix-herdr-gitui.pane"
+  if [ -f "$state" ] && [ "$(cat "$state")" = "$current" ]; then
+    rm -f "$state"
+  fi
+  herdr pane close "$current" >/dev/null 2>&1 || true
+  exit 0
+}
+
 # --- no-arg / dispatch -----------------------------------------------------
 if [ "$#" -eq 0 ]; then usage; exit 1; fi
+
+if [ "$1" = "--edit" ]; then
+  shift
+  open_in_helix "$@"
+fi
 
 case "$1" in
   --help|-h) usage; exit 0 ;;
@@ -142,6 +199,7 @@ except Exception:
     pass
 ")"
 [ -n "$CUR_TAB" ] || die "could not resolve current tab"
+[ -n "$CUR_PID" ] || die "could not resolve current pane"
 
 # tab_id of pane $1 (empty if it no longer exists)
 pane_tab() {
@@ -200,6 +258,15 @@ except Exception:
 ")"
   [ -n "$PID" ] || die "could not parse new pane id: $OUT"
   herdr pane rename "$PID" "$TITLE" >/dev/null 2>&1
+  # GitUI normally resolves core.editor=hx and therefore opens a second Helix
+  # in its own pane. Override only this GitUI process so changed files are sent
+  # back to the Helix pane that invoked the launcher. The internal editor mode
+  # falls back to blocking hx for Git metadata such as COMMIT_EDITMSG.
+  if [ "$TOOL" = "gitui" ]; then
+    CMD=(env "HELIX_HERDR_PANE=$CUR_PID" \
+      "HELIX_HERDR_TOOL_PANE=$PID" \
+      "GIT_EDITOR=helix-herdr --edit" "${CMD[@]}")
+  fi
   # `; exit` closes the pane when the tool quits (herdr reaps ended processes).
   # Quote each element so args containing spaces (e.g. scooter --search-text
   # with yanked multi-word text) survive the pane's shell unbroken.

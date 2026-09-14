@@ -50,7 +50,7 @@ CONVENTIONAL_COMMIT_SUBJECT = re.compile(
 )
 
 REVIEWER_RUNTIME_BY_PROVIDER: dict[str, tuple[str, str]] = {
-    "claude": ("opus", "high"),
+    "claude": ("sonnet", "high"),
     "codex": ("gpt-5.6-sol", "high"),
 }
 

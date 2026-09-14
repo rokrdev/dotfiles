@@ -6,7 +6,7 @@ The reviewer starts in fresh read-only context and must not edit files, invoke
 agents, stage, commit, or mutate workflow state.
 
 The executable selects the review runtime independently of the implementation
-model: Claude uses Opus with high effort, Codex uses `gpt-5.6-sol` with high
+model: Claude uses Sonnet with high effort, Codex uses `gpt-5.6-sol` with high
 reasoning effort, and OpenCode retains the session model.
 
 For both serial HITL and worktree-parallel AUTO, review the candidate once in

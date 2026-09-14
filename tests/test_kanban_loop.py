@@ -491,20 +491,20 @@ class ProviderTests(unittest.TestCase):
             self.assertTrue(capabilities["read-only-review"])
             self.assertIn("session-resume", capabilities)
 
-    def test_claude_reviewer_command_uses_opus_with_high_effort(self) -> None:
+    def test_claude_reviewer_command_uses_sonnet_with_high_effort(self) -> None:
         request = AgentRequest(
             role="reviewer",
             prompt="review",
             schema=REVIEWER_SCHEMA,
             cwd=Path("/tmp/repo"),
             writable=False,
-            model="opus",
+            model="sonnet",
             effort="high",
         )
         command = ClaudeAdapter().build_command(
             request, Path("/tmp/schema.json"), Path("/tmp/output.json")
         )
-        self.assertEqual(command[command.index("--model") + 1], "opus")
+        self.assertEqual(command[command.index("--model") + 1], "sonnet")
         self.assertEqual(command[command.index("--effort") + 1], "high")
 
     def test_codex_reviewer_command_uses_sol_with_high_effort(self) -> None:
@@ -946,8 +946,8 @@ class EngineTests(RepoCase):
         self.assertEqual(runtime["model"], expected_model)
         self.assertEqual(runtime["effort"], expected_effort)
 
-    def test_claude_reviewer_runtime_uses_opus_high(self) -> None:
-        self.assert_reviewer_runtime("claude", "sonnet", "opus", "high")
+    def test_claude_reviewer_runtime_uses_sonnet_high(self) -> None:
+        self.assert_reviewer_runtime("claude", "sonnet", "sonnet", "high")
 
     def test_codex_reviewer_runtime_uses_sol_high(self) -> None:
         self.assert_reviewer_runtime("codex", "gpt-5.6-terra", "gpt-5.6-sol", "high")

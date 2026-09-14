@@ -284,7 +284,7 @@ coverage, security, data loss, unrelated scope, or unverifiable behavior.
 Style and optional improvements are advisory.
 
 Reviewer quality is provider-specific and independent of the implementation
-model selection: Claude reviewers run Opus with high effort, and Codex reviewers
+model selection: Claude reviewers run Sonnet with high effort, and Codex reviewers
 run `gpt-5.6-sol` with high reasoning effort. DeepSeek Harness and OpenCode
 reviewers continue to use the session's configured model. The selected reviewer
 provider, model, and effort are recorded in the review packet.

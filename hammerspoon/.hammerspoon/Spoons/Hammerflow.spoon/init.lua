@@ -118,12 +118,55 @@ end
 local code = function(arg)
 	return cmd("open -a 'Visual Studio Code' " .. arg)
 end
+
+-- Focus AeroSpace-managed windows through AeroSpace itself. Activating an
+-- off-screen window through macOS can briefly expose the desktop while
+-- AeroSpace restores that window's workspace.
+local aerospace = "/opt/homebrew/bin/aerospace"
+
+local aerospaceRun = function(args)
+	local _, success = hs.execute(aerospace .. " " .. args)
+	return success
+end
+
+local aerospaceFocusApp = function(appPath)
+	local appInfo = hs.application.infoForBundlePath(appPath)
+	local bundleID = appInfo and appInfo.CFBundleIdentifier
+	if not bundleID then
+		return false
+	end
+
+	local windows, success = hs.execute(
+		aerospace .. " list-windows --all --format '%{window-id}%{tab}%{app-bundle-id}'"
+	)
+	if not success then
+		return false
+	end
+
+	for line in windows:gmatch("[^\r\n]+") do
+		local windowID, candidateBundleID = line:match("^(%d+)\t(.+)$")
+		if candidateBundleID == bundleID then
+			return aerospaceRun("focus --window-id " .. windowID)
+		end
+	end
+
+	return false
+end
+
 local launch = function(app)
 	return function()
 		local frontApp = hs.application.frontmostApplication()
 		if frontApp:path() == app then
-			hs.eventtap.keyStroke({ "cmd" }, "tab")
-		else
+			if
+				not aerospaceRun("focus-back-and-forth")
+				and not aerospaceRun("workspace-back-and-forth")
+			then
+				hs.eventtap.keyStroke({ "cmd" }, "tab")
+			end
+			return
+		end
+
+		if not aerospaceFocusApp(app) then
 			hs.application.launchOrFocus(app)
 		end
 	end

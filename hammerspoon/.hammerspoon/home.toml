@@ -6,7 +6,8 @@ auto_reload = true        # optional, default true, reload when any file in this
 toast_on_reload = false    # optional, default false, show a toast when the config is reloaded
 show_ui = true            # optional, default true, show the ui with your key maps
 
-s = ["raycast://extensions/raycast/navigation/switch-windows", "Switch Windows"]
+# Private transport shortcuts; bind the same chords to these commands in Tinycast.
+s = ["shortcut:ctrl alt cmd shift 1", "Switch Windows"]
 
 [a]
 label = "Applications"
@@ -22,20 +23,19 @@ z = ["/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app", "Sa
 
 [b]
 label = "Browser"
-b = ["raycast://extensions/Keyruu/zen-browser/search-bookmarks", "Bookmarks"]
-h = ["raycast://extensions/Keyruu/zen-browser/search-history", "History"]
+b = ["shortcut:ctrl alt cmd shift b", "Bookmarks"]
+h = ["shortcut:ctrl alt cmd shift h", "History"]
 
 [r]
-label = "Raycast"
-c = ["raycast://extensions/raycast/clipboard-history/clipboard-history", "Clipboard"]
-e = ["raycast://extensions/raycast/emoji-symbols/search-emoji-symbols", "Emoji"]
-k = ["raycast://extensions/rolandleth/kill-process/index", "Kill Process"]
-n = ["raycast://extensions/raycast/apple-notes/index", "Notes"]
-s = ["raycast://extensions/raycast/snippets/search-snippets", "Snippets"]
-w = ["raycast://extensions/raycast/dictionary/define-word", "Word"]
-C = ["raycast://extensions/raycast/raycast/confetti", "Confetti"]
+label = "Tinycast"
+c = ["shortcut:ctrl alt cmd shift c", "Clipboard"]
+e = ["shortcut:ctrl alt cmd shift e", "Emoji"]
+k = ["shortcut:ctrl alt cmd shift k", "Kill Process"]
+n = ["shortcut:ctrl alt cmd shift n", "Notes"]
+s = ["shortcut:ctrl alt cmd shift s", "Snippets"]
+w = ["shortcut:ctrl alt cmd shift d", "Word"]
 R = "reload"
-W = ["raycast://extensions/tonka3000/weather/index", "Weather"]
+W = ["shortcut:ctrl alt cmd shift w", "Weather"]
 
 [t]
 label = "Things"

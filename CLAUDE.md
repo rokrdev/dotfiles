@@ -10,12 +10,16 @@ Remote: `git@github.com:rokrdev/dotfiles.git`
 
 | Package | Manages |
 |---------|---------|
+| `aerospace` | AeroSpace window manager — `~/.config/aerospace/` |
 | `agents` | Global instructions and canonical Codex/DeepSeek Harness skills — `~/AGENTS.md`, `~/.agents/skills/` |
 | `asdf` | asdf version manager — `~/.tool-versions` |
 | `bat` | bat (cat replacement) config |
+| `bin` | User scripts — `~/.local/bin/` |
+| `borders` | JankyBorders — `~/.config/borders/` |
 | `btop` | btop system monitor — `~/.config/btop/` |
 | `ccstatusline` | ccstatusline — `~/.config/ccstatusline/` |
-| `claude` | Claude Code — `~/.claude/` (settings, hooks, MCP, agents, and skill links) |
+| `claude` | Claude Code — `~/.claude/` (settings, hooks, agents, and skill compatibility links) |
+| `dprint` | dprint formatter — `~/.config/dprint/` |
 | `fish` | Fish shell — `~/.config/fish/` (config, functions, completions, conf.d) |
 | `ghostty` | Ghostty terminal config |
 | `git` | Git config — `~/.gitconfig` and related |
@@ -29,10 +33,11 @@ Remote: `git@github.com:rokrdev/dotfiles.git`
 | `lazygit` | lazygit config |
 | `marksman` | Marksman (markdown LSP) — `~/.config/marksman/` |
 | `moxide` | Moxide config — `~/.config/moxide/` |
+| `sketchybar` | SketchyBar menu bar — `~/.config/sketchybar/` |
 | `yazi` | yazi file manager config |
 | `zed` | Zed editor — `~/.config/zed/` (keymap, settings, tasks) |
 
-Non-package items at root: `CLAUDE.md`, `README.md`, `Brewfile`, `.editorconfig`, `install.sh`, `clear.sh`
+Non-package items at root: `CLAUDE.md`, `README.md`, `Brewfile`, `.editorconfig`, `install.sh`, `clear.sh`, `scripts/`, `docs/`, `tests/`
 
 ## How to Apply Configs
 
@@ -66,22 +71,13 @@ Stow target is `$HOME` by default when running from the repo root. No `--target`
 - `claude/.claude/settings.json` — Claude Code settings (hooks, permissions)
 - `claude/.claude/hooks/` — Claude Code hook scripts
 - `claude/.claude/skills/` — per-skill compatibility symlinks to `agents/.agents/skills/`
-- `claude/.claude/agents/neo.md` — neo orchestrator agent definition
+- `claude/.claude/agents/` — agent definitions (neo, merlin, argus)
 
 Codex and DeepSeek Harness read the canonical `~/.agents/skills/` tree directly.
 DeepSeek Harness profiles based on `dsh-base`, including the persistent Web
 profile, watch that tree and refresh their catalogs without a restart. Claude
 Code uses the compatibility links under `~/.claude/skills/`. Invoke skills as
 `$skill-name` in Codex or `/skill-name` in Claude Code and DeepSeek Harness.
-
-## Fish Claude Aliases
-
-Defined in `fish/.config/fish/config.fish`:
-
-| Alias | Model | Effort | Auto-approve |
-|-------|-------|--------|--------------|
-| `clb` | claude-sonnet-4-6 | high | no |
-| `cld` | claude-opus (high) | high | no |
 
 ## RepoWise — mandatory for codebase questions
 

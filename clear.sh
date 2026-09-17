@@ -2,7 +2,8 @@
 
 setopt PIPE_FAIL
 
-SKIP=(.git .claude .opencode .workflow .crush .hermes)
+# Non-package directories (keep in sync with install.sh)
+SKIP=(.git .claude .opencode .workflow .crush .hermes docs scripts tests)
 FAILED=0
 
 for d in */ ; do

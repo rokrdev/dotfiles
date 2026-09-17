@@ -25,6 +25,7 @@ z = ["/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app", "Sa
 label = "Browser"
 b = ["shortcut:ctrl alt cmd shift b", "Bookmarks"]
 h = ["shortcut:ctrl alt cmd shift h", "History"]
+t = ["shortcut:ctrl alt cmd shift t", "Tabs"]
 
 [r]
 label = "Tinycast"

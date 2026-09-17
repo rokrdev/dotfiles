@@ -72,16 +72,17 @@ if ! command -v stow &>/dev/null; then
 fi
 
 echo "Stowing packages..."
+NON_PACKAGES=".git .claude .opencode .workflow .crush .hermes docs scripts tests"
 for d in "$DOTFILES"/*/ ; do
   # Get the directory name (strip trailing slash and path)
   dirname="$(basename "$d")"
 
-  # Skip non-package directories and files
-  case "$dirname" in
-    .git|.claude|.opencode|.workflow|.crush|.hermes) continue ;;
-    agents|aerospace|asdf|bat|bin|borders|btop|ccstatusline|claude|dprint|fish|ghostty|git|gitui|hammerspoon|helix|herdr|ideavim|karabiner|keylayout|lazygit|marksman|moxide|sketchybar|yazi|zed) ;; # valid packages
-    *) continue ;; # skip anything else (docs, node_modules, etc.)
-  esac
+  # Skip non-package directories (docs, scripts, etc.)
+  for np in $NON_PACKAGES; do
+    if [ "$dirname" = "$np" ]; then
+      continue 2
+    fi
+  done
 
   # Dry-run check for conflicts
   conflicts=$(stow -v --no-folding -n -d "$DOTFILES" "$dirname" 2>&1 | grep "conflict" || true)

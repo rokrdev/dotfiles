@@ -2372,6 +2372,24 @@ Return structured evidence. If unavailable, end with `Status: complete` or
         state = self.sessions.load(run_id)
         execution_repo = self._execution_repo(state)
         ticket, column = self._current_ticket(state)
+        if column == "done":
+            # A newer session may have completed this ticket while this stale
+            # record remained active. Retire only the dead session: diff cleanup
+            # against its old baseline could otherwise disturb completed work.
+            if state.get("managed-worktree") and not state.get(
+                "managed-worktree-removed"
+            ):
+                self._cleanup_parallel_worktree(run_id)
+            phase = "cancelled" if action == "cancel" else "abandoned"
+            self.sessions.save(
+                run_id,
+                {
+                    "phase": phase,
+                    "termination-reason": reason,
+                },
+            )
+            self.sessions.event(run_id, f"session-{action}", {"reason": reason})
+            return {"status": phase, "ticket": ticket.key}
         if column not in {"active", "review", "blocked", "paused"}:
             raise KanbanError(f"Cannot {action} ticket in {column}")
         if state.get("shelf-patch") is None and column in {"active", "review"}:

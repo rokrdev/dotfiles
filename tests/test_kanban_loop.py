@@ -1229,9 +1229,7 @@ class EngineTests(RepoCase):
         self.write_ticket(column="done", number=1, slug="finished")
         self.write_ticket(number=2, slug="next")
         sessions = SessionStore(self.root)
-        run_id = sessions.create(
-            {"ticket": "LR-01-finished", "phase": "implementing"}
-        )
+        run_id = sessions.create({"ticket": "LR-01-finished", "phase": "implementing"})
 
         result = Engine(self.root).review_action(run_id, "abandon")
 
@@ -1457,6 +1455,231 @@ class EngineTests(RepoCase):
         self.assertTrue(red_path.exists())
         self.assertEqual(adapter.calls[0], "implementer-tests")
 
+    def test_strict_tdd_allows_green_line_additions_for_hitl_review(self) -> None:
+        self.write_ticket(
+            strict_tdd=True,
+            tdd_command="python -c 'print(\"AssertionError\"); raise SystemExit(1)'",
+        )
+
+        def write_red_test(request: Any) -> None:
+            (request.cwd / "tests").mkdir()
+            (request.cwd / "tests/test_app.py").write_text(
+                "def test_value():\n    result = value()\n    assert result == 1\n",
+                encoding="utf-8",
+            )
+
+        def implement_green(request: Any) -> None:
+            self.change_value(1)(request)
+            path = request.cwd / "tests/test_app.py"
+            path.write_text(
+                path.read_text(encoding="utf-8").replace(
+                    "    result = value()\n",
+                    "    prepare()\n    result = value()\n",
+                ),
+                encoding="utf-8",
+            )
+
+        def review_addition(request: Any) -> None:
+            self.assertIn("tests/test_app.py", request.prompt)
+            self.assertIn("GREEN-phase test changes", request.prompt)
+            self.assertIn('"kind": "additions-only"', request.prompt)
+            self.assertIn("+    prepare()", request.prompt)
+
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer-tests", implementer_result(), write_red_test),
+                ("implementer", implementer_result(), implement_green),
+                ("reviewer", review_result(), review_addition),
+            ],
+        )
+        result = self.engine(adapter).start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+
+        self.assertEqual(result["status"], "awaiting-review")
+        changes = result["review-packet"]["strict-tdd-green-test-changes"]
+        self.assertEqual(changes[0]["path"], "tests/test_app.py")
+        self.assertEqual(changes[0]["kind"], "additions-only")
+        self.assertIn("+    prepare()", changes[0]["diff"])
+
+    def test_strict_tdd_green_line_additions_escalate_auto_to_hitl(self) -> None:
+        self.write_ticket(
+            strict_tdd=True,
+            tdd_command="python -c 'print(\"AssertionError\"); raise SystemExit(1)'",
+        )
+
+        def write_red_test(request: Any) -> None:
+            (request.cwd / "tests").mkdir()
+            (request.cwd / "tests/test_app.py").write_text(
+                "def test_value():\n    assert value() == 1\n",
+                encoding="utf-8",
+            )
+
+        def implement_green(request: Any) -> None:
+            self.change_value(1)(request)
+            path = request.cwd / "tests/test_app.py"
+            path.write_text(
+                path.read_text(encoding="utf-8").replace(
+                    "    assert value() == 1\n",
+                    "    prepare()\n    assert value() == 1\n",
+                ),
+                encoding="utf-8",
+            )
+
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer-tests", implementer_result(), write_red_test),
+                ("implementer", implementer_result(), implement_green),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        engine = self.engine(adapter)
+        result = engine.start(
+            ticket_ref="LR-01-deliver-outcome",
+            feature=None,
+            all_tickets=False,
+            mode="auto",
+            branch=None,
+            max_attempts=3,
+        )
+
+        self.assertEqual(result["status"], "blocked")
+        self.assertIn("require HITL review", result["reason"])
+        state = SessionStore(self.root).load(result["run-id"])
+        self.assertEqual(state["mode"], "hitl")
+        self.assertTrue(state["review-packet"])
+        self.assertTrue(state["shelf-patch"])
+        resumed = engine.resume("LR-01-deliver-outcome")
+        self.assertEqual(resumed["status"], "awaiting-review")
+
+    def test_strict_tdd_rewrite_reaches_hitl_review_with_diff(self) -> None:
+        self.write_ticket(
+            strict_tdd=True,
+            tdd_command="python -c 'print(\"AssertionError\"); raise SystemExit(1)'",
+        )
+
+        def write_red_test(request: Any) -> None:
+            (request.cwd / "tests").mkdir()
+            (request.cwd / "tests/test_app.py").write_text(
+                "def test_value(): assert False\n",
+                encoding="utf-8",
+            )
+
+        def consolidate_green_test(request: Any) -> None:
+            self.change_value(1)(request)
+            (request.cwd / "tests/test_app.py").write_text(
+                "def test_value():\n    setup()\n    assert True\n",
+                encoding="utf-8",
+            )
+
+        def review_rewrite(request: Any) -> None:
+            self.assertIn("RED-to-GREEN diffs", request.prompt)
+            self.assertIn("-def test_value(): assert False", request.prompt)
+            self.assertIn("+    setup()", request.prompt)
+
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer-tests", implementer_result(), write_red_test),
+                ("implementer", implementer_result(), consolidate_green_test),
+                ("reviewer", review_result(), review_rewrite),
+            ],
+        )
+        result = self.engine(adapter).start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+
+        self.assertEqual(result["status"], "awaiting-review")
+        changes = result["review-packet"]["strict-tdd-green-test-changes"]
+        self.assertEqual(changes[0]["path"], "tests/test_app.py")
+        self.assertEqual(changes[0]["kind"], "rewrite-or-delete")
+        self.assertIn("-def test_value(): assert False", changes[0]["diff"])
+
+    def test_strict_tdd_extra_test_path_shelves_resumable_hitl_block(self) -> None:
+        self.write_ticket(
+            strict_tdd=True,
+            tdd_command="python -c 'print(\"AssertionError\"); raise SystemExit(1)'",
+        )
+
+        def write_red_test(request: Any) -> None:
+            (request.cwd / "tests").mkdir()
+            (request.cwd / "tests/test_app.py").write_text(
+                "def test_value(): assert False\n",
+                encoding="utf-8",
+            )
+
+        def add_extra_test(request: Any) -> None:
+            self.change_value(1)(request)
+            (request.cwd / "tests/test_extra.py").write_text(
+                "def test_extra(): assert True\n",
+                encoding="utf-8",
+            )
+
+        def retry_with_additive_setup(request: Any) -> None:
+            self.change_value(2)(request)
+            path = request.cwd / "tests/test_app.py"
+            path.write_text(
+                "prepare()\n" + path.read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer-tests", implementer_result(), write_red_test),
+                ("implementer", implementer_result(), add_extra_test),
+                ("implementer", implementer_result(), retry_with_additive_setup),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        engine = self.engine(adapter)
+        result = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+
+        self.assertEqual(result["status"], "blocked")
+        self.assertIn("additional test paths", result["reason"])
+        run_id = result["run-id"]
+        state = SessionStore(self.root).load(run_id)
+        self.assertEqual(state["phase"], "blocked")
+        self.assertTrue(state["shelf-patch"])
+        self.assertTrue(state["strict-tdd-red-test-sources"])
+        resumed = engine.resume("LR-01-deliver-outcome")
+        self.assertEqual(resumed["status"], "active")
+        self.assertEqual(SessionStore(self.root).load(run_id)["phase"], "active")
+        worker = Path(SessionStore(self.root).load(run_id)["execution-repo"])
+        self.assertEqual(
+            (worker / "tests/test_app.py").read_text(encoding="utf-8"),
+            "def test_value(): assert False\n",
+        )
+        self.assertFalse((worker / "tests/test_extra.py").exists())
+        retried = engine.start(
+            ticket_ref="LR-01-deliver-outcome",
+            feature=None,
+            all_tickets=False,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        self.assertEqual(retried["status"], "awaiting-review")
+
     def test_review_pause_shelves_and_resume_restores_patch(self) -> None:
         self.write_ticket()
         adapter = FakeAdapter(
@@ -1611,7 +1834,7 @@ class EngineTests(RepoCase):
         )
         self.assertEqual(resumed["status"], "awaiting-review")
 
-    def test_provider_failure_is_persisted_before_exception(self) -> None:
+    def test_provider_failure_is_persisted_and_shelved(self) -> None:
         self.write_ticket()
         self.store.config_path.write_text("provider-retries: 0\n", encoding="utf-8")
 
@@ -1634,15 +1857,19 @@ class EngineTests(RepoCase):
 
         engine = Engine(self.root)
         engine.provider = lambda state=None: BrokenAdapter()  # type: ignore[method-assign]
-        with self.assertRaisesRegex(KanbanError, "diagnostics"):
-            engine.start(
-                ticket_ref=None,
-                feature=None,
-                all_tickets=True,
-                mode="hitl",
-                branch=None,
-                max_attempts=3,
-            )
+        result = engine.start(
+            ticket_ref=None,
+            feature=None,
+            all_tickets=True,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        self.assertEqual(result["status"], "blocked")
+        self.assertIn("diagnostics", result["reason"])
+        state = SessionStore(self.root).load(result["run-id"])
+        self.assertEqual(state["phase"], "blocked")
+        self.assertTrue(state["shelf-patch"])
         failures = list(SessionStore(self.root).failures.glob("*.json"))
         self.assertGreaterEqual(len(failures), 1)
         combined = "\n".join(path.read_text() for path in failures)

@@ -29,6 +29,13 @@ Style, optional cleanup, and nonessential improvements are advisory. Do not
 invent requirements, treat `likely-files` as an allowlist, or require TDD when
 `strict-tdd` is false.
 
+For strict-TDD candidates, the executable identifies test files that received
+line-only additions during GREEN and supplies RED-to-GREEN diffs for updates,
+deletions, or reordering. Verify that each change is necessary and preserves or
+strengthens the RED behavior. Legitimate consolidation and shared-setup changes
+are allowed; skipped, weakened, bypassed, replaced, or unverifiable RED behavior
+is a blocking correctness finding.
+
 Return exactly the structured reviewer schema supplied by the executable:
 
 - `verdict`: `accept`, `revise`, or `blocked`;

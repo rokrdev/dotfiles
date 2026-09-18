@@ -125,7 +125,12 @@ but ticket-generation workflows must not emit it. If `mode` is absent, the
 runner fails safe to HITL. HITL always overrides AUTO. Strict RED→GREEN is
 opt-in with `strict-tdd: true` and then requires an exact, non-destructive
 `tdd-test-command`. Other tickets use verification appropriate to their change
-type.
+type. During GREEN, test changes are classified as `additions-only` or
+`rewrite-or-delete`, with an exact RED-to-GREEN diff for either form. HITL sends
+both through explicit review, while AUTO escalates to HITL. The reviewer may
+accept legitimate consolidation or shared-setup changes only when the RED
+behavior remains preserved or strengthened. Changing test paths outside the RED
+phase remains a resumable blocker in both modes.
 
 ## Lifecycle
 
@@ -291,7 +296,8 @@ provider, model, and effort are recorded in the review packet.
 
 The review packet contains outcome summary, every changed file, scope notes,
 assumptions, exact verification, review findings, patch hash/path, amendments,
-and a proposed commit subject following
+any strict-TDD GREEN-phase test additions or rewrite diffs, and a proposed commit
+subject following
 [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/):
 `<type>[optional scope][!]: <description>`. Invalid or missing agent proposals
 fall back to a valid `chore:` subject; invalid human `--message` overrides are

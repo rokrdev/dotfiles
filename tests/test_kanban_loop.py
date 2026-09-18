@@ -346,8 +346,11 @@ class MigrationTests(RepoCase):
         self.assertEqual(board.tickets["LF-01-first"].column, "ready")
         self.assertEqual(board.tickets["LF-02-second"].column, "paused")
         self.assertEqual(board.tickets["LF-02-second"].ticket.mode, "hitl")
-        key, destination = self.store.resume_ticket("LF-02-second", "migration")
-        self.assertEqual((key, destination), ("LF-02-second", "ready"))
+        resumed = Engine(self.root).resume("LF-02-second")
+        self.assertEqual(
+            resumed,
+            {"status": "ready", "ticket": "LF-02-second"},
+        )
 
     def test_migration_rejects_duplicate_legacy_dependency_slugs(self) -> None:
         self.legacy_ticket("backlog", 1, "duplicate")
@@ -1220,6 +1223,46 @@ class EngineTests(RepoCase):
         self.assertEqual(len(gitops.registered_worktrees(self.root)), 1)
         ticket_status = Engine(self.root).status()["tickets"][0]
         self.assertEqual(ticket_status["cancellation-reason"], "Requirement withdrawn")
+
+    def test_abandon_stale_session_for_completed_ticket_unjams_board(self) -> None:
+        self.write_ticket(column="done", number=1, slug="finished")
+        self.write_ticket(number=2, slug="next")
+        sessions = SessionStore(self.root)
+        run_id = sessions.create(
+            {"ticket": "LR-01-finished", "phase": "implementing"}
+        )
+
+        result = Engine(self.root).review_action(run_id, "abandon")
+
+        self.assertEqual(
+            result,
+            {"status": "abandoned", "ticket": "LR-01-finished"},
+        )
+        self.assertEqual(
+            self.store.load().tickets["LR-01-finished"].column,
+            "done",
+        )
+        self.assertEqual(sessions.load(run_id)["phase"], "abandoned")
+        self.assertIsNone(sessions.active_for_ticket("LR-01-finished"))
+        adapter = FakeAdapter(
+            self.root,
+            [
+                (
+                    "implementer",
+                    implementer_result(status="blocked", blocker="stop here"),
+                    None,
+                )
+            ],
+        )
+        next_result = self.engine(adapter).start(
+            ticket_ref="LR-02-next",
+            feature=None,
+            all_tickets=False,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        self.assertEqual(next_result["ticket"], "LR-02-next")
 
     def test_failed_verification_requires_explicit_override(self) -> None:
         self.write_ticket(verification=["python -c 'raise SystemExit(1)'"])

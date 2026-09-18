@@ -276,7 +276,13 @@ class BoardStore:
         if located.column != "paused" or not isinstance(record, dict):
             raise KanbanError(f"Ticket is not paused: {located.ticket.key}")
         origins = set(record.get("origins", []))
-        origins.discard(origin)
+        effective_origin = origin
+        if origin == "ticket" and origin not in origins and "migration" in origins:
+            # A migrated in-progress ticket has no direct user pause to remove.
+            # Treat the ordinary ticket resume command as releasing the migration
+            # safety pause while preserving any independent feature pause.
+            effective_origin = "migration"
+        origins.discard(effective_origin)
         if origins:
             record["origins"] = sorted(origins)
             self.save_control(control)

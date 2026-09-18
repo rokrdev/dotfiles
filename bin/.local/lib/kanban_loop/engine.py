@@ -649,6 +649,45 @@ class Engine:
                         )
                     if phase in {"paused", "blocked"}:
                         if (
+                            phase == "blocked"
+                            and existing_state.get("managed-worktree")
+                            and not existing_state.get("managed-worktree-removed")
+                            and self._has_valid_integration_patch(
+                                run_id,
+                                existing_state,
+                            )
+                        ):
+                            self._cleanup_parallel_worktree(run_id)
+                            current = self.board.load().tickets[
+                                existing_ticket.ticket.key
+                            ]
+                            if current.column == "blocked":
+                                self.board.transition(
+                                    current.ticket,
+                                    "blocked",
+                                    "review",
+                                )
+                            recovered_mode = (
+                                "auto"
+                                if existing_state.get("escalated-from") == "auto"
+                                else existing_state.get("mode", "hitl")
+                            )
+                            self.sessions.save(
+                                run_id,
+                                {
+                                    "phase": "integration-pending",
+                                    "mode": recovered_mode,
+                                    "blocker": None,
+                                    "technical-blocker": False,
+                                },
+                            )
+                            self.sessions.event(
+                                run_id,
+                                "worktree-cleanup-recovered",
+                                {"previous-phase": phase},
+                            )
+                            return self._integrate_parallel_candidate(run_id)
+                        if (
                             existing_state.get("mode") == "auto"
                             and existing_state.get("managed-worktree")
                             and not existing_state.get("managed-worktree-removed")
@@ -863,7 +902,12 @@ class Engine:
         if state.get("managed-worktree-removed"):
             return
         worktree = Path(worktree_value)
-        gitops.remove_managed_worktree(self.repo, path=worktree, branch=branch)
+        gitops.remove_managed_worktree(
+            self.repo,
+            path=worktree,
+            branch=branch,
+            force=True,
+        )
         self.sessions.save(
             run_id,
             {
@@ -877,6 +921,21 @@ class Engine:
             "worktree-removed",
             {"worktree": worktree_value, "branch": branch},
         )
+
+    def _has_valid_integration_patch(
+        self, run_id: str, state: dict[str, Any]
+    ) -> bool:
+        patch_name = state.get("integration-patch")
+        expected_hash = state.get("patch-hash")
+        if not isinstance(patch_name, str) or not isinstance(expected_hash, str):
+            return False
+        try:
+            patch = (self.sessions.path(run_id) / patch_name).read_text(
+                encoding="utf-8"
+            )
+        except OSError:
+            return False
+        return gitops.patch_hash(patch) == expected_hash
 
     def _queue_managed_candidate(self, run_id: str) -> dict[str, Any]:
         state = self.sessions.load(run_id)

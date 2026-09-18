@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import difflib
 import hashlib
 import json
 import re
@@ -73,6 +74,18 @@ def _test_path(path: str) -> bool:
         or ".test." in name
         or ".spec." in name
     )
+
+
+def _contains_only_line_additions(before: bytes, after: bytes) -> bool:
+    if before == after:
+        return False
+    original = before.splitlines(keepends=True)
+    candidate = after.splitlines(keepends=True)
+    original_index = 0
+    for line in candidate:
+        if original_index < len(original) and line == original[original_index]:
+            original_index += 1
+    return original_index == len(original)
 
 
 def _command_is_safe(command: str) -> tuple[bool, str | None]:
@@ -209,6 +222,7 @@ def reviewer_prompt(
     patch: str,
     verification: list[dict[str, Any]],
     amendments: list[dict[str, Any]],
+    strict_tdd_green_test_changes: list[dict[str, str]],
 ) -> str:
     return f"""You are a fresh independent read-only reviewer. You did not implement
 this patch. Inspect the repository as needed, but do not edit files, run agents,
@@ -228,6 +242,15 @@ Accepted amendments:
 
 Verification evidence:
 {json.dumps(verification, indent=2)}
+
+Strict TDD GREEN-phase test changes, classified with RED-to-GREEN diffs:
+{json.dumps(strict_tdd_green_test_changes, indent=2)}
+
+When that list is non-empty, verify that each test change is necessary for the
+production implementation and preserves or strengthens the RED behavior.
+Consolidation and shared-setup changes are allowed when behavior is preserved.
+Treat skipped, weakened, bypassed, replaced, or unverifiable RED behavior as a
+blocking correctness finding.
 
 Patch:
 ```diff
@@ -922,9 +945,7 @@ class Engine:
             {"worktree": worktree_value, "branch": branch},
         )
 
-    def _has_valid_integration_patch(
-        self, run_id: str, state: dict[str, Any]
-    ) -> bool:
+    def _has_valid_integration_patch(self, run_id: str, state: dict[str, Any]) -> bool:
         patch_name = state.get("integration-patch")
         expected_hash = state.get("patch-hash")
         if not isinstance(patch_name, str) or not isinstance(expected_hash, str):
@@ -1437,10 +1458,42 @@ class Engine:
         )
         contract = self._contract_ticket(state)
         strict_test_paths: list[str] = []
+        strict_test_contents: dict[str, bytes] = {}
         try:
-            if contract.strict_tdd and attempt == 1:
-                strict_test_paths = self._strict_red(run_id, contract, state, feedback)
-            test_fingerprints = gitops.fingerprints(execution_repo, strict_test_paths)
+            if contract.strict_tdd:
+                if attempt == 1:
+                    strict_test_paths = self._strict_red(
+                        run_id, contract, state, feedback
+                    )
+                    red_sources: dict[str, str] = {}
+                    for path in strict_test_paths:
+                        content = (execution_repo / path).read_bytes()
+                        try:
+                            text = content.decode("utf-8")
+                        except UnicodeDecodeError as error:
+                            raise KanbanError(
+                                f"Strict TDD test must be UTF-8 text: {path}"
+                            ) from error
+                        source = f"attempt-{attempt:02d}-red-tests/{path}"
+                        self.sessions.write_text(run_id, source, text)
+                        red_sources[path] = source
+                        strict_test_contents[path] = content
+                    state = self.sessions.save(
+                        run_id,
+                        {"strict-tdd-red-test-sources": red_sources},
+                    )
+                else:
+                    red_sources = state.get("strict-tdd-red-test-sources", {})
+                    if not isinstance(red_sources, dict) or any(
+                        not isinstance(path, str) or not isinstance(source, str)
+                        for path, source in red_sources.items()
+                    ):
+                        raise KanbanError("Strict TDD RED test snapshots are invalid")
+                    strict_test_paths = sorted(red_sources)
+                    strict_test_contents = {
+                        path: (self.sessions.path(run_id) / source).read_bytes()
+                        for path, source in red_sources.items()
+                    }
             request = AgentRequest(
                 role="implementer",
                 prompt=implementer_prompt(
@@ -1475,18 +1528,59 @@ class Engine:
                     if _test_path(path) and path not in strict_test_paths
                 }
                 if extra_test_paths:
+                    gitops.restore_paths(
+                        execution_repo,
+                        extra_test_paths,
+                        state["baseline"]["base-commit"],
+                    )
                     raise KanbanError(
                         "Strict TDD implementation phase changed additional test paths: "
                         f"{sorted(extra_test_paths)}"
                     )
-                changed_tests = {
-                    path
-                    for path, before in test_fingerprints.items()
-                    if gitops.file_fingerprint(execution_repo / path) != before
-                }
-                if changed_tests:
-                    raise KanbanError(
-                        f"Strict TDD implementation phase rewrote test paths: {sorted(changed_tests)}"
+                green_test_changes: list[dict[str, str]] = []
+                for path, before in strict_test_contents.items():
+                    current_path = execution_repo / path
+                    after = (
+                        current_path.read_bytes() if current_path.is_file() else None
+                    )
+                    if after == before:
+                        continue
+                    kind = (
+                        "additions-only"
+                        if after is not None
+                        and _contains_only_line_additions(before, after)
+                        else "rewrite-or-delete"
+                    )
+                    before_text = before.decode("utf-8")
+                    after_text = "" if after is None else after.decode("utf-8")
+                    green_test_changes.append(
+                        {
+                            "path": path,
+                            "kind": kind,
+                            "diff": "".join(
+                                difflib.unified_diff(
+                                    before_text.splitlines(keepends=True),
+                                    after_text.splitlines(keepends=True),
+                                    fromfile=f"{path} (RED)",
+                                    tofile=f"{path} (GREEN)",
+                                )
+                            ),
+                        }
+                    )
+                state = self.sessions.save(
+                    run_id,
+                    {"strict-tdd-green-test-changes": green_test_changes},
+                )
+                if green_test_changes:
+                    self.sessions.event(
+                        run_id,
+                        "strict-tdd-green-test-changes",
+                        {
+                            "changes": [
+                                {"path": item["path"], "kind": item["kind"]}
+                                for item in green_test_changes
+                            ]
+                        },
                     )
             if implementation.data["status"] == "blocked":
                 return self._block(
@@ -1543,17 +1637,15 @@ class Engine:
                     extra={"original-diagnostics": str(path)},
                 )
             raise
-        except Exception as error:
+        except Exception as error:  # noqa: BLE001 - persist and shelf session failure
             path = self._record_failure(
                 error, run_id=run_id, phase="implementation", extra={"attempt": attempt}
             )
-            if state["mode"] == "auto":
-                return self._block(
-                    run_id,
-                    f"Implementation failure; diagnostics: {path}",
-                    technical=True,
-                )
-            raise KanbanError(f"Implementation failed; diagnostics: {path}") from error
+            return self._block(
+                run_id,
+                f"Implementation failure: {error}; diagnostics: {path}",
+                technical=True,
+            )
 
     def _finalize_candidate(
         self,
@@ -1620,7 +1712,11 @@ class Engine:
             AgentRequest(
                 role="reviewer",
                 prompt=reviewer_prompt(
-                    ticket, patch, verification, state.get("amendments", [])
+                    ticket,
+                    patch,
+                    verification,
+                    state.get("amendments", []),
+                    state.get("strict-tdd-green-test-changes", []),
                 ),
                 schema=REVIEWER_SCHEMA,
                 cwd=execution_repo,
@@ -1680,6 +1776,9 @@ class Engine:
             else str(self.sessions.path(run_id) / patch_name),
             "proposed-commit-message": suggested.strip(),
             "amendments": state.get("amendments", []),
+            "strict-tdd-green-test-changes": state.get(
+                "strict-tdd-green-test-changes", []
+            ),
         }
         self.sessions.write_json(run_id, f"{artifact}-review-packet.json", packet)
         state = self.sessions.save(
@@ -1711,6 +1810,12 @@ class Engine:
                 "stage": review_stage,
             },
         )
+        if state["mode"] == "auto" and state.get("strict-tdd-green-test-changes"):
+            return self._block(
+                run_id,
+                "Strict TDD GREEN-phase test changes require HITL review.",
+                technical=False,
+            )
         if state["mode"] == "auto":
             if verification_ok and review["verdict"] == "accept":
                 if state.get("integration-required"):

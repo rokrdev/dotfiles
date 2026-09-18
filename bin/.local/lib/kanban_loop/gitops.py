@@ -152,14 +152,19 @@ def create_managed_worktree(
     git(repo, "worktree", "add", "-b", branch, str(path), base)
 
 
-def remove_managed_worktree(repo: Path, *, path: Path, branch: str) -> None:
+def remove_managed_worktree(
+    repo: Path, *, path: Path, branch: str, force: bool = False
+) -> None:
     registered = {
         str(Path(str(item["worktree"])).resolve())
         for item in registered_worktrees(repo)
         if "worktree" in item
     }
     if str(path.resolve()) in registered:
-        git(repo, "worktree", "remove", str(path))
+        arguments = ["worktree", "remove"]
+        if force:
+            arguments.append("--force")
+        git(repo, *arguments, str(path))
     elif path.exists():
         raise KanbanError(
             f"Refusing to remove unregistered managed worktree path: {path}"

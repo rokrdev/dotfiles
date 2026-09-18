@@ -14,6 +14,7 @@ import unittest
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
+from unittest import mock
 
 LIBRARY = Path(__file__).resolve().parents[1] / "bin/.local/lib"
 sys.path.insert(0, str(LIBRARY))
@@ -1263,6 +1264,60 @@ class EngineTests(RepoCase):
             max_attempts=3,
         )
         self.assertEqual(next_result["ticket"], "LR-02-next")
+
+    def test_run_retries_failed_dirty_worktree_cleanup_and_integrates(self) -> None:
+        self.write_ticket()
+        adapter = FakeAdapter(
+            self.root,
+            [
+                ("implementer", implementer_result(), self.change_value(7)),
+                ("reviewer", review_result(), None),
+                ("reviewer", review_result(), None),
+            ],
+        )
+        engine = self.engine(adapter)
+        candidate = engine.start(
+            ticket_ref="LR-01-deliver-outcome",
+            feature=None,
+            all_tickets=False,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+        sessions = SessionStore(self.root)
+        state = sessions.load(candidate["run-id"])
+        worker = Path(state["execution-repo"])
+        (worker / "leftover.txt").write_text("unsaved\n", encoding="utf-8")
+
+        with mock.patch.object(
+            gitops,
+            "remove_managed_worktree",
+            side_effect=KanbanError("simulated cleanup failure"),
+        ):
+            blocked = engine.review_action(candidate["run-id"], "approve")
+
+        self.assertEqual(blocked["status"], "blocked")
+        self.assertTrue(worker.exists())
+        self.assertFalse(
+            sessions.load(candidate["run-id"]).get("managed-worktree-removed")
+        )
+
+        recovered = engine.start(
+            ticket_ref="LR-01-deliver-outcome",
+            feature=None,
+            all_tickets=False,
+            mode="hitl",
+            branch=None,
+            max_attempts=3,
+        )
+
+        self.assertEqual(recovered["status"], "completed")
+        self.assertFalse(worker.exists())
+        self.assertEqual(
+            self.store.load().tickets["LR-01-deliver-outcome"].column,
+            "done",
+        )
+        self.assertTrue(sessions.load(candidate["run-id"])["managed-worktree-removed"])
 
     def test_failed_verification_requires_explicit_override(self) -> None:
         self.write_ticket(verification=["python -c 'raise SystemExit(1)'"])

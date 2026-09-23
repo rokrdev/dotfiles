@@ -20,8 +20,10 @@
 
 [pull]
 	ff = only
+
 [push]
 	default = current
+	autoSetupRemote = true
 
 [commit]
 	template = ~/.gitmessage

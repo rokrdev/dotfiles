@@ -8,6 +8,7 @@ These are common instructions for all agents across all scenarios.
 4. Flag uncertainty explicitly. If you're unsure about something, see point 1 above. If it makes sense to do so, conduct a small, localised and low-risk experiment and bring the hypothesis and results to me to discuss. Confidence without certainty causes more damage than admitting a gap.
 5. I'm always open to ideas on better ways to do things. Please don't hesitate to suggest a better way, or one that has long lasting impact over a tactical change. (as a few examples)
 6. Do not add your agent name as a commit co-author unless the user explicitly requests it. The user-invoked `kanban-loop` skill is an explicit request and supplies the trailer rules.
+7. Comment why, not what. Delete any comment that restates the code or narrates structure the names already made clear. Keep comments short-single-line. Ters 5 to 15 words, never a paragraph. Don't add Javadoc to every method. Only document where the contract is non-obvious from the name and signature.
 
 ## Codex subagent routing
 

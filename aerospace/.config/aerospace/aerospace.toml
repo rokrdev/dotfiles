@@ -85,9 +85,9 @@ gaps.inner.horizontal = 4
 gaps.inner.vertical =   4
 gaps.outer.left =       2
 gaps.outer.bottom =     2
-# Reserve the sketchybar strip (40px) on every monitor so tiled windows stop
-# below the bar instead of overlapping its top chrome.
-gaps.outer.top =        [{ monitor.main = 10 }, { monitor.secondary = 41 }, 2]
+# Bar strip is margin(10)+height(40)=50pt (bar.lua); 45 tucks windows 5pt under the blur.
+# Keyed by display name since main/secondary flip per machine; notches measure from notch bottom.
+gaps.outer.top =        [{ monitor."dell" = 45 }, { monitor."built-in" = 10 }, 45]
 gaps.outer.right =      2
 
 # 'main' binding mode declaration

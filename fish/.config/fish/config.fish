@@ -17,7 +17,7 @@ if test (uname) = Darwin
     # Global Domain" when the shell lacks defaults authorization (e.g. herdr
     # panes launched from an agent/SSH context). 2>/dev/null also silences any
     # residual denial without affecting normal interactive terminals.
-    set -l k "ApplePressAndHoldEnabled"
+    set -l k ApplePressAndHoldEnabled
     if not defaults read -g $k >/dev/null 2>&1
         defaults write -g $k -bool false 2>/dev/null
     end

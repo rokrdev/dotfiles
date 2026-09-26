@@ -2,6 +2,12 @@ local icons = require("icons")
 local colors = require("colors")
 local settings = require("settings")
 
+-- Desktop Macs (e.g. Mac Studio) have no InternalBattery in pmset output; skip the widget there.
+local batt = io.popen("pmset -g batt 2>/dev/null"):read("*a") or ""
+if not batt:find("InternalBattery") then
+	return
+end
+
 local battery = sbar.add("item", "widgets.battery", {
 	position = "right",
 	icon = {

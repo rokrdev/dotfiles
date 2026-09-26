@@ -1,2 +1,2 @@
-# Apply the color scheme so it travels via stow instead of the local fish_frozen_theme.fish.
-setscheme catppuccin_mocha
+# Built-in theme. --color-theme=dark pins mocha; otherwise light terminals get Latte.
+fish_config theme choose catppuccin-mocha --color-theme=dark

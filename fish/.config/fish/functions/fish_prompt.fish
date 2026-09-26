@@ -11,9 +11,6 @@ set __fish_git_prompt_color_upstream cyan
 set __fish_git_prompt_color_branch magenta
 set -U fish_prompt_pwd_dir_length 0
 
-# set -U fish_color_cwd blue
-# set -U fish_color_cwd_root red
-
 function fish_prompt --description 'Write out the prompt'
     set -l _display_status $status
 
@@ -50,5 +47,5 @@ function fish_prompt --description 'Write out the prompt'
         echo -s -e (set_color brblack) "=== $duration ===" (set_color normal)
     end
 
-    echo -n -s -e $mode_indicator (set_color $fish_color_cwd) $pwd $git ' ' (set_color white) (date +%H:%M:%S) '\n' (set_color $prompt_color) $prompt
+    echo -n -s -e $mode_indicator (set_color blue) $pwd $git ' ' (set_color white) (date +%H:%M:%S) '\n' (set_color $prompt_color) $prompt
 end

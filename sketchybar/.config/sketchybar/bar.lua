@@ -2,7 +2,8 @@ local colors = require("colors")
 
 -- Equivalent to the --bar domain
 sbar.bar({
-  topmost = "normal",
+  -- 'normal' is not an accepted value; sketchybar ignores it and leaves the bar off.
+  topmost = "window",
   height = 40,
   color = colors.transparent,
   padding_right = 2,

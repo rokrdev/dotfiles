@@ -4,7 +4,6 @@ abbr -a gts git status
 abbr -a gtc git checkout
 abbr -a gtd git diff
 abbr -a gtds git diff --staged
-abbr -a gtp git pull
 abbr -a gtP git push
 
 # Tools

@@ -52,6 +52,7 @@ Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by d
 | `ccstatusline` | ccstatusline — `~/.config/ccstatusline/` |
 | `claude` | Claude Code — `~/.claude/` (settings, hooks, agents, and skill compatibility links) |
 | `dprint` | dprint formatter — `~/.config/dprint/` |
+| `elio` | elio file manager — `~/.config/elio/` |
 | `fish` | Fish shell — `~/.config/fish/` (config, functions, completions, conf.d) |
 | `ghostty` | Ghostty terminal config |
 | `git` | Git config — `~/.gitconfig` and related |

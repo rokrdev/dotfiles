@@ -79,6 +79,12 @@ n = { label = "Files", command = [
   ':open %sh{cat /tmp/unique-file}',
   ':redraw',
 ] }
+# :sh true masks the empty-path :open error on cancel, like yazi
+e = { label = "Files (elio)", command = [
+  ':open %sh{elio-pick "%{buffer_name}"}',
+  ':sh true',
+  ':redraw',
+] }
 r = { label = "Reload File", command = [":reload"] }
 R = { label = "Reload Config", command = [":config-reload"] }
 w = { label = "LSP Commands", command = ":lsp-workspace-command" }

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Run elio as a file chooser for Helix; print the chosen path to stdout.
+set -u
+
+chooser="$(mktemp -t elio-chooser)" || exit 1
+trap 'rm -f "$chooser"' EXIT
+
+# Helix passes "[scratch]" for unnamed buffers; elio errors on missing paths.
+target="${1:-.}"
+[ -e "$target" ] || target=.
+
+# macOS kqueue can't poll /dev/tty, so elio's input reader needs the real tty device.
+tty="/dev/$(ps -o tty= -p $$ | tr -d ' ')"
+elio "$target" --chooser-file="$chooser" <"$tty"
+
+# elio leaves Helix's terminal modes off; restore alt screen, paste, mouse.
+printf '\e[?1049h\e[?2004h\e[?1002h\e[?1006h' >/dev/tty
+
+head -n 1 "$chooser"

@@ -38,7 +38,7 @@ spoon.Hammerflow.registerFunctions({
 })
 
 -- cmd+` cycles through the focused app's windows (overrides macOS default)
-hs.hotkey.bind({"cmd"}, "`", cycleAppWindows)
+hs.hotkey.bind({ "cmd" }, "`", cycleAppWindows)
 
 -- select config by machine serial number suffix (no full serials in the repo)
 -- 3F4Y = home (bharat), X177 = work (bjoshi)

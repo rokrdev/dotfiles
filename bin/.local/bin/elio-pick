@@ -11,7 +11,7 @@ target="${1:-.}"
 
 # macOS kqueue can't poll /dev/tty, so elio's input reader needs the real tty device.
 tty="/dev/$(ps -o tty= -p $$ | tr -d ' ')"
-elio "$target" --chooser-file="$chooser" <"$tty"
+ELIO_IMAGE_PREVIEWS=1 elio "$target" --chooser-file="$chooser" <"$tty"
 
 # elio leaves Helix's terminal modes off; restore alt screen, paste, mouse.
 printf '\e[?1049h\e[?2004h\e[?1002h\e[?1006h' >/dev/tty

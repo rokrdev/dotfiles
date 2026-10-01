@@ -35,3 +35,6 @@ sketchybar/.config/sketchybar/helper/helper
 .hermes/
 !claude/.claude/
 !bin/.local/
+
+# Claude Code local agent memory (per-machine, never committed)
+claude/.claude/MEMORY.md

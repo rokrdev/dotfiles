@@ -72,7 +72,8 @@ if ! command -v stow &>/dev/null; then
 fi
 
 echo "Stowing packages..."
-NON_PACKAGES=".git .claude .opencode .workflow .crush .hermes docs scripts tests"
+# The */ glob never matches dot dirs; only these real dirs need listing
+NON_PACKAGES="docs scripts tests"
 for d in "$DOTFILES"/*/ ; do
   # Get the directory name (strip trailing slash and path)
   dirname="$(basename "$d")"

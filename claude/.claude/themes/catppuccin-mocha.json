@@ -1,0 +1,76 @@
+{
+  "name": "Catppuccin Mocha",
+  "base": "dark",
+  "overrides": {
+    "claude": "#cba6f7",
+    "text": "#cdd6f4",
+    "inverseText": "#1e1e2e",
+    "inactive": "#6c7086",
+    "subtle": "#7f849c",
+    "suggestion": "#89b4fa",
+    "permission": "#f9e2af",
+    "remember": "#74c7ec",
+
+    "success": "#a6e3a1",
+    "error": "#f38ba8",
+    "warning": "#fab387",
+    "merged": "#cba6f7",
+
+    "promptBorder": "#b4befe",
+    "planMode": "#74c7ec",
+    "autoAccept": "#a6e3a1",
+    "bashBorder": "#fab387",
+    "ide": "#89b4fa",
+    "fastMode": "#f9e2af",
+
+    "diffAdded": "#1f2d24",
+    "diffRemoved": "#2d1f24",
+    "diffAddedDimmed": "#182019",
+    "diffRemovedDimmed": "#201819",
+    "diffAddedWord": "#a6e3a1",
+    "diffRemovedWord": "#f38ba8",
+
+    "userMessageBackground": "#313244",
+    "userMessageBackgroundHover": "#45475a",
+    "bashMessageBackgroundColor": "#181825",
+    "memoryBackgroundColor": "#11111b",
+    "selectionBg": "#585b70",
+
+    "rate_limit_fill": "#cba6f7",
+    "rate_limit_empty": "#45475a",
+    "briefLabelYou": "#89b4fa",
+    "briefLabelClaude": "#cba6f7",
+
+    "claudeShimmer": "#b4befe",
+    "warningShimmer": "#f9e2af",
+    "permissionShimmer": "#f2cdcd",
+    "promptBorderShimmer": "#cba6f7",
+    "inactiveShimmer": "#9399b2",
+    "fastModeShimmer": "#f5e0dc",
+
+    "red_FOR_SUBAGENTS_ONLY": "#f38ba8",
+    "blue_FOR_SUBAGENTS_ONLY": "#89b4fa",
+    "green_FOR_SUBAGENTS_ONLY": "#a6e3a1",
+    "yellow_FOR_SUBAGENTS_ONLY": "#f9e2af",
+    "purple_FOR_SUBAGENTS_ONLY": "#cba6f7",
+    "orange_FOR_SUBAGENTS_ONLY": "#fab387",
+    "pink_FOR_SUBAGENTS_ONLY": "#f5c2e7",
+    "cyan_FOR_SUBAGENTS_ONLY": "#94e2d5",
+
+    "rainbow_red": "#f38ba8",
+    "rainbow_orange": "#fab387",
+    "rainbow_yellow": "#f9e2af",
+    "rainbow_green": "#a6e3a1",
+    "rainbow_blue": "#89b4fa",
+    "rainbow_indigo": "#74c7ec",
+    "rainbow_violet": "#cba6f7",
+
+    "rainbow_red_shimmer": "#f2cdcd",
+    "rainbow_orange_shimmer": "#f9e2af",
+    "rainbow_yellow_shimmer": "#f5e0dc",
+    "rainbow_green_shimmer": "#94e2d5",
+    "rainbow_blue_shimmer": "#89dceb",
+    "rainbow_indigo_shimmer": "#b4befe",
+    "rainbow_violet_shimmer": "#f5c2e7"
+  }
+}

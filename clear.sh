@@ -2,8 +2,8 @@
 
 setopt PIPE_FAIL
 
-# Non-package directories (keep in sync with install.sh)
-SKIP=(.git .claude .opencode .workflow .crush .hermes docs scripts tests)
+# Non-package directories (keep in sync with install.sh; dot dirs never match */)
+SKIP=(docs scripts tests)
 FAILED=0
 
 for d in */ ; do

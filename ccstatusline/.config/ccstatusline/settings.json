@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "lines": [
     [
       {
@@ -37,30 +37,24 @@
     ],
     [
       {
-        "id": "f7696335-7232-4c6a-8389-21298892e0c6",
-        "type": "session-clock",
-        "color": "hex:94e2d5"
+        "id": "d32e09de-d533-4993-b6b6-86336e8c3be8",
+        "type": "session-usage"
       },
       {
-        "id": "1406724b-1138-442c-860d-f58e421c2308",
+        "id": "1fa1492b-33cf-436d-9a36-f81afde73a61",
         "type": "separator"
       },
       {
-        "id": "2e6099bb-84e6-4779-8120-b8f1c2eab33b",
-        "type": "session-cost",
-        "color": "hex:a6e3a1"
+        "id": "d800f28d-8fe3-442e-bc11-b804920d41aa",
+        "type": "weekly-usage"
       },
       {
-        "id": "92c55d18-d719-4571-905f-fafb9e9302d4",
+        "id": "66267e3a-1d12-43c0-a432-de4d96c513a0",
         "type": "separator"
       },
       {
-        "id": "2d8c7943-caaf-4eab-8d5a-644aa4bdb10d",
-        "type": "reset-timer",
-        "color": "hex:74c7ec",
-        "metadata": {
-          "display": "time"
-        }
+        "id": "3607bbc4-6ad3-408e-8bcf-db0fc4b4c877",
+        "type": "reset-timer"
       }
     ],
     [
@@ -92,8 +86,10 @@
   "flexMode": "full-minus-40",
   "compactThreshold": 60,
   "colorLevel": 3,
+  "defaultPaddingSide": "both",
   "inheritSeparatorColors": false,
   "globalBold": false,
+  "gitCacheTtlSeconds": 5,
   "minimalistMode": false,
   "powerline": {
     "enabled": false,

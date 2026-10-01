@@ -1,0 +1,13 @@
+[open]
+rules = [
+  { type = ["text", "code", "config"], command = "hx", terminal = true },
+]
+
+[layout.panes]
+places = 0
+files = 45
+preview = 45
+
+[ui]
+show_top_bar = true
+show_hidden = true

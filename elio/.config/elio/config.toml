@@ -9,5 +9,5 @@ files = 45
 preview = 45
 
 [ui]
-show_top_bar = true
+show_top_bar = false
 show_hidden = true

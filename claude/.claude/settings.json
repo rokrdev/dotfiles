@@ -1,5 +1,4 @@
 {
-  "theme": "custom:catppuccin_mocha",
   "env": {
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "60",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "0",
@@ -58,7 +57,7 @@
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
-      "Bash(mkdir -p ~/projects/**:*)",
+      "Bash(mkdir -p ~/projects/**)",
       "Bash(cd ~/projects/**)"
     ],
     "deny": [
@@ -70,6 +69,17 @@
       "Edit(**/*.key)"
     ],
     "defaultMode": "auto"
+  },
+  "skillOverrides": {
+    "grill-with-docs": "user-invocable-only",
+    "handoff": "user-invocable-only",
+    "code-review": "user-invocable-only",
+    "diagnosing-bugs": "user-invocable-only",
+    "setup-matt-pocock-skills": "user-invocable-only",
+    "tdd": "user-invocable-only",
+    "to-spec": "user-invocable-only",
+    "to-tickets": "user-invocable-only",
+    "kanban-loop": "user-invocable-only"
   },
   "hooks": {
     "WorktreeCreate": [
@@ -144,6 +154,16 @@
             "statusMessage": "Loading repowise context..."
           }
         ]
+      },
+      {
+        "matcher": "^(startup|resume|clear|compact|fork)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/Users/bharat.joshi/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -204,7 +224,8 @@
     "pr-review-toolkit@claude-plugins-official": false,
     "skill-creator@claude-plugins-official": true,
     "repowise@repowise": true,
-    "humanizer@humanizer": true
+    "humanizer@humanizer": true,
+    "figma@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -229,25 +250,15 @@
   },
   "effortLevel": "high",
   "agent": "neo",
+  "tui": "fullscreen",
   "voice": {
     "enabled": true,
     "mode": "hold"
   },
   "autoMemoryEnabled": false,
   "skipDangerousModePermissionPrompt": true,
+  "theme": "custom:catppuccin_mocha",
   "remoteControlAtStartup": false,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true,
-  "skillOverrides": {
-    "grill-with-docs": "user-invocable-only",
-    "handoff": "user-invocable-only",
-    "code-review": "user-invocable-only",
-    "diagnosing-bugs": "user-invocable-only",
-    "setup-matt-pocock-skills": "user-invocable-only",
-    "tdd": "user-invocable-only",
-    "to-spec": "user-invocable-only",
-    "to-tickets": "user-invocable-only",
-    "kanban-loop": "user-invocable-only"
-  },
-  "tui": "fullscreen"
+  "voiceEnabled": true
 }

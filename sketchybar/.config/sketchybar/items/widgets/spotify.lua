@@ -12,53 +12,53 @@ local settings = require("settings")
 local SPOTIFY_GLYPH = "󰎆" -- Nerd Font spotify glyph (MonoLisa Nerd Font)
 
 local spotify = sbar.add("item", "widgets.spotify", {
-	position = "right",
-	scroll_texts = "on",
-	updates = true,
-	drawing = "off",
-	icon = {
-		string = SPOTIFY_GLYPH,
-		color = colors.green,
-		font = { family = settings.font.text, style = settings.font.style_map["Regular"], size = 13.0 },
-		padding_left = 10,
-	},
-	label = {
-		string = "",
-		max_chars = 20,
-		color = colors.white,
-		font = { family = settings.font.text, style = settings.font.style_map["Black"], size = 12.0 },
-		padding_right = 10,
-	},
-	background = {
-		color = colors.bg1,
-		height = 30,
-		corner_radius = 9,
-		border_width = 1,
-		border_color = colors.black,
-	},
-	padding_left = settings.paddings,
-	padding_right = settings.paddings,
+  position = "right",
+  scroll_texts = "on",
+  updates = true,
+  drawing = "off",
+  icon = {
+    string = SPOTIFY_GLYPH,
+    color = colors.green,
+    font = { family = settings.font.text, style = settings.font.style_map["Regular"], size = 13.0 },
+    padding_left = 10,
+  },
+  label = {
+    string = "",
+    max_chars = 20,
+    color = colors.white,
+    font = { family = settings.font.text, style = settings.font.style_map["Black"], size = 12.0 },
+    padding_right = 10,
+  },
+  background = {
+    color = colors.bg1,
+    height = 30,
+    corner_radius = 9,
+    border_width = 1,
+    border_color = colors.black,
+  },
+  padding_left = settings.paddings,
+  padding_right = settings.paddings,
 })
 
 sbar.add("event", "spotify_change")
 
 spotify:subscribe("spotify_change", function(env)
-	local playing = env.playing == "true"
-	local app = env.app or ""
-	local title = env.title or ""
-	local artist = env.artist or ""
+  local playing = env.playing == "true"
+  local app = env.app or ""
+  local title = env.title or ""
+  local artist = env.artist or ""
 
-	if playing and app == "com.spotify.client" and title ~= "" then
-		local label = artist ~= "" and (title .. " - " .. artist) or title
-		spotify:set({ drawing = "on", label = { string = label } })
-	else
-		spotify:set({ drawing = "off" })
-	end
+  if playing and app == "com.spotify.client" and title ~= "" then
+    local label = artist ~= "" and (title .. " - " .. artist) or title
+    spotify:set({ drawing = "on", label = { string = label } })
+  else
+    spotify:set({ drawing = "off" })
+  end
 end)
 
 -- Clicking the pill opens the Spotify app.
 spotify:subscribe("mouse.clicked", function()
-	sbar.exec("osascript -e 'tell application \"Spotify\" to activate'")
+  sbar.exec("osascript -e 'tell application \"Spotify\" to activate'")
 end)
 
 -- Keep the spotify_change stream alive for the life of the bar.

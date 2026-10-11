@@ -70,6 +70,7 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "sonnet",
   "skillOverrides": {
     "grill-with-docs": "user-invocable-only",
     "handoff": "user-invocable-only",
@@ -249,6 +250,14 @@
     }
   },
   "effortLevel": "high",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    },
+    "claude-sonnet-5-5": {
+      "effortLevel": "xhigh"
+    }
+  },
   "agent": "neo",
   "tui": "fullscreen",
   "voice": {

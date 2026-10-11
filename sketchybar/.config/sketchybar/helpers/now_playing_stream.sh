@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# helpers/spotify_stream.sh
+# helpers/now_playing_stream.sh
 # Bridge media-control (event-driven now-playing via privileged /usr/bin/perl)
 # into a sketchybar event. Works on macOS 15.4+/26 where sketchybar's own
 # media_change event is deprecated/blocked.
@@ -8,7 +8,7 @@
 # This script accumulates state (playing/app/title/artist), seeding from the
 # first full snapshot, and only overwrites fields present in each diff. Each
 # line then fires:
-#   sketchybar --trigger spotify_change playing=.. app=.. title=.. artist=..
+#   sketchybar --trigger now_playing_change playing=.. app=.. title=.. artist=..
 #
 # NOTE: use jq's `has()` to detect field presence. A bare `.X // empty` drops
 # literal `false` values (playing=false), which would leave the pill stuck on.
@@ -35,6 +35,6 @@ media-control stream 2>/dev/null | while IFS= read -r line; do
     ARTIST=$(printf '%s' "$line" | jq -r '.payload.artist' 2>/dev/null)
   fi
 
-  /opt/homebrew/bin/sketchybar --trigger spotify_change \
+  /opt/homebrew/bin/sketchybar --trigger now_playing_change \
     playing="$PLAYING" app="$APP" title="$TITLE" artist="$ARTIST"
 done

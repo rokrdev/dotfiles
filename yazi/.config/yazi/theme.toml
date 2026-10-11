@@ -17,7 +17,7 @@ count_cut      = { fg = "#1e1e2e", bg = "#f38ba8" }
 count_selected = { fg = "#1e1e2e", bg = "#89b4fa" }
 
 border_symbol = "│"
-border_style  = { fg = "#7f849c" }
+border_style  = { fg = "#89b4fa" }
 
 syntect_theme = "~/.config/yazi/Catppuccin-mocha.tmTheme"
 

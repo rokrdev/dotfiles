@@ -58,7 +58,10 @@ def server_root(root: Path) -> Path:
     if legacy.exists():
         return legacy.resolve()
 
-    fail("server is not installed; run ~/.dotfiles/scripts/install-intellij-server.sh")
+    fail(
+        "server is not installed; run scripts/install-intellij-server.sh "
+        "from the dotfiles checkout"
+    )
 
 
 def accepted_eula_hash(root: Path, server: Path) -> str:
@@ -74,7 +77,8 @@ def accepted_eula_hash(root: Path, server: Path) -> str:
     if accepted_hash != current_hash:
         fail(
             "the current EULA has not been accepted; run "
-            "~/.dotfiles/scripts/install-intellij-server.sh and review the prompt"
+            "scripts/install-intellij-server.sh from the dotfiles checkout "
+            "and review the prompt"
         )
     return current_hash
 

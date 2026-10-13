@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Install the language server behind "Java and Kotlin by IntelliJ IDEA" for Helix.
-set -euo pipefail
+set -Eeuo pipefail
+# Exit 3 means "EULA pending" to install.sh, so map tool failures (curl, unzip) to 1.
+trap 'exit 1' ERR
 
 export PYTHONUTF8=1
 
@@ -13,7 +15,8 @@ Usage: install-intellij-server.sh [--accept-eula] [--dest PATH]
 
 Downloads the latest platform-specific JetBrains IntelliJ language server,
 verifies its published SHA-256, installs it side-by-side, and activates it for
-the Helix wrapper.
+the Helix wrapper. After a successful update it prunes old versions, keeping the
+active one and the newest other one.
 
 The server has a JetBrains EULA. Without --accept-eula the script shows the
 agreement and asks for explicit acceptance on an interactive terminal.
@@ -59,9 +62,6 @@ case "$(uname -s):$(uname -m)" in
     ;;
 esac
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-WRAPPER_SOURCE="$REPO_ROOT/bin/.local/bin/intellij-server-helix"
 TMP_DIR="$(mktemp -d)"
 INSTALL_TMP=""
 
@@ -72,6 +72,48 @@ cleanup() {
   fi
 }
 trap cleanup EXIT
+
+# Keeps the active version plus the newest other one for rollback.
+prune_old_versions() {
+  local entry name previous
+
+  # Guards against rm -rf on a relative or empty path.
+  if [[ -z "$DEST" || "$DEST" != /* ]]; then
+    echo "==> Skipping prune: install dir is not an absolute path"
+    return 0
+  fi
+
+  previous="$(
+    for entry in "$SERVERS_DIR"/*; do
+      name="${entry##*/}"
+      if [[ -d "$entry" && ! -L "$entry" && "$name" != "$SERVER_VERSION" \
+        && "$name" =~ ^[0-9A-Za-z][0-9A-Za-z._-]*$ ]]; then
+        printf '%s\n' "$name"
+      fi
+    done | sort -V | tail -n 1
+  )"
+
+  # The legacy extension/ layout is dead once current points at servers/.
+  for entry in "$SERVERS_DIR"/* "$SERVERS_DIR"/.incomplete-* "$DEST/extension"; do
+    [[ -d "$entry" && ! -L "$entry" ]] || continue
+    name="${entry##*/}"
+    if [[ "$entry" == "$DEST/extension" ]]; then
+      # extension/server is the marker the wrapper uses for the legacy layout.
+      [[ -d "$entry/server" ]] || continue
+    else
+      case "$name" in
+        "$SERVER_VERSION" | "$previous") continue ;;
+        .incomplete-*) ;;
+        *) [[ "$name" =~ ^[0-9A-Za-z][0-9A-Za-z._-]*$ ]] || continue ;;
+      esac
+    fi
+    if rm -rf -- "$entry"; then
+      echo "==> Removed old install: $entry"
+    else
+      echo "WARNING: could not remove $entry" >&2
+    fi
+  done
+}
 
 echo "==> Discovering the latest JetBrains extension for $PLATFORM"
 curl -fsSL "https://open-vsx.org/api/JetBrains/intellij-server/latest" \
@@ -245,13 +287,13 @@ fi
 printf '%s\n' "$EULA_HASH" > "$DEST/accepted-eula"
 ln -sfn "servers/$SERVER_VERSION" "$DEST/current"
 
-mkdir -p "$HOME/.local/bin"
-chmod +x "$WRAPPER_SOURCE"
-ln -sfn "$WRAPPER_SOURCE" "$HOME/.local/bin/intellij-server-helix"
+prune_old_versions
 
 echo
 echo "==> Installed IntelliJ language server $SERVER_VERSION"
 echo "==> Activated: $DEST/current"
-echo "==> Wrapper:   $HOME/.local/bin/intellij-server-helix"
 echo "==> Verify:    intellij-server-helix --check"
 echo "==> Restart existing Helix sessions with :lsp-restart"
+if [[ ! -e "$HOME/.local/bin/intellij-server-helix" ]]; then
+  echo "==> Wrapper missing from ~/.local/bin: run 'stow -R --no-folding bin' from the dotfiles repo"
+fi

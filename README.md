@@ -52,7 +52,6 @@ Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by d
 | `ccstatusline` | ccstatusline — `~/.config/ccstatusline/` |
 | `claude` | Claude Code — `~/.claude/` (settings, hooks, agents, and skill compatibility links) |
 | `dprint` | dprint formatter — `~/.config/dprint/` |
-| `elio` | elio file manager — `~/.config/elio/` |
 | `fish` | Fish shell — `~/.config/fish/` (config, functions, completions, conf.d) |
 | `ghostty` | Ghostty terminal config |
 | `git` | Git config — `~/.gitconfig` and related |
@@ -67,7 +66,7 @@ Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by d
 | `marksman` | Marksman (markdown LSP) — `~/.config/marksman/` |
 | `moxide` | Moxide config — `~/.config/moxide/` |
 | `sketchybar` | SketchyBar menu bar — `~/.config/sketchybar/` |
-| `yazi` | yazi file manager config |
+| `yazi` | yazi file manager config, installs plugins via `ya pkg install` from package.toml |
 | `zed` | Zed editor — `~/.config/zed/` |
 
 ## Structure
@@ -109,7 +108,7 @@ The deterministic local workflow is:
 ## Utilities
 
 - **`install.sh`** — full bootstrap installer (Homebrew, brew bundle, stow, asdf, language servers, Claude Code).
-- **`scripts/install-intellij-server.sh`** — installs and verifies JetBrains' Java/Kotlin IntelliJ language server, records explicit EULA acceptance, and wires its Helix wrapper into `~/.local/bin`.
+- **`scripts/install-intellij-server.sh`** — installs and verifies JetBrains' Java/Kotlin IntelliJ language server, records explicit EULA acceptance, and prunes old versions. `install.sh` runs it; you can also run it directly.
 - **`clear.sh`** — shell script at repo root that unstows all packages at once (`stow -D` on each). Useful for a clean removal of all symlinks. Skips non-package dirs (`.git`, tool dirs, etc.).
 
 ## Java and Kotlin in Helix
@@ -119,7 +118,7 @@ and Bazel projects containing both languages share one imported project model.
 The server is distributed separately from the small VS Code/Open VSX extension
 and is covered by a JetBrains EULA.
 
-Install or update it with:
+`install.sh` installs and updates it. To do that on its own, run:
 
 ```bash
 scripts/install-intellij-server.sh
@@ -127,8 +126,16 @@ scripts/install-intellij-server.sh
 
 The installer fetches the current platform manifest, verifies the server
 archive's published SHA-256, shows the EULA when it changes, and activates the
-new build side-by-side. Run `intellij-server-helix --check` afterwards, then
-restart an existing editor with `:lsp-restart`.
+new build side-by-side. When run from a terminal, `install.sh` shows the EULA
+and asks you to type `accept`. It never accepts the EULA for you. If you decline
+or run non-interactively, nothing is activated, so rerun
+`scripts/install-intellij-server.sh` later. After a successful update it
+deletes old versions, keeping the current one and one previous. Run
+`intellij-server-helix --check` afterwards, then restart an existing editor
+with `:lsp-restart`.
+
+The `intellij-server-helix` wrapper lives in `bin/` and gets its
+`~/.local/bin` symlink from `stow -R --no-folding bin`, not from the installer.
 
 Useful overrides:
 

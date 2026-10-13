@@ -20,7 +20,6 @@ Remote: `git@github.com:rokrdev/dotfiles.git`
 | `ccstatusline` | ccstatusline — `~/.config/ccstatusline/` |
 | `claude` | Claude Code — `~/.claude/` (settings, hooks, agents, and skill compatibility links) |
 | `dprint` | dprint formatter — `~/.config/dprint/` |
-| `elio` | elio file manager — `~/.config/elio/` (config, Catppuccin Mocha theme) |
 | `fish` | Fish shell — `~/.config/fish/` (config, functions, completions, conf.d) |
 | `ghostty` | Ghostty terminal config |
 | `git` | Git config — `~/.gitconfig` and related |
@@ -35,7 +34,7 @@ Remote: `git@github.com:rokrdev/dotfiles.git`
 | `marksman` | Marksman (markdown LSP) — `~/.config/marksman/` |
 | `moxide` | Moxide config — `~/.config/moxide/` |
 | `sketchybar` | SketchyBar menu bar — `~/.config/sketchybar/` |
-| `yazi` | yazi file manager config |
+| `yazi` | yazi file manager config, installs plugins via `ya pkg install` from package.toml |
 | `zed` | Zed editor — `~/.config/zed/` (keymap, settings, tasks) |
 
 Non-package items at root: `CLAUDE.md`, `README.md`, `Brewfile`, `.editorconfig`, `install.sh`, `clear.sh`, `scripts/`, `docs/`, `tests/`

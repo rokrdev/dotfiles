@@ -2,7 +2,7 @@
 
 # clear.sh is zsh, which shellcheck does not support
 SHELL_SCRIPTS := install.sh scripts/install-intellij-server.sh \
-	bin/.local/bin/elio-pick bin/.local/bin/glowm-preview \
+	bin/.local/bin/glowm-preview \
 	bin/.local/bin/glowm-watch bin/.local/bin/helix-herdr
 
 # Hand-written Lua only. hammerspoon Spoons/ and fish-helix are vendored.

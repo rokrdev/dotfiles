@@ -100,6 +100,38 @@ for d in "$DOTFILES"/*/ ; do
 done
 
 # ─────────────────────────────────────────────
+# Yazi plugins (pinned in ~/.config/yazi/package.toml)
+# ─────────────────────────────────────────────
+if command -v ya &>/dev/null; then
+  echo "Installing yazi plugins..."
+  ya pkg install || echo "WARNING: ya pkg install failed. Run manually: ya pkg install"
+else
+  echo "WARNING: ya not found, skipping yazi plugins. Run 'ya pkg install' after yazi is installed."
+fi
+
+# ─────────────────────────────────────────────
+# IntelliJ language server for Helix (Java/Kotlin)
+# ─────────────────────────────────────────────
+intellij_installer="$DOTFILES/scripts/install-intellij-server.sh"
+intellij_eula_pending=false
+intellij_install_failed=false
+
+echo "Installing IntelliJ language server..."
+# The installer must not abort the bootstrap, so capture its exit code
+if "$intellij_installer"; then
+  echo "IntelliJ language server ok."
+else
+  rc=$?
+  if [[ $rc -eq 3 ]]; then
+    intellij_eula_pending=true
+    echo "WARNING: IntelliJ language server EULA was declined or not shown (non-interactive run). Re-run from a terminal and type 'accept': $intellij_installer"
+  else
+    intellij_install_failed=true
+    echo "WARNING: IntelliJ language server install failed (exit $rc). Re-run: $intellij_installer"
+  fi
+fi
+
+# ─────────────────────────────────────────────
 # asdf — plugins and tool versions
 # ─────────────────────────────────────────────
 echo "Installing asdf plugins..."
@@ -195,9 +227,14 @@ echo "Manual setup steps:"
 echo "1. Set Fish as default shell"
 echo "   → chsh -s /opt/homebrew/bin/fish"
 echo ""
-echo "2. Install the IntelliJ Java/Kotlin language server for Helix"
-echo "   → $DOTFILES/scripts/install-intellij-server.sh"
-echo "   (requires reviewing and accepting JetBrains' EULA)"
-echo ""
+if [[ "$intellij_eula_pending" == true ]]; then
+  echo "2. Re-run the IntelliJ language server installer from a terminal and type 'accept' at the EULA prompt"
+  echo "   → $intellij_installer"
+  echo ""
+elif [[ "$intellij_install_failed" == true ]]; then
+  echo "2. Re-run the failed IntelliJ language server install"
+  echo "   → $intellij_installer"
+  echo ""
+fi
 echo "NOTE: Do NOT stow ~/.claude/settings.local.json — it contains personal"
 echo "      paths, email, and API references specific to this machine."

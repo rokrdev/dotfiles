@@ -20,4 +20,4 @@ keybind = shift+enter=text:\x1b\r
 macos-option-as-alt = true
 
 custom-shader = ~/.config/ghostty/shaders/cursor_warp.glsl
-custom-shader-animation = always
+custom-shader-animation = true

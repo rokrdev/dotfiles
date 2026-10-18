@@ -37,11 +37,3 @@ s = ["shortcut:ctrl alt cmd shift s", "Snippets"]
 w = ["shortcut:ctrl alt cmd shift d", "Word"]
 R = "reload"
 W = ["shortcut:ctrl alt cmd shift w", "Weather"]
-
-[t]
-label = "Things"
-a = ["cmd:shortcuts run 'Things Anytime'", "Anytime"]
-i = ["cmd:shortcuts run 'Things Inbox'", "Inbox"]
-q = ["cmd:shortcuts run 'QT'", "Quick Todo"]
-t = ["cmd:shortcuts run 'Things Today'", "Today"]
-u = ["cmd:shortcuts run 'Things Upcoming'", "Upcoming"]

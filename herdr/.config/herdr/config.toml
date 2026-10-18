@@ -18,9 +18,11 @@ focus_agent = "prefix+shift+1..9"
 
 [[keys.command]]
 key = "prefix+ctrl+g"
-type = "pane"
+type = "popup"
 command = "gitui"
-description = "run gitui"
+description = "open gitui"
+width = "95%"
+height = "95%"
 
 [[keys.command]]
 key = "prefix+ctrl+t"
@@ -30,9 +32,11 @@ description = "jump to anything"
 
 [[keys.command]]
 key = "prefix+ctrl+d"
-type = "pane"
+type = "popup"
 command = "fish -c 'cd ~/Documents/rokr_vault; hx index.md'"
 description = "vault"
+width = "95%"
+height = "95%"
 
 [[keys.command]]
 key = "prefix+f"

@@ -7,7 +7,6 @@ toast_on_reload = false    # optional, default false, show a toast when the conf
 show_ui = true            # optional, default true, show the ui with your key maps
 
 # Private transport shortcuts; bind the same chords to these commands in Tinycast.
-s = ["shortcut:ctrl alt cmd shift 1", "Switch Windows"]
 
 [a]
 label = "Applications"
@@ -21,19 +20,19 @@ t = ["/Applications/Ghostty.app", "Terminal"]
 y = ["/Applications/Things3.app", "Things"]
 z = ["/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app", "Safari"]
 
-[b]
-label = "Browser"
-b = ["shortcut:ctrl alt cmd shift b", "Bookmarks"]
-h = ["shortcut:ctrl alt cmd shift h", "History"]
-t = ["shortcut:ctrl alt cmd shift t", "Tabs"]
-
-[r]
-label = "Tinycast"
+[s]
+label = "misc"
 c = ["shortcut:ctrl alt cmd shift c", "Clipboard"]
 e = ["shortcut:ctrl alt cmd shift e", "Emoji"]
 k = ["shortcut:ctrl alt cmd shift k", "Kill Process"]
 n = ["shortcut:ctrl alt cmd shift n", "Notes"]
 s = ["shortcut:ctrl alt cmd shift s", "Snippets"]
-w = ["shortcut:ctrl alt cmd shift d", "Word"]
-R = "reload"
+w = ["shortcut:ctrl alt cmd shift 1", "Switch Windows"]
 W = ["shortcut:ctrl alt cmd shift w", "Weather"]
+R = "reload"
+
+[s.b]
+label = "Browser"
+b = ["shortcut:ctrl alt cmd shift b", "Bookmarks"]
+h = ["shortcut:ctrl alt cmd shift h", "History"]
+t = ["shortcut:ctrl alt cmd shift t", "Tabs"]

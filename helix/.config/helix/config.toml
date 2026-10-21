@@ -90,3 +90,7 @@ S = { label = "Speak", command = [":pipe-to ~/.local/bin/say-selection"] }
 label = "Markdown Preview"
 o = { label = "Open", command = [":insert-output ~/.local/bin/glowm-preview %{file_path_absolute} >/dev/tty 2>&1", ":redraw"] }
 c = { label = "Close", command = [":insert-output ~/.local/bin/glowm-preview --close >/dev/tty 2>&1", ":redraw"] }
+
+[keys.normal.g]
+I = "call_hierarchy_incoming"
+O = "call_hierarchy_outgoing"

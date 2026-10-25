@@ -35,7 +35,7 @@
 	path = ~/gitconfig_me
 
 [includeIf "gitdir:~/projects/"]
-	path = ~/gitconfig_me
+	path = ~/gitconfig_work
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f

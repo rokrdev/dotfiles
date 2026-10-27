@@ -35,7 +35,6 @@ Remote: `git@github.com:rokrdev/dotfiles.git`
 | `moxide` | Moxide config — `~/.config/moxide/` |
 | `sketchybar` | SketchyBar menu bar — `~/.config/sketchybar/` |
 | `yazi` | yazi file manager config, installs plugins via `ya pkg install` from package.toml |
-| `zed` | Zed editor — `~/.config/zed/` (keymap, settings, tasks) |
 
 Non-package items at root: `CLAUDE.md`, `README.md`, `Brewfile`, `.editorconfig`, `install.sh`, `clear.sh`, `scripts/`, `docs/`, `tests/`
 

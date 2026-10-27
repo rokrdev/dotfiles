@@ -67,7 +67,6 @@ Stow creates symlinks from each package into `$HOME`. The target is `$HOME` by d
 | `moxide` | Moxide config — `~/.config/moxide/` |
 | `sketchybar` | SketchyBar menu bar — `~/.config/sketchybar/` |
 | `yazi` | yazi file manager config, installs plugins via `ya pkg install` from package.toml |
-| `zed` | Zed editor — `~/.config/zed/` |
 
 ## Structure
 

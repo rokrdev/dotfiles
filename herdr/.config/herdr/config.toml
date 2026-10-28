@@ -17,7 +17,7 @@ switch_workspace = "prefix+ctrl+1..9"
 focus_agent = "prefix+shift+1..9"
 
 [[keys.command]]
-key = "prefix+ctrl+g"
+key = "prefix+shift+g"
 type = "popup"
 command = "gitui"
 description = "open gitui"

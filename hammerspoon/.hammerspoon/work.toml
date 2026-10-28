@@ -16,8 +16,8 @@ i = ["/System/Volumes/Data/Applications/IntelliJ IDEA.app", "Idea"]
 m = ["/System/Applications/Music.app", "Music"]
 s = ["/Applications/Slack.app", "Slack"]
 t = ["/Applications/Ghostty.app", "Terminal"]
-y = ["/Applications/Things3.app", "Things"]
 z = ["/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app", "Safari"]
+1 = ["/Applications/Things3.app", "Things"]
 
 [s]
 label = "misc"

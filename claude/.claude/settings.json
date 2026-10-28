@@ -226,7 +226,8 @@
     "skill-creator@claude-plugins-official": true,
     "repowise@repowise": true,
     "humanizer@humanizer": true,
-    "figma@claude-plugins-official": true
+    "figma@claude-plugins-official": true,
+    "postman@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {

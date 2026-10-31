@@ -18,6 +18,7 @@ s = ["/Applications/Slack.app", "Slack"]
 t = ["/Applications/Ghostty.app", "Terminal"]
 y = ["/Applications/Things3.app", "Things"]
 z = ["/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app", "Safari"]
+1 = ["/Applications/Things3.app", "Things"]
 
 [s]
 label = "misc"

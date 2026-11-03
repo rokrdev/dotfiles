@@ -165,6 +165,15 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/sh -c 'rex __internal session-start --agent claude --feature-session-naming=false 2>/dev/null || true'",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -270,5 +279,37 @@
   "theme": "custom:catppuccin_mocha",
   "remoteControlAtStartup": false,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "autoMode": {
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: None configured",
+      "**Repository visibility**: assume private unless the remote host and repo name indicate otherwise, or a visibility check in the transcript shows public — no remote configured for this repo (no git remotes found)",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: None configured",
+      "**Default / protected branches**: unknown — origin/HEAD unset, no remotes configured, and visibility/branch protection was not queryable via gh (no derivable owner/repo)",
+      "**CI/CD deploy targets**: None configured",
+      "**Network posture**: None configured",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine or CI runner with open internet",
+      "**Source control**: The trusted repo and its remote(s) only (no additional orgs configured) — this repo has no tracked files and no remotes",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: None configured",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: any file or store holding personal data, confidential business data, credentials, regulated data, or similarly sensitive material; preserve exact handles when known and share only with audiences cleared at the [named+specifics] bar",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: software development",
+      "**Trusted repo**: The git repository the agent started in (/Users/bharat.joshi) — no remotes configured, no tracked files",
+      "**Org-specific CLIs**: None configured"
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Bash(rm -rf:*) in /Users/bharat.joshi"
+    ]
+  }
 }

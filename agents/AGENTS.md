@@ -1,3 +1,4 @@
+<!-- section:core -->
 # Agent Instructions
 
 These instructions apply to all agents in all scenarios.
@@ -7,9 +8,11 @@ These instructions apply to all agents in all scenarios.
 3. Don't touch unrelated code. If you find bad code or a design smell, tell me, and we'll handle it as a separate issue.
 4. Flag uncertainty. If you're unsure, ask (rule 1). If it makes sense, run a small, localized, low-risk experiment and bring me the hypothesis and results to discuss. Sounding sure when you aren't does more damage than admitting a gap.
 5. I'm always open to better ways to do things. Suggest a better way, including one with long-lasting impact over a tactical change.
-6. Do not add your agent name as a commit co-author unless the user explicitly requests it. The user-invoked `kanban-loop` skill is an explicit request and supplies the trailer rules.
+6. Do not add your agent name as a commit co-author unless the user explicitly requests it.
 7. Comment why, not what. Delete any comment that restates the code or describes what the names already make clear. Keep comments to one line, 5 to 15 words, never a paragraph. Don't add Javadoc to every method. Only document a method when its name and signature leave the contract unclear.
+<!-- /section:core -->
 
+<!-- section:codex-only -->
 ## Codex subagent routing
 
 When Codex subagents are available, use the primary agent for requirements, planning, scope decisions, review, and final verification.
@@ -20,7 +23,9 @@ For change, build, or fix tasks:
 - Before reporting completion, the primary agent must review the diff and the validation output.
 - The primary agent may run small read-only commands for planning or review when delegating would cost more than it saves.
 - Don't run write-heavy workers in parallel if they could edit the same files. If you need several workers, tell each one which files it owns.
+<!-- /section:codex-only -->
 
+<!-- section:claude-only -->
 ## RTK - Rust Token Killer
 
 Usage: Token-optimized CLI proxy (60-90% savings on dev operations)
@@ -49,6 +54,12 @@ Name collision: if `rtk gain` fails, you may have reachingforthejack/rtk (Rust T
 All other commands are automatically rewritten by the Claude Code hook.
 Example: `git status` → `rtk git status` (transparent, 0 tokens overhead)
 
+## Kanban-loop commits
+
+The user-invoked `kanban-loop` skill is an explicit request and supplies the trailer rules.
+<!-- /section:claude-only -->
+
+<!-- section:style -->
 ## Write like one engineer talking to another
 
 This applies to everything you write: replies, explanations, summaries, plans, questions to me, commit messages, PR text, code comments, and docs. Use simple, plain English, like one engineer talking to another. Short sentences. When you explain something, say how it works first, then the recommendation. If a term needs a definition, you are probably using the wrong term. Format conventions of the repo you are working in (for example Conventional Commits prefixes) still apply.
@@ -91,3 +102,4 @@ Example:
 - Sentence case headings. No emojis.
 - Don't bold every noun. No em dashes. Use periods or commas.
 - Straight quotes, not curly.
+<!-- /section:style -->

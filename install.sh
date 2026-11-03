@@ -73,7 +73,7 @@ fi
 
 echo "Stowing packages..."
 # The */ glob never matches dot dirs; only these real dirs need listing
-NON_PACKAGES="docs scripts tests"
+NON_PACKAGES="docs hermes scripts tests"
 for d in "$DOTFILES"/*/ ; do
   # Get the directory name (strip trailing slash and path)
   dirname="$(basename "$d")"

@@ -3,7 +3,7 @@
   "base": "dark-ansi",
   "overrides": {
     "text": "#cba6f7",
-    "userMessageBackground": "#1e1e2e",
+    "userMessageBackground": "#313244",
     "inverseText": "#1e1e2e",
     "inactive": "#585b70",
     "inactiveShimmer": "#6c7086",

@@ -35,6 +35,9 @@
 	path = ~/gitconfig_me
 
 [includeIf "gitdir:~/projects/"]
+	path = ~/gitconfig_me
+
+[includeIf "gitdir:~/work/"]
 	path = ~/gitconfig_work
 
 [filter "lfs"]

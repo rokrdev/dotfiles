@@ -24,7 +24,10 @@ export FZF_DEFAULT_OPTS="\
 export _ZO_FZF_OPTS=$FZF_DEFAULT_OPTS
 
 # setp yarn prefix first with this `yarn config set prefix "~/.yarn/"`
-export PATH="$HOME/.cargo/bin:$HOME/.docker/bin:$HOME/bin:$HOME/.bun/bin:$GOPATH/bin:$ANDROID_SDK_ROOT:$HOME/.yarn/bin:$HOME/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+# fish_add_path keeps entries from $fish_user_paths and ~/.env.
+fish_add_path --path --move \
+    $HOME/.cargo/bin $HOME/.docker/bin $HOME/bin $HOME/.bun/bin $GOPATH/bin $ANDROID_SDK_ROOT \
+    $HOME/.yarn/bin /opt/homebrew/bin /opt/homebrew/sbin
 
 if test (uname) = Linux
     set -g PATH "/home/linuxbrew/.linuxbrew/bin" $PATH

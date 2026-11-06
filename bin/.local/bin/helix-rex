@@ -1,0 +1,226 @@
+#!/usr/bin/env bash
+# helix-rex — open a registered tool (gitui, scooter, yazi) in a Rex pane
+# split to the right of the current (Helix) pane.
+#
+# Bind it to Helix keys, e.g.:
+#   g = { label = "GitUI", command = [":write-all", ":sh helix-rex gitui", ":redraw"] }
+#   G = { label = "GitUI at Line", command = [":noop %sh{helix-rex gitui $(git blame -L %{cursor_line},%{cursor_line} --porcelain '%{file_path_absolute}' | head -1 | cut -d' ' -f1)}"] }
+#
+# Subcommands:
+#   helix-rex <tool> [args...]  open <tool> in a pane split right
+#   helix-rex <tool> --close    close <tool>'s pane
+#   helix-rex --list            list registered tools
+#   helix-rex --help            show usage
+#
+# Behavior (per tool):
+#   - reuses an existing <tool> pane in the current Rex tab (state file,
+#     label scan, process check) and focuses it
+#   - otherwise splits the current pane right (50%, focused) and runs <tool>;
+#     the pane closes when the tool exits; args are forwarded
+#   - GitUI's file editor is routed back to the originating Helix pane, then
+#     the GitUI pane closes; Git metadata files still open in blocking `hx`
+#
+# Rex splits any direction, but this script always splits right. `--side` and
+# `--right` are accepted and ignored. Rex targets $REX_SESSION, so no -s flags.
+set -u
+
+STATE_DIR="$HOME/.local/state"
+mkdir -p "$STATE_DIR"
+
+die() { echo "helix-rex: $*" >&2; exit 1; }
+usage() {
+  cat <<'EOF'
+usage: helix-rex <tool> [args...]
+       helix-rex <tool> --close
+       helix-rex --list
+       helix-rex --help
+
+Open a registered tool (gitui, scooter, yazi) in a dedicated Rex pane split
+to the right of the current pane, reusing an existing pane for that tool when
+present. '--close' closes the tool's pane. Tools run with the pane focused.
+EOF
+}
+
+# The rex next to the running server matches its protocol; PATH may not.
+REX_BIN="rex"
+if [ -x "${REX_BIN_DIR:-}/rex" ]; then REX_BIN="$REX_BIN_DIR/rex"; fi
+rex() { "$REX_BIN" "$@"; }
+
+# --- per-tool registry -----------------------------------------------------
+# Each tool is a case arm assigning:
+#   TITLE   pane label (also names the state file)
+#   PROG    foreground process name that means "running"
+#   FOCUS   "yes" = new pane takes focus (interactive TUI), "" = background
+#   CMD     launch command built from $args
+# ${args[@]+...} keeps empty args safe under `set -u` on bash 3.2.
+tool_meta() {
+  case "$1" in
+    gitui)
+      TITLE="gitui"; PROG="gitui"; FOCUS="yes"
+      CMD=(gitui ${args[@]+"${args[@]}"})
+      ;;
+    scooter)
+      TITLE="scooter"; PROG="scooter"; FOCUS="yes"
+      CMD=(scooter ${args[@]+"${args[@]}"})
+      ;;
+    yazi)
+      TITLE="yazi"; PROG="yazi"; FOCUS="yes"
+      CMD=(yazi ${args[@]+"${args[@]}"})
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+# Is PROG the foreground process of pane $1?
+tool_running() {
+  rex block call -b "$1" process 2>/dev/null \
+    | jq -e --arg p "$PROG" '
+        .foreground
+        | [.name, (.path // "" | split("/")[-1]), (.invoked_path // "" | split("/")[-1])]
+        | any(. == $p)' >/dev/null 2>&1
+}
+
+# Rex tab (window) id of pane $1; empty if the pane is gone.
+pane_tab() {
+  rex block ls --json 2>/dev/null \
+    | jq -r --arg id "$1" '.blocks[] | select(.block_id == $id) | .window_id' 2>/dev/null
+}
+
+# GitUI runs its editor as a blocking child. Send worktree files back to the
+# Helix pane that launched GitUI, then close the GitUI pane.
+open_in_helix() {
+  local target="${HELIX_REX_PANE:-}"
+  local current="${HELIX_REX_TOOL_PANE:-${REX_BLOCK:-}}"
+  local arg base command=":open" q="'"
+
+  [ "$#" -gt 0 ] || die "--edit requires a file"
+
+  # GitUI reads these only after the editor exits, so they must block.
+  for arg in "$@"; do
+    base="${arg##*/}"
+    case "$base" in
+      COMMIT_EDITMSG|MERGE_MSG|TAG_EDITMSG|git-rebase-todo)
+        exec hx "$@"
+        ;;
+    esac
+  done
+
+  # Outside a managed GitUI pane, keep the normal editor behavior.
+  if [ -z "$target" ] || [ -z "$current" ] \
+    || [ -z "$(pane_tab "$target")" ]; then
+    exec hx "$@"
+  fi
+
+  # Helix escapes a single quote inside a quoted argument by doubling it.
+  for arg in "$@"; do
+    command+=" '${arg//$q/$q$q}'"
+  done
+
+  rex send-key -b "$target" esc >/dev/null 2>&1 \
+    || exec hx "$@"
+  rex send -b "$target" "$command" >/dev/null 2>&1 \
+    || exec hx "$@"
+  rex send-key -b "$target" enter >/dev/null 2>&1 \
+    || exec hx "$@"
+
+  # Closing alone can leave Helix without terminal focus and hide its cursor.
+  rex focus "$target" >/dev/null 2>&1 || true
+
+  local state="$STATE_DIR/helix-rex-gitui.pane"
+  if [ -f "$state" ] && [ "$(cat "$state")" = "$current" ]; then
+    rm -f "$state"
+  fi
+  rex block close "$current" >/dev/null 2>&1 || true
+  exit 0
+}
+
+# --- dispatch --------------------------------------------------------------
+if [ "$#" -eq 0 ]; then usage; exit 1; fi
+
+if [ "$1" = "--edit" ]; then
+  shift
+  open_in_helix "$@"
+fi
+
+case "$1" in
+  --help|-h) usage; exit 0 ;;
+  --list)
+    echo "registered tools:"
+    echo "  gitui    git TUI (optional arg: commit hash)"
+    echo "  scooter  interactive find & replace TUI"
+    echo "  yazi     file manager TUI"
+    exit 0
+    ;;
+esac
+
+TOOL="$1"; shift
+
+case "${1:-}" in
+  --side|--right) shift ;;
+esac
+
+command -v "$REX_BIN" >/dev/null 2>&1 || die "rex not found"
+command -v jq >/dev/null 2>&1 || die "jq not found"
+
+# --- close mode ------------------------------------------------------------
+if [ "${1:-}" = "--close" ]; then
+  ST="$STATE_DIR/helix-rex-$TOOL.pane"
+  if [ -f "$ST" ]; then
+    rex block close "$(cat "$ST")" >/dev/null 2>&1
+    rm -f "$ST"
+  fi
+  exit 0
+fi
+
+args=("$@")
+tool_meta "$TOOL" || die "unknown tool: '$TOOL' (try 'helix-rex --list')"
+
+ST="$STATE_DIR/helix-rex-$TOOL.pane"
+
+# --- current pane and tab (the Helix pane invoking this script) ------------
+CUR_PID="${REX_BLOCK:-}"
+[ -n "$CUR_PID" ] || die "could not resolve current pane (not inside Rex?)"
+CUR_TAB="$(pane_tab "$CUR_PID")"
+[ -n "$CUR_TAB" ] || die "could not resolve current tab"
+
+# --- reuse a running <tool> pane in THIS tab -------------------------------
+PID=""
+if [ -f "$ST" ]; then
+  CAND="$(cat "$ST")"
+  if [ "$(pane_tab "$CAND")" = "$CUR_TAB" ] && tool_running "$CAND"; then
+    PID="$CAND"
+  fi
+fi
+if [ -z "$PID" ]; then
+  PID="$(rex block ls --json 2>/dev/null \
+    | jq -r --arg tab "$CUR_TAB" --arg label "$TITLE" '
+        [.blocks[] | select(.window_id == $tab and .label == $label)][0].block_id // empty' 2>/dev/null)"
+  # A labeled pane without the tool is stale.
+  if [ -n "$PID" ] && ! tool_running "$PID"; then
+    rex block close "$PID" >/dev/null 2>&1
+    PID=""
+  fi
+fi
+
+# --- create if missing -----------------------------------------------------
+if [ -z "$PID" ]; then
+  SPLIT_FOCUS="--focus=false"
+  [ "$FOCUS" = "yes" ] && SPLIT_FOCUS="--focus=true"
+  # Override core.editor=hx for this GitUI only, so edits return to this Helix.
+  # The new pane's own REX_BLOCK serves as HELIX_REX_TOOL_PANE.
+  if [ "$TOOL" = "gitui" ]; then
+    CMD=(env "HELIX_REX_PANE=$CUR_PID" "GIT_EDITOR=helix-rex --edit" "${CMD[@]}")
+  fi
+  # Rex runs the command directly, so args with spaces or quotes stay intact.
+  OUT="$(rex split -b "$CUR_PID" --split=right --ratio 50 "$SPLIT_FOCUS" \
+    --label "$TITLE" -c "$PWD" --json -- "${CMD[@]}" 2>&1)" \
+    || die "rex split failed: $OUT"
+  PID="$(printf '%s' "$OUT" | jq -r '.block_ids[0] // empty' 2>/dev/null)"
+  [ -n "$PID" ] || die "could not parse new pane id: $OUT"
+else
+  rex focus "$PID" >/dev/null 2>&1 || true
+fi
+
+echo "$PID" > "$ST"

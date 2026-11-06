@@ -3,7 +3,7 @@
 # clear.sh is zsh, which shellcheck does not support
 SHELL_SCRIPTS := install.sh scripts/install-intellij-server.sh \
 	bin/.local/bin/glowm-preview \
-	bin/.local/bin/glowm-watch bin/.local/bin/helix-herdr
+	bin/.local/bin/glowm-watch bin/.local/bin/helix-herdr bin/.local/bin/helix-rex
 
 # Hand-written Lua only. hammerspoon Spoons/ and fish-helix are vendored.
 LUA_TARGETS := hammerspoon/.hammerspoon/init.lua sketchybar/.config/sketchybar

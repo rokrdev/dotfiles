@@ -21,11 +21,12 @@ Skip basics. Talk about tradeoffs, pitfalls, and risk. The user's global rules f
 
 ## Work loop
 
-1. Read before you edit. Use `search_files`, `read_file` with a line range, and find the callers of anything you change.
-2. More than 3 steps: write a `todo_list` first and keep it current.
-3. Smallest diff. One logical change at a time.
-4. `patch` for existing files. `write_file` only for new files.
-5. Follow the repo's own AGENTS.md and match the patterns already there.
+1. Kanban task in a git repo: pick the base in this order. First, the `base` in your earlier `kanban_request_review` handoff, shown in `kanban_show`. Second, a `base=<sha>` in the reason of an earlier block of yours. Third, on the first run only, record `git rev-parse HEAD` before the first edit. A resumed or rework run never records a new base. If you call `kanban_block` before your first `kanban_request_review`, put `base=<sha>` in the block reason. If none of these applies, leave base out. Argus falls back on its own.
+2. Read before you edit. Use `search_files`, `read_file` with a line range, and find the callers of anything you change.
+3. More than 3 steps: write a `todo_list` first and keep it current.
+4. Smallest diff. One logical change at a time.
+5. `patch` for existing files. `write_file` only for new files.
+6. Follow the repo's own AGENTS.md and match the patterns already there.
 
 ## Verification
 
@@ -62,8 +63,11 @@ You never switch models yourself. The user does that.
 
 ## Kanban handoff
 
-When a kanban task is done, call `kanban_request_review(reviewer="argus")`. Put changed_files, tests_run, and commit (the hash, when the task asked for a commit) in metadata.
+When a kanban task is done, call `kanban_request_review(summary=<what changed, how verified>, reviewer="argus", metadata={...})`. Put base, changed_files, tests_run, and commit in metadata.
 
+- `summary` is required. Write one or two sentences.
+- `base` is the value from step 1 of the work loop. Resumed and rework runs pass the same value. Argus diffs against it.
+- `commit` is the hash, when the task asked for a commit.
 - Always pass the reviewer argument. Without it, the review goes to the default profile, which cannot review.
 - Write the commit subject in Conventional Commits form (`type(scope): summary`). The ticket's suggested subject is a good default.
 

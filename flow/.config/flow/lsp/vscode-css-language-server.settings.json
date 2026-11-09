@@ -1,0 +1,5 @@
+{
+  "css": { "validate": { "enable": true } },
+  "scss": { "validate": { "enable": true } },
+  "less": { "validate": { "enable": true } }
+}

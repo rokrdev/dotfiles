@@ -21,6 +21,7 @@ Remote: `git@github.com:rokrdev/dotfiles.git`
 | `claude` | Claude Code — `~/.claude/` (settings, hooks, agents, and skill compatibility links) |
 | `dprint` | dprint formatter — `~/.config/dprint/` |
 | `fish` | Fish shell — `~/.config/fish/` (config, functions, completions, conf.d) |
+| `flow` | Flow editor — `~/.config/flow/` (Helix keymap overlay, themes, file types, LSP settings, `user.conf`; stow with `--no-folding`, see `docs/flow-helix-keybinding-gaps.md`) |
 | `ghostty` | Ghostty terminal config |
 | `git` | Git config — `~/.gitconfig` and related |
 | `gitui` | gitui config |

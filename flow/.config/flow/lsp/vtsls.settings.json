@@ -1,0 +1,8 @@
+{
+  "typescript": {
+    "updateImportsOnFileMove": { "enabled": "always" },
+    "suggest": { "completeFunctionCalls": true },
+    "tsserver": { "experimental": { "enableProjectDiagnostics": true } },
+    "tsdk": "/Users/bharat.joshi/.bun/install/global/node_modules/typescript/lib"
+  }
+}

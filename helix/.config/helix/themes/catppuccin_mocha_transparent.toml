@@ -85,7 +85,7 @@
 "ui.help" = { fg = "overlay2", bg = "surface0" }
 
 "ui.bufferline" = { fg = "subtext0" }
-"ui.bufferline.active" = { fg = "mauve", bg = "surface0", modifiers = ["bold"] }
+"ui.bufferline.active" = { fg = "pink", bg = "surface0", modifiers = ["bold"] }
 "ui.bufferline.background" = { }
 # "ui.bufferline" = { fg = "subtext0", bg = "mantle" }
 # "ui.bufferline.active" = { fg = "mauve", bg = "base", modifiers = ["bold"] }

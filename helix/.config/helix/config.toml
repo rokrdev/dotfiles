@@ -23,7 +23,7 @@ sort-recent = true
 
 [editor.cursor-shape]
 insert = "bar"
-normal = "block"
+normal = "terminal-block"
 select = "underline"
 
 [editor.file-picker]

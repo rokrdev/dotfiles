@@ -83,7 +83,7 @@
 "ui.help" = { fg = "overlay2", bg = "surface0" }
 
 "ui.bufferline" = { fg = "subtext0", bg = "cursorline" }
-"ui.bufferline.active" = { fg = "pink", bg = "base", modifiers = ["bold"] }
+"ui.bufferline.active" = { fg = "peach", bg = "base", modifiers = ["bold"] }
 "ui.bufferline.background" = { bg = "cursorline" }
 
 "ui.text" = "text"
@@ -95,7 +95,7 @@
 "ui.virtual.ruler" = { bg = "surface0" }
 "ui.virtual.indent-guide" = "surface0"
 "ui.virtual.inlay-hint" = { fg = "surface1", bg = "mantle" }
-"ui.virtual.jump-label" = { fg = "rosewater", modifiers = ["bold"] }
+"ui.virtual.jump-label" = { fg = "teal", modifiers = ["bold"] }
 
 "ui.selection" = { bg = "surface1" }
 

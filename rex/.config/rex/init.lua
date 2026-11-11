@@ -80,6 +80,7 @@ rex.bind("cmd+o>r", "client.config.reload")
 rex.bind("cmd+o>n", "pane.new_floating")
 rex.bind("cmd+o>x", "pane.close")
 rex.bind("cmd+o>m", "pane.minimize_floating")
+rex.bind("cmd+o>a", "pane.minimize_all_floating")
 
 rex.bind("cmd+z", "pane.zoom")
 rex.bind("cmd+l", "pane.go_to")

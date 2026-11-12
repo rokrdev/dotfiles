@@ -35,10 +35,10 @@ local function popup(ctx, command)
 end
 
 rex.action({
-  name = "popup_gitui",
-  title = "Popup: gitui",
+  name = "popup_lazygit",
+  title = "Popup: lazygit",
   run = function(ctx)
-    popup(ctx, { "gitui" })
+    popup(ctx, { "lazygit" })
   end,
 })
 
@@ -72,7 +72,7 @@ rex.bind("cmd+s>n", "session.new")
 rex.bind("cmd+s>x", "session.close")
 rex.bind("cmd+s>r", "session.rename")
 
-rex.bind("cmd+o>g", "popup_gitui")
+rex.bind("cmd+o>g", "popup_lazygit")
 rex.bind("cmd+o>v", "popup_vault")
 rex.bind("cmd+o>f", "popup_shell")
 rex.bind("cmd+o>l", "popup_scrollback")
@@ -84,6 +84,7 @@ rex.bind("cmd+o>a", "pane.minimize_all_floating")
 
 rex.bind("cmd+z", "pane.zoom")
 rex.bind("cmd+l", "pane.go_to")
+rex.bind("cmd+;", "pane.focus_next")
 
 -- Exclusive so stray keys never reach the terminal mid-resize.
 rex.mode("resize", { exclusive = true })

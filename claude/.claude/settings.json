@@ -114,6 +114,15 @@
             "timeout": 20
           }
         ]
+      },
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/agent-worktree-description.sh\""
+          }
+        ]
       }
     ],
     "SessionStart": [

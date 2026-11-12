@@ -1,4 +1,10 @@
 gui:
+  # Set initial screen mode: 'normal' (default), 'half', or 'full'
+  screenMode: half
+
+  # Control split direction in half-screen mode: 'left' (default) or 'top'
+  enlargedSideViewLocation: left
+
   nerdFontsVersion: "3"
   # Catppuccin Mocha lavender, from catppuccin/lazygit themes/mocha/lavender.yml.
   theme:

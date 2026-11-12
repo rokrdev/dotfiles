@@ -127,15 +127,6 @@
         ]
       },
       {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "LOG=\"$HOME/.claude/logs/hooks.log\"; if [ -f \"$LOG\" ] && [ \"$(stat -f%z \"$LOG\" 2>/dev/null)\" -gt 1048576 ]; then mv \"$LOG\" \"$LOG.1\" && touch \"$LOG\" && echo \"[log-rotate] hooks.log rotated at $(date -u +%FT%TZ)\" >> \"$LOG\"; fi || true",
-            "statusMessage": "Rotating hooks log..."
-          }
-        ]
-      },
-      {
         "matcher": "^(startup|resume|clear|compact|fork)$",
         "hooks": [
           {
@@ -149,7 +140,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/bin/sh -c 'rex __internal session-start --agent claude 2>/dev/null || true'",
+            "command": "/bin/sh -c 'rex __internal session-start --agent claude --feature-session-naming=false 2>/dev/null || true'",
             "timeout": 5
           }
         ]
@@ -163,28 +154,6 @@
             "type": "command",
             "command": "if command -v repowise >/dev/null 2>&1 && [ -d .repowise ]; then repowise update; fi",
             "async": true
-          }
-        ]
-      },
-      {
-        "matcher": "Grep|Glob|Read|Edit|Write|mcp__.*[Rr]epowise.*__.*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "if command -v repowise-augment >/dev/null 2>&1; then exec repowise-augment; fi",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "PostToolUseFailure": [
-      {
-        "matcher": "Read|Edit|Write|Grep|Glob|NotebookEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "if command -v repowise-augment >/dev/null 2>&1; then exec repowise-augment; fi",
-            "timeout": 10
           }
         ]
       }
@@ -264,14 +233,14 @@
       "### Org-wide",
       "**Organization**: None configured",
       "**Cloud provider(s)**: None configured",
-      "**Repository visibility**: assume private unless the remote host and repo name indicate otherwise, or a visibility check in the transcript shows public — no remote configured for this repo (no git remotes found)",
-      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Repository visibility**: assume private unless the remote host and repo name indicate otherwise, or a visibility check in the transcript shows public \u2014 no remote configured for this repo (no git remotes found)",
+      "**Internal sharing / snippet hosting**: None configured \u2014 treat public paste/gist services as outside the trust boundary",
       "**Secrets management**: None configured",
-      "**Default / protected branches**: unknown — origin/HEAD unset, no remotes configured, and visibility/branch protection was not queryable via gh (no derivable owner/repo)",
+      "**Default / protected branches**: unknown \u2014 origin/HEAD unset, no remotes configured, and visibility/branch protection was not queryable via gh (no derivable owner/repo)",
       "**CI/CD deploy targets**: None configured",
       "**Network posture**: None configured",
-      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine or CI runner with open internet",
-      "**Source control**: The trusted repo and its remote(s) only (no additional orgs configured) — this repo has no tracked files and no remotes",
+      "**Host containment**: None configured \u2014 assume Claude Code runs on an ordinary developer machine or CI runner with open internet",
+      "**Source control**: The trusted repo and its remote(s) only (no additional orgs configured) \u2014 this repo has no tracked files and no remotes",
       "**Trusted internal domains**: None configured",
       "**Trusted cloud buckets**: None configured",
       "**Key internal services**: None configured",
@@ -279,11 +248,11 @@
       "**Sensitive data locations & audiences**: any file or store holding personal data, confidential business data, credentials, regulated data, or similarly sensitive material; preserve exact handles when known and share only with audiences cleared at the [named+specifics] bar",
       "**Data retention / declassification**: None configured",
       "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment",
-      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected deployment namespaces / environments**: None configured \u2014 fall back to the Sensitive remote targets heuristic",
       "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
       "### User-specific",
       "**Primary use of Claude Code**: software development",
-      "**Trusted repo**: The git repository the agent started in (/Users/bharat.joshi) — no remotes configured, no tracked files",
+      "**Trusted repo**: The git repository the agent started in (/Users/bharat.joshi) \u2014 no remotes configured, no tracked files",
       "**Org-specific CLIs**: None configured"
     ],
     "soft_deny": [

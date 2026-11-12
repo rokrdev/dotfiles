@@ -34,35 +34,69 @@ input_cwd=""
 input_name=""
 transcript_path=""
 description=""
+DBG=/private/tmp/claude-501/-Users-bharat-joshi-work-wrkr-contributions/93c3ed4d-fc5c-4c45-9641-6929c05280bf/scratchpad/worktree-hook-debug.log # TEMP-DEBUG
+dbg_ms() { perl -MTime::HiRes=time -e 'printf "%.0f", time*1000'; } # TEMP-DEBUG
+dbg_t0=0 # TEMP-DEBUG
+
+# Skip torn lines; only unanswered calls count so stale descriptions are ignored.
+scan_transcript() {
+  tail -n 400 "$transcript_path" 2>/dev/null \
+    | jq -cR 'fromjson? // empty' 2>/dev/null \
+    | jq -rs '
+        [.[] | .. | objects | select(.type? == "tool_result") | .tool_use_id?] as $answered
+        | [
+            .[]
+            | ..
+            | objects
+            | select(
+                .type? == "tool_use"
+                and (.name? == "Agent" or .name? == "Task")
+                and .input?.isolation? == "worktree"
+                and ((.id? // "") as $id | ($answered | index($id)) == null)
+              )
+            | .input.description?
+            | select(type == "string" and length > 0)
+          ]
+        | last // empty
+      ' 2>/dev/null
+}
 
 if command -v jq >/dev/null 2>&1; then
   input_cwd="$(printf '%s' "$payload" | jq -r '.cwd // empty' 2>/dev/null)"
   input_name="$(printf '%s' "$payload" | jq -r '.name // empty' 2>/dev/null)"
   transcript_path="$(printf '%s' "$payload" | jq -r '.transcript_path // empty' 2>/dev/null)"
 
-  if [ -n "$transcript_path" ] && [ -r "$transcript_path" ]; then
+  # PreToolUse spools the Agent description, since the interactive transcript lags the hook.
+  session_id="$(printf '%s' "$payload" | jq -r '.session_id // empty' 2>/dev/null)"
+  if [ -n "$session_id" ]; then
+    spooled="$(find "${TMPDIR:-/tmp}/claude-worktree-desc" -name "$session_id.*" -mmin -2 2>/dev/null | sort | head -n 1)"
+    if [ -n "$spooled" ]; then
+      description="$(command cat "$spooled" 2>/dev/null)"
+      rm -f "$spooled"
+    fi
+  fi
+
+  if [ -z "$description" ] && [ -n "$transcript_path" ] && [ -r "$transcript_path" ]; then
     # The triggering tool call is near the end of the JSONL transcript. Bound
     # the scan so a very large or malformed transcript cannot stall creation.
-    description="$(
-      tail -n 400 "$transcript_path" 2>/dev/null \
-        | jq -rs '
-            [
-              .[]
-              | ..
-              | objects
-              | select(
-                  .type? == "tool_use"
-                  and (.name? == "Agent" or .name? == "Task")
-                  and .input?.isolation? == "worktree"
-                )
-              | .input.description?
-              | select(type == "string" and length > 0)
-            ]
-            | last // empty
-          ' 2>/dev/null
-    )"
+    # Interactive sessions may not write the tool_use until the tool returns.
+    dbg_t0=$(dbg_ms); printf '%s START abs_ms=%s name=[%s] payload_keys=%s\n' "$(date +%T)" "$dbg_t0" "$input_name" "$(printf '%s' "$payload" | jq -c 'keys' 2>/dev/null)" >> "$DBG" 2>/dev/null # TEMP-DEBUG
+    scans=1
+    case "$input_name" in
+      "" | agent-*) scans=20 ;;
+    esac
+    while :; do
+      description="$(scan_transcript)"
+      scans=$((scans - 1))
+      printf '  scans_left=%s +%sms lines=%s found=[%s]\n' "$scans" "$(( $(dbg_ms) - dbg_t0 ))" "$(wc -l < "$transcript_path" 2>/dev/null | tr -d ' ')" "$description" >> "$DBG" 2>/dev/null # TEMP-DEBUG
+      if [ -n "$description" ] || [ "$scans" -le 0 ]; then
+        break
+      fi
+      sleep 0.1
+    done
   fi
 fi
+printf '%s END desc=[%s] name=[%s] transcript=[%s] +%sms last3_types=[%s]\n' "$(date +%T)" "$description" "$input_name" "$transcript_path" "$(( $(dbg_ms) - dbg_t0 ))" "$(tail -n 3 "$transcript_path" 2>/dev/null | jq -rR 'fromjson? | .type // "?"' 2>/dev/null | tr '\n' ' ')" >> "$DBG" 2>/dev/null # TEMP-DEBUG
 
 if [ -n "$input_cwd" ] && [ -d "$input_cwd" ]; then
   start_dir="$input_cwd"

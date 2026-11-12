@@ -4,10 +4,11 @@
 #
 # Bind it to Helix keys, e.g.:
 #   g = { label = "LazyGit", command = [":write-all", ":sh helix-rex lazygit", ":redraw"] }
-#   G = { label = "LazyGit on Current File", command = [":sh helix-rex lazygit --filter '%{file_path_absolute}'", ":redraw"] }
+#   G = { label = "LazyGit on Blamed Commit", command = [":write", ":sh helix-rex lazygit --blame '%{file_path_absolute}' %{cursor_line}", ":redraw"] }
 #
 # Subcommands:
 #   helix-rex <tool> [args...]  open <tool> in a pane split right
+#   helix-rex lazygit --blame <file> <line>  open LazyGit on the files of the commit blamed for that line
 #   helix-rex <tool> --close    close <tool>'s pane
 #   helix-rex --list            list registered tools
 #   helix-rex --help            show usage
@@ -31,6 +32,7 @@ die() { echo "helix-rex: $*" >&2; exit 1; }
 usage() {
   cat <<'EOF'
 usage: helix-rex <tool> [args...]
+       helix-rex lazygit --blame <file> <line>
        helix-rex <tool> --close
        helix-rex --list
        helix-rex --help
@@ -38,6 +40,7 @@ usage: helix-rex <tool> [args...]
 Open a registered tool (lazygit, scooter, yazi) in a dedicated Rex pane split
 to the right of the current pane, reusing an existing pane for that tool when
 present. '--close' closes the tool's pane. Tools run with the pane focused.
+'lazygit --blame' opens the files of the commit that last touched <line>.
 EOF
 }
 
@@ -136,6 +139,60 @@ open_in_helix() {
   exit 0
 }
 
+# --- lazygit --blame helpers ------------------------------------------------
+# LazyGit has no CLI arg for a commit, so we type /<sha> into its commits panel.
+pane_screen() { rex capture -b "$1" 2>/dev/null; }
+
+# Keys sent before LazyGit's first render are lost, so wait for HEAD's hash.
+wait_for_commit_list() {
+  local pane="$1" head7="$2"
+  for _ in $(seq 1 100); do
+    case "$(pane_screen "$pane")" in *"$head7"*) return 0 ;; esac
+    sleep 0.025
+  done
+  return 1
+}
+
+# Search for <sha> in pane $1's commits panel, confirm the cursor landed, open its files.
+jump_to_commit() {
+  local pane="$1" sha="$2" screen last
+  rex send -b "$pane" "/$sha" >/dev/null 2>&1 || return 1
+  rex send-key -b "$pane" enter >/dev/null 2>&1 || return 1
+  for _ in $(seq 1 30); do
+    screen="$(pane_screen "$pane")"
+    case "$screen" in
+      *"commit $sha"*)
+        # Enter works with the search bar still on; skip it unless the cursor is verified.
+        rex send-key -b "$pane" enter >/dev/null 2>&1
+        return 0
+        ;;
+    esac
+    last="$(printf '%s\n' "$screen" | sed '/^[[:space:]]*$/d' | tail -n 1)"
+    # Only 300 commits load first; older ones need `n`, which is "new branch" outside search.
+    case "$last" in *"Search: matches for"*) rex send -b "$pane" n >/dev/null 2>&1 ;; esac
+    sleep 0.1
+  done
+  return 1
+}
+
+# Raw keys once typed "/<sha>" into a commit prompt, so Esc out and refocus commits.
+reuse_jump() {
+  local pane="$1" sha="$2"
+  rex send-key -b "$pane" esc >/dev/null 2>&1; sleep 0.1
+  rex send-key -b "$pane" esc >/dev/null 2>&1; sleep 0.1
+  rex send -b "$pane" 4 >/dev/null 2>&1; sleep 0.05
+  # A files view left open would swallow the search, so pop back to the list.
+  rex send-key -b "$pane" esc >/dev/null 2>&1; sleep 0.1
+  jump_to_commit "$pane" "$sha"
+}
+
+# Is the foreground cwd of pane $1 inside repo $2?
+pane_in_repo() {
+  local cwd
+  cwd="$(rex block call -b "$1" process 2>/dev/null | jq -r '.foreground.cwd // empty')"
+  [ -n "$cwd" ] && [ "$(git -C "$cwd" rev-parse --show-toplevel 2>/dev/null)" = "$2" ]
+}
+
 # --- dispatch --------------------------------------------------------------
 if [ "$#" -eq 0 ]; then usage; exit 1; fi
 
@@ -148,7 +205,7 @@ case "$1" in
   --help|-h) usage; exit 0 ;;
   --list)
     echo "registered tools:"
-    echo "  lazygit  git TUI (optional args: panel to focus, or --filter <path>)"
+    echo "  lazygit  git TUI (optional args: panel to focus, --filter <path>, or --blame <file> <line>)"
     echo "  scooter  interactive find & replace TUI"
     echo "  yazi     file manager TUI"
     exit 0
@@ -172,6 +229,24 @@ if [ "${1:-}" = "--close" ]; then
     rm -f "$ST"
   fi
   exit 0
+fi
+
+# --- lazygit --blame <file> <line> -------------------------------------------
+COMMIT=""; REPO=""; HEAD7=""
+if [ "$TOOL" = "lazygit" ] && [ "${1:-}" = "--blame" ]; then
+  [ "$#" -ge 3 ] || die "--blame needs FILE and LINE"
+  BFILE="$2"; BLINE="$3"; shift 3
+  BDIR="$(dirname "$BFILE")"
+  REPO="$(git -C "$BDIR" rev-parse --show-toplevel 2>/dev/null)" || die "not in a git repo: $BFILE"
+  COMMIT="$(git -C "$BDIR" blame -L "$BLINE,$BLINE" --porcelain -- "$BFILE" 2>/dev/null | head -n 1 | cut -d' ' -f1)"
+  case "$COMMIT" in
+    0000000000000000000000000000000000000000) echo "helix-rex: line $BLINE is not committed yet" >&2; COMMIT="" ;;
+    *[!0-9a-f]*|"") echo "helix-rex: no blame for $BFILE:$BLINE" >&2; COMMIT="" ;;
+  esac
+  HEAD7="$(git -C "$REPO" rev-parse HEAD 2>/dev/null | cut -c1-7)"
+  [ -n "$HEAD7" ] || COMMIT=""
+  # `log` focuses the commits panel; `-sm normal` keeps the layout the jump checks rely on.
+  set -- log -sm normal "$@"
 fi
 
 args=("$@")
@@ -204,6 +279,12 @@ if [ -z "$PID" ]; then
   fi
 fi
 
+# A pane in another repo can't be reused for a blame jump.
+if [ -n "$PID" ] && [ -n "$REPO" ] && ! pane_in_repo "$PID" "$REPO"; then
+  rex block close "$PID" >/dev/null 2>&1
+  PID=""
+fi
+
 # --- create if missing -----------------------------------------------------
 if [ -z "$PID" ]; then
   SPLIT_FOCUS="--focus=false"
@@ -218,12 +299,14 @@ if [ -z "$PID" ]; then
   fi
   # Rex runs the command directly, so args with spaces or quotes stay intact.
   OUT="$(rex split -b "$CUR_PID" --split=right --ratio 50 "$SPLIT_FOCUS" \
-    --label "$TITLE" -c "$PWD" --json -- "${CMD[@]}" 2>&1)" \
+    --label "$TITLE" -c "${REPO:-$PWD}" --json -- "${CMD[@]}" 2>&1)" \
     || die "rex split failed: $OUT"
   PID="$(printf '%s' "$OUT" | jq -r '.block_ids[0] // empty' 2>/dev/null)"
   [ -n "$PID" ] || die "could not parse new pane id: $OUT"
+  echo "$PID" > "$ST"
+  [ -z "$COMMIT" ] || { wait_for_commit_list "$PID" "$HEAD7" && jump_to_commit "$PID" "$COMMIT"; } || echo "helix-rex: could not select $COMMIT" >&2
 else
   rex focus "$PID" >/dev/null 2>&1 || true
+  echo "$PID" > "$ST"
+  [ -z "$COMMIT" ] || reuse_jump "$PID" "$COMMIT" || echo "helix-rex: could not select $COMMIT" >&2
 fi
-
-echo "$PID" > "$ST"

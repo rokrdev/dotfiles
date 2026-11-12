@@ -83,7 +83,7 @@ r = { label = "Reload File", command = [":reload"] }
 R = { label = "Reload Config", command = [":config-reload"] }
 w = { label = "LSP Commands", command = ":lsp-workspace-command" }
 y = { label = "Copy Path", command = [":noop %sh{echo \"%{buffer_name}:%{cursor_line}\" | pbcopy}"] }
-G = { label = "LazyGit on Current File", command = [":sh helix-rex lazygit --filter '%{file_path_absolute}'", ":redraw"] }
+G = { label = "LazyGit on Blamed Commit", command = [":write", ":sh helix-rex lazygit --blame '%{file_path_absolute}' %{cursor_line}", ":redraw"] }
 S = { label = "Speak", command = [":pipe-to ~/.local/bin/say-selection"] }
 
 [keys.normal.space.g.m]

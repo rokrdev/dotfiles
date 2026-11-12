@@ -106,16 +106,6 @@
         ]
       },
       {
-        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "if command -v repowise >/dev/null 2>&1 && [ -d .repowise ]; then repowise context \"$(jq -r '.tool_input.file_path // .tool_input.notebook_path // empty')\" --include callers --include callees --include health --include decisions; fi",
-            "timeout": 20
-          }
-        ]
-      },
-      {
         "matcher": "Agent",
         "hooks": [
           {
@@ -145,18 +135,6 @@
           }
         ]
       }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "if command -v repowise >/dev/null 2>&1 && [ -d .repowise ]; then repowise update; fi",
-            "async": true
-          }
-        ]
-      }
     ]
   },
   "worktree": {
@@ -181,7 +159,6 @@
     "exa@claude-plugins-official": true,
     "pr-review-toolkit@claude-plugins-official": false,
     "skill-creator@claude-plugins-official": true,
-    "repowise@repowise": true,
     "humanizer@humanizer": true,
     "figma@claude-plugins-official": true,
     "postman@claude-plugins-official": true
@@ -193,12 +170,6 @@
         "repo": "anthropics/claude-plugins-official"
       },
       "autoUpdate": false
-    },
-    "repowise": {
-      "source": {
-        "source": "github",
-        "repo": "repowise-dev/repowise"
-      }
     },
     "humanizer": {
       "source": {

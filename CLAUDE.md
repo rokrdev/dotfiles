@@ -78,17 +78,6 @@ profile, watch that tree and refresh their catalogs without a restart. Claude
 Code uses the compatibility links under `~/.claude/skills/`. Invoke skills as
 `$skill-name` in Codex or `/skill-name` in Claude Code and DeepSeek Harness.
 
-## RepoWise — mandatory for codebase questions
-
-RepoWise is a codebase-intelligence MCP server (installed via `install.sh`; hooks in `claude/.claude/settings.json` keep its index fresh). Use its tools via `use_capability` before answering or editing:
-
-- **Codebase Q&A** ("how does X work", "where is Y", "why is Z") → `repowise/get_answer` (confidence=high answers are content-grounded and need no verification Read).
-- **Triage before editing** → `repowise/get_context` for the target file/module (relationships, hotspots, fix history).
-- **Self-check after editing** → `repowise/get_health` on the touched files (score + findings, rank by `weighted_deficit`).
-- **PR/commit review** → `repowise/get_change_risk` on the `base..head` range (use `risk_percentile` as the headline).
-
-If the `repowise` server is not connected (`use_capability` list shows it down), fall back to normal reads and note it.
-
 ## Conventions
 
 - Each stow package mirrors the exact target path relative to `$HOME`. If a file lives at `~/.config/foo/bar.toml`, the package structure is `foo/.config/foo/bar.toml`.

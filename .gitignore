@@ -15,8 +15,6 @@ karabiner/.config/karabiner/automatic_backups/
 .claude/tmp
 docs/prd/
 
-.repowise/
-
 # herdr runtime files
 herdr/.config/herdr/session.json
 herdr/.config/herdr/herdr-client.log

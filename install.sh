@@ -206,18 +206,6 @@ else
 fi
 
 # ─────────────────────────────────────────────
-# repowise — codebase intelligence / MCP server for Claude Code
-# ─────────────────────────────────────────────
-if command -v uv &>/dev/null; then
-  if ! command -v repowise &>/dev/null; then
-    echo "Installing repowise..."
-    uv tool install repowise
-  fi
-else
-  echo "WARNING: uv not found — skipping repowise. Run 'uv tool install repowise' after uv is set up."
-fi
-
-# ─────────────────────────────────────────────
 # Manual setup required
 # ─────────────────────────────────────────────
 echo ""

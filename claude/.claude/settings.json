@@ -127,15 +127,6 @@
     ],
     "SessionStart": [
       {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo '=== POST-COMPACTION CONTEXT RESTORE ===' && echo 'IRON LAW: You are an orchestrator. Never do work directly. Always dispatch subagents.' && echo 'Recent commits:' && git -C \"$PWD\" log --oneline -5 2>/dev/null || echo 'No git repo' && echo 'Date:' && date",
-            "statusMessage": "Restoring post-compaction context..."
-          }
-        ]
-      },
-      {
         "matcher": "^(startup|resume|clear|compact|fork)$",
         "hooks": [
           {

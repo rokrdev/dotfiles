@@ -29,7 +29,7 @@ abbr -a dkcd 'docker compose down'
 abbr -a dkcs 'docker compose start'
 abbr -a dkcp 'docker compose stop'
 abbr -a gtp 'git pull origin (git branch --show-current)'
-abbr -a gg gitui
+abbr -a gg lazygit
 abbr -a gtl 'git log --oneline --graph --decorate --all'
 abbr -a gtx 'git clean -fxd'
 abbr -a kbgp "kubectl get pods"

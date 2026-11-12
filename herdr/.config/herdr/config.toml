@@ -19,8 +19,8 @@ focus_agent = "prefix+shift+1..9"
 [[keys.command]]
 key = "prefix+shift+g"
 type = "popup"
-command = "gitui"
-description = "open gitui"
+command = "lazygit"
+description = "open lazygit"
 width = "95%"
 height = "95%"
 

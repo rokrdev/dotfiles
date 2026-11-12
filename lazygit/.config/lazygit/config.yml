@@ -1,54 +1,31 @@
-# gui:
-#   nerdFontsVersion: "3"
-#   theme:
-#     activeBorderColor:
-#       - "#ff966c"
-#       - "bold"
-#     inactiveBorderColor:
-#       - "#589ed7"
-#     searchingActiveBorderColor:
-#       - "#ff966c"
-#       - "bold"
-#     optionsTextColor:
-#       - "#82aaff"
-#     selectedLineBgColor:
-#       - "#2d3f76"
-#     cherryPickedCommitFgColor:
-#       - "#82aaff"
-#     cherryPickedCommitBgColor:
-#       - "#c099ff"
-#     markedBaseCommitFgColor:
-#       - "#82aaff"
-#     markedBaseCommitBgColor:
-#       - "#ffc777"
-#     unstagedChangesColor:
-#       - "#c53b53"
-#     defaultFgColor:
-#       - "#c8d3f5"
 gui:
   nerdFontsVersion: "3"
+  # Catppuccin Mocha lavender, from catppuccin/lazygit themes/mocha/lavender.yml.
   theme:
     activeBorderColor:
-      - "#ff9e64"
-      - "bold"
+      - "#b4befe"
+      - bold
     inactiveBorderColor:
-      - "#27a1b9"
+      - "#a6adc8"
     searchingActiveBorderColor:
-      - "#ff9e64"
-      - "bold"
+      - "#f9e2af"
     optionsTextColor:
-      - "#7aa2f7"
+      - "#89b4fa"
     selectedLineBgColor:
-      - "#283457"
+      - "#313244"
+    inactiveViewSelectedLineBgColor:
+      - "#6c7086"
     cherryPickedCommitFgColor:
-      - "#7aa2f7"
+      - "#b4befe"
     cherryPickedCommitBgColor:
-      - "#bb9af7"
+      - "#45475a"
     markedBaseCommitFgColor:
-      - "#7aa2f7"
+      - "#89b4fa"
     markedBaseCommitBgColor:
-      - "#e0af68"
+      - "#f9e2af"
     unstagedChangesColor:
-      - "#db4b4b"
+      - "#f38ba8"
     defaultFgColor:
-      - "#c0caf5"
+      - "#cdd6f4"
+    authorColors:
+      "*": "#b4befe"

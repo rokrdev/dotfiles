@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# helix-herdr — open a registered tool (gitui, scooter, yazi, ...) in a
+# helix-herdr — open a registered tool (lazygit, scooter, yazi, ...) in a
 # dedicated herdr pane, split to the right of the current (Helix) pane.
 #
 # The tool name, pane title, process check, and launch command are all per-tool
@@ -7,8 +7,8 @@
 #
 # Designed to be bound to Helix keys, e.g.:
 #   [keys.normal.space.g]
-#   g = { label = "GitUI", command = [":write-all", ":sh helix-herdr gitui", ":redraw"] }
-#   G = { label = "GitUI at Line", command = [":noop %sh{helix-herdr gitui $(git blame -L %{cursor_line},%{cursor_line} --porcelain '%{file_path_absolute}' | head -1 | cut -d' ' -f1)}"] }
+#   g = { label = "LazyGit", command = [":write-all", ":sh helix-herdr lazygit", ":redraw"] }
+#   G = { label = "LazyGit on Current File", command = [":sh helix-herdr lazygit --filter '%{file_path_absolute}'", ":redraw"] }
 #   f = { label = "Files (yazi)", command = [":write-all", ":sh helix-herdr yazi", ":redraw"] }
 #   s = { label = "Scooter", command = [":write-all", ":sh helix-herdr scooter", ":redraw"] }
 #
@@ -23,9 +23,9 @@
 #     title scan + process check)
 #   - creates one (splits the current pane right, ratio 0.5, focused) if missing
 #   - launches <tool> in that pane and focuses it (all current tools are
-#     interactive); optional args (e.g. a git hash for gitui) are forwarded
-#   - routes GitUI's changed-file editor back to the originating Helix pane,
-#     then closes the GitUI pane; Git metadata editors remain blocking `hx`
+#     interactive); optional args (e.g. a panel name for lazygit) are forwarded
+#   - routes LazyGit's changed-file editor back to the originating Helix pane,
+#     then closes the LazyGit pane; Git metadata editors remain blocking `hx`
 #
 # NOTE on directions: herdr's `pane split --direction` only supports `right`
 # and `down`. By design this script always splits right; `--side`/`--right`
@@ -43,7 +43,7 @@ usage: helix-herdr <tool> [args...]
        helix-herdr --list
        helix-herdr --help
 
-Open a registered tool (gitui, scooter, yazi) in a dedicated herdr pane split
+Open a registered tool (lazygit, scooter, yazi) in a dedicated herdr pane split
 to the right of the current pane, reusing an existing pane for that tool when
 present. '--close' closes the tool's pane. Tools run with the pane focused.
 EOF
@@ -57,10 +57,10 @@ EOF
 # Then CMD is built from $args (lowercased-passthrough) + optional reaping.
 tool_meta() {
   case "$1" in
-    gitui)
-      TITLE="gitui"; PROG="gitui"; FOCUS="yes"
-      # optional first arg = commit hash to jump to
-      CMD=(gitui "${args[@]}")
+    lazygit)
+      TITLE="lazygit"; PROG="lazygit"; FOCUS="yes"
+      # optional first arg = panel to focus (status, branch, log, stash)
+      CMD=(lazygit "${args[@]}")
       ;;
     scooter)
       TITLE="scooter"; PROG="scooter"; FOCUS="yes"
@@ -122,10 +122,10 @@ except Exception:
   esac
 }
 
-# GitUI launches its configured editor as a blocking child process. For normal
-# worktree files, route that open back to the Helix pane that launched GitUI and
-# close GitUI's temporary pane. Git metadata files must keep the normal blocking
-# editor behavior because GitUI reads them only after the editor exits.
+# LazyGit launches its configured editor as a blocking child process. For normal
+# worktree files, route that open back to the Helix pane that launched LazyGit and
+# close LazyGit's temporary pane. Git metadata files must keep the normal blocking
+# editor behavior because Git reads them only after the editor exits.
 open_in_helix() {
   local target="${HELIX_HERDR_PANE:-}"
   local current="${HELIX_HERDR_TOOL_PANE:-${HERDR_PANE_ID:-}}"
@@ -142,7 +142,7 @@ open_in_helix() {
     esac
   done
 
-  # If this was invoked outside the managed GitUI pane, retain the user's
+  # If this was invoked outside the managed LazyGit pane, retain the user's
   # configured editor behavior instead of swallowing the open request.
   if [ -z "$target" ] || [ -z "$current" ] \
     || ! herdr pane get "$target" >/dev/null 2>&1; then
@@ -162,13 +162,13 @@ open_in_helix() {
   herdr pane send-keys "$target" enter >/dev/null 2>&1 \
     || exec hx "$@"
 
-  # Closing the GitUI pane alone can leave Helix's terminal-focus flag false:
+  # Closing the LazyGit pane alone can leave Helix's terminal-focus flag false:
   # input still arrives, but Helix deliberately suppresses its primary cursor.
   # Explicit focus emits FocusGained and redraws the cursor before the close.
   focus_pane_from "$current" "$target" >/dev/null 2>&1 || true
 
   # Clear only this pane's state entry before closing it.
-  local state="$STATE_DIR/helix-herdr-gitui.pane"
+  local state="$STATE_DIR/helix-herdr-lazygit.pane"
   if [ -f "$state" ] && [ "$(cat "$state")" = "$current" ]; then
     rm -f "$state"
   fi
@@ -188,7 +188,7 @@ case "$1" in
   --help|-h) usage; exit 0 ;;
   --list)
     echo "registered tools:"
-    echo "  gitui    git TUI (optional arg: commit hash)"
+    echo "  lazygit  git TUI (optional args: panel to focus, or --filter <path>)"
     echo "  scooter  interactive find & replace TUI"
     echo "  yazi     file manager TUI"
     exit 0
@@ -293,14 +293,17 @@ except Exception:
 ")"
   [ -n "$PID" ] || die "could not parse new pane id: $OUT"
   herdr pane rename "$PID" "$TITLE" >/dev/null 2>&1
-  # GitUI normally resolves core.editor=hx and therefore opens a second Helix
-  # in its own pane. Override only this GitUI process so changed files are sent
-  # back to the Helix pane that invoked the launcher. The internal editor mode
+  # LazyGit normally resolves core.editor=hx and therefore opens a second Helix
+  # in its own pane. Override only this LazyGit process so changed files are sent
+  # back to the Helix pane that invoked the launcher. The overlay config covers
+  # file edits and GIT_EDITOR covers commit messages. The internal editor mode
   # falls back to blocking hx for Git metadata such as COMMIT_EDITMSG.
-  if [ "$TOOL" = "gitui" ]; then
+  if [ "$TOOL" = "lazygit" ]; then
+    LG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/lazygit"
     CMD=(env "HELIX_HERDR_PANE=$CUR_PID" \
       "HELIX_HERDR_TOOL_PANE=$PID" \
-      "GIT_EDITOR=helix-herdr --edit" "${CMD[@]}")
+      "GIT_EDITOR=helix-herdr --edit" \
+      "LG_CONFIG_FILE=$LG_DIR/config.yml,$LG_DIR/helix-herdr.yml" "${CMD[@]}")
   fi
   # `; exit` closes the pane when the tool quits (herdr reaps ended processes).
   # Quote each element so args containing spaces (e.g. scooter --search-text

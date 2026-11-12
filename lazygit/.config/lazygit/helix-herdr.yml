@@ -1,0 +1,4 @@
+# Overlay loaded only by helix-herdr via LG_CONFIG_FILE, so global edits keep the default editor.
+os:
+  edit: 'helix-herdr --edit {{filename}}'
+  editAtLine: 'helix-herdr --edit {{filename}}'

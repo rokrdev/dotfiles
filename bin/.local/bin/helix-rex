@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# helix-rex — open a registered tool (gitui, scooter, yazi) in a Rex pane
+# helix-rex — open a registered tool (lazygit, scooter, yazi) in a Rex pane
 # split to the right of the current (Helix) pane.
 #
 # Bind it to Helix keys, e.g.:
-#   g = { label = "GitUI", command = [":write-all", ":sh helix-rex gitui", ":redraw"] }
-#   G = { label = "GitUI at Line", command = [":noop %sh{helix-rex gitui $(git blame -L %{cursor_line},%{cursor_line} --porcelain '%{file_path_absolute}' | head -1 | cut -d' ' -f1)}"] }
+#   g = { label = "LazyGit", command = [":write-all", ":sh helix-rex lazygit", ":redraw"] }
+#   G = { label = "LazyGit on Current File", command = [":sh helix-rex lazygit --filter '%{file_path_absolute}'", ":redraw"] }
 #
 # Subcommands:
 #   helix-rex <tool> [args...]  open <tool> in a pane split right
@@ -17,8 +17,8 @@
 #     label scan, process check) and focuses it
 #   - otherwise splits the current pane right (50%, focused) and runs <tool>;
 #     the pane closes when the tool exits; args are forwarded
-#   - GitUI's file editor is routed back to the originating Helix pane, then
-#     the GitUI pane closes; Git metadata files still open in blocking `hx`
+#   - LazyGit's file editor is routed back to the originating Helix pane, then
+#     the LazyGit pane closes; Git metadata files still open in blocking `hx`
 #
 # Rex splits any direction, but this script always splits right. `--side` and
 # `--right` are accepted and ignored. Rex targets $REX_SESSION, so no -s flags.
@@ -35,7 +35,7 @@ usage: helix-rex <tool> [args...]
        helix-rex --list
        helix-rex --help
 
-Open a registered tool (gitui, scooter, yazi) in a dedicated Rex pane split
+Open a registered tool (lazygit, scooter, yazi) in a dedicated Rex pane split
 to the right of the current pane, reusing an existing pane for that tool when
 present. '--close' closes the tool's pane. Tools run with the pane focused.
 EOF
@@ -55,9 +55,9 @@ rex() { "$REX_BIN" "$@"; }
 # ${args[@]+...} keeps empty args safe under `set -u` on bash 3.2.
 tool_meta() {
   case "$1" in
-    gitui)
-      TITLE="gitui"; PROG="gitui"; FOCUS="yes"
-      CMD=(gitui ${args[@]+"${args[@]}"})
+    lazygit)
+      TITLE="lazygit"; PROG="lazygit"; FOCUS="yes"
+      CMD=(lazygit ${args[@]+"${args[@]}"})
       ;;
     scooter)
       TITLE="scooter"; PROG="scooter"; FOCUS="yes"
@@ -88,8 +88,8 @@ pane_tab() {
     | jq -r --arg id "$1" '.blocks[] | select(.block_id == $id) | .window_id' 2>/dev/null
 }
 
-# GitUI runs its editor as a blocking child. Send worktree files back to the
-# Helix pane that launched GitUI, then close the GitUI pane.
+# LazyGit runs its editor as a blocking child. Send worktree files back to the
+# Helix pane that launched LazyGit, then close the LazyGit pane.
 open_in_helix() {
   local target="${HELIX_REX_PANE:-}"
   local current="${HELIX_REX_TOOL_PANE:-${REX_BLOCK:-}}"
@@ -97,7 +97,7 @@ open_in_helix() {
 
   [ "$#" -gt 0 ] || die "--edit requires a file"
 
-  # GitUI reads these only after the editor exits, so they must block.
+  # Git reads these only after the editor exits, so they must block.
   for arg in "$@"; do
     base="${arg##*/}"
     case "$base" in
@@ -107,7 +107,7 @@ open_in_helix() {
     esac
   done
 
-  # Outside a managed GitUI pane, keep the normal editor behavior.
+  # Outside a managed LazyGit pane, keep the normal editor behavior.
   if [ -z "$target" ] || [ -z "$current" ] \
     || [ -z "$(pane_tab "$target")" ]; then
     exec hx "$@"
@@ -128,7 +128,7 @@ open_in_helix() {
   # Closing alone can leave Helix without terminal focus and hide its cursor.
   rex focus "$target" >/dev/null 2>&1 || true
 
-  local state="$STATE_DIR/helix-rex-gitui.pane"
+  local state="$STATE_DIR/helix-rex-lazygit.pane"
   if [ -f "$state" ] && [ "$(cat "$state")" = "$current" ]; then
     rm -f "$state"
   fi
@@ -148,7 +148,7 @@ case "$1" in
   --help|-h) usage; exit 0 ;;
   --list)
     echo "registered tools:"
-    echo "  gitui    git TUI (optional arg: commit hash)"
+    echo "  lazygit  git TUI (optional args: panel to focus, or --filter <path>)"
     echo "  scooter  interactive find & replace TUI"
     echo "  yazi     file manager TUI"
     exit 0
@@ -208,10 +208,13 @@ fi
 if [ -z "$PID" ]; then
   SPLIT_FOCUS="--focus=false"
   [ "$FOCUS" = "yes" ] && SPLIT_FOCUS="--focus=true"
-  # Override core.editor=hx for this GitUI only, so edits return to this Helix.
-  # The new pane's own REX_BLOCK serves as HELIX_REX_TOOL_PANE.
-  if [ "$TOOL" = "gitui" ]; then
-    CMD=(env "HELIX_REX_PANE=$CUR_PID" "GIT_EDITOR=helix-rex --edit" "${CMD[@]}")
+  # Scope the Helix editor to this LazyGit only: the overlay config covers
+  # file edits and GIT_EDITOR covers commit messages. The new pane's own
+  # REX_BLOCK serves as HELIX_REX_TOOL_PANE.
+  if [ "$TOOL" = "lazygit" ]; then
+    LG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/lazygit"
+    CMD=(env "HELIX_REX_PANE=$CUR_PID" "GIT_EDITOR=helix-rex --edit" \
+      "LG_CONFIG_FILE=$LG_DIR/config.yml,$LG_DIR/helix-rex.yml" "${CMD[@]}")
   fi
   # Rex runs the command directly, so args with spaces or quotes stay intact.
   OUT="$(rex split -b "$CUR_PID" --split=right --ratio 50 "$SPLIT_FOCUS" \

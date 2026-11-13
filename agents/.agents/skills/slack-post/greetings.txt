@@ -1,0 +1,104 @@
+Hello|English
+Namaste|Hindi
+Bonjour|French
+Hola|Spanish
+Ciao|Italian
+Hallo|German
+Olá|Portuguese
+Konnichiwa|Japanese
+Annyeong|Korean
+G'day|Australian English
+Marhaba|Arabic
+Privet|Russian
+Ni hao|Mandarin Chinese
+Nei hou|Cantonese
+Sawubona|Zulu
+Merhaba|Turkish
+Shalom|Hebrew
+Salam|Persian
+Sawasdee|Thai
+Xin chao|Vietnamese
+Halo|Indonesian
+Apa khabar|Malay
+Hoi|Dutch
+Hej|Swedish
+Hejsa|Danish
+Hei|Norwegian
+Moi|Finnish
+Hæ|Icelandic
+Cześć|Polish
+Ahoj|Czech
+Dobrý deň|Slovak
+Szia|Hungarian
+Salut|Romanian
+Zdravey|Bulgarian
+Zdravo|Serbian
+Bok|Croatian
+Živjo|Slovenian
+Yassou|Greek
+Pryvit|Ukrainian
+Labas|Lithuanian
+Sveiki|Latvian
+Tere|Estonian
+Mirëdita|Albanian
+Bonġu|Maltese
+Dia duit|Irish
+Halò|Scottish Gaelic
+Shwmae|Welsh
+Demat|Breton
+Kaixo|Basque
+Bon dia|Catalan
+Ola|Galician
+Bonjorn|Occitan
+Moien|Luxembourgish
+Goeie dag|Afrikaans
+Saluton|Esperanto
+Gamarjoba|Georgian
+Barev|Armenian
+Salom|Uzbek
+Yaxshimusiz|Uyghur
+Sain baina uu|Mongolian
+Tashi delek|Tibetan
+Nomoshkar|Bengali
+Sat sri akal|Punjabi
+Kem cho|Gujarati
+Vanakkam|Tamil
+Namaskaram|Telugu
+Namaskara|Kannada
+Mingalaba|Burmese
+Sua sdei|Khmer
+Sabaidee|Lao
+Nyob zoo|Hmong
+Kumusta|Tagalog
+Bondia|Tetum
+Aloha|Hawaiian
+Kia ora|Maori
+Kia orana|Cook Islands Maori
+Ia ora na|Tahitian
+Talofa|Samoan
+Malo e lelei|Tongan
+Bula|Fijian
+Hafa adai|Chamorro
+Yokwe|Marshallese
+Mauri|Gilbertese
+Jambo|Swahili
+Molo|Xhosa
+Lumela|Sotho
+Dumela|Tswana
+Mhoro|Shona
+Moni|Chichewa
+Muraho|Kinyarwanda
+Selam|Amharic
+Sannu|Hausa
+Bawo ni|Yoruba
+Ndewo|Igbo
+Salama|Malagasy
+Mbote|Lingala
+Oli otya|Luganda
+I ni ce|Bambara
+Bonjou|Haitian Creole
+Allillanchu|Quechua
+Mba'éichapa|Guarani
+Yá'át'ééh|Navajo
+Osiyo|Cherokee
+Bures|Northern Sami

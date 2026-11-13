@@ -17,10 +17,14 @@ gui:
       - "#f9e2af"
     optionsTextColor:
       - "#89b4fa"
+    # surface0 was too close to base, so the cursor uses surface2 and range/unfocused use surface1.
     selectedLineBgColor:
-      - "#313244"
+      - "#585b70"
+      - bold
+    selectedRangeBgColor:
+      - "#45475a"
     inactiveViewSelectedLineBgColor:
-      - "#6c7086"
+      - "#45475a"
     cherryPickedCommitFgColor:
       - "#b4befe"
     cherryPickedCommitBgColor:
